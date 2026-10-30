@@ -20,7 +20,7 @@ TEXT_VA, TEXT_OFF, TEXT_SIZE = 0x100000, 0x80, 0x159df0
 CC = os.environ.get('SLY2_CC', os.path.join(ROOT, 'tools', 'compilers', 'bundle', 'ee-gcc2.95.3-136', 'bin', 'ee-gcc.exe'))  # Sly 2 compiler
 WIBO = os.environ.get('SLY2_WIBO', os.path.join(ROOT, 'tools', 'wibo_cc.py'))
 WIBO_CMD = [sys.executable, WIBO] if os.name == 'nt' else [WIBO]   # native Windows: no wibo, wibo_cc.py runs the .exe files
-M2C_INC = os.environ.get('SLY2_M2C_INC', '/home/claude/m2c')     # directory holding m2c_macros.h (needed by raw m2c .c files)
+M2C_INC = os.environ.get('SLY2_M2C_INC', '/home/claude/m2c' if os.path.isdir('/home/claude/m2c') else os.path.expanduser('~/m2c'))     # directory holding m2c_macros.h (needed by raw m2c .c files)
 CFLAGS = os.environ.get('SLY2_CFLAGS', '-x c++ -O2 -G0 -ffast-math -mvu0-use-vf0-vf31 -fno-exceptions').split() + ['-B' + os.path.join(ROOT, 'tools/compilers/bundle/ee-gcc2.95.3-136/lib/gcc-lib/ee/2.95.3') + '/']
 INCLUDES = ['-I' + os.path.join(ROOT, 'include')] + os.environ.get('SLY2_INC', '').split()
 
