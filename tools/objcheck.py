@@ -139,8 +139,10 @@ def git(*args):
 
 
 def changed_sources(base):
-    names = git('diff', '--name-only', base, '--', 'src').split() + \
-            git('ls-files', '--others', '--exclude-standard', '--', 'src').split()
+    names = git('diff', '--name-only', base, '--', 'src', 'include').split() + \
+            git('ls-files', '--others', '--exclude-standard', '--', 'src', 'include').split()
+    if any(n.startswith('include/') for n in names):   # a shared header changed: every includer may compile differently
+        return all_sources()
     return sorted({os.path.join(M.ROOT, n) for n in names if n.endswith(('.c', '.cpp')) and os.path.exists(os.path.join(M.ROOT, n))})
 
 

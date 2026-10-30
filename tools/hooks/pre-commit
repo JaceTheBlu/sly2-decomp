@@ -1,0 +1,7 @@
+#!/bin/sh
+# Refuse a commit that changes compiled code.  Install: ln -s ../../tools/hooks/pre-commit .git/hooks/pre-commit
+# Needs build/baseline.json (python3 tools/objcheck.py baseline).  Skip once with: git commit --no-verify
+if git diff --cached --name-only | grep -qE '^src/.*\.(c|cpp)$|^include/'; then
+    [ -f build/baseline.json ] || { echo "pre-commit: no build/baseline.json, skipping objcheck"; exit 0; }
+    python3 tools/objcheck.py check || { echo "pre-commit: compiled code differs from the baseline (see above)"; exit 1; }
+fi
