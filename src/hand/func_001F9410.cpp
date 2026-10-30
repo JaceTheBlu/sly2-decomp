@@ -22,7 +22,7 @@ struct CLOCK {float time,dt;};
 struct GAME;
 struct FRAME;
 extern CLOCK D_002DDED0;
-extern GAME D_003DD490;
+extern GAME g_sw;
 extern "C" {
 FRAME *func_001AE478(FRAME *);
 void func_001AE4A0(FRAME *,int);
@@ -146,8 +146,8 @@ extern "C" void func_001F9410(GAME *game,int flags,int objectCount,P **objects,i
         }
         if(k>=objectCount){
             for(k=0;k<objectCount;k++)func_001F9C48(objects[k]);
-            func_001A7E60(&D_003DD490,contactCount,contacts);
-            func_001A7FC0(&D_003DD490,contactCount,contacts);
+            func_001A7E60(&g_sw,contactCount,contacts);
+            func_001A7FC0(&g_sw,contactCount,contacts);
         }
     }else{
         for(k=0;k<objectCount;k++)Callback(objects[k],66);

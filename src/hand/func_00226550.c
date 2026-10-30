@@ -4,8 +4,8 @@ extern DLI *D_002DD2FC;     /* g_pdliFirst */
 struct CLOCK { float t; float dt; char pad[8]; float g10; };
 extern struct CLOCK D_002DDED0;
 extern char D_002E65E0[];
-extern char D_003DD040[];
-extern char D_002DDF40[];
+extern char g_sndmgr[];
+extern char g_cm[];
 extern char D_002DD598[];
 struct VTE { short d; short pad; void (*pfn)(); };
 struct O { char pad[0xC]; struct VTE *vt; };
@@ -81,9 +81,9 @@ void func_00226550(struct S *p)
         D_002DD2FC = dli.m_pdliNext;
     }
     func_001AB1A0(D_002E65E0);
-    func_001FD830(D_003DD040);
+    func_001FD830(g_sndmgr);
     if (0.0f < D_002DDED0.g10)
-        func_0014D478(D_002DDF40);
+        func_0014D478(g_cm);
     func_0020F7E0(p);
     func_00128148(D_002DD598);
 }

@@ -29,14 +29,14 @@ extern M2C_UNK D_002CE488;
 extern void **D_002DD2FC;
 extern f32 D_002DDED0;
 extern f32 D_002DDED4;
-extern M2C_UNK D_002DDF40;
+extern M2C_UNK g_cm;
 extern f32 D_002DDF7C;
 extern M2C_UNK D_002DEB30;
 extern s32 D_002E1E40;
 extern M2C_UNK D_002E65E0;
 extern M2C_UNK D_003D4A60;
-extern M2C_UNK D_003DD040;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sndmgr;
+extern M2C_UNK g_sw;
 extern s32 D_003E0FE0;
 
 s32 func_00225A68(s32 arg0, s32 arg1) {

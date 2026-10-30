@@ -11,7 +11,7 @@ extern "C" {
 extern CLOCK D_002DDED0;
 extern qword D_002BD8F0, D_002BD900;
 extern float D_002BD8D8, D_002BD8DC;
-extern char D_003DD490[];
+extern char g_sw[];
 void *func_001AE478(FRAME *p);
 void func_001AE4A0(FRAME *p, int n);
 void func_0020FAA0(void *g, qword a, qword b, void *pfn, void *o, int *pi, int *pj);
@@ -48,7 +48,7 @@ qword func_0014F110(void *p, qword pos, qword posTarget)
     qword posMin = Add(pos, D_002BD8F0);
     qword posMax = Add(pos, D_002BD900);
     FRAME frame;
-    func_0020FAA0(D_003DD490, posMin, posMax, (void *)func_0014F030, 0, &ii, &jj);
+    func_0020FAA0(g_sw, posMin, posMax, (void *)func_0014F030, 0, &ii, &jj);
     qword w = func_0014EDA0(p, ii, jj, (void *)func_0014F040, pos, v, D_002BD8D8, Length(v) + D_002BD8DC);
     qword r = AddScaled(pos, w, VU_FLOAT(&pclock->dtPrev));
     return r;

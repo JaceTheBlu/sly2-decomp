@@ -10,7 +10,7 @@ typedef struct {
     int c;
     ENT *ae;
 } OBJ;
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern float D_002C3264;
 extern int D_002C3268[];
 int func_002132D0(void *);
@@ -32,7 +32,7 @@ void func_001DAC58(OBJ *p)
         return;
     if (!func_002132D0(p->x24))
         return;
-    q = func_001C4840(&D_003DD490);
+    q = func_001C4840(&g_sw);
     if (q == 0)
         return;
     if (!func_00132B10(q, 0x34))

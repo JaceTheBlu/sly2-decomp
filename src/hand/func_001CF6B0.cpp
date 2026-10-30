@@ -10,7 +10,7 @@ struct VE {short delta,pad;void(*fn)(void*,qword,int,float);};
 struct O {char pad18[0x18];float duration;LO*visual;char pad20[8];float spin;char pad2C[0x14];M3 matrix;U position;char pad80[0x10];U velocity;char padA0[0x4C];VE*vt;LO*space;};
 struct CLOCK {float t,dt;};
 extern CLOCK D_002DDED0;
-extern char D_003DD490[];
+extern char g_sw[];
 extern qword D_002A2DA0,D_002A2DB0,D_002A2DC0;
 extern "C" {
 O *func_001CE888(void*,void*,void*);
@@ -34,7 +34,7 @@ static inline M3 Mul(const M3&a,const M3&b) return r {
 O *func_001CF6B0(EMIT*p,LO*visual,LO*space,qword position,qword direction){
  O*object=0;
  if(visual){
-  object=func_001CE888(D_003DD490,(void*)10,0);
+  object=func_001CE888(g_sw,(void*)10,0);
   if(object){
    float zero=0.0f;
    U local;local.q=func_0022FC48(0,space,position);

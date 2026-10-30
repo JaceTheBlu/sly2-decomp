@@ -3,7 +3,7 @@ struct BSP;
 struct O { char pad[0x2DC]; int x2DC; };
 struct S { char pad[0xE0]; struct O *pE0; char pad1[0x108 - 0xE4]; struct BSP *p108; char pad2[0x124 - 0x10C]; int x124; char pad3[0x13C - 0x128]; int x13C; };
 struct G;
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern int D_002DE240;
 extern "C" struct O *func_001C4A48(struct G *pg);
 extern "C" void func_00221178(struct S *p, int k);
@@ -14,7 +14,7 @@ extern "C" int func_00132B10(struct O *po, int n);
 static inline int AutomaticSentinel(){int value;__asm__("addiu %0,$zero,-1":"=r"(value));return value;}
 extern "C" void func_00221298(struct S *p)
 {
-    struct O *po = func_001C4A48(&D_003DD490);
+    struct O *po = func_001C4A48(&g_sw);
     int f;
     if (!po) return;
     if (po != p->pE0) {

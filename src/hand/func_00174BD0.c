@@ -2,10 +2,10 @@ typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f; } U;
 struct G;
 struct ANIMATION;
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern void *D_002F7900;
 extern char D_002DFC00[];
-extern char D_002DDF40[];
+extern char g_cm[];
 struct VTE { short d; short pad; void *pfn; };
 struct A {
     char pad[0xC]; struct VTE *vt; char pad2[0x190 - 0x10]; qword v190; char pad3[4]; int n1A4; char pad4[8];
@@ -72,17 +72,17 @@ int func_00174BD0(struct S *p, int msg, struct M *pm) {
     case 0x2F:
         {
             struct O *o = func_00205458(p->p10, 0xA5);
-            if (o && o->p30 == func_001C4840(&D_003DD490)) func_00187E28(D_002DFC00, 8, 1.0f);
+            if (o && o->p30 == func_001C4840(&g_sw)) func_00187E28(D_002DFC00, 8, 1.0f);
         }
         return 0;
     case 0x34:
     case 0x35:
         {
-            void *g = func_001C4840(&D_003DD490);
+            void *g = func_001C4840(&g_sw);
             struct O *o = func_00205458(p->p10, 0xA0);
             if (o && func_001A6AF8(o->parent, g) && g == D_002F7900) {
                 switch (pm->n8) {
-                case 0x35: func_0014F750(D_002DDF40, 0); break;
+                case 0x35: func_0014F750(g_cm, 0); break;
                 case 0x34: func_00187E28(D_002DFC00, 3, 1.50000005960464477539e-01f); break;
                 }
             }

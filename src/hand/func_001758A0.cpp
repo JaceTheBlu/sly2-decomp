@@ -57,7 +57,7 @@ extern "C" {
 extern CLOCK D_002DDED0;
 extern POLY D_002BE600;
 extern LM D_002BBB60;
-extern char D_003DD490[];
+extern char g_sw[];
 int func_00132B10(P *, int);
 int func_0020A818(void *, P *);
 qword func_001A62E8(P *);
@@ -200,7 +200,7 @@ extern "C" ENTRY *func_001758A0(P *p, P *target, void *gate)
             void **objects;
             line.start.q = from;
             line.end.q = to;
-            func_0020FAA0(D_003DD490, from, to, func_00175820, entry, &count, &objects);
+            func_0020FAA0(g_sw, from, to, func_00175820, entry, &count, &objects);
             if (func_0014CC58(0, line.start.q, line.end.q, count, objects, &line.hit) &&
                 Blocked(&line, entry->minHit))
                 continue;

@@ -11,7 +11,7 @@ typedef struct {
     char pad44[4];
     int x48;
 } OBJ;
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern int D_002C3258[];
 void func_001DA808(OBJ *);
 int func_00187D80(void *, int);
@@ -40,7 +40,7 @@ void func_001DAA90(OBJ *p)
         func_001DB520(p, -1);
         return;
     }
-    pv = func_001C4840(&D_003DD490);
+    pv = func_001C4840(&g_sw);
     if (pv == 0 || !func_00132B10(pv, 0x34)) {
         func_001DB520(p, -1);
         return;

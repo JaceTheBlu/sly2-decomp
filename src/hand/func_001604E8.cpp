@@ -6,7 +6,7 @@ struct Source { char pad[0x40]; M4 m40; };
 struct Dest { M4 m; char pad[0xA0-0x40]; Source *parent; int stamp; };
 struct S { Source *source; Dest *dest; int position,rotation; };
 struct G { char pad[0x3D58]; int counter; };
-extern G D_003DD490;
+extern G g_sw;
 extern "C" M4 func_0011C318(const M4 *m);
 extern "C" M3 func_0011B340(const M3 *m);
 extern "C" void func_0011B3D0(M3 *m);
@@ -41,6 +41,6 @@ extern "C" void func_001604E8(void *,S *s)
   dest->m.r[1].i[3]=0;
   dest->m.r[2].i[3]=0;
  }
- int stamp=++D_003DD490.counter;
+ int stamp=++g_sw.counter;
  s->dest->stamp=stamp;
 }

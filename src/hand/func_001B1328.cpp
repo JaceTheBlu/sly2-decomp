@@ -12,7 +12,7 @@ struct P{char pad0[12];VE*vt;char pad10[0x5C-0x10];void*group;char pad60[0x158-0
 struct WORK{U first,second,direction,velocity,scalar;float angle,parameter;};
 struct CLOCK{float t,dt;};
 extern "C"{
- extern CLOCK D_002DDED0;extern U D_002A2DD0,D_002A2DA0;extern char D_003DD490[],D_002DE578[];
+ extern CLOCK D_002DDED0;extern U D_002A2DD0,D_002A2DA0;extern char g_sw[],D_002DE578[];
  void func_002303A0(P*,void*,int);void func_0022C840(P*,void*);void func_0022C818(P*,void*);
  float func_0011D448(float,float);void func_0011EFB0(qword,float*,float*,float*);
  void func_001B1818(P*,float);void func_001B17B8(P*,float);
@@ -89,7 +89,7 @@ extern "C" void func_001B1328(P*p,int next){
    float end=func_001E6648(p->path);
    p->deadline=D_002DDED0.t+travel+(end-w.parameter)/p->speed.value-p->lead;
   }else{
-   P*near=func_001C4AF8(D_003DD490,w.first.q);w.second=w.first;w.first.q=func_001A62E8(near);p->deadline=D_002DDED0.t+2.0f;
+   P*near=func_001C4AF8(g_sw,w.first.q);w.second=w.first;w.first.q=func_001A62E8(near);p->deadline=D_002DDED0.t+2.0f;
   }
   qword ff=w.first.q;qword ss=w.second.q;qword gap=Sub(ss,ff);
   w.direction.q=gap;w.direction.i[2]=0;

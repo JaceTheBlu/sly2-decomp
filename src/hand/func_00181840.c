@@ -3,7 +3,7 @@ struct Q { char pad[0x20]; struct E *pr; int n; };
 struct E { int oid; int c; int x8; int xc; char dl[0xC]; int x1c; float g; void *pv; int x28; float h; };
 struct R { int a; void *p; int x8; int n; unsigned long fl; char pad[0x98]; };
 struct S { char pad[0x28]; unsigned long fl; char p0[0x30]; int x60; char p1[0x7C]; int ce0; struct R *ar; char p2[0xE0]; int c; struct E ae[4]; };
-extern char D_003DD490[];
+extern char g_sw[];
 void *func_0015E938(void *g, int n, int oid, struct S *p);
 void func_0011A1F8(void *pdl, int ib);
 void *func_001AE2A0(struct MSG *pmsg);
@@ -17,7 +17,7 @@ void func_00181840(struct S *p)
     struct R *pr;
     for (i = 0; i < p->c; i++) {
         pe = &p->ae[i];
-        pe->pv = func_0015E938(D_003DD490, 4, pe->oid, p);
+        pe->pv = func_0015E938(g_sw, 4, pe->oid, p);
         if (!pe->pv) {
             i--;
             p->c--;

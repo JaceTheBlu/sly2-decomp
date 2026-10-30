@@ -19,7 +19,7 @@ extern "C"{
  extern float D_002BE6FC,D_002BE700,D_002BE704;
  extern F D_002BE708;
  extern U D_002A2DC0;
- extern char D_003DD490[],D_002DFC00[];
+ extern char g_sw[],D_002DFC00[];
  void func_001F35C8(P*,float);
  void func_00130D30(ASEGA*,int,float,float);
  void func_0012E460(DELTA**);
@@ -165,7 +165,7 @@ extern "C" void func_0017B1A8(C*p,int next){
    p->delta=func_0012DE58(p->actor,first,0,end,localPoint,localDirection);
   }
   int owned=0;if(request.flag)owned=p->target->owner==p->actor;p->owned=owned;
-  if(p->actor->attention){P*focus=func_001C4840(D_003DD490);if(focus&&p->target==focus)func_00187E28(D_002DFC00,3,0.15f);}
+  if(p->actor->attention){P*focus=func_001C4840(g_sw);if(focus&&p->target==focus)func_00187E28(D_002DFC00,3,0.15f);}
   break;
  }
  case 3:{ENTRY*entry=func_0012F938(p->control->curves,0x3C);if(entry)func_00130D30(p->control->asega,0,entry->value,1.0f);break;}

@@ -22,7 +22,7 @@ extern float D_002BE5E4;
 extern float D_002BE5E8;
 extern CLOCK D_002DDED0;
 extern LM D_002BBB60;
-extern CAMERA D_002DDF40;
+extern CAMERA g_cm;
 extern qword D_002A2DC0;
 FRAME *func_001AE478(FRAME *);
 void func_001AE4A0(FRAME *, int);
@@ -187,7 +187,7 @@ extern "C" SEL *func_00173F18(SET *pset, qword pos, qword *pposOut, M3 *pmatOut,
                     if (sDist < D_002BE5E4 || sBest < sDist)
                         goto nextSample;
                     {
-                        int fFlipT = GXOfQw(QwDot(D_002DDF40.dir, dirCurve.q)) < 0.0f;
+                        int fFlipT = GXOfQw(QwDot(g_cm.dir, dirCurve.q)) < 0.0f;
                         if (!fFlipT)
                         {
                             VU_FLOAT gNeg = VuFloatFromMemWord(0xBF800000);

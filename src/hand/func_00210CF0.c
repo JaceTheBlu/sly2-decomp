@@ -1,5 +1,5 @@
 struct O { int x0; void *x4; int x8; void *xC; };
-extern char D_003DD490[];
+extern char g_sw[];
 extern struct O D_003E1C20;
 extern char D_002C3EB8[], D_003E1C60[];
 extern int D_002DD2E0, D_002DD2E4, D_002DD2E8, D_002DD2EC, D_002DD2F0, D_002DD2F4;
@@ -12,7 +12,7 @@ void func_00210CF0(int fInit, int prio)
     if (prio != 0xFFFF)
         return;
     if (fInit) {
-        func_0020D9D0(D_003DD490);
+        func_0020D9D0(g_sw);
         D_003E1C20.x0 = 0;
         D_003E1C20.x4 = D_002C3EB8;
         D_003E1C20.x8 = 0;
@@ -30,6 +30,6 @@ void func_00210CF0(int fInit, int prio)
         if (++D_002DD2F4 == 1)
             func_0011CCA8(D_00452170, 0x14, 0x100, 0x10);
     } else {
-        func_00258348(D_003DD490, 2);
+        func_00258348(g_sw, 2);
     }
 }

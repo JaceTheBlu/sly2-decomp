@@ -4,7 +4,7 @@ struct N { int x0; struct O *po; int x8; struct N *next; };
 struct S { char pad[0x150]; struct N *pn; };
 struct MSG { struct S *p; struct O *po; };
 struct G;
-extern struct G D_003DD490;
+extern struct G g_sw;
 void func_00229738(struct O *po, struct N *pn);
 void func_002296C0(struct G *pg, struct N *pn);
 void func_00133590(struct S *p, int k, struct O *q);
@@ -35,7 +35,7 @@ void func_00229370(struct S *p, int k, struct O *q)
         if (pn) {
             pn->next = 0;
             func_00229738(pn->po, pn);
-            func_002296C0(&D_003DD490, pn);
+            func_002296C0(&g_sw, pn);
         }
         msg.po->vt[4].pfn((char *)msg.po + msg.po->vt[4].d, 5, &msg);
     }

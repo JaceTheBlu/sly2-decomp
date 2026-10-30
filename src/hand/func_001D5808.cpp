@@ -13,12 +13,12 @@
 //       it (LINK_COST_FREE), so this extra step puts the lqc2 after `qmtc2 r; lw w` as in the target.
 //   (4) the plane loads take the word token "j"(q17) (dependency only), so they stay after the word qmtc2 and the home stores.
 // Earlier steps (lilly10, T1849):
-//   (1) `VIEW *pview = &D_002DDF40;` moved to the top of the for(ir) body, and the preheader reads `D_002DDF40.grfChannels`
+//   (1) `VIEW *pview = &g_cm;` moved to the top of the for(ir) body, and the preheader reads `g_cm.grfChannels`
 //       directly. The preheader address is then its own non-live-out pseudo set after the push call: sched1's adjust_priority
 //       does not raise it to max_priority (not "birthing"), so the 0x840/0x890 loop hoists issue first (target order). Because
 //       loop.c re-emits the for-body pview from its REG_EQUAL note, the gcse high(D) reg has a single use and local-alloc moves
 //       it next to the lo_sum (same register: `lui v0; addiu v0,v0; lw v0,0x14(v0)`). The while-top registers follow.
-//   (2) StartCull gets the plane pointer as a parameter, `qword *aqwPlane = D_002DDF40.aqwPlane;` declared at the while-body
+//   (2) StartCull gets the plane pointer as a parameter, `qword *aqwPlane = g_cm.aqwPlane;` declared at the while-body
 //       top (posCam = aqwPlane[-1]): with pview in the for body, cse would otherwise address the planes off pview.
 // (lilly9, T1845):
 //   (1) UnpackWords copies with the VIFS::AddVifUnpack shape (CopyWords: odd-word loop, then a quad loop from cunOdd to cun). For the
@@ -158,8 +158,8 @@ struct RPL
     void *pv;
 };
 extern DMA D_002DEA28;
-extern G D_003DD490;
-extern VIEW D_002DDF40;
+extern G g_sw;
+extern VIEW g_cm;
 extern RPL D_003B3980[0x2000];
 extern RPL *D_003D4A50;
 extern "C" {
@@ -334,19 +334,19 @@ extern "C" void func_001D5808(STACK *pstack, SCENE *pscene)
             pvte->pfn((char *)pobj + pvte->delta);
         }
     }
-    G *pg = &D_003DD490;
+    G *pg = &g_sw;
     if (pscene->nStamp != pg->nStamp)
         func_001681F8(pscene);
     int cDeferred = 0;
     func_001D57B8(pstack, pscene->pblockRoot);
-    int grfChannels = D_002DDF40.grfChannels;
+    int grfChannels = g_cm.grfChannels;
     BLOCK *pblock;
     while ((pblock = func_001D57E0(pstack)) != 0)
     {
-        qword *aqwPlane = D_002DDF40.aqwPlane;
+        qword *aqwPlane = g_cm.aqwPlane;
         for (uint ir = 0; ir < 4; ir++)
         {
-            VIEW *pview = &D_002DDF40;
+            VIEW *pview = &g_cm;
             RENDER *prender = &pblock->ar[ir];
             if (prender->kind == -1)
                 continue;

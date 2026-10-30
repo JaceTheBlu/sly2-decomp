@@ -1319,7 +1319,7 @@ FFindBinding__8CSidebagiP4CRef,0x12AB28,20,match,src/hand/FFindBinding__8CSideba
 func_0012AB78,0x12AB78,81,match,src/hand/func_0012AB78.cpp
 func_0012ACC0,0x12ACC0,77,match,src/auto/func_0012ACC0.c
 func_0012ADF8,0x12ADF8,8,match,src/auto/func_0012ADF8.c
-func_0012AE18,0x12AE18,4,match,src/auto/func_0012AE18.c
+BeginSpliceLoad,0x12AE18,4,match,src/auto/BeginSpliceLoad.c
 func_0012AE28,0x12AE28,33,match,src/auto/func_0012AE28.c
 func_0012AEB0,0x12AEB0,133,match,src/auto/func_0012AEB0.c
 func_0012B0C8,0x12B0C8,8,match,src/auto/func_0012B0C8.c
@@ -1681,14 +1681,14 @@ func_0013D850,0x13D850,26,match,src/auto/func_0013D850.c
 func_0013D8B8,0x13D8B8,2,match,src/auto/func_0013D8B8.c
 func_0013D8C0,0x13D8C0,77,match,src/auto/func_0013D8C0.c
 func_0013D9F8,0x13D9F8,8,match,src/auto/func_0013D9F8.c
-func_0013DA18,0x13DA18,345,match,src/hand/func_0013DA18.cpp
+LoadSwFromBrx,0x13DA18,345,match,src/hand/LoadSwFromBrx.cpp
 func_0013DF80,0x13DF80,87,match,src/hand/func_0013DF80.c
 func_0013E0E0,0x13E0E0,75,match,src/hand/func_0013E0E0.c
 func_0013E210,0x13E210,77,match,src/auto/func_0013E210.c
 func_0013E348,0x13E348,8,match,src/auto/func_0013E348.c
 func_0013E368,0x13E368,24,match,src/hand/func_0013E368.c
 func_0013E3C8,0x13E3C8,82,match,src/hand/func_0013E3C8.c
-func_0013E510,0x13E510,32,match,src/hand/func_0013E510.c
+PloCloneLo,0x13E510,32,match,src/hand/PloCloneLo.c
 func_0013E590,0x13E590,20,match,src/hand/func_0013E590.c
 func_0013E5E0,0x13E5E0,43,match,src/hand/func_0013E5E0.cpp
 func_0013E690,0x13E690,98,match,src/hand/func_0013E690.c
@@ -1945,7 +1945,7 @@ func_0014B508,0x14B508,77,match,src/auto/func_0014B508.c
 func_0014B640,0x14B640,8,match,src/auto/func_0014B640.c
 func_0014B660,0x14B660,4,match,src/auto/func_0014B660.c
 func_0014B670,0x14B670,7,match,src/auto/func_0014B670.c
-func_0014B690,0x14B690,3,match,src/auto/func_0014B690.c
+PchzFidName,0x14B690,3,match,src/auto/PchzFidName.c
 func_0014B6A0,0x14B6A0,77,match,src/auto/func_0014B6A0.c
 func_0014B7D8,0x14B7D8,8,match,src/auto/func_0014B7D8.c
 CpchzTokenizePath__FPc,0x14B7F8,111,match,src/hand/CpchzTokenizePath__FPc.cpp

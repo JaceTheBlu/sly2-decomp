@@ -1,6 +1,6 @@
 // func_00221DD8: ported from Lilly's personal Sly 2 decomp (src/P2/cplcy.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002A2DA0 (D_002A2DA0), D_002C4118 (D_002C4118), D_002C41B0 (D_002C41B0), D_002C41D8 (D_002C41D8), D_002C41DC (D_002C41DC), D_002C41E0 (D_002C41E0), D_002C41F0 (D_002C41F0), D_002C4200 (D_002C4200), D_002C4208 (D_002C4208), D_002C4220 (D_002C4220), D_002C4230 (D_002C4230), D_002C4240 (D_002C4240), D_002C4250 (D_002C4250), D_002C4260 (D_002C4260), D_002C426C (D_002C426C), D_002C4270 (D_002C4270), D_002C4274 (D_002C4274), D_002C4278 (D_002C4278), D_002C427C (D_002C427C), D_002C4280 (D_002C4280), D_002C41EC (g_SheetCameraEngineCameraDamping), D_002C41E4 (g_SheetCameraEngineCameraHorizontalSpeed), D_002C41E8 (g_SheetCameraEngineCameraVerticalSpeed), D_002DDED0 (g_clock), D_002DDF40 (g_cm), D_002DEB30 (g_game), D_002BBB60 (g_lmZeroOne), D_002A2DC0 (g_normalZ), D_002A2DD0 (g_qwZero)
+// Globals: D_002A2DA0 (D_002A2DA0), D_002C4118 (D_002C4118), D_002C41B0 (D_002C41B0), D_002C41D8 (D_002C41D8), D_002C41DC (D_002C41DC), D_002C41E0 (D_002C41E0), D_002C41F0 (D_002C41F0), D_002C4200 (D_002C4200), D_002C4208 (D_002C4208), D_002C4220 (D_002C4220), D_002C4230 (D_002C4230), D_002C4240 (D_002C4240), D_002C4250 (D_002C4250), D_002C4260 (D_002C4260), D_002C426C (D_002C426C), D_002C4270 (D_002C4270), D_002C4274 (D_002C4274), D_002C4278 (D_002C4278), D_002C427C (D_002C427C), D_002C4280 (D_002C4280), D_002C41EC (g_SheetCameraEngineCameraDamping), D_002C41E4 (g_SheetCameraEngineCameraHorizontalSpeed), D_002C41E8 (g_SheetCameraEngineCameraVerticalSpeed), D_002DDED0 (g_clock), g_cm (g_cm), D_002DEB30 (g_game), D_002BBB60 (g_lmZeroOne), D_002A2DC0 (g_normalZ), D_002A2DD0 (g_qwZero)
 // 0x00221DD8 Update__7CMPART2P6CPDEFIP3JOY  (MATCHES Sly 2; T1253, 1604 instructions). The frame is the game's 0x230 (0x00 posFocus, 0x10 posHang,
 // 0x20 vecTangent, 0x30 dposCrv / vFocus, 0x40..0x60 the free camera's temporaries, 0x70 smp, 0x80 vecHeading / smpPull, 0x90..0xEF six untouched
 // locals, 0xF0.. the view floats, 0x124 / 0x128 the pull flags; T1203). How the last 16.5% -> MATCH went (re/notes/camera-updatecm.md "T1253"):
@@ -730,7 +730,7 @@ struct CM : public CMBASE
       float rUnk620;
       float rUnk624;
 };
-extern CM D_002DDF40;
+extern CM g_cm;
 void SpringCm(CM *pcm, qword *pqwPos, VECTOR *pvVel, qword qwTarget, float k, float c);
 void SetCmPanTilt(CM *pcm, qword posEye, qword posCenter, float radPan, float radTilt);
 struct VU_FLOAT
@@ -1692,9 +1692,9 @@ void CMPART2::Update(CPDEFI *pcpdefi, JOY *pjoy)
     VECTOR4 posFocus;
     CalcCpdFocus(pcpd, pcpdefi, (qword *)&posFocus, ptnCur);
     if (ploPlayer != 0 && ((STEPPLAYER *)ploPlayer)->jtgrab.jtfock == JTFOCK_Focus)
-        SpringCm(&D_002DDF40, &D_002DDF40.dposFocus, &D_002DDF40.vFocus, QwSub(((STEPPLAYER *)ploPlayer)->jtgrab.qwPosFocus, *(qword *)&posFocus), 8.0f, -6.0f);
+        SpringCm(&g_cm, &g_cm.dposFocus, &g_cm.vFocus, QwSub(((STEPPLAYER *)ploPlayer)->jtgrab.qwPosFocus, *(qword *)&posFocus), 8.0f, -6.0f);
     VECTOR4 posHang;
-    qword *pdposFocus = &D_002DDF40.dposFocus;
+    qword *pdposFocus = &g_cm.dposFocus;
     *(qword *)&posHang = QwAdd(*(qword *)&posFocus, *pdposFocus);
     if (ptnCur != 0 && ptnCur->ploPull != 0)
         pcpdefi->grfcpd &= ~1;
@@ -1738,13 +1738,13 @@ void CMPART2::Update(CPDEFI *pcpdefi, JOY *pjoy)
     }
     if (fEntered)
         nMode = 4;
-    if (D_002DDF40.nCut != 0)
+    if (g_cm.nCut != 0)
     {
-        if (D_002DDF40.nCut == 2)
+        if (g_cm.nCut == 2)
         {
             nMode = 4;
-            radPan = D_002DDF40.radCutPan;
-            float radTiltCut = D_002DDF40.radCutTilt - atanf(pcpd->uFrameY * D_002DDF40.gTanHalfY);
+            radPan = g_cm.radCutPan;
+            float radTiltCut = g_cm.radCutTilt - atanf(pcpd->uFrameY * g_cm.gTanHalfY);
             radTilt = GLimitLm(&D_002C41B0, radTiltCut);
         }
         else if ((grftnm & 3) == 0)
@@ -1870,7 +1870,7 @@ void CMPART2::Update(CPDEFI *pcpdefi, JOY *pjoy)
         }
         *(qword *)&vecStick = qwStick;
         VECTOR4 vecView;
-        CM *pcm = &D_002DDF40;
+        CM *pcm = &g_cm;
         qword *pqwFallbackView = &D_002A2DA0;
         *(qword *)&vecView = QwSub(*(qword *)&posHang, *(qword *)&pcm->pos);
         vecView.z *= 0.3f;
@@ -2149,7 +2149,7 @@ void CMPART2::Update(CPDEFI *pcpdefi, JOY *pjoy)
         }
         break;
     }
-    if (D_002DDF40.nCut != 0)
+    if (g_cm.nCut != 0)
     {
         dsDist = duFrameY = 0.0f;
     }
@@ -2168,20 +2168,20 @@ void CMPART2::Update(CPDEFI *pcpdefi, JOY *pjoy)
     *(qword *)&posEyeWant = QwAdd(*(qword *)&posHang, *(qword *)&dposEye);
     if (ptnCur == 0 || ptnCur->fNoCamClip == 0)
     {
-        if (D_002DDF40.nCut != 0)
+        if (g_cm.nCut != 0)
             FreeCamClip(this, *(qword *)&posHang, *(qword *)&posEyeWant, (qword *)&posEyeWant);
         else if (D_002C4118 == 0)
-            *(qword *)&posEyeWant = ClipCmEye(&D_002DDF40, posEye, *(qword *)&posEyeWant);
+            *(qword *)&posEyeWant = ClipCmEye(&g_cm, posEye, *(qword *)&posEyeWant);
     }
     *(qword *)&dposEye = QwSub(*(qword *)&posEyeWant, *(qword *)&posHang);
     DecomposeSphere(*(qword *)&dposEye, &radPanOut, &radTiltOut, &sDistOut);
     posEye = *(qword *)&posEyeWant;
-    *(qword *)&posEyeWant = QwAdd(*(qword *)&posHang, QwMulX(*(qword *)&dposEye, VuFloat((sDistOut + D_002DDF40.sNearClip) / sDistOut)));
-    float radLookX = atanf(uFrameXWant * D_002DDF40.gTanHalfX);
-    float radLookY = -atanf(uFrameYWant * D_002DDF40.gTanHalfY);
+    *(qword *)&posEyeWant = QwAdd(*(qword *)&posHang, QwMulX(*(qword *)&dposEye, VuFloat((sDistOut + g_cm.sNearClip) / sDistOut)));
+    float radLookX = atanf(uFrameXWant * g_cm.gTanHalfX);
+    float radLookY = -atanf(uFrameYWant * g_cm.gTanHalfY);
     if (fEntered)
     {
-        if (D_002DDF40.nCut != 0)
+        if (g_cm.nCut != 0)
         {
             radPanLook = radTiltLook = 0.0f;
         }
@@ -2192,7 +2192,7 @@ void CMPART2::Update(CPDEFI *pcpdefi, JOY *pjoy)
             DecomposeCylind(*(qword *)&dposEye, 0, &sXY, &z);
             float radPanCm;
             float radTiltCm;
-            DecomposeRotateMatrixPanTilt(&D_002DDF40.matRot, &radPanCm, &radTiltCm);
+            DecomposeRotateMatrixPanTilt(&g_cm.matRot, &radPanCm, &radTiltCm);
             float radPanView = RadNormalize(radPanOut + 3.1415927f + radLookX);
             float radTiltView = RadNormalize(atan2f(-z, sXY) + radLookY);
             radPanLook = RadNormalize(radPanCm - radPanView);
@@ -2207,7 +2207,7 @@ void CMPART2::Update(CPDEFI *pcpdefi, JOY *pjoy)
         radPanLook += dradPanLook * D_002DDED0.dt;
         radTiltLook += dradTiltLook * D_002DDED0.dt;
     }
-    SetCmPanTilt(&D_002DDF40, *(qword *)&posEyeWant, *(qword *)&posHang, radLookX + radPanLook, radLookY + radTiltLook);
+    SetCmPanTilt(&g_cm, *(qword *)&posEyeWant, *(qword *)&posHang, radLookX + radPanLook, radLookY + radTiltLook);
     uFrameY = uFrameYWant;
     radPan = radPanOut;
     radTilt = radTiltOut;

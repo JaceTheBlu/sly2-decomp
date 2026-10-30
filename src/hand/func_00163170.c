@@ -10,7 +10,7 @@ struct X {
 };
 struct CLOCK { float t; };
 extern struct CLOCK D_002DDED0;
-extern char D_003DD490[];
+extern char g_sw[];
 int func_00164030(struct X *p);
 void func_001A6CA8(struct X *p, int n);
 void func_0020EFC0(void *pg, int n);
@@ -56,7 +56,7 @@ void func_00163170(struct X *p, int n)
             *(int *)v |= 0x102;
         else
             p->fl = v | 0x102;
-        func_0020EFC0(D_003DD490, 2);
+        func_0020EFC0(g_sw, 2);
     }
     p->fC4 = n;
     p->fC8 = D_002DDED0.t;
@@ -71,7 +71,7 @@ void func_00163170(struct X *p, int n)
             *(int *)v &= ~0x102;
         else
             p->fl = v & ~0x102;
-        func_0020F030(D_003DD490, 2);
+        func_0020F030(g_sw, 2);
         break;
     }
     case 1:

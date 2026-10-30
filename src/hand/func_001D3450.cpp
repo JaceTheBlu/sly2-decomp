@@ -43,7 +43,7 @@ struct OWNER { char pad0[0xC]; VTE *vt; char pad10[0xE4 - 0x10]; SHAPE *shape; }
 struct WHEEL { char pad0[0x20]; float radius, bottom, top; char pad2C[0x24]; qword pos; };
 struct CONTACT;
 struct GAME;
-extern GAME D_003DD490;
+extern GAME g_sw;
 extern const qword D_002A2DC0;
 extern const qword D_002C2150[5];
 /* -FLT_MAX / FLT_MAX below are constant-pool literals (0x2A7838/0x2A783C), not globals: their REG_EQUAL sets order f24/f26 */
@@ -325,6 +325,6 @@ extern "C" void func_001D3450(OWNER *owner, WHEEL *wheel, SOPART *ppart, int unu
         qword world = Transform(frame, bestPoint).q;
         VECTOR normal;
         normal.q = plane;
-        func_001A7C18(&D_003DD490, owner->shape, ppart, world, normal.q, 10, 0, 0, ppcontact, best);
+        func_001A7C18(&g_sw, owner->shape, ppart, world, normal.q, 10, 0, 0, ppcontact, best);
     }
 }

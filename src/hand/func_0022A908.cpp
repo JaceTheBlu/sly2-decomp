@@ -41,8 +41,8 @@ struct WAYPT
 struct SW { char pad[0x3B0C]; int fUnk3B0C; char pad3B10[0xC40]; float tUnk4750, tUnk4754; char pad4758[0xC]; int cUnk4764, cUnk4768; };
 struct CM { char pad[0x90]; qword pos; };
 struct CLOCK { float t; };
-extern SW D_003DD490;      // g_sw
-extern CM D_002DDF40;      // g_cm
+extern SW g_sw;      // g_sw
+extern CM g_cm;      // g_cm
 extern CLOCK D_002DDED0;   // g_clock
 extern qword D_002A2DC0;   // g_normalZ
 extern LM D_002BBB60;      // g_lmZeroOne
@@ -63,7 +63,7 @@ void func_001A5FB8(SO *pso, qword pos0, qword pos1, float s, float a);
 char *func_0013E368(SW *psw, int id);
 void func_001CD780(qword pos, float s, char *pchz, const RGBA *prgba0, const RGBA *prgba1);
 }
-static inline void DrawLabel(qword pos, RGBA rgba0, RGBA rgba1, int id, float s) { func_001CD780(pos, s, func_0013E368(&D_003DD490, id), &rgba0, &rgba1); }
+static inline void DrawLabel(qword pos, RGBA rgba0, RGBA rgba1, int id, float s) { func_001CD780(pos, s, func_0013E368(&g_sw, id), &rgba0, &rgba1); }
 
 static inline float GEvaluateClq(CLQ *pclq, float x) { return pclq->g0 + x * (pclq->g1 + x * pclq->g2); }
 static inline float GLimitG(float g, float gMin, float gMax)
@@ -121,24 +121,24 @@ inline MATRIX3 operator*(const MATRIX3 &mat, VU_FLOAT g) return matRes
 extern "C" void func_0022A908(WAYPT *pwaypt)
 {
     func_001F3C70(pwaypt);
-    float tStart = GMax(D_003DD490.tUnk4750 + D_002C4494, D_003DD490.tUnk4754 + D_002C4498);
+    float tStart = GMax(g_sw.tUnk4750 + D_002C4494, g_sw.tUnk4754 + D_002C4498);
     float uShow = GLimitG(GEvaluateClq(&D_002C44A0, D_002DDED0.t - tStart), D_002BBB60.gMin, D_002BBB60.gMax);
-    tStart = D_003DD490.tUnk4750 + D_002C449C;
+    tStart = g_sw.tUnk4750 + D_002C449C;
     float uLabel = GLimitG(GEvaluateClq(&D_002C44B0, D_002DDED0.t - tStart), D_002BBB60.gMin, D_002BBB60.gMax);
     switch (pwaypt->nMode)
     {
     case 0:
-        if (D_003DD490.fUnk3B0C)
+        if (g_sw.fUnk3B0C)
             uShow = uLabel = 0.0f;
         break;
     case 2:
-        if (D_003DD490.cUnk4764 < D_003DD490.cUnk4768 || D_003DD490.fUnk3B0C ||
+        if (g_sw.cUnk4764 < g_sw.cUnk4768 || g_sw.fUnk3B0C ||
             (pwaypt->ipukReq != -1 && func_001DAEA8(pwaypt->ipukReq)) ||
             (pwaypt->pcond && !func_00163400(pwaypt->pcond)))
             uShow = uLabel = 0.0f;
         break;
     case 1:
-        if (!D_003DD490.fUnk3B0C)
+        if (!g_sw.fUnk3B0C)
             uShow = uLabel = 0.0f;
         break;
     }
@@ -146,7 +146,7 @@ extern "C" void func_0022A908(WAYPT *pwaypt)
         return;
 
     func_0022A220(pwaypt);
-    qword posCam = D_002DDF40.pos;
+    qword posCam = g_cm.pos;
     qword pos = func_001A62E8(pwaypt->ploSource);
     qword posTop = QwAddScaled(pos, D_002A2DC0, VuFloatFromMemWord(*(int *)&pwaypt->sHeight));
     float sDist;

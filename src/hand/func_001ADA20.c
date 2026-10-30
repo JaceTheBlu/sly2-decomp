@@ -5,7 +5,7 @@ struct GD { char pad[0x3B1C]; int x3B1C; };
 struct B { char data[0x5464]; };
 extern struct G D_003D9ED0;
 extern struct E D_003D9EDC[];
-extern struct GD D_003DD490;
+extern struct GD g_sw;
 extern struct B D_002E6604[];
 int func_001B0108(struct G *g);
 int func_001B0078(struct G *g);
@@ -22,7 +22,7 @@ void func_001ADA20(char *buf)
     float f;
     if (!func_001B0108(g))
         return;
-    gd = &D_003DD490;
+    gd = &g_sw;
     {
     struct E *e = &D_003D9EDC[g->x24];
     func_002581C0(&ref, gd->x3B1C, &D_002E6604[e->x14]);

@@ -4,7 +4,7 @@ struct VTE { short d; short p; void (*pfn)(void *); };
 struct P { char pad[0xC]; struct VTE *pvt; char pad1[0x14 - 0x10]; int n14; char pad2[0x44 - 0x18]; float f44; char pad3[0x52 - 0x48]; short h52; char pad4[0x60 - 0x54]; struct X *p60; char pad5[0x3B8 - 0x64]; int n3B8; };
 struct M { int n0; int n4; int n8; int nC; int n10; int n14; };
 struct G { char pad[0x10]; int n10; };
-extern struct G D_003DD040;
+extern struct G g_sndmgr;
 void func_00258248(struct K *);
 int func_001FD080(struct G *, struct X *);
 void func_001FB018(struct P *);
@@ -32,7 +32,7 @@ void func_001FC510(struct P *p)
     int n;
     k.n8 = 2;
     func_00258248(&k);
-    n = func_001FD080(&D_003DD040, p->p60);
+    n = func_001FD080(&g_sndmgr, p->p60);
     if (FSet(&k, p->p60)) {
         if (k.n8 != 2) {
             func_001FB658(p, 0x1FFF, 0);
@@ -46,7 +46,7 @@ void func_001FC510(struct P *p)
         m.n10 = p->n3B8 | 1;
         {
             int fl = 0;
-            if (D_003DD040.n10 && n == 2) fl = p->p60->n4C == 0;
+            if (g_sndmgr.n10 && n == 2) fl = p->p60->n4C == 0;
             m.n14 = fl;
         }
         p->h52 = 1;

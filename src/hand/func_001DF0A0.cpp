@@ -25,7 +25,7 @@ struct REQUEST { int x0; SUB *x4; };
 struct HIT { qword pos; char pad[0x50]; };
 union VECTOR { qword q; float f[4]; };
 struct G;
-extern G D_003DD490;
+extern G g_sw;
 typedef void (OBJ::*PMF)();
 extern "C" {
 void func_001F5990(OBJ *, REQUEST *, int, int, int, CONTACT **);
@@ -93,8 +93,8 @@ extern "C" void func_001DF0A0(OBJ *p, REQUEST *q, int a2, int a3, int a4, CONTAC
             float dist = Scalar(Len(Sub(seg[0], pos.q)));
             qword dir = Sub(seg[1], seg[0]);
             dir = Div(dir, Len(dir));
-            func_001A7C18(&D_003DD490, p->shape, q, pos.q, dir, 10, *(int *)&dist, 0, &e->head, 0.0f);
-            func_00149AB8(&D_003DD490, p, &OBJ::Notify, 0);
+            func_001A7C18(&g_sw, p->shape, q, pos.q, dir, 10, *(int *)&dist, 0, &e->head, 0.0f);
+            func_00149AB8(&g_sw, p, &OBJ::Notify, 0);
         }
     }
 }

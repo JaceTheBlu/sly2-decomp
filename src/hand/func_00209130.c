@@ -8,7 +8,7 @@ union PAYLOAD {
     void *resource;
 };
 struct E { int kind; union PAYLOAD value; int n8, nC; };
-extern char D_003DD490[];
+extern char g_sw[];
 void func_0020BD88(struct H *, void *);
 void func_0020C7E0(struct DIRECTION_STATE *, void *);
 void *func_0015E938(void *, int, int, void *);
@@ -29,7 +29,7 @@ void func_00209130(struct E *e, void *context)
         func_0020BD88(e->value.curvature, context);
         return;
     }
-    resource = func_0015E938(D_003DD490, 4, e->value.oid, context);
+    resource = func_0015E938(g_sw, 4, e->value.oid, context);
     if (!resource) {
         e->kind = -1;
         return;

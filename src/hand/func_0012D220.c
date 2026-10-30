@@ -18,7 +18,7 @@ struct P {
     int x0; void *x4; struct X *x8; int xC; int pad10[4]; qword v20; struct POLY poly30; int pad3C; struct POLY poly40; int pad4C;
     float g50; float g54; float g58; float g5C; float g60; int x64; int x68; int x6C; void *x70; int x74;
 };
-extern char D_003DD490[];
+extern char g_sw[];
 extern qword D_002A2DD0;
 extern float D_002A45A8;
 struct CLOCK { float t; int dt; };
@@ -55,7 +55,7 @@ void func_0012D220(struct P *p)
     qword vel;
 
     if (p->x70 == 0 && p->x6C != -1)
-        p->x70 = func_0015E938(D_003DD490, 0x104, p->x6C, p->x4);
+        p->x70 = func_0015E938(g_sw, 0x104, p->x6C, p->x4);
     {
         struct X *x8 = p->x8;
         int z;
@@ -65,7 +65,7 @@ void func_0012D220(struct P *p)
         __asm__("" : "+r"(po) : "r"(x8), "r"(z));  /* empty asm, allocation only: x8 ($v0) and z ($v1) stay live past the posT load, so reload picks $a1 for it (non-volatile: has an output, so reload_cse can drop the later a1 reload) */
     }
     if (!po)
-        po = func_001C4AF8(D_003DD490, posT);
+        po = func_001C4AF8(g_sw, posT);
     if (po) {
         qword d, t;
         d = func_001A62E8(po);

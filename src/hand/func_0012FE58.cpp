@@ -13,7 +13,7 @@ struct O {
     virtual void v46(); virtual void v47(); virtual void v48(); virtual void v49(); virtual void v50();
     virtual int Get(int sub);
 };
-extern char D_003DD490[];
+extern char g_sw[];
 extern "C" {
 O *func_0015E938(void *pg, int k, int id, void *p);
 void func_0012FE58(void *a, void *b, KEYID *pk, O **ppo, int *pn);
@@ -21,9 +21,9 @@ void func_0012FE58(void *a, void *b, KEYID *pk, O **ppo, int *pn);
 void func_0012FE58(void *a, void *b, KEYID *pk, O **ppo, int *pn)
 {
     if (b)
-        *ppo = func_0015E938(D_003DD490, 1, pk->id, b);
+        *ppo = func_0015E938(g_sw, 1, pk->id, b);
     else
-        *ppo = func_0015E938(D_003DD490, 4, pk->id, a);
+        *ppo = func_0015E938(g_sw, 4, pk->id, a);
     if (!*ppo)
         *pn = 0;
     else

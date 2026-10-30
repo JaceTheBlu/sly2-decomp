@@ -1,7 +1,7 @@
 #include "vifs.h"
 struct X { char pad[0x120]; QW amat[3]; int f150[4]; int f160; };
 struct G;
-extern G D_003DD490;
+extern G g_sw;
 extern char D_0025E090[];
 extern char D_0025E668[];
 extern "C" void func_00160918(VIFS *pvifs, void *pvStart, void *pvEnd);
@@ -18,7 +18,7 @@ extern "C" void func_00167FC0(VIFS *pvifs)
     pvifs->AddDmaCnt();
     pvifs->AddVifFlusha();
     pvifs->AddVifBaseOffset(0x32, 0);
-    int c = func_0015E9C8(&D_003DD490, 0x505, 4, 0, 0x180, (void **)apx);
+    int c = func_0015E9C8(&g_sw, 0x505, 4, 0, 0x180, (void **)apx);
     for (i = 0; i < c; i++) {
         px = apx[i];
         if (!px->f160)

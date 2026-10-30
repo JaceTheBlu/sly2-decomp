@@ -66,7 +66,7 @@ extern "C" {
 extern CLOCK D_002DDED0;          // g_clock
 extern ACTOR *D_002E1E40;         // the player
 extern ACTOR *D_002F7900;
-extern MANAGER D_002DDF40;
+extern MANAGER g_cm;
 extern qword D_002A2DA0, D_002A2DC0, D_002A2DD0, D_002BF650;
 extern float D_002BF63C, D_002BF640;
 int func_00132B10(void *, int);
@@ -257,13 +257,13 @@ extern "C" void func_00192BD8(CONTEXT *p, int step)
                 SetVector(p->pactor, 35, D_002A2DD0);
                 SetVector(p->pactor, 36, D_002A2DD0);
             }
-            func_0014E328(&D_002DDF40, 10, (CAMERA *)((char *)&D_002DDF40 + 0x4C0), p->pactor, p->pactor->anchor);
+            func_0014E328(&g_cm, 10, (CAMERA *)((char *)&g_cm + 0x4C0), p->pactor, p->pactor->anchor);
         }
         break;
     case 9:
     case 10:
         if (!(Less(step, 11) && !Less(step, 9)))
-            func_0014E4C8(&D_002DDF40, 2, 10, (CAMERA *)((char *)&D_002DDF40 + 0x4C0), 0, 0);
+            func_0014E4C8(&g_cm, 2, 10, (CAMERA *)((char *)&g_cm + 0x4C0), 0, 0);
         break;
     }
 

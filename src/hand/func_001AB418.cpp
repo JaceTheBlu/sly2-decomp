@@ -17,7 +17,7 @@ struct G { char pad[0x3B1C]; int x3B1C; };
 struct CLOCK { char pad[0x3C]; float t3c; };
 struct ST { char pad[0x44]; int x44; };
 extern "C" {
-extern G D_003DD490;
+extern G g_sw;
 extern CLOCK D_002DDED0;
 extern ST D_002E6550;
 extern char D_002E65A0[];
@@ -66,7 +66,7 @@ void func_001AB418(MC *p, int state)
         p->pslotCur = &p->aslot[0];
         for (i = 0; i < 3; i++) {
             SLOT *pslot = &p->aslot[i];
-            float g = GetF(D_003DD490.x3B1C, pslot);
+            float g = GetF(g_sw.x3B1C, pslot);
             if (g != 0.0f) {
                 if (func_001AB398(p->pslotCur->x5408, pslot->x5408) < 0)
                     p->pslotCur = pslot;

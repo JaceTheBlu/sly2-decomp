@@ -9,7 +9,7 @@ typedef struct { int ids; void (*pfn)(void); int k; int pad[5]; } ITEM;
 typedef struct { char pad[0xFD50]; void *xFD50; void *xFD54; } BIG;
 extern BIG D_002E65E0;
 extern char D_002E6550[];
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern char D_003D9ED0[];
 extern ITEM D_003DA578[];
 extern int D_002C35B8[];
@@ -57,7 +57,7 @@ void func_001DD920(OBJ *p)
         return;
     if (!func_00187D80(p->pad10, 0x10))
         return;
-    pv = func_0015E938(&D_003DD490, 5, 0x5D6, 0);
+    pv = func_0015E938(&g_sw, 5, 0x5D6, 0);
     if (pv == 0)
         return;
     func_001A2C48(&c, &ak);

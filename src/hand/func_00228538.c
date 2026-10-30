@@ -1,6 +1,6 @@
 typedef int qword __attribute__((mode(TI)));
 struct G;
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern char D_002F66B0[];
 struct CLOCK { float t; float dt; };
 extern struct CLOCK D_002DDED0;
@@ -23,12 +23,12 @@ void func_00228538(struct S *p)
             int i;
             for (i = 0; i < p->c; i++)
                 func_001B3A48(D_002F66B0, p->a[i]);
-            func_0022B490(&D_003DD490, p->x144, p->x150, -1, p->x138 ? 0x20 : 0, p->x154);
+            func_0022B490(&g_sw, p->x144, p->x150, -1, p->x138 ? 0x20 : 0, p->x154);
             p->t158 = 0.0f;
         }
         break;
     case 0: case 1: case 3: {
-        void *pj = func_001C4840(&D_003DD490);
+        void *pj = func_001C4840(&g_sw);
         union { qword q; } u;
         int f;
         if (!pj) return;

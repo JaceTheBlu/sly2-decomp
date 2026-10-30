@@ -1,6 +1,6 @@
 typedef int qword __attribute__((mode(TI)));
 extern qword D_002A2DD0;
-extern char D_003DD490[];
+extern char g_sw[];
 struct CLOCK { float t; };
 extern struct CLOCK D_002DDED0;
 struct V3 { int x; int y; int z; };
@@ -57,7 +57,7 @@ void func_0014AE38(struct P *p, int state)
     switch (state) {
     case 0: {
         struct O9E *po = func_00205438(p->p10, 0x9E);
-        po->x38 = func_001C4840(D_003DD490);
+        po->x38 = func_001C4840(g_sw);
         VCALL0(po, 8);
         {
             struct X *px = p->p10;
@@ -91,7 +91,7 @@ void func_0014AE38(struct P *p, int state)
         po->xC0 = 8;
         po->x40 = 1;
         po->x64 = 25.0f;
-        po->xC8 = func_001C4840(D_003DD490);
+        po->xC8 = func_001C4840(g_sw);
         VCALL0(po, 8);
         p->p10->xF04 = D_002DDED0.t;
         func_001F5720(p->p10, 0);
@@ -115,7 +115,7 @@ void func_0014AE38(struct P *p, int state)
     }
     case 4: {
         struct O9E *po = func_00205438(p->p10, 0x9E);
-        po->x38 = func_001C4840(D_003DD490);
+        po->x38 = func_001C4840(g_sw);
         po->x3C = 1;
         VCALL0(po, 8);
         break;

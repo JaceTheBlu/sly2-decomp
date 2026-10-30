@@ -28,7 +28,7 @@ void func_0020FAA0(GAME*,qword,qword,int(*)(void*,ROW*),void*,int*,ROW***);
 extern P*D_003E1444;
 extern float D_002A7620;
 extern qword D_002C0A80,D_002C0A90,D_002C0AA0;
-extern GAME D_003DD490;
+extern GAME g_sw;
 }
 struct MARK{MARK(){func_001AE478(this);}~MARK(){func_001AE4A0(this,2);}};
 static inline qword Vector(qword r){qword v;__asm__("qmtc2.ni %1,%0":"=j"(v):"r"(r));return v;}
@@ -74,7 +74,7 @@ extern "C" void func_001BA128(P*p){
    qword high=Add(position,D_002C0AA0);
    MARK arena;
    int count;ROW**rows;
-   func_0020FAA0(&D_003DD490,low,high,func_001BA100,0,&count,&rows);
+   func_0020FAA0(&g_sw,low,high,func_001BA100,0,&count,&rows);
    for(int i=0;i<count;i++){
     ROW*row=rows[i];
     if(func_00227C90(volume,func_001A62E8(row->object))){p->target=row->object;break;}

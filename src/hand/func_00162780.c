@@ -10,7 +10,7 @@ struct S {
 };
 extern char D_003D4A60[];
 struct G { char pad[0x3A18]; char m3a18[0x10]; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 void func_001A5C48(struct S *p);
 int func_001633E8(struct S *p);
 int func_00162670(struct S *p);
@@ -45,8 +45,8 @@ void func_00162780(struct S *p)
         func_00129EC8(&ref);
         p->fa4 = g;
     }
-    p->fa8 = func_001D7E80(D_003DD490.m3a18, &p->fe8, D_003D4A60);
+    p->fa8 = func_001D7E80(g_sw.m3a18, &p->fe8, D_003D4A60);
     if (p->fac != -1)
-        p->fb8 = func_0015E938(&D_003DD490, 0x405, p->fac, 0);
-    p->fbc = func_0015E938(&D_003DD490, 0x405, 0x379, 0);
+        p->fb8 = func_0015E938(&g_sw, 0x405, p->fac, 0);
+    p->fbc = func_0015E938(&g_sw, 0x405, 0x379, 0);
 }

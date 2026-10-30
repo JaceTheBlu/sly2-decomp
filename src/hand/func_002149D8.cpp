@@ -53,7 +53,7 @@ void func_00149A50(WORLD *,OWNER *,PMF,SPRITE *);
 struct STACKSCOPE {STACKSCOPE();~STACKSCOPE();};
 extern int D_002C40A4;
 extern PMF D_002A8B08;
-extern WORLD D_003DD490;
+extern WORLD g_sw;
 extern QW D_002A2E10;
 extern char D_00000650[],D_00000140[];
 static inline void *Acquire(ALLOCREQ *request,int bytes,int alignment){request->cb=bytes;request->cbAlign=alignment;return func_001AE378(request);}
@@ -122,7 +122,7 @@ extern "C" void func_002149D8(OWNER *const owner,BIS *stream,ROOT *root,int,SPRI
   vif.AddVifUnpack(UPK_V4_32,((uint)gif.m_pb-(uint)gif.m_ab)>>4,gif.m_ab,7);
   vif.AddVifMscal(D_00000650);vif.EndDmaCnt();vif.AddDmaRet();
   if(sprite->kind==6)vif.DetachCopySw(owner->heap,&sprite->data.effect.count,0,&sprite->data.effect.packet);
-  else{vif.DetachCopySw(owner->heap,&sprite->data.picture.count,0,&sprite->data.picture.packet);func_00149A50(&D_003DD490,owner,D_002A8B08,sprite);}
+  else{vif.DetachCopySw(owner->heap,&sprite->data.picture.count,0,&sprite->data.picture.packet);func_00149A50(&g_sw,owner,D_002A8B08,sprite);}
   break;
  }
  case 1:{

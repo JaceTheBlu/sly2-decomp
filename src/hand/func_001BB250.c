@@ -12,7 +12,7 @@ typedef struct O {
 } O;
 typedef struct L { int x0; struct L *next; int *px8; O *po; } L;
 typedef struct X { char pad[0x64]; L *pl; } X;
-extern char D_003DD490[];
+extern char g_sw[];
 void func_001F4F10(O *p);
 int func_001BBE48(O *p);
 int func_00132B10(O *p, int k);
@@ -44,7 +44,7 @@ void func_001BB250(O *p)
             }
             ((void (*)(void *, O *))p->vt[54].pfn)((char *)p + p->vt[54].d, pl->po);
             ((void (*)(void *, O *))pl->po->vt[54].pfn)((char *)pl->po + pl->po->vt[54].d, p);
-            func_001A7E10(D_003DD490, pl->x0);
+            func_001A7E10(g_sw, pl->x0);
             *pl->px8 = 0;
             pl->x0 = 0;
             break;

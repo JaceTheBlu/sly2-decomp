@@ -9,7 +9,7 @@ struct P {char padC[0xC];VT *vt;char pad10[0x48];OWNER *position,*rotation;char 
 struct G {char pad3D58[0x3D58];int stamp;};
 struct CLOCK {float time,dt;};
 extern CLOCK D_002DDED0;
-extern G D_003DD490;
+extern G g_sw;
 extern "C" void func_00230630(P *,OWNER *);
 extern "C" qword *func_00256D18(qword *,qword);
 extern "C" M3 *func_0011B570(M3 *,qword);
@@ -46,7 +46,7 @@ extern "C" void func_001F9C48(P *p)
     qword k=Scalar(clock->dt*coefficient,&scalar);
     func_00256D18(&position->position.q,AddScaled(point,position->velocity.q,k));}
     position->position.f[3]=1.0f;
-    global=&D_003DD490;
+    global=&g_sw;
     position->stamp=++global->stamp;
     Clear(positionVelocity);
     frame=Mul(BuildRotation(Scale(rotation->velocity.q,Scalar(clock->dt*coefficient,&scalar))),rotation->matrix);

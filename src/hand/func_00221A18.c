@@ -6,7 +6,7 @@ struct R { char pad[0x5C]; float g5C; };
 struct S { char pad[0x10]; struct T *pt; void *pe; float g18; float g1C; float g20; float g24; char pad1[0x34 - 0x28]; int x34; int x38;
     int x3C; char pad2[0x48 - 0x40]; float g48; char pad3[0x60 - 0x4C]; float g60; char pad4[0x70 - 0x64]; qword pos; float g80; };
 struct G { char pad[0x24]; float g24; char pad1[0x4C - 0x28]; float g4C; char pad2[0x90 - 0x50]; qword q90; char pad3[0x2E0 - 0xA0]; qword q2E0; };
-extern struct G D_002DDF40;
+extern struct G g_cm;
 extern char D_002C4120[];
 extern float D_002C41DC;
 struct CLOCK { float t; float dt; };
@@ -46,7 +46,7 @@ void func_00221A18(struct S *p, void *pj, struct T *pt)
     }
     p->x38 = 1;
     func_00220D40(p->pe);
-    func_0014E968(&D_002DDF40, pj, &q0);
+    func_0014E968(&g_cm, pj, &q0);
     func_00220DD8(p->pe, &q0, &q50, 0);
     if (p->pt) {
         struct T *ptT = p->pt;
@@ -56,18 +56,18 @@ void func_00221A18(struct S *p, void *pj, struct T *pt)
             func_00221CE8(p, &q0);
         func_00220DD8(p->pe, &q0, &q50, p->pt);
     }
-    { qword *pq = &D_002DDF40.q2E0; a = VAdd(q50, *pq);
+    { qword *pq = &g_cm.q2E0; a = VAdd(q50, *pq);
     func_0011EFB0(VSub(pq[-0x25], a), &p->g18, &p->g1C, &p->g20); }
-    p->g20 = p->g20 - D_002DDF40.g4C;
+    p->g20 = p->g20 - g_cm.g4C;
     p->pos = VAdd(a, func_0011E208(p->g18, p->g1C, p->g20));
     p->g24 = ((struct R *)p->pe)->g5C;
     p->x34 = 0;
     if (p->pt && p->pt->x184)
-        func_0014D8C0(&D_002DDF40);
+        func_0014D8C0(&g_cm);
     p->g80 = D_002DDED0.t;
     p->g60 = D_002DDED0.t;
     p->g48 = D_002DDED0.t - D_002C41DC;
     p->x3C = 0;
     if (p->pt && p->pt->g188 != 0.0f)
-        D_002DDF40.g24 = p->pt->g188;
+        g_cm.g24 = p->pt->g188;
 }

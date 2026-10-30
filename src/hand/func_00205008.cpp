@@ -11,7 +11,7 @@ struct LO;
 struct LINK { XP *pxpFirst; LINK *plinkNext; XP **ppxpOut; SO *pso; };
 struct ATT { char pad0[0x34]; SOPART *psopart; char pad38[0x60 - 0x38]; SO *pso; LINK *plinkFirst; XP *pxpFirst; };
 struct SO { char pad0[0x10]; SO *psoParent; char pad14[0xEC - 0x14]; ATT *patt; char padF0[0x258 - 0xF0]; SOPART *psopart; };
-extern char D_003DD490[];  // g_sw
+extern char g_sw[];  // g_sw
 extern qword D_002A2DC0;   // g_normalZ
 extern "C" {
 SO *func_001A5BF0(LO *);                 // PsoZapTarget
@@ -64,10 +64,10 @@ extern "C" void func_00205008(SO *pso, int grf, LO *plo, qword posOther, qword d
     M3 mat = func_0011B830(direction, D_002A2DC0);
     qword posLocal = Rotate(mat, Sub(pos, posOther));
     if ((grf & 1) || ((grf & 8) && X(posLocal) < 0.0001f))
-        func_001A7C18(D_003DD490, pso->psopart, psopartOther, pos, mat.r[0], X(posLocal), (grf & 1) ? 11 : 10, 0, 0, ppxpFirst);
+        func_001A7C18(g_sw, pso->psopart, psopartOther, pos, mat.r[0], X(posLocal), (grf & 1) ? 11 : 10, 0, 0, ppxpFirst);
     if ((grf & 2) || ((grf & 0x10) && Y(posLocal) < 0.0001f))
-        func_001A7C18(D_003DD490, pso->psopart, psopartOther, pos, mat.r[1], Y(posLocal), (grf & 2) ? 11 : 10, 0, 0, ppxpFirst);
+        func_001A7C18(g_sw, pso->psopart, psopartOther, pos, mat.r[1], Y(posLocal), (grf & 2) ? 11 : 10, 0, 0, ppxpFirst);
     if ((grf & 4) || ((grf & 0x20) && Z(posLocal) < 0.0001f))
-        func_001A7C18(D_003DD490, pso->psopart, psopartOther, pos, mat.r[2], Z(posLocal), (grf & 4) ? 11 : 14, 0, 0, ppxpFirst);
+        func_001A7C18(g_sw, pso->psopart, psopartOther, pos, mat.r[2], Z(posLocal), (grf & 4) ? 11 : 14, 0, 0, ppxpFirst);
     *ppxpOut = *ppxpFirst;
 }

@@ -7,7 +7,7 @@ typedef int qword __attribute__((mode(TI)));
 struct CLOCK { float t; float dt; };
 extern "C" CLOCK D_002DDED0;
 struct CM;
-extern "C" CM D_002DDF40;
+extern "C" CM g_cm;
 struct CLQ { float g0, g1, g2, pad; };
 struct LM { float gMin, gMax; };
 extern "C" CLQ D_002BDA10;
@@ -106,5 +106,5 @@ void func_00151340(X *p, void *pv, JOY *pjoy)
     }
     func_0012D108(p->p14, pos);
     p->v = v;
-    func_0014E168(&D_002DDF40, &p->p10->m40);
+    func_0014E168(&g_cm, &p->p10->m40);
 }

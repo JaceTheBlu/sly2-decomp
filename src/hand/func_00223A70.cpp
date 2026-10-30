@@ -8,8 +8,8 @@ struct N;
 struct S {O *object;char pad[0x30];int state;};
 struct CAMERA {char pad[0x48];float radius;};
 struct WORLD;
-extern CAMERA D_002DDF40;
-extern WORLD D_003DD490;
+extern CAMERA g_cm;
+extern WORLD g_sw;
 extern float D_002A9700;
 extern "C" {
 void *func_001AE478(void *);
@@ -45,7 +45,7 @@ extern "C" void func_00223A70(S *p,qword begin,qword end,qword *out){
     float one=1.0f;
     w.minimum.q=Min(begin,Min(end,func_001A62E8(object)));
     w.maximum.q=Max(begin,Max(end,func_001A62E8(object)));
-    func_0020FAA0(&D_003DD490,w.minimum.q,w.maximum.q,func_0014F030,0,&w.count,&w.objects);
+    func_0020FAA0(&g_sw,w.minimum.q,w.maximum.q,func_0014F030,0,&w.count,&w.objects);
     int count=w.count; SO **objects=w.objects;
     w.origin.q=func_0014EB70(count,objects,func_001A62E8(object),500.0f);
     func_0014EA08(w.count,w.objects,w.origin.q,end,initialAngle,&w.low,&w.high);
@@ -75,7 +75,7 @@ extern "C" void func_00223A70(S *p,qword begin,qword end,qword *out){
         }while(angle<3.1415927f);
         w.candidate.q=w.best.q;
     }else w.candidate.q=end;
-    final=ToVF(func_0014EDA0(&D_002DDF40,w.count,w.objects,func_00223A10,w.candidate.q,w.candidate.q,D_002DDF40.radius,D_002DDF40.radius));
+    final=ToVF(func_0014EDA0(&g_cm,w.count,w.objects,func_00223A10,w.candidate.q,w.candidate.q,g_cm.radius,g_cm.radius));
     func_0014EA08(w.count,w.objects,w.candidate.q,final,0.0f,&w.low,&w.high);
     if(w.high!=1.0f){
         float u=(w.low+w.high)*0.5f;

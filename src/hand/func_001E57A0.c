@@ -8,7 +8,7 @@ struct G { char pad[0x20]; float f20; char pad24[0x60 - 0x24]; struct G2 m60; ch
 extern qword D_002A2DD0;
 extern float D_002A8124;
 extern struct { float t; float dt; } D_002DDED0;
-extern struct G D_002DDF40;
+extern struct G g_cm;
 extern struct G2 D_002DDFA0;
 int func_0011D4D0(float, float, float);
 float func_0011CF60(float);
@@ -59,12 +59,12 @@ void func_001E57A0(struct P *p, struct A *pa, struct A *pb, float t)
             if (FNear(pt->v10, *zero))
                 pt->v10 = func_0011BFF0(&D_002DDFA0);
             if (pt->f20 == 0.0f)
-                pt->f20 = D_002DDF40.f20;
+                pt->f20 = g_cm.f20;
         }
     }
     if (p->sub.f8C == 0.0f)
         p->sub.f8C = D_002A8124;
-    if (func_0014FD50(D_002DDF40.m500))
-        func_0014E4C8(&D_002DDF40, 2, 10, D_002DDF40.m500, 0, D_002DDF40.n510);
-    func_0014E328(&D_002DDF40, 10, D_002DDF40.m500, 0, &p->sub);
+    if (func_0014FD50(g_cm.m500))
+        func_0014E4C8(&g_cm, 2, 10, g_cm.m500, 0, g_cm.n510);
+    func_0014E328(&g_cm, 10, g_cm.m500, 0, &p->sub);
 }

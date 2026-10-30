@@ -7,7 +7,7 @@ struct G { char pad[0x64]; struct L *groups; struct N *def; };
 struct P { char pad[0xEC]; struct G *g; char padF0[0x118]; struct N *best; float t; char pad210[0x20]; qword position; };
 extern float D_002A85F4,D_002DDED0;
 struct SW;
-extern struct SW D_003DD490;
+extern struct SW g_sw;
 void func_001F4F10(struct P *);
 void FreeSwXpList__FP2SWP2XP(struct SW *,struct N *);
 static inline struct P *Other(struct N*n,struct P*p){unsigned different=(unsigned)p^(unsigned)n->e[0].owner;int i=different>0;return ((struct Endpoint *)((char *)n+(i<<6)))->other;}
@@ -48,6 +48,6 @@ void func_00204768(struct P *p)
             *group->back=group->first;
             group=group->next;
         }
-        FreeSwXpList__FP2SWP2XP(&D_003DD490,removed);
+        FreeSwXpList__FP2SWP2XP(&g_sw,removed);
     }
 }

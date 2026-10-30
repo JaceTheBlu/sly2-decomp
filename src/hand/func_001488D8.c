@@ -8,7 +8,7 @@ struct P {
     struct OID *po; struct E ae[2]; char pad[0x8C - 0x8C]; float g8C; char pad2[0xA0 - 0x90]; int xA0; char pad3[4];
     int xA8; void *pAC; int xB0; char mB4[0x134 - 0xB4]; int x134; char m138[4];
 };
-extern char D_003DD490[];
+extern char g_sw[];
 extern char D_002DEB30[];
 struct OID *func_0015E938(void *g, int k, int oid, struct OID *po);
 void func_00130598(struct SO *pso, struct OID *po, int n, int x, float g, float h);
@@ -27,7 +27,7 @@ void func_001488D8(struct P *p, int i)
         oid = pso->px14->po->oid;
         x = p->ae[i].a[j].x;
         if (p->po->oid == oid) po = p->po;
-        else if (oid != -1) po = func_0015E938(D_003DD490, 4, oid, p->po);
+        else if (oid != -1) po = func_0015E938(g_sw, 4, oid, p->po);
         else po = 0;
         if (p->xA0) {
             int n = 0;
@@ -37,7 +37,7 @@ void func_001488D8(struct P *p, int i)
             func_00130598(pso, po, 1, x, 0.0f, p->g8C);
         }
     }
-    func_0020FF70(D_003DD490, p->xB0, p->mB4, p->po, i == 0);
+    func_0020FF70(g_sw, p->xB0, p->mB4, p->po, i == 0);
     if (i == 0) {
         if (p->pAC) func_001DFD58(p->pAC, p->xA8);
         func_00161F48(D_002DEB30, p->x134, p->m138, p->po);

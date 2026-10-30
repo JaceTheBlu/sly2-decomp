@@ -8,7 +8,7 @@ struct CAMERA {char pad0[0x14];int mask;char pad18[0x78];U position;};
 struct PROFILE {float a,b,c,unused,min,max;};
 struct CLOCK {float time,dt;};
 struct EFFECT;
-extern CAMERA D_002DDF40;
+extern CAMERA g_cm;
 extern PROFILE D_003E1A60;
 extern CLOCK D_002DDED0;
 extern float D_002C3D4C;
@@ -31,7 +31,7 @@ extern "C" void func_00207690(P *p)
     M4 local;
     U offset;
     M4 basis,matrix,product,inverse;
-    CAMERA *camera=&D_002DDF40;
+    CAMERA *camera=&g_cm;
     if(p->flags.bytes[5]&camera->mask){
         func_001F3C10(p);
         if(!func_0014FD50((char *)camera+0x3B0)){

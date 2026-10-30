@@ -15,7 +15,7 @@ extern "C" {
 extern qword D_002A2DC0;
 extern int D_002BC9E0;
 extern float D_002A4B1C;
-extern G D_003DD490;
+extern G g_sw;
 qword func_001A62E8(void *p);
 void func_0013B428(P *p, qword a, qword b);
 void func_0013B5E8(P *p, int *pc, PO ***papo);
@@ -97,7 +97,7 @@ extern "C" void func_0013B860(P *p)
             PO *pT = *po->pp14;
             if (pT != po) pv = pT;
         }
-        func_00156698(D_003DD490.x402C, func_001A62E8(p), pv)[0x54 / 4] = 1;
+        func_00156698(g_sw.x402C, func_001A62E8(p), pv)[0x54 / 4] = 1;
     }
     ((void (*)(P *))p->pvt[9].pfn)((P *)((char *)p + p->pvt[9].d));
     p->x174 = 0;

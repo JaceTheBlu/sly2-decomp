@@ -12,7 +12,7 @@ extern f32 D_002C3DA8;
 extern f32 D_002C3DAC;
 extern f32 D_002DDED0;
 extern M2C_UNK D_002DEB30;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 
 void func_002081C8(s32 arg0, s32 arg1) {
     func_00208178(arg0, arg0 + 0xC10);

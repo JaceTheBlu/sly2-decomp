@@ -10,7 +10,7 @@ struct E { char pad[0xDC]; struct REGION_LINK *regionLink; };
 struct VTE { short d; short p; void (*pfn)(void *); };
 struct P { char pad[0xC]; struct VTE *pvt; char pad2[0x58 - 0x10]; struct LO *p58; char pad3[0x60 - 0x5C]; struct LO *p60; char pad4[0xE8 - 0x64]; struct E *pe; };
 struct SW { char pad[0x3D58]; int n3D58; };
-extern struct SW D_003DD490;
+extern struct SW g_sw;
 qword *func_00256D18(qword *, qword);
 M4 *func_0011C318(M4 *,const M4 *);
 M4 *func_0011C168(M4 *, const M4 *, const M4 *);
@@ -61,7 +61,7 @@ void func_001F40A0(struct P *p, qword v)
     mC0 = m100;
     func_00256D18(&plo->v30.q, mC0.r[3]);
     plo->v30.f[3] = 1.0f;
-    { int stamp=++D_003DD490.n3D58;p->p58->nA4=stamp; }
+    { int stamp=++g_sw.n3D58;p->p58->nA4=stamp; }
     p->pvt[18].pfn((char *)p + p->pvt[18].d);
     func_001F4E28(p);
     func_00230598(p, p->p58);

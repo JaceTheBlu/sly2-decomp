@@ -5,7 +5,7 @@ struct X {
     char pad[0x110]; int n110; int n114; int n118; int n11C; int n120; int pad124; int n128; int n12C; float g130;
 };
 struct G { char pad[0x3B58]; void *a3B58[9]; void *a3B7C[9]; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern char D_003D4A60[];
 extern char D_003D9ED0[], D_002E6550[], D_003DA4F0[];
 extern char D_002DFC00[];
@@ -89,7 +89,7 @@ void func_0015CF30(struct X *p)
             int c;
             int f = 0;
             int n = D_002BE248[p->n110];
-            void *pv = D_003DD490.a3B7C[p->n110];
+            void *pv = g_sw.a3B7C[p->n110];
             if (pv) {
                 struct CRef ref;
                 func_002581C0(&ref, pv, D_003D4A60);
@@ -109,7 +109,7 @@ void func_0015CF30(struct X *p)
         case 1:
             if (func_00187D80(D_002DFC00, 0x80)) {
                 func_001B3A48(D_002F66B0, D_002BE248[p->n110]);
-                func_0022B490(&D_003DD490, 0, 0x189, -1, 0, -1);
+                func_0022B490(&g_sw, 0, 0x189, -1, 0, -1);
                 PlaySound(0x34);
                 return;
             }
@@ -132,7 +132,7 @@ void func_0015CF30(struct X *p)
             if (func_00187D80(D_002DFC00, 0x40)) {
                 D_002BE270 = p->n128;
                 func_001B3A48(D_002F66B0, D_002BE200[p->n128]);
-                func_0022B490(&D_003DD490, 0, 0x189, -1, 0, -1);
+                func_0022B490(&g_sw, 0, 0x189, -1, 0, -1);
                 PlaySound(0x34);
                 return;
             }
@@ -168,7 +168,7 @@ void func_0015CF30(struct X *p)
     case 10:
         if (!func_002121E8(p, r)) {
             int f = 0;
-            void *pv = D_003DD490.a3B58[p->n110];
+            void *pv = g_sw.a3B58[p->n110];
             if (pv) {
                 struct CRefG ref;
                 float g;
@@ -180,7 +180,7 @@ void func_0015CF30(struct X *p)
                     f = 0;
             }
             if (f) {
-                void *po = func_0015E938(&D_003DD490, 5, D_002BE2A8[p->n110], 0);
+                void *po = func_0015E938(&g_sw, 5, D_002BE2A8[p->n110], 0);
                 if (po) {
                     func_00228358(po, 3);
                     func_002283D0(po);
@@ -189,7 +189,7 @@ void func_0015CF30(struct X *p)
             }
             if (!f) {
                 int s = func_00210B98(p->n110);
-                func_0022B490(&D_003DD490, s, 0x189, -1, 0, 0x30A);
+                func_0022B490(&g_sw, s, 0x189, -1, 0, 0x30A);
             }
             func_0015D648(p, -1, -1);
         }

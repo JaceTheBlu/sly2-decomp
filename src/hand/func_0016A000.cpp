@@ -463,7 +463,7 @@ struct XF
       qword qwRestUnkE0;
       qword qwUnkF0;
 };
-extern CM D_002DDF40;
+extern CM g_cm;
 void *PvAllocSwCopyImpl(struct SWALLOC *pswalloc, void *pvBase);
 struct SWALLOC
 {
@@ -674,7 +674,7 @@ void LoadSubglobType0FromBrx(GLOBSET *const pglobset, SUBGLOB *psubglob, GLOB *p
     }
     float *pgFit;
     vifs.UnpackHelper(UPK_V4_32, 1, 9, 0, (uint **)&pgFit);
-    CalcRecipFitParams(psgl->gUnk00, &D_002DDF40, pgFit);
+    CalcRecipFitParams(psgl->gUnk00, &g_cm, pgFit);
 
     psubglob->cbnd = pbis->U8Read();
     pglob->abnd = (BND *)PvAllocSwClearP(psubglob->cbnd * sizeof(BND));

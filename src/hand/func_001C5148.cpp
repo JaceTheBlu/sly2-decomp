@@ -34,8 +34,8 @@ struct CAMERA { char pad90[0x90]; qword position; };
 struct SW { char pad3D58[0x3D58]; int stamp; };
 extern "C" {
 extern CLOCK D_002DDED0;
-extern CAMERA D_002DDF40;
-extern SW D_003DD490;
+extern CAMERA g_cm;
+extern SW g_sw;
 extern float D_002C0D4C;
 extern qword D_002A2DC0;
 void func_001F3980(P *);
@@ -122,7 +122,7 @@ extern "C" void func_001C5148(P *p)
     func_00256D18(&channel->position, newPosition);
     *(float *)((char *)channel + 0x3C) = 1.0f;
     p->position->velocity = p->velocity;
-    { int stamp = ++D_003DD490.stamp; p->position->stamp = stamp; }
+    { int stamp = ++g_sw.stamp; p->position->stamp = stamp; }
     if (p->holder && p->holder->animation) {
         ANIM *animation = p->holder->animation;
         ACTION *action = animation->action;
@@ -143,7 +143,7 @@ extern "C" void func_001C5148(P *p)
         if (positionMotion || orientationMotion) {
             U dir, position, velocity, angles, angularVelocity;
             M3 frame, rot;
-            dir.q = Difference(D_002DDF40.position, p->position->position);
+            dir.q = Difference(g_cm.position, p->position->position);
             dir.words[2] = 0;
             frame = func_0011B830(dir.q, D_002A2DC0);
             if (positionMotion) {
@@ -153,7 +153,7 @@ extern "C" void func_001C5148(P *p)
                 *(float *)((char *)channel + 0x3C) = 1.0f;
                 CHANNEL *current = p->position;
                 current->velocity = Add(current->velocity, RotateVec(frame, velocity.q));
-                { int stamp = ++D_003DD490.stamp; p->position->stamp = stamp; }
+                { int stamp = ++g_sw.stamp; p->position->stamp = stamp; }
             }
             if (orientationMotion) {
                 Sample(orientationMotion, animation, &angles.q, &angularVelocity.q);
@@ -163,7 +163,7 @@ extern "C" void func_001C5148(P *p)
                 current->matrix.values[3] = 0.0f; current->matrix.values[7] = 0.0f; current->matrix.values[11] = 0.0f;
                 CHANNEL *spin = p->orientation;
                 spin->velocity = RotateVec(frame, angularVelocity.q);
-                { int stamp = ++D_003DD490.stamp; p->orientation->stamp = stamp; }
+                { int stamp = ++g_sw.stamp; p->orientation->stamp = stamp; }
             }
         }
     }

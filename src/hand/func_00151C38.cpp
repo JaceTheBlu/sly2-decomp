@@ -6,7 +6,7 @@ union U { qword q; float f[4]; };
 struct M3 { qword r[3]; };
 union M4 { struct { qword r[4]; } q; M3 m3; float af[4][4]; };
 struct CM;
-extern "C" CM D_002DDF40;
+extern "C" CM g_cm;
 struct CLQ { float g0, g1, g2, pad; };
 struct LM { float gMin, gMax; int pad[2]; };
 extern "C" float D_002BDACC;
@@ -66,8 +66,8 @@ static inline qword Normalize(qword a)
 struct VU_FLOATJ { qword q; VU_FLOATJ(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } };
 static inline qword Scale(qword a, VU_FLOATJ s) { qword r; __asm__("vmulx.xyzw %0, %1, %2x" : "=j"(r) : "j"(a), "j"(s.q)); return r; }
 
-static inline void Cm1(M4 *pm) { func_0014E168(&D_002DDF40, pm); }
-static inline void Cm2(float g) { func_0014F5A0(&D_002DDF40, g); }
+static inline void Cm1(M4 *pm) { func_0014E168(&g_cm, pm); }
+static inline void Cm2(float g) { func_0014F5A0(&g_cm, g); }
 void func_00151C38(X *p)
 {
     U d;

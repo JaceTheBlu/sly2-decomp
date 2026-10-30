@@ -6,7 +6,7 @@ struct LO {M3 matrix;U position;char pad40[0x60];LO *parent;int stamp;};
 struct VE {short delta,pad;void(*fn)(void*);};
 struct P {char padC[0xC];VE *vt;char pad10[0x48];LO *translation,*rotation;char pad60[0x88];int enabled;char padEC[4];U shift,turn;};
 extern qword D_002A2DD0;
-extern struct GAME {char pad3D58[0x3D58];int stamp;} D_003DD490;
+extern struct GAME {char pad3D58[0x3D58];int stamp;} g_sw;
 extern "C" int func_0011D4D0(float,float,float);
 extern "C" void func_00230598(P *,LO *);
 extern "C" qword func_0022FCC8(void *,LO *,qword);
@@ -39,7 +39,7 @@ extern "C" void func_001FA528(P*p)
             p->shift.i[0]=0;
             func_00256D18(&object->position.q,Add(object->position.q,shift));
             object->position.f[3]=1.0f;
-            object->stamp=++D_003DD490.stamp;
+            object->stamp=++g_sw.stamp;
         }
         near=0;Near(&near,D_002A2DD0,p->turn.q);
         if(!near){
@@ -52,7 +52,7 @@ extern "C" void func_001FA528(P*p)
             ((int*)&object->matrix.r[1])[3]=0;
             ((int*)&object->matrix.r[2])[3]=0;
             ((int*)&object->matrix.r[0])[3]=0;
-            object->stamp=++D_003DD490.stamp;
+            object->stamp=++g_sw.stamp;
         }
         if(changed){p->vt[18].fn((char*)p+p->vt[18].delta);func_001F4BF8(p);}
     }

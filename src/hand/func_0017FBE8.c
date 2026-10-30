@@ -1,5 +1,5 @@
 struct G { int a; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern int D_002E1E00;
 extern char D_002DEB30[];
 struct S { char pad[0x184]; int n184; char pad2[0x38]; int n1C0; };
@@ -10,7 +10,7 @@ void func_001619A0(void *g, int n, int m);
 void func_0017FD08(struct S *p, int n);
 int func_0017FBE8(struct S *p, int *pn) {
     if (p->n1C0 < 5) { if (p->n1C0 >= 2) return 0; }
-    if (func_0020F0B0(&D_003DD490)) return 0;
+    if (func_0020F0B0(&g_sw)) return 0;
     if (D_002E1E00 & 1) return 0;
     if (!func_0017F1D0(p, pn)) return 0;
     func_00180100(p);

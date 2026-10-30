@@ -25,7 +25,7 @@ extern "C" {
 extern REC D_002BCD00[];
 extern REC12 D_002C3288[];
 extern char D_002DEB30[];
-extern char D_003DD490[];
+extern char g_sw[];
 extern char D_002A79A0[], D_002A79D0[], D_002A79D8[];
 void func_001DA808(OBJ *);
 int func_00187D80(void *, int);
@@ -67,7 +67,7 @@ extern "C" void func_001DB870(OBJ *p)
                     func_001DAF38(p->x254, 1);
                     func_001DBD10(p);
                     func_001FB2F8(func_001FBB90(0x29), 0);
-                    func_0019F0A8(D_003DD490);
+                    func_0019F0A8(g_sw);
                 } else if (have >= cost) {
                     func_001DA950(p, 0, 0x34);
                 } else {

@@ -30,13 +30,13 @@ extern s128 D_002BDBF0;
 extern M2C_UNK D_002DD590;
 extern f32 D_002DDED0;
 extern f32 D_002DDED4;
-extern M2C_UNK D_002DDF40;
+extern M2C_UNK g_cm;
 extern void *D_002DE570;
 extern M2C_UNK D_002DE578;
 extern M2C_UNK D_002DEB30;
 extern M2C_UNK D_003D4A60;
-extern M2C_UNK D_003DD040;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sndmgr;
+extern M2C_UNK g_sw;
 extern void *D_003E0F9C;
 extern s32 D_003E1480;
 
@@ -44,7 +44,7 @@ s32 func_00152520(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s3
     s32 temp_v0;
     void *temp_v0_2;
 
-    temp_v0 = func_0015E938((s32) &D_003DD490, 4, arg1, arg0, arg4, arg5, arg6);
+    temp_v0 = func_0015E938((s32) &g_sw, 4, arg1, arg0, arg4, arg5, arg6);
     if (temp_v0 != 0) {
         temp_v0_2 = M2C_FIELD(temp_v0, void **, 0xC);
         M2C_FIELD(temp_v0_2, void (**)(s32), 0x4C)(temp_v0 + M2C_FIELD(temp_v0_2, s16 *, 0x48));

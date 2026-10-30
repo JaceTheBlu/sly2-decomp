@@ -14,7 +14,7 @@ struct OBJ {
     int c;
     ENT *ae;
 };
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern PAIR D_002A7AC0;
 void func_001F5988(void);
 void func_001A7E10(struct G *, LNK *);
@@ -38,6 +38,6 @@ void func_001DEEA8(OBJ *p, void *x)
             }
         }
     }
-    func_001A7E10(&D_003DD490, list);
-    func_00149AB8(&D_003DD490, p, D_002A7AC0, 0);
+    func_001A7E10(&g_sw, list);
+    func_00149AB8(&g_sw, p, D_002A7AC0, 0);
 }

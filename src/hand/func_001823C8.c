@@ -11,7 +11,7 @@ typedef struct CONTACT{char pad[0xB0];}CONTACT;
 typedef struct P{char pad0[0xE0];int contactCount;CONTACT*contacts;char padE8[0xE0];int entryCount;ENTRY entries[1];}P;
 typedef struct SEGMENT{qword a,b,plane;char pad30[0x30];}SEGMENT;
 typedef struct WORK{U direction,newEndpoint,oldEndpoint;SEGMENT segments[2];U scale,dot,one;}WORK;
-extern qword D_002A2DA0;extern int D_003DD490;
+extern qword D_002A2DA0;extern int g_sw;
 extern void func_001F5990(P*,REQUEST*,int,int,int,CONTACT**);
 extern qword*func_002564B8(qword*);
 extern int func_0014C748(qword,float,qword,qword,int,SEGMENT*);
@@ -57,7 +57,7 @@ void func_001823C8(P*p,REQUEST*q,int unused2,int unused3,int unused4,CONTACT**po
    distance=Planar(&w.direction);
    if(distance<radius){
     w.newEndpoint.q=Broadcast(-q->radius);
-    func_001A7C18(&D_003DD490,&p->contacts[p->contactCount-1],q,MAdd(center,w.direction.q,w.newEndpoint.q),w.direction.q,10,n,0,out,distance-radius);
+    func_001A7C18(&g_sw,&p->contacts[p->contactCount-1],q,MAdd(center,w.direction.q,w.newEndpoint.q),w.direction.q,10,n,0,out,distance-radius);
    }else{
     int j;
     for(j=q->start;j<q->count;j++){
@@ -70,7 +70,7 @@ void func_001823C8(P*p,REQUEST*q,int unused2,int unused3,int unused4,CONTACT**po
       result=MAdd2(point,plane,w.scale.q);
       func_002564B8(&w.dot.q);func_002564B8(&w.one.q);
       distance=Distance(&w.dot,&w.one,plane,point)-q->radius;
-      func_001A7C18(&D_003DD490,&p->contacts[p->contactCount-1],q,result,plane,10,n,0,out,distance);
+      func_001A7C18(&g_sw,&p->contacts[p->contactCount-1],q,result,plane,10,n,0,out,distance);
       break;
      }
     }

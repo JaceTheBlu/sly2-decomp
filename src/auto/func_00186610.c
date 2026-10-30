@@ -32,14 +32,14 @@ extern M2C_UNK D_002DDEC0;
 extern M2C_UNK D_002DDED0;
 extern f32 D_002DDED4;
 extern f32 D_002DDF0C;
-extern M2C_UNK D_002DDF40;
+extern M2C_UNK g_cm;
 extern f32 D_002DEB30;
 extern s32 D_002DFB84;
 extern s32 D_002DFBC0;
 extern s32 D_002DFBC4;
 extern s32 D_002E0CBC;
 extern s32 D_002E1E40;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 
 s32 func_00186610(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     void *temp_v0;

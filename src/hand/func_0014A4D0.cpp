@@ -12,7 +12,7 @@ struct W { char pad[0x1010]; LO *plo; };
 struct P { char pad[0x10]; W *pw; char pad1[0x48 - 0x14]; float t48; };
 struct CLOCK { float t; float dt; };
 extern "C" {
-extern G D_003DD490;
+extern G g_sw;
 extern SO *D_003E1450;
 extern CLOCK D_002DDED0;
 extern float D_002BD460;
@@ -75,7 +75,7 @@ static inline qword AddScaledNorm(qword a, qword v, VU_FLOAT s)
 
 void func_0014A4D0(P *p)
 {
-    G *pg = &D_003DD490;
+    G *pg = &g_sw;
     PSO *pso = func_001C4840(pg);
     qword posPlayer = func_001A62E8(pso);
     qword posMe = func_001A62E8(p->pw);
@@ -112,7 +112,7 @@ void func_0014A4D0(P *p)
                 posT = ps->pxEC->pos;
                 r = ps->pxEC->g30;
             }
-            int c = func_0015E9C8(&D_003DD490, 1, 0x12, ps, 8, apso);
+            int c = func_0015E9C8(&g_sw, 1, 0x12, ps, 8, apso);
             int k = 0;
             for (int i = 0; i < c; i++) {
                 if (apso[i]->grfE8 & 0x17E)

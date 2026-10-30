@@ -9,7 +9,7 @@ struct CRef {
 struct G { char pad[0x3B1C]; void *x3B1C; };
 struct H { char pad[0x100C]; int x100C; int x1010; };
 struct I { char pad[0xFD54]; void *xFD54; };
-extern G D_003DD490;
+extern G g_sw;
 extern H D_002DFC00;
 extern I D_002E65E0;
 extern char D_002A7A70[];
@@ -23,23 +23,23 @@ extern "C" void func_001DDBF0(char *pch)
     float g;
     void *pv;
     if (D_002DFC00.x100C == 1 && D_002DFC00.x1010 == 0) {
-        func_0021ED58(pch, func_0013E368(&D_003DD490, 9));
+        func_0021ED58(pch, func_0013E368(&g_sw, 9));
         return;
     }
     g = 0.0f;
     pv = D_002E65E0.xFD54;
     if (pv) {
-        CRef ref = func_002581C0(D_003DD490.x3B1C, pv);
+        CRef ref = func_002581C0(g_sw.x3B1C, pv);
         g = ref.m_g;
     }
     {
         int ids = g != 0.0f ? 6 : 5;
-        func_0021ED58(pch, func_0013E368(&D_003DD490, ids));
+        func_0021ED58(pch, func_0013E368(&g_sw, ids));
     }
     func_0021EDA0(pch, D_002A7A70);
-    func_0021EDA0(pch, func_0013E368(&D_003DD490, 8));
+    func_0021EDA0(pch, func_0013E368(&g_sw, 8));
     if (func_001A2C98() >= 2) {
         func_0021EDA0(pch, D_002A7A70);
-        func_0021EDA0(pch, func_0013E368(&D_003DD490, 0x56));
+        func_0021EDA0(pch, func_0013E368(&g_sw, 0x56));
     }
 }

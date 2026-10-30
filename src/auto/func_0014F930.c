@@ -8,7 +8,7 @@ extern s32 D_002DD2E8;
 extern s32 D_002DD2EC;
 extern s32 D_002DD2F0;
 extern s32 D_002DD2F4;
-extern M2C_UNK D_002DDF40;
+extern M2C_UNK g_cm;
 extern M2C_UNK D_004520A8;
 extern M2C_UNK D_004520D0;
 extern M2C_UNK D_004520F8;
@@ -26,7 +26,7 @@ void func_0014F930(s32 arg0, s32 arg1) {
 
     if (arg1 == 0xFFFF) {
         if (arg0 != 0) {
-            func_0014D3D8(&D_002DDF40);
+            func_0014D3D8(&g_cm);
             temp_v0 = D_002DD2E0 + 1;
             D_002DD2E0 = temp_v0;
             if (temp_v0 == 1) {
@@ -58,7 +58,7 @@ void func_0014F930(s32 arg0, s32 arg1) {
                 func_0011CCA8(&D_00452170, 0x14, 0x100, 0x10);
             }
         } else {
-            func_00258290(&D_002DDF40, 2);
+            func_00258290(&g_cm, 2);
         }
     }
 }

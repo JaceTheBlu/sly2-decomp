@@ -5,7 +5,7 @@ struct ALO { int x0, x4, x8; VTE *vt; ALO *x10; ALO **x14; char pad[0x24 - 0x18]
 #define VFN(p, n, T) ((T)(p)->vt[n].pfn)
 #define VTHIS(p, n) ((ALO *)((char *)(p) + (p)->vt[n].d))
 extern char D_003DD4BC[];
-extern char D_003DD490[];
+extern char g_sw[];
 void func_001A5448(ALO *p, void **ppdl, ALO ***pppalo);
 void func_0011A2E8(void *pdl, void *p);
 void func_0011A220(void *pdl, void *p);
@@ -61,5 +61,5 @@ void func_001A5900(ALO *palo, ALO *paloParent, int a, int b)
     if (func_001A61A0(palo))
         VFN(palo, 23, void (*)(ALO *))(VTHIS(palo, 23));
     else if (!palo->x10 && fNew)
-        func_00148300(D_003DD490, palo);
+        func_00148300(g_sw, palo);
 }

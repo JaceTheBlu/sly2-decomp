@@ -4,7 +4,7 @@ struct S {
     char pad6e[0x26]; int x94; int x98; float x9C; float xA0; char pada4[4]; int xA8; char padac[0x10];
     int xBC; char padc0[8]; struct S *xC8;
 };
-extern struct G { char pad[0x3BE8]; void *x3BE8; } D_003DD490;
+extern struct G { char pad[0x3BE8]; void *x3BE8; } g_sw;
 void func_001A5C48(struct S *p);
 void *func_0015E938(struct G *, int, int, struct S *);
 void func_001A6CA8(struct S *p, int);
@@ -15,7 +15,7 @@ void func_002123C8(struct S *p)
     int h;
     func_001A5C48(p);
     if (p->xBC) {
-        struct G *pg = &D_003DD490;
+        struct G *pg = &g_sw;
         if (!pg->x3BE8)
             pg->x3BE8 = func_0015E938(pg, 0x405, 0x374, p);
     }

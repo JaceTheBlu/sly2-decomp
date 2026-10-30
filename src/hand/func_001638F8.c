@@ -12,7 +12,7 @@ struct S {
     char pad4[0xC8 - 0xB8]; int fc8; int pad5; int fd0;
 };
 extern char D_003D4A60[];
-extern char D_003DD490[];
+extern char g_sw[];
 void func_001A5C48(struct S *p);
 void func_0011A070(struct SL *psl, struct S *p);
 void *func_0015E938(void *pg, int kind, int oid, void *owner);
@@ -39,7 +39,7 @@ void func_001638F8(struct S *p)
     pnD0 = &p->fd0;
     if (p->c94 > 0) {
         do {
-            void *pv = func_0015E938(D_003DD490, 0x105, p->a90[i], 0);
+            void *pv = func_0015E938(g_sw, 0x105, p->a90[i], 0);
             if (pv)
                 p->a98[j++] = pv;
         } while (++i < p->c94);
@@ -47,7 +47,7 @@ void func_001638F8(struct S *p)
     p->c94 = j;
     j = 0;
     for (i = 0; i < p->cA0; i++) {
-        void *pv = func_0015E938(D_003DD490, 0x105, p->a9C[i], 0);
+        void *pv = func_0015E938(g_sw, 0x105, p->a9C[i], 0);
         if (pv)
             p->aA4[j++] = pv;
     }

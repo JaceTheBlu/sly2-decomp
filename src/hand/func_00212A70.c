@@ -5,7 +5,7 @@ struct S {
 };
 struct G { char pad[0x3BEC]; int count; };
 struct Clock { char pad[0x3C]; float time; float dt; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern struct Clock D_002DDED0;
 extern int D_002DD318;
 extern int D_002BE538;
@@ -17,8 +17,8 @@ void func_00213830(struct S *,int);
 void func_00212A70(struct S *p,int state) {
     if(p->state==state) return;
     if(p->flag>=16) {
-        if(p->state<2 && state>=2) D_003DD490.count++;
-        else if(state<2 && p->state>=2) D_003DD490.count--;
+        if(p->state<2 && state>=2) g_sw.count++;
+        else if(state<2 && p->state>=2) g_sw.count--;
     }
     if(p->pauses) {
         if(p->state<2 && state>=2) {

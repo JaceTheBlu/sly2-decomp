@@ -17,7 +17,7 @@ extern M2C_UNK D_002DEB30;
 extern s32 D_002DFB80;
 extern s32 D_002E1E00;
 extern M2C_UNK D_003DD020;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 
 s32 func_0017F170(s32 arg0, s32 arg1) {
     s32 temp_v0;

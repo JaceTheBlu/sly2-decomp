@@ -19,10 +19,10 @@ struct P4 { qword q; };
 struct REQ { int cb, align; };
 struct FRAME { int x[4]; };
 struct WORLD;
-extern CAM D_002DDF40;
+extern CAM g_cm;
 extern int D_002C4490;
 extern qword D_002A2DC0;
-extern WORLD D_003DD490;
+extern WORLD g_sw;
 extern "C" {
 qword func_001A62E8(O *);
 void func_00119308(UQ *, qword, qword, qword);
@@ -142,7 +142,7 @@ extern "C" void func_0022A220(O *po)
 #define cface L.cface
 #define ppface L.ppface
 
-    CAM *pcam = &D_002DDF40;
+    CAM *pcam = &g_cm;
     if (po->frame == pcam->frame)
         return;
     po->frame = pcam->frame;
@@ -193,7 +193,7 @@ extern "C" void func_0022A220(O *po)
     apface = (FACE **)func_001AE318(preq);
     qword k2 = QI(D_002C4490);
     tmp.q = k2;
-    func_0020FAA0(&D_003DD490, Min(posCam, posSrc), AddUp(Max(posCam, posSrc), D_002A2DC0, k2),
+    func_0020FAA0(&g_sw, Min(posCam, posSrc), AddUp(Max(posCam, posSrc), D_002A2DC0, k2),
                   func_0014F030, 0, &cpso, &apso);
     qword dpos = Sub(posSrc, posCam);
     int nso = cpso;

@@ -17,7 +17,7 @@ struct POLY{float a,b,c;};
 struct LIMIT{float lo,hi;};
 extern "C"{
  extern CLOCK D_002DDED0;
- extern CM D_002DDF40;
+ extern CM g_cm;
  extern U D_002BFA00,D_002BFA10,D_002A2DD0;
  extern POLY D_002BFA20;
  extern LIMIT D_002BBB60;
@@ -40,7 +40,7 @@ static inline qword Vector(P*p){VE*v=&p->vt[33];return ((qword(*)(P*))v->fn)((P*
 static inline void SetVector(P*p,qword q){VE*v=&p->vt[36];((void(*)(P*,qword))v->fn)((P*)((char*)p+v->delta),q);}
 static inline void Invoke(P*p,int slot){VE*v=&p->vt[slot];((void(*)(P*))v->fn)((P*)((char*)p+v->delta));}
 static inline qword Position(){
- register CM*manager __asm__("$2")=&D_002DDF40;
+ register CM*manager __asm__("$2")=&g_cm;
  register qword value __asm__("$2");
  __asm__("lq %0,%1":"=r"(value):"m"(manager->position.q));
  return value;

@@ -24,7 +24,7 @@ extern struct CLOCK { float t,dt; } D_002DDED0;
 struct LM { float gMin, gMax; };
 extern float D_002C43B0,D_002C43C0[3];
 extern LM D_002BBB60;
-extern char D_003DD490[];
+extern char g_sw[];
 struct GAME;
 extern GAME D_002DEB30;
 void func_002240B0(struct S *);
@@ -79,7 +79,7 @@ extern "C" void func_00225300(struct S *p) {
                     func_0012D108(p->actor->color,Splat(g));
                 }
                 if(D_002C43B0<D_002DDED0.t-p->time) {
-                    func_001C6FD8(D_003DD490,0x5D,func_001A62E8(p->source),p,1);
+                    func_001C6FD8(g_sw,0x5D,func_001A62E8(p->source),p,1);
                     p->actor->vt[9].fn((char*)p->actor+p->actor->vt[9].d);
                     // PIN: &D_002DEB30 straight into $a0 keeps %hi(D_002DEB30) inside the loop (see the header).
                     register GAME *pgame asm("$4")=&D_002DEB30;

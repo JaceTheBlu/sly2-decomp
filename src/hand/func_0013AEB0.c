@@ -33,7 +33,7 @@ typedef struct K { short x; short y; int i; } K;
 extern float D_002A4B18;
 extern qword D_002A2DA0;
 extern K D_002A4B10;
-extern char D_003DD490[];
+extern char g_sw[];
 void func_001F4F10(P *p);
 int func_00132B10(P *p, int n);
 int func_001C4098(P *p);
@@ -166,7 +166,7 @@ void func_0013AEB0(P *p)
         break;
     }
     case 1:
-        func_00149A50(D_003DD490, p, D_002A4B10, AE(pqBest)[IOther(pqBest, p)].x);
+        func_00149A50(g_sw, p, D_002A4B10, AE(pqBest)[IOther(pqBest, p)].x);
         break;
     }
 }

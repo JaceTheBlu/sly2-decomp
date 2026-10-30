@@ -5,7 +5,7 @@ struct S {
     char pad1[0x403C - 0x39E8]; char a403C[0x18]; char a4054[0x1C]; char a4070[0x18]; char a4088[4];
     char pad2[0x45CC - 0x408C]; void *p45CC;
 };
-extern char D_002DDF40[], D_002DEB30[], D_003D9E70[];
+extern char g_cm[], D_002DEB30[], D_003D9E70[];
 void func_0011CDD8(void *p);
 void func_0020E338(struct S *p);
 void func_0020E2B0(struct S *p);
@@ -51,6 +51,6 @@ void func_0020E740(struct S *p)
     p->n39D8 = 0;
     p->n39D0 = 0;
     func_001C1260(p->p45CC);
-    func_0014D470(D_002DDF40);
+    func_0014D470(g_cm);
     func_001619A0(D_002DEB30, 4, 0);
 }

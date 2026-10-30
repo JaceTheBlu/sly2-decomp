@@ -1,5 +1,5 @@
 struct X { char pad[0xF20]; int xF20; char padf24[0x18]; float xF3C; };
-extern char D_003DD490[];
+extern char g_sw[];
 extern float D_002DE3B8, D_002DE514;
 extern char D_002A8AB8[], D_002A8AC0[], D_002A8AC8[], D_002A8AD0[], D_002A8AD8[];
 struct X *func_001C4840(void *);
@@ -8,7 +8,7 @@ int func_0021ECD8(char *, char *, ...);
 int func_0023E290(float);
 void func_00210FE0(char *pch)
 {
-    struct X *x = func_001C4840(D_003DD490);
+    struct X *x = func_001C4840(g_sw);
     float g;
     if (!x || !func_00132B10(x, 0x34))
         return;

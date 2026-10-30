@@ -4,7 +4,7 @@ struct IF { struct VT *vt; int x4; int x8; };
 struct LO { char pad[0xC]; struct VT *vt; char pad2[0x50 - 0x10]; int x50; };
 struct G { char pad[0x3F0C]; int x3F0C; int x3F10; };
 extern struct VT D_002CBE38[];
-extern struct G D_003DD490;
+extern struct G g_sw;
 int func_00117D50(void *pbis);
 int func_00117D00(void *pbis);
 int func_00117DB8(void *pbis);
@@ -61,7 +61,7 @@ void func_0013FB40(void *psw, void *pbisArg, struct IF *pifParent)
             goto create;
         }
         {
-            struct G *pg = &D_003DD490;
+            struct G *pg = &g_sw;
             int r;
             t = func_001C9940(pg->x3F10, -1);
             r = func_001C99D8(pg->x3F0C, 1, &t);
@@ -99,7 +99,7 @@ void func_0013FB40(void *psw, void *pbisArg, struct IF *pifParent)
         }
     create:
         if (func_0015E988(cid, 6)) {
-            func_001C9B08(&D_003DD490, psw, cid, oid, n, pbis, pif);
+            func_001C9B08(&g_sw, psw, cid, oid, n, pbis, pif);
         } else {
             plo2 = func_0013E3C8(cid, psw, oid, n);
             VCALL1(plo2, 14, pbis);

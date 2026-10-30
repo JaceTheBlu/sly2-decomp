@@ -21,7 +21,7 @@ typedef struct {
     char padf4[0x100 - 0xF4];
     qword x100;
 } OBJ;
-extern char D_002DDF40[];
+extern char g_cm[];
 extern float D_002C2000;
 extern qword D_002BBB50;
 void func_001CE920(OBJ *, qword);
@@ -33,7 +33,7 @@ void func_001D04E8(OBJ *p, qword q)
     float x, y;
     func_001CE920(p, q);
     d = p->xF0;
-    p->x100 = func_0014F308(D_002DDF40, q);
+    p->x100 = func_0014F308(g_cm, q);
     x = func_0011D448(d->x20[0], d->x30[0]);
     y = func_0011D448(d->x20[1], d->x30[1]);
     {

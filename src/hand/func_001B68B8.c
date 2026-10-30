@@ -24,7 +24,7 @@ typedef struct P {
     void *x190C;
     char x1910[0x10];
 } P;
-extern char D_003DD490[];
+extern char g_sw[];
 extern float D_002C0990[];
 extern float D_002C099C;
 void func_00140F90(P *p, int msg, MSG *pm);
@@ -48,7 +48,7 @@ void func_001B68B8(P *p, int msg, MSG *pm)
             func_001B6DA8(p, 1);
             break;
         case 0x1A5:
-            func_00156B98(D_003DD490, 0, func_001A62E8(p), p);
+            func_00156B98(g_sw, 0, func_001A62E8(p), p);
             break;
         case 0x1EB:
             switch (p->x13D0) {
@@ -68,7 +68,7 @@ void func_001B68B8(P *p, int msg, MSG *pm)
             break;
         case 0x1C8:
             if (!p->x1450) {
-                func_00156B98(D_003DD490, 0, func_001A62E8(p), p);
+                func_00156B98(g_sw, 0, func_001A62E8(p), p);
                 func_001B93E8(p, 1);
             }
             break;

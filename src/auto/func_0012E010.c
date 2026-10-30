@@ -7,10 +7,10 @@ extern M2C_UNK D_002CAF48;
 extern f32 D_002DDED0;
 extern f32 D_002DDED4;
 extern f32 D_002DDF10;
-extern M2C_UNK D_002DDF40;
+extern M2C_UNK g_cm;
 extern M2C_UNK D_002DE578;
-extern M2C_UNK D_003DD040;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sndmgr;
+extern M2C_UNK g_sw;
 extern M2C_UNK D_003E1218;
 extern M2C_UNK D_003E1224;
 

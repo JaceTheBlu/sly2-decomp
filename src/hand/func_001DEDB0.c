@@ -2,7 +2,7 @@ typedef struct { char pad[0x18]; int x18; } Q;
 typedef struct { int pad; int x4; } R;
 typedef struct { void *o; Q *q; void *r; int xC; } ENT;
 typedef struct { char pad[0x1A0]; ENT a[2]; } OBJ;
-extern struct G D_003DD490;
+extern struct G g_sw;
 void func_0015E9C8(struct G *, int, int, void *, int, Q **);
 void *func_001F6788(void *, int);
 void *func_00130488(Q *, void *, int, float, float);
@@ -17,7 +17,7 @@ void func_001DEDB0(OBJ *p)
         R *r;
         if (o == 0)
             continue;
-        func_0015E9C8(&D_003DD490, 2, 0x6D, o, 1, &e->q);
+        func_0015E9C8(&g_sw, 2, 0x6D, o, 1, &e->q);
         q = e->q;
         if (q == 0)
             continue;

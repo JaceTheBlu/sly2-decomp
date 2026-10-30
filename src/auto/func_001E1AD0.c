@@ -7,10 +7,10 @@ extern f32 D_002A8130;
 extern f32 D_002A8134;
 extern M2C_UNK D_002D8C08;
 extern f32 D_002DDED0;
-extern M2C_UNK D_002DDF40;
+extern M2C_UNK g_cm;
 extern M2C_UNK D_002DDFA0;
 extern M2C_UNK D_002DE440;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 extern M2C_UNK D_003E1560;
 
 void func_001E1AD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {

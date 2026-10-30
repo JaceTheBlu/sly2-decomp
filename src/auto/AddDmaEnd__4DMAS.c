@@ -22,7 +22,7 @@ extern M2C_UNK D_002CE488;
 extern void *D_002DD2FC;
 extern M2C_UNK D_002DD590;
 extern f32 D_002DDED0;
-extern M2C_UNK D_002DDF40;
+extern M2C_UNK g_cm;
 extern s32 D_002DE5A4;
 extern M2C_UNK D_002DE5B0;
 extern s128 D_002DE5F0;
@@ -36,7 +36,7 @@ extern M2C_UNK D_002DF940;
 extern M2C_UNK D_002DFA80;
 extern M2C_UNK D_003B3980;
 extern s32 D_003D4A50;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 extern M2C_UNK D_003E12B8;
 extern void *D_003E148C;
 

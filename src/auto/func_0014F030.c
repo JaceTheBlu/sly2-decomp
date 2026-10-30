@@ -24,11 +24,11 @@ extern f32 D_002DDED4;
 extern f32 D_002DDEE0;
 extern M2C_UNK D_002DDF30;
 extern s32 D_002DDF34;
-extern M2C_UNK D_002DDF40;
+extern M2C_UNK g_cm;
 extern s32 D_002DFBC0;
 extern M2C_UNK D_002DFC00;
 extern M2C_UNK D_002E0D00;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 
 s32 func_0014F030(s32 arg0, s32 arg1) {
     return M2C_FIELD(arg1, s32 *, 0x70) > 0;

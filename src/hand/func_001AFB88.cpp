@@ -14,7 +14,7 @@ struct CRef{
 struct OPT;
 struct MSG{int kind;};
 struct GAME{char pad[0x3B40];OPT*first,*second;};
-extern GAME D_003DD490;
+extern GAME g_sw;
 extern OPT*D_003E0FC0,*D_003E0FC4,*D_003E0FC8,*D_003E0FCC,*D_003E0FD8,*D_003E0FDC,*D_003E0FE0;
 extern float D_003DD190,D_003DD18C,D_002F6468,D_002F646C;
 extern int D_002C2D8C;
@@ -50,7 +50,7 @@ extern "C" void func_001AFB88(void*owner,MSG*msg){
   func_001AEAA8(owner,9);
   break;
  case 63:{
-  GAME*game=&D_003DD490;
+  GAME*game=&g_sw;
   SetFloat(game->first,D_002F6468-636.0f);
   SetFloat(game->second,D_002F646C-50.0f);
   func_001AEAA8(owner,9);

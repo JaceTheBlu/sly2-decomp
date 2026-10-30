@@ -6,7 +6,7 @@ struct TABLE {int minimum,maximum;float chance;struct PICK picks[6];};
 struct OBJECT {char pad[0x230];void *state;};
 struct OWNER;
 struct P {char pad404[0x404];struct ITEM items[8];int count;char pad488[8];int busy;struct OWNER *owner;};
-extern char D_003DD490[];
+extern char g_sw[];
 extern struct TABLE D_002C3968[],D_002C3748[];
 void func_001C2DB8(struct OWNER *);
 int func_00210AE0(void);
@@ -27,7 +27,7 @@ void func_001F1A40(struct P *p)
     if(func_00132B10(p,0x3A))table=&D_002C3968[id];else table=&D_002C3748[id];
     func_002333B4(&reward,0,sizeof(reward));
     if(p->count>0){
-        struct OBJECT *object=func_0015E938(D_003DD490,4,p->items[0].kind,p->owner);
+        struct OBJECT *object=func_0015E938(g_sw,4,p->items[0].kind,p->owner);
         if(object && func_00132B10(object,0x5C) && object->state && func_00164030(object->state))p->count=0;
         if(p->count>0){reward=p->items[0];}
         else goto choose_reward;

@@ -1,6 +1,6 @@
 typedef int qword __attribute__((mode(TI)));
 struct G;
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern float D_002A54D0;
 struct VTE { short d; short pad; void *(*pfn)(void *); };
 struct A { char pad[0xC]; struct VTE *vt; char pad2[0xFBC - 0x10]; int nFBC; char pad3[0x1010 - 0xFC0]; int n1010; };
@@ -21,10 +21,10 @@ void func_00177BA0(struct S *p) {
     func_002333B4(&f, 0, sizeof f);
     if (func_00132B10(p->p10, 0x3B) && p->p10->n1010 > 0) {
         f.a = 0xD;
-        f.p10 = func_001C4840(&D_003DD490);
+        f.p10 = func_001C4840(&g_sw);
     } else if (p->p10->nFBC == 0x15) {
         f.a = 0x12;
-        f.p10 = func_001C4840(&D_003DD490);
+        f.p10 = func_001C4840(&g_sw);
         f.f14 = D_002A54D0;
     } else if (func_00177D20(p)) {
         f.a = 0xC;
@@ -47,7 +47,7 @@ void func_00177BA0(struct S *p) {
             if (n < 11) {
                 if (n >= 6) {
                     f.a = 2;
-                    f.p10 = func_00156B98(&D_003DD490, 0, func_001A62E8(p->p10), p->p10);
+                    f.p10 = func_00156B98(&g_sw, 0, func_001A62E8(p->p10), p->p10);
                 } else {
                     f.a = 1;
                 }

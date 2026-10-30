@@ -3,7 +3,7 @@
 // passes the camera tests func_0014F850 / func_0014F898, as M4s in a stack array (or the single D_002A2D30 when the
 // list check fails), then uploads each light per DMA queue through the VIF helpers.
 // Matching notes (gather loop, the last diffs; found with sched1/sched2/local-alloc dumps):
-//  * The g100 lw must issue after the &D_002DDF40 addiu in sched1 (else lw and lui overlap and the lui gets v1):
+//  * The g100 lw must issue after the &g_cm addiu in sched1 (else lw and lui overlap and the lui gets v1):
 //    the lw is written inside the VU_FLOAT asm with an allocation-only "r"(pcm) input.
 //  * The vF0 barrier is an operand-less volatile asm: a "+j"(v) one gives v 2 more refs, and local-alloc then
 //    ranks the vF0 chain above mat.r[2] (vF0 vf1 instead of vf2).
@@ -19,7 +19,7 @@ struct VU_FLOAT {
     qword q;
     /* else branch: word move into a 128-bit GPR value; volatile keeps the g100 load before the vsub like the target */
     VU_FLOAT(float f) { __asm__ volatile("" : "=r"(q) : "0"(*(int *)&f)); }
-    /* gather loop: the lw itself, with an allocation-only "r"(pcm) so it can only issue after &D_002DDF40 is built
+    /* gather loop: the lw itself, with an allocation-only "r"(pcm) so it can only issue after &g_cm is built
        (sched1 then keeps the lw and the lui apart, and both get v0 like the target) */
     VU_FLOAT(const float *pf, CM *pcm) { __asm__("lw %0, %1" : "=r"(q) : "m"(*pf), "r"(pcm)); }
 };
@@ -36,7 +36,7 @@ struct CM { char pad[0x90]; qword pos; };
 extern "C" {
 extern M3 D_002A2D00;
 extern M4 D_002A2D30;
-extern CM D_002DDF40;
+extern CM g_cm;
 extern VIFS D_002DEA28;
 extern char D_00000000[];
 extern char D_00000390[];
@@ -111,17 +111,17 @@ void func_0013A1E8(P *p)
             }
             qword v = p->vF0;
             __asm__ volatile(""); /* barrier: the vF0 load issues first (an operand-less one adds no refs to v) */
-            CM *pcm = &D_002DDF40;
+            CM *pcm = &g_cm;
             VU_FLOAT vf(&p->g100, pcm);
             /* empty asm, emits nothing: z depends on pcm and feeds the Rot and the Add, so in sched2 it takes the
                second issue slot next to the lw and the mat.r[1] lqc2 waits a cycle (target order lw, lqc2, por, Rot) */
             int z; __asm__("" : "=r"(z) : "r"(pcm));
             qword d = Sub(AddZ(RotKZ(mat, v, vf.q, z), pos, z), pcm->pos);
             __asm__("" : "+j"(d)); /* empty asm: extra refs so d is caller-saved in vf1 */
-            if (!func_0014F850(&D_002DDF40, d, vf))
+            if (!func_0014F850(&g_cm, d, vf))
                 goto next;
             float g;
-            if (!func_0014F898(&D_002DDF40, d, plo->g38, &g))
+            if (!func_0014F898(&g_cm, d, plo->g38, &g))
                 goto next;
             func_00256D18(&pl->x30, pos);
             cLight++;
@@ -139,7 +139,7 @@ void func_0013A1E8(P *p)
             if (plo) goto top;
     done:;
     } else {
-        register CM *pcm asm("$4") = &D_002DDF40; /* register pin: the target builds &D_002DDF40 in a0 */
+        register CM *pcm asm("$4") = &g_cm; /* register pin: the target builds &g_cm in a0 */
         qword v = p->vF0;
         __asm__("" : "+j"(v)); /* empty asm: keeps vF0 in a pseudo */
         VU_FLOAT vf(p->g100);

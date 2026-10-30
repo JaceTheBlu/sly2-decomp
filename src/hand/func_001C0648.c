@@ -8,7 +8,7 @@ struct FS { int ai[3]; };
 struct P { float x, y; int z; unsigned short c, d; };
 struct S { char pad[0xE0]; int cE0; struct V *aE4; int cE8; struct F *aEC; int cF0; struct P *aF4; char p1[0x114 - 0xF8]; int x114; };
 struct G { char pad[0x3D70]; int x3D70; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern struct VS D_002C0C10[];
 extern struct FS D_002C0C90[];
 static inline float sqrtf_(float x) { float r; __asm__ __volatile__("sqrt.s %0, %1" : "=&f"(r) : "f"(x)); return r; }
@@ -58,5 +58,5 @@ void func_001C0648(struct S *p)
     pp->x = g;
     pp->y = -g;
     func_001C0880(&p->cE0);
-    p->x114 = ++D_003DD490.x3D70;
+    p->x114 = ++g_sw.x3D70;
 }

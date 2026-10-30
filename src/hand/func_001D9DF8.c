@@ -25,7 +25,7 @@ typedef struct OBJ {
     int x48;
     int x4C;
 } OBJ;
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern struct { float t; float dt; } D_002DDED0;
 extern char D_002C3248[];
 Q *func_001C4840(struct G *);
@@ -44,7 +44,7 @@ void func_001D9DF8(OBJ *p)
         return;
     old = p->x34;
     p->x34 = 0;
-    q = func_001C4840(&D_003DD490);
+    q = func_001C4840(&g_sw);
     if (q && func_00132B10(q, 0x34))
         p->x34 = q;
     if (!p->x34) {

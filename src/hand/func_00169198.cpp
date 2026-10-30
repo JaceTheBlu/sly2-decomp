@@ -115,7 +115,7 @@ struct RPL
 };
 struct G;
 extern DMA D_002DEA28;
-extern G D_003DD490;
+extern G g_sw;
 extern MATRIX4 D_002A2D30;
 extern "C" {
 void *func_002333B4(void *pv, int b, uint cb);
@@ -211,7 +211,7 @@ extern "C" void func_00169198(MODEL *pmodel, ALO *palo)
     {
         func_002333B4(&shd, 0, sizeof(SHD));
         pshd = &shd;
-        func_001A4AD8(&D_003DD490, palo->cpshd, palo->apshd, &shd);
+        func_001A4AD8(&g_sw, palo->cpshd, palo->apshd, &shd);
     }
     else
     {

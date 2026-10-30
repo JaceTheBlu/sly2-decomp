@@ -8,7 +8,7 @@ struct G;
 struct Q { char pad[0xEC]; struct BBOX *xEC; };
 struct CLOCK { float t; float dt; };
 extern struct CLOCK D_002DDED0;
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern float D_002C08E4;
 extern qword D_002C08F0;
 extern qword D_002A2DE0;
@@ -110,7 +110,7 @@ void func_001B50B0(struct P *p)
         return;
     if (p->x190C && func_00131968(p->x190C))
         func_001306A8(&p->x190C);
-    func_00194A40(&D_003DD490, p, 0xF8FA);
+    func_00194A40(&g_sw, p, 0xF8FA);
     func_001B5038(p);
     func_001B4AA0(p);
     switch (p->x13D0) {
@@ -150,10 +150,10 @@ void func_001B50B0(struct P *p)
     func_001B82A0(p);
     func_001A1358(p->xDF0);
     if (p->p1430 && p->g1434 + 0.1f < D_002DDED0.t) {
-        if (!p->p1430->xEC || !func_00133D08(&D_003DD490, p->xEC, p->p1430->xEC))
+        if (!p->p1430->xEC || !func_00133D08(&g_sw, p->xEC, p->p1430->xEC))
             p->p1430 = 0;
         if (!p->p1430)
-            func_00134320(&D_003DD490, p);
+            func_00134320(&g_sw, p);
     }
     if (p->x1ACC) {
         if (D_002DDED0.t - p->g1AC8 < D_002C08E4)

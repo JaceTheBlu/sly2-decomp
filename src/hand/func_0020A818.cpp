@@ -4,7 +4,7 @@ union U { qword q; float f[4]; };
 struct Actor { char pad[0xF30]; int blocked,ready,padF38,busy; };
 struct P { char pad[0xC]; Actor *target; int kind; float unused,tolerance; int disabled; char pad20[8]; int count; Actor *actors[1]; };
 struct Camera { char pad[0x90]; qword position; };
-extern Camera D_002DDF40;
+extern Camera g_cm;
 extern "C" {
 qword func_001A62E8(Actor *);
 int func_0014F850(Camera *,qword,qword);
@@ -36,7 +36,7 @@ extern "C" int func_0020A818(P*p,Actor*a)
         if(a->ready)return 1;
         qword returned;returned=func_001A62E8(a);
         register Camera *camera __asm__("$4");
-        __asm__("sq %2,%0\n\tla %1,%3":"=m"(position0.q),"=r"(camera):"r"(returned),"i"(&D_002DDF40));
+        __asm__("sq %2,%0\n\tla %1,%3":"=m"(position0.q),"=r"(camera):"r"(returned),"i"(&g_cm));
         qword threshold,point;
         PlaneArguments(&threshold,&point,&scalar,0.0f,&camera->position,&position0.q);
         if(!func_0014F850(camera,point,threshold))goto fail;

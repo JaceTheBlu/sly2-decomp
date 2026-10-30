@@ -13,7 +13,7 @@ struct X {
     char p2[0xEC - 0x70]; struct VTE *vt; void *xF0; struct S *xF4; int xF8;
 };
 struct M { int n; struct S *p; int pad[14]; };
-extern char D_003DD490[];
+extern char g_sw[];
 extern char D_002C0DA0[];
 extern char D_002DEB30[];
 float func_0011D448(float a, float b);
@@ -34,7 +34,7 @@ void func_001C65F8(struct S *p, int n)
         p->x238 = func_0011D448(p->x230, p->x234);
         break;
     case 1: {
-        struct X *px = func_001CE888(D_003DD490, 9, 0);
+        struct X *px = func_001CE888(g_sw, 9, 0);
         struct LO *plo;
         if (px) {
             struct VTE *e;
@@ -58,7 +58,7 @@ void func_001C65F8(struct S *p, int n)
         }
         n = 2;
         ((void (*)(void *, int, int, int, int, int))p->vt[3].pf)((char *)p + p->vt[3].d, 5, 0, 0, 0, 0);
-        func_00161868(D_003DD490);
+        func_00161868(g_sw);
         func_001619A0(D_002DEB30, 0x12, p);
         break;
     }

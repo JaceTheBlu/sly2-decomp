@@ -12,7 +12,7 @@ extern "C" void func_00258458(CONFIG *,const RGBA *);
 extern "C" void func_00258470(CONFIG *,int);
 extern "C" void func_00258478(CONFIG *,int);
 struct CONFIG {float x,y,width,height;RGBA color;int hAlign,vAlign;CONFIG(uint bits=0xFF808080){func_00258438(this,0.0f,0.0f);func_00258448(this,640.0f,492.8000183f);RGBA gray(bits);func_00258458(this,&gray);func_00258470(this,0);func_00258478(this,0);}};
-extern CM D_002DDF40;
+extern CM g_cm;
 extern float D_002C1F20;
 extern LM D_002C1F28;
 extern int D_002C1F30,D_002C1F34;
@@ -28,7 +28,7 @@ static inline float Z(qword q){float f;__asm__("pextuw %0,$zero,%1":"=r"(f):"r"(
 extern "C" void func_001CD780(qword position,const char *text,const RGBA *unusedColor,const RGBA *color,float inputHeight)
 {
     float height=SavedHeight(inputHeight);
-    CM *camera=&D_002DDF40;
+    CM *camera=&g_cm;
     qword screen=func_0014F308(camera,position);
     float depth=Z(screen);
     if(depth<camera->nearDepth)return;

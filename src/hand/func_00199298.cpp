@@ -72,7 +72,7 @@ struct C8 { int x0; C4 *x4; };
 struct P0 { char pad[0xEC]; EC *xec; };
 struct P { P0 *x0; char pad[0x1C-4]; int x1c; char pad2[0xC8-0x20]; C8 *xc8; };
 struct G;
-extern G D_003DD490;
+extern G g_sw;
 extern "C" void func_001A7E10(G *g, X *x);
 extern "C" void func_00199298(P *p)
 {
@@ -101,5 +101,5 @@ extern "C" void func_00199298(P *p)
         }
         *l->x8 = l->x0;
     }
-    func_001A7E10(&D_003DD490, head);
+    func_001A7E10(&g_sw, head);
 }

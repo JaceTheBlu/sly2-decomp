@@ -4,7 +4,7 @@ union U { qword q; float f; };
 struct G { char pad[0x60]; M3 mat; };
 struct SPIN { char pad[0x40]; qword axis; };
 struct S {char pad[0x14];float start,duration;char pad1C[0x40-0x1C];M3 mat;char pad70[0xF0-0x70];SPIN *spin;char padF4[0x100-0xF4];qword pos;};
-extern G D_002DDF40;
+extern G g_cm;
 extern struct CLOCK {float t,dt;} D_002DDED0;
 extern "C" {
 qword func_0014F268(G*,qword);
@@ -22,7 +22,7 @@ static inline M3 Mul(const M3 &a,const M3 &b) return r {
 void func_001D0630(S *p) {
  M3 camera,fade,spin,render;
  U axis;float angle;
- G *pg=&D_002DDF40;
+ G *pg=&g_cm;
  qword view=func_0014F268(pg,p->pos);
  camera=func_0011BC00(p->mat,pg->mat);
  func_0011BCF8(&camera,&angle,&axis.q);

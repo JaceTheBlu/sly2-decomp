@@ -9,7 +9,7 @@ struct C{char pad0[16];P*actor;int pad14;H*helper;char pad1C[0x30-0x1C];STATE st
 struct CLOCK{float time,dt;};
 extern "C"{
  extern CLOCK D_002DDED0;
- extern char D_003DD490[];
+ extern char g_sw[];
  void func_001EEF98(C*);
  int func_001EF0A8(C*);
  int func_00177D20(C*);
@@ -133,7 +133,7 @@ extern "C" void func_00177618(C*p){
   case 0:{STATE next;Clear(&next);next.kind=1;func_00176750(p,&next);break;}
   case 8:{
    if(func_00174FB8(p->helper)){
-    P*object=func_00156B98(D_003DD490,0,func_001A62E8(p->actor),p->actor);
+    P*object=func_00156B98(g_sw,0,func_001A62E8(p->actor),p->actor);
     STATE next;Clear(&next);next.kind=2;next.payload.s.object=object;func_00176750(p,&next);func_00156780(object);
    }
    break;

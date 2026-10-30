@@ -2,7 +2,7 @@ typedef struct { char pad[0x30]; int x30; int x34; int x38; char pad3c[0x48 - 0x
 typedef struct { int pad[5]; int x14; int x18; int x1C; } REC;
 typedef struct { char pad[0x1C]; int x1C; } OBJ;
 extern GS D_003DA0F0;
-extern char D_003DD490[];
+extern char g_sw[];
 extern REC D_002BCD00[];
 extern char *D_002C3268[];
 extern char D_002A7A10[], D_002A7A18[], D_002A7A28[];
@@ -17,14 +17,14 @@ void func_001DC598(char *out)
     char buf[256];
     unsigned char *s;
     if (D_003DA0F0.x30 != -1) {
-        func_0021ED58(out, func_0013E368(D_003DD490, D_003DA0F0.x38));
+        func_0021ED58(out, func_0013E368(g_sw, D_003DA0F0.x38));
     } else if (D_003DA0F0.x48 == -1) {
-        func_0021ED58(out, func_0013E368(D_003DD490, 0xDD));
+        func_0021ED58(out, func_0013E368(g_sw, 0xDD));
     } else {
         OBJ *po = func_001DAE20(&D_003DA0F0,D_003DA0F0.x48);
-        int v = func_00141E78(func_001C4840(D_003DD490), D_003DA0F0.x48);
+        int v = func_00141E78(func_001C4840(g_sw), D_003DA0F0.x48);
         if ((po->x1C & 1) && v < 0) {
-            func_0021ED58(buf, func_0013E368(D_003DD490, 0xE1));
+            func_0021ED58(buf, func_0013E368(g_sw, 0xE1));
             s = (unsigned char *)D_002A7A10;
         } else {
             char *sz;
@@ -32,10 +32,10 @@ void func_001DC598(char *out)
                 sz = D_002C3268[v];
             else
                 sz = D_002A7A10;
-            func_0021ECD8(buf, func_0013E368(D_003DD490, D_002BCD00[D_003DA0F0.x48].x1C), sz, sz, sz);
-            s = (unsigned char *)func_0013E368(D_003DD490, D_002BCD00[D_003DA0F0.x48].x18);
+            func_0021ECD8(buf, func_0013E368(g_sw, D_002BCD00[D_003DA0F0.x48].x1C), sz, sz, sz);
+            s = (unsigned char *)func_0013E368(g_sw, D_002BCD00[D_003DA0F0.x48].x18);
         }
-        func_0021ECD8(out, D_002A7A18, func_0013E368(D_003DD490, D_002BCD00[D_003DA0F0.x48].x14),
+        func_0021ECD8(out, D_002A7A18, func_0013E368(g_sw, D_002BCD00[D_003DA0F0.x48].x14),
                       *s ? D_002A7A28 : D_002A7A10, s, buf);
     }
 }

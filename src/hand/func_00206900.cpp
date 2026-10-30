@@ -8,7 +8,7 @@ struct ANCHOR {int unused0;float stamp;int mode;struct P *object;};
 struct P {char pad0[0x2C0];ulong flags;char pad2C8[0xCC];int kindCount;int kinds[3];int generated;char pad3A8[0x24];struct ANCHOR *anchor;char pad3D0[0xB94];struct MANAGER *manager;};
 struct CANDIDATE {float distance;int *source;struct P *object;int mode;float stamp;int unused14;};
 struct GAME;
-extern struct GAME D_003DD490;
+extern struct GAME g_sw;
 extern int D_003DD488;
 extern ulong D_003DD480;
 extern float D_002A8614;
@@ -60,7 +60,7 @@ void func_00206900(struct P *p)
         int kind;
         for(kind=0;kind<p->kindCount;kind++){
             int *source=&p->kinds[kind];
-            int objectCount=func_0015E9C8(&D_003DD490,0x505,*source,0,256,objects);
+            int objectCount=func_0015E9C8(&g_sw,0x505,*source,0,256,objects);
             int i=0;
             if(objectCount>0){
                 float initialStamp=D_002A8614;

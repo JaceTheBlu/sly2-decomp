@@ -14,9 +14,9 @@ extern s32 D_002BC9B8;
 extern M2C_UNK D_002C44E0;
 extern s32 D_002DD5BC;
 extern f32 D_002DDED0;
-extern M2C_UNK D_002DDF40;
+extern M2C_UNK g_cm;
 extern void *D_002F7900;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 
 void func_001374E0(s32 arg0, s32 arg1) {
     M2C_FIELD(arg1, f32 *, 0x94) = (f32) D_002BC9B4;

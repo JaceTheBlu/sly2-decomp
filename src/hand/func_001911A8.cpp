@@ -46,7 +46,7 @@ struct STACKSCOPE { STACKSCOPE(); ~STACKSCOPE(); };   // 0x1AE478 / 0x1AE4A0(thi
 struct VU_FLOAT { qword q; };
 
 extern "C" {
-extern SW D_003DD490;                                   // the world
+extern SW g_sw;                                   // the world
 extern CLOCK D_002DDED0;                                // g_clock
 extern uint D_002DFBC4;
 extern qword D_002A2DC0;                                // (0, 0, 1)
@@ -116,7 +116,7 @@ static inline void ProbeGround(CONTEXT *p)
     qword posEnd = QwAdd(posBase, QwScale(D_002A2DC0, VuFloat(&D_002BF5B0)));
     int cso;
     SO **apso;
-    func_0020FAA0(&D_003DD490, posEnd, posBase, func_0020F948, p->pactor->pvFilter, &cso, &apso);
+    func_0020FAA0(&g_sw, posEnd, posBase, func_0020F948, p->pactor->pvFilter, &cso, &apso);
     for (i = 0; i < cso; i++) {
         int clsg = func_0014C6A0(apso[i], posBase, posEnd, 8, alsg);
         LSG *plsg = alsg;
@@ -130,7 +130,7 @@ static inline void ProbeGround(CONTEXT *p)
     func_001F38A8(psoSelf);
     qword posMin = func_0011F288(pgeom->cpos, pgeom->apos);
     qword posMax = func_0011F2B8(pgeom->cpos, pgeom->apos);
-    func_0020FAA0(&D_003DD490, posMin, posMax, func_0020F948, p->pactor->pvFilter, &cso, &apso);
+    func_0020FAA0(&g_sw, posMin, posMax, func_0020F948, p->pactor->pvFilter, &cso, &apso);
     for (i = 0; i < cso; i++)
         if (cbspMax <= apso[i]->cbsp)
             cbspMax = apso[i]->cbsp;
@@ -142,18 +142,18 @@ static inline void ProbeGround(CONTEXT *p)
         SO *pso = apso[i];
         XP *pxp = 0;
         if (pso->flags & (1UL << 49)) {
-            func_001A9B28(&D_003DD490, pso, psoSelf, 0, 0, &pxp);
+            func_001A9B28(&g_sw, pso, psoSelf, 0, 0, &pxp);
         } else {
             int cbspLeft = cbspMax;
             BSP *pbsp = absp;
             if (func_00118A88(pso->absp, (BSP *)0x7FFFFFFF, sRadius, posMid, &cbspLeft, &pbsp) == 2) {
                 int cbsp = pbsp - absp;
                 pbsp--;
-                func_001A8B50(&D_003DD490, psoSelf, pso, cbsp, pso->absp, pbsp, &pxp);
+                func_001A8B50(&g_sw, psoSelf, pso, cbsp, pso->absp, pbsp, &pxp);
             }
         }
         if (pxp) {
-            FreeSwXpList(&D_003DD490, pxp);
+            FreeSwXpList(&g_sw, pxp);
             return;
         }
     }

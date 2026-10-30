@@ -40,7 +40,7 @@ extern M2C_UNK D_002C44F0;
 extern M2C_UNK D_002C94A0;
 extern f32 D_002DDED0;
 extern f32 D_002DDF10;
-extern M2C_UNK D_002DDF40;
+extern M2C_UNK g_cm;
 extern M2C_UNK D_002DE2E0;
 extern M2C_UNK D_002DEA28;
 extern s32 D_002DFBC0;
@@ -51,7 +51,7 @@ extern void *D_003D4A50;
 extern s32 D_003D4A54;
 extern M2C_UNK D_003D4A60;
 extern M2C_UNK D_003DA150;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 extern s32 D_003E0FD8;
 
 s32 func_001D2DD0(s32 arg0, s32 arg1) {

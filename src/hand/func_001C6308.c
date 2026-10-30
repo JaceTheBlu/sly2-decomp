@@ -11,11 +11,11 @@ struct S {
 struct Q { char pad[0x18]; float duration; void *owner; char pad20[0xEC-0x20]; struct VTE *vt; void *emit; };
 struct CAMERA { char pad[0x60]; qword a,b; };
 struct CLOCK { float t; };
-extern struct CAMERA D_002DDF40;
+extern struct CAMERA g_cm;
 extern struct CLOCK D_002DDED0;
 extern qword D_002C0D80;
 extern float D_002C0D90;
-extern struct G D_003DD490;
+extern struct G g_sw;
 qword func_001A6FC0(struct S *,void *,qword);
 float func_0011D448(float,float);
 struct Q *func_001CE888(struct G *,void *,void *);
@@ -43,14 +43,14 @@ void func_001C6308(struct S *p)
     struct Q *q;
     if(!p->owner||p->probability<=0)return;
     direction=func_001A6FC0(p,0,D_002C0D80);
-    side=Dot(direction,D_002DDF40.b)<0;
+    side=Dot(direction,g_cm.b)<0;
     if(side!=p->previous) {
         if(func_0011D448(0,1)<p->probability) {
             if(D_002C0D90<D_002DDED0.t-p->last) {
-                if(Dot(direction,D_002DDF40.a)<0)emitter=p->left;
+                if(Dot(direction,g_cm.a)<0)emitter=p->left;
                 else emitter=p->right;
                 if(!emitter)goto changed;
-                q=func_001CE888(&D_003DD490,(void *)4,0);
+                q=func_001CE888(&g_sw,(void *)4,0);
                 if(!q)goto changed;
                 p->last=D_002DDED0.t;
                 {

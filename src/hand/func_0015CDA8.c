@@ -1,6 +1,6 @@
 typedef struct CRef { int m_tagk; union { int n; float g; } u; } CRef;
 struct G { char pad[0x3B58]; void *apA[9]; void *apB[9]; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern char D_003D4A60[];
 extern char D_002DFC00[];
 extern int D_002BE26C;
@@ -37,9 +37,9 @@ void func_0015CDA8(struct S *p)
         do {
             int n;
             void *pB;
-            if (GFromP(D_003DD490.apA[p->i118]) != 0.0f)
+            if (GFromP(g_sw.apA[p->i118]) != 0.0f)
                 break;
-            pB = D_003DD490.apB[p->i118 - 1];
+            pB = g_sw.apB[p->i118 - 1];
             n = 0;
             if (pB)
                 n = NFromP(pB);

@@ -1,4 +1,4 @@
-extern char D_003D9ED0[], D_003DD490[], D_002A6EB8[];
+extern char D_003D9ED0[], g_sw[], D_002A6EB8[];
 int func_001B0078(void *p);
 void *func_0013E368(void *p, int n);
 void func_0021ED58(void *s, void *q);
@@ -9,7 +9,7 @@ void func_001ADBB8(void *s)
     case 0x19:
     case 0x1E:
     case 0x1F:
-        func_0021ED58(s, func_0013E368(D_003DD490, 0x40));
+        func_0021ED58(s, func_0013E368(g_sw, 0x40));
         func_0021EDA0(s, D_002A6EB8);
         break;
     }

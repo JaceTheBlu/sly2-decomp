@@ -19,7 +19,7 @@ struct G{char pad[0x4038];int channel;};
 extern "C"{
  extern CLOCK D_002DDED0;
  extern char D_002DE578[],D_002DEB30[];
- extern G D_003DD490;
+ extern G g_sw;
  extern qword D_002A2DD0,D_002BFB10;
  int func_001A2358(C*,RECORD*);
  int func_00155228(void*,int);
@@ -143,7 +143,7 @@ notify:
   }
  }
 sound:
- register G*game __asm__("$16")=&D_003DD490;
+ register G*game __asm__("$16")=&g_sw;
  qword point=func_001A62E8(p->actor);int channel=game->channel;
  (void)func_00156698(channel,point,p->actor);
  return 1;

@@ -11,7 +11,7 @@ struct P {char pad0[0x10];int state;float stateTime;char pad18[8];U previousVelo
 struct CLOCK {float time,dt;};
 struct GAME;
 extern CLOCK D_002DDED0;
-extern GAME D_003DD490;
+extern GAME g_sw;
 void ApplyAsegCur(ASEG *,ALO *,float,float,int,ASEGA **);
 extern "C" {
 void func_001333C0(ASEGA *,int);
@@ -116,7 +116,7 @@ extern "C" void func_0020C2F8(P *p,int state)
             qword speed=func_0022FCC8(0,p->subject->space->parent,finalVelocity.q);
             p->constraint=func_0012DE58(p->subject,p->subject->space,5,position,speed,p->arrival);
             p->subject->flags|=0x04000000ul;
-            func_00134320(&D_003DD490,p->subject);
+            func_00134320(&g_sw,p->subject);
         }
         func_001F5880(p->subject,acceleration.q);
         break;

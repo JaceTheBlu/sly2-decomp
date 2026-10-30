@@ -13,7 +13,7 @@ struct CLOCK { float t; };
 extern struct CLOCK D_002DDED0;
 extern float D_002BD2D0;
 extern float D_002BD2D4;
-extern char D_003DD490[];
+extern char g_sw[];
 extern char D_002DEB30[];
 int func_00144068(struct PO *);
 int func_0020F0B0(void *);
@@ -59,7 +59,7 @@ void func_00144640(struct P *p)
     if (D_002DDED0.t < p->t24)
         return;
     p->t24 = D_002DDED0.t + D_002BD2D0;
-    if (func_0020F0B0(D_003DD490)) {
+    if (func_0020F0B0(g_sw)) {
         int fAny = 0;
         struct LN *pln;
         for (pln = p->p0->xEC->x64; pln; pln = pln->pnext) {

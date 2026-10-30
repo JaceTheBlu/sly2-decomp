@@ -34,7 +34,7 @@ struct FRAME {FRAME(){}~FRAME(){}};
 struct P {char pad0[0xEC];void *attachment;char padF0[0xB8];float heading;char pad1AC[4];MATRIX3 basis;};
 struct HEIGHT {float min,max;};
 struct GAME;
-extern GAME D_003DD490;
+extern GAME g_sw;
 extern qword D_002A2DC0;
 extern const float D_002A85F8;
 extern float D_002C3CE0;
@@ -103,7 +103,7 @@ extern "C" void func_00205910(P *p,HEIGHT *height,int pointCount,const qword *lo
     FRAME *frame=&storage;
     func_001AE478(frame);
     int nearbyCount;void **nearby;
-    func_0020FC60(&D_003DD490,*(qword *)matCur.mat[3],radius,func_0020FA50,p->attachment,&nearbyCount,&nearby);
+    func_0020FC60(&g_sw,*(qword *)matCur.mat[3],radius,func_0020FA50,p->attachment,&nearbyCount,&nearby);
     U points[3];
     U point;
     for(int pass=0;pass<D_002C3CE4;pass++){

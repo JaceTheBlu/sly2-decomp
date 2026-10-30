@@ -20,7 +20,7 @@ struct OBJ {
     char x188[4];
 };
 extern "C" {
-extern GS D_003DD490;
+extern GS g_sw;
 extern char D_002A7878[];
 extern int D_002DFBC0;
 extern char D_002DFC00[], D_002E0D00[];
@@ -52,18 +52,18 @@ extern "C" void func_001D7480(OBJ *p, int s)
         SO *aso2[32];
         int n;
         int idx;
-        if (D_003DD490.x3B0C && !D_003DD490.x3B0C->x74)
-            func_00162E38(D_003DD490.x3B0C);
-        n = func_0015E9C8(&D_003DD490, 5, 0x34, 0, 3, aso0);
+        if (g_sw.x3B0C && !g_sw.x3B0C->x74)
+            func_00162E38(g_sw.x3B0C);
+        n = func_0015E9C8(&g_sw, 5, 0x34, 0, 3, aso0);
         for (int i0 = 0; i0 < n; i0++) {
             SO *so = aso0[i0];
             func_001433C8(so);
             func_001440D0(so, 1);
         }
-        n = func_0015E9C8(&D_003DD490, 0x105, 0x64, 0, 0x20, aso1);
+        n = func_0015E9C8(&g_sw, 0x105, 0x64, 0, 0x20, aso1);
         for (int i1 = 0; i1 < n; i1++)
             ((void (*)(void *, int))aso1[i1]->vt[76].pfn)((char *)aso1[i1] + aso1[i1]->vt[76].d, 4);
-        n = func_0015E9C8(&D_003DD490, 0x105, 0x4F, 0, 0x20, aso2);
+        n = func_0015E9C8(&g_sw, 0x105, 0x4F, 0, 0x20, aso2);
         for (int i2 = 0; i2 < n; i2++)
             VCALL(aso2[i2], 9);
         if (p->x184) {

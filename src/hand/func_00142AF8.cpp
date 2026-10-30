@@ -25,7 +25,7 @@ extern int D_002DD640;
 extern float D_002A4D68;
 extern qword D_002A2DA0;
 extern S *D_003E1474;
-extern GS D_003DD490;
+extern GS g_sw;
 void func_00142880(P *p);
 void func_001427C8(P *p, int n, S *ps);
 void func_001428D8(P *p, S *ps, void **ppv, float *pg, float *pg2);
@@ -113,9 +113,9 @@ void func_00142AF8(P *p)
                     nBest = psBest->nF4;
                 }
             }
-            if (D_003DD490.c4678 > 0 && nBest < 3) {
-                __asm__("" : : : "$4"); /* clobber of dead a0: target keeps &D_003DD490 in a1 */
-                ps = D_003DD490.ps4690;
+            if (g_sw.c4678 > 0 && nBest < 3) {
+                __asm__("" : : : "$4"); /* clobber of dead a0: target keeps &g_sw in a1 */
+                ps = g_sw.ps4690;
                 if (ps) {
                     float g3, g4;
                     func_001428D8(p, ps, &p->p10F8, &g3, &g4);

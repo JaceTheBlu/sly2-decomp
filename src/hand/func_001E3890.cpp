@@ -1,6 +1,6 @@
 // func_001E3890: ported from Lilly's personal Sly 2 decomp (src/P2/jsg.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002BD850 (D_002BD850), D_002C3620 (D_002C3620), D_002C3624 (D_002C3624), D_002C3628 (D_002C3628), D_002C362C (D_002C362C), D_003DA530 (D_003DA530), D_002DDED0 (g_clock), D_002DDF40 (g_cm), D_002DFC00 (g_joy), D_003DD040 (g_sndmgr), D_004435F0 (g_subtitle), D_003DD490 (g_sw)
+// Globals: D_002BD850 (D_002BD850), D_002C3620 (D_002C3620), D_002C3624 (D_002C3624), D_002C3628 (D_002C3628), D_002C362C (D_002C362C), D_003DA530 (D_003DA530), D_002DDED0 (g_clock), g_cm (g_cm), D_002DFC00 (g_joy), g_sndmgr (g_sndmgr), D_004435F0 (g_subtitle), g_sw (g_sw)
 // 0x001E3890 FIsJsgCommandComplete__FP3JSGP8RELAYCMD  (T1306, our name; MATCH)
 // Whether the command the script is on has finished, by kind; UpdateJsg asks it of the current command (a command that is fAsync is not asked) and
 // ReleaseJsgJtIfComplete of the one that took the character. A kind with nothing to wait for (and every kind past the table) is complete at once.
@@ -887,7 +887,7 @@ struct CM : public CMBASE
       float rUnk620;
       float rUnk624;
 };
-extern CM D_002DDF40;
+extern CM g_cm;
 struct STEPPLAYER;
 struct GRABSPOTDATA
 {
@@ -1154,7 +1154,7 @@ struct SW : public BASIC
       struct EMITTER *apemitTracked[4];
       uint32_t   _pad_360    [ 1 ] ;
 };
-extern SW D_003DD490;
+extern SW g_sw;
 struct XA
 {
       uint32_t   _pad_409    [ 1 ] ;
@@ -2836,7 +2836,7 @@ static inline float GXOfQwAct(qword qw)
 JSG *PjsgFindRelayBlock(RELAY *prelay, OID oidLabel, JSG *pjsgExcept);
 void PopJsgCamBlend(JSG *pjsg, int n);
 void ReleaseJsgSma(JSG *pjsg);
-extern SNDMGR D_003DD040;
+extern SNDMGR g_sndmgr;
 extern char D_003DA530[];
 LO *PloFindJsgObject(JSG *pjsg, OID oid);
 extern "C" BHV *PbhvFindStep(STEP *pstep, int cid);
@@ -3214,13 +3214,13 @@ int FIsJsgCommandComplete(JSG *pjsg, RELAYCMD *prelaycmd)
         }
         break;
     case RELAYCK_TweenPosObj:
-        fComplete = D_002DDF40.cpzoom.FAtTargetFocus();
+        fComplete = g_cm.cpzoom.FAtTargetFocus();
         break;
     case RELAYCK_TweenAimObj:
-        fComplete = D_002DDF40.cpzoom.FAtTargetEye();
+        fComplete = g_cm.cpzoom.FAtTargetEye();
         break;
     case RELAYCK_TweenTime:
-        fComplete = D_002DDF40.cpzoom.FAtTargetZoom();
+        fComplete = g_cm.cpzoom.FAtTargetZoom();
         break;
     case RELAYCK_ButtonPrompt:
         if (prelaycmd->buttonPrompt.oidWho == -1)
@@ -3230,7 +3230,7 @@ int FIsJsgCommandComplete(JSG *pjsg, RELAYCMD *prelaycmd)
         else
         {
             POCTL *ppoctl;
-            for (ppoctl = (POCTL *)D_003DD490.slPoctl.head; ppoctl; ppoctl = (POCTL *)ppoctl->pvUnk84)
+            for (ppoctl = (POCTL *)g_sw.slPoctl.head; ppoctl; ppoctl = (POCTL *)ppoctl->pvUnk84)
             {
                 if (FObjHasTarget(ppoctl->ppo, prelaycmd->buttonPrompt.oidWho))
                 {
@@ -3270,7 +3270,7 @@ int FIsJsgCommandComplete(JSG *pjsg, RELAYCMD *prelaycmd)
         fComplete = func_001D9880(D_003DA530) == 0;
         break;
     case RELAYCK_Line:
-        fComplete = FCurrentIdMatches(&D_003DD040, prelaycmd->line.idLine) == 0;
+        fComplete = FCurrentIdMatches(&g_sndmgr, prelaycmd->line.idLine) == 0;
         break;
     case RELAYCK_Unk52:
     {
@@ -3279,7 +3279,7 @@ int FIsJsgCommandComplete(JSG *pjsg, RELAYCMD *prelaycmd)
         {
             idLine = pjsg->prelaycmdLine->line.idLine;
         }
-        if (!FCurrentIdMatches(&D_003DD040, idLine))
+        if (!FCurrentIdMatches(&g_sndmgr, idLine))
         {
             fComplete = 1;
         }
@@ -3289,15 +3289,15 @@ int FIsJsgCommandComplete(JSG *pjsg, RELAYCMD *prelaycmd)
         }
         else
         {
-            fComplete = 0.0f <= func_001FE888(&D_003DD040) - prelaycmd->unk52.dtWait;
+            fComplete = 0.0f <= func_001FE888(&g_sndmgr) - prelaycmd->unk52.dtWait;
         }
         break;
     }
     case RELAYCK_Unk4A:
-        fComplete = prelaycmd->unk4A.gUnk4 <= GetFirstTimerSeconds(&D_003DD040);
+        fComplete = prelaycmd->unk4A.gUnk4 <= GetFirstTimerSeconds(&g_sndmgr);
         break;
     case RELAYCK_WaitTimer:
-        fComplete = prelaycmd->waitTimer.dtWait <= GetFirstTimerSeconds(&D_003DD040);
+        fComplete = prelaycmd->waitTimer.dtWait <= GetFirstTimerSeconds(&g_sndmgr);
         break;
     case RELAYCK_Unk4F:
         fComplete = 0;

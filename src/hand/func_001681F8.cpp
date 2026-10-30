@@ -93,7 +93,7 @@ struct G
     int tick;
 };
 extern DMA D_002DEA28;
-extern G D_003DD490;
+extern G g_sw;
 extern "C" {
 void func_001AE5A0(void *pvDst, const void *pvSrc, uint cb);
 void *func_0023320C(void *pvDst, const void *pvSrc, uint cb);
@@ -202,5 +202,5 @@ extern "C" void func_001681F8(PACKETS *p)
         prpl->pad4 = 0;
         prpl->chain = descriptor->chain;
     }
-    p->tick = D_003DD490.tick;
+    p->tick = g_sw.tick;
 }

@@ -5,7 +5,7 @@ struct VT { VTE a[3]; VTE5 a3; };
 struct P { int n0; char pad[0x64 - 4]; int n64; };
 struct S { int n0; int n4; int n8; VT *pvt; int n10; P *p14; int pad18[2]; qword q20; qword q30; int n40; int pad44; int n48; float f4C; int n50; int n54; int pad58[2]; };
 struct SW { char pad[0x3D68]; int c; char pad2[0x3FFC - 0x3D6C]; char dl[0xC]; char pool[0x10]; };
-extern SW D_003DD490;
+extern SW g_sw;
 extern VT D_002CE2B8;
 struct CLOCK { float t; float dt; };
 extern CLOCK D_002DDED0;
@@ -22,7 +22,7 @@ struct Lock {
 };
 extern "C" void func_00156548(P *p, qword q, int b, S **pps)
 {
-    S *ps = func_0011CCC0(D_003DD490.pool);
+    S *ps = func_0011CCC0(g_sw.pool);
     func_002333B4(ps, 0, 0x60);
     ps->n0 = 0;
     ps->n4 = 0;
@@ -31,10 +31,10 @@ extern "C" void func_00156548(P *p, qword q, int b, S **pps)
     ps->q30 = q;
     ps->pvt = &D_002CE2B8;
     ps->n40 = b;
-    ps->n48 = ++D_003DD490.c;
+    ps->n48 = ++g_sw.c;
     ps->f4C = D_002DDED0.t;
     ps->n54 = p->n64;
-    func_0011A220(D_003DD490.dl, ps);
+    func_0011A220(g_sw.dl, ps);
     ps->pvt->a[1].pfn((char *)ps + ps->pvt->a[1].d);
     Lock l(ps);
     func_00256EE0(ps, p->n0);

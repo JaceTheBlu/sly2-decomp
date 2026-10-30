@@ -14,7 +14,7 @@ class SO { public: char pad[0xC]; VT *pvt; };
 struct VUV { qword q; VUV() {} VUV(const VUV &v) : q(v.q) {} };
 struct FRAME { int a[4]; };
 extern "C" {
-extern char D_003DD490[];
+extern char g_sw[];
 extern qword g_normalZ;
 extern float D_002BDC98;
 extern VECTOR D_002BDC60;
@@ -71,7 +71,7 @@ static inline int FFast(qword v) { return D_002BDC98 < Len(v); }
 
 qword func_00155FB0(void *p, qword pos)
 {
-    SO *pso = func_001C4840(D_003DD490);
+    SO *pso = func_001C4840(g_sw);
     float dist = Len(Sub(func_001A62E8(pso), pos));
     float u = func_00154C90(D_002DE578);
     qword posTarget = AddScaled(func_001A62E8(pso), g_normalZ, VU_FLOAT(50.0f));

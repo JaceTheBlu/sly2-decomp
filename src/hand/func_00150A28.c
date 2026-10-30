@@ -4,7 +4,7 @@ typedef union { struct { qword r[4]; } q; M3 m3; float af[4][4]; } M4;
 struct CLOCK { float t; float dt; };
 extern struct CLOCK D_002DDED0;
 struct CM;
-extern struct CM D_002DDF40;
+extern struct CM g_cm;
 extern float D_003E1BE0;
 extern char D_002BD9B8[], D_002BD9C8[], D_002BD9D8[], D_002BD9E8[], D_002BD9F8[];
 extern char D_002BBB60[], D_002BBB68[];
@@ -92,14 +92,14 @@ void func_00150A28(struct X *p)
         m4.af[1][3] = 0.0f;
         m4.af[0][3] = 0.0f;
         pm4->af[3][3] = 1.0f;
-        func_0014E168(&D_002DDF40, pm4);
-        func_0014F5A0(&D_002DDF40, p->g70);
+        func_0014E168(&g_cm, pm4);
+        func_0014F5A0(&g_cm, p->g70);
         func_0011BC88(pm4, &p->gA4, &p->gA8);
         }
         p->gAC = func_0011D948(D_002BBB60, GFrac(p->g70, p->gB8, p->gBC));
     } else {
         float u = 1.0f - p->gAC;
-        func_0014F5A0(&D_002DDF40, (1.0f - u) * p->gB8 + u * p->gBC);
+        func_0014F5A0(&g_cm, (1.0f - u) * p->gB8 + u * p->gBC);
         {
             qword a = p->q30;
             p->q30 = func_0011F088(a, func_001507F8(p), D_002DDED0.dt, D_002BD9F8, 0);
@@ -108,7 +108,7 @@ void func_00150A28(struct X *p)
             qword a = p->q20;
             p->q20 = func_0011F088(a, func_00150780(p), D_002DDED0.dt, D_002BD9F8, 0);
         }
-        func_0014E1A8(&D_002DDF40, p->q30, p->q20, 0.0f, 0.0f);
+        func_0014E1A8(&g_cm, p->q30, p->q20, 0.0f, 0.0f);
     }
     D_003E1BE0 = D_002DDED0.t;
 }

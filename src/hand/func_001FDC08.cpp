@@ -4,7 +4,7 @@ struct REF {char pad50[0x50];unsigned short flags,state;};
 struct COEF {float a,b,c;};
 struct PLAYER {char pad4C8[0x4C8];int action;char pad4CC[0xBFC];int mode;char pad10CC[0x20];int state;};
 struct P {char pad5C[0x5C];int modeA,modeB,selected;char pad68[0xA0];float weights[3];struct COEF coefficients[3];char pad138[0xCC];int count;struct REF *refs[8];};
-extern char D_003DD490[];
+extern char g_sw[];
 extern float D_002DDF10;
 struct PLAYER *func_001C4A48(void *);
 int func_00132B10(void *,int);
@@ -21,8 +21,8 @@ void func_001FDC08(struct P *input)
     p->selected=1;
     if(p->modeA)p->selected=2;
     else if(p->modeB)p->selected=0;
-    else if(func_001C4A48(D_003DD490) && func_00132B10(func_001C4A48(D_003DD490),0x34)){
-        struct PLAYER *player=func_001C4A48(D_003DD490);
+    else if(func_001C4A48(g_sw) && func_00132B10(func_001C4A48(g_sw),0x34)){
+        struct PLAYER *player=func_001C4A48(g_sw);
         if(player->state==3)p->selected=0;
         else if(player->state==4)p->selected=2;
         else if(player->mode!=-1)p->selected=0;

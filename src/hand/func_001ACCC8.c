@@ -5,7 +5,7 @@ struct MC { char pad[8]; int x8; char pad2[0xFD58 - 0xC]; int xFD58; char pad3[0
 struct CLOCK { char pad[0x3C]; float t3c; };
 extern struct MC D_002E65E0;
 extern struct CLOCK D_002DDED0;
-extern char D_003DD490[];
+extern char g_sw[];
 extern char D_003D9ED0[];
 extern char D_002F633C[];
 extern const struct PMF D_002A6D88;
@@ -32,7 +32,7 @@ void func_001ACCC8(struct S *s)
     c = p->x64;
     if (c != 2)
         return;
-    if (func_0020E040(D_003DD490))
+    if (func_0020E040(g_sw))
         return;
     if (D_002DDED0.t3c - s->x24->x5C <= 0.1f)
         return;

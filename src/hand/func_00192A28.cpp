@@ -8,7 +8,7 @@ qword func_001A62E8(void *p);
 void func_0020FAA0(void *g, qword a, qword b, void *pfn, void *o, int *pi, int *pj);
 int func_0014CC58(int z, qword a, qword b, int i, int j, int k);
 void func_00154568(void);
-extern char D_003DD490[];
+extern char g_sw[];
 extern float D_002BF638;
 }
 class FRAME { public: FRAME() { func_001AE478(this); } ~FRAME() { func_001AE4A0(this, 2); } };
@@ -38,7 +38,7 @@ void func_00192A28(P *p)
         }
         struct { char c; FRAME frame; int i, j; } x;
 
-        func_0020FAA0(D_003DD490, a, b, (void *)func_00154568, o, &x.i, &x.j);
+        func_0020FAA0(g_sw, a, b, (void *)func_00154568, o, &x.i, &x.j);
         if (!func_0014CC58(0, a, b, x.i, x.j, 0)) continue;
         func_00154080(o->xf64, e, 0);
     }

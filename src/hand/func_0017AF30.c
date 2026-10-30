@@ -1,6 +1,6 @@
 typedef int qword __attribute__((mode(TI)));
 struct G { char pad[0x4028]; void *p4028; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern void *D_002BE6D0[];
 extern int D_002BE6E8[];
 struct VTE { short d; short pad; void *pfn; };
@@ -54,7 +54,7 @@ int func_0017AF30(struct S *p, int msg, struct M *pm) {
             }
             func_00130D30(p->p40->p8, g, 1.0f, 0);
             func_0017B1A8(p, 0);
-            o = func_0015E938(&D_003DD490, 5, D_002BE6E8[i], 0);
+            o = func_0015E938(&g_sw, 5, D_002BE6E8[i], 0);
             if (o) {
                 struct X x;
                 struct VTE *e;
@@ -69,7 +69,7 @@ int func_0017AF30(struct S *p, int msg, struct M *pm) {
                 int m = a->n33C + pm->n10;
                 a->n33C = m < 5 ? 5 : m;
             }
-            func_00156698(D_003DD490.p4028, func_001A62E8(p->p10), p->p10);
+            func_00156698(g_sw.p4028, func_001A62E8(p->p10), p->p10);
             return 1;
         }
     }

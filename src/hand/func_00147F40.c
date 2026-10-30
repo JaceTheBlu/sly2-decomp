@@ -8,7 +8,7 @@ struct SO { char pad[0xC]; struct VT *pvt; char pad2[0x28 - 0x10]; long grf; flo
 struct ITEM { struct SO *pso; };
 struct CM { char pad[0x14]; int x14; char pad2[0x90 - 0x18]; qword pos; };
 struct P { char pad[0x20]; DL dl; char pad2[0x2C - 0x2C]; char x2C[0x39A4 - 0x2C]; void *pvStop; int x39A8; qword q39B0; qword q39C0; };
-extern struct CM D_002DDF40;
+extern struct CM g_cm;
 extern float D_002BD450;
 void *func_001C4840(void);
 qword func_001A62E8(void *p);
@@ -56,8 +56,8 @@ void func_00147F40(struct P *p)
     int n;
     void *pvB;
     void *pv;
-    pos = D_002DDF40.pos;
-    n = D_002DDF40.x14;
+    pos = g_cm.pos;
+    n = g_cm.x14;
     pvB = func_001C4840();
     if (pvB)
         posB = func_001A62E8(pvB);

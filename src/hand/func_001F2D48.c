@@ -8,7 +8,7 @@ struct E { char pad[0xDC]; int nDC; };
 struct P { char pad[0x64]; DL dl; char pad2[0xE8 - 0x70]; struct E *pe; char pad3[0x12C - 0xEC]; float f12C; int n130; };
 struct K { int a, b; };
 struct G;
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern struct K D_002A8270;
 void func_001A5848(struct P *);
 void func_001F2BA8(struct P *);
@@ -40,7 +40,7 @@ void func_001F2D48(struct P *p)
     n = 0;
     if (p->pe) n = p->pe->nDC;
     if (n) {
-        func_00149B58(&D_003DD490, 3, p, D_002A8270, 0);
+        func_00149B58(&g_sw, 3, p, D_002A8270, 0);
         func_001F37C8(p, 0);
     }
     InitDli(&dli, &p->dl);

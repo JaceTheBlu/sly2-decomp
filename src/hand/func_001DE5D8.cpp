@@ -68,7 +68,7 @@ struct P {
 };
 struct MSG { int bytes, alignment; };
 struct G;
-extern G D_003DD490;
+extern G g_sw;
 extern qword D_002A2DF0, D_002A2E00;
 extern float D_002C3610;
 extern "C" {
@@ -113,7 +113,7 @@ extern "C" void func_001DE5D8(P *p)
             ENDPOINT *endpoint = &entry->endpoints[j];
             endpoint->kind = -1;
             if (endpoint->id != -1) {
-                void *object = func_0015E938(&D_003DD490, 1, endpoint->id, p);
+                void *object = func_0015E938(&g_sw, 1, endpoint->id, p);
                 if (object) {
                     if (func_00132B10(object, 10)) {
                         PATH *path = (PATH *)object;

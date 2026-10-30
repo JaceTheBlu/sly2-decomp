@@ -18,7 +18,7 @@ typedef struct {
     W *pw;
     int ids[5];
 } OBJ;
-extern struct G D_003DD490;
+extern struct G g_sw;
 W *func_0015E938(struct G *, int, int, int);
 Q *func_001C4840(struct G *);
 int func_00132B10(Q *, int);
@@ -29,10 +29,10 @@ void func_001D9968(OBJ *p)
 {
     Q *q;
     W *pw;
-    p->pw = func_0015E938(&D_003DD490, 0x405, 0x36B, 0);
+    p->pw = func_0015E938(&g_sw, 0x405, 0x36B, 0);
     p->x30 = 0;
     p->q = 0;
-    q = func_001C4840(&D_003DD490);
+    q = func_001C4840(&g_sw);
     if (q && func_00132B10(q, 0x34))
         p->q = q;
     if (p->q == 0) {

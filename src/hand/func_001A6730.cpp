@@ -52,7 +52,7 @@ typedef char META_bytes_Offset[FIELD_OFFSET(META,bytes)==12?1:-1];
 typedef char G_phase_Offset[FIELD_OFFSET(G,phase)==16144?1:-1];
 extern "C"{
 extern char D_002DD598[],D_004520D0[],D_00452148[];
-extern G D_003DD490;
+extern G g_sw;
 void func_00128148(void*);
 void func_00257250(void*,int);
 void func_00129EC8(void*);
@@ -97,7 +97,7 @@ extern "C" void func_001A6730(P*p,const P*source){
     p->tag.Set(source->tag.Get());
     p->word34=source->word34;
     char*dst;const char*src;
-    if(D_003DD490.phase!=-2){src=(const char*)source+0x50;dst=(char*)p+0x50;p->nodes=source->nodes;}
+    if(g_sw.phase!=-2){src=(const char*)source+0x50;dst=(char*)p+0x50;p->nodes=source->nodes;}
     else{
         src=(const char*)source+0x50;dst=(char*)p+0x50;REQUEST request;
         for(NODE*n=source->nodes;n&&n->owner==source;n=n->next){
@@ -107,7 +107,7 @@ extern "C" void func_001A6730(P*p,const P*source){
             func_0011A058(&copy->link);
             func_0011A060(copy->list);
             func_0011A070(copy->next->list,copy);
-            void*list=func_0015E3C0(&D_003DD490,copy->key);
+            void*list=func_0015E3C0(&g_sw,copy->key);
             func_0011A070(list,copy);
         }
     }

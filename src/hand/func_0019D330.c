@@ -3,7 +3,7 @@ struct V { char pad[0x10]; float x10, x14, x18, x1c, x20, x24, x28, x2c; char pa
 struct O { char pad[0x150]; struct V *x150; char pad2[0x190-0x154]; qword x190; };
 struct P { struct O *x0; int x4; int pad[3]; void *x14; int pad2[2]; int x20; char x24[0x3C-0x24]; float x3c; };
 struct D { char pad[0x460]; float x460; int p1[3]; float x470; char pad2[0x5C4-0x474]; float x5c4; int p2; float x5cc; };
-extern struct D D_002DDF40;
+extern struct D g_cm;
 extern qword D_002A2DD0;
 int func_00131968(void *p);
 void func_0019CD38(struct P *p, int n);
@@ -24,13 +24,13 @@ void func_0019D330(struct P *p)
             p->x0->x190 = D_002A2DD0;
             switch (p->x20) {
             case 0:
-                func_00204660(p->x0, D_002DDF40.x460);
-                p->x3c = D_002DDF40.x470;
+                func_00204660(p->x0, g_cm.x460);
+                p->x3c = g_cm.x470;
                 func_0019DA78(p->x24);
                 break;
             case 1:
-                func_00204660(p->x0, D_002DDF40.x5c4);
-                p->x3c = D_002DDF40.x5cc;
+                func_00204660(p->x0, g_cm.x5c4);
+                p->x3c = g_cm.x5cc;
                 func_0019DA78(p->x24);
                 break;
             }

@@ -1,6 +1,6 @@
 struct VTE { short d; short pad; void (*pfn)(void *, int); };
 struct P { char pad[0xC]; struct VTE *vt; char pad2[0x1030 - 0x10]; char m1030[4]; char m1034[4]; };
-extern char D_003DD490[];
+extern char g_sw[];
 void func_00143FF8(struct P *p);
 void *func_0015E938(void *g, int k, int oid, struct P *p);
 int func_00132B10(void *o, int n);
@@ -15,7 +15,7 @@ void func_00143EE0(struct P *p, int oid, int a, int b)
         func_00143FF8(p);
         return;
     }
-    o = func_0015E938(D_003DD490, 1, oid, p);
+    o = func_0015E938(g_sw, 1, oid, p);
     if (!o) return;
     if (func_00132B10(o, 0x6D)) {
         p->vt[88].pfn((char *)p + p->vt[88].d, b);

@@ -15,7 +15,7 @@ public:
     int ff0;
 };
 struct G;
-extern G D_003DD490;
+extern G g_sw;
 extern char D_002DEB30[];
 extern "C" void func_00165DC0(G *pg, O *p);
 extern "C" int func_00162670(O *p);
@@ -25,7 +25,7 @@ extern "C" void func_001620B0(O *p, int n, int c, int a);
 extern "C" void func_001623D0(O *p, int n, int c, int a, int b);
 extern "C" void func_001629A0(O *p)
 {
-    func_00165DC0(&D_003DD490, p);
+    func_00165DC0(&g_sw, p);
     if (func_00162670(p)) {
         p->f7c++;
         func_00163460(p);

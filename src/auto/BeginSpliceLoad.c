@@ -1,6 +1,6 @@
 #include "m2c_prelude.h"
 extern s32 D_002DD5B8;
 
-void func_0012AE18(void) {
+void BeginSpliceLoad(void) {
     D_002DD5B8 = 1;
 }

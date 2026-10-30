@@ -1,6 +1,6 @@
 // func_0022DE88: ported from Lilly's personal Sly 2 decomp (src/P2/xf.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002A2DA0 (D_002A2DA0), D_002DDED0 (g_clock), D_002A2DD0 (g_qwZero), D_003DD490 (g_sw)
+// Globals: D_002A2DA0 (D_002A2DA0), D_002DDED0 (g_clock), D_002A2DD0 (g_qwZero), g_sw (g_sw)
 // 0x0022DE88 UpdateSoSlots__FP2SO (our name, was FUN_0022DE88; SO::Update 0x1F3980 calls it right after the SO's own update). THE per-frame step of an SO's XF slots:
 // for every XF it runs SlotRefresh and then, by the XF's role (nRole, see SlotRefresh / SlotSetRole), moves the XF's local matrix `mat` and stamps it (nStampWorld = ++g_sw.nStampXf):
 //   roles 1 2   constant acceleration qwUnkF0 on the velocity vUnkB0: xfk 1 moves the position row (trapezoid: pos += (v_old + v_new) * dt / 2), xfk 6 turns the rotation by the
@@ -644,7 +644,7 @@ struct SW : public BASIC
       struct EMITTER *apemitTracked[4];
       uint32_t   _pad_360    [ 1 ] ;
 };
-extern SW D_003DD490;
+extern SW g_sw;
 struct CONSTR
 {
       qword vecNormal;
@@ -1005,7 +1005,7 @@ void UpdateSoSlots(SO *pso)
                         func_00256D18(pxf->mat.mat[3], qwPos);
                         *(qword *)&pxf->vUnkB0 = qwVel;
                         pxf->mat.mat[3][3] = 1.0f;
-                        pxf->nStampWorld = ++D_003DD490.nStampXf;
+                        pxf->nStampWorld = ++g_sw.nStampXf;
                     }
                     else
                     {
@@ -1034,7 +1034,7 @@ void UpdateSoSlots(SO *pso)
                         qword qwSum = QwAdd(*(qword *)&pxf->vUnkB0, qwVel);
                         TurnSlotMat(pxf, (MATRIX3 *)&pxf->mat, QwMulX(qwSum, vfHalf.qw));
                         *(qword *)&pxf->vUnkB0 = qwVel;
-                        pxf->nStampWorld = ++D_003DD490.nStampXf;
+                        pxf->nStampWorld = ++g_sw.nStampXf;
                     }
                     else
                     {
@@ -1060,7 +1060,7 @@ void UpdateSoSlots(SO *pso)
                     pxf->mat.mat[1][3] = 0.0f;
                     pxf->mat.mat[2][3] = 0.0f;
                     pxf->mat.mat[0][3] = 0.0f;
-                    pxf->nStampWorld = ++D_003DD490.nStampXf;
+                    pxf->nStampWorld = ++g_sw.nStampXf;
                 }
                 break;
             case 4:
@@ -1085,7 +1085,7 @@ void UpdateSoSlots(SO *pso)
                     qword qwVal = QwSlotValue(pxf);
                     pxf->mat = SlotStoreValue(pxf, qwVal);
                 }
-                pxf->nStampWorld = ++D_003DD490.nStampXf;
+                pxf->nStampWorld = ++g_sw.nStampXf;
                 if (pxf->nRole == 6 && pxf->nPhase == 2)
                     SlotSetRole(pso, pxf, 10);
             }
@@ -1350,7 +1350,7 @@ void UpdateSoSlots(SO *pso)
                 }
             LChaseDone:
                 fIdle = 0;
-                pxf->nStampWorld = ++D_003DD490.nStampXf;
+                pxf->nStampWorld = ++g_sw.nStampXf;
                 break;
             }
             case 0xd:
@@ -1379,7 +1379,7 @@ void UpdateSoSlots(SO *pso)
                 func_00256D18(pxf->mat.mat[3], *(qword *)&vecPos);
                 pxf->mat.mat[3][3] = 1.0f;
                 *(qword *)&pxf->vUnkB0 = *(qword *)&vecVel;
-                pxf->nStampWorld = ++D_003DD490.nStampXf;
+                pxf->nStampWorld = ++g_sw.nStampXf;
                 break;
             }
             case 0x12:
@@ -1480,7 +1480,7 @@ void UpdateSoSlots(SO *pso)
                 }
                 }
                 fIdle = 0;
-                pxf->nStampWorld = ++D_003DD490.nStampXf;
+                pxf->nStampWorld = ++g_sw.nStampXf;
                 break;
             }
         }

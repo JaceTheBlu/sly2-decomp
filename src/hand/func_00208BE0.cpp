@@ -14,7 +14,7 @@ int func_00227C90(L *pl, qword q);
 void func_0020FAA0(void *g, qword a, qword b, void *p1, void *p2, int *pi, int *pj);
 int func_0014CC58(int z, qword a, qword b, int i, int j, void *phit);
 void func_0020FA10();
-extern char D_003DD490[];
+extern char g_sw[];
 int func_00208BE0(S2 *p, O *o);
 }
 class FRAME { public: FRAME(); ~FRAME(); };
@@ -51,7 +51,7 @@ int func_00208BE0(S2 *p, O *o)
         {
             FRAME frame;
             int i, j;
-            func_0020FAA0(D_003DD490, pos, tpos, (void *)func_0020FA10, p->pEC, &i, &j);
+            func_0020FAA0(g_sw, pos, tpos, (void *)func_0020FA10, p->pEC, &i, &j);
             if (!func_0014CC58(0, pos, tpos, i, j, 0))
                 return 1;
             return 0;

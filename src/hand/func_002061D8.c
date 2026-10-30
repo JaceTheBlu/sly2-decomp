@@ -10,7 +10,7 @@ struct S {
     char pad7[0xFC4 - 0x4A0]; void *pFC4;
 };
 extern char D_002C3CF8[];
-extern char D_003DD490[];
+extern char g_sw[];
 extern struct K D_002A8608;
 extern qword D_002A2DE0;
 void func_00203A38(struct S *p);
@@ -43,7 +43,7 @@ void func_002061D8(struct S *p)
     p->p49C = func_001AE4F8(0x14);
     func_0020D1B0(p->p49C, p);
     if (!p->p3C->n24)
-        func_00149A50(D_003DD490, p, D_002A8608, 0);
+        func_00149A50(g_sw, p, D_002A8608, 0);
     p->p2EC = func_0013E3C8(0x71, 0, 0x2CB, -1);
     func_00170C90(p->p2EC, -1, -1, 40.0f);
     p->n2F0 = p->p2EC->n50;

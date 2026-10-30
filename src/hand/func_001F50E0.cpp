@@ -47,7 +47,7 @@ struct SO {char pad[0xEC];SOTREE *ptree;};
 struct SW {char pad[0x3CCC];int fUnk3CCC;};
 struct VU_FLOAT {qword qw;};
 extern qword D_002A2DE0,D_002A2DF0,D_002A2E00;
-extern SW D_003DD490;
+extern SW g_sw;
 extern "C" void func_001F38A8(SOPART *);
 extern "C" void func_001F4BA8(SO *);
 
@@ -200,7 +200,7 @@ extern "C" void func_001F50E0(SO *pso)
     }
     pso->ptree->qwCenter = qwCenter;
     pso->ptree->sRadius = sRadius;
-    D_003DD490.fUnk3CCC = 1;
+    g_sw.fUnk3CCC = 1;
     func_001F4BA8(pso);
 }
 

@@ -22,7 +22,7 @@ struct P {
 };
 struct CLOCK { float t; float dt; };
 extern struct CLOCK D_002DDED0;
-extern char D_003DD490[];
+extern char g_sw[];
 extern struct LM D_002BBB60;
 extern struct POLY D_002BC940;
 extern struct POLY D_002BC950;
@@ -122,7 +122,7 @@ void func_00134DA8(struct P *p)
     func_001403D0(p);
     if (((p->ul28 >> 60) & 1) == 0)
         return;
-    func_00194A40(D_003DD490, p, 0xF8FE);
+    func_00194A40(g_sw, p, 0xF8FE);
     func_00134D30(p);
     func_00134850(p);
     switch (p->x13D0) {

@@ -3,8 +3,8 @@ typedef union {qword q;float f[4];int i[4];} V;
 struct RANGE {float low,high;};
 struct M3 {qword r[3];};
 struct CAMERA {char pad[0x90];qword position;};
-extern char D_003DD490[],D_002BBB60[];
-extern struct CAMERA D_002DDF40;
+extern char g_sw[],D_002BBB60[];
+extern struct CAMERA g_cm;
 extern struct M3 D_002DDFA0;
 void *func_001C4A48(void*);
 qword func_001A62E8(void*);
@@ -29,9 +29,9 @@ void func_001FB778(void *unused,qword point,const struct RANGE*limits,float*outV
  float high,low,distance,value;
  register qword difference __asm__("vf3");
  source.q=point;
- player=func_001C4A48(D_003DD490);
+ player=func_001C4A48(g_sw);
  if(player)reference=func_001A62E8(player);
- else reference=D_002DDF40.position;
+ else reference=g_cm.position;
  high=limits->high;low=limits->low;
  {register qword input __asm__("vf2")=source.q;
   distance=Length(Sub(input,reference),&delta);}

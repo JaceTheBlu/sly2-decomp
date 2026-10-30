@@ -8,7 +8,7 @@ typedef struct {
     float x94;
     float x98;
 } OBJ;
-extern char D_003DD490[];
+extern char g_sw[];
 extern S8 D_002A7840;
 void func_001F4FB0(void *, OBJ *, int);
 int func_00132B10(void *, int);
@@ -35,5 +35,5 @@ void func_001D4050(void *a, OBJ *p, int n)
         p->x98 = 0.1f;
     }
     if (func_00132B10(e, 0x6C))
-        func_00149AB8(D_003DD490, a, D_002A7840, e);
+        func_00149AB8(g_sw, a, D_002A7840, e);
 }

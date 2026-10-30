@@ -23,7 +23,7 @@ typedef struct OBJ { VT *vt; } OBJ;
 typedef struct E { OBJ *x0; int x4; char pad8[8]; struct E *x10; } E;
 typedef struct A { char pad0[0x1C]; float x1C; char pad20[0x34 - 0x20]; C *x34; E *x38; char pad3C[4]; float x40; } A;
 typedef struct G { char pad[0x3D58]; int x3D58; } G;
-extern G D_003DD490;
+extern G g_sw;
 extern qword D_002A2DD0;
 int func_00131968(A *);
 int func_0012CEE0(C *);
@@ -90,7 +90,7 @@ void func_00230CF0(A *a, int flag)
             *(M4 *)p->m = t;
         }
         p->xB0 = D_002A2DD0;
-        p->xA4 = ++D_003DD490.x3D58;
+        p->xA4 = ++g_sw.x3D58;
     }
     for (i = 0; i < n; i++)
         list[i]->vt[18].pfn((char *)list[i] + list[i]->vt[18].d);

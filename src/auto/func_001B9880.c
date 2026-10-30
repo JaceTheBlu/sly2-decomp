@@ -19,7 +19,7 @@ extern M2C_UNK D_002C3C60;
 extern f32 D_002DDED0;
 extern M2C_UNK D_002DEB30;
 extern s32 D_002E1E40;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 extern s32 D_003E1444;
 
 void func_001B9880(s32 arg0, s32 arg1, s32 arg2) {

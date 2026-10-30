@@ -12,7 +12,7 @@ struct P{char pad[0xC];VE*vt;char pad10[0x50];P*space;char pad64[0x12C];int coun
 struct CLOCK{float time,dt;};
 struct G{char pad[0x3D58];int generation;};
 extern CLOCK D_002DDED0;
-extern G D_003DD490;
+extern G g_sw;
 extern qword D_002A2DC0,D_002A2DB0;
 extern char D_002C21A0[],D_002C21B0[],D_002C21C0[];
 extern float D_002C21CC;
@@ -74,7 +74,7 @@ extern "C" void func_001D41F8(P*p){
   node->matrix.basis.r[1].f[3]=0.0f;
   node->matrix.basis.r[0].f[3]=0.0f;
   node->matrix.basis.r[2].f[3]=0.0f;
-  register int generation=++D_003DD490.generation;
+  register int generation=++g_sw.generation;
   e->node->generation=generation;
  }
  func_0022FAA0(p);func_001F3C70(p);

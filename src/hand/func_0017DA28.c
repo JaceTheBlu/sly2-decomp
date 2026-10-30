@@ -3,7 +3,7 @@ struct CLOCK { float t; float dt; };
 extern struct CLOCK D_002DDED0;
 struct W { int pad[0x28 / 4]; int n28; };
 struct G { char pad[0x45CC]; struct W *p45CC; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 struct X { qword a; qword v; };
 struct Q { char pad[0x60]; struct X x60; struct X x80; char pad2[0x120 - 0xA0]; int n120; };
 struct B { char pad[0xE8]; int nE8; char pad2[8]; qword *pF4; };
@@ -84,5 +84,5 @@ void func_0017DA28(struct S *p) {
     }
     func_0017D450(p, k);
     p->fA0 = D_002DDED0.t;
-    p->nA4 = D_003DD490.p45CC->n28;
+    p->nA4 = g_sw.p45CC->n28;
 }

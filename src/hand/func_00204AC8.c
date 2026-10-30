@@ -6,7 +6,7 @@ struct X { int pad; struct X4 *p4; };
 struct S { char pad[0xC]; struct VE *vt; char pad2[0x218 - 0x10]; qword *p218; qword *p21C; char pad3[0x258 - 0x220]; void *p258; };
 struct HIT { qword pos; qword q10; qword normal; qword q30; float t; int n44; int n48; int n4C; char pad[0x10]; };
 extern qword D_002A2DC0;
-extern char D_003DD490[];
+extern char g_sw[];
 void func_001F5990(void);
 int func_00132B10(void *p, int n);
 qword func_001A62E8(void *p);
@@ -43,6 +43,6 @@ void func_00204AC8(struct S *p, struct X *x, int a2, int a3, int a4, int a5)
         __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(*p->p218), "j"(hit.pos));
         __asm__("vmul.xyz %0, %0, %2\n\tvaddw.x %1, $vf0, $vf0w\n\tvadday.x $ACC, %0, %0y\n\tvmaddz.x %0, %1, %0z" : "+j"(d), "=&j"(tmp) : "j"(n));
         __asm__("mtc1 %1, %0" : "=f"(f) : "r"(d));
-        func_001A7C18(D_003DD490, p->p258, x, *p->p218, n, 0xE, 0, 0, a5, f);
+        func_001A7C18(g_sw, p->p258, x, *p->p218, n, 0xE, 0, 0, a5, f);
     }
 }

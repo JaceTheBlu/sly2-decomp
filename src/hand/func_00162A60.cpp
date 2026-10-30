@@ -16,7 +16,7 @@ public:
 };
 struct W { int a, b, f8; char pad[0x38 - 0xC]; int f38; };
 struct G { char pad[0x3B14]; O *f3b14; char pad2[0x3C88 - 0x3B18]; int f3c88; int f3c8c; };
-extern G D_003DD490;
+extern G g_sw;
 extern char D_002DEB30[];
 extern "C" void func_00165DC0(G *pg, O *p);
 extern "C" void func_00165E10(G *pg, O *p);
@@ -35,14 +35,14 @@ static inline int FSame(W *pw1, W *pw2)
 }
 extern "C" void func_00162A60(O *p)
 {
-    func_00165DC0(&D_003DD490, 0);
-    if (D_003DD490.f3b14 && D_003DD490.f3b14->f7c && D_003DD490.f3b14->f7c == p)
-        func_00165E10(&D_003DD490, 0);
+    func_00165DC0(&g_sw, 0);
+    if (g_sw.f3b14 && g_sw.f3b14->f7c && g_sw.f3b14->f7c == p)
+        func_00165E10(&g_sw, 0);
     W *pw1 = func_00210B70();
     W *pw2 = func_00210990(func_00210A88());
     if (FSame(pw1, pw2)) {
-        D_003DD490.f3c88 = 0x189;
-        D_003DD490.f3c8c = -1;
+        g_sw.f3c88 = 0x189;
+        g_sw.f3c8c = -1;
     }
     if (func_00162670(p)) {
         func_001619A0(D_002DEB30, 0x22, p);

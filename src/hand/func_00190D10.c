@@ -7,7 +7,7 @@ struct P {
     char pad3[0x19C4-0x19A8]; struct T *x19c4; int x19c8; struct T *x19cc;
 };
 struct G { char pad[0x3D58]; int x3d58; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 qword func_00190C58(struct P *p);
 qword func_001A62E8(void *p);
 qword func_0022FCC8(int n, void *p, qword q);
@@ -30,7 +30,7 @@ void func_00190D10(struct P *p)
     t = p->x19c4;
     func_00256D18(&t->x30, VAdd(t->x30, a));
     ((float *)&t->x30)[3] = 1.0f;
-    n = ++D_003DD490.x3d58;
+    n = ++g_sw.x3d58;
     p->x19c4->xa4 = n;
     {
         struct T *t2 = p->x19c4;

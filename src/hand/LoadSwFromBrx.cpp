@@ -1,4 +1,4 @@
-// func_0013DA18 = LoadSwFromBrx(SW *psw, CBinaryInputStream *pbis).
+// LoadSwFromBrx = LoadSwFromBrx(SW *psw, CBinaryInputStream *pbis).
 // Reads the level body: the world-entry table (0x6C-byte WE records at psw+0x3F08, count psw+0x3F04), sound section, save vars,
 // level table, language strings, cells, options of g_sw / g_cm, then per world entry its objects (LoadSwObjectsFromBrx into a
 // CLoadCollectorArray) and the clones of them.
@@ -6,7 +6,7 @@
 // 0x1AE1D0/0x1AE2A0/0x1AE318 PvAllocSw/PvAllocSwClear/PvAllocStack Impl(SWALLOC *), 0x1C9058/90/98 CLoadSpin Begin/SetName/End,
 // 0x16F960 BuildClearGifs(QW *, const RGBA &, int), 0x1703F8 InitGsb, 0x258248 InitFloc, 0x1848A8/0x184950 CBinaryInputStream
 // ctor/dtor, 0x1AE478/0x1AE4A0 STACKSCOPE ctor/dtor, 0x13F888 CLoadCollectorArray ctor, 0x13FB40 LoadSwObjectsFromBrx,
-// 0x13E510 PloCloneLo, 0x14B690 PchzFidName. D_003DD040 = g_sndmgr, D_003DD490 = g_sw, D_002DDF40 = g_cm.
+// 0x13E510 PloCloneLo, 0x14B690 PchzFidName. g_sndmgr = g_sndmgr, g_sw = g_sw, g_cm = g_cm.
 // Matching notes: the alloc helpers take cbAlign as a parameter (its copy lets loop.c hoist the loop's 0x10, which reload then
 // rematerialises); the black clear colour is stored as `unsigned int`.
 // STAND-IN (same trick as func_0013E818.cpp / func_00219400.cpp): the five spilled gcse reaching pseudos (&gsb1, &frame, &bis,
@@ -23,7 +23,7 @@ void *func_001AE2A0(AREQ *preq);
 void *func_001AE318(AREQ *preq);
 void func_001AE5A0(void *pvDst, void *pvSrc, int cb);
 void *func_002333B4(void *pv, int b, int cb);
-void func_0012AE18(void);
+void BeginSpliceLoad(void);
 int func_00117D50(BIS *pbis);
 int func_00117DB8(BIS *pbis);
 void func_00117968(BIS *pbis, int cb, void *pv);
@@ -47,7 +47,7 @@ void func_001ED3A8(void);
 void func_001ED448(void);
 void func_001EA9F0(void *psw, void *pzpr);
 void func_00258248(void *p);
-void *func_0014B690(void *p);
+void *PchzFidName(void *p);
 void func_001848A8(void *p, int k, void *pv, int n);
 void func_00184950(void *p, int n);
 void func_0020F5D0(int n, BIS *pbis);
@@ -59,11 +59,11 @@ struct LOL { void *pvt; int x4; int c; LO **apo; };
 LOL *func_0013F888(LOL *p);
 void func_0013FB40(int n, BIS *pbis, LOL *p);
 void func_001EC7A0(void);
-LO *func_0013E510(LO *po, int n);
+LO *PloCloneLo(LO *po, int n);
 extern char D_002A4BD0[];
-extern char D_003DD040[];
-extern char D_003DD490[];
-extern char D_002DDF40[];
+extern char g_sndmgr[];
+extern char g_sw[];
+extern char g_cm[];
 extern char D_002DEDC0[];
 extern int D_003E1C34;
 }
@@ -87,12 +87,12 @@ static inline void *AllocZ(AREQ *preq, int cb, int cbAlign) { preq->cb = cb; pre
 static inline void *Alloc(AREQ *preq, int cb, int cbAlign) { preq->cb = cb; preq->cbAlign = cbAlign; return func_001AE1D0(preq); }
 static inline void *AllocS(AREQ *preq, int cb, int cbAlign) { preq->cb = cb; preq->cbAlign = cbAlign; return func_001AE318(preq); }
 
-extern "C" void func_0013DA18(SW *psw, BIS *pbis)
+extern "C" void LoadSwFromBrx(SW *psw, BIS *pbis)
 {
     union { AREQ req; RGBA rgba; struct { int pad[2]; int c; LO **apo; } lol; } u;
     int i;
     int fNever = 0;
-    func_0012AE18();
+    BeginSpliceLoad();
     psw->cwe = func_00117D50(pbis);
     psw->awe = (WE *)AllocZ(&u.req, psw->cwe * 0x6C, 0x10);
     int h;
@@ -125,13 +125,13 @@ extern "C" void func_0013DA18(SW *psw, BIS *pbis)
         func_00117968(pbis, 0x40, psw);
         func_00117968(pbis, 0x40, psw);
     }
-    func_001FD0E8(D_003DD040, pbis);
+    func_001FD0E8(g_sndmgr, pbis);
     func_001D7B88((char *)psw + 0x3A18, pbis);
     func_0020F318(psw, pbis);
     func_0013DF80(psw, pbis);
     func_0013E0E0(psw, pbis);
-    func_0013F810(D_003DD490, pbis);
-    func_0013F810(D_002DDF40, pbis);
+    func_0013F810(g_sw, pbis);
+    func_0013F810(g_cm, pbis);
     func_00117988(pbis, 0x10);
     func_001FF7E8(psw);
     func_0020E3C0(psw);
@@ -158,7 +158,7 @@ extern "C" void func_0013DA18(SW *psw, BIS *pbis)
         ODD odd;
         char ab[0x4040];
         func_00258248(&odd);
-        func_001C9090(&h, func_0014B690(pwe->ab1C));
+        func_001C9090(&h, PchzFidName(pwe->ab1C));
         psw->iwe = pwe->x5C ? -1 : i;
         OBJ obj(0x403F, ab, 0);
         func_0020F5D0(1, pbis);
@@ -174,7 +174,7 @@ extern "C" void func_0013DA18(SW *psw, BIS *pbis)
             func_0013F888((LOL *)&u.lol);
             func_0013FB40(0, pbis, (LOL *)&u.lol);
             func_00117988(pbis, 0x10);
-            func_0014B690(pwe->ab1C);
+            PchzFidName(pwe->ab1C);
             func_001EC7A0();
             psw->x39E8 = 0;
             pwe->c0 = u.lol.c;
@@ -183,7 +183,7 @@ extern "C" void func_0013DA18(SW *psw, BIS *pbis)
             ppo = &pwe->apo[pwe->c0];
             for (j = 1; j < pwe->c8; j++)
                 for (k = 0; k < pwe->c0; k++)
-                    *ppo++ = func_0013E510(pwe->apo[k], 0);
+                    *ppo++ = PloCloneLo(pwe->apo[k], 0);
             if (pwe->x5C) {
                 pwe->cC++;
             } else {
@@ -197,7 +197,7 @@ extern "C" void func_0013DA18(SW *psw, BIS *pbis)
     }
     func_001ED448();
     psw->iwe = -2;
-    func_001FD5E8(D_003DD040);
+    func_001FD5E8(g_sndmgr);
     func_001C9090(&h, 0);
     func_001C9098(&h);
 }

@@ -1,5 +1,5 @@
 struct G;
-extern struct G D_003DD490;
+extern struct G g_sw;
 struct O { char pad[0x54]; int n54; };
 struct E { int n0; int n4; void *p8; struct O *pC; int n10; int pad[2]; };
 struct S { char pad[0x40]; unsigned int u40; char pad2[0xC]; int n50; struct E *a54; int pad3; int n5C; void *p60; };
@@ -21,7 +21,7 @@ void func_001733F8(struct S *p) {
         case 1:
             {
                 struct O *o;
-                e->p8 = func_0015E938(&D_003DD490, 5, e->n4, 0);
+                e->p8 = func_0015E938(&g_sw, 5, e->n4, 0);
                 o = func_0013E3C8(0x71, 0, 0x2CB, -1);
                 func_00170C50(o, e->n4, 1, -1);
                 e->n10 = o->n54;
@@ -30,7 +30,7 @@ void func_001733F8(struct S *p) {
             break;
         case 0:
         case 2:
-            e->p8 = func_0015E938(&D_003DD490, 5, e->n4, 0);
+            e->p8 = func_0015E938(&g_sw, 5, e->n4, 0);
             break;
         }
     }

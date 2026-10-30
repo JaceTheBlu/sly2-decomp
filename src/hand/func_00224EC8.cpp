@@ -7,7 +7,7 @@ struct O;
 struct S {char pad[0x58];NODE *positionNode,*rotationNode;char pad60[0xF0];int state;float time;int sentinel,kind;O *nearest;char pad164[4];void *animation;char pad16C[0x10];void *rotationJob,*positionJob;char pad184[0xC];qword direction;};
 struct WORLD;
 struct CLOCK {float t,dt;};
-extern WORLD D_003DD490;
+extern WORLD g_sw;
 extern CLOCK D_002DDED0;
 extern qword D_002A2DC0;
 extern float D_002A97A8;
@@ -66,7 +66,7 @@ extern "C" void func_00224EC8(S *p,int state){
  p->state=state;p->time=D_002DDED0.t;p->sentinel=-1;
  func_0012E460(&p->positionJob);
  func_0012E460(&p->rotationJob);
- if(old==0||old==4)func_00134320(&D_003DD490,p);
+ if(old==0||old==4)func_00134320(&g_sw,p);
  switch(p->state){
  case 0:{
   func_001F5720(p,0);func_001F57C0(p,0);
@@ -75,7 +75,7 @@ extern "C" void func_00224EC8(S *p,int state){
   qword rotation=func_0011BFF0(p->rotationNode);
   p->positionJob=func_0012DC18(p,p->positionNode,0,7,2,position);
   p->rotationJob=func_0012DC18(p,p->rotationNode,0,7,2,rotation);
-  func_00134320(&D_003DD490,p);
+  func_00134320(&g_sw,p);
   break;
  }
  case 2:{
@@ -94,12 +94,12 @@ extern "C" void func_00224EC8(S *p,int state){
   if(p->kind!=0x29){func_001F57C0(p,0);break;}
   func_001F57C0(p,1);
   O *objects[32];
-  int count=func_0015E9C8(&D_003DD490,0x105,0x38,0,32,objects);
+  int count=func_0015E9C8(&g_sw,0x105,0x38,0,32,objects);
   p->nearest=FindNearest(p,count,objects,D_002E1E40,D_002A97A8);
   break;
  }
  case 4:
-  func_00134320(&D_003DD490,p);
+  func_00134320(&g_sw,p);
   func_001F7BF8(p,0.25f);
   break;
  }

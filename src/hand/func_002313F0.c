@@ -1,4 +1,4 @@
-extern char D_003DD490[];
+extern char g_sw[];
 void func_00147E88(void *, int);
 typedef struct S {
     char pad[0x10];
@@ -19,5 +19,5 @@ void func_002313F0(S *p)
 {
     p->x54 = -1;
     if (p->x10 == 0 && p->f)
-        func_00147E88(D_003DD490, p->x14);
+        func_00147E88(g_sw, p->x14);
 }

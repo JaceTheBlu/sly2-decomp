@@ -10,7 +10,7 @@ typedef struct CLR { int a, b, c; } CLR;
 typedef struct O1034 { char pad[0x30]; void *x30; } O1034;
 struct VTE { short d; short pad; void *pfn; };
 
-extern char D_003DD490[];
+extern char g_sw[];
 extern char D_002BF2A0[];
 extern char D_002BF2B8[];
 
@@ -101,7 +101,7 @@ void func_00188F20(char *p, int msg, void *pv)
                 if (F(void *, 0x10DC) && F(int, 0x1BD4)) {
                     void *po = func_001F1E20(F(void *, 0x10DC), func_001A62E8(p));
                     if (po && !func_00132B10(po, 0x5B) && !func_00132B10(po, 0x5D)) {
-                        int oid = func_0015E938(D_003DD490, 1, 0x282, p);
+                        int oid = func_0015E938(g_sw, 1, 0x282, p);
                         F(void *, 0x1BCC) = po;
                         func_001424E0(p, oid, po, -1);
                     }
@@ -126,7 +126,7 @@ void func_00188F20(char *p, int msg, void *pv)
                 break;
             }
             case 0x16D:
-                func_00156B98(D_003DD490, 0, func_001A62E8(p), p);
+                func_00156B98(g_sw, 0, func_001A62E8(p), p);
                 break;
             }
         }

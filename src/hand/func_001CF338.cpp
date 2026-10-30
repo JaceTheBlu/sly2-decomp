@@ -5,7 +5,7 @@ struct POLY { float a,b,c; };
 struct LO { char pad[0x38]; float radius; };
 struct S { char pad[0x14]; float start,duration; LO *lo; POLY size; int pad2; POLY alpha; };
 struct G { char pad[0x90]; qword pos; };
-extern G D_002DDF40;
+extern G g_cm;
 extern struct CLOCK { float t,dt; } D_002DDED0;
 extern struct LIMIT { float lo,hi; } D_002BBB60;
 extern "C" {
@@ -28,7 +28,7 @@ int func_001CF338(S*p,qword pos,const M3&mat)
     float t=(D_002DDED0.t-p->start)/p->duration;
     float alpha=Clamp(Poly(&p->alpha,t),D_002BBB60.lo,D_002BBB60.hi);
     float size=Poly(&p->size,t);
-    G *pg=&D_002DDF40;
+    G *pg=&g_cm;
     __asm__("vsub.xyzw %0,%1,%2":"=j"(delta):"j"(pos),"j"(pg->pos));
     if(!func_0014F850(pg,delta,BcG(size*100.0f)))return 1;
     if(!func_0014F898(pg,delta,p->lo->radius,&proj))return 0;

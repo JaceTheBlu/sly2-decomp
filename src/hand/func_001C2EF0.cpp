@@ -7,7 +7,7 @@
 // source and given the velocity through virtual calls.  func_001C2DB8 cleans up the owner on every exit.
 // Matching notes:
 //  * `game` is a plain local set before the loop: the address is then a spilled constant that reload rematerializes
-//    as `la a0` at the call (lui/addiu into a0).  Taking &D_003DD490 inside the loop lets loop.c hoist only the HIGH part.
+//    as `la a0` at the call (lui/addiu into a0).  Taking &g_sw inside the loop lets loop.c hoist only the HIGH part.
 //  * Scale takes the dot product first (`vmulx %0,%2,%1x`, like func_001C3500's VU_FLOAT * VU_VECTOR): the asm output
 //    is tied to its first dying input, which gives the original vf numbering.
 //  * `count`, start, target and offset are plain values; the stack slots at sp+0x60..0x90 are their spill slots, and
@@ -20,7 +20,7 @@ struct OWNER { char pad0[0x150]; SO *source; void *factory; SO *first; };
 struct LM { float gMin, gMax; };
 struct GAME { int dummy; };
 extern "C" {
-extern GAME D_003DD490;
+extern GAME g_sw;
 extern qword D_002A2DC0, D_002A2DA0, D_002C0D60;    // up axis, fallback X axis, launch acceleration
 extern LM D_002C0CF0, D_002C0CF8, D_002C0CE0;       // random ranges: two offset angles, flight time
 extern float D_002C0CE8, D_002C0CEC, D_002A76E8;
@@ -81,7 +81,7 @@ static inline void SetVelocity(SO *p, qword velocity) { VTE *v = p->vt; ((void (
 
 extern "C" SO *func_001C2EF0(OWNER *p, int count)
 {
-    GAME *game = &D_003DD490;
+    GAME *game = &g_sw;
     SO *first = 0;
     for (int i = 0; i < count; i++) {
         SO *node;

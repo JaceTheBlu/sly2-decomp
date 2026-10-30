@@ -1,6 +1,6 @@
 // func_001CA118: ported from Lilly's personal Sly 2 decomp (src/P2/proxy.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_003DD490 (g_sw)
+// Globals: g_sw (g_sw)
 // 0x001CA118 SetIdProxy__2LOii  (MATCHES Sly 2, T0879)
 // Virtual 24: puts the object in the proxy copy tree under idProxy: the path is the ids from the root
 // down to the object's current node (at most 16, deepest last) with idProxy added at the end. The
@@ -497,7 +497,7 @@ struct SW : public BASIC
       struct EMITTER *apemitTracked[4];
       uint32_t   _pad_360    [ 1 ] ;
 };
-extern SW D_003DD490;
+extern SW g_sw;
 struct PROXYSPARE
 {
       struct PROXY *pproxy;
@@ -535,7 +535,7 @@ struct STACKSCOPE
 };
 inline PROXYSRC *PproxysrcFromIdProxy(int idProxy)
 {
-    return &D_003DD490.aproxysrc[IsrcFromIdProxy(idProxy)];
+    return &g_sw.aproxysrc[IsrcFromIdProxy(idProxy)];
 }
 void LO::SetIdProxy(int idProxy, int fChildren)
 {
@@ -551,7 +551,7 @@ void LO::SetIdProxy(int idProxy, int fChildren)
         aid[--cid] = ppxrIter->idProxy;
     }
     aid[--cid] = idProxy;
-    PXR *ppxrNew = FindPxr(D_003DD490.ppxrRoot, 16 - cid, &aid[cid]);
+    PXR *ppxrNew = FindPxr(g_sw.ppxrRoot, 16 - cid, &aid[cid]);
     for (ppxrIter = ppxr; ppxrIter->idProxy != -1; ppxrIter = ppxrIter->ppxrParent)
     {
         if (ppxrIter->plo == this)

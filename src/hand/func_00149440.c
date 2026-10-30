@@ -2,7 +2,7 @@
 typedef int qword __attribute__((mode(TI)));
 struct CTX { int a[4]; };
 struct G { char pad[0x3EB8]; int c; void *apo[1]; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 struct CLOCK { float t; };
 extern struct CLOCK D_002DDED0;
 struct VTE { short d; short pad; void *pfn; };
@@ -43,10 +43,10 @@ void func_00149440(struct P *p)
         func_001AE5A0(apo, p->a28C, p->c288 * 4);
         c = p->c288;
         for (; i < p->c2AC; i++)
-            c += func_0015E9C8(&D_003DD490, 0x505, p->a2B0[i], 0, 0x40 - c, &apo[c]);
+            c += func_0015E9C8(&g_sw, 0x505, p->a2B0[i], 0, 0x40 - c, &apo[c]);
         if (p->c288 == 0 && p->c2AC == 0) {
-            func_001AE5A0(&apo[c], D_003DD490.apo, D_003DD490.c * 4);
-            c += D_003DD490.c;
+            func_001AE5A0(&apo[c], g_sw.apo, g_sw.c * 4);
+            c += g_sw.c;
         }
         p->x1D8 = 0;
         cSel = 0;

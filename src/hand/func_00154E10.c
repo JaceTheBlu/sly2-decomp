@@ -7,7 +7,7 @@ typedef struct T {
 } T;
 typedef struct S { int x0; int x4; int pad[3]; T *p14; } S;
 extern char D_002DE578[];
-extern char D_003DD490[];
+extern char g_sw[];
 extern float func_00154C90(void *p);
 extern int func_0011D3F8(int a, int b);
 extern int func_00132B10(void *p, int k);
@@ -44,7 +44,7 @@ void func_00154E10(S *p, qword q, int n, int dn, void *pv)
             n = func_0011D3F8(p->p14->x18, p->p14->x1C);
     }
     if (n > 0)
-        func_001C6FD8(D_003DD490, 0x5B, q, pv, n);
+        func_001C6FD8(g_sw, 0x5B, q, pv, n);
     if (p->x4 <= 0)
-        func_001C6FD8(D_003DD490, 0x5D, q, pv, 1);
+        func_001C6FD8(g_sw, 0x5D, q, pv, 1);
 }

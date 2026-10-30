@@ -1,6 +1,6 @@
 // func_001E1E30: ported from Lilly's personal Sly 2 decomp (src/P2/jsg.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002A7AD0 (D_002A7AD0), D_002DE570 (D_002DE570), D_003DA530 (D_003DA530), D_002DDED0 (g_clock), D_002DDF40 (g_cm), D_002DEB30 (g_game), D_003DA0C0 (g_hintbox), D_002DFC00 (g_joy), D_002A2DC0 (g_normalZ), D_002A2DD0 (g_qwZero), D_003DD040 (g_sndmgr), D_004435F0 (g_subtitle), D_003DD490 (g_sw)
+// Globals: D_002A7AD0 (D_002A7AD0), D_002DE570 (D_002DE570), D_003DA530 (D_003DA530), D_002DDED0 (g_clock), g_cm (g_cm), D_002DEB30 (g_game), D_003DA0C0 (g_hintbox), D_002DFC00 (g_joy), D_002A2DC0 (g_normalZ), D_002A2DD0 (g_qwZero), g_sndmgr (g_sndmgr), D_004435F0 (g_subtitle), g_sw (g_sw)
 // 0x001E1E30 NextJsgCommand__FP3JSG  (T1200; was DispatchAsegEvent: it is Sly 1's NextJsgJsge)
 // Steps the script to the next command of its block and executes it. First the command's actor is chosen (the oid the command carries, else the
 // SetActor default, the block's object or the relay's firer), then the command runs by kind (the table in re/notes/relay-commands-t1289.md), and
@@ -905,7 +905,7 @@ struct CM : public CMBASE
       float rUnk620;
       float rUnk624;
 };
-extern CM D_002DDF40;
+extern CM g_cm;
 void JoltCm(CM *pcm, int nUnk61c);
 void CutCm(CM *pcm);
 struct JT;
@@ -928,7 +928,7 @@ struct GRABSPOT : public GRABSPOTDATA
     virtual void GetClosestParam(JT *pjt, float *psParam);
 };
 struct PO;
-extern SW D_003DD490;
+extern SW g_sw;
 struct XA
 {
       uint32_t   _pad_409    [ 1 ] ;
@@ -2764,7 +2764,7 @@ extern "C" void StartMusic(SNDMGR *psndmgr, int idMusic);
 extern "C" void StopMusic(SNDMGR *psndmgr, int idMusic);
 extern "C" void SetHintBoxText(HINTBOX *phintbox, int idText, float dt);
 extern "C" void ClearIfSlotId(HINTBOX *phintbox, int idText);
-extern SNDMGR D_003DD040;
+extern SNDMGR g_sndmgr;
 extern HINTBOX D_003DA0C0;
 extern char D_003DA530[];
 extern LO *D_002DE570;
@@ -3000,7 +3000,7 @@ void NextJsgCommand(JSG *pjsg)
         aoid[2] = prelaycmd->applySm.oidState;
         aoid[3] = OID_Nil;
         int grfSma = prelaycmd->applySm.fUnk7 ? 3 : 1;
-        func_0020FFF0(&D_003DD490, aoid, pjsg->ploContext, grfSma, pjsg, &pjsg->psmaCur);
+        func_0020FFF0(&g_sw, aoid, pjsg->ploContext, grfSma, pjsg, &pjsg->psmaCur);
         if (prelaycmd->fAsync)
         {
             ReleaseJsgSma(pjsg);
@@ -3014,7 +3014,7 @@ void NextJsgCommand(JSG *pjsg)
     case RELAYCK_WidgetShow:
     case RELAYCK_WidgetHide:
     {
-        LO *plo = PloFindSwObject(&D_003DD490, (GRFFSO)0x405, prelaycmd->widgetShow.oidWidget, 0);
+        LO *plo = PloFindSwObject(&g_sw, (GRFFSO)0x405, prelaycmd->widgetShow.oidWidget, 0);
         if (plo && FIsBasicDerivedFrom(plo, (CID)126))
         {
             if (prelaycmd->relayck == RELAYCK_WidgetShow)
@@ -3157,7 +3157,7 @@ void NextJsgCommand(JSG *pjsg)
         break;
     }
     case RELAYCK_CutCamera:
-        CutCm(&D_002DDF40);
+        CutCm(&g_cm);
         break;
     case RELAYCK_SetTunnel:
     {
@@ -3283,11 +3283,11 @@ void NextJsgCommand(JSG *pjsg)
         if (FIsBasicDerivedFrom(pjsg->ploActor, (CID)52))
         {
             STEP *pstep = (STEP *)pjsg->ploActor;
-            LO *ploTarget = PloFindSwObject(&D_003DD490, (GRFFSO)1, prelaycmd->stepCmd22.oidTarget, pstep);
+            LO *ploTarget = PloFindSwObject(&g_sw, (GRFFSO)1, prelaycmd->stepCmd22.oidTarget, pstep);
             LO *ploDir;
             if (prelaycmd->stepCmd22.nMode == 3)
             {
-                CM *pcm = &D_002DDF40;
+                CM *pcm = &g_cm;
                 qword qwCm = *(qword *)&pcm->pos;
                 SetStepRadTowardDir(pstep, QwSub(qwCm, PosLoWorld(pstep)));
                 ploDir = 0;
@@ -3496,7 +3496,7 @@ void NextJsgCommand(JSG *pjsg)
     case RELAYCK_AddObject:
     case RELAYCK_RemoveObject:
     {
-        LO *plo = FadeAsegObjectEvent(&D_003DD490, prelaycmd->relayck == RELAYCK_AddObject, prelaycmd->addObject.oidObj, prelaycmd->addObject.dtFade, pjsg->ploContext,
+        LO *plo = FadeAsegObjectEvent(&g_sw, prelaycmd->relayck == RELAYCK_AddObject, prelaycmd->addObject.oidObj, prelaycmd->addObject.dtFade, pjsg->ploContext,
                                       (ASEG *)pjsg->prelay);
         if (plo && !prelaycmd->fAsync && FIsBasicDerivedFrom(plo, (CID)48))
         {
@@ -3506,33 +3506,33 @@ void NextJsgCommand(JSG *pjsg)
     }
     case RELAYCK_SetPartFlag:
     case RELAYCK_ClearPartFlag:
-        SetAsegPartFlagEvent(&D_003DD490, prelaycmd->relayck == RELAYCK_SetPartFlag, prelaycmd->setPartFlag.oidAseg, prelaycmd->setPartFlag.oidPart, 0, pjsg->ploContext,
+        SetAsegPartFlagEvent(&g_sw, prelaycmd->relayck == RELAYCK_SetPartFlag, prelaycmd->setPartFlag.oidAseg, prelaycmd->setPartFlag.oidPart, 0, pjsg->ploContext,
                              (ASEG *)pjsg->prelay);
         break;
     case RELAYCK_ShowPart:
     case RELAYCK_HidePart:
-        ShowAsegPartEvent(&D_003DD490, prelaycmd->relayck == RELAYCK_ShowPart, prelaycmd->showPart.oidAseg, prelaycmd->showPart.oidPart, 0, pjsg->ploContext,
+        ShowAsegPartEvent(&g_sw, prelaycmd->relayck == RELAYCK_ShowPart, prelaycmd->showPart.oidAseg, prelaycmd->showPart.oidPart, 0, pjsg->ploContext,
                           (ASEG *)pjsg->prelay);
         break;
     case RELAYCK_Unk32:
-        JoltCm(&D_002DDF40, prelaycmd->unk32.nUnk4);
+        JoltCm(&g_cm, prelaycmd->unk32.nUnk4);
         break;
     case RELAYCK_Rumble:
         TriggerJoyRumbleRumk(&D_002DFC00, (RUMK)prelaycmd->rumble.rumk, prelaycmd->rumble.dtRumble);
         break;
     case RELAYCK_Explode:
-        ExplodeAsegEvent(&D_003DD490, prelaycmd->explode.oidA, prelaycmd->explode.oidB, prelaycmd->explode.oidC, pjsg->ploContext, (ASEG *)pjsg->prelay,
+        ExplodeAsegEvent(&g_sw, prelaycmd->explode.oidA, prelaycmd->explode.oidB, prelaycmd->explode.oidC, pjsg->ploContext, (ASEG *)pjsg->prelay,
                          prelaycmd->explode.dtDelay);
         break;
     case RELAYCK_Eyes:
-        SetAsegEyesEvent(&D_003DD490, prelaycmd->eyes.oidA, prelaycmd->eyes.oidB, pjsg->ploContext, (ASEG *)pjsg->prelay, prelaycmd->eyes.dtEyes);
+        SetAsegEyesEvent(&g_sw, prelaycmd->eyes.oidA, prelaycmd->eyes.oidB, pjsg->ploContext, (ASEG *)pjsg->prelay, prelaycmd->eyes.dtEyes);
         break;
     case RELAYCK_Sound:
-        PlayAsegSoundEvent(&D_003DD490, prelaycmd->sound.idSnd, prelaycmd->sound.oidA, prelaycmd->sound.nUnk6, prelaycmd->sound.nUnk7, prelaycmd->sound.gUnk8,
+        PlayAsegSoundEvent(&g_sw, prelaycmd->sound.idSnd, prelaycmd->sound.oidA, prelaycmd->sound.nUnk6, prelaycmd->sound.nUnk7, prelaycmd->sound.gUnk8,
                            prelaycmd->sound.gUnk9, prelaycmd->sound.gUnk10, 0, pjsg->ploContext, (ASEG *)pjsg->prelay, &pjsg->psnd);
         break;
     case RELAYCK_StopSound:
-        StopAsegSoundEvent(&D_003DD490, prelaycmd->stopSound.idSnd, (ASEG *)pjsg->prelay, &pjsg->psnd);
+        StopAsegSoundEvent(&g_sw, prelaycmd->stopSound.idSnd, (ASEG *)pjsg->prelay, &pjsg->psnd);
         break;
     case RELAYCK_CamBlendFrom:
     {
@@ -3604,7 +3604,7 @@ void NextJsgCommand(JSG *pjsg)
         {
             FIsBasicDerivedFrom(ploStep, (CID)51);
         }
-        LO *ploHud = PloFindSwObject(&D_003DD490, (GRFFSO)0x405, prelaycmd->startJtMode.oidUnk6, 0);
+        LO *ploHud = PloFindSwObject(&g_sw, (GRFFSO)0x405, prelaycmd->startJtMode.oidUnk6, 0);
         LO *plo = PloFindJsgObject(pjsg, prelaycmd->startJtMode.oidActor);
         if (plo && FIsBasicDerivedFrom(plo, (CID)52))
         {
@@ -3619,23 +3619,23 @@ void NextJsgCommand(JSG *pjsg)
     case RELAYCK_TweenPosObj:
     {
         LO *plo = PloFindJsgObject(pjsg, prelaycmd->tweenPosObj.oidObj);
-        D_002DDF40.cpzoom.SetOwner(plo);
+        g_cm.cpzoom.SetOwner(plo);
         break;
     }
     case RELAYCK_TweenAimObj:
     {
         LO *plo = PloFindJsgObject(pjsg, prelaycmd->tweenAimObj.oidObj);
-        D_002DDF40.cpzoom.SetFocus(plo);
+        g_cm.cpzoom.SetFocus(plo);
         break;
     }
     case RELAYCK_TweenTarget:
-        D_002DDF40.cpzoom.SetPose(prelaycmd->tweenTarget.qwPos, *(qword *)&prelaycmd->tweenTarget.radX, prelaycmd->tweenTarget.gFov);
+        g_cm.cpzoom.SetPose(prelaycmd->tweenTarget.qwPos, *(qword *)&prelaycmd->tweenTarget.radX, prelaycmd->tweenTarget.gFov);
         break;
     case RELAYCK_TweenTime:
-        D_002DDF40.cpzoom.SetZoom(prelaycmd->tweenTime.gUnk4);
+        g_cm.cpzoom.SetZoom(prelaycmd->tweenTime.gUnk4);
         break;
     case RELAYCK_TweenStart:
-        D_002DDF40.cpzoom.Reset();
+        g_cm.cpzoom.Reset();
         break;
     case RELAYCK_ButtonPrompt:
         D_004435F0.grfbtnPrompt = prelaycmd->buttonPrompt.grfbtn & 0xF0;
@@ -3644,7 +3644,7 @@ void NextJsgCommand(JSG *pjsg)
         func_001DD820(D_003DA530);
         break;
     case RELAYCK_Line:
-        StartDialogueLine(&D_003DD040, prelaycmd->line.idLine, prelaycmd->line.fWait);
+        StartDialogueLine(&g_sndmgr, prelaycmd->line.idLine, prelaycmd->line.fWait);
         pjsg->prelaycmdLine = prelaycmd;
         break;
     case RELAYCK_ClearSubtitle:
@@ -3725,16 +3725,16 @@ void NextJsgCommand(JSG *pjsg)
             }
             else
             {
-                ploOther = PloFindSwObject(&D_003DD490, (GRFFSO)4, prelaycmd->playAsegDefault.oidOther, plo);
+                ploOther = PloFindSwObject(&g_sw, (GRFFSO)4, prelaycmd->playAsegDefault.oidOther, plo);
             }
             PlayJtAsegDefault(plo, ploOther, 0);
         }
         break;
     case RELAYCK_StartMusic:
-        StartMusic(&D_003DD040, prelaycmd->startMusic.idMusic);
+        StartMusic(&g_sndmgr, prelaycmd->startMusic.idMusic);
         break;
     case RELAYCK_StopMusic:
-        StopMusic(&D_003DD040, prelaycmd->stopMusic.idMusic);
+        StopMusic(&g_sndmgr, prelaycmd->stopMusic.idMusic);
         break;
     case RELAYCK_Unk4F:
         if (!pjsg->ploActor)

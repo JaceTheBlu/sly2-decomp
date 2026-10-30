@@ -1,6 +1,6 @@
 struct CLOCK { float t; };
 extern struct CLOCK D_002DDED0;
-extern char D_003DD490[];
+extern char g_sw[];
 struct VE { short d; short pad; void (*pfn)(); };
 struct X { char pad[0x58]; int x58; int x5C; };
 struct O { char pad[0xC]; struct VE *vt; char pad1[0x180 - 0x10]; struct X *x180; };
@@ -36,5 +36,5 @@ void func_001B7D20(struct P *p)
     func_001A58D0(x, 0, 0xF);
     p->x1430 = x;
     p->f1434 = D_002DDED0.t;
-    func_00134320(D_003DD490, p);
+    func_00134320(g_sw, p);
 }

@@ -22,7 +22,7 @@ public:
     int ff4;
 };
 struct G;
-extern G D_003DD490;
+extern G g_sw;
 extern char D_002DEB30[];
 extern char D_003DA0C0[];
 extern "C" void func_00165DE8(G *pg, O *p);
@@ -38,7 +38,7 @@ extern "C" void func_001DA4B8(void *pv, int n, float g);
 extern "C" void func_002283D0(LO *plo);
 extern "C" void func_00163D18(O *p)
 {
-    G *pg = &D_003DD490;
+    G *pg = &g_sw;
     func_00165DE8(pg, p);
     if (p->fb8 != -1)
         func_00165E10(pg, p);

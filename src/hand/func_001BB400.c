@@ -16,7 +16,7 @@ typedef struct P {
     void *x16C;
     int x170;
 } P;
-extern char D_003DD490[];
+extern char g_sw[];
 extern char D_002DEB30[];
 int func_001BBE48(P *p);
 int func_001BBE18(P *p);
@@ -32,7 +32,7 @@ void func_001BB400(P *p)
     E *pe;
     int v;
     if (func_001BBE48(p)) return;
-    if (p->x16C == func_001C4840(D_003DD490)) {
+    if (p->x16C == func_001C4840(g_sw)) {
         p->x168 = 0xE;
     } else {
         v = p->x170;
@@ -47,7 +47,7 @@ void func_001BB400(P *p)
     func_001BB648(p, p->ae - 1);
     func_001BB648(p, pe);
     if (!p->x16C || !func_00132B10(p->x16C, 0x38) || func_00132B10(p->x16C, 0x3C)) {
-        func_00156B98(D_003DD490, 0, func_001A62E8(p), p->x16C);
+        func_00156B98(g_sw, 0, func_001A62E8(p), p->x16C);
     }
     if (pe->n > 0) {
         if (++p->x158 >= pe->n) {

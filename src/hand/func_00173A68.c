@@ -10,7 +10,7 @@ struct P{char pad[0xC];struct VT*vt;char pad10[0x48];int count,capacity;char pad
 struct M3{qword r[3];};
 struct LINK{struct LO**pp;};
 struct CRef{int tag;void*value;};
-extern char D_003DD490[];
+extern char g_sw[];
 struct CLOCK{float t,dt;};extern struct CLOCK D_002DDED0;extern float D_002BE5CC,D_002BE5D0,D_002BE5D4,D_002BE5D8;
 void func_001A5E28(struct P*);
 qword func_00173A18(struct P*);
@@ -42,7 +42,7 @@ void func_00173A68(struct P*p){
  if(D_002DDED0.t<p->next)return;
  p->next=D_002DDED0.t+D_002BE5D0;
  if(p->count==p->capacity){int close=DistanceXY(pos,p->last)<D_002BE5D4;if(close)return;}
- event=0;context=func_001C4840(D_003DD490);
+ event=0;context=func_001C4840(g_sw);
  {
  if(context){
   event=func_001F8240(context);

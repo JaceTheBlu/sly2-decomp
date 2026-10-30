@@ -10,7 +10,7 @@ struct CRef {
 struct Q { char pad[0x3C]; void *pv; };
 struct W { char pad[0xC]; Q *pq; };
 struct G { char pad[0x3F0C]; void *pv; };
-extern G D_003DD490;
+extern G g_sw;
 extern "C" {
 int func_0015E678(G *pg, int k, void *a, Q *b, void *c, int n, void **ap);
 CRef func_00124078(int c, void **ap);
@@ -26,7 +26,7 @@ CRef func_001241E8(void *pbasic, CRef *aref)
         pqT = ((W *)aref[2].u.pv)->pq;
     else
         pqT = pq;
-    G *pg = &D_003DD490;
+    G *pg = &g_sw;
     int k = pq ? 1 : 5;
     void *p0 = aref[0].u.pv;
     void *pv;

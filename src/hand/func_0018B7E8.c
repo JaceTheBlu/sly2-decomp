@@ -24,7 +24,7 @@ struct P{
  char pad2030[8];void*blend;
 };
 union PHASE{qword direction;U scalar;};
-extern qword D_002A2DD0;extern char D_003DD490[];
+extern qword D_002A2DD0;extern char g_sw[];
 extern float D_002BF3C0,D_002BF3C4,D_002BF3C8,D_002BF3CC,D_002BF35C;
 float func_00204740(struct P*);float func_0011CF60(float);
 void func_00194A40(void*,struct P*,unsigned int);
@@ -70,7 +70,7 @@ static inline float Z(qword q){float r;__asm__("pextuw %0,$zero,%1":"=r"(r):"r"(
 void func_0018B7E8(struct P*p){
  union PHASE phase;U scalar;float initialHeading;
  initialHeading=func_00204740(p);(void)func_0011CF60(p->state->heading-initialHeading);
- func_00194A40(D_003DD490,p,0xFFFF);
+ func_00194A40(g_sw,p,0xFFFF);
  func_0018B2C0(p);func_0018A8C8(p);func_0018F0A8(p);
  switch(p->mode){
  case 4:case 9:{

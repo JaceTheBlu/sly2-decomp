@@ -66,7 +66,7 @@ struct LAUNCH {
 };
 extern XF D_002C44F0;           // identity frame
 extern qword D_002A2DA0;        // default direction
-extern char D_003DD490[];
+extern char g_sw[];
 extern "C" {
 qword func_001A62E8(SO *);                                       // PosLoWorld
 MATRIX4 *func_0011C168(MATRIX4 *, MATRIX4 *, MATRIX4 *);
@@ -211,7 +211,7 @@ extern "C" void func_001D6B00(LAUNCH *plaunch, SO *pso)
     posAim = QwFromVf(posLaunch);
     if (func_00132B10(pso, 0x4F)) {
         func_0013BC60(pso, plaunch);
-        func_00134320(D_003DD490, pso);
+        func_00134320(g_sw, pso);
     }
     pso->Add();
     func_001F5720(pso, 0);

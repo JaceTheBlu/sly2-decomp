@@ -25,13 +25,13 @@ extern M2C_UNK D_002C3D60;
 extern s32 D_002DD5BC;
 extern s32 D_002DD648;
 extern f32 D_002DDED0;
-extern M2C_UNK D_002DDF40;
+extern M2C_UNK g_cm;
 extern s32 D_002E1E40;
 extern s32 D_002F7900;
-extern M2C_UNK D_003DD040;
+extern M2C_UNK g_sndmgr;
 extern s64 D_003DD480;
 extern s32 D_003DD488;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 extern M2C_UNK D_003E1444;
 extern M2C_UNK D_003E1A60;
 

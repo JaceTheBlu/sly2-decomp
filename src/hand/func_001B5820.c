@@ -1,6 +1,6 @@
 struct CLOCK { float t; float dt; };
 extern struct CLOCK D_002DDED0;
-extern char D_003DD490[];
+extern char g_sw[];
 extern int D_002C0908[][5], D_002C0948[][5];
 extern float D_002C0900;
 struct P { char pad[0x150]; int x150; char pad1[0x1034 - 0x154]; int x1034; char pad2[0x1524 - 0x1038]; float f1524; float f1528; int x152C; int x1530; int x1534; };
@@ -13,8 +13,8 @@ void func_001F0660(int a, int b);
 void func_001B5820(struct P *p)
 {
     int a;
-    if (func_001C4840(D_003DD490) != p) return;
-    if (func_0020F0B0(D_003DD490)) return;
+    if (func_001C4840(g_sw) != p) return;
+    if (func_0020F0B0(g_sw)) return;
     a = func_001F07E8(p->x1034);
     if (a != func_001F07C8(p->x1034)) return;
     if (a >= 0x1D0) return;

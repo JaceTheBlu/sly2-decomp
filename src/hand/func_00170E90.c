@@ -3,7 +3,7 @@ typedef union {qword q;float f[4];} U;
 struct N{int kind,tag;qword*position;char padC[0xC];struct N*next;};
 struct P{char pad[0x50];struct N*head;};
 struct CHOICE{struct N*node;struct P*object;float value;};
-extern char D_003DD490[];
+extern char g_sw[];
 extern float D_002A52B0;
 struct P*func_0015E938(void*,int,int,struct P*);
 void func_001710F8(struct P*,qword,struct P*,qword*,float*);
@@ -26,19 +26,19 @@ void func_00170E90(struct P*root,qword pos,struct CHOICE*out){
   case 12:stopped=0;break;
   case 3:case 7:
    if(stopped)break;
-   if(node->tag!=-1){struct P*object=func_0015E938(D_003DD490,4,node->tag,current);func_001710F8(root,pos,object,&hit.q,0);}
+   if(node->tag!=-1){struct P*object=func_0015E938(g_sw,4,node->tag,current);func_001710F8(root,pos,object,&hit.q,0);}
    else if(node->position)hit.q=*node->position;
    {float d=Length(Sub(pos,hit.q));if(d<best){best=d;choice.node=node;choice.object=current;}}
    break;
   case 6:
    if(stopped)break;
-   {struct P*object=func_0015E938(D_003DD490,4,node->tag,current);
+   {struct P*object=func_0015E938(g_sw,4,node->tag,current);
     if(out && out->node==node)func_001E7380(object,pos,0,&hit.q,0,0,&value,out->value);
     else func_001E6F60(object,pos,0,&hit.q,0,0,&value);
     {float d=Length(Sub(pos,hit.q));if(d<best){best=d;choice.node=node;choice.value=value;choice.object=current;}}
    }
    break;
-  case 0:{int kind=5;if(current)kind=4;current=func_0015E938(D_003DD490,kind,node->tag,current);break;}
+  case 0:{int kind=5;if(current)kind=4;current=func_0015E938(g_sw,kind,node->tag,current);break;}
   case 1:case 2:case 4:case 5:case 8:case 9:case 10:break;
   }
  }

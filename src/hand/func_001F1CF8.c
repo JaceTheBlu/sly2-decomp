@@ -3,7 +3,7 @@ struct O { char pad[0x230]; struct X *px; };
 struct Ent { int a0; int a4; int a8; int aC; };
 struct P { char pad[0x404]; struct Ent a[8]; int n484; int n488; int n48C; int n490; int n494; };
 struct G;
-extern struct G D_003DD490;
+extern struct G g_sw;
 struct O *func_0015E938(struct G *, int, int, int);
 int func_00132B10(struct O *, int);
 int func_001C2DC8(int, struct O *, int, int);
@@ -13,7 +13,7 @@ void func_001F1CF8(struct P *p)
     p->n48C = 0;
     for (; p->n488 < p->n484; p->n488++) {
         struct Ent *pe = &p->a[p->n488];
-        struct O *po = func_0015E938(&D_003DD490, 4, pe->a0, p->n494);
+        struct O *po = func_0015E938(&g_sw, 4, pe->a0, p->n494);
         int a8, k;
         if (!po) continue;
         a8 = pe->a8;

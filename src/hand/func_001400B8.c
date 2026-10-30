@@ -2,7 +2,7 @@ typedef int qword __attribute__((mode(TI)));
 struct K { int a; int b; };
 extern struct K D_002A4D10;
 struct G { char pad[0x3BF4]; int grf; char pad2[0x3D58 - 0x3BF8]; int cid; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 struct VTE { short d; short pad; void *pfn; };
 struct M3 { qword r[3]; };
 struct AREQ { int cb; int cbAlign; };
@@ -48,7 +48,7 @@ void func_001400B8(struct P *p)
     func_0019CC30((char *)p + 0xF00);
     func_0021F388((char *)p + 0x11B0);
     func_0019DE58((char *)p + 0xF50);
-    c = func_0015E650(&D_003DD490, 0x401, 0x2AB, p, 0x10, apv);
+    c = func_0015E650(&g_sw, 0x401, 0x2AB, p, 0x10, apv);
     if (c) {
         struct AREQ req;
         struct AREQ *preq = &req;
@@ -74,7 +74,7 @@ void func_001400B8(struct P *p)
         ((void (*)(void *))e->pfn)((char *)p + e->d);
     }
     func_00141EF8(p);
-    func_001440D0(p, D_003DD490.grf & 4);
+    func_001440D0(p, g_sw.grf & 4);
     p->x1088 = func_001F8278(p);
     func_001F35C8(p, 0.25f);
     if (p->pso->x94 == 0) {
@@ -83,8 +83,8 @@ void func_001400B8(struct P *p)
         struct SO *pso = p->pso;
         func_002333B4(pso, 0, 0x40);
         pso->m[0] = pso->m[5] = pso->m[10] = pso->m[15] = 1.0f;
-        D_003DD490.cid++;
-        p->pso->id = D_003DD490.cid;
+        g_sw.cid++;
+        p->pso->id = g_sw.cid;
         {
             struct VTE *e = &p->vt[18];
             ((void (*)(void *))e->pfn)((char *)p + e->d);
@@ -98,5 +98,5 @@ void func_001400B8(struct P *p)
             ((void (*)(void *, struct M3 *))e->pfn)((char *)p + e->d, &m);
         }
     }
-    func_00149A50(&D_003DD490, p, D_002A4D10, 0);
+    func_00149A50(&g_sw, p, D_002A4D10, 0);
 }

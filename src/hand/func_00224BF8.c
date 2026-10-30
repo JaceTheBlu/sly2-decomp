@@ -6,7 +6,7 @@ struct A { struct B *pb; };
 struct S { char pad[0xEC]; void *xEC; };
 struct G { char pad[0x402C]; void *x402C; };
 struct R { char pad[0x54]; int x54; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern int D_002C4368[11];
 extern float D_002C4338[11];
 void func_0020FA10();
@@ -29,7 +29,7 @@ void func_00224BF8(struct S *p, int a, int b, qword pos, float r)
     int cx;
     int i, j, k, m;
     func_001AE478(&mark);
-    func_0020FC60(&D_003DD490, pos, func_0020FA10, p->xEC, r, &c, &apa);
+    func_0020FC60(&g_sw, pos, func_0020FA10, p->xEC, r, &c, &apa);
     cx = 0;
     for (i = 0; i < sizeof(D_002C4368) / sizeof(D_002C4368[0]); i++) {
         for (j = 0; j < D_002C4368[i]; j++) {
@@ -43,6 +43,6 @@ void func_00224BF8(struct S *p, int a, int b, qword pos, float r)
     }
     for (m = 0; m < cx; m++)
         func_001F7598(&ax[m]);
-    func_00156698(D_003DD490.x402C, pos, p)->x54 = 1;
+    func_00156698(g_sw.x402C, pos, p)->x54 = 1;
     func_001AE4A0(&mark, 2);
 }

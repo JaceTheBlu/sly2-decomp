@@ -8,7 +8,7 @@ typedef struct QUERY{U point;float heading;unsigned count;ROW row[64];U candidat
 typedef struct WORK{QUERY query;NODE*result256[256];NODE*result32[32];NODE*result128[128];}WORK;
 typedef struct LM{float low,high;}LM;
 extern NODE*D_003E13FC,*D_003E13F0,*D_003E1408,*D_003E13E4,*D_003E13C0,*D_003E13D8,*D_003E13CC,*D_003E13B4,*D_003E1450;
-extern char D_003DD490;
+extern char g_sw;
 extern qword D_002A2DA0,D_002A2DC0;
 extern const float D_002A53D0;
 extern LM D_002BE5A8,D_002BE5B0;
@@ -78,11 +78,11 @@ extern "C" void func_001728B0(P*p){
  for(object=D_003E13B4;object;object=object->nextE0){
   if((object->flags&1)&&func_00132B10(object,0x13)){w.query.candidate.q=func_001A62E8(object);func_00172798(&w.query);}
  }
- {int count=func_0015E9C8(&D_003DD490,0x505,0x23,0,0x100,w.result256);
+ {int count=func_0015E9C8(&g_sw,0x505,0x23,0,0x100,w.result256);
  if(count>0){cursor=w.result256;remaining=count;do{NODE*item=*cursor++;--remaining;w.query.candidate.q=func_001A62E8(item);func_00172798(&w.query);}while(remaining);}}
- {int count=func_0015E9C8(&D_003DD490,0x505,0x67,0,0x20,w.result32);
+ {int count=func_0015E9C8(&g_sw,0x505,0x67,0,0x20,w.result32);
  if(count>0){cursor=w.result32;remaining=count;do{NODE*item=*cursor++;--remaining;w.query.candidate.q=func_001A62E8(item);func_00172798(&w.query);}while(remaining);}}
- {int count=func_0015E9C8(&D_003DD490,0x505,0x1B,0,0x80,w.result128);
+ {int count=func_0015E9C8(&g_sw,0x505,0x1B,0,0x80,w.result128);
  if(count>0){cursor=w.result128;remaining=count;do{NODE*item=*cursor++;--remaining;w.query.candidate.q=func_001A62E8(item);func_00172798(&w.query);}while(remaining);}}
  for(object=D_003E1450;object;object=object->next174){w.query.candidate.q=func_001A62E8(object);func_00172798(&w.query);}
  lastAngle=0.0f;

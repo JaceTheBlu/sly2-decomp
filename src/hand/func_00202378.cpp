@@ -20,7 +20,7 @@ extern "C" qword func_001A62E8(LO *);
 extern "C" int func_00202350(void *,LO *);
 extern "C" void func_0020FAA0(void *,qword,qword,int (*)(void *,LO *),void *,int *,LO ***);
 extern "C" LO *func_0014CC58(int,qword,qword,int,LO **,void *);
-extern char D_003DD490[];
+extern char g_sw[];
 extern qword D_002DDFA0[3];
 static inline qword Add(qword a,qword b){qword r;__asm__("vadd.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
@@ -48,7 +48,7 @@ extern "C" void func_00202378(P *p,LO *other)
     V *point;
     qword origin=func_001A62E8(other);
     radius=other->radius;
-    func_0020FAA0(D_003DD490,origin,p->position,func_00202350,0,&query.count,&query.objects);
+    func_0020FAA0(g_sw,origin,p->position,func_00202350,0,&query.count,&query.objects);
     {
         qword up=D_002DDFA0[1];
         qword direction=Normalize(Sub(p->position,origin));

@@ -187,8 +187,8 @@ struct RPL
     char *pv;
 };
 extern DMA D_002DEA28;
-extern G D_003DD490;
-extern VIEW D_002DDF40;
+extern G g_sw;
+extern VIEW g_cm;
 extern CLOCK D_002DDED0;
 extern MATRIX4 D_002A2D30;
 extern "C" {
@@ -274,12 +274,12 @@ struct VU_FLOATS
 // Microprogram 0x1C0 (sphere against the view planes): its inputs and outputs live in fixed VU registers.
 static inline float GCullSphere(qword posCam, qword pos, const SPH *psph, const float &sRadius, qword *pdpos)
 {
-    qword *aqwPlane = D_002DDF40.aqwPlane;
+    qword *aqwPlane = g_cm.aqwPlane;
     register qword qwPlane0 __asm__("vf10") = aqwPlane[0];
     register qword qwPlane1 __asm__("vf11") = aqwPlane[1];
     register qword qwPlane2 __asm__("vf12") = aqwPlane[2];
     register qword qwCam __asm__("vf13") = posCam;
-    register qword qwGain __asm__("vf14") = VU_FLOATM(D_002DDF40.sGain).qw;
+    register qword qwGain __asm__("vf14") = VU_FLOATM(g_cm.sGain).qw;
     register qword qwPos __asm__("vf15") = pos;
     register qword qwRadius __asm__("vf16") = VU_FLOATM(sRadius).qw;
     register qword qwRange __asm__("vf17") = VU_FLOATS(psph).qw;
@@ -297,12 +297,12 @@ static inline float GCullSphere(qword posCam, qword pos, const SPH *psph, const 
 // Same cull, with the VU0 sync as its own statement and the visibility moved out through a GPR.
 static inline float GCullSphereSync(qword posCam, qword pos, const SPH *psph, const float &sRadius, qword *pdpos)
 {
-    qword *aqwPlane = D_002DDF40.aqwPlane;
+    qword *aqwPlane = g_cm.aqwPlane;
     register qword qwPlane0 __asm__("vf10") = aqwPlane[0];
     register qword qwPlane1 __asm__("vf11") = aqwPlane[1];
     register qword qwPlane2 __asm__("vf12") = aqwPlane[2];
     register qword qwCam __asm__("vf13") = posCam;
-    register qword qwGain __asm__("vf14") = VU_FLOATM(D_002DDF40.sGain).qw;
+    register qword qwGain __asm__("vf14") = VU_FLOATM(g_cm.sGain).qw;
     register qword qwPos __asm__("vf15") = pos;
     register qword qwRadius __asm__("vf16") = VU_FLOATM(sRadius).qw;
     register qword qwRange __asm__("vf17") = VU_FLOATS(psph).qw;
@@ -376,7 +376,7 @@ static inline int KindOf(SUB *psub)
 extern "C" void func_00168638(MODEL *pmodel, MATRIX4 *pmatWorld, float gFirst, float gSecond, SHD *pshd)
 {
     SUBDESC *pdesc;
-    qword posCam = D_002DDF40.posCam;
+    qword posCam = g_cm.posCam;
     qword pos = QwXfmRef(pmodel->powner->pxf->mat, *(qword *)&pmodel->posCenter);
     float sRadius = pmodel->rad;
     if (pmatWorld)
@@ -391,7 +391,7 @@ extern "C" void func_00168638(MODEL *pmodel, MATRIX4 *pmatWorld, float gFirst, f
     if (gVis == 0.0f)
         return;
     pmodel->t = D_002DDED0.t;
-    if (pmodel->nStamp != D_003DD490.nStamp)
+    if (pmodel->nStamp != g_sw.nStamp)
         func_001681F8(pmodel);
     int i;
     for (i = 0; i < pmodel->cobj; i++)
@@ -405,7 +405,7 @@ extern "C" void func_00168638(MODEL *pmodel, MATRIX4 *pmatWorld, float gFirst, f
     }
     int fAlt = 0;
     if (pmodel->grf & 0x400000000UL)
-        fAlt = D_003DD490.fAlt == 0;
+        fAlt = g_sw.fAlt == 0;
     for (i = 0; i < pmodel->csub; i++)
     {
         pdesc = &pmodel->asubdesc[i];
@@ -450,7 +450,7 @@ extern "C" void func_00168638(MODEL *pmodel, MATRIX4 *pmatWorld, float gFirst, f
         else
         {
             dposSub = QwSub(posSub, posCam);
-            if (!func_0014F898(&D_002DDF40, dposSub, psph->sRange, &gVisSub))
+            if (!func_0014F898(&g_cm, dposSub, psph->sRange, &gVisSub))
                 continue;
         }
         uchar *pbStart = D_002DEA28.pb;
@@ -476,7 +476,7 @@ extern "C" void func_00168638(MODEL *pmodel, MATRIX4 *pmatWorld, float gFirst, f
             ptag = (ulong *)D_002DEA28.pb;
             *ptag = 0x10000000;
             float g = SqDist(posCam, posSub);
-            float sNear = sRadiusSub + D_002DDF40.sNear;
+            float sNear = sRadiusSub + g_cm.sNear;
             D_002DEA28.pb += 0x10;
             int fNear = g < sNear * sNear;
             UnpackWords(0x6001C012, &fNear, 1);

@@ -7,14 +7,14 @@ public:
 };
 struct X { char pad[0x94]; int f94; char pad2[0xFC - 0x98]; int fFC; };
 struct G { char pad[0x3AFC]; int c; };
-extern G D_003DD490;
+extern G g_sw;
 extern "C" void *func_001AE378(ALLOCREQ *preq);
 extern "C" int func_0015E9C8(G *pg, int kind, int n, int m, int c, void **apv);
 extern "C" void func_00164100(X *px, int *pc, void *pv, int a, int b);
 extern "C" void func_00165C98(int *pc, void **ppv)
 {
     ALLOCREQ req;
-    G *pg = &D_003DD490;
+    G *pg = &g_sw;
     *pc = 0;
     req.cb = pg->c * 4;
     req.nKind = 0x10;

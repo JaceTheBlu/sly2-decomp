@@ -3,7 +3,7 @@ struct LO { char pad[0xC]; struct VT *pvt; void *psw; int x14; int oid; int x1C;
 struct CLS { int x0; int x4; int x8; int xC; struct LO *(*pfnNew)(void); };
 struct G { char pad[0x39E4]; struct LO **pplo; };
 extern struct CLS D_002BAAE8[];
-extern struct G D_003DD490;
+extern struct G g_sw;
 void *func_001FFA40(struct G *pg, int n, struct LO *plo);
 void func_00256EE0(struct LO *plo, void *pv);
 void *func_0015E380(struct G *pg, int oid);
@@ -16,7 +16,7 @@ struct LO *func_0013E3C8(int cid, void *psw, int oid, int n)
     struct G *pg; struct LO *plo = (D_002BAAE8 + cid)->pfnNew();
     plo->psw = psw;
     plo->oid = oid;
-    pg = &D_003DD490;
+    pg = &g_sw;
     func_00256EE0(plo, func_001FFA40(pg, n, plo));
     func_0011A070(func_0015E380(pg, oid), plo);
     func_0011A070(func_0015E3A8(pg, cid), plo);

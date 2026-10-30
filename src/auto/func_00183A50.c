@@ -24,7 +24,7 @@ extern f32 D_002BE904;
 extern f32 D_002DDED0;
 extern M2C_UNK D_002DEB30;
 extern s32 D_002DFB80;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 
 s32 func_00183A50(s32 arg0, s32 arg1) {
     s32 var_s1;

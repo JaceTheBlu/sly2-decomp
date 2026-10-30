@@ -27,7 +27,7 @@ struct O {
 };
 struct MSG { int k; void *p; };
 extern struct CLOCK D_002DDED0;
-extern struct GS D_003DD490;
+extern struct GS g_sw;
 extern char D_002DEB30[];
 extern qword D_002A2DD0;
 extern qword D_002A4B60;
@@ -133,14 +133,14 @@ void func_0013C560(struct O *p, int st)
 
     if (p->st == st)
         return;
-    if (D_003DD490.p4638 != 0) {
+    if (g_sw.p4638 != 0) {
         int fOld = p->st >= 2;
         int fNew = st >= 2;
         if (fOld) {
             if (!fNew)
-                func_001CB4B8(D_003DD490.p4638, p);
+                func_001CB4B8(g_sw.p4638, p);
         } else if (fNew) {
-            func_001CB488(D_003DD490.p4638, p);
+            func_001CB488(g_sw.p4638, p);
         }
     }
     stOld = p->st;
@@ -159,8 +159,8 @@ void func_0013C560(struct O *p, int st)
         break;
     case 1:
         if (p->pst->xC)
-            func_001618F8(&D_003DD490, p->pq->g18C + 0.99f);
-        func_00156C80(&D_003DD490, 1, func_001A62E8(p->pq), p->pq, (char *)p->pq + 0x198);
+            func_001618F8(&g_sw, p->pq->g18C + 0.99f);
+        func_00156C80(&g_sw, 1, func_001A62E8(p->pq), p->pq, (char *)p->pq + 0x198);
         if (st == 2)
             func_001619A0(D_002DEB30, 0x2F, p);
         p->pq->p194 = 0;
@@ -183,7 +183,7 @@ void func_0013C560(struct O *p, int st)
         if (p->pst->x18 != -1)
             func_001F6AC8(p, p->pst->x18);
         if (p->pst->xC)
-            func_00161958(&D_003DD490);
+            func_00161958(&g_sw);
         break;
     case 5: {
         struct R *pr = p->p164;
@@ -211,7 +211,7 @@ void func_0013C560(struct O *p, int st)
         VCALL(p, 9, PFNV));
         break;
     case 1:
-        func_00156C80(&D_003DD490, -1, D_002A2DD0, 0, (char *)p->pq + 0x198);
+        func_00156C80(&g_sw, -1, D_002A2DD0, 0, (char *)p->pq + 0x198);
         func_001A6BE8(p, VCALL(p->pq, 31, PFNP)));
         func_001A58D0(p, (void *)p->pq->x10, 3);
         p->pq->p194 = p;
@@ -225,7 +225,7 @@ void func_0013C560(struct O *p, int st)
     case 6:
         VCALL(p->pot->pr, 8, PFNV));
         if (p->st == 2) {
-            p->pe = func_001CE888(&D_003DD490, 6, 0);
+            p->pe = func_001CE888(&g_sw, 6, 0);
         } else {
             p->pe = 0;
             VCALL(p, 3, PFN3), 6, 0, 0, 0, 0);
@@ -245,7 +245,7 @@ void func_0013C560(struct O *p, int st)
         struct E *pe;
         func_001A6BE8(p, VCALL(p->pq, 31, PFNP)));
         func_001A58D0(p, (void *)p->pq->x10, 3);
-        p->pe = func_001CE888(&D_003DD490, 6, 0);
+        p->pe = func_001CE888(&g_sw, 6, 0);
         if (p->pe)
             LINKE3(p->pe, pot->pr, p);
         if (!p->pe)

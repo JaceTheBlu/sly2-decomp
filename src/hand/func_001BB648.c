@@ -12,8 +12,8 @@ typedef struct P {
     char pad15C[0x168 - 0x15C];
     int x168;
 } P;
-extern char D_003DD490[];
-extern char D_002DDF40[];
+extern char g_sw[];
+extern char g_cm[];
 extern char D_002DFC00[];
 extern char D_002DE578[];
 extern char D_002DEB30[];
@@ -39,7 +39,7 @@ void func_001BB648(P *p, E *pe)
         if ((p->x158 > 0 || pe->n <= 0) && ((0x3F >> pi->k) & 1)) continue;
         ps = 0;
         if ((0xC3 >> pi->k) & 1) {
-            ps = func_0015E938(D_003DD490, 1, pi->v, p);
+            ps = func_0015E938(g_sw, 1, pi->v, p);
             if (!ps) continue;
         }
         switch ((unsigned int)pi->k) {
@@ -73,7 +73,7 @@ void func_001BB648(P *p, E *pe)
             }
             break;
         case 8:
-            if (p->x168 & 2) func_0014F750(D_002DDF40, pi->v);
+            if (p->x168 & 2) func_0014F750(g_cm, pi->v);
             break;
         case 9:
             if (p->x168 & 4) func_00187E28(D_002DFC00, pi->v, 0.3f);

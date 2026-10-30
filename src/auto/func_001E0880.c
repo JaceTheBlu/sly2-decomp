@@ -6,9 +6,9 @@ extern void *D_002DD2FC;
 extern M2C_UNK D_002DDED0;
 extern f32 D_002DDED4;
 extern f32 D_002DDF10;
-extern M2C_UNK D_002DDF40;
+extern M2C_UNK g_cm;
 extern M2C_UNK D_003DA740;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 extern M2C_UNK D_003E11C4;
 
 void func_001E0880(s32 arg0, s32 arg1, s32 arg2) {

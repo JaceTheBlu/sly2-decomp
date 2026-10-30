@@ -17,7 +17,7 @@ void*func_001AE2A0(const REQUEST&);
 void func_0014E270(ENV*,float*,float);
 void*func_002333B4(void*,int,uint);
 void func_001699E8(P*,D*,E*,SPHERE*,int,int,const int*,FACE**,CBinaryInputStream*);
-extern ENV D_002DDF40;
+extern ENV g_cm;
 extern uint D_002DEB50;
 extern QW D_002DEB60;
 extern uint D_002BE540[];
@@ -71,7 +71,7 @@ extern "C" void func_0016E438(P*p,D*desc,E*entry,PARAM*param,SPHERE*sphere,int g
  vifs.AllocSw(0x2000);vifs.AddDmaCnt();
  float*environment;
  vifs.UnpackHelper(UPK_V4_32,1,9,0,(uint**)&environment);
- func_0014E270(&D_002DDF40,environment,param->value);
+ func_0014E270(&g_cm,environment,param->value);
  int count=stream->U8Read();desc->count=count;
  entry->bones=(BONE*)Allocate((char)count*sizeof(BONE));
  for(;i<desc->count;i++){

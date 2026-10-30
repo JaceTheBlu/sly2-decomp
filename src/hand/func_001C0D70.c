@@ -3,7 +3,7 @@ typedef union { qword q; float f; } U;
 struct N { qword *pplane; unsigned short ach[2]; };
 struct B { int c; struct N *an; int x8, xc; int x10; int x14; void **al; };
 struct G { char pad[0x45C8]; void *x45C8; struct B *pbsp; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 void func_002564B8(void *p);
 static __inline__ int ISide(qword plane, qword pos)
 {
@@ -25,7 +25,7 @@ static __inline__ int ISide(qword plane, qword pos)
 }
 void *func_001C0D70(qword pos, int f)
 {
-    struct B *pb = D_003DD490.pbsp;
+    struct B *pb = g_sw.pbsp;
     struct N *pn, *pnEnd, *an;
     void **al;
     unsigned int c;
@@ -43,7 +43,7 @@ void *func_001C0D70(qword pos, int f)
     }
     if (!f && pb->x10)
         return 0;
-    return D_003DD490.x45C8;
+    return g_sw.x45C8;
 leaf:
     return al[c & 0x7FFF];
 }

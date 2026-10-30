@@ -7,8 +7,8 @@ struct S {
 };
 struct CLOCK { float t; float dt; };
 extern struct CLOCK D_002DDED0;
-extern char D_003DD040[];
-extern char D_003DD490[];
+extern char g_sndmgr[];
+extern char g_sw[];
 void func_001FE738(void *p);
 void func_001DFEB8(void *p);
 void func_001C8918(struct S *p, int n);
@@ -24,7 +24,7 @@ void func_001C8730(struct S *p, int n)
     void *pv;
     if (n == p->x180) return;
     if (p->x1A4) {
-        func_001FE738(D_003DD040);
+        func_001FE738(g_sndmgr);
         p->x1A4 = 0;
     }
     if (p->x19C)
@@ -32,17 +32,17 @@ void func_001C8730(struct S *p, int n)
     switch (p->x180) {
     case 2:
         func_001C8918(p, -1);
-        func_0020F160(D_003DD490);
+        func_0020F160(g_sw);
         break;
     case 3:
         if (p->x200 != -1)
             func_001DAF38(p->x200, 1);
         if (p->x1FC)
-            p->x1A4 = func_001FE5F0(D_003DD040, p->x1FC, 1);
+            p->x1A4 = func_001FE5F0(g_sndmgr, p->x1FC, 1);
         break;
     case 0:
         if (p->x190)
-            func_0020F198(D_003DD490);
+            func_0020F198(g_sw);
         break;
     }
     p->x180 = n;
@@ -53,9 +53,9 @@ void func_001C8730(struct S *p, int n)
     case 2:
         p->x194 = 5;
         func_001C8918(p, 1);
-        func_0020F128(D_003DD490);
+        func_0020F128(g_sw);
         if (p->x1F4)
-            p->x1A4 = func_001FE5F0(D_003DD040, p->x1F4, 0);
+            p->x1A4 = func_001FE5F0(g_sndmgr, p->x1F4, 0);
         break;
     case 1:
         ((void (*)(void *, int))p->vt[79].pf)((char *)p + p->vt[79].d, 1);
@@ -66,7 +66,7 @@ void func_001C8730(struct S *p, int n)
         if (q) {
             ((void (*)(void *, int))q->vt[79].pf)((char *)q + q->vt[79].d, 1);
             p->x190 = 0;
-            func_0020F1A8(D_003DD490);
+            func_0020F1A8(g_sw);
         }
         break;
     }

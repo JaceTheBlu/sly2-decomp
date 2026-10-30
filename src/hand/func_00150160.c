@@ -2,9 +2,9 @@ typedef int qword __attribute__((mode(TI)));
 struct CLOCK { float t; float dt; };
 extern struct CLOCK D_002DDED0;
 struct CM { char pad[0x20]; float g20; };
-extern struct CM D_002DDF40;
+extern struct CM g_cm;
 struct G { char pad[0x3B4C]; void *p3B4C; char pad2[0x4750 - 0x3B50]; float g4750; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern char D_003D4A60[];
 struct POLY { float c0, c1, c2; };
 struct LM { float gMin, gMax; };
@@ -72,10 +72,10 @@ void func_00150160(struct X *p, void *pv, struct JOY *pjoy)
             func_001FB018(p->p34);
     }
     u = 1.0f - p->g20;
-    func_0014F5A0(&D_002DDF40, (1.0f - u) * p->g2C + u * p->g30);
+    func_0014F5A0(&g_cm, (1.0f - u) * p->g2C + u * p->g30);
     gPan = -__builtin_fabsf(pjoy->g103C) * pjoy->g103C * D_002BD990;
     gTilt = -__builtin_fabsf(pjoy->g1040) * pjoy->g1040 * D_002BD994;
-    func_002581C0(&ref, D_003DD490.p3B4C, D_003D4A60);
+    func_002581C0(&ref, g_sw.p3B4C, D_003D4A60);
     f = ref.m_n;
     func_00129EC8(&ref);
     if (f)
@@ -93,12 +93,12 @@ void func_00150160(struct X *p, void *pv, struct JOY *pjoy)
         p->g1C = GClamp(gTilt, gMin, gMax);
     }
     {
-        float k = (1.0f - D_002DDF40.g20) * D_002BD9B0.gMin + D_002DDF40.g20 * D_002BD9B0.gMax;
+        float k = (1.0f - g_cm.g20) * D_002BD9B0.gMin + g_cm.g20 * D_002BD9B0.gMax;
         p->g10 += k * p->g18 * D_002DDED0.dt;
         p->g14 += k * p->g1C * D_002DDED0.dt;
     }
     if (6.2831855f <= p->g40 - p->g3C)
         p->g10 = func_0011CF60(p->g10);
-    func_0014E1A8(&D_002DDF40, func_0014FEC8(p), func_0014FE58(p), 0.0f, 0.0f);
-    D_003DD490.g4750 = D_002DDED0.t;
+    func_0014E1A8(&g_cm, func_0014FEC8(p), func_0014FE58(p), 0.0f, 0.0f);
+    g_sw.g4750 = D_002DDED0.t;
 }

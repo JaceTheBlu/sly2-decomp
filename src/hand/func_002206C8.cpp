@@ -15,7 +15,7 @@ struct S {O *owner;int state;float time;O *peer,*selected;char pad14[0x2C];float
 struct CLOCK {float t,dt;};
 struct WORK {V scalar,saved,coefficient,velocity,point;};
 extern O *D_002DD5BC;
-extern WORLD D_003DD490;
+extern WORLD g_sw;
 extern CLOCK D_002DDED0;
 extern V D_002A2DC0,D_002A2DA0,D_002A2DD0;
 extern "C" {
@@ -123,7 +123,7 @@ extern "C" void func_002206C8(S *s,int state){
  }
  int previous=s->state;
  s->state=state;s->time=D_002DDED0.t;
- func_00134320(&D_003DD490,s->owner);
+ func_00134320(&g_sw,s->owner);
  switch(s->state){
  case -1:func_00204660(s->owner,func_00204740(s->owner));s->owner->movement=0;break;
  case 7:
@@ -176,5 +176,5 @@ extern "C" void func_002206C8(S *s,int state){
  func_001F15B8(&s->owner->extra);
  func_001305B8(animation,s->owner,0.0f,1.0f,flags,&s->owner->animation);
  PlainCall(s->owner,90);
- func_00134320(&D_003DD490,s->owner);
+ func_00134320(&g_sw,s->owner);
 }

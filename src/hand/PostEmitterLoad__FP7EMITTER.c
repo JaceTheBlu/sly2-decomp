@@ -11,7 +11,7 @@ struct EMITTER {
     char pad11C[0x130 - 0x11C]; float g130; float g134; float g138; float g13C; float g140;
 };
 struct ALLOCREQ { int cb; int kind; };
-extern char D_003DD490[];
+extern char g_sw[];
 extern const struct K D_002A5140;
 extern float D_002A5148;
 void func_002586D8(struct EMITTER *p);
@@ -40,7 +40,7 @@ void PostEmitterLoad__FP7EMITTER(struct EMITTER *pemitter)
 {
     func_002586D8(pemitter);
     if (pemitter->pemitb->pemito->palo)
-        func_00149A50(D_003DD490, pemitter, D_002A5140, 0);
+        func_00149A50(g_sw, pemitter, D_002A5140, 0);
     if (pemitter->kind == -1) {
         if (pemitter->g104 != 0.0f || pemitter->n114)
             pemitter->kind = 3;
@@ -96,7 +96,7 @@ void PostEmitterLoad__FP7EMITTER(struct EMITTER *pemitter)
         }
     }
     if (pemitter->oid118 != -1) {
-        struct EMITTER *pemitterNew = func_0015E938(D_003DD490, 5, pemitter->oid118, 0);
+        struct EMITTER *pemitterNew = func_0015E938(g_sw, 5, pemitter->oid118, 0);
         if (!pemitterNew) {
             struct VTE *pvte;
             void *pthis;

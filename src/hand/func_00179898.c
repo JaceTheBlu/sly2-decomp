@@ -2,7 +2,7 @@
    for-init `n = 0` (keeps the target's bltz/then-first layout). The v3E0 vector is read into q before the call. */
 typedef int qword __attribute__((mode(TI)));
 struct G;
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern char D_002DEB30[];
 extern char D_002DE578[];
 struct E { int n0; int pad[2]; int nC; };
@@ -43,7 +43,7 @@ void func_00179898(struct S *p) {
     a = p->p10;
     if (a->n330 == 0) {
         a->n330 = 1;
-        if (p->p50 == func_001C4840(&D_003DD490))
+        if (p->p50 == func_001C4840(&g_sw))
             func_001619A0(D_002DEB30, 0x18, p->p10);
         else
             func_001619A0(D_002DEB30, 0x17, p->p10);
@@ -56,7 +56,7 @@ void func_00179898(struct S *p) {
             v = func_001A6F00(p->p10, 0, q);
             func_00154E10(D_002DE578, v, n, p->p10->n3F0, p->p10);
         }
-        func_00134320(&D_003DD490, p->p10);
+        func_00134320(&g_sw, p->p10);
         func_00153FF8(p->p10->pF64);
     }
 }

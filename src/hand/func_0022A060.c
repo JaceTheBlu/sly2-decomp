@@ -3,7 +3,7 @@ struct VTE { short d; short pad; int (*pfn)(); };
 struct J { char pad[0xC]; struct VTE *vt; char pad1[0x2DC - 0x10]; int x2DC; };
 struct P { char pad[0xC]; struct VTE *vt; char pad1[0x150 - 0x10]; int x150; int x154; float g158; float g15C; int x160; int x164; };
 struct G { char pad[0x3B0C]; int x3B0C; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 void func_001F36E0(struct P *p);
 struct J *func_001C4840(struct G *pg);
 int func_00132B10(struct J *pj, int k);
@@ -29,12 +29,12 @@ void func_0022A060(struct P *p)
     int f;
     float r;
     func_001F36E0(p);
-    pj = func_001C4840(&D_003DD490);
+    pj = func_001C4840(&g_sw);
     if (pj && func_00132B10(pj, p->x154)) {
         r = p->x164 ? p->g15C : p->g158;
         f = GDist(func_001A62E8(pj), func_001A62E8(p)) < r;
     } else f = 0;
-    if ((p->x150 == 0 || p->x150 == 2) && D_003DD490.x3B0C)
+    if ((p->x150 == 0 || p->x150 == 2) && g_sw.x3B0C)
         f = 0;
     if (f && func_00132B10(pj, 0x34) &&
         (pj->x2DC != -1 || ((int (*)(void *))pj->vt[77].pfn)((char *)pj + pj->vt[77].d) == 2))

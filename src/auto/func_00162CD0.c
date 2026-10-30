@@ -3,7 +3,7 @@ s32 func_00162670();                                /* extern */
 M2C_UNK func_00162D50(void *);                      /* extern */
 M2C_UNK func_00162F10(void *);                      /* extern */
 M2C_UNK func_00165E10(M2C_UNK *, void *);           /* extern */
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 
 void func_00162CD0(void *arg0, void *arg1) {
     if (func_00162670() != 0) {
@@ -14,7 +14,7 @@ void func_00162CD0(void *arg0, void *arg1) {
             func_00162F10(arg0);
         }
         if (M2C_FIELD(arg1, s32 *, 0xB8) != -1) {
-            func_00165E10(&D_003DD490, arg1);
+            func_00165E10(&g_sw, arg1);
         }
     }
 }

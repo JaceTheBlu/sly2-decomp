@@ -21,8 +21,8 @@ struct EMITTER { char pad[0xC8]; int fC8; char padCC[0xF0 - 0xCC]; int kF0; int 
 struct EMITX { PRG **ppprg; void *ppripg; EMITTER *pemitter; };
 struct CM { char pad[0x70]; qword dir; };
 extern "C" {
-extern CM D_002DDF40;
-extern char D_003DD490[];
+extern CM g_cm;
+extern char g_sw[];
 PRG *func_001390D8(void *pv);
 void func_001394C8(PRG *pprg, EMITTER *p);
 BLK *func_00138FF8(void *pv, PRG *pprg);
@@ -49,7 +49,7 @@ void func_0015B428(EMITTER *p, EMITX *px, int c, qword *apos, qword *av, float *
     if (px && px->ppprg)
         pprg = *px->ppprg;
     if (!pprg) {
-        pprg = func_001390D8(D_003DD490);
+        pprg = func_001390D8(g_sw);
         if (!pprg)
             return;
         if (px && px->ppprg)
@@ -62,7 +62,7 @@ void func_0015B428(EMITTER *p, EMITX *px, int c, qword *apos, qword *av, float *
     }
     BLK *pblk = pprg->pblkFirst;
     int k = 0;
-    while (k < c && (pblk || (pblk = func_00138FF8(D_003DD490, pprg)))) {
+    while (k < c && (pblk || (pblk = func_00138FF8(g_sw, pprg)))) {
         qword *pq1 = pblk->afr[1].apos;
         for (unsigned int i = pblk->c; i < 43 && k < c; k++, i++) {
             FR *pfr = &pblk->afr[0];
@@ -80,7 +80,7 @@ void func_0015B428(EMITTER *p, EMITX *px, int c, qword *apos, qword *av, float *
             if (pprg->k43C == 2) {
                 float g = GRand(&p->lm);
                 pd->g8 = g;
-                if (!p->kF0 && 0.0f < Dot(D_002DDF40.dir, pfr->av[i]))
+                if (!p->kF0 && 0.0f < Dot(g_cm.dir, pfr->av[i]))
                     pd->g8 = -g;
                 if (p->fF4)
                     pd->gC = func_0011D448(-3.14159265f, 3.14159265f);

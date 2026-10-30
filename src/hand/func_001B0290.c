@@ -4,7 +4,7 @@ typedef struct G { char pad[0x3B0C]; int x3B0C; } G;
 typedef struct H { char pad[0x24]; int x24; } H;
 typedef struct X { char pad[0x1C]; int x1C; } X;
 extern MENU D_003D9ED0;
-extern G D_003DD490;
+extern G g_sw;
 extern H D_003DA3C0;
 extern char D_002E6550[];
 extern M D_002C00E8[];
@@ -28,9 +28,9 @@ int func_001B0290(X *px)
     int f, k;
 
     if (!D_003D9ED0.x20) return 0;
-    if (func_0020E040(&D_003DD490)) return 0;
+    if (func_0020E040(&g_sw)) return 0;
     if (func_001D9880(D_002E6550)) return 0;
-    pl = func_001C4840(&D_003DD490);
+    pl = func_001C4840(&g_sw);
     if (pl && func_00132B10(pl, 0x34)) func_0019CD38(pl + 0xF00, -1);
     if (!func_002127C8()) return 0;
     psrc = D_002C00E8;
@@ -46,7 +46,7 @@ int func_001B0290(X *px)
             break;
         case 0x6B:
             f = 0;
-            if (D_003DD490.x3B0C) {
+            if (g_sw.x3B0C) {
                 if (func_00210AE0()) f = 1;
             }
             break;

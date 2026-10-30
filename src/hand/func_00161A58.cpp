@@ -17,7 +17,7 @@ struct BANK{
 struct LEASE;
 struct CRef;
 extern "C"{
- extern G D_003DD490;
+ extern G g_sw;
  extern BANK D_002E65E0;
  extern CHECK D_003E1088,D_002A37E8;
  extern char D_003D4A60[];
@@ -93,19 +93,19 @@ extern "C" void func_00161A58(P*p,int action){
  case 1:{
   if(Same(&D_003E1088,&D_002A37E8)){
    P*results[3];
-   int found=func_0015E9C8(&D_003DD490,5,0x34,0,3,results);
+   int found=func_0015E9C8(&g_sw,5,0x34,0,3,results);
    if(found>0){P**cursor=results;int count=found;do{P*object=*cursor;if(object->widget)(void)func_00143AF0(object,func_0013C478(object->widget));--count;++cursor;}while(count);}
   }
   break;
  }
  case 3:{
-  if(D_003DD490.flags&1){func_001613F8(p);D_002E65E0.selected=0;}
-  else if(D_003DD490.flags&0x40)func_00166008();
+  if(g_sw.flags&1){func_001613F8(p);D_002E65E0.selected=0;}
+  else if(g_sw.flags&0x40)func_00166008();
   func_001AB630(&D_002E65E0);
   if(func_00210AE0())break;
   if(D_002E65E0.mode!=6||D_002E65E0.selected||!D_002E65E0.current)break;
-  if(GetFloat(D_003DD490.primary,D_003D4A60)!=0.0f)break;
-  if(GetFloat(D_003DD490.primary,D_002E65E0.current)!=0.0f)func_001D8FF8(D_002E65E0.current);
+  if(GetFloat(g_sw.primary,D_003D4A60)!=0.0f)break;
+  if(GetFloat(g_sw.primary,D_002E65E0.current)!=0.0f)func_001D8FF8(D_002E65E0.current);
   break;
  }
  case 4:func_00165280(p);break;
@@ -116,7 +116,7 @@ extern "C" void func_00161A58(P*p,int action){
   P**objects;
   func_00165C98(&count,&objects);
   for(;i<count;i++){P*object=objects[i];OVERRIDE temp(object,1,0);func_00164270(object);}
-  G*g=&D_003DD490;
+  G*g=&g_sw;
   func_00165DC0(g,func_0015E938(g,0x105,p->selections[0],0));
   func_00165DE8(g,func_0015E938(g,0x105,p->selections[1],0));
   func_00165E10(g,func_0015E938(g,0x105,p->selections[2],0));
@@ -127,7 +127,7 @@ extern "C" void func_00161A58(P*p,int action){
   mark.Release();
   break;
  }
- case 16:{G*g=&D_003DD490;if(!g->first)func_0022B490(g,0,g->a,g->b,g->ready?0x20:0,0x30A);break;}
+ case 16:{G*g=&g_sw;if(!g->first)func_0022B490(g,0,g->a,g->b,g->ready?0x20:0,0x30A);break;}
  case 2:case 6:case 7:case 8:case 9:case 10:case 11:case 12:case 13:case 14:case 15:break;
  }
 }

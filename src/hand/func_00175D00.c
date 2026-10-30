@@ -2,7 +2,7 @@ typedef int qword __attribute__((mode(TI)));
 struct CLOCK { float t; float dt; };
 extern struct CLOCK D_002DDED0;
 struct G;
-extern struct G D_003DD490;
+extern struct G g_sw;
 struct VTE { short d; short pad; void *pfn; };
 struct T {
     char pad[0xC]; struct VTE *vt; char pad2[0x18]; unsigned long fl28; char pad3[0x2DC - 0x30]; int n2DC;
@@ -89,7 +89,7 @@ int func_00175D00(struct S *p) {
     {
         struct R *r;
         func_001AE478(&x);
-        func_0020FAA0(&D_003DD490, pa, pb, func_0020FA10, p->p10->nEC, &na, &nb);
+        func_0020FAA0(&g_sw, pa, pb, func_0020FA10, p->p10->nEC, &na, &nb);
         r = func_0014CC58(0, pa, pb, na, nb, &y);
         if (r && r->p4->p14->p0 != p->p30) {
             func_001AE4A0(&x, 2);

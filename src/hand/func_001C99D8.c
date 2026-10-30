@@ -1,7 +1,7 @@
 struct DL { void *head; void *tail; int ibDle; };
 struct N { int id; struct N *pnParent; int x8; int xC; int x10; struct N *pnNext; struct DL dl; int pad; };
 struct AL { int cb; int cbAlign; };
-extern char D_003DD490[];
+extern char g_sw[];
 void *func_001AE2A0(const struct AL *pal);
 void func_0011A050(struct DL *pdl, int ib);
 int func_001C9968(int id);
@@ -31,7 +31,7 @@ again:
         func_0011A050(&pn->dl, 0x14);
         pn->id = aid[i];
         pn->x8 = func_001C9968(pn->id);
-        func_0011A070(func_0015E3C0(D_003DD490, pn->x8), pn);
+        func_0011A070(func_0015E3C0(g_sw, pn->x8), pn);
         pn->pnParent = pnParent;
         func_0011A070(&pnParent->dl, pn);
         pnParent = pn;

@@ -13,7 +13,7 @@ public:
     virtual void V9();
 };
 struct G;
-extern G D_003DD490;
+extern G g_sw;
 extern "C" int func_00161FC8(int n);
 extern "C" int func_00161FF0(int c, int *ai);
 extern "C" int func_00210A88();
@@ -36,8 +36,8 @@ extern "C" void func_001620B0(void *p, int nState, int c, E *ae)
             continue;
         if (pe->n != -1 && pe->n != func_00210A88())
             continue;
-        void *pOwner = func_0015E938(&D_003DD490, 5, pe->oidB, 0);
-        LO *plo = (LO *)func_0015E938(&D_003DD490, pOwner ? 4 : 5, pe->oidA, pOwner);
+        void *pOwner = func_0015E938(&g_sw, 5, pe->oidB, 0);
+        LO *plo = (LO *)func_0015E938(&g_sw, pOwner ? 4 : 5, pe->oidA, pOwner);
         if (!plo)
             continue;
         if (pe->grf & grfState)

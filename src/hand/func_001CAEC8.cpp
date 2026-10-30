@@ -13,7 +13,7 @@ struct DESC {int kind,flags;char pad8[0x20];};
 struct STREAM {int flags;unsigned char *cursor;int remaining,consumed;unsigned char *raw;int rawCount,compression,pending,word20;unsigned char *decompressed;int word28,word2C;VTE *vt;void *begin,*end;};
 struct WORK {int id;P *found,*child;void *cursor;P *owner;};
 extern "C" {
-extern SW D_003DD490;
+extern SW g_sw;
 extern DESC D_002AC880[];
 NODE *func_001CADE0(P *,int);
 void func_001CAA60(P *,NODE *);
@@ -45,13 +45,13 @@ extern "C" NODE *func_001CAEC8(P *p,int minimum){
  work.owner=p;
  node->matrix=p->matrix;
  int row=func_001CA930(p,node);
- work.id=func_001C9940(p->table-D_003DD490.tables,row);
- TREE *tree=func_001C99D8(D_003DD490.root,1,&work.id);
+ work.id=func_001C9940(p->table-g_sw.tables,row);
+ TREE *tree=func_001C99D8(g_sw.root,1,&work.id);
  for(int i=0;i<p->bindCount;i++){
   BIND *bind=&p->binds[i];
   if(bind->kind==5)continue;
   if(bind->kind==6){work.found=tree->owner;if(!work.found)continue;}
-  else if(func_0015E678(&D_003DD490,0xA05,bind->kind,0,tree,1,&work.found)!=1)continue;
+  else if(func_0015E678(&g_sw,0xA05,bind->kind,0,tree,1,&work.found)!=1)continue;
   bind->object=work.found;
   func_00118480(&stream);
   func_00118500(&stream,bind->begin,bind->end,0);

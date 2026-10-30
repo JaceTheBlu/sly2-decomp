@@ -4,7 +4,7 @@ typedef struct {
     char p34[0xC8 - 0x34]; int xC8; int xCC; int xD0; int xD4;
 } X;
 typedef struct { char p0[0xE4]; X *px; } SO;
-extern char D_003DD490[];
+extern char g_sw[];
 extern char D_002CE4B8[];
 void func_001A5C48(SO *p);
 void *func_002333B4(void *p, int c, int n);
@@ -30,9 +30,9 @@ void func_00259170(SO *p)
     }
     func_002333B4(a, 0, 0x14);
     if (o1 != -1)
-        a[0] = func_0015E938(D_003DD490, 4, o1, p);
+        a[0] = func_0015E938(g_sw, 4, o1, p);
     if (o2 != -1) {
-        void *q = func_0015E938(D_003DD490, 4, o2, p);
+        void *q = func_0015E938(g_sw, 4, o2, p);
         a[0] = 0;
         a[1] = q;
     }
@@ -43,16 +43,16 @@ void func_00259170(SO *p)
         int cc = x->xCC;
         int d0 = x->xD0;
         if (c8 != -1)
-            a[2] = func_0015E938(D_003DD490, 4, c8, p);
+            a[2] = func_0015E938(g_sw, 4, c8, p);
         if (cc != -1)
-            a[3] = func_0015E938(D_003DD490, 4, cc, p);
+            a[3] = func_0015E938(g_sw, 4, cc, p);
         if (d0 != -1)
-            a[4] = func_0015E938(D_003DD490, 4, d0, p);
+            a[4] = func_0015E938(g_sw, 4, d0, p);
         break;
     }
     case 0:
         if (x->xD4 != -1)
-            a[2] = func_0015E938(D_003DD490, 4, x->xD4, p);
+            a[2] = func_0015E938(g_sw, 4, x->xD4, p);
         break;
     }
     if (p->px->x8 == 0)

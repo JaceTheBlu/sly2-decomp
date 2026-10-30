@@ -4,7 +4,7 @@ extern M2C_UNK D_0027A10C;
 extern M2C_UNK D_0027A1D8;
 extern M2C_UNK D_002BAAE8;
 extern f32 D_002DDED0;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 extern f32 *D_003E0E80;
 extern M2C_UNK D_003E1144;
 extern M2C_UNK D_004520A8;

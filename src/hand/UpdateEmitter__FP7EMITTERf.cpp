@@ -3,7 +3,7 @@ struct ALO;
 struct CLOCK { float t; float dt; };
 extern CLOCK D_002DDED0;
 struct CM { char pad[0x1C]; float g1C; char pad2[0x90 - 0x20]; qword pos; };
-extern CM D_002DDF40;
+extern CM g_cm;
 struct EMITO { void *palo; int f4; };
 struct EMITB { int pad0; int f4; EMITO *pemito; };
 struct RIPG { char pad[0x15C]; int dl; };
@@ -58,18 +58,18 @@ void UpdateEmitter(EMITTER *p, float dt)
                 continue;
             if (!pe->x10)
                 goto LActive;
-            float r = pe->g38 * D_002DDF40.g1C;
+            float r = pe->g38 * g_cm.g1C;
             qword pos = func_001A62E8(pe);
             r = r * r;
-            if (FLess(Dist2(pos, D_002DDF40.pos), r))
+            if (FLess(Dist2(pos, g_cm.pos), r))
                 goto LActive;
         }
         return;
     } else if (p->x10) {
-        float r = p->g38 * D_002DDF40.g1C;
+        float r = p->g38 * g_cm.g1C;
         qword pos = func_001A62E8(p);
         r = r * r;
-        if (FLess(r, Dist2(pos, D_002DDF40.pos)))
+        if (FLess(r, Dist2(pos, g_cm.pos)))
             return;
     }
 LActive:

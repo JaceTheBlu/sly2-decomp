@@ -2,7 +2,7 @@ typedef int qword __attribute__((mode(TI)));
 struct CLOCK { float t; float dt; };
 extern struct CLOCK D_002DDED0;
 struct G;
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern qword D_002A2DD0;
 extern float D_002A5584;
 extern void *D_002F7900;
@@ -56,11 +56,11 @@ void func_00179328(struct S *p) {
     }
     func_0020AB68(p->p10, 0, 0, D_002A2DD0);
     if (p->n30 == 0) func_001EEFC0(p);
-    func_00156C80(&D_003DD490, 1, func_001A62E8(p->p10), p->p10, p->p10->a35C);
+    func_00156C80(&g_sw, 1, func_001A62E8(p->p10), p->p10, p->p10->a35C);
     p->fB0 = p->fB4 = D_002A5584;
     p->p10->nF04 = 0;
     if (p->p10->n334) {
-        void *o = func_001C4840(&D_003DD490);
+        void *o = func_001C4840(&g_sw);
         if (o && func_001A6AF8(p->n50, o) && (o == D_002F7900 || (p->n5C & 0x40000))) {
             func_00187E28(D_002DFC00, 3, 1.50000005960464477539e-01f);
             p->fB0 = D_002DDED0.t + 5.00000044703483581543e-02f;

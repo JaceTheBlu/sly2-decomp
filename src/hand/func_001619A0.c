@@ -1,6 +1,6 @@
 struct X { char pad[0x7C]; void *f7c; char pad2[0x88 - 0x80]; struct X *pNext; };
 struct G { char pad[0x3B0C]; void *f3b0c; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern struct X *D_003E0F90;
 extern char D_002DE578[];
 void func_00161A58(void *pv, int n, void *p);
@@ -13,9 +13,9 @@ void func_001619A0(void *pv, int n, void *p)
     func_00161A58(pv, n, p);
     func_00154A90(D_002DE578, n, p);
     for (px = D_003E0F90; px; px = px->pNext) {
-        if (px->f7c == D_003DD490.f3b0c)
+        if (px->f7c == g_sw.f3b0c)
             func_00165170(px, n, p);
     }
-    if (D_003DD490.f3b0c)
-        func_00162BB8(D_003DD490.f3b0c, n, p);
+    if (g_sw.f3b0c)
+        func_00162BB8(g_sw.f3b0c, n, p);
 }

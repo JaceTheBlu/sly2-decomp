@@ -21,7 +21,7 @@ struct P {
 };
 class FRAME;
 extern "C" {
-extern char D_003DD490[];
+extern char g_sw[];
 extern qword D_002A2DA0, D_002A2DC0, D_002A2DD0, D_002A2DE0;
 extern float D_002C0D74, D_002C0D78;
 void func_001AE478(FRAME *);
@@ -110,7 +110,7 @@ extern "C" void func_001C55E0(P *p)
     posMax = QwAddScaled(posMax, D_002A2DE0, vec.qw);
     int cpart;
     SOPART **appart;
-    func_0020FAA0(D_003DD490, posMin, posMax, func_001C5570, 0, &cpart, &appart);
+    func_0020FAA0(g_sw, posMin, posMax, func_001C5570, 0, &cpart, &appart);
     U normal;
     CMCONTACT acontact[8];
     for (int i = 0; i < cpart; i++) {

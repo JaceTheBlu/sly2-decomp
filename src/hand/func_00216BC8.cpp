@@ -10,7 +10,7 @@ typedef struct {char pad[0x3BE8];void *font;} WORLD;
 typedef struct {int id;void (*get)(char *,void *,void *);void *context;} STRINGGEN;
 typedef struct {char pad10[0x10];int state;float time;int pad18;float finish;} SCROLL;
 typedef struct {float t,dt;} CLOCK;
-extern WORLD D_003DD490;
+extern WORLD g_sw;
 extern STRINGGEN D_003E1C88[];
 extern const char D_002A8B80[],D_002A8B88[];
 extern char D_004435F0[];
@@ -38,7 +38,7 @@ extern "C" void func_00216BC8(S *p,T *t,DATA *data,int unused){
     RT rt;
     DATA style;
     char marquee[2*sizeof(text)+3*5];
-    if(!D_003DD490.font)return;
+    if(!g_sw.font)return;
     text[0]=0;
     if(p->kind==1){
         uint i;
@@ -46,7 +46,7 @@ extern "C" void func_00216BC8(S *p,T *t,DATA *data,int unused){
         if(i>=108)*(long *)text=*(const long *)D_002A8B80;
         else D_003E1C88[i].get(text,D_003E1C88[i].context,p->owner);
     }else if(p->kind==0){
-        func_0021ED58(text,(const char *)func_0013E368(&D_003DD490,p->id));
+        func_0021ED58(text,(const char *)func_0013E368(&g_sw,p->id));
     }
     if(p->kind==1 && p->id==0x2EF){
         int lines=1,ch,visible;

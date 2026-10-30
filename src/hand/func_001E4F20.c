@@ -1,7 +1,7 @@
 struct VTE { short d; short pad; void (*pfn)(void *); };
 struct O { int pad[3]; struct VTE *vt; char pad2[0x28 - 0x10]; unsigned long flPad : 60; unsigned int fBit60 : 1; char pad3[0xE0 - 0x30]; void *pvE0; };
 struct G { int a; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 struct P { char pad[0x24]; void *p24; char pad2[0x6C - 0x28]; struct O *po; int fActive; };
 void func_00221268(struct O *po, int n);
 int func_00132B10(void *p, int cid);
@@ -18,6 +18,6 @@ void func_001E4F20(struct P *p, struct O *po)
     p->po = po;
     p->fActive = !po->fBit60;
     if (p->fActive) po->vt[8].pfn((char *)po + po->vt[8].d);
-    po->pvE0 = (p->p24 && func_00132B10(p->p24, 0x30)) ? p->p24 : func_001C4A48(&D_003DD490);
+    po->pvE0 = (p->p24 && func_00132B10(p->p24, 0x30)) ? p->p24 : func_001C4A48(&g_sw);
     func_00221268(po, 1);
 }

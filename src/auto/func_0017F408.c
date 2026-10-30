@@ -1,7 +1,7 @@
 #include "m2c_prelude.h"
 s32 func_00132B10(s32, M2C_UNK);                    /* extern */
 s32 func_0015E938(M2C_UNK *, M2C_UNK, s32, s32);    /* extern */
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 
 void func_0017F408(s32 arg0, s32 arg1, void *arg2) {
     s32 temp_a2;
@@ -15,7 +15,7 @@ void func_0017F408(s32 arg0, s32 arg1, void *arg2) {
         do {
             temp_a2 = M2C_FIELD(var_s1, s32 *, 0);
             if (temp_a2 != -1) {
-                temp_v0 = func_0015E938(&D_003DD490, 4, temp_a2, arg0);
+                temp_v0 = func_0015E938(&g_sw, 4, temp_a2, arg0);
                 if (temp_v0 != 0) {
                     if (func_00132B10(temp_v0, 0x6D) != 0) {
                         M2C_FIELD(var_s1, s32 *, 4) = temp_v0;

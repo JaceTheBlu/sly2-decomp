@@ -1,5 +1,5 @@
 struct A { int pad[4]; int n10; int n14; float g18; char pad2[0x40 - 0x1C]; int n40; char pad3[0xC0 - 0x44]; void *pC0; void *pC4; };
-extern char D_002DDF40[];
+extern char g_cm[];
 void func_001FB098(void *p, float g);
 void func_00258040(void **pp, int n);
 void func_0014D8C0(void *p);
@@ -19,6 +19,6 @@ void func_00151130(struct A *a, int n, void *b)
     a->n14 = 0;
     a->n40 = 0;
     a->g18 = -1.0f;
-    func_0014D8C0(D_002DDF40);
+    func_0014D8C0(g_cm);
     func_0014FCE8(a, n, b);
 }

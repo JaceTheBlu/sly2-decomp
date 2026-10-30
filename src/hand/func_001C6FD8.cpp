@@ -46,7 +46,7 @@ struct LO : BASIC {
     virtual void V73(); virtual void V74(); virtual void V75();
     virtual void SetState(int state);                  // 76
 };
-extern char D_003DD490[];
+extern char g_sw[];
 extern qword D_002A2DA0, D_002A2DC0, D_002A2DE0, D_002C0D60;
 extern float D_002A775C, D_002A7760, D_002C0D70;
 extern float D_002C0E80, D_002C0E84, D_002C0E88, D_002C0E8C, D_002C0E90, D_002C0E94;
@@ -172,7 +172,7 @@ extern "C" void func_001C6FD8(void *pworld, int kind, qword posSeed, void *pvUnu
     posMax.q = AddScaled(posSnap.q, VU_FLOAT(r), D_002A2DE0);
     int ccand;
     CANDIDATE **apcand;
-    func_0020FAA0(D_003DD490, posMin.q, posMax.q, func_001C5570, 0, &ccand, &apcand);
+    func_0020FAA0(g_sw, posMin.q, posMax.q, func_001C5570, 0, &ccand, &apcand);
     int cLaunched = 0;
     float gAngle = func_0011D448(-3.1415927f, 3.1415927f);
     float gRadius = D_002C0E8C;

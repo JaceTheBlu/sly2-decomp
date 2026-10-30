@@ -18,7 +18,7 @@ struct CLOCK { float t; float dt; };
 struct GS { char pad[0x4758]; float g4758; };
 struct GG { char pad[0x2010]; void *p2010; };
 extern struct CLOCK D_002DDED0;
-extern struct GS D_003DD490;
+extern struct GS g_sw;
 extern DL D_003E148C;
 extern struct GG *D_002E1E40;
 extern float D_002BCC94;
@@ -151,10 +151,10 @@ void func_00140F90(void *p, int msg, void *pv)
                     func_00141CD0(p);
                     switch (F(int, p, 0x9BC)) {
                     case 0xE:
-                        func_0019F170(&D_003DD490, 1);
+                        func_0019F170(&g_sw, 1);
                         break;
                     case 0x15:
-                        func_0019F220(&D_003DD490, 0x15);
+                        func_0019F220(&g_sw, 0x15);
                         break;
                     case 0x17: {
                         DLI dli;
@@ -168,7 +168,7 @@ void func_00140F90(void *p, int msg, void *pv)
                                 func_00156780(po2);
                         }
                         D_002DD2FC = dli.m_pdliNext;
-                        D_003DD490.g4758 = D_002DDED0.t + D_002BCC94;
+                        g_sw.g4758 = D_002DDED0.t + D_002BCC94;
                         break;
                     }
                     }

@@ -7,7 +7,7 @@ struct P {char padC[0xC];VT *vt;char pad10[0x48];OWNER *position,*rotation;char 
 struct G {char pad3D58[0x3D58];int stamp;};
 struct CLOCK {float time,dt;};
 extern CLOCK D_002DDED0;
-extern G D_003DD490;
+extern G g_sw;
 extern "C" void func_00230598(P *,OWNER *);
 extern "C" qword func_0022FCC8(void *,OWNER *,qword);
 extern "C" int func_0011D4D0(float,float,float);
@@ -79,7 +79,7 @@ extern "C" void func_001F9E70(P *input)
                 qword k=Scalar(halfDt,&scalar);
                 func_00256D18(positionAddress,AddScaled(point,delta,k));
                 position->position.f[3]=1.0f;
-                position->stamp=++D_003DD490.stamp;
+                position->stamp=++g_sw.stamp;
             }
             incrementNear=0;NearVector(&incrementNear,D_002A2DD0,turn);
             if(!incrementNear){
@@ -89,7 +89,7 @@ extern "C" void func_001F9E70(P *input)
                 rotation->matrix.r[1].i[3]=0;
                 rotation->matrix.r[2].i[3]=0;
                 rotation->matrix.r[0].i[3]=0;
-                rotation->stamp=++D_003DD490.stamp;
+                rotation->stamp=++g_sw.stamp;
             }
             p->vt[18].fn((char *)p+p->vt[18].delta);
         }

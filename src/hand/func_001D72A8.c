@@ -7,7 +7,7 @@ typedef struct OBJ {
     int c;
     ENT ae[8];
 } OBJ;
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern char D_003DA150[];
 extern char D_002DE2E0[];
 extern int D_002DFBC0;
@@ -58,7 +58,7 @@ void func_001D72A8(OBJ *p)
                 func_001DC260(D_003DA150, 0);
                 break;
             }
-            q = func_0015E938(&D_003DD490, 4, pe->n, p);
+            q = func_0015E938(&g_sw, 4, pe->n, p);
             if (q) {
                 func_001DFD58(q, 0);
                 return;

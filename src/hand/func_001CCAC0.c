@@ -11,7 +11,7 @@ struct S {
 struct CLOCK { float t; float dt; };
 extern struct CLOCK D_002DDED0;
 extern struct P8 D_002A77C8;
-extern char D_003DD490[];
+extern char g_sw[];
 void func_0012E460(int *p);
 int func_00132B10(struct O *p, int n);
 qword func_001A62E8(struct W *p);
@@ -52,7 +52,7 @@ void func_001CCAC0(struct S *p, int n)
             p->x80 = func_0012DC18(p->x0, p->x38, 5, 7, 3, func_0022CA18(p->x38, p->x38));
         p->x1C = p->x8 = 0.5f;
         func_001384C0(p->x30);
-        func_00149AB8(D_003DD490, p->x0, D_002A77C8, p);
+        func_00149AB8(g_sw, p->x0, D_002A77C8, p);
         break;
     case -1:
         func_0012E460(&p->x80);

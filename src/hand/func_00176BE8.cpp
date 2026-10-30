@@ -31,7 +31,7 @@ struct WORK{STATE next;U scalar,own,other,copy,delta;};
 struct OFFSETINPUTS{qword own,other,copy;};
 extern "C"{
 extern OBJECT*D_002F7900;
-extern void*D_003E14BC;extern void*D_003E14B0;extern void*D_003E14B8;struct GAMESTATE{char pad[0x4028];void*context;};extern GAMESTATE D_003DD490;
+extern void*D_003E14BC;extern void*D_003E14B0;extern void*D_003E14B8;struct GAMESTATE{char pad[0x4028];void*context;};extern GAMESTATE g_sw;
 extern CLOCK D_002DDED0;extern float D_002BE620;
 void*func_002333B4(void*,int,unsigned);
 void func_00176750(S*,STATE*);
@@ -110,7 +110,7 @@ extern "C" int func_00176BE8(S*p,int event,MSG*msg){
  if(msg->data.kind==0x200000&&(msg->data.flags&8)){
   if(func_0020A378(p->actor,msg->data.object,func_00207A20(6))){
    {int reserve=p->actor->reserve+msg->data.amount;int limited=4<reserve?reserve:5;p->actor->reserve=limited;}
-   (void)func_00156698(D_003DD490.context,func_001A62E8(p->actor),p->actor);
+   (void)func_00156698(g_sw.context,func_001A62E8(p->actor),p->actor);
    Clear(&w.next);w.next.kind=7;w.next.msg.data.object=msg->data.object;func_00176750(p,&w.next);goto finish;
   }
  }

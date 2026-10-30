@@ -1,7 +1,7 @@
 struct CHK { int a[16]; };
 struct X { int flags; struct CHK chk; int a; int b; };
 struct M { char pad[0x3C40]; struct CHK chk; };
-extern struct M D_003DD490;
+extern struct M g_sw;
 extern struct CHK D_003E10D0;
 struct S { int k; int x4; struct X x; void *po; int n; };
 void func_0022B090(struct S *p, int k);
@@ -30,9 +30,9 @@ void func_0022B220(struct S *p, struct X *px, int n, int f)
         px->flags |= 2;
     else
         px->flags &= ~2;
-    p->po = func_0015E938(&D_003DD490, 0x405, n, 0);
+    p->po = func_0015E938(&g_sw, 0x405, n, 0);
     if (!p->po) {
-        func_0020DF80(&D_003DD490, px);
+        func_0020DF80(&g_sw, px);
         return;
     }
     p->x4 = 1;

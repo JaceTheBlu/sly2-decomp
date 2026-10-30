@@ -7,7 +7,7 @@ struct S {
     char p1[0x210 - 0x154]; struct LO *x210;
 };
 struct M { int n; struct S *p; int pad[14]; };
-extern char D_003DD490[];
+extern char g_sw[];
 void *func_001FBB90(int n);
 void func_001FB2F8(void *p, int n);
 qword func_001A62E8(struct S *p);
@@ -34,7 +34,7 @@ void func_001C7EE8(struct S *p, int n)
         } else {
             func_001FB2F8(func_001FBB90(0x29), 0);
         }
-        pg = D_003DD490;
+        pg = g_sw;
         n = 2;
         qv = func_001A62E8(p);
         func_00156B98(pg, 0, qv, p);

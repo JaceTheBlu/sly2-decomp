@@ -44,7 +44,7 @@ struct JTTHROW {
 // What the line test reports (the hit point first)
 struct HIT {V pos;char unk10[0x50];};
 struct CLOCK {float t,dt;};
-extern SW D_003DD490;
+extern SW g_sw;
 extern CLOCK D_002DDED0;
 extern CLQ D_002C40F0;                         // the launch elevation over the aim distance
 extern float D_002C40E4;                       // 1.35: tPredict scale with power-up 0x24
@@ -121,7 +121,7 @@ extern "C" void func_0021FB70(JTTHROW *pjtthrow,int fUpdateBlends)
  posMax=QwMax(posLaunch,posMax);
  posMin=QwMin(posLaunch,posMin);
  int cso;SO **apso;
- func_0020FAA0(&D_003DD490,posMin,posMax,func_0021FB18,pjtthrow->ploCarried->pvFilter,&cso,&apso);
+ func_0020FAA0(&g_sw,posMin,posMax,func_0021FB18,pjtthrow->ploCarried->pvFilter,&cso,&apso);
  pjtthrow->vLaunch.q=vLaunch;
  float dt=t*0.034482758f;
  V apos[30];

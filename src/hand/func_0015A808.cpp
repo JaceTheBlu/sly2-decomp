@@ -7,7 +7,7 @@ struct VU_VECTOR { qword q; };
 static inline VU_VECTOR V(qword q) { VU_VECTOR v; v.q = q; return v; }
 struct MATRIX3 { qword r[3]; };
 struct CM { char pad[0x60]; MATRIX3 mat; };
-extern CM D_002DDF40;
+extern CM g_cm;
 extern qword D_002A2DA0;
 struct TRI { int aipos[3]; float sArea; };
 struct EMITMESH { int cpos; qword *apos; int ctri; TRI *atri; qword *anormal; float sArea; };
@@ -182,9 +182,9 @@ extern "C" void func_0015A808(EMITB *p, int i, int c, qword *ppos, qword *pv)
         void *palo = p->pemito->palo;
         if (palo) {
             MATRIX3 *pm = func_001A6318(palo);
-            *pv = MulTMat(*pm, MulCam(&D_002DDF40, pep->v40));
+            *pv = MulTMat(*pm, MulCam(&g_cm, pep->v40));
         } else {
-            *pv = MulCam(&D_002DDF40, pep->v40);
+            *pv = MulCam(&g_cm, pep->v40);
         }
         break;
     }

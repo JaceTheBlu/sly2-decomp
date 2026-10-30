@@ -13,7 +13,7 @@ struct P {int state;char pad4[0xC];qword origin;char pad20[0x10];int count;ACTOR
 struct CLOCK {float time,dt;};
 struct PLAYER {char pad0[0x150];void *control;};
 struct VU_FLOAT {qword qw;};
-extern CM D_002DDF40;
+extern CM g_cm;
 extern CLOCK D_002DDED0;
 extern PLAYER *D_002E1E40;
 extern char D_002DE2E0[];
@@ -71,9 +71,9 @@ extern "C" void func_00202D38(P *p)
     if(p->actor){
         qword world=func_001A62E8(p->actor);
         VU_FLOAT offset=VuFloatFromMemWord(*(int *)&p->actor->headOffset);
-        qword head=QwAdd(world,QwScaleX(QwUp(&D_002DDF40.mat),offset.qw));
-        qword base=func_0014F308(&D_002DDF40,world);
-        qword top=func_0014F308(&D_002DDF40,head);
+        qword head=QwAdd(world,QwScaleX(QwUp(&g_cm.mat),offset.qw));
+        qword base=func_0014F308(&g_cm,world);
+        qword top=func_0014F308(&g_cm,head);
         VU_FLOAT screen=ScreenFromProjected(base);
         float distance=GXOfQw(QwLengthXY(QwSub(screen.qw,p->origin)));
         VU_FLOAT screenTop=ScreenFromProjected(top);

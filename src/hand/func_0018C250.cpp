@@ -1,6 +1,6 @@
 // func_0018C250: ported from Lilly's personal Sly 2 decomp (src/P2/jtstate.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002BF358 (D_002BF358), D_002BF35C (D_002BF35C), D_002BF3E0 (D_002BF3E0), D_002BF3E4 (D_002BF3E4), D_002BF3E8 (D_002BF3E8), D_002DDED0 (g_clock), D_002DEB30 (g_game), D_002A2DD0 (g_qwZero), D_003DD490 (g_sw)
+// Globals: D_002BF358 (D_002BF358), D_002BF35C (D_002BF35C), D_002BF3E0 (D_002BF3E0), D_002BF3E4 (D_002BF3E4), D_002BF3E8 (D_002BF3E8), D_002DDED0 (g_clock), D_002DEB30 (g_game), D_002A2DD0 (g_qwZero), g_sw (g_sw)
 // 0x0018C250 SetJtJts
 typedef unsigned char    uint8_t;
 typedef unsigned short   uint16_t;
@@ -454,7 +454,7 @@ struct GRABSPOT : public GRABSPOTDATA
     virtual int FGetWrapRange(float *pasRange);
 };
 struct PO;
-extern SW D_003DD490;
+extern SW g_sw;
 struct XA
 {
       uint32_t   _pad_409    [ 1 ] ;
@@ -1808,7 +1808,7 @@ void SetJtJts(JT *pjt, JTS jts, JTBS jtbs)
                 if (pjt->janim.pxaHang != 0)
                 {
                     RemoveSoXa(pjt->janim.pxaHang->pso, pjt->janim.pxaHang);
-                    FreeSwXaList(&D_003DD490, pjt->janim.pxaHang);
+                    FreeSwXaList(&g_sw, pjt->janim.pxaHang);
                     pjt->janim.pxaHang = 0;
                 }
                 SetPlayerTn(pjt, 0);

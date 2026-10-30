@@ -1,7 +1,7 @@
 typedef unsigned long ulong;
 struct L { char pad[0x24]; struct L *next; char pad2[0x64 - 0x28]; struct L *first; char pad3[0x148 - 0x68]; ulong lo : 35; ulong b35 : 1; ulong hi : 28; };
 struct G { char pad[0x3E5C]; int f; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 void func_001D6378(struct L *);
 void func_001D6310(struct L *);
 int func_00132B10(void *, int);
@@ -10,7 +10,7 @@ void func_001F8668(struct L *p, long f)
     struct L *q;
     if (f != p->b35) {
         p->b35 = f;
-        if (D_003DD490.f) {
+        if (g_sw.f) {
             if (f) func_001D6378(p);
             else func_001D6310(p);
         }

@@ -4,7 +4,7 @@ extern DLI *D_002DD2FC;
 struct RIP;
 struct RIPG { char pad[0x10]; int x10; char p1[0xEC - 0x14]; void *xEC; char p2[0x15C - 0xF0]; DL dl; };
 struct SW { char pad[0x403C]; char pool[0x30]; RIPG *x406C; };
-extern SW D_003DD490;
+extern SW g_sw;
 extern "C" {
 void func_001CE980(RIP *prip);
 void func_001F2D48(RIPG *p);
@@ -36,7 +36,7 @@ void OnRipgRemove(RIPG *pripg)
     SW *psw;
     InitDli(&dli, &pripg->dl);
     while ((prip = (RIP *)PvNextDli(&dli)) != 0) func_001CE980(prip);
-    psw = &D_003DD490;
+    psw = &g_sw;
     if (pripg == psw->x406C) psw->x406C = 0;
     func_001F2D48(pripg);
     if (pripg->xEC) {

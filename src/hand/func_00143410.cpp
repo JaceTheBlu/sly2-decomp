@@ -21,7 +21,7 @@ struct AREQ { int cb; int cbAlign; AREQ(int c, int a) { cb = c; cbAlign = a; } }
 struct G { char pad[0x3A18]; TRIE trie; };
 extern "C" {
 extern TRIE D_003E0EA8;
-extern G D_003DD490;
+extern G g_sw;
 extern char D_003D4A60[];
 extern char D_002A4D88[];
 extern char D_002A4D90[];
@@ -45,7 +45,7 @@ extern "C" KEY *func_00143410(int id)
     KEY key;
     OUT out;
     OUT out2;
-    TRIE *pt = &D_003DD490.trie;
+    TRIE *pt = &g_sw.trie;
     key.c = 0;
     key.a = as;
     as[0] = func_001D8720(pt->x8, D_002A4D88);
@@ -56,13 +56,13 @@ extern "C" KEY *func_00143410(int id)
     func_001D7DA0(pt, &key, &out);
     ENT *pe1;
     for (int n = out.pe->iChild; n != 0; n = pe1->iSibling) {
-        pe1 = &D_003DD490.trie.ae[n];
+        pe1 = &g_sw.trie.ae[n];
         key.c = 3;
         as[1] = pe1->ch;
-        if (func_001D7DA0(&D_003DD490.trie, &key, &out2)) {
+        if (func_001D7DA0(&g_sw.trie, &key, &out2)) {
             ENT *pe2;
             for (int n2 = out2.pe->iChild; n2 != 0; n2 = pe2->iSibling) {
-                pe2 = &D_003DD490.trie.ae[n2];
+                pe2 = &g_sw.trie.ae[n2];
                 as[3] = pe2->ch;
                 CRef ref;
                 for (int i = 0; i < 15; i++) {

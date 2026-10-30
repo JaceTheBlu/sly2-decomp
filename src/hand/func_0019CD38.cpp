@@ -1,6 +1,6 @@
 // func_0019CD38: ported from Lilly's personal Sly 2 decomp (src/P2/jtmode.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002DDED0 (g_clock), D_002DDF40 (g_cm), D_002A2DD0 (g_qwZero), D_003DD040 (g_sndmgr), D_003DD490 (g_sw)
+// Globals: D_002DDED0 (g_clock), g_cm (g_cm), D_002A2DD0 (g_qwZero), g_sndmgr (g_sndmgr), g_sw (g_sw)
 // 0x0019CD38 SetJtModeState__FP6JTMODEi  (our name)
 // Leaving a state: from off (-1) the mode takes hold of the hero's own animation (held at speed 0; kind 1 also counts a no-pause request in the world); from running (1) the
 // camera policy is taken off the camera's list (kind 1 also lets the held object go), the camera cuts, the sound buses return to full volume and the hero
@@ -633,13 +633,13 @@ struct CM : public CMBASE
       float rUnk620;
       float rUnk624;
 };
-extern CM D_002DDF40;
+extern CM g_cm;
 void CutCm(CM *pcm);
 void PushHeroCameraMode(CM *pcm, int nPriority, void *pvMode, int nUnk, int nUnk2);
 extern "C" void PopHeroCameraMode(CM *pcm, int grf, int nPriority, void *pvMode, void *pvHero, void *pvOwner);
 struct STEPPLAYER;
 struct PO;
-extern SW D_003DD490;
+extern SW g_sw;
 void IncrementSwNoPause(SW *psw);
 void DecrementSwNoPause(SW *psw);
 struct RAW8
@@ -1491,7 +1491,7 @@ void func_0020F1A8(SW *psw);
 extern "C" {
 void func_001F5720(SO *pso, int fOn);
 }
-extern SNDMGR D_003DD040;
+extern SNDMGR g_sndmgr;
 static inline void ClearXyz(VECTOR *pvec)
 {
     pvec->z = 0.0f;
@@ -1510,10 +1510,10 @@ void SetJtModeState(JTMODE *pjtmode, int nState)
             switch (pjtmode->nKind)
             {
                 case 0:
-                    PopHeroCameraMode(&D_002DDF40, 0xF, 7, &D_002DDF40.cplook, pjtmode->pstepplayer, 0);
+                    PopHeroCameraMode(&g_cm, 0xF, 7, &g_cm.cplook, pjtmode->pstepplayer, 0);
                     break;
                 case 1:
-                    PopHeroCameraMode(&D_002DDF40, 0xF, 8, &D_002DDF40.cpzoom, pjtmode->pstepplayer, 0);
+                    PopHeroCameraMode(&g_cm, 0xF, 8, &g_cm.cpzoom, pjtmode->pstepplayer, 0);
                     {
                         STEP *pstep = pjtmode->pstepOther;
                         if (pstep)
@@ -1525,12 +1525,12 @@ void SetJtModeState(JTMODE *pjtmode, int nState)
                     pjtmode->pstepplayer->VUnk83(0x3F, 0);
                     break;
                 case 2:
-                    PopHeroCameraMode(&D_002DDF40, 0xF, 7, &D_002DDF40.cplook, pjtmode->pstepOther, 0);
+                    PopHeroCameraMode(&g_cm, 0xF, 7, &g_cm.cplook, pjtmode->pstepOther, 0);
                     break;
             }
-            CutCm(&D_002DDF40);
-            SetSoundBusVolume(&D_003DD040, 0, 1.0f, 3);
-            SetSoundBusVolume(&D_003DD040, 1, 1.0f, 3);
+            CutCm(&g_cm);
+            SetSoundBusVolume(&g_sndmgr, 0, 1.0f, 3);
+            SetSoundBusVolume(&g_sndmgr, 1, 1.0f, 3);
             if (pjtmode->nKind != 2)
                 pjtmode->pstepplayer->VUnk86(0);
             pjtmode->nState = nState;
@@ -1539,8 +1539,8 @@ void SetJtModeState(JTMODE *pjtmode, int nState)
         {
             if (pjtmode->nKind == 1)
             {
-                func_0020F198(&D_003DD490);
-                IncrementSwNoPause(&D_003DD490);
+                func_0020F198(&g_sw);
+                IncrementSwNoPause(&g_sw);
             }
             STEPPLAYER *pstepplayer = pjtmode->pstepplayer;
             if (pstepplayer->pasegaUnk1030)
@@ -1570,13 +1570,13 @@ void SetJtModeState(JTMODE *pjtmode, int nState)
             switch (pjtmode->nKind)
             {
                 case 0:
-                    PushHeroCameraMode(&D_002DDF40, 7, &D_002DDF40.cplook, (int)pjtmode->pstepplayer, 0);
-                    SetStepRadTarget(pjtmode->pstepplayer, *(float *)((char *)&D_002DDF40 + 0x460));
+                    PushHeroCameraMode(&g_cm, 7, &g_cm.cplook, (int)pjtmode->pstepplayer, 0);
+                    SetStepRadTarget(pjtmode->pstepplayer, *(float *)((char *)&g_cm + 0x460));
                     pjtmode->hud.SetState(0);
                     break;
                 case 1:
-                    PushHeroCameraMode(&D_002DDF40, 8, &D_002DDF40.cpzoom, (int)pjtmode->pstepplayer, 0);
-                    SetStepRadTarget(pjtmode->pstepplayer, *(float *)((char *)&D_002DDF40 + 0x5C4));
+                    PushHeroCameraMode(&g_cm, 8, &g_cm.cpzoom, (int)pjtmode->pstepplayer, 0);
+                    SetStepRadTarget(pjtmode->pstepplayer, *(float *)((char *)&g_cm + 0x5C4));
                     {
                         STEP *pstep = pjtmode->pstepOther;
                         if (pstep)
@@ -1593,16 +1593,16 @@ void SetJtModeState(JTMODE *pjtmode, int nState)
                     pjtmode->pstepplayer->VUnk82(0x3F, 0);
                     break;
                 case 2:
-                    PushHeroCameraMode(&D_002DDF40, 7, &D_002DDF40.cplook, (int)pjtmode->pstepOther, 0);
+                    PushHeroCameraMode(&g_cm, 7, &g_cm.cplook, (int)pjtmode->pstepOther, 0);
                     pjtmode->hud.SetState(0);
                     break;
             }
             ClearXyz(&pjtmode->pstepplayer->vUnk190);
             pjtmode->pstepplayer->SetVelocity(D_002A2DD0);
             pjtmode->pstepplayer->SetAngularVelocity(D_002A2DD0);
-            CutCm(&D_002DDF40);
-            SetSoundBusVolume(&D_003DD040, 0, 0.6f, 3);
-            SetSoundBusVolume(&D_003DD040, 1, 0.6f, 3);
+            CutCm(&g_cm);
+            SetSoundBusVolume(&g_sndmgr, 0, 0.6f, 3);
+            SetSoundBusVolume(&g_sndmgr, 1, 0.6f, 3);
             if (pjtmode->nKind != 2)
                 pjtmode->pstepplayer->VUnk86(1);
             break;
@@ -1619,8 +1619,8 @@ void SetJtModeState(JTMODE *pjtmode, int nState)
                     break;
                 case 1:
                     pjtmode->hud.SetState(-1);
-                    func_0020F1A8(&D_003DD490);
-                    DecrementSwNoPause(&D_003DD490);
+                    func_0020F1A8(&g_sw);
+                    DecrementSwNoPause(&g_sw);
                     break;
             }
             if (pjtmode->pasegaHold)

@@ -3,7 +3,7 @@ typedef int qword __attribute__((mode(TI)));
 struct VT { short d; short pad; void *pfn; };
 struct CLOCK { float t; float dt; };
 extern struct CLOCK D_002DDED0;
-extern char D_003DD490[];
+extern char g_sw[];
 extern qword D_002A2DC0;
 union WORD{int bits;float value;};extern union WORD D_002C09A8;
 struct SIDE { int x0; int x4; void *x8; void *xC; qword v10; char pad[0x30 - 0x20]; qword v30; };
@@ -77,7 +77,7 @@ void func_001B6DA8(struct P *p, int s)
     case 0:
         break;
     case -1:
-        func_001A7E10(D_003DD490, p->plink);
+        func_001A7E10(g_sw, p->plink);
         p->plink = 0;
         break;
     case 1: {
@@ -119,7 +119,7 @@ void func_001B6DA8(struct P *p, int s)
                 (void)func_001F7598(&msg);
             }
         }
-        func_001A7E10(D_003DD490, p->plink);
+        func_001A7E10(g_sw, p->plink);
         p->plink = 0;
         {
             float *pg = func_0012F938(p->p1030->x14, 0x1A5);

@@ -9,7 +9,7 @@ extern struct { float t; float dt; } D_002DDED0;
 extern qword D_002A2DE0;
 extern qword D_002C3D30;
 extern float D_002A8698;
-extern char D_003DD490[];
+extern char g_sw[];
 int func_00206EB0(struct S *p, int k);
 void func_0012D108(void *p, qword q);
 void func_00208728(struct S *p, int n);
@@ -54,7 +54,7 @@ void func_00207030(struct S *p, int k)
     }
     case 0x15: {
         struct Z *z = func_00205458(p, 0x9C);
-        if (z && z->k30 == 0x12 && z->n40 == func_001C4840(D_003DD490) && z->f44 == D_002A8698)
+        if (z && z->k30 == 0x12 && z->n40 == func_001C4840(g_sw) && z->f44 == D_002A8698)
             func_00177BA0(z);
         break;
     }

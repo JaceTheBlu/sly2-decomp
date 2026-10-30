@@ -14,7 +14,7 @@ extern "C" {
 extern struct CLOCK D_002DDED0;
 extern qword D_002A2DD0;
 extern qword D_002BE8F0;
-extern char D_003DD490[];
+extern char g_sw[];
 void func_001A58D0(struct O *p, int a, int b);
 void func_002303A0(struct O *p, struct X *px, int n);
 void func_001F5720(struct O *p, int n);
@@ -49,7 +49,7 @@ void func_00183B80(struct O *p, int n)
             func_001F68A8(p, 0);
         }
         { struct VTE *e = &p->pvt[3]; ((void (*)(void *, int, int, int, int, int))e->pfn)((char *)p + e->d, 6, 0, 0, 0, 0); }
-        func_00147F40(D_003DD490);
+        func_00147F40(g_sw);
         p->p190 = 0;
     }
     if (n == 2) {

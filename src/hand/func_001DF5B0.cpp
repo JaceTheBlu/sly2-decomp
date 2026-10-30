@@ -29,7 +29,7 @@ struct P {
     void *line, *stretch; int count; ENTRY *entries; ENDPOINT endpoints[2];
 };
 struct CAMERA { char pad0[0x90]; U position; };
-extern CAMERA D_002DDF40;
+extern CAMERA g_cm;
 extern qword D_002A2DC0;
 struct VU_FLOAT {
     qword q;
@@ -85,7 +85,7 @@ extern "C" void func_001DF5B0(P *p)
     func_001F3C70(p);
     BOUND *bound = p->bound;
     if (!bound) return;
-    CAMERA *cam = &D_002DDF40;
+    CAMERA *cam = &g_cm;
     qword boundPosition = bound->position.q;
     VU_FLOAT radius(&bound->radius, 0);
     qword relativePosition = Subtract(boundPosition, cam->position.q);

@@ -3,9 +3,9 @@ void func_001291A8(s32, M2C_UNK *);              /* extern */
 void func_00129EC8(M2C_UNK *);                   /* extern */
 void func_0012A0B0(M2C_UNK *, M2C_UNK);          /* extern */
 extern f32 D_002DDED0;
-extern M2C_UNK D_002DDF40;
-extern M2C_UNK D_003DD040;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_cm;
+extern M2C_UNK g_sndmgr;
+extern M2C_UNK g_sw;
 extern s32 D_003E0F9C;
 extern s32 D_003E0FA0;
 extern s32 D_003E0FA4;

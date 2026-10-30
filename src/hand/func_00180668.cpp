@@ -17,7 +17,7 @@ extern float D_002BE820,D_002BE824,D_002BE828;
 extern POLY D_002BE830,D_002BE840,D_002BE860;
 extern LM D_002BE850,D_002BBB60;
 extern CLOCK D_002DDED0;
-extern char D_002DE578[],D_003DD490[];
+extern char D_002DE578[],g_sw[];
 void func_001F36E0(P*);
 int func_0017F550(P*);
 void func_00181268(P*,int);
@@ -143,7 +143,7 @@ dispatch:
   float speed=Limit(Evaluate(&p->remaining,remaining),&D_002BBB60)*Limit(Evaluate(&p->angle,turn),&D_002BBB60)*Limit(Evaluate(&D_002BE830,response),&D_002BBB60)*p->scale;
   qword force=QwScaleX(unit.q,VuFloat(speed));
   NODE*objects[64];
-  int n=func_0015E9C8(D_003DD490,0x105,0x49,0,64,objects);
+  int n=func_0015E9C8(g_sw,0x105,0x49,0,64,objects);
   for(int i=0;i<n;i++){
    NODE*object=objects[i];
    if(object!=&p->node&&object->group!=p->node.group){

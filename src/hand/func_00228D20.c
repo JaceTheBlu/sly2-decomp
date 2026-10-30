@@ -2,7 +2,7 @@ typedef unsigned long ulong;
 struct O { char pad[0x148]; long bits; };
 struct N { int x0; struct O *po; int x8; struct N *next; };
 struct G;
-extern struct G D_003DD490;
+extern struct G g_sw;
 void func_00229738(struct O *po, struct N *pn);
 void func_00229710(struct O *po, struct N *pn);
 void func_002296C0(struct G *pg, struct N *pn);
@@ -33,5 +33,5 @@ void func_00228D20(void *pv, struct N **ppn)
         }
         pn = pnNext;
     }
-    func_002296C0(&D_003DD490, pnFree);
+    func_002296C0(&g_sw, pnFree);
 }

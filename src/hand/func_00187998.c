@@ -51,10 +51,10 @@ typedef struct G { char pad[0x30C]; int x30c; int x310; void *x314; char pad318[
 typedef struct SND { float t; } SND;
 
 extern CLOCK D_002DDED0;
-extern G D_002DDF40;
+extern G g_cm;
 extern SND D_002DEB30;
 extern char D_002DDEC0[];
-extern char D_003DD490[];
+extern char g_sw[];
 
 extern void *func_002333B4(void *pv, int b, int cb);
 extern int func_002432D0(int port, int slot, unsigned char *pb);
@@ -101,7 +101,7 @@ int func_00187998(JOY *p)
 
 
         }
-        if (D_002DDF40.x30c == 0 || D_002DDF40.x314 != &D_002DDF40.x3a0) {
+        if (g_cm.x30c == 0 || g_cm.x314 != &g_cm.x3a0) {
             if (p->grfbtn & 0xF000) {
 
                 p->x = p->y = p->uDeflect = 0.0f;
@@ -135,7 +135,7 @@ int func_00187998(JOY *p)
             p->x1020 = 0;
 
             if (D_002DDED0.tReal - D_002DEB30.t > 15.0f) {
-                func_001619A0(&D_002DEB30, 0xE, func_001C4840(D_003DD490));
+                func_001619A0(&D_002DEB30, 0xE, func_001C4840(g_sw));
                 D_002DEB30.t = D_002DDED0.tReal;
             }
         } else {

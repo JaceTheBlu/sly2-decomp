@@ -45,7 +45,7 @@ extern M2C_UNK D_003D4A60;
 extern M2C_UNK D_003D9EDC;
 extern s32 D_003D9EF4;
 extern M2C_UNK D_003DA4F0;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 extern void *D_003E1060;
 extern void *D_003E106C;
 extern M2C_UNK D_003E1C20;
@@ -81,7 +81,7 @@ void func_00211148(s32 arg0, s32 arg1) {
     s32 var_a1;
     s32 var_v0;
 
-    temp_v0 = func_001C4840((s32) &D_003DD490);
+    temp_v0 = func_001C4840((s32) &g_sw);
     if ((temp_v0 != 0) && (func_00132B10(temp_v0, 0x34) != 0)) {
         temp_a0 = M2C_FIELD(temp_v0, s32 *, 0xF38);
         var_a1 = 0;

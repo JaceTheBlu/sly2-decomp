@@ -4,7 +4,7 @@ struct A { char pad[0x50]; int c; struct E *ae; char pad2[4]; char dl[1]; };
 struct C { char pad[0x18]; int x18; };
 struct S { int x0; int x4; int pad8; struct VTE *pvt; int pad10; struct A *pa; int x18; int x1C; int pad20[2]; struct E *pe28; struct E *pe2C; char pad30[0xEC - 0x30]; int xEC; };
 extern char D_003E1560[];
-extern char D_003DD490[];
+extern char g_sw[];
 extern struct VTE D_002D8C08[];
 struct S *func_0011CCC0(void *);
 void *func_002333B4(void *, int, int);
@@ -26,7 +26,7 @@ struct S *func_001E5AE0(struct A *pa, struct E *pe, struct C *pc)
     else
         p->x18 = (int)pa;
     if (((int *)pe)[4] != -1)
-        p->x1C = func_0015E938(D_003DD490, 5, ((int *)pe)[4], 0);
+        p->x1C = func_0015E938(g_sw, 5, ((int *)pe)[4], 0);
     p->pe28 = pe;
     peLast = &pa->ae[pa->c - 1];
     depth = 1;

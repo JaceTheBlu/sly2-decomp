@@ -14,7 +14,7 @@ extern float D_002DDEE0;
 extern int D_002DFBC0;
 extern char D_002DFC00[];
 extern char D_002E0D00[];
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern char D_002BD810[];
 void func_0014E920(struct CM *p, void *pv);
 void func_0014E768(struct CM *p, struct O *po, void *pv);
@@ -65,6 +65,6 @@ void func_0014D478(struct CM *p)
         func_0014DB70(p);
     }
     p->x300 = 0;
-    if (D_003DD490.x3E38)
+    if (g_sw.x3E38)
         p->g620 = func_0011D018(p->g620, p->g624, D_002DDEE0, D_002BD810, 0);
 }

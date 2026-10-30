@@ -3,7 +3,7 @@ M2C_UNK func_001306A8(void *);                      /* extern */
 s32 func_00131968(s32);                             /* extern */
 M2C_UNK func_00147410(void *, M2C_UNK);             /* extern */
 s32 func_001FE848(M2C_UNK *, s32);                  /* extern */
-extern M2C_UNK D_003DD040;
+extern M2C_UNK g_sndmgr;
 
 void func_00147278(void *arg0) {
     s32 temp_a0;
@@ -15,7 +15,7 @@ void func_00147278(void *arg0) {
         func_00147410(arg0, 1);
         return;
     case 3:
-        if (func_001FE848(&D_003DD040, M2C_FIELD(arg0, s32 *, 0x170)) == 0) {
+        if (func_001FE848(&g_sndmgr, M2C_FIELD(arg0, s32 *, 0x170)) == 0) {
             func_00147410(arg0, 2);
             return;
         }

@@ -7,7 +7,7 @@ struct CM {
     char pad0[0x20]; float g20; float g24; char pad1[0x60 - 0x28];
     M3 mat; qword pos; char pad2[0x300 - 0xA0]; int n300;
 };
-extern "C" CM D_002DDF40;
+extern "C" CM g_cm;
 extern "C" char D_002BDAB0[], D_002BDAC0[];
 struct LO;
 struct LOV { char pad[0xF8]; short d31; short p31; M4 *(*pfn31)(LO *); };
@@ -60,12 +60,12 @@ void func_00151950(X *p)
     Y *py = p->py;
     LO *plo = py->plo;
     M4 m = *plo->pvt->pfn31((LO *)((char *)plo + plo->pvt->d31));
-    if (D_002DDF40.n300 == 0 && py->n1D4 != 0) {
+    if (g_cm.n300 == 0 && py->n1D4 != 0) {
         M3 mRel;
         M3 mNew;
         union { qword q; } axis;
         float rad;
-        mRel = func_0011BC00(&m, &D_002DDF40.mat);
+        mRel = func_0011BC00(&m, &g_cm.mat);
         func_0011BCF8(&mRel, &rad, &axis.q);
         if (rad < 0.0001f) {
             mNew = m.m3;
@@ -73,7 +73,7 @@ void func_00151950(X *p)
             float g = func_0011D018(rad, 0.0f, D_002DDED0.dt, D_002BDAB0, 0);
             mNew = Mul(func_0011B500(axis.q, g), m.m3);
         }
-        qword d = Sub(D_002DDF40.pos, m.q.r[3]);
+        qword d = Sub(g_cm.pos, m.q.r[3]);
         float dist = Length(d);
         qword pos;
         if (dist < 0.0001f)
@@ -87,9 +87,9 @@ void func_00151950(X *p)
         m.af[1][3] = 0.0f;
         m.af[0][3] = 0.0f;
     }
-    func_0014E168(&D_002DDF40, &m);
-    if (D_002DDF40.g24 != D_002DDF40.g20)
-        D_002DDF40.g24 = py->g1BC;
+    func_0014E168(&g_cm, &m);
+    if (g_cm.g24 != g_cm.g20)
+        g_cm.g24 = py->g1BC;
     else
-        func_0014F5A0(&D_002DDF40, py->g1BC);
+        func_0014F5A0(&g_cm, py->g1BC);
 }
