@@ -1,4 +1,4 @@
-// func_001C5148 (w2lane4, wave 2): per-frame update of an animated object (state 6 only forwards to func_001F3980).
+// func_001C5148: per-frame update of an animated object (state 6 only forwards to func_001F3980).
 // Step 1: damped velocity/position integration of the object's own coordinate (VU: velocity = velocity * damping + acceleration * dt,
 //         coordinate += velocity * dt) which is pushed into the position channel.
 // Step 2: if the object's holder has an animation, find the position/orientation motions of this object in the animation's action

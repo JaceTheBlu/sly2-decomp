@@ -1,4 +1,4 @@
-// func_0011BA08 (Claude agent, lane A25, 2026-10-23): MATCH, fresh rewrite (old best fresh2 = 47).
+// func_0011BA08: MATCH, fresh rewrite (old best fresh2 = 47).
 // Rotation matrix taking direction a onto b (Sly 1 LoadRotateVectorMatrix-like): identity if either length < 1e-4,
 // else axis = normalized a x b (func_0011E390(a) fallback), cos = clamp(dot / (|a||b|)), sin = sqrt(1 - cos^2).
 // Matching notes:

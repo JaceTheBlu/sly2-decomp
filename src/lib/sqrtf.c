@@ -1,4 +1,4 @@
-// (Claude agent) near miss 18/69: needs 'extern const' _LIB_VERSION (value kept in s0); remaining: hi-part copied v1->s1, and the c.lt.s->bc1f hazard nop that Sony's gas inserts before a noreorder branch (toolchain).
+// near miss 18/69: needs 'extern const' _LIB_VERSION (value kept in s0); remaining: hi-part copied v1->s1, and the c.lt.s->bc1f hazard nop that Sony's gas inserts before a noreorder branch (toolchain).
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db

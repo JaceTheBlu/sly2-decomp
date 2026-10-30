@@ -2,7 +2,7 @@
 // (11 segments) and tests every segment against the shapes of every layer; returns whether at least 2 hits
 // had a plane normal with Z > 0.7 (any hit before the 3rd segment, or with parameter 0, fails at once).
 //
-// Tricks that mattered (lane 8):
+// Tricks that mattered:
 //  * the segment test is a small inline helper taking POINTERS to the two end points: its pointer parameters become
 //    pseudos copied at the call site, which gives the target's "cursor copy in $s6 + recomputed &apt[i+1]" pair
 //    without any strength-reduced second pointer;

@@ -1,10 +1,10 @@
-/* MATCH (Claude agent laneB14, 2026-10-23), from v2 (3). One register pin (k3 in s5) plus commented empty asms:
+/* MATCH, from v2 (3). One register pin (k3 in s5) plus commented empty asms:
  * - an empty asm after `pe = ae` keeps the loop-made i+1 (addiu s4) last in its block, so reorg puts it in the b slot;
  * - that asm lengthens ae's live range by one insn, which drops ae's global-alloc priority below p's (s2/s3 swap).
  *   Five empty asms after the first loop add the same length to p's range (they stand in for ~5 insns the original
  *   had there), restoring the target's p/ae priority order;
  * - paae is set (before k3) so the aae address is computed ahead of the k3 constant, as in the target. */
-/* v2 (Claude agent laneB12, 2026-10-23): aligned 7 -> 3. The /12 pointer-diff divisions written out as (bytes * k3) >> 2 with k3 = 0xAAAAAAAB in ONE commented register pin ($21 = s5, as in the target): fixes the s4/s5 swap. Left: ori s5 before addiu fp, and i+1 (addiu s4) scheduled right after the sll instead of in the b delay slot (j = i + 1 / i = j step, split init: same 3). */
+/* v2: aligned 7 -> 3. The /12 pointer-diff divisions written out as (bytes * k3) >> 2 with k3 = 0xAAAAAAAB in ONE commented register pin ($21 = s5, as in the target): fixes the s4/s5 swap. Left: ori s5 before addiu fp, and i+1 (addiu s4) scheduled right after the sll instead of in the b delay slot (j = i + 1 / i = j step, split init: same 3). */
 struct VTE { short d; short pad; void *pfn; };
 struct LO { int pad[3]; struct VTE *vt; };
 struct X;

@@ -1,4 +1,4 @@
-// func_00142AF8 (Claude agent, laneC38 2026-10-24): MATCH from fresh5 (aligned 18). Every matrix product is written with Lilly's
+// func_00142AF8: MATCH from fresh5 (aligned 18). Every matrix product is written with Lilly's
 // MATRIX3 operator* (the NRV helper from src/hand/func_0021CB18.cpp / func_001F4558.cpp: rows read into qword locals, each
 // result row stored through a VU_VECTOR4 copy), and the first func_0022FD38 call is a plain assignment (no dead-copy wrapper).
 // The one remaining trick is fresh3's commented clobber of the dead a0 in the c4678 block.
@@ -114,7 +114,7 @@ void func_00142AF8(P *p)
                 }
             }
             if (D_003DD490.c4678 > 0 && nBest < 3) {
-                __asm__("" : : : "$4"); /* clobber of dead a0 (Claude agent): target keeps &D_003DD490 in a1 */
+                __asm__("" : : : "$4"); /* clobber of dead a0: target keeps &D_003DD490 in a1 */
                 ps = D_003DD490.ps4690;
                 if (ps) {
                     float g3, g4;

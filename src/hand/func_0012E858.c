@@ -1,4 +1,4 @@
-// (Claude agent) vmulx outputs into temps, then stores g, mT.r[0], mT.r[1] in that order.
+// vmulx outputs into temps, then stores g, mT.r[0], mT.r[1] in that order.
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } U;
 typedef struct { qword r[3]; } M3;

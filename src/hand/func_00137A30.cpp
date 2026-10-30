@@ -1,4 +1,4 @@
-// func_00137A30 (Claude agent laneBE2, 2026-10-23): MATCH. Built from build/hand_wip/func_00137A30.fresh14.cpp:
+// func_00137A30: MATCH. Built from build/hand_wip/func_00137A30.fresh14.cpp:
 // the E3-loop "r"(0x10) asm removed, one allocation-only empty asm on the i*4 giv, one register pin (mF31 in s5),
 // and the not-found slot written as `pentNew = &pxNew->aent[pxNew->c++];`.
 typedef int qword __attribute__((mode(TI)));

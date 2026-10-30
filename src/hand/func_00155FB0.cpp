@@ -1,9 +1,9 @@
-// func_00155FB0 (Claude agent, lane D20): matched from v8.
+// func_00155FB0: matched from v8.
 // g_normalZ: Sly 1 name of the (0,0,1) vector at D_002A2DC0.
 // The clamp scale lives in a function-scope VUV sc (declared after lm) so its slot sits at 0x30 before frame.
 // Sub2 clobbers vf4, which is dead there (the next write to vf4 is the qmtc2 of func_0011E208's result), so the pos reload takes vf2.
 // The empty volatile asm in the loop stops jump threading of the two f tests.
-// DRAFT (Claude agent): escape/flee target position search (logic complete, not close: frame 0x130 vs 0x1D0 - target returns func_256CE8/256D08 VECTOR4 results via hidden pointer slots 0xB0..0xE0 and spills more temps; unreachable `b; mov.s f22,f20` block at 0x1561EC not reproduced).
+// DRAFT: escape/flee target position search (logic complete, not close: frame 0x130 vs 0x1D0 - target returns func_256CE8/256D08 VECTOR4 results via hidden pointer slots 0xB0..0xE0 and spills more temps; unreachable `b; mov.s f22,f20` block at 0x1561EC not reproduced).
 typedef int qword __attribute__((mode(TI)));
 struct M3 { qword r[3]; };
 struct VECTOR { float x, y, z, w; };

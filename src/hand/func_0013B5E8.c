@@ -1,4 +1,4 @@
-// (Claude agent) func_001A93C8 takes its float before the HIT* (see AGENT_GUIDE "Float vs. int parameter order").
+// func_001A93C8 takes its float before the HIT* (see AGENT_GUIDE "Float vs. int parameter order").
 // Radius: fold turns `b >= a ? b : a` into MAX(b, a) only with both values in locals (a loaded first).
 typedef int qword __attribute__((mode(TI)));
 struct AREQ { int cb; int cbAlign; };

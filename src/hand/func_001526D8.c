@@ -1,4 +1,4 @@
-// Claude agent (lane D37): writing the range through a pointer to the 0x234 pair keeps cse from folding
+// Claude agent: writing the range through a pointer to the 0x234 pair keeps cse from folding
 // gMax - gMin, like the target (no asm, no volatile).
 struct R { float g; int n; float g8; };
 struct LM { float gMin; float gMax; };

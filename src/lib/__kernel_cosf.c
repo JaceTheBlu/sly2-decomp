@@ -1,4 +1,4 @@
-// (Claude agent) ee-gcc2.9 plain fdlibm: MATCH only with the proposed mfc1->noreorder-branch nop rule (notes/245000.md); 72/86 with current tool.
+// ee-gcc2.9 plain fdlibm: MATCH only with the proposed mfc1->noreorder-branch nop rule (notes/245000.md); 72/86 with current tool.
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db

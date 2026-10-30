@@ -1,4 +1,4 @@
-// func_001C2EF0 (w3lane8, wave 3): launches `count` objects from an owner's source object towards the player.
+// func_001C2EF0: launches `count` objects from an owner's source object towards the player.
 // The first object is the owner's existing one (+0x158), the others come from its factory (func_001CB250); new
 // objects of class 0x5A are put into state 2.  Each launch aims at a random point around the target: a random
 // offset (func_0011E1A0 from two random angles and -75) is expressed in a basis built (func_0011B830) from the

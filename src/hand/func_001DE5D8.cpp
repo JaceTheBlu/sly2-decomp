@@ -2,7 +2,7 @@
 // an endpoint names an object: a path (shape test 10) becomes a moving endpoint with a 1/2/6-segment motion profile
 // (mode 8 / 0 / 16, the last a trapezoidal accelerate-cruise-decelerate profile), shape 3/0x30 objects and missing
 // objects become fixed points. All points (or the whole transformed path) are accumulated into a min/max box that
-// becomes p's single bound (func_00166270 copies it to world space). Fresh rewrite (wave-4 lane 9).
+// becomes p's single bound (func_00166270 copies it to world space). Fresh rewrite.
 // What mattered:
 //  - Min/Max take VU_VECTOR (const qword & conversion) parameters as in func_001DF0A0: the extra RTL copies keep the
 //    endpoint loop large enough that loop.c does not hoist 1.0f and 16 out of it;

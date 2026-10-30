@@ -1,5 +1,5 @@
 /* func_001BDE80: merge a set of convex polygons into one new polygon (hull of all their transformed points), re-centre
-   it on the average point, then reparent the old polygons' children to the new one (lane 10).
+   it on the average point, then reparent the old polygons' children to the new one.
    X is the polygon object (apos = point array, c = point count incl. the closing duplicate, vt = vtable).
 
    Notes on the compile (all general tricks, see build/lane_notes/lane10.md):

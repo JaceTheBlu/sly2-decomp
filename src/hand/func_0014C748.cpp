@@ -1,4 +1,4 @@
-// func_0014C748 MATCH (Claude agent, lane K2, 2026-10-24), no register pins, VU helper asms only. Fresh rewrite (old v12 draft 10).
+// func_0014C748 MATCH, no register pins, VU helper asms only. Fresh rewrite (old v12 draft 10).
 // Keys: (1) the three dots as mtc1-from-VF (GXOfVf with an allocation-only "j") instead of a qmfc2 "=r"(float) asm: gcc emits the
 // qmfc2 itself, which gives the target's prologue schedule and VF numbering; (2) `float a = Dot(dir, dir);` declared BEFORE b
 // (no function-top a/b): a's pseudo is then lower than b's, so global-alloc gives a f4 / b f5 (equal priority, lower number first);

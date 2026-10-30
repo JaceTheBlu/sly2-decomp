@@ -1,4 +1,4 @@
-/* func_0011B830 (Claude agent, 2026-10-23): matched from build/hand_wip/func_0011B830.v4.c. Separate l/l2 for the two
+/* func_0011B830: matched from build/hand_wip/func_0011B830.v4.c. Separate l/l2 for the two
    lengths, plus allocation-only operands on the first Div and second Len. */
 typedef int qword __attribute__((mode(TI)));
 typedef struct { qword r[3]; } M3;

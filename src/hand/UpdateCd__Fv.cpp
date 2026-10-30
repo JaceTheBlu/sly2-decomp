@@ -1,4 +1,4 @@
-// UpdateCd (Claude agent, 2026-10-17): matched. Keys: `int lsn = D_002A2E5C; lsn += 0xCA0;` (fixes s0/s1), CRC table via a local `unsigned int *tbl` with a byte offset `(char *)tbl + (idx << 2)` (gives addu v0,t1,v0).
+// UpdateCd: matched. Keys: `int lsn = D_002A2E5C; lsn += 0xCA0;` (fixes s0/s1), CRC table via a local `unsigned int *tbl` with a byte offset `(char *)tbl + (idx << 2)` (gives addu v0,t1,v0).
 extern int D_002BD4C0;
 extern int D_003DD0E4;
 extern char D_003DA4F0[];

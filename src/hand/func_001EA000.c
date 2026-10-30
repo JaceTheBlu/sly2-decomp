@@ -1,4 +1,4 @@
-// func_001EA000 (lane 5): matched. Samples an object's path over [tStart, tEnd] and collects the time segments where
+// func_001EA000: matched. Samples an object's path over [tStart, tEnd] and collects the time segments where
 // func_001E9F50 finds a valid position into ps->aseg10 (func_001BD560 == 3 means "no bound found", so tStart/tEnd are
 // used), intersects them with ps->aseg through func_0014C9F8 and fixes up a wrap-around pair at the end.
 // Notes for whoever touches this again:

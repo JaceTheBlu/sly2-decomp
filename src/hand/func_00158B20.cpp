@@ -1,4 +1,4 @@
-// func_00158B20 (Claude agent, T1655): DZG constraint-add loop. Each pass re-solves (func_00158988), picks the free
+// func_00158B20: DZG constraint-add loop. Each pass re-solves (func_00158988), picks the free
 // contact row whose projected push (the rows' gC-weighted af[j].av[i] vectors minus the normal part) is largest, then
 // appends a new row paired with it: its g10 = -|v|, its F gets the push divided by g10 and the SO, its g8/g4 limits come from
 // the object's friction data, and func_00158668 (AppendDzgDz) gets the new row and its F.

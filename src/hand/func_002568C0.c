@@ -1,4 +1,4 @@
-// (Claude agent) MATCH only via register-pinned local `register E *list asm("s1")` (scheduling tie list=0 vs i=0); coordinator decide if acceptable.
+// MATCH only via register-pinned local `register E *list asm("s1")` (scheduling tie list=0 vs i=0); coordinator decide if acceptable.
 typedef struct VT { short d; short pad; void *pfn; } VT;
 typedef struct A { VT *vt; } A;
 typedef struct E { unsigned int key; int k; int v; struct E *next; } E;

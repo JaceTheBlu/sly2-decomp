@@ -1,7 +1,7 @@
 // func_001DF0A0: for every segment entry of p, find where the segment's two endpoints hit the request (first
 // func_0014C6A0, else the shape test func_00132B10 + func_00205670) and add a kind-10 contact there with PxpAdd
 // (func_001A7C18), then post the OBJ::Notify (func_001DF260) message through func_00149AB8.
-// What mattered (w3lane2):
+// What mattered:
 //  - the same 6-argument virtual signature as func_001823C8 / func_0013ADE8, with every argument passed through to
 //    the empty base stub func_001F5990 (no code, but the call's argument uses fix the prologue schedule);
 //  - VU helpers taking VU_VECTOR parameters (const qword & conversion): the extra RTL copies keep the loop above

@@ -1,4 +1,4 @@
-/* func_00179898 (Claude agent lane G2, 2026-10-24). Count() is an inline whose else arm starts with the
+/* func_00179898. Count() is an inline whose else arm starts with the
    for-init `n = 0` (keeps the target's bltz/then-first layout). The v3E0 vector is read into q before the call. */
 typedef int qword __attribute__((mode(TI)));
 struct G;

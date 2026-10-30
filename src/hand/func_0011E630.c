@@ -1,4 +1,4 @@
-/* func_0011E630 (Claude agent, lane A23, 2026-10-23), from v6. The u/v dots (DotG) end with one `mtc1` asm from the qword
+/* func_0011E630, from v6. The u/v dots (DotG) end with one `mtc1` asm from the qword
    so gcc emits the qmfc2 moves itself; the commented barrier sits after ba (not ca). One pin (d). */
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f; } U;

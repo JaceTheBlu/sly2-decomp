@@ -1,4 +1,4 @@
-/* (Claude agent) MATCH: parent bit via (int)(x>>60)&1, fNew via if(!(bit56)) fNew=1; else fNew=0; (gives addiu/movn). */
+/* MATCH: parent bit via (int)(x>>60)&1, fNew via if(!(bit56)) fNew=1; else fNew=0; (gives addiu/movn). */
 typedef struct ALO ALO;
 typedef struct { short d; short pad; void *pfn; } VTE;
 struct ALO { int x0, x4, x8; VTE *vt; ALO *x10; ALO **x14; char pad[0x24 - 0x18]; ALO *x24; union { unsigned long u; struct { unsigned long f0 : 56; unsigned long f56 : 1; unsigned long f57 : 3; unsigned long f60 : 1; unsigned long f61 : 3; } b; } x28; };

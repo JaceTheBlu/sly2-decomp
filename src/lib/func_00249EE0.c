@@ -1,4 +1,4 @@
-// (Claude agent) TOOLCHAIN near miss: MATCHES if gas does not move the 2nd insn of the li.d (ori;dsll32) expansion into the following jal delay slot (verified by adding a label after li.d in the .s).
+// TOOLCHAIN near miss: MATCHES if gas does not move the 2nd insn of the li.d (ori;dsll32) expansion into the following jal delay slot (verified by adding a label after li.d in the .s).
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db

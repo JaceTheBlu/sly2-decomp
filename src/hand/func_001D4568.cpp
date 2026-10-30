@@ -1,4 +1,4 @@
-/* func_001D4568 (Claude agent, wave-3 lane 9): hit reaction. After the base handler (func_001F7588) accepts the event, the
+/* func_001D4568: hit reaction. After the base handler (func_001F7588) accepts the event, the
  * remaining count is updated (clamped at 0) and, for kind 0x100 (random hit) or 0x1000 (hit from a sender), a random linear
  * and angular impulse is built and added to the object's velocity through its virtual get/set pairs (vtable slots 33/35 and
  * 34/36).

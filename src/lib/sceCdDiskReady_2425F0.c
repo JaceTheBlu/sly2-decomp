@@ -1,4 +1,4 @@
-// (Claude agent) libcdvd sceCdDiskReady (0x2425F0): both delay loops share one function-scope counter `i` (same reg in both, like the target).
+// libcdvd sceCdDiskReady (0x2425F0): both delay loops share one function-scope counter `i` (same reg in both, like the target).
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db

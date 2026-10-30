@@ -1,4 +1,4 @@
-// (Claude agent) libcdvd sceCdDiskReady_old: bind retry loop sets the bound flag before break; both failure exits written out (gcc cross-jumps them).
+// libcdvd sceCdDiskReady_old: bind retry loop sets the bound flag before break; both failure exits written out (gcc cross-jumps them).
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db

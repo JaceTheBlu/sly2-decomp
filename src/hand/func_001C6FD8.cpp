@@ -1,4 +1,4 @@
-// func_001C6FD8 (wave-3 lane 10): spray up to cRequested objects of a kind (0x5B / 0x5D, made by func_001C6CE8) out of a
+// func_001C6FD8: spray up to cRequested objects of a kind (0x5B / 0x5D, made by func_001C6CE8) out of a
 // point. The seed is dropped to the ground (posOrig), snapped onto the region (posSnap, height from posOrig or from the
 // nearest object) and raised again; then up to 50 candidate landing points are tried on a widening spiral around posSnap.
 // A candidate is used when it is blocked from posSnap and its sideways-pushed partner, and a landing spot is found near it

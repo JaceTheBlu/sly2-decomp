@@ -1,4 +1,4 @@
-// func_001E6F60 (w2lane4, wave 2): closest point of a path (a chain of control points, transformed by the path's
+// func_001E6F60: closest point of a path (a chain of control points, transformed by the path's
 // own matrix) to a query point. mode 0 walks every segment, projects the point on it (clamped to the segment), keeps the
 // nearest candidate and reports its position, direction, interpolated time and the path value at that time. mode 1 only
 // measures the distances to the control points and hands the nearest vertex time to func_001E6ED8.

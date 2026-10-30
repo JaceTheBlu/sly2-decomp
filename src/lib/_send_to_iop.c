@@ -1,7 +1,7 @@
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db
-/* _send_to_iop (libpad): DMA the 0x20-byte pad command to the IOP double buffer (Claude agent). */
+/* _send_to_iop (libpad): DMA the 0x20-byte pad command to the IOP double buffer. */
 typedef struct { int x0; int x4; int x8; unsigned char data[0x14]; } PadCmd;
 typedef struct { unsigned char *buf; PadCmd *cmd; unsigned int dest; unsigned int dmaid; int open; int x14; int x18; } PadSt;
 typedef struct { void *src; void *dest; int size; int attr; } SifDmaData;

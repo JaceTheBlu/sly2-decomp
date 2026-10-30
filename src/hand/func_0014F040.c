@@ -1,4 +1,4 @@
-// MATCH (Claude agent, lane D24, 2026-10-23): v6 with the mtc1 asm's allocation-only "j" operands replaced by an
+// MATCH: v6 with the mtc1 asm's allocation-only "j" operands replaced by an
 // "r,j" constraint on td (never-chosen alternative, forced off by an unused "i,r"(0) operand). With fewer operands
 // the mtc1 has 4 dependents like the `one` sqc2, so the luid tie-break issues the sqc2 first, like the target.
 typedef int qword __attribute__((mode(TI)));

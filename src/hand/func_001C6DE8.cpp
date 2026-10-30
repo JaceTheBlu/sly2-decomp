@@ -2,7 +2,7 @@
 // right after it in the same file and shares its FRAME / VU_FLOAT / VV / AddScaled idioms). Casts a line from point up to
 // point + axis * gMax and, failing that, down to point + axis * gMin, against `apcand` (fetched with func_0020FAA0 when the
 // caller passed none); returns the hit position, or point itself when gMin >= 0 and nothing above was found.
-// Matching notes (wave 4, lane 1):
+// Matching notes:
 //  * FRAME is a plain RAII local with out-of-line ctor/dtor (as in func_001C6FD8); g++ emits the three `dtor(this, 2)` calls
 //    and cross-jumping rebuilds the target's shared tails. Parameters are used directly (their homes are 0x80/0x84).
 //  * The game loads func_0020FAA0's third argument (posMax) into $a2 BEFORE the `apcand == 0` test: that load is the last insn

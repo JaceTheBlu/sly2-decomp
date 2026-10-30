@@ -1,4 +1,4 @@
-// func_0013A1E8: light-list VU upload (Claude agent for Lilly, T1676; built on the team's v2..v14 drafts).
+// func_0013A1E8: light-list VU upload.
 // Collects the lights of p->xE0's list whose position (PosLoWorld 0x1A62E8 + PmatLoWorld 0x1A6318 rotating p->vF0)
 // passes the camera tests func_0014F850 / func_0014F898, as M4s in a stack array (or the single D_002A2D30 when the
 // list check fails), then uploads each light per DMA queue through the VIF helpers.

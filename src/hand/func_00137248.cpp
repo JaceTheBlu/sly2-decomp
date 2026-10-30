@@ -1,4 +1,4 @@
-// func_00137248 (Claude agent laneB24, 2026-10-23): matched. len as an mtc1 asm from the qword (gcc emits the qmfc2), cz via a pextuw asm with a float "=r" output (gcc emits the mtc1).
+// func_00137248: matched. len as an mtc1 asm from the qword (gcc emits the qmfc2), cz via a pextuw asm with a float "=r" output (gcc emits the mtc1).
 typedef int qword __attribute__((mode(TI)));
 struct M3 { qword r[3]; };
 union UQ { qword q; };

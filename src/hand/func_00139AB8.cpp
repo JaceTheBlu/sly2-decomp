@@ -1,7 +1,7 @@
 // func_00139AB8 (0x139AB8): DMA-double-buffered VU particle update over the DLI list at p->dl (0x448), accumulating the
 // bounding box of every particle batch in vMin/vMax (func_00139950, microprogram), then sets the bounding sphere
 // p->vF0 = centre, p->g100 = radius + p->g120 (or calls virtual slot 9 when p->c444 drops to 0).
-// MATCH (Claude agent for Lilly, T1675, 2026-10-25), built on lilly2 (T1663: arg block) and lilly1 (T1659: sceDmaSync returns int).
+// MATCH, built on lilly2 (T1663: arg block) and lilly1 (T1659: sceDmaSync returns int).
 // The prologue (hi $LC0 v0, zero v1, hi $LC1 v0, f0 stores then f1 stores) needs VECTOR = struct with an anonymous union:
 // store_constructor clears the struct (sq zero) and then ALWAYS emits a CLOBBER for the union member, even when already
 // cleared (expr.c, UNION_TYPE). That clobber is deleted by reload, so it only exists for sched1: it sits between lwc1 A

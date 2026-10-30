@@ -1,4 +1,4 @@
-// func_001681F8 (Claude agent, T1651): builds one VIF packet per entry of a model's packet list: a DMA CNT tag, an UNPACK of
+// func_001681F8: builds one VIF packet per entry of a model's packet list: a DMA CNT tag, an UNPACK of
 // 6 qwords to VU address 0x301 (entry word + bounding sphere + model matrix), padding, and a DMA RET tag, then queues it
 // in a render-list entry (func_001CD998) with the descriptor's chain. Stamps the game tick at the end.
 // From lanef9v1 (aligned 5) plus func_00169198's packet idioms (template UNPACK tag, CopyQws with the empty do-while).

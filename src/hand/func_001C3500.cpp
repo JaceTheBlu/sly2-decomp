@@ -1,4 +1,4 @@
-// func_001C3500 (lane 6, 2026-10-24): builds an orientation basis (M3) for a position `distance` along a path.
+// func_001C3500: builds an orientation basis (M3) for a position `distance` along a path.
 // It samples the path tangent at the start, then tries sample distances distance, +10, -10, +20, -20 ... (wrapped
 // for cyclic paths, rejected outside [low,high] otherwise) until the direction between the samples at +-50 is within
 // ~25 degrees of the tangent, rotates the path axis by the tangent->direction rotation, and builds the basis

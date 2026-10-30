@@ -1,4 +1,4 @@
-// WIP (Claude agent): gcc-2.95 frame.c verbatim minus DW_CFA_GNU_negative_offset_extended (table is 0..0x2E). Left: inlined memcpy block-move loops have `nop; bne; nop` in target (Sony gas/compiler; toolchain), a1=sp hoisted in DW_CFA_offset case, window_save loop scheduling.
+// WIP: gcc-2.95 frame.c verbatim minus DW_CFA_GNU_negative_offset_extended (table is 0..0x2E). Left: inlined memcpy block-move loops have `nop; bne; nop` in target (Sony gas/compiler; toolchain), a1=sp hoisted in DW_CFA_offset case, window_save loop scheduling.
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db

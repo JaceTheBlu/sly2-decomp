@@ -1,4 +1,4 @@
-/* func_001488D8 (Claude agent, 2026-10-17): matched. The p/pso s0/s1 swap went away when the po selection reads p->po in each branch (`if (p->po->oid == oid) po = p->po; else if (oid != -1) po = f(..., p->po); else po = 0;`) instead of a po = p->po copy first. */
+/* func_001488D8: matched. The p/pso s0/s1 swap went away when the po selection reads p->po in each branch (`if (p->po->oid == oid) po = p->po; else if (oid != -1) po = f(..., p->po); else po = 0;`) instead of a po = p->po copy first. */
 struct OID { char pad[0x18]; int oid; };
 struct X14 { struct OID *po; };
 struct SO { char pad[0x14]; struct X14 *px14; };

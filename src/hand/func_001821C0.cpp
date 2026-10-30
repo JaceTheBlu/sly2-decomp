@@ -1,4 +1,4 @@
-// func_001821C0 (Claude agent, lane G4): laneG3v1 with the outer loop as `do { if (count<=0) goto done; top: ... if (i<count) goto top; } while (0);`.
+// func_001821C0: laneG3v1 with the outer loop as `do { if (count<=0) goto done; top: ... if (i<count) goto top; } while (0);`.
 // The do/while(0) gives the real loop notes (alignment nop, fall-in entry) while the goto back edge keeps loop.c from hoisting the 0x30 stride.
 // One pin (epsilon in $f1).
 

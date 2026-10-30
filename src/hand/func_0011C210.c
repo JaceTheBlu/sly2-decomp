@@ -1,4 +1,4 @@
-/* func_0011C210 (Claude agent, lane A29, 2026-10-24): builds a 4x4 matrix from a 3x3 rotation scaled per row by pg[0..2] plus a
+/* func_0011C210: builds a 4x4 matrix from a 3x3 rotation scaled per row by pg[0..2] plus a
    position. From v6 (aligned 2): the one register pin is on the pg[2] temp in Q7 (the target puts pg[2] in pg's dying a3).
    The dead sqc2 stores of the scales and their extra operands are commented below. */
 typedef int qword __attribute__((mode(TI)));

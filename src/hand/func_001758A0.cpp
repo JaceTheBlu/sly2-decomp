@@ -1,6 +1,6 @@
 // func_001758A0: pick the first enabled response ENTRY of p that accepts target (range, height, angle, optional
 // line of sight), ask p's HandleSpliceEvent(0x18) about it with a CRef(true), then run the response.
-// (Claude agent, T1672) MATCH from lanef10v1 with real C++ locals instead of the SLOT union and explicit calls:
+// MATCH from lanef10v1 with real C++ locals instead of the SLOT union and explicit calls:
 // FRAME with out-of-line ctor/dtor (func_001AE478 / func_001AE4A0(this, 2)), CRef(bool) with inline dtor
 // (func_00129EC8), and `void *argument = (char *)entry + 0x18;` declared after the CRef.
 typedef int qword __attribute__((mode(TI)));

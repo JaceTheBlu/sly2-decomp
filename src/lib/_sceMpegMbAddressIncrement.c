@@ -1,4 +1,4 @@
-// (Claude agent) MATCH: ee-gcc2.9, IPU cmd as inline helper, (short)(unsigned short)r after x12C, cont=1 before inc+=0x21.
+// MATCH: ee-gcc2.9, IPU cmd as inline helper, (short)(unsigned short)r after x12C, cont=1 before inc+=0x21.
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db

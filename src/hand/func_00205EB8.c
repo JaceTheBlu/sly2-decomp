@@ -1,4 +1,4 @@
-// (Claude agent, nonvu16, 2026-10-17) plain stores, no register pins; store order tuned (see notes/200000.md).
+// plain stores, no register pins; store order tuned (see notes/200000.md).
 struct S;
 struct BLOCK {char unknown[0xC];struct S *owner;char tail[0x14];};
 struct F64 { char pad[0x40]; int u40; };

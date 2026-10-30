@@ -1,4 +1,4 @@
-/* func_00193A68 (Claude agent): func_0011E1A0's qword result assigned plainly so gcc emits the qmtc2 itself; Dot's float via an mtc1 asm fed by gcc's own qmfc2. */
+/* func_00193A68: func_0011E1A0's qword result assigned plainly so gcc emits the qmtc2 itself; Dot's float via an mtc1 asm fed by gcc's own qmfc2. */
 
 typedef int qword __attribute__((mode(TI)));
 typedef union {qword q;float f[4];int i[4];} U;

@@ -1,4 +1,4 @@
-/* func_001A4258 (Claude agent, wave-3 lane 9): does a sphere (pos, sRadius) touch a chain of spheres? First every sphere of the
+/* func_001A4258: does a sphere (pos, sRadius) touch a chain of spheres? First every sphere of the
  * chain is tested on its own, then the capsule-like hull between each adjacent pair: the common tangent line of the two circles
  * (normal n = u * s + perp * sqrt(1 - s*s) with u the unit axis, s = (r0 - r1) / |axis|) gives the tangent points A and B; the
  * point touches when its distance to the tangent is below sRadius and its projection onto AB falls inside the segment.

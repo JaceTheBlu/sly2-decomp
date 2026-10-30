@@ -1,4 +1,4 @@
-// func_00117308 (Claude agent, lane A13, 2026-10-23): MATCH, from build/hand_wip/func_00117308.fresh15.cpp (4).
+// func_00117308: MATCH, from build/hand_wip/func_00117308.fresh15.cpp (4).
 // Rotation interpolation between two orientations (pmat0/w0 and pmat1/w1); writes the blended matrix and/or the
 // blended angular velocity.  Matching notes:
 //  - k is a plain qword (no volatile copy): it gets no hard register and is reloaded from its spill slot (0x120).

@@ -1,6 +1,6 @@
 /* memcmp (newlib r5900 string routine: hand-written assembly like memcpy/memset/memmove -- note the
  * assembler-style `lui 0xFFFF; ori 0xFFFF` for -1 and pcpyud with the loop flag as rt; kept as a
- * top-level asm block). (Claude agent) */
+ * top-level asm block). */
 __asm__(
     ".set noreorder\n"
     ".set noat\n"

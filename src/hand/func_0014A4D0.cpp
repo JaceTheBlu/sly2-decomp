@@ -1,4 +1,4 @@
-// func_0014A4D0 (Claude agent, lane D16). From v4: the vsub reads q (the pinned Add result) with `posT = q` after it, and its posMe operand is repeated as an allocation-only operand (reload then puts posMe in vf4 like the target).
+// func_0014A4D0. From v4: the vsub reads q (the pinned Add result) with `posT = q` after it, and its posMe operand is repeated as an allocation-only operand (reload then puts posMe in vf4 like the target).
 typedef int qword __attribute__((mode(TI)));
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } };
 struct VTE { short d; short pad; void *pfn; };

@@ -2,7 +2,7 @@
 // SLY2_CFLAGS: -O2 -G0 -fstrict-aliasing
 // SLY2_ASM: gnu-reorder-db
 // SLY2_SAVES: sd
-// (Claude agent) MATCH with -fstrict-aliasing (-Os sweep)
+// MATCH with -fstrict-aliasing (-Os sweep)
 typedef struct { char p[0x24]; int server; } RpcCD;
 typedef struct { int fd; int x4; int x8; int size; int x10; int x14; void *buf; void *param; } McRwSend;
 extern RpcCD D_00450880;

@@ -1,7 +1,7 @@
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db
-// (Claude agent, -Os sweep) 73 diffs with -Os (was 95 at -O2)
+// 73 diffs with -Os (was 95 at -O2)
 typedef struct { char p[0x24]; int server; } RpcCD;
 typedef struct { int fd; int port; int slot; int format; int free; int type; int x18; void *param; } McInfoSend;
 extern RpcCD D_00450880;

@@ -1,4 +1,4 @@
-/* (Claude agent) BODY IS EXACT: identical to the target except the 2 leading nops the build adds before the
+/* BODY IS EXACT: identical to the target except the 2 leading nops the build adds before the
    function-entry div.s. Those nops ARE in the original binary at 0x117120-0x117127, but config/junk.csv lists
    0x117120..0x117128 as a dead-code scrap and functions.csv starts this function at 0x117128. Fix: make the function
    start at 0x117120 (drop the junk.csv entry) and this file should match as-is (rename to func_00117120). */

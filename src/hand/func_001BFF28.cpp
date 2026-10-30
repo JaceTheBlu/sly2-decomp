@@ -1,4 +1,4 @@
-// func_001BFF28: build a route between two points over the navigation graph (wave-3 lane 4, from w2lane6.v1).
+// func_001BFF28: build a route between two points over the navigation graph.
 // Finds the triangles containing both points, projects the points onto them (func_001BFDB0), links a temporary start
 // vertex to the start triangle's corners and the goal vertex to the goal triangle's corners, runs the path search
 // (func_001BF980) and the path simplifier (func_001BFC18), copies the route out, drops points closer than the minimum

@@ -1,4 +1,4 @@
-// (Claude agent) one reused `temp` for the three swaps; check=out1, out2 if type==1.
+// one reused `temp` for the three swaps; check=out1, out2 if type==1.
 // SLY2_CC: tools/compilers/bundle/ee-gcc2.95.3-136
 // SLY2_CFLAGS: -O2 -G0 -fstrict-aliasing
 // SLY2_ASM: gnu-reorder-db

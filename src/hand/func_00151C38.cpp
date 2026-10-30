@@ -1,4 +1,4 @@
-// func_00151C38 (Claude agent, lane D12): matched from the v7 draft. Normalize's sqrt and divide are two asms (sqrt into a
+// func_00151C38: matched from the v7 draft. Normalize's sqrt and divide are two asms (sqrt into a
 // separate length temp), which lengthens the VU chain so the scheduler orders the block like the target; Cross lists `a`
 // twice (allocation-only operand) so the VF numbering matches.
 typedef int qword __attribute__((mode(TI)));

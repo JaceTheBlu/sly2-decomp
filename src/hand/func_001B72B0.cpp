@@ -6,7 +6,7 @@
 //    (rotation re-orthonormalised through the quaternion, position = the right node's local position), then
 //    accumulate the chain with `replace` substituted for the right node and output the final position.
 //
-// How the match was found (wave-4 lane 3, from w3lane6.v2 at aligned 16):
+// How the match was found:
 //  - Matrix products by value with const-reference operands, nested as written in one expression
 //    (`M4 result = Mul(Mul(from, inverse), to)`): the outer call's return slot address is put in a register before the
 //    inner call is expanded, so gcse meets &result before the inner temporary (the game's PRE copy order).

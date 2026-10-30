@@ -1,4 +1,4 @@
-// func_002048C8 (Claude agent, 2026-10-17): breadth-first polygon adjacency search. MATCH.
+// func_002048C8: breadth-first polygon adjacency search. MATCH.
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned short ushort;
 union V {qword q;float f[4];};

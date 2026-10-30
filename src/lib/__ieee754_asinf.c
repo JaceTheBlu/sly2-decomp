@@ -1,4 +1,4 @@
-// (Claude agent) fdlibm ef_asin.c (old newlib constants pio2_hi 0x3FC90FDA, pio2_lo 0x33A22168). Built with ee-gcc2.9-991111-01,
+// fdlibm ef_asin.c (old newlib constants pio2_hi 0x3FC90FDA, pio2_lo 0x33A22168). Built with ee-gcc2.9-991111-01,
 // whose divsf3 is the native Sony `nop; nop; div.s` noreorder unit (fixes the reorg delay-slot gap).
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111-01
 // SLY2_CFLAGS: -O2 -G0

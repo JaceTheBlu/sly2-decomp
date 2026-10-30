@@ -2,10 +2,10 @@
 // dprize-style collision response (next to matched FCheckDprizeCollect): query the radius box with func_0020FAA0, find the deepest
 // sphere / CplaneFromSphere contact that the velocity approaches, then push the position out and rebuild the velocity (floor case:
 // tangent + clamped normal parts, one-shot boost; otherwise normal/tangent split with the two response factors).
-// Keys (wave 4, from w3lane8.v3 at aligned 52): call results passed raw so gcc emits the qmtc2; QwNormalizeInto reads the vector
+// Keys: call results passed raw so gcc emits the qmtc2; QwNormalizeInto reads the vector
 // like matched func_001D09A0's NormalizeSafe; GDot's 1.0 temp is not early-clobber; "rV" on every qmtc2 of a float word read from
 // memory (the lw becomes a reload: frees local-alloc and resets reload's round-robin); gSpeed read with the mtc1 form.
-// Last fix (wave 5): the length test also reads its float with the mtc1 asm. A reload mtc1 has latency 2, which gave the
+// Last fix: the length test also reads its float with the mtc1 asm. A reload mtc1 has latency 2, which gave the
 // gNormal copy (anti dependence on that $f0 write) sched2 priority 7 > 6 for the li.s 1e-4; the asm mtc1 costs 1, so the
 // two tie and the li.s goes first as in the target.
 typedef int qword __attribute__((mode(TI)));

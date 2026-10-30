@@ -1,4 +1,4 @@
-// func_00118FB0 (Claude agent, lane A8, 2026-10-23): BSP-style plane walk. From v6: one asm doing qmfc2.ni + mtc1 (scratch "=&r"), and the left child clipped into a block-scoped `q = 0; if (p < pnodeMax) q = p;` (gives the target v1->v0 copy). oq pinned to vf2.
+// func_00118FB0: BSP-style plane walk. From v6: one asm doing qmfc2.ni + mtc1 (scratch "=&r"), and the left child clipped into a block-scoped `q = 0; if (p < pnodeMax) q = p;` (gives the target v1->v0 copy). oq pinned to vf2.
 typedef int qword __attribute__((mode(TI)));
 union VUF { qword q; float f[4]; };
 struct NODE { NODE *pnodeLeft; NODE *pnodeRight; qword *pplane; };

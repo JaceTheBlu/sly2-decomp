@@ -1,4 +1,4 @@
-// func_001E6A30 (w2lane4, wave 2): closest point on a path (chain of control points under the path's own matrix) to a query point,
+// func_001E6A30: closest point on a path (chain of control points under the path's own matrix) to a query point,
 // searched from a starting time. func_001E7538 turns the starting time into a segment index; the loop projects the point on that
 // segment (segment vector rotated by the matrix, point minus the transformed start) and walks to the next / previous segment (wrapping
 // when the path is cyclic) until the projection falls inside a segment. Afterwards the position, direction, time and value outputs

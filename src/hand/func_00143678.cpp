@@ -1,4 +1,4 @@
-// MATCH (Claude agent, laneC20 2026-10-23): v4 + func_001291A8 (CRef copy ctor) declared returning void * instead of void.
+// MATCH: v4 + func_001291A8 (CRef copy ctor) declared returning void * instead of void.
 struct CRef;
 extern "C" void func_00129EC8(CRef *);
 extern "C" void *func_001291A8(CRef *, const CRef *); // CRef copy ctor returns this (void *); declaring it void scheduled the pv copy early

@@ -1,7 +1,7 @@
 // func_00140F90 (0x140F90): message handler (p, msg, pv): msg 3 resets x1038 and stops the 0xDF0/0x11B0 actions, msg 9 (pso->p18 == p)
 // switches on pmsg->k (0x15E: x190 = -v and virtual slot 35 called with the 0x1B0 rows times v; 0x161/0x162; 0x27B/0x27C; 0x1C7/0x1C8),
 // msgs 4/5 call virtual slots 8/9 on the 0x1090 entries, msg 1 / msg 11 release 0x4D4 / 0x1310; then forwards to func_001EED78/func_001C3E20.
-// MATCH (Claude agent for Lilly, T1682, 2026-10-25), no pins: from v6 (aligned 2), case 0x15E written with NO volatile asm and no vf6 pin.
+// MATCH, no pins: from v6 (aligned 2), case 0x15E written with NO volatile asm and no vf6 pin.
 // The -1.0f VU_FLOAT's home store (s.q = sv) goes last, so sv stays live in vf5 across the transform and the earlyclobber output lands
 // in vf6 by itself; with the plain asms sched2 orders lh / lqc2 / lqc2 / addu / lw like the target.
 typedef int qword __attribute__((mode(TI)));
@@ -138,7 +138,7 @@ void func_00140F90(void *p, int msg, void *pv)
                 }
                 n = F(int, p, 0x9BC);
                 if (F(void *, p, 0x130C) != 0) {
-                    __asm__("" : : : "$3", "$4"); /* clobber of dead v1/a0 (Claude agent): target keeps n in a1 */
+                    __asm__("" : : : "$3", "$4"); /* clobber of dead v1/a0: target keeps n in a1 */
                     if (F(int, p, 0x1314) == n) {
                         func_00130658((char *)p + 0x1310);
                         F(int, p, 0x1314) = -1;

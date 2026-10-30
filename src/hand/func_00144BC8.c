@@ -1,4 +1,4 @@
-// NEAR MISS (Claude agent): 4/150. Hard-reg VF vars in Dot fixed the first block; remaining: 2nd block vsub scheduled before the lui of D_002BD2F0 (target lui first).
+// NEAR MISS: 4/150. Hard-reg VF vars in Dot fixed the first block; remaining: 2nd block vsub scheduled before the lui of D_002BD2F0 (target lui first).
 typedef int qword __attribute__((mode(TI)));
 struct Q { char pad[0x18]; float x18; float x1C; char pad2[0x30 - 0x20]; int x30; };
 struct O;
@@ -36,7 +36,7 @@ static __inline__ float LenXY2(qword d)
 {
     float g;
     qword t;
-    /* volatile: raises the priority of the preceding limit load so lui/lwc1 interleave with vsub (Claude agent) */
+    /* volatile: raises the priority of the preceding limit load so lui/lwc1 interleave with vsub */
     __asm__ __volatile__("vmul.xy %0, %1, %1" : "=j"(t) : "j"(d));
     __asm__("vaddy.x %0, %0, %0y" : "+j"(t));
     d = t;

@@ -1,4 +1,4 @@
-/* func_001D0190 (Claude agent, wave-2 lane 7): per-frame draw of a RIP (decal): fade size/opacity polynomials over its lifetime and by camera
+/* func_001D0190: per-frame draw of a RIP (decal): fade size/opacity polynomials over its lifetime and by camera
  * distance, cull it (RemoveRip) when the camera test fails, otherwise build facing * spin and submit the transform.
  *
  * What made it match (no pins, no allocation-only operands):

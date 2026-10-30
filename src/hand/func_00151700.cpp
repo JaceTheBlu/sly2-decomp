@@ -1,4 +1,4 @@
-// func_00151700 (Claude agent): camera path keyframe lerp. VU_FLOAT is a qmtc2 asm fed by a gcc mfc1, and Dot ends
+// func_00151700: camera path keyframe lerp. VU_FLOAT is a qmtc2 asm fed by a gcc mfc1, and Dot ends
 // with separate qmfc2/mtc1 asms, so the float t lives only in an FPR and sub.s schedules like the original.
 extern "C" {
 typedef int qword __attribute__((mode(TI)));

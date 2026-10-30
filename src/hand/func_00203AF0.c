@@ -1,4 +1,4 @@
-/* (Claude agent) matched: mesh->p7C loaded into a $2 pointer after qmtc2, vmadd fed the VF3 scalar directly, slot = c*16 + (int)dst computed before the u.q store. */
+/* matched: mesh->p7C loaded into a $2 pointer after qmtc2, vmadd fed the VF3 scalar directly, slot = c*16 + (int)dst computed before the u.q store. */
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f; } U;
 struct E { float a; float b; float c; float d; };

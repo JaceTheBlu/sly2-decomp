@@ -1,4 +1,4 @@
-/* Insert an entry into a priority-sorted array of 8 (Claude agent). memmove goes through an inline helper: its
+/* Insert an entry into a priority-sorted array of 8. memmove goes through an inline helper: its
    parameters get their own pseudos, giving the target's (p + i*16) base copied into a1 then +0x320 / +0x310. */
 struct VTE { short d; short pad; void (*pfn)(void *, ...); };
 struct O { int pad[3]; struct VTE *vt; };

@@ -1,4 +1,4 @@
-/* func_00140750 (Claude agent): matched. GMin/GMax as `b < a ? b : a`, block-local dt per case, and the x10C8 state as `if (xDF4 != -1 || (g = x10CC) == 0) -1; else if (g == 1 || (x10C8 == 1 && 0 < g)) 1; else 0`. */
+/* func_00140750: matched. GMin/GMax as `b < a ? b : a`, block-local dt per case, and the x10C8 state as `if (xDF4 != -1 || (g = x10CC) == 0) -1; else if (g == 1 || (x10C8 == 1 && 0 < g)) 1; else 0`. */
 typedef int qword __attribute__((mode(TI)));
 struct VTE { short d; short pad; int (*pfn)(void *); };
 struct P {

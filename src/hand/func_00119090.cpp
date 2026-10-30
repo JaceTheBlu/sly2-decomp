@@ -1,4 +1,4 @@
-// (Claude agent, lane A9, 2026-10-23) BSP point search. On the on-plane path ONE local p holds the checked right child, the
+// BSP point search. On the on-plane path ONE local p holds the checked right child, the
 // recursive result and then the checked left child, so it stays in v0 (no if-conversion straight into a0).
 typedef int qword __attribute__((mode(TI)));
 class VUF {

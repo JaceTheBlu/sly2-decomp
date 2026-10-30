@@ -1,4 +1,4 @@
-// func_001D6B00 (wave-3 lane 10): launch an object (pso) from a launcher (plaunch). The launch point is the target point in
+// func_001D6B00: launch an object (pso) from a launcher (plaunch). The launch point is the target point in
 // the source's frame, optionally advanced by a predicted time (clqPredict over the distance, clamped to lmPredict), then
 // moved by clqOffset(distance) along the direction to it. Depending on the object's class it gets a speed vector (0x52),
 // a velocity toward that point at its own launch speed plus a matching orientation (0x51), or a ballistic launch velocity

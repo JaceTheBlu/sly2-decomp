@@ -1,4 +1,4 @@
-/* func_0013FB40 (Claude agent, laneC11 2026-10-23): matched from wip v3. One commented register pin (pbis in s5). The plo1->x50 = 1 store is written in both arms of `if (cid == 0x84)`: gcc cross-jumps them and leaves the dead `li v1,0x84` the target has. */
+/* func_0013FB40: matched from wip v3. One commented register pin (pbis in s5). The plo1->x50 = 1 store is written in both arms of `if (cid == 0x84)`: gcc cross-jumps them and leaves the dead `li v1,0x84` the target has. */
 struct VT { short d; short pad; void *f; };
 struct IF { struct VT *vt; int x4; int x8; };
 struct LO { char pad[0xC]; struct VT *vt; char pad2[0x50 - 0x10]; int x50; };
@@ -26,7 +26,7 @@ static inline int FList(int k) { return k > 0 || k < -2; }
 
 void func_0013FB40(void *psw, void *pbisArg, struct IF *pifParent)
 {
-    register void *pbis asm("$21") = pbisArg; /* register pin (Claude agent): target keeps pbis in s5 */
+    register void *pbis asm("$21") = pbisArg; /* register pin: target keeps pbis in s5 */
     struct IF obj;
     short as[0x80];
     int cid, oid, cb, n;

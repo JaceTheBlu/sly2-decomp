@@ -14,7 +14,7 @@ void func_00166428(const M4 *matrix, unsigned int count,
         register qword odd __asm__("vf5");
 
         const qword *input;
-        /* first input row: volatile asm keeps it ahead of the pointer/end updates (Claude agent) */
+        /* first input row: volatile asm keeps it ahead of the pointer/end updates */
         __asm__ __volatile__("lqc2 %0,%1" : "=j"(even) : "m"(*in0));
         input = in0 + 1;
         end = (unsigned int)output + end;

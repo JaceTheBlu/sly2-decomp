@@ -1,6 +1,6 @@
-// MATCH (Claude agent laneB14, 2026-10-23), from v5 (4): fNext computed BEFORE tagk (so b dies at the andi and sched puts tagk first), the b register pin and the barrier removed. No pins or asms.
-// v5 (Claude agent laneB11, aligned 4): v4 + empty asm barrier after the fNext computation (lw sp.p now first in the join block). Left: andi/srl/sltiu order before the switch range check (target interleaves sltiu, andi fNext in the beqz slot). Barrier is a probe, not a final fix.
-// v4 (Claude agent, aligned 5): v3 + b pinned to $17 (s1) and loops 2-5 as { float *ag = pref->u.ag; float g = f(); ag += i; *ag = g; }. Left: 8 lines of scheduling after the D_003E1C34 block (target: lw sp.p in the beqz slot, andi tagk before srl fNext).
+// MATCH, from v5 (4): fNext computed BEFORE tagk (so b dies at the andi and sched puts tagk first), the b register pin and the barrier removed. No pins or asms.
+// v5: v4 + empty asm barrier after the fNext computation (lw sp.p now first in the join block). Left: andi/srl/sltiu order before the switch range check (target interleaves sltiu, andi fNext in the beqz slot). Barrier is a probe, not a final fix.
+// v4: v3 + b pinned to $17 (s1) and loops 2-5 as { float *ag = pref->u.ag; float g = f(); ag += i; *ag = g; }. Left: 8 lines of scheduling after the D_003E1C34 block (target: lw sp.p in the beqz slot, andi tagk before srl fNext).
 // 227 diff, structurally complete (NODE loader, jump table 0x2A4500). Mostly a one-instruction shift: target fills the
 // beqz delay slot with the sp.p load (pref first), we put srl b,7 there; target also keeps the float-loop counter in $s2
 // (6 saved regs, frame 0x90) where we use 5. `register ... b __asm__("$17")` keeps b in s1 like the target.

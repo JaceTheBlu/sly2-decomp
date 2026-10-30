@@ -1,4 +1,4 @@
-// (Claude agent, laneB10) memsets through an inline ClearM4 helper keep &m2/&mB out of gcse; pe at function scope.
+// memsets through an inline ClearM4 helper keep &m2/&mB out of gcse; pe at function scope.
 typedef int qword __attribute__((mode(TI)));
 struct AREQ { int cb; int cbAlign; AREQ(int c, int a) { cb = c; cbAlign = a; } };
 class FRAME { public: FRAME(); ~FRAME(); int a[4]; };

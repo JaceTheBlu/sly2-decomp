@@ -1,5 +1,4 @@
-/* func_00196928: largest non-negative limit from two quadratic root sets and two sqrt cone terms
-   (lane 6, 2026-10-24).  v and a are VECTORs passed by value in single GPRs. */
+/* func_00196928: largest non-negative limit from two quadratic root sets and two sqrt cone terms.  v and a are VECTORs passed by value in single GPRs. */
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } U;
 

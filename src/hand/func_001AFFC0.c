@@ -1,4 +1,4 @@
-/* (Claude agent) Matched: plain search loop, array pointer cached, key re-read each iteration. */
+/* Matched: plain search loop, array pointer cached, key re-read each iteration. */
 struct MSG{int kind;};
 struct OWNER;
 struct S{struct MSG msg;int word4;int x8;int*xC;int pad[3];unsigned flags;};

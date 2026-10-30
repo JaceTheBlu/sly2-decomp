@@ -1,4 +1,4 @@
-// func_001856C0 (Claude agent, lane G17, 2026-10-24): MATCH, no register pins, VU helper asms only.
+// func_001856C0: MATCH, no register pins, VU helper asms only.
 // From laneG16v1 (46). Keys: (1) points loop as `for (n = 0; n < count; n++)` over points[n] (gcc reverses it: bnez),
 // with the edge direction Sub hoisted into the edge body and the edge-plane Cross left inside the loop (loop.c moves it
 // after the count test) (46 -> 38). (2) Append(LIST*, const qword&) helper storing through `&l->planes[l->count++]`:

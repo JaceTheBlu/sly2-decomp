@@ -1,4 +1,4 @@
-// (Claude agent) fresh14: b operands read through a plain qword pointer (scalar MEM, so the load waits for the VUF temp store)
+// fresh14: b operands read through a plain qword pointer (scalar MEM, so the load waits for the VUF temp store)
 typedef int qword __attribute__((mode(TI)));
 struct AL { int cb; int cbAlign; int pad[2]; AL(int c, int a) { cb = c; cbAlign = a; } };
 struct SO { char pad[0xF0]; qword xF0; qword x100; };

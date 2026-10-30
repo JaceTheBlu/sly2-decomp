@@ -1,4 +1,4 @@
-// (Claude agent) matched: count-down search as do { if (--j < 0) break; if (...) break; } while (1); separate counter k in the last loop.
+// matched: count-down search as do { if (--j < 0) break; if (...) break; } while (1); separate counter k in the last loop.
 struct L { char pad[0x1C]; float g1C; char pad2[0x2C - 0x20]; struct L *pnext; };
 struct E { int x0; int x4; int x8; };
 struct K { float t; int x4; int x8; int xC; };

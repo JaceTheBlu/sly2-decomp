@@ -1,4 +1,4 @@
-// func_001D5808 (Claude agent for Lilly, T1854, 2026-10-27): MATCH, one register pin (vf18). Scene render-list walk: culls every
+// func_001D5808: MATCH, one register pin (vf18). Scene render-list walk: culls every
 //   RENDER of every BLOCK against the view (VU0 microprogram 0x1C0) and queues meshes / packets / deferred blocks. Built on lilly10.
 //   The microprogram inputs vf10..vf17 are loaded by asm statements that name their vf register in the text (the team allows one pin,
 //   so only vf18 is a register variable: its `vmove vf3, vf18` must be a compiler move, because reorg never puts an asm in a delay

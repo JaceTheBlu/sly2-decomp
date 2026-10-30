@@ -2,7 +2,7 @@
 // Original source was most likely `RGBA D_002A2900[256] = { RGBA(...), ... };` + two global objects (ctors
 // func_001EAD98 / func_001EB050) + six slot-heap Schwarz counters; that natural form also matches exactly
 // (gcc's array-init emits a dead element countdown per entry). Here as a named function: the dead `n` countdown
-// (one decrement suffices) shifts cse's 1000-insn hash flush so palette entry 0x5D sharing matches. (Claude agent)
+// (one decrement suffices) shifts cse's 1000-insn hash flush so palette entry 0x5D sharing matches.
 struct RGBA { unsigned char r, g, b, a; RGBA(unsigned char r_, unsigned char g_, unsigned char b_, unsigned char a_) { r = r_; g = g_; b = b_; a = a_; } };
 struct SLOTHEAP { int a[10]; };
 extern RGBA D_002A2900[256];

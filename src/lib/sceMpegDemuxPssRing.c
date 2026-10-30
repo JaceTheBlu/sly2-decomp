@@ -1,7 +1,7 @@
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db
-/* (Claude agent, T1589, 2026-10-24) libmpeg demux of a PSS ring buffer: parse pack headers and PES packets and hand each
+/* libmpeg demux of a PSS ring buffer: parse pack headers and PES packets and hand each
    packet to the matching sceMpegAddStrCallback entry (id == pes.id & mask), else to the 0xBDFF000000 catch-all entry.
    Built on the sony8 v11 draft (build/hand_wip/sceMpegDemuxPssRing.v11.c). Keys, all from gcc 2.9's reorg/sched/global:
    - the empty asm at the head of the PES loop: the first `== 0x1BA` bne must stay unfilled in reorg pass 1 (an asm insn

@@ -1,7 +1,7 @@
 // func_001B6078(p, next): main state transition of the animated actor (state at +0x13D0).
 // Exit work for the old state, then entry work for `next` (clip/template selection), then the shared
 // "ApplyAseg" tail that restarts the animation player (+0x1030) and the component (+0x1034).
-// Lane 4 (Claude agent): hacks of the earlier drafts (xori/mtc1/addiu asm, 6 pins) are gone; this has ONE pin
+// Lane 4: hacks of the earlier drafts (xori/mtc1/addiu asm, 6 pins) are gone; this has ONE pin
 // (the zero-vector temp in case 7) and one VU vsub.
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; int i[4]; };

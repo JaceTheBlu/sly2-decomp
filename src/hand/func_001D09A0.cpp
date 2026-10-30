@@ -1,4 +1,4 @@
-/* func_001D09A0 (Claude agent, wave-3 lane 6): particle turning + axis-dependent damping (P: basis rows at 0x40, velocity at 0x90, drag at 0xC4).
+/* func_001D09A0: particle turning + axis-dependent damping (P: basis rows at 0x40, velocity at 0x90, drag at 0xC4).
  * Turn the basis and velocity about basis row 1 by a clamped quadratic of vel.row0, split the velocity into the part along the old row 0 and the
  * part across it, normalise the along part (fallback D_002A2DA0 when shorter than 1e-4), blend its length toward a target and damp the
  * across part, update with drag cleared, then restore drag.

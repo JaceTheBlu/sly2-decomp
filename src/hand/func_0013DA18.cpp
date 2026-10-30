@@ -1,4 +1,4 @@
-// func_0013DA18 = LoadSwFromBrx(SW *psw, CBinaryInputStream *pbis) (Claude agent for Lilly, T1681, from the v2/v3 drafts).
+// func_0013DA18 = LoadSwFromBrx(SW *psw, CBinaryInputStream *pbis).
 // Reads the level body: the world-entry table (0x6C-byte WE records at psw+0x3F08, count psw+0x3F04), sound section, save vars,
 // level table, language strings, cells, options of g_sw / g_cm, then per world entry its objects (LoadSwObjectsFromBrx into a
 // CLoadCollectorArray) and the clones of them.

@@ -1,4 +1,4 @@
-// (Claude agent, lane A9, 2026-10-23) script `+` builtin (probably). The first node is read through an inline accessor in an
+// script `+` builtin (probably). The first node is read through an inline accessor in an
 // if/else: the inline blocks jump.c's "x = b; if (c) x = a" rewrite, so `pn = 0` is laid out after the branch and
 // reorg steals it into the beqz delay slot as in the original.
 typedef int qword __attribute__((mode(TI)));

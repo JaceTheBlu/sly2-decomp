@@ -1,5 +1,5 @@
 // func_001BF3D8: walk the segment from -> to (XY only) through the 2D BSP of a navigation graph and write the
-// leaf spans it crosses into out[] (at most `capacity` rows); returns the number of rows (wave-4 lane 6).
+// leaf spans it crosses into out[] (at most `capacity` rows); returns the number of rows.
 // Matched siblings: func_001BF110 / func_001BF1F8 (same GRAPH/NODE layout and Make/GetX/GetY/Dot helpers),
 // func_001BF398 (plane side test), caller func_001BF900 (ROW layout).
 // Keys:

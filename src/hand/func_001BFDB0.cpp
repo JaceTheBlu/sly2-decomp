@@ -1,4 +1,4 @@
-// func_001BFDB0: closest point of a navigation triangle to p (wave-3 lane 4). T holds pointers to the three corners.
+// func_001BFDB0: closest point of a navigation triangle to p. T holds pointers to the three corners.
 // If p lies outside an edge in the XY plane (z of cross(p - v0, v1 - v0) > 0, tested a-b, b-c, c-a in turn), the result
 // is the closest point on that edge (func_0011EE08); otherwise p is projected along D_002A2DC0 (world up) onto the
 // triangle's plane.

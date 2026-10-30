@@ -1,4 +1,4 @@
-/* (Claude agent) func_001C84D8: VU nearest-of-9 selection state machine. The copy of p->index into a register
+/* func_001C84D8: VU nearest-of-9 selection state machine. The copy of p->index into a register
    variable (a3) reproduces the target's daddu scheduling; register pins as in other VU files. */
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};

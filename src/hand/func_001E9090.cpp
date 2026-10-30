@@ -1,4 +1,4 @@
-/* func_001E9090: one simulation step of a rope-like path chain (wave-4 lane 2, from w3lane9's rewrite).
+/* func_001E9090: one simulation step of a rope-like path chain.
  *
  * The first point is the start offset transformed by the first space's matrix; its velocity comes from
  * func_0022D348. Every later point is integrated (accel = force - damping * v, v += accel * dt,

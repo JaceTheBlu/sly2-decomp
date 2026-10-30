@@ -1,4 +1,4 @@
-/* (Claude agent, 2026-10-17) frame pointer copy pf used only for the push call reproduces the a0->s5 copy. */
+/* frame pointer copy pf used only for the push call reproduces the a0->s5 copy. */
 struct REF{int tag;union{int n;float g;};};
 struct G{char pad[0x3A18];char object[0x104];void*primary;int pad20[2];void*fallback;};
 struct B{char data[0x5464];};

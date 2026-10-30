@@ -1,4 +1,4 @@
-// MATCH (Claude agent): hard-register VF locals; clock pointer pinned to v0 and the second dt read via a v0-pinned int.
+// MATCH: hard-register VF locals; clock pointer pinned to v0 and the second dt read via a v0-pinned int.
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } VU;
 struct CLOCK { float t; union { float g; int n; } dt; };

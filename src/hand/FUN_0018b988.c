@@ -2,7 +2,7 @@
    (-1..-8, -403); code 0 is success and gives message 0, unknown codes fall back to 11 (code < -9) or 31.
    Kinds 7..9 and anything outside 1..21 give 31 (jump-table default).
 
-   Compile note (lane 10): kinds 16/17 write `result = 0` first and then branch to the shared `done:` return at the
+   Compile note: kinds 16/17 write `result = 0` first and then branch to the shared `done:` return at the
    end of the function.  Those conditional branches to the function's return label are what leave the label in
    front of the last `jr ra` while dbr runs, so the final "result = 31; return" keeps an unfilled delay slot like
    the original.  Kind 1's `result = 9` is plain.  No register pin or asm is needed. */

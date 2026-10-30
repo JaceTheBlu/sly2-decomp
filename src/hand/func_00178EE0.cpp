@@ -1,4 +1,4 @@
-// func_00178EE0 (Claude agent, lane G13, 2026-10-24): laneG10v2 (no pins) + VU_FLOAT(float) qmtc2 constructor building the speed in place, and the 1e-4 length test read with GXOfQw (gcc emits the qmfc2, asm mtc1).
+// func_00178EE0: laneG10v2 (no pins) + VU_FLOAT(float) qmtc2 constructor building the speed in place, and the 1e-4 length test read with GXOfQw (gcc emits the qmfc2, asm mtc1).
 typedef int qword __attribute__((mode(TI)));
 struct MATRIX3 { float mat[3][4]; };
 struct CLQ { float g0, g1, g2; };

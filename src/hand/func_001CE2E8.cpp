@@ -1,4 +1,4 @@
-/* func_001CE2E8 (Claude agent, wave-3 lane 6): for an active particle system (mode 1), walk the subject nodes and their shape lists; for
+/* func_001CE2E8: for an active particle system (mode 1), walk the subject nodes and their shape lists; for
  * every usable shape query its tree for candidate entries (scratch-frame allocation), then let each live rip test its contacts against the
  * shape (vtable slot 8, stop at the first hit); finally notify the owner (vtable slot 9) if the rip list reports a change.
  *

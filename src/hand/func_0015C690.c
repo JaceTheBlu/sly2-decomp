@@ -1,4 +1,4 @@
-// (Claude agent) MATCH: g8 if/else reload form, max via local h=0.5f, pfrm transform split into mul asm + vadd asm with t loaded late.
+// MATCH: g8 if/else reload form, max via local h=0.5f, pfrm transform split into mul asm + vadd asm with t loaded late.
 typedef int qword __attribute__((mode(TI)));
 typedef struct EMITP { int x0; int x4; int x8; int xC; int x10; } EMITP;
 typedef struct XF4 { qword v; } XF4;

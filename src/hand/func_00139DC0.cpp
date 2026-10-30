@@ -3,9 +3,9 @@
 // velocity transformed by func_0015BFD8's matrix, 1 = plain copy, 2 = func_00117120 path; x43C == 2 updates c.w through
 // func_0011CF60. It accumulates the bounding box in vMin/vMax and sets p->vF0 = centre, p->g100 = radius + p->g120 (or calls
 // virtual slot 9 when p->c444 drops to 0).
-// MATCH (Claude agent for Lilly, T1677, 2026-10-25): lilly5 (T1673) + the T1675 func_00139AB8 prologue fix: VECTOR is a
+// MATCH: lilly5 (T1673) + the T1675 func_00139AB8 prologue fix: VECTOR is a
 // struct with an anonymous union, so store_constructor emits a sched1-only CLOBBER after the clear, which gives both pool
-// his $v0 and the zero reload $v1. Loop givs: the post-switch copies go through c-based pointers pcs/pcd (laneC2f).
+// his $v0 and the zero reload $v1. Loop givs: the post-switch copies go through c-based pointers pcs/pcd.
 typedef int qword __attribute__((mode(TI)));
 #define FLT_MAX 3.40282347e+38f /* $LC0/$LC1 at 0x2A4AFC/0x2A4B00: this function's literal pool */
 typedef union { qword q; struct { float x, y, z, w; } v; } VEC;

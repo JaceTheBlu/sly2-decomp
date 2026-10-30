@@ -2,7 +2,7 @@
 // Leaves the old step (cleanup per step / per action), then enters the new one: picks the animation clip, the
 // script, the flags and the blend for the new step and starts them on the actor.
 //
-// Matching notes (wave-5 lane 5, fresh rewrite):
+// Matching notes:
 // - p ends up in s2 only because two block-local call-crossing pointers take s0/s1 while p is live (old action 4:
 //   `ACTOR *actor = p->pactor` before the position call; action 34: `AUX *aux = p->aux` before func_001A62E8).
 // - Normalize: return-style inline plus a split vdiv / vmulq (see Unit) keeps the fallback lq/qmtc2 of the target.

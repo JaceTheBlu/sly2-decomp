@@ -1,4 +1,4 @@
-/* (Claude agent) MATCH: the loop's func_0011E1A0 result is a plain qword local; gcc emits the qmtc2 itself and schedules it. */
+/* MATCH: the loop's func_0011E1A0 result is a plain qword local; gcc emits the qmtc2 itself and schedules it. */
 // Complete camera segment avoidance WIP. FRAME has no instance members.
 typedef int qword __attribute__((mode(TI)));
 union V {qword q;float f[4];};

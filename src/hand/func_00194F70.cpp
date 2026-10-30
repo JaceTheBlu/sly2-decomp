@@ -1,4 +1,4 @@
-// MATCH (w3lane3, 2026-10-25): func_00194F70 = UpdateJtGrabCandidates(SW *psw, STEPPLAYER *pstepplayer, int ccand, JTGRABCAND *ajtgrabcand)
+// MATCH: func_00194F70 = UpdateJtGrabCandidates(SW *psw, STEPPLAYER *pstepplayer, int ccand, JTGRABCAND *ajtgrabcand)
 // (name and structures from src/hand/func_00194A40.cpp, the GatherJtGrabCandidates port that calls it).
 // Merges this frame's sorted grab candidates into the four the world keeps (SW::ajtgrabcand): an old candidate
 // whose object is found again takes the new distance and smooths its parameter towards the new one (wrapping

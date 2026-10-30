@@ -1,9 +1,9 @@
-// (Claude agent, lane E17) MATCH from fresh19: func_0022CC00 declared void here. With the M4* return, the call sets $v0, so the
+// MATCH from fresh19: func_0022CC00 declared void here. With the M4* return, the call sets $v0, so the
 // r3 store (v0) lost sched2's "more dependents" tie-break to the r2 store (v1, reused after the call). With void, plain *pm = t
 // matches and the old r1/$7 pin and qword temps are gone.
-// (Claude agent, lane E7) fresh18: aligned 2 (fresh17 3). SetM4 copies mat through explicit qword temps r0,r1,r2 stored r1,r2,r0.
+// fresh18: aligned 2 (fresh17 3). SetM4 copies mat through explicit qword temps r0,r1,r2 stored r1,r2,r0.
 // Left: path-3 *pm = t (target loads r0,r2,r3,r1, stores r3,r2,r0,r1); all 24 temp store orders x load orders tried, Q4 struct copies: 2.
-// (Claude agent, lane E6) fresh17: aligned 3 (fresh16 6). (1) VUF ctor: `float f = g; asm("" : "+f"(f)); qmtc2 "r"(f)`:
+// fresh17: aligned 3 (fresh16 6). (1) VUF ctor: `float f = g; asm("" : "+f"(f)); qmtc2 "r"(f)`:
 // gcc emits the mfc1 itself (with its latency, so a free insn lands between mfc1 and qmtc2 like the target) and g stays in f20.
 // (2) path 2 uses VUF2, the same ctor with a VOLATILE empty asm (keeps the qB0 lqc2 after the mfc1), through
 // BuildRotationS(const VUF2 &f, qword v) { func_0011B570(&m, Scale(v, f)); }. Left: SetM4 row store order (r1,r2,r0) and path-3 *pm = t store order.

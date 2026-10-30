@@ -1,4 +1,4 @@
-// (Claude agent, lane A9, 2026-10-23) from the old draft (21): the dot is ONE asm tied to pos ("0"(pos)), and the float
+// from the old draft (21): the dot is ONE asm tied to pos ("0"(pos)), and the float
 // readback is an mtc1 asm taking the qword (gcc emits the qmfc2 itself). Together they fix every VF number.
 typedef int qword __attribute__((mode(TI)));
 struct VECTOR;

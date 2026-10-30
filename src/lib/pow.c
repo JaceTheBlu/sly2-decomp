@@ -1,4 +1,4 @@
-// (Claude agent) newlib w_pow.c, -O2: only 6 diffs, all the PRE hi-copy artefact (target 'lui s5,%hi(__fdlib_version)' in the prologue; ours 'lui v1 ... daddu s5,v1' after the call). powf (same source, float) has no copy.
+// newlib w_pow.c, -O2: only 6 diffs, all the PRE hi-copy artefact (target 'lui s5,%hi(__fdlib_version)' in the prologue; ours 'lui v1 ... daddu s5,v1' after the call). powf (same source, float) has no copy.
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db

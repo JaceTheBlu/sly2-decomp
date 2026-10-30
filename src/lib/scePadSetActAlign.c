@@ -1,4 +1,4 @@
-// (Claude agent) 2 diffs: pad result pattern r = p->result; if (r == 1) { f(); r = p->result; }. Left: loop body sb/slti order (ours sb first) in every mode/compiler tried.
+// 2 diffs: pad result pattern r = p->result; if (r == 1) { f(); r = p->result; }. Left: loop body sb/slti order (ours sb first) in every mode/compiler tried.
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db

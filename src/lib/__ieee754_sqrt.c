@@ -1,4 +1,4 @@
-// (Claude agent) fdlibm e_sqrt.c; ee-gcc2.9-991111 gnu-reorg.
+// fdlibm e_sqrt.c; ee-gcc2.9-991111 gnu-reorg.
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorg

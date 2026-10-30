@@ -1,4 +1,4 @@
-// func_00188960 (Claude agent, lane G9, 2026-10-24): MATCH, no register pins, VU helper asms only (Lilly style).
+// func_00188960: MATCH, no register pins, VU helper asms only (Lilly style).
 // Keys: the 0x20 stack slot is the by-value VU_FLOAT temporary (not a WORK field); WORK = {a, b} at 0x0/0x10 shared by cases 14 and 24; Reject = QwProjectOut.
 
 typedef int qword __attribute__((mode(TI)));

@@ -1,4 +1,4 @@
-// (Claude agent, laneB10) MATCH: the !fShuffle reassign goes through an inline SetSpn(SPN*, NODE*) so &spRes is substituted directly (no pseudo for gcse to share with pspHead).
+// MATCH: the !fShuffle reassign goes through an inline SetSpn(SPN*, NODE*) so &spRes is substituted directly (no pseudo for gcse to share with pspHead).
 struct NODE;
 struct CRef {
     int m_tagk; union { int n; float g; void *pv; NODE *pnode; } u;

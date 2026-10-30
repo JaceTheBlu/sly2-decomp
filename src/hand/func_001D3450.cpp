@@ -95,7 +95,7 @@ static inline float Dot(qword a, qword b)
     qword r, one;
     float f;
     __asm__("vmul.xyz %0,%2,%3\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z" : "=j"(r), "=&j"(one) : "j"(a), "j"(b));
-    __asm__("mtc1 %1,%0" : "=f"(f) : "r"(r), "j"(r));   /* allocation-only "j"(r) (w5lane3) */
+    __asm__("mtc1 %1,%0" : "=f"(f) : "r"(r), "j"(r));   /* allocation-only "j"(r) */
     return f;
 }
 /* returning the compare as a value gives the target's li 1 / move 0 setcc in this arm only */

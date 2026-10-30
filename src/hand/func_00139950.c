@@ -1,5 +1,5 @@
-// laneZ2 v4 (Claude agent, 2026-10-30): particle update through VU0 microprogram 0x10.
-// Built from build/hand_wip/func_00139950.lilly1.c (Claude agent for Lilly, T1646). The fixed vf21-vf31 registers
+// laneZ2 v4: particle update through VU0 microprogram 0x10.
+// Built from build/hand_wip/func_00139950.lilly1.c. The fixed vf21-vf31 registers
 // of the microprogram are bound only inside the inline VU helper UpdateMs10, which loads them, runs vcallms 0x10
 // per live particle and stores the results after the cfc2.i interlock; the function body has no register pins.
 // Microprogram ABI: vf27 = dt, vf28..vf31 = matrix rows 3..0, vf23/vf24 = the pa/pb entries; it accumulates the

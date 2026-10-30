@@ -1,4 +1,4 @@
-// func_0015A808: EMITB choose emit position/direction (Claude agent, lanes E3-E11).
+// func_0015A808: EMITB choose emit position/direction.
 // Notes: the unused case-1 VU_VECTOR[3] frees the stack slot that case 3's an[] reuses; VLen = one length-squared asm
 // plus a separate vsqrt asm; Normalize returns its VU_VECTOR by value (gives dir its stack slot).
 typedef int qword __attribute__((mode(TI)));

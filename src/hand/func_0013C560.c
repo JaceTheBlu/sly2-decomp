@@ -1,9 +1,9 @@
-// MATCH (Claude agent, laneC43 2026-10-24): v7 + case 5 `pvt = p->pvt` read after the qmtc2 asm, which gets a "memory" clobber (lw then can't fill the mfc1->qmtc2 slot). No register pins.
-// v7 (Claude agent, laneC42 2026-10-24): aligned 12 -> 1 with NO register pins. Dist3 ends with the guide's mtc1-from-qword helper `__asm__("mtc1 %1, %0" : "=f"(g) : "r"(d), "f"(k))` (gcc emits the qmfc2 v1 itself, asm cost 1 so max.s follows the mtc1 like the target); the $3 pin and the qmfc2 asm are gone. Left (1): case 5 lw pvt fills the slot between the reload mfc1 and the qmtc2 asm. A "$3" clobber on the qmtc2 asm fixes the order but pvt then takes a2 (with the vmulx "$2") or v0 (without it); pins on pvt/pfn on top: 3-11. The game's mfc1 VU_FLOAT ctor asm: 16-22.
-// v6 (Claude agent, laneC33 2026-10-24): aligned 1 -> 12 (WORSE, policy version). The case-3 mtc1 asm is replaced by a pointer pun `return *(float *)&t;` (gcc emits the same mtc1 v1,f1), "f"(k) moved to the qmfc2 asm as the allocation-only operand. gcc's own mtc1 (movsf) has scheduler cost 2, so the lw p->pe again fills the max.s hazard slot, and the p1C lw gets a0 (target v0). union{int;float} 14, float-typed $3 qmfc2 output 14, no "f"(k) 17, "f"(k) on a separate empty asm 26.
-// v5 (Claude agent, laneC32 2026-10-24): aligned 11 -> 1. (1) Case 3: its own Dist3/LINKE3 with qmfc2 into an int (ONE register pin, $3 like the target) plus a separate mtc1 asm, which has latency 1 in the scheduler (the reload movsf had 2), so max.s issues right after the mtc1 and the lw p->pe follows it (target keeps the mtc1 hazard nop). An allocation-only "f"(k) (k = the 250.0f GMax limit) on the mtc1 gives 250 f0 / distance f1 like the target. (2) Case 5: `qword vv = *pv` before the qmtc2 (lqc2 before mfc1, mfc1 reuses v0), asm outputs into plain qwords sq/vq copied into the unions afterwards, a pvt local passed as an allocation-only "r"(pvt) to the vmulx (sched1 otherwise sinks the vtable lw below the union stores) and a clobber of the dead v0 on the vmulx (pvt v1, pfn v0). Left: lw pvt fills the mfc1 -> qmtc2 stall (target: qmtc2 right after the mfc1, same reload-latency effect as case 3).
-// v4 (Claude agent, laneC6 2026-10-23): 13 -> 11: case 3 writes `p->pe = func_001CE888(...); if (p->pe) LINKE(p->pe, pot->pr, p)` (no pe local). Left: case 3 mtc1->max.s hazard nop (our lw p->pe fills it).
-// v3 (Claude agent, laneC5 2026-10-23): aligned 46 -> 13: case-4 `pot4 = p->pot` read (gives the s0 copy), Dist sqrt asm split from its qmfc2, LINKE macro as a plain block (do/while(0) added a nop). Left: case 3 LINKE scheduling.
+// MATCH: v7 + case 5 `pvt = p->pvt` read after the qmtc2 asm, which gets a "memory" clobber (lw then can't fill the mfc1->qmtc2 slot). No register pins.
+// v7: aligned 12 -> 1 with NO register pins. Dist3 ends with the guide's mtc1-from-qword helper `__asm__("mtc1 %1, %0" : "=f"(g) : "r"(d), "f"(k))` (gcc emits the qmfc2 v1 itself, asm cost 1 so max.s follows the mtc1 like the target); the $3 pin and the qmfc2 asm are gone. Left (1): case 5 lw pvt fills the slot between the reload mfc1 and the qmtc2 asm. A "$3" clobber on the qmtc2 asm fixes the order but pvt then takes a2 (with the vmulx "$2") or v0 (without it); pins on pvt/pfn on top: 3-11. The game's mfc1 VU_FLOAT ctor asm: 16-22.
+// v6: aligned 1 -> 12 (WORSE, policy version). The case-3 mtc1 asm is replaced by a pointer pun `return *(float *)&t;` (gcc emits the same mtc1 v1,f1), "f"(k) moved to the qmfc2 asm as the allocation-only operand. gcc's own mtc1 (movsf) has scheduler cost 2, so the lw p->pe again fills the max.s hazard slot, and the p1C lw gets a0 (target v0). union{int;float} 14, float-typed $3 qmfc2 output 14, no "f"(k) 17, "f"(k) on a separate empty asm 26.
+// v5: aligned 11 -> 1. (1) Case 3: its own Dist3/LINKE3 with qmfc2 into an int (ONE register pin, $3 like the target) plus a separate mtc1 asm, which has latency 1 in the scheduler (the reload movsf had 2), so max.s issues right after the mtc1 and the lw p->pe follows it (target keeps the mtc1 hazard nop). An allocation-only "f"(k) (k = the 250.0f GMax limit) on the mtc1 gives 250 f0 / distance f1 like the target. (2) Case 5: `qword vv = *pv` before the qmtc2 (lqc2 before mfc1, mfc1 reuses v0), asm outputs into plain qwords sq/vq copied into the unions afterwards, a pvt local passed as an allocation-only "r"(pvt) to the vmulx (sched1 otherwise sinks the vtable lw below the union stores) and a clobber of the dead v0 on the vmulx (pvt v1, pfn v0). Left: lw pvt fills the mfc1 -> qmtc2 stall (target: qmtc2 right after the mfc1, same reload-latency effect as case 3).
+// v4: 13 -> 11: case 3 writes `p->pe = func_001CE888(...); if (p->pe) LINKE(p->pe, pot->pr, p)` (no pe local). Left: case 3 mtc1->max.s hazard nop (our lw p->pe fills it).
+// v3: aligned 46 -> 13: case-4 `pot4 = p->pot` read (gives the s0 copy), Dist sqrt asm split from its qmfc2, LINKE macro as a plain block (do/while(0) added a nop). Left: case 3 LINKE scheduling.
 // ~235/598 diffs, mostly offsets after a few small sched diffs (Dist/vsqrt scheduling, GMax regs, loop nops); frame 0x110 and layout match.
 typedef int qword __attribute__((mode(TI)));
 struct VTE { short d; short pad; void (*pfn)(); };
@@ -83,7 +83,7 @@ static inline float Dist3(qword a, qword b, float k)
     __asm__("vmul.xyz %0, %0, %0\n\tvaddw.x $vf2, $vf0, $vf0w\n\tvadday.x ACC, %0, %0y\n\tvmaddz.x %0, $vf2, %0z"
         : "+j"(d) : : "vf2");
     __asm__("vsqrt Q, %0x\n\tvwaitq\n\tvaddq.x %0, $vf0, Q" : "+j"(d));
-    __asm__("mtc1 %1, %0" : "=f"(g) : "r"(d), "f"(k)); /* mtc1 from a qword (gcc emits the qmfc2); "f"(k): allocation-only operand (Claude agent) */
+    __asm__("mtc1 %1, %0" : "=f"(g) : "r"(d), "f"(k)); /* mtc1 from a qword (gcc emits the qmfc2); "f"(k): allocation-only operand */
     return g;
 }
 
@@ -273,9 +273,9 @@ void func_0013C560(struct O *p, int st)
             qword vv = *pv;
             struct VT *pvt;
             qword sq, vq;
-            __asm__("qmtc2.ni %1, %0" : "=j"(sq) : "r"(1000.0f) : "memory"); /* "memory" clobber (Claude agent): with pvt read after this asm, keeps the vtable lw after the qmtc2 like the target */
+            __asm__("qmtc2.ni %1, %0" : "=j"(sq) : "r"(1000.0f) : "memory"); /* "memory" clobber: with pvt read after this asm, keeps the vtable lw after the qmtc2 like the target */
             pvt = p->pvt;
-            __asm__("vmulx.xyzw %0, %1, %2x" : "=j"(vq) : "j"(vv), "j"(sq), "r"(pvt) : "$2"); /* "r"(pvt): allocation-only (Claude agent), keeps the vtable load before the vmulx like the target; "$2": clobber of the dead v0 (Claude agent), so pvt takes v1 like the target */
+            __asm__("vmulx.xyzw %0, %1, %2x" : "=j"(vq) : "j"(vv), "j"(sq), "r"(pvt) : "$2"); /* "r"(pvt): allocation-only, keeps the vtable load before the vmulx like the target; "$2": clobber of the dead v0, so pvt takes v1 like the target */
             s.q = sq;
             v.q = vq;
             ((PFNQ)pvt->a[35].pfn)((char *)p + pvt->a[35].d, v.q);

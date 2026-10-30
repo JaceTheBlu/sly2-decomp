@@ -1,4 +1,4 @@
-// func_00169198 (Claude agent, lanes I1-I9, H21): fresh rewrite in the style of Lilly's matched files.
+// func_00169198: fresh rewrite in the style of Lilly's matched files.
 // H21: the copy loop is a `for` counter loop (loop.c turns it into the target's 12/-4/bgez count) preceded by an
 // empty do-while(0), whose loop notes act as the scheduling barrier the target shows after `pb += 4`.
 // Builds the VIF packet for every submodel of a model: model matrix, optional bone matrices, optional skin matrices,

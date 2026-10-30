@@ -1,7 +1,7 @@
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db
-// (Claude agent) matches with ee-gcc 2.9 (old 2.95.3-114 near miss)
+// matches with ee-gcc 2.9 (old 2.95.3-114 near miss)
 extern int D_002C8350;
 extern int D_002C8354;
 extern int D_002C8358;

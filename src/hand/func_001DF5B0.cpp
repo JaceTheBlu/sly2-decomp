@@ -1,4 +1,4 @@
-// func_001DF5B0 (w2lane4, wave 2): per-frame render of a "connector" (a chain of links drawn between pairs of points).
+// func_001DF5B0: per-frame render of a "connector" (a chain of links drawn between pairs of points).
 // After the generic update (func_001F3C70) and a camera visibility test of the connector's bounding sphere
 // (func_0014F850), each link is queried for its two end points and its length (func_001DEF98). A link longer than its
 // maximum is pulled back toward the first point, then the line object, the stretched middle object and the two end caps

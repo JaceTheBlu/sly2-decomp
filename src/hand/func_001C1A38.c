@@ -1,5 +1,4 @@
-/* Insert a begin event (g0, kind 1) and an end event (g1, kind 0) into a time-sorted array of 8-byte events
-   (lane 10).  The memmove goes through an inline helper: its parameters get their own pseudos, which gives the
+/* Insert a begin event (g0, kind 1) and an end event (g1, kind 0) into a time-sorted array of 8-byte events.  The memmove goes through an inline helper: its parameters get their own pseudos, which gives the
    target's "pointer copied into a0/a1, then a0 += 16" argument setup. */
 struct E { float t; unsigned short k; unsigned short bit; };
 void *func_002332B8(void *dst, const void *src, unsigned int cb);

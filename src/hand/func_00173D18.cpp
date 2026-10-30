@@ -1,4 +1,4 @@
-// func_00173D18 (Claude agent, 2026-10-25): MATCH. Updates the per-entry state of an array of 0x30-byte records (e->po object,
+// func_00173D18: MATCH. Updates the per-entry state of an array of 0x30-byte records (e->po object,
 // e->k state, g4 max, g8 clock stamp). The VU helper layers (VsubXyzw, operator-, LengthXY, DistXYImpl, DistXY) pass VU_VECTORs
 // by value; they add ~30 RTL insns to the loop (pass 1: 90, pass 2: 81 > threshold) so loop.c hoists the clock's %hi only in
 // the second pass, giving the target's preheader order (1, hi BE5DC, giv 0, hi clock). Fewer layers (86) or more (94+) differ.

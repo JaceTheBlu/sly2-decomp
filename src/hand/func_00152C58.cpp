@@ -1,4 +1,4 @@
-// func_00152C58 (Claude agent, lane D17): MATCH. The last diff was the daddu a0/sb order in the key loop: in sched1 the f12 = scale arg move
+// func_00152C58: MATCH. The last diff was the daddu a0/sb order in the key loop: in sched1 the f12 = scale arg move
 // (reg weight 0) took the t=1 alu slot ahead of a0 = &fontBig (weight +1), so a0 got a later luid than the a[0] store. Pinning scale to $f12 removes that move.
 typedef int qword __attribute__((mode(TI)));
 struct FONT { char ab[0x84]; float dy; char pad[0xA0 - 0x88]; };

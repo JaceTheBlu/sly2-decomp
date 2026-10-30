@@ -1,7 +1,7 @@
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db
-/* sceSifInitCmd (libkernel sifcmd). Handler func field must be a function pointer type (Claude agent). */
+/* sceSifInitCmd (libkernel sifcmd). Handler func field must be a function pointer type. */
 typedef struct { void (*func)(void *, void *); void *data; int pad; } HANDLER;
 typedef struct {
     void *pktbuf;

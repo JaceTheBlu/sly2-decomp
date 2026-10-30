@@ -1,5 +1,5 @@
 // WakeSoWater (0x15A2C0): wake sound, ripple and splash for an SO moving through WATER.
-// (Lilly's agent, T1683) MATCH, no register pins. Built from the lilly1/v3 drafts (Claude agents, T1679 / lane E20).
+// (Lilly's agent, T1683) MATCH, no register pins. Built from the lilly1/v3 drafts.
 //
 // Sly 2 signature (SO *, WATER *, qword pos, qword v, float dt, float gFrac, float gScale) despite the Sly 1 mangled name.
 // The splash is func_0015BE28(pos, dir, cParticle, EMITP, EMITV, &e, 0, 0) with the EMITP (0x40) and EMITV (0x70) blocks

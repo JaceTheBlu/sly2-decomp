@@ -1,4 +1,4 @@
-// (Claude agent, lane E14) MATCH: the next av pointer is computed at the top of the k body (avNext = av + 1) and assigned after the vsub; this gives the target k+1/av+1 s7/fp assignment.
+// MATCH: the next av pointer is computed at the top of the k body (avNext = av + 1) and assigned after the vsub; this gives the target k+1/av+1 s7/fp assignment.
 typedef int qword __attribute__((mode(TI)));
 struct AL { int cb; int cbAlign; AL(int c, int a) { cb = c; cbAlign = a; } };
 struct DZ;

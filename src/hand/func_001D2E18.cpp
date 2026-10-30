@@ -1,4 +1,4 @@
-// func_001D2E18 (Claude agent, wave-3 lane 7): MATCH, no register pins, VU helper asms only.
+// func_001D2E18: MATCH, no register pins, VU helper asms only.
 // Vehicle contact/traction update: correct the orientation every 3 s, sum the impulses of the wheel contacts
 // (entries 0x1A0, stride 0x60), then turn and drive the body within the remaining impulse budget.
 // How it matches (on top of w2lane4's v13 draft, which had the right instruction stream):

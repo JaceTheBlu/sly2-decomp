@@ -1,4 +1,4 @@
-// func_0015C3C0 (Claude agent, lane D40): matched with Lilly's MATRIX3 operator* (src/hand/func_0021CB18.cpp: rows of the LEFT
+// func_0015C3C0: matched with Lilly's MATRIX3 operator* (src/hand/func_0021CB18.cpp: rows of the LEFT
 // matrix into qword locals, VU_VECTOR4 row temps) and her QwRotateVec(MATRIX3 *, qword), with px->mat as the left operand.
 typedef int qword __attribute__((mode(TI)));
 struct MATRIX4 { qword r[4]; };

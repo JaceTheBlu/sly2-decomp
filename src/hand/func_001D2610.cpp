@@ -1,4 +1,4 @@
-// func_001D2610 (Claude agent, wave-4 lane 7): MATCH. Mode-1 update of a vehicle with attached weapons (called from
+// func_001D2610: MATCH. Mode-1 update of a vehicle with attached weapons (called from
 // func_001D19A8): pick a ready attachment (func_001D2240) or a target object (func_001D22D0), run the state machine
 // (0 approach/orbit the target, 1 attack in place, 2 pursue the object, 3 back away) until the state is stable, steer
 // for the current state, then let every ready attachment fire once its aim error is small enough.

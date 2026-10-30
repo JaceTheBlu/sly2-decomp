@@ -1,4 +1,4 @@
-// func_0015B9F0: emitter particle transform (Claude agent, lane E20). The clock time is read into a local BEFORE
+// func_0015B9F0: emitter particle transform. The clock time is read into a local BEFORE
 // the ptimes->at[i] load, so loop.c sees a 1-insn life for %hi(D_002DDED0) and doesn't hoist it.
 typedef int qword __attribute__((mode(TI)));
 struct M4 { qword r[4]; };

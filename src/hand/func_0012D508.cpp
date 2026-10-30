@@ -1,4 +1,4 @@
-// func_0012D508 (Claude agent, 2026-10-23): MATCH. From hand_wip v5; the virtual at vtable slot 5 takes a float 4th
+// func_0012D508: MATCH. From hand_wip v5; the virtual at vtable slot 5 takes a float 4th
 // argument, and the caller passes p->g20 (that is why the target loads g20 into $f12 for the 0 < g20 test).
 typedef int qword __attribute__((mode(TI)));
 struct M3 { qword r[3]; };

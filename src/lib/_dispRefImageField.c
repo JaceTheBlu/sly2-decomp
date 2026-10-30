@@ -1,7 +1,7 @@
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db
-/* (Claude agent) MATCH. Keys: inline pointer params; else-store shared by all paths (`if (x8C && p->x18 < 0 && x98 >= 0)`); long t/u bit temps; descending-bit pC; x98/xA0 set in the caller from d->mp; size check in an inline returning ok; flag set after top/bot. */
+/* MATCH. Keys: inline pointer params; else-store shared by all paths (`if (x8C && p->x18 < 0 && x98 >= 0)`); long t/u bit temps; descending-bit pC; x98/xA0 set in the caller from d->mp; size check in an inline returning ok; flag set after top/bot. */
 typedef struct { char p0[0x10]; long x10; long x18; long x20; long x28; long x30; long x38; } MP;
 typedef struct {
     int x0; int x4; int x8; int xC; int x10; int p14; long x18; long x20;

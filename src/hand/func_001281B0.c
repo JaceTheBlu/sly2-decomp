@@ -1,4 +1,4 @@
-// (Claude agent, 2026-10-17) MATCH. GC mark loop: pops frame / closure / node stacks of GC, marks children (bit31 @+4 vs
+// MATCH. GC mark loop: pops frame / closure / node stacks of GC, marks children (bit31 @+4 vs
 // D_002DD598) and pushes unmarked ones. Register keys: one function-level `pcRef` for every closure pointer (the tagk 0x22
 // case marks through the stale pointer of an earlier 0x20 case - original behaviour), one `pf` for the popped frame and the
 // closure's frame, one `pn` for the closure's link list walk, its node and the popped node.

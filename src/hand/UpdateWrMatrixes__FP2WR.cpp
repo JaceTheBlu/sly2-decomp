@@ -1,4 +1,4 @@
-// UpdateWrMatrixes (0x22C028). Circle case: the scalar-home sqc2 stores and one combine carry "memory" clobbers to fix their order (Claude agent).
+// UpdateWrMatrixes (0x22C028). Circle case: the scalar-home sqc2 stores and one combine carry "memory" clobbers to fix their order.
 typedef int qword __attribute__((mode(TI)));
 union V {qword q;float f[4];};
 struct M3 {float f[3][4];} __attribute__((aligned(16)));

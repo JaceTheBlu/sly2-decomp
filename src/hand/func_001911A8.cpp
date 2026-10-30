@@ -4,7 +4,7 @@
 // against every found object (any hit with a nonzero parameter aborts), then a sphere around the actor's world bounds
 // is pruned against every object's BSP and turned into contacts; any contact aborts, otherwise step 8 is entered.
 //
-// Matching notes (wave-4 lane 8):
+// Matching notes:
 // - case 8 switches on p->step (the field, not the loop's local): gcse turns the load into a copy of the loop-top
 //   load, which gives the `lw a1, step` in the dispatch branch's delay slot; the local itself is spilled.
 // - ProbeGround's exits are plain returns out of a STACKSCOPE scope (out-of-line ctor/dtor 0x1AE478/0x1AE4A0);

@@ -1,4 +1,4 @@
-// (Claude agent) Matched: MulM3q writes rows through an out pointer, copying each row right after storing it (interleaved m/t stores).
+// Matched: MulM3q writes rows through an out pointer, copying each row right after storing it (interleaved m/t stores).
 typedef int qword __attribute__((mode(TI)));
 typedef struct { qword r[3]; } M3;
 extern qword D_002A2DB0;

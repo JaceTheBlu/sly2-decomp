@@ -1,4 +1,4 @@
-// (Claude agent) fdlibm/newlib ef_acos.c, written fresh. Sony libm compiler = ee-gcc2.9-991111-01, whose divsf3 pattern is the
+// fdlibm/newlib ef_acos.c, written fresh. Sony libm compiler = ee-gcc2.9-991111-01, whose divsf3 pattern is the
 // noreorder unit `nop; nop; div.s` (length 3: never put in a delay slot, but not a reorg search stop), so the DIVNOP emulation is not needed.
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111-01
 // SLY2_CFLAGS: -O2 -G0

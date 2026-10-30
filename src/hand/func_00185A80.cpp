@@ -1,4 +1,4 @@
-// func_00185A80 (Claude agent, lane G16, 2026-10-24): MATCH, no register pins, VU helper asms only.
+// func_00185A80: MATCH, no register pins, VU helper asms only.
 // From laneG13v1 (12). Keys: (1) loop 2: the plane.w read before a qmfc2 helper with a "memory" clobber, then an
 // mtc1 helper with allocation-only "f"(w) operands (12 -> 9). (2) loop 3 as a fresh block-scoped `int k`/`int m`
 // with the weights read through Lilly's VuFloatFromMemWord ("rV": reload makes the lw) (9 -> 1). (3) an early

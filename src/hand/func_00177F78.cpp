@@ -1,4 +1,4 @@
-// func_00177F78 (Claude agent, T1690, 2026-10-25): MATCH. Curve follower step: closest point on the curve(s), steering
+// func_00177F78: MATCH. Curve follower step: closest point on the curve(s), steering
 // velocity toward the next point, avoidance of other bodies (loop), integration and collision clamp.
 // Built on lilly15 (aligned 11, T1686). What finished it (each measured, see notes/170000.md):
 //  - accel = VecCombo(VU_FLOAT(&D_002BE658), vGoal - p->v, VU_FLOAT(&D_002BE65C), next - p->pos): the game's own

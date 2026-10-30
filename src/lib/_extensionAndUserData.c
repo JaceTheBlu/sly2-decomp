@@ -1,7 +1,7 @@
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db
-// (Claude agent) near miss 2/115: before 'jal _sceMpegNextBit(d,4)' target sets a0 then a1 (a1 in slot); ours a1 then a0.
+// near miss 2/115: before 'jal _sceMpegNextBit(d,4)' target sets a0 then a1 (a1 in slot); ours a1 then a0.
 typedef struct { char p0[0x878]; int stop; } D;
 unsigned int _sceMpegNextBit(D *d, int n);
 unsigned int _sceMpegPeepBit(D *d, int n);

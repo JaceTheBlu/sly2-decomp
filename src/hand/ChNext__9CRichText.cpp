@@ -1,4 +1,4 @@
-// (Claude agent, lane E7) MATCH from v2 (1 diff): ONE register pin, `one` in $19 for the three m_fDirty = 1 stores. Without it,
+// MATCH from v2 (1 diff): ONE register pin, `one` in $19 for the three m_fDirty = 1 stores. Without it,
 // the null-font branch's m_fDirty = 1 is CSE'd into fDone's s1 (target keeps the hoisted const-1 in s3).
 struct RGBA { unsigned char r, g, b, a; };
 class CFont {
