@@ -24,7 +24,7 @@ void func_00258248(KEY *);
 STREAM *func_001848A8(STREAM *,int,void *,int);
 int func_00184D60(STREAM *,KEY *);
 void func_00184950(STREAM *,int);
-void func_001179D8(STREAM *,int,void *);
+void SetDecompress__18CBinaryInputStreamiPUc(STREAM *,int,void *);
 void func_00184CA0(STREAM *);
 void func_0020E068(SW *);
 void func_0014D068(void *);
@@ -96,7 +96,7 @@ extern "C" void func_0020E890(SW *p)
     __asm__("daddu %0,%1,$zero":"=r"(reader):"r"(argument));
     func_001848A8(argument,0xD8000,D_002F7980,0);
     if(hasFile&&!func_00184D60(reader,&key)){func_00184950(reader,2);func_001AE4A0(scope,2);return;}
-    func_001179D8(reader,0x4000,(void *)0x70000000);
+    SetDecompress__18CBinaryInputStreamiPUc(reader,0x4000,(void *)0x70000000);
     func_00184CA0(reader);
     func_0020E068(p);
     func_0014D068(D_002DDED0);

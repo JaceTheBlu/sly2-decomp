@@ -33,7 +33,7 @@ void func_00226CA8(VIFS *p, int a, int b);
 void func_00226F28(VIFS *p, int a, int b, void *pv, int n);
 void func_0014F768(CM *p, int k, void *pv, M4 *pm0, M4 *pm1);
 void func_001576F0(VIFS *p);
-void func_001574A0(void *p);
+void Flush__4DMAS(void *p);
 void func_001EA9F0(GAME *p, int n);
 
 void func_00157FA0(GAME *pgame)
@@ -120,8 +120,8 @@ void func_00157FA0(GAME *pgame)
     if (kPrev != -1)
         D_002BDD88[kPrev].pfnEnd(&D_002DEA28, kindPrev, -1);
     D_003D4A50 = 0;
-    func_001574A0(D_002DEA00);
-    func_001574A0(&D_002DEA28);
+    Flush__4DMAS(D_002DEA00);
+    Flush__4DMAS(&D_002DEA28);
     if (pgame->f3EA8) {
         pgame->f3EA8 = 0;
         func_001EA9F0(pgame, 0);

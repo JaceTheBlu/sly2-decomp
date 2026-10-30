@@ -19,7 +19,7 @@ struct L {
     void *p28;
 };
 extern void **D_003DD004;
-void func_00117968(void *, int, void *);
+void Read__18CBinaryInputStreamiPv(void *, int, void *);
 void func_001ED278(int *);
 int func_00117D50(void *);
 void *func_001AE2A0(struct MSG *);
@@ -36,7 +36,7 @@ void func_001EB2F0(void *pbis, struct L *p)
     struct MSG msg;
     int i, j;
     struct ENT *ae, *pe;
-    func_00117968(pbis, 0x18, p);
+    Read__18CBinaryInputStreamiPv(pbis, 0x18, p);
     func_001ED278(&p->c8);
     func_001ED278(&p->cC);
     func_001ED278(&p->c10);

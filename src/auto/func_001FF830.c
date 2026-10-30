@@ -1,5 +1,5 @@
 #include "m2c_prelude.h"
-M2C_UNK func_00117968(s32, s32, s32);               /* extern */
+M2C_UNK Read__18CBinaryInputStreamiPv(s32, s32, s32);               /* extern */
 M2C_UNK func_001291A8(s32, s32 *);                  /* extern */
 M2C_UNK func_00129EC8(s32 *);                       /* extern */
 M2C_UNK func_0012A0B0(s32 *, M2C_UNK);              /* extern */

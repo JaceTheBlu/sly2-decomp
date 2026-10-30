@@ -11,5 +11,5 @@ extern void *D_002DD2F8;
 extern void *D_002DD2FC;
 
 void func_00118458(s32 arg0, s32 arg1) {
-    func_00117968(arg0, 0x40, arg1);
+    Read__18CBinaryInputStreamiPv(arg0, 0x40, arg1);
 }

@@ -4,14 +4,14 @@ struct E20 { char pad[0x20]; };
 struct Z { int a; short b; unsigned char c1; unsigned char c2; int pad8; struct E28 **ap1; struct E20 **ap2; };
 extern struct E28 *D_003DCFF4;
 extern struct E20 *D_003DCFFC;
-void func_00117968(void *pbis, int cb, void *pv);
+void Read__18CBinaryInputStreamiPv(void *pbis, int cb, void *pv);
 int func_00117C20(void *pbis);
 void *func_001AE1D0(struct AR *par);
 void func_001EB1A8(void *pbis, struct Z *pz)
 {
     struct AR ar;
     int i;
-    func_00117968(pbis, 8, pz);
+    Read__18CBinaryInputStreamiPv(pbis, 8, pz);
     if (pz->c1) {
         ar.cb = pz->c1 * 4;
         ar.cbAlign = 0x10;

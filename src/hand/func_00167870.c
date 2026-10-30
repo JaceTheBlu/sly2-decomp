@@ -14,7 +14,7 @@ typedef char EntrySize[sizeof(struct E)==0x28?1:-1];
 short func_00117D50(struct STREAM*) __asm__("S16Read__18CBinaryInputStream");
 char func_00117D00(struct STREAM*) __asm__("S8Read__18CBinaryInputStream");
 struct VECTOR;
-void func_00117EB0(struct STREAM*,struct VECTOR*) __asm__("ReadVector__18CBinaryInputStreamP6VECTOR");
+void ReadVector__18CBinaryInputStreamP6VECTOR(struct STREAM*,struct VECTOR*) __asm__("ReadVector__18CBinaryInputStreamP6VECTOR");
 float func_00117E38(struct STREAM*) __asm__("F32Read__18CBinaryInputStream");
 unsigned char func_00117BD0(struct STREAM*) __asm__("U8Read__18CBinaryInputStream");
 void*func_001AE2A0(struct REQUEST*);
@@ -37,7 +37,7 @@ void func_00167870(struct P*p,struct STREAM*stream){
                     for(;j<4;j++)group->records[j].meta.kind=-1;
                     break;
                 }
-                func_00117EB0(stream,(struct VECTOR*)record->position);
+                ReadVector__18CBinaryInputStreamP6VECTOR(stream,(struct VECTOR*)record->position);
                 record->radius=func_00117E38(stream);
                 record->meta.limit=func_00117E38(stream);
                 record->meta.count=func_00117BD0(stream);

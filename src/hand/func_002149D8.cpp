@@ -42,8 +42,8 @@ int func_00117D50(BIS *);
 int func_00117D00(BIS *);
 int func_00117DB8(BIS *);
 float func_00117E38(BIS *);
-void func_00117ED0(BIS *,M3 *);
-void func_00117968(BIS *,int,void *);
+void ReadMatrix__18CBinaryInputStreamP7MATRIX3(BIS *,M3 *);
+void Read__18CBinaryInputStreamiPv(BIS *,int,void *);
 void *func_00116918(HEAP *,int,int);
 void *func_001AE378(ALLOCREQ *);
 void func_00214398(OWNER *,BIS *,ROOT *,int *,SPRITE **);
@@ -90,10 +90,10 @@ extern "C" void func_002149D8(OWNER *const owner,BIS *stream,ROOT *root,int,SPRI
   break;
  }
  case 2:{
-  func_00117ED0(stream,&raw);M3 matrix=raw;CopyXY(sprite->data.polygon.matrix,matrix);
+  ReadMatrix__18CBinaryInputStreamP7MATRIX3(stream,&raw);M3 matrix=raw;CopyXY(sprite->data.polygon.matrix,matrix);
   sprite->data.polygon.count=func_00117C20(stream);
   sprite->data.polygon.vertices=(VERTEX *)func_00116918(owner->heap,sprite->data.polygon.count*sizeof(VERTEX),0x14);
-  func_00117968(stream,sprite->data.polygon.count*sizeof(VERTEX),sprite->data.polygon.vertices);break;
+  Read__18CBinaryInputStreamiPv(stream,sprite->data.polygon.count*sizeof(VERTEX),sprite->data.polygon.vertices);break;
  }
  case 6:case 7:{
   PAIR first,second;

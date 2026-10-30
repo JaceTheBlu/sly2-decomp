@@ -14,7 +14,7 @@ extern char D_002DB338[];
 int func_00117D00(void *);
 int func_00117BD0(void *);
 float func_00117E38(void *);
-void func_00117EB0(void *,qword *);
+void ReadVector__18CBinaryInputStreamP6VECTOR(void *,qword *);
 int func_00117D50(void *);
 void *func_001AE2A0(struct Alloc *);
 struct Hook *func_0012E1F0(int);
@@ -33,8 +33,8 @@ void func_0021C888(struct S *p,void *stream) {
         n->x10=func_00117E38(stream);
         n->x14=func_00117E38(stream);
         n->x18=func_00117E38(stream);
-        func_00117EB0(stream,&n->q20);
-        func_00117EB0(stream,&n->q30);
+        ReadVector__18CBinaryInputStreamP6VECTOR(stream,&n->q20);
+        ReadVector__18CBinaryInputStreamP6VECTOR(stream,&n->q30);
         n->count=func_00117D00(stream);
         n->entries=(struct E *)Alloc(n->count*sizeof(struct E));
         for(j=0;j<n->count;j++) {

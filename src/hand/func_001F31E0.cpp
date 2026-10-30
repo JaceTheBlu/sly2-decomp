@@ -23,7 +23,7 @@ int func_00117D00(void *);
 float func_00117E38(void *);
 void func_00117FD0(void *,GEO *);
 void func_00118220(void *,GEO *,TREE *);
-void func_00117ED0(void *,STATE *);
+void ReadMatrix__18CBinaryInputStreamP7MATRIX3(void *,STATE *);
 void func_00167320(DATA *,P *,void *);
 void *func_001AE2A0(MSG *);
 void func_00166270(GEO *,const M4 *,GEO *);
@@ -77,7 +77,7 @@ extern "C" void func_001F31E0(P *p,void *stream)
         STATE *state=(STATE *)func_001AE2A0(&request);
         p->state=state;
         state->mass=func_00117E38(stream);
-        func_00117ED0(stream,state);
+        ReadMatrix__18CBinaryInputStreamP7MATRIX3(stream,state);
         func_001F35F8(p,1.0f);
         Post(p);
     }

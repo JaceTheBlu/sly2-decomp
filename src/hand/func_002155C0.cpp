@@ -3,7 +3,7 @@ void func_001AE478(void *p);
 void func_001AE4A0(void *p, int n);
 struct X { char pad[0x14]; unsigned long *px14; };
 X *func_001EC880(int);
-void func_00166920(void *);
+void __4GIFS(void *);
 void func_001572E0(void *, int);
 void func_00166BD8(void *, int, int, int);
 void func_00166E90(void *, int, unsigned long);
@@ -24,7 +24,7 @@ void func_002155C0(P *p, Q *q)
         X *x = func_001EC880(q->x10);
         if (x) {
             BUF b;
-            func_00166920(&b);
+            __4GIFS(&b);
             func_001572E0(&b, 0x10);
             func_00166BD8(&b, 0, 1, 0xE);
             func_00166E90(&b, 6, *x->px14);

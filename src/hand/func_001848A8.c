@@ -6,11 +6,11 @@ struct BIS {
     int x3c, x40, x44, x48, x4c, x50, x54, x58, x5c, x60;
 };
 extern char D_002D2918[];
-void func_001177A8(struct BIS *p);
+void __18CBinaryInputStream(struct BIS *p);
 struct BIS *func_001848A8(struct BIS *p, int cb, char *pv, int grf)
 {
     char *ab;
-    func_001177A8(p);
+    __18CBinaryInputStream(p);
     ab = (char *)(((int)pv + 0x3F) & ~0x3F);
     p->vt = D_002D2918;
     p->grf = grf;

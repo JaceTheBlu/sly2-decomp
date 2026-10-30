@@ -2,7 +2,7 @@ typedef int qword __attribute__((mode(TI)));
 struct RGBA { unsigned char r, g, b, a; };
 struct GS { int a[12]; };
 struct PROG { int cRetry; int nRemain; int nTarget; int nMax; char pad[0x50 - 0x10]; int x50; struct RGBA c54, c58, c5C, c60; };
-void func_00166920(struct GS *p);
+void __4GIFS(struct GS *p);
 void func_00157330(struct GS *p, int n, qword *buf);
 void func_001574B8(struct GS *p);
 float func_0011D7F0(float g);
@@ -18,7 +18,7 @@ void func_001C8DD8(struct PROG *p)
     struct GS gs;
     struct RGBA c;
     int w, s;
-    func_00166920(&gs);
+    __4GIFS(&gs);
     func_00157330(&gs, 0x400, buf);
     func_001574B8(&gs);
     w = (int)((float)p->nTarget * 620.0f / (float)p->nRemain);

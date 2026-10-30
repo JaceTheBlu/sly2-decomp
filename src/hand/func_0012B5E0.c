@@ -3,7 +3,7 @@ typedef struct KEY { VECTOR3 pos; float t; VECTOR3 dpos; int pad; VECTOR3 dpos2;
 typedef struct T { int pad; int c; KEY *a; } T;
 typedef struct AREQ { int cb; int cbAlign; } AREQ;
 int func_00117C20(void *pbis);
-void func_00117EB0(void *pbis, VECTOR3 *pv);
+void ReadVector__18CBinaryInputStreamP6VECTOR(void *pbis, VECTOR3 *pv);
 KEY *func_001AE2A0(AREQ *preq);
 void func_0012B5E0(T *t, void *pbis)
 {
@@ -17,8 +17,8 @@ void func_0012B5E0(T *t, void *pbis)
     for (i = 0; i < t->c; i++) {
         KEY *pkey = &t->a[i];
         pkey->t = func_00117C20(pbis) * (1.0f / 60.0f);
-        func_00117EB0(pbis, &pkey->pos);
-        func_00117EB0(pbis, &pkey->dpos);
-        func_00117EB0(pbis, &pkey->dpos2);
+        ReadVector__18CBinaryInputStreamP6VECTOR(pbis, &pkey->pos);
+        ReadVector__18CBinaryInputStreamP6VECTOR(pbis, &pkey->dpos);
+        ReadVector__18CBinaryInputStreamP6VECTOR(pbis, &pkey->dpos2);
     }
 }

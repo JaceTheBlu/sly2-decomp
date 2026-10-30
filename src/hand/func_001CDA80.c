@@ -10,7 +10,7 @@ extern char D_002DEA28[];
 void func_001A3EE8(struct G *p);
 void func_001CD9E0(struct G *p);
 void func_001DAC58(void *p);
-void func_001574A0(void *p);
+void Flush__4DMAS(void *p);
 void func_001CDA80(struct G *p)
 {
     int i;
@@ -29,6 +29,6 @@ void func_001CDA80(struct G *p)
     }
     p->pi = 0;
     func_001DAC58(D_003DA0F0);
-    func_001574A0(D_002DEA00);
-    func_001574A0(D_002DEA28);
+    Flush__4DMAS(D_002DEA00);
+    Flush__4DMAS(D_002DEA28);
 }

@@ -15,7 +15,7 @@ extern "C" void func_00184950(BIS *,int);
 extern "C" void func_00258248(KEY *);
 extern "C" void *func_001AE318(MSG *);
 extern "C" int func_00184D60(BIS *,KEY *);
-extern "C" void func_001179D8(BIS *,int,void *);
+extern "C" void SetDecompress__18CBinaryInputStreamiPUc(BIS *,int,void *);
 extern "C" unsigned char func_00117BD0(BIS *);
 extern "C" unsigned short func_00117C20(BIS *);
 extern "C" int func_00233470(const void *,const void *,unsigned int);
@@ -68,7 +68,7 @@ extern "C" void func_002124F0(S *p) {
     pk->kind=2;
     func_00258248(pk);
     if(!SetKey(&work.key,p->file)||!func_00184D60(bs,pk))goto fail;
-    func_001179D8(bs,0x4000,(void *)0x70000000);
+    SetDecompress__18CBinaryInputStreamiPUc(bs,0x4000,(void *)0x70000000);
     work.tmp.magic[0]=func_00117BD0(bs);
     work.tmp.magic[1]=func_00117BD0(bs);
     work.tmp.magic[2]=func_00117BD0(bs);

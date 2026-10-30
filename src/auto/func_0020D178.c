@@ -2,9 +2,9 @@
 /* Warning: missing "jr $ra" in last block of func_0020D468 (initial). */
 
 M2C_UNK CopyAb__FPvT0Ui(void *, s32, s32);          /* extern */
-M2C_UNK func_00117968(s32, s32, s32);               /* extern */
-M2C_UNK func_001179B8(s32, s32);                    /* extern */
-M2C_UNK func_001179D8(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
+M2C_UNK Read__18CBinaryInputStreamiPv(s32, s32, s32);               /* extern */
+M2C_UNK Skip__18CBinaryInputStreami(s32, s32);                    /* extern */
+M2C_UNK SetDecompress__18CBinaryInputStreamiPUc(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_001291A8(s32 *, s32 *, s32, s32);      /* extern */
 M2C_UNK func_00129EC8(s32 *);                       /* extern */
 s32 func_001AE318(s32 *, s32, s32, s128);           /* extern */

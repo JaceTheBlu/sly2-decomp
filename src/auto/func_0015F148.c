@@ -7,7 +7,7 @@
 
 M2C_UNK func_001291A8(s32 *, s32 *, s32);           /* extern */
 M2C_UNK func_00129EC8(s32 *);                       /* extern */
-M2C_UNK func_00166920(M2C_UNK *);                   /* extern */
+M2C_UNK __4GIFS(M2C_UNK *);                   /* extern */
 M2C_UNK func_002271C8(s32, M2C_UNK *);              /* extern */
 s32 func_002355E0(s32, M2C_UNK);                    /* extern */
 M2C_UNK func_002417F0(s32, M2C_UNK, M2C_UNK);       /* extern */

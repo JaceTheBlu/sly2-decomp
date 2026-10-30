@@ -8,8 +8,8 @@ extern struct G g_sw;
 int func_00117D50(void *pbis);
 int func_00117D00(void *pbis);
 int func_00117DB8(void *pbis);
-void func_00117968(void *pbis, int cb, void *pv);
-void func_001179B8(void *pbis, int cb);
+void Read__18CBinaryInputStreamiPv(void *pbis, int cb, void *pv);
+void Skip__18CBinaryInputStreami(void *pbis, int cb);
 int func_001C9940(int, int);
 int func_001C99D8(int, int, int *);
 int func_0015E938(struct G *, int, int, int, int);
@@ -46,7 +46,7 @@ void func_0013FB40(void *psw, void *pbisArg, struct IF *pifParent)
             goto read;
         if (k < -2) {
         read:
-            func_00117968(pbis, k * 2, as);
+            Read__18CBinaryInputStreamiPv(pbis, k * 2, as);
         }
         pif = pifParent;
         cid = func_00117D50(pbis);
@@ -108,6 +108,6 @@ void func_0013FB40(void *psw, void *pbisArg, struct IF *pifParent)
         }
         continue;
     skip:
-        func_001179B8(pbis, cb);
+        Skip__18CBinaryInputStreami(pbis, cb);
     }
 }

@@ -26,7 +26,7 @@ void *func_002333B4(void *pv, int b, int cb);
 void BeginSpliceLoad(void);
 int func_00117D50(BIS *pbis);
 int func_00117DB8(BIS *pbis);
-void func_00117968(BIS *pbis, int cb, void *pv);
+void Read__18CBinaryInputStreamiPv(BIS *pbis, int cb, void *pv);
 void func_00117988(BIS *pbis, int cb);
 void func_001C9058(void *p);
 void func_001C9090(void *p, void *pv);
@@ -100,7 +100,7 @@ extern "C" void LoadSwFromBrx(SW *psw, BIS *pbis)
     func_001C9090(&h, D_002A4BD0);
     for (i = 0; i < psw->cwe; i++) {
         WE *pwe = &psw->awe[i];
-        func_00117968(pbis, 0x40, pwe->ab1C);
+        Read__18CBinaryInputStreamiPv(pbis, 0x40, pwe->ab1C);
         pwe->x5C = func_00117DB8(pbis);
         pwe->x60 = func_00117DB8(pbis);
         pwe->x10 = func_00117DB8(pbis);
@@ -110,20 +110,20 @@ extern "C" void LoadSwFromBrx(SW *psw, BIS *pbis)
         func_002333B4(pwe->pv18, -1, pwe->c8 * 4);
     }
     if (fNever) { // STAND-IN, see the header
-        func_00117968(pbis, 0x40, psw);
-        func_00117968(pbis, 0x40, psw);
-        func_00117968(pbis, 0x40, psw);
-        func_00117968(pbis, 0x40, psw);
-        func_00117968(pbis, 0x40, psw);
-        func_00117968(pbis, 0x40, psw);
-        func_00117968(pbis, 0x40, psw);
-        func_00117968(pbis, 0x40, psw);
-        func_00117968(pbis, 0x40, psw);
-        func_00117968(pbis, 0x40, psw);
-        func_00117968(pbis, 0x40, psw);
-        func_00117968(pbis, 0x40, psw);
-        func_00117968(pbis, 0x40, psw);
-        func_00117968(pbis, 0x40, psw);
+        Read__18CBinaryInputStreamiPv(pbis, 0x40, psw);
+        Read__18CBinaryInputStreamiPv(pbis, 0x40, psw);
+        Read__18CBinaryInputStreamiPv(pbis, 0x40, psw);
+        Read__18CBinaryInputStreamiPv(pbis, 0x40, psw);
+        Read__18CBinaryInputStreamiPv(pbis, 0x40, psw);
+        Read__18CBinaryInputStreamiPv(pbis, 0x40, psw);
+        Read__18CBinaryInputStreamiPv(pbis, 0x40, psw);
+        Read__18CBinaryInputStreamiPv(pbis, 0x40, psw);
+        Read__18CBinaryInputStreamiPv(pbis, 0x40, psw);
+        Read__18CBinaryInputStreamiPv(pbis, 0x40, psw);
+        Read__18CBinaryInputStreamiPv(pbis, 0x40, psw);
+        Read__18CBinaryInputStreamiPv(pbis, 0x40, psw);
+        Read__18CBinaryInputStreamiPv(pbis, 0x40, psw);
+        Read__18CBinaryInputStreamiPv(pbis, 0x40, psw);
     }
     func_001FD0E8(g_sndmgr, pbis);
     func_001D7B88((char *)psw + 0x3A18, pbis);

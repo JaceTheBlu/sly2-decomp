@@ -10,7 +10,7 @@ extern struct G g_sw;
 void func_00231170(struct S *p, void *pbis);
 int func_00117C20(void *pbis);
 int func_00117BD0(void *pbis);
-void func_00117EB0(void *pbis, struct V *pv);
+void ReadVector__18CBinaryInputStreamP6VECTOR(void *pbis, struct V *pv);
 float func_00117E38(void *pbis);
 void *func_001AE2A0(struct A *pa);
 void *func_001AE1D0(struct A *pa);
@@ -30,7 +30,7 @@ void func_001C03C0(struct S *p, void *pbis)
     p->aEC = func_001AE2A0(&a);
     for (i = 0; i < p->cE0; i++) {
         struct V *pd = &p->aE4[i];
-        func_00117EB0(pbis, pd);
+        ReadVector__18CBinaryInputStreamP6VECTOR(pbis, pd);
         pd->c = func_00117BD0(pbis);
         a.cb = pd->c * 8 + 8;
         a.align = 0x10;
