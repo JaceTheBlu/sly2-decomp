@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct PL { char pad[0x18]; float g18; float g1C; };
 struct O;
@@ -6,7 +7,6 @@ struct ASEGA {char pad[0x14];struct TABLE*table;struct O*owner;float time;char p
 struct BBOX {float min[4],max[4];char pad20[0x40];struct O*owner;};
 struct G;
 struct Q { char pad[0xEC]; struct BBOX *xEC; };
-struct CLOCK { float t; float dt; };
 extern struct CLOCK g_clock;
 extern struct G g_sw;
 extern float D_002C08E4;
@@ -96,7 +96,6 @@ typedef char Size_0[sizeof(struct PL)==32?1:-1];
 typedef char Size_1[sizeof(struct ASEGA)==80?1:-1];
 typedef char Size_2[sizeof(struct BBOX)==100?1:-1];
 typedef char Size_3[sizeof(struct Q)==240?1:-1];
-typedef char Size_4[sizeof(struct CLOCK)==8?1:-1];
 typedef char Size_5[sizeof(struct P)==6864?1:-1];
 typedef char Size_6[sizeof(qword)==16?1:-1];
 typedef char Size_7[sizeof(unsigned long)==8?1:-1];

@@ -1,7 +1,7 @@
+#include "clock.h"
 // Update the movement-state controller.
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } U;
-struct CLOCK { float t; float dt; };
 extern struct CLOCK g_clock;
 extern float D_002BE6C8, D_002BE6CC;
 struct VTE { short d; short pad; void *pfn; };
@@ -101,7 +101,6 @@ typedef char layout_pointer[(sizeof(void*)==4)?1:-1];
 typedef char layout_qword[(sizeof(qword)==16)?1:-1];
 typedef char layout_U[(sizeof(U)==16)?1:-1];
 typedef char layout_VTE[(sizeof(struct VTE)==8)?1:-1];
-typedef char layout_CLOCK[(sizeof(struct CLOCK)==8)?1:-1];
 typedef char layout_C[(sizeof(struct C)==0x20)?1:-1];
 typedef char layout_B[(sizeof(struct B)==0x94)?1:-1];
 typedef char layout_A[(sizeof(struct A)==0x20C)?1:-1];

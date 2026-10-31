@@ -108,6 +108,10 @@ def main():
         if '--careful' in sys.argv and ren and any(re.search(r'\{[^{}]*\b%s\b[^{}]*\}' % re.escape(old), others) for old in ren):
             skipped[rel] = 'a renamed field name is also used by another struct'; continue
         u = others
+        # static asserts on the size of the local stand-in (typedef char X[sizeof(STRUCT)==8?1:-1];) checked the
+        # stand-in, not the real type: they go with it
+        u = re.sub(r'^[ \t]*typedef[ \t]+char[ \t]+\w+[ \t]*\[[^\]\n]*(?:sizeof|__alignof__)[ \t]*\([ \t]*(?:struct[ \t]+)?%s[ \t]*\)[^\n]*\n'
+                   % struct, '', u, flags=re.M)
         for old, new in ren.items():
             u = re.sub(r'(\.|->)\s*%s\b' % re.escape(old), r'\g<1>' + new, u)
         if f'#include "{header}"' not in u:

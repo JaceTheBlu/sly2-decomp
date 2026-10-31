@@ -1,4 +1,4 @@
-typedef struct CLOCK { float t; float dt; } CLOCK;
+#include "clock.h"
 extern CLOCK g_clock;
 extern float D_003E1BE0;
 struct G { char pad[0x24]; float g24; char pad2[0x60 - 0x28]; char mat[0x4A4 - 0x60]; int c4A4; };

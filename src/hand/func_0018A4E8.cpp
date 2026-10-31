@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } VU;
 struct WORK{VU scalar;VU forward,reverse;VU kept;};
@@ -12,7 +13,6 @@ typedef struct S {
     qword v40; float g50; int pad54[5]; C *p68;
 } S;
 typedef struct R { unsigned int x0; char pad[0x30 - 4]; float g30; int x34; int pad38; int x3C; } R;
-typedef struct CLOCK { float t; float dt; } CLOCK;
 struct SMP {float a,b,duration;};
 
 extern "C" CLOCK g_clock;
@@ -151,7 +151,6 @@ typedef char Pointer_Size[(sizeof(void*)==4)?1:-1];
 typedef char VU_Size[(sizeof(VU)==16)?1:-1];
 typedef char WORK_Size[(sizeof(WORK)==0x40)?1:-1];
 typedef char M_Size[(sizeof(M)==0x40)?1:-1];
-typedef char CLOCK_Size[(sizeof(CLOCK)==8)?1:-1];
 typedef char S_Size[(sizeof(S)==0x70)?1:-1];
 typedef char R_Size[(sizeof(R)==0x40)?1:-1];
 typedef char A_x1024_Offset[((unsigned)&((A*)0)->x1024==4132)?1:-1];

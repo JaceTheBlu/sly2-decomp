@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};
 struct VE{short delta,pad;void*fn;};
@@ -8,7 +9,6 @@ struct NODE{char pad0[12];VE*vt;};
 struct TARGET{char pad0[0x130];int exitEffect;};
 struct POINT{char pad0[0x70];U position;};
 struct BLEND{float incoming,unknown4,unknown8,outgoing,unknown10,unknown14;ASEG*clip;};
-struct CLOCK{float t,dt;};
 struct WORK{U average,half,first;};
 struct P{
  char pad0[0x1028];
@@ -312,7 +312,6 @@ typedef char layout_ASEGA_prefix_size[(sizeof(ASEGA)==0x4C)?1:-1];
 typedef char layout_NODE_prefix_size[(sizeof(NODE)==0x10)?1:-1];
 typedef char layout_TARGET_prefix_size[(sizeof(TARGET)==0x134)?1:-1];
 typedef char layout_POINT_prefix_size[(sizeof(POINT)==0x80)?1:-1];
-typedef char layout_CLOCK_prefix_size[(sizeof(CLOCK)==8)?1:-1];
 typedef char layout_P_prefix_size[(sizeof(P)==0x1D1C)?1:-1];
 typedef char layout_WORK_size[(sizeof(WORK)==0x30)?1:-1];
 typedef char layout_WORK_average[((unsigned long)&((WORK*)0)->average==0)?1:-1];

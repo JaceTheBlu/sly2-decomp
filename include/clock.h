@@ -20,6 +20,10 @@ struct CLOCK
     int cWrap;          /* 0x58 COUNT register wrap-arounds */
 };
 
+#ifndef __cplusplus
+typedef struct CLOCK CLOCK;
+#endif
+
 extern struct CLOCK g_clock;   /* global variables are not mangled by g++ 2.95: no extern "C" needed */
 
 #endif /* CLOCK_H */

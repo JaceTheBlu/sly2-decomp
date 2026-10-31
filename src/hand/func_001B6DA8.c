@@ -1,7 +1,7 @@
+#include "clock.h"
 // Update attachment state and projected velocity.
 typedef int qword __attribute__((mode(TI)));
 struct VT { short d; short pad; void *pfn; };
-struct CLOCK { float t; float dt; };
 extern struct CLOCK g_clock;
 extern char g_sw[];
 extern qword g_normalZ;
@@ -28,7 +28,6 @@ static inline void Zero(struct V3 *pv) { pv->z = 0.0f; pv->y = 0.0f; pv->x = 0.0
 typedef char qword_Size[sizeof(qword)==16?1:-1];
 typedef char WORD_Size[sizeof(union WORD)==4?1:-1];
 typedef char VT_Size[sizeof(struct VT)==8?1:-1];
-typedef char CLOCK_Size[sizeof(struct CLOCK)==8?1:-1];
 typedef char SIDE_Size[sizeof(struct SIDE)==64?1:-1];
 typedef char LINK_Size[sizeof(struct LINK)==176?1:-1];
 typedef char MSG_Size[sizeof(struct MSG)==96?1:-1];

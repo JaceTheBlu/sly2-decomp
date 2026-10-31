@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f; } U;
 typedef struct { short d; short pad; qword (*pfn)(void *); } VT;
@@ -5,7 +6,6 @@ struct E8 { char pad[0x80]; qword x80; };
 struct O { char pad[0xC]; VT *vt; char pad2[0xE8-0x10]; struct E8 *xe8; };
 struct S { char pad[0x1BC]; int x1bc; float x1c0; float x1c4; };
 struct P { struct O *x0; int x4; int x8; int pad[2]; struct S *x14; int x18; float x1c; };
-struct CLOCK { float t; float dt; };
 extern struct CLOCK g_clock;
 struct SMP { float a,b,c; };
 extern struct SMP D_002BF700;
@@ -40,7 +40,6 @@ typedef char E8_PrefixSize[sizeof(struct E8)==144?1:-1];
 typedef char O_PrefixSize[sizeof(struct O)==236?1:-1];
 typedef char S_PrefixSize[sizeof(struct S)==456?1:-1];
 typedef char P_PrefixSize[sizeof(struct P)==32?1:-1];
-typedef char CLOCK_PrefixSize[sizeof(struct CLOCK)==8?1:-1];
 typedef char SMP_PrefixSize[sizeof(struct SMP)==12?1:-1];
 typedef char qword_Size[sizeof(qword)==16?1:-1];
 typedef char U_Size[sizeof(U)==16?1:-1];

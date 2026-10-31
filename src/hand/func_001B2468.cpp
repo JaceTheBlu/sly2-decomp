@@ -1,9 +1,9 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};
 struct V {float x,y,z,w;}__attribute__((aligned(16)));
 struct VT {short delta,pad;void*fn;};
 struct P {char pad[0xC];VT*vt;char pad10[0x1E8-0x10];int disabled;char pad1EC[0x278-0x1EC];float deadline;char opaque27C[4];qword targetVelocity;};
-struct CLOCK {float t,dt;};
 extern "C" {
 extern CLOCK g_clock;
 extern qword D_002A2DD0;
@@ -100,8 +100,6 @@ typedef char VT_PrefixSize[sizeof(VT)==8?1:-1];
 typedef char VT_Alignment[__alignof__(VT)==4?1:-1];
 typedef char P_PrefixSize[sizeof(P)==656?1:-1];
 typedef char P_Alignment[__alignof__(P)==16?1:-1];
-typedef char CLOCK_PrefixSize[sizeof(CLOCK)==8?1:-1];
-typedef char CLOCK_Alignment[__alignof__(CLOCK)==4?1:-1];
 typedef char WORK_PrefixSize[sizeof(WORK)==128?1:-1];
 typedef char WORK_Alignment[__alignof__(WORK)==16?1:-1];
 typedef char qword_Width[sizeof(qword)==16?1:-1];

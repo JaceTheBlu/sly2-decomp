@@ -1,6 +1,5 @@
+#include "dl.h"
 typedef struct MSG { int cb; int nKind; } MSG;
-typedef struct DL { void *pvFirst; void *pvLast; int ibDle; } DL;
-typedef struct DLE { void *pvNext; void *pvPrev; } DLE;
 typedef struct FRAME { int an[4]; } FRAME;
 
 typedef struct DZ {

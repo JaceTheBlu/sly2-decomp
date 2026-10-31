@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4];};
 struct V { float x,y,z,w; } __attribute__((aligned(16)));
@@ -8,7 +9,6 @@ struct P {char pad0[0xC];VT *vt;char pad1[0x5C-0x10];CONTROLLER *controller;
  ASEG *aseg;ASEGA *asega[12];int enabled;ACTION *action;float parameter;
  float g270,g274,g278;};
 struct HIT { qword q[4];float t0,t1;int count;void *owner0,*owner1;};
-struct CLOCK {float t,dt;};
 extern "C" CLOCK g_clock;
 extern "C" qword D_002A2DD0;
 struct LO;
@@ -108,8 +108,6 @@ typedef char P_PrefixSize[sizeof(P)==640?1:-1];
 typedef char P_Alignment[__alignof__(P)==16?1:-1];
 typedef char HIT_PrefixSize[sizeof(HIT)==96?1:-1];
 typedef char HIT_Alignment[__alignof__(HIT)==16?1:-1];
-typedef char CLOCK_PrefixSize[sizeof(CLOCK)==8?1:-1];
-typedef char CLOCK_Alignment[__alignof__(CLOCK)==4?1:-1];
 typedef char WORK_PrefixSize[sizeof(WORK)==224?1:-1];
 typedef char WORK_Alignment[__alignof__(WORK)==16?1:-1];
 typedef char qword_Width[sizeof(qword)==16?1:-1];

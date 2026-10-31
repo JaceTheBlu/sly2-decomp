@@ -1,5 +1,4 @@
-struct DL { void *pvFirst; void *pvLast; int ibDle; };
-struct DLE { void *pvNext; void *pvPrev; };
+#include "dl.h"
 struct DZS {
     char pad0[0xC];
     float gC;

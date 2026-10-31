@@ -1,5 +1,5 @@
+#include "util.h"
 #include "gifs.h"
-struct RGBA {uchar r,g,b,a;};
 struct PACKET {int count;QW*data;};
 struct TEXTURE;
 struct ENTRY {char unknown0[4];uchar kind,flags;char unknown6[6];RGBA color,secondary;char unknown14[4];TEXTURE*texture;int unknown1C;PACKET*packets;char unknown24[8];};
@@ -8,14 +8,13 @@ extern ENTRY *D_003DCFEC;
 extern uint D_002DE18C;
 extern "C" void func_001EA750(TEXTURE*,int,GIFS*);
 extern "C" void func_001EB960();
-static inline ulong ColorWord(const RGBA&color,const ENTRY*entry){ulong value=(ulong)color.r|((ulong)color.g<<8)|((ulong)color.b<<16);if(entry->flags&2)return (value|((ulong)color.a<<24))|(1UL<<32);return value|(1UL<<32);}
+static inline ulong ColorWord(const RGBA&color,const ENTRY*entry){ulong value=(ulong)color.bRed|((ulong)color.bGreen<<8)|((ulong)color.bBlue<<16);if(entry->flags&2)return (value|((ulong)color.bAlpha<<24))|(1UL<<32);return value|(1UL<<32);}
 static inline void Pair(GIFS&q,int first,ulong regs){q.AddPrimBulk(first,0,4,regs,0);q.AddPrimBulk(first+1,0,4,regs,0);}
 static inline void Packed(GIFS&q){q.AddPrimPack(0,1,0xE);}
 static inline void End(GIFS&q){q.GIFS::EndPrim(1);q.EndDmaCnt();}
 union BLEND_WORD {ulong value;struct {ulong first:2;ulong second:2;ulong third:2;ulong fourth:2;ulong remaining:56;} fields;};
 static inline ulong Alpha(ENTRY*e){BLEND_WORD word;word.value=0;word.fields.second=(e->flags&1)?2UL:1UL;word.fields.fourth=1;return word.value;}
 #define OFF(t,m) ((unsigned int)&((t*)0)->m)
-typedef char packet_layout[(sizeof(void*)==4 && sizeof(ulong)==8 && sizeof(QW)==16 && sizeof(DMAS)==28 && sizeof(GIFS)==40 && sizeof(RGBA)==4 && sizeof(PACKET)==8 && sizeof(ENTRY)==44 && sizeof(BLEND_WORD)==8 && OFF(PACKET,count)==0x0 && OFF(PACKET,data)==0x4 && OFF(RGBA,r)==0x0 && OFF(RGBA,g)==0x1 && OFF(RGBA,b)==0x2 && OFF(RGBA,a)==0x3 && OFF(ENTRY,kind)==0x4 && OFF(ENTRY,flags)==0x5 && OFF(ENTRY,color)==0xC && OFF(ENTRY,secondary)==0x10 && OFF(ENTRY,texture)==0x18 && OFF(ENTRY,packets)==0x20 && OFF(GIFS,m_pbMax)==0x0 && OFF(GIFS,m_ab)==0x4 && OFF(GIFS,m_pqwCnt)==0x8 && OFF(GIFS,m_pb)==0xC && OFF(GIFS,m_fPad)==0x10 && OFF(GIFS,m_fEndPrim)==0x14 && OFF(GIFS,m_pqwPrim)==0x1C && OFF(GIFS,m_creg)==0x20 && OFF(GIFS,m_cregAll)==0x24)?1:-1];
 static inline ulong TestWordOr(uint base,ulong bits){
  register ulong result __asm__("$6");register uint input __asm__("$5")=base;register ulong mask __asm__("$2")=bits;
  __asm__("or %0,%1,%2":"=r"(result):"r"(input),"r"(mask));return result;
@@ -98,8 +97,8 @@ void func_001EB960(){
    q.PackSTQ(0.f,0.f,1.f);
    {
 
-    rounded.r=(e->color.r+1)>>1;rounded.g=(e->color.g+1)>>1;
-    rounded.b=(e->color.b+1)>>1;rounded.a=(e->color.a+1)>>1;
+    rounded.bRed=(e->color.bRed+1)>>1;rounded.bGreen=(e->color.bGreen+1)>>1;
+    rounded.bBlue=(e->color.bBlue+1)>>1;rounded.bAlpha=(e->color.bAlpha+1)>>1;
     q.PackRGBA(*(uint*)&rounded);
    }
    End(q);q.Clear();

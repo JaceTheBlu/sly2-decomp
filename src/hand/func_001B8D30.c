@@ -1,5 +1,5 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t,dt; };
 struct CLIP; struct ANIMATION;
 struct COMPONENT_DATA;
 struct COMPONENT { struct COMPONENT_DATA *value; };
@@ -43,7 +43,6 @@ typedef char P_x1890_Offset[FIELD_OFFSET(P,x1890)==6288?1:-1];
 typedef char P_x1900_Offset[FIELD_OFFSET(P,x1900)==6400?1:-1];
 typedef char P_x1904_Offset[FIELD_OFFSET(P,x1904)==6404?1:-1];
 typedef char P_x1908_Offset[FIELD_OFFSET(P,x1908)==6408?1:-1];
-typedef char CLOCK_Size[sizeof(struct CLOCK)==8?1:-1];
 typedef char COMPONENT_Size[sizeof(struct COMPONENT)==4?1:-1];
 typedef char SCRIPT_Size[sizeof(struct SCRIPT)==28?1:-1];
 typedef char M3_Size[sizeof(struct M3)==48?1:-1];

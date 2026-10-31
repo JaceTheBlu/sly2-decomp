@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f; } U;
 #include "mat.h"
@@ -8,7 +9,6 @@ struct S1030 { char pad[0x14]; struct S14 *x14; int pad2; float x1c; };
 struct O { char pad[0xC]; VT *vt; char pad2[0x1030-0x10]; struct S1030 *x1030; };
 struct CURVE;
 struct P { struct O *x0; int x4; int x8; struct CURVE *xc; float x10; int x14; int x18; };
-struct CLOCK { float t; float dt; };
 extern "C" struct CLOCK g_clock;
 extern "C" qword D_002A2DD0;
 extern "C" void func_001C3500(struct CURVE *a, int b, M3 *pm, float g);
@@ -34,7 +34,6 @@ typedef char S14_PrefixSize[sizeof(struct S14)==120?1:-1];
 typedef char S1030_PrefixSize[sizeof(struct S1030)==32?1:-1];
 typedef char O_PrefixSize[sizeof(struct O)==4148?1:-1];
 typedef char P_PrefixSize[sizeof(struct P)==28?1:-1];
-typedef char CLOCK_PrefixSize[sizeof(struct CLOCK)==8?1:-1];
 typedef char qword_Size[sizeof(qword)==16?1:-1];
 typedef char U_Size[sizeof(U)==16?1:-1];
 typedef char VT_Size[sizeof(VT)==8?1:-1];

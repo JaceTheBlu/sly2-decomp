@@ -1,4 +1,4 @@
-struct DLE { void *next; void *prev; };
+#include "dl.h"
 struct R { char pad[0x10]; char dl[0xC]; };
 struct Q { char pad[0x20]; struct R *pr; char p1[0x3C]; struct DLE dle; };
 struct E { int a; int b; int c; int d; char p[0xC]; int x1c; float g; int x24; int x28; float h; };

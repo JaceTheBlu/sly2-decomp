@@ -1,3 +1,4 @@
+#include "clock.h"
 // Smooth movement and update directional animation weights.
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};
@@ -8,7 +9,6 @@ struct O{char pad[0xC];VTE*vt;};
 struct PARAM{char pad[0x10];float y,z;int pad18;float weight;};
 struct ANIM;
 struct P{char pad[0xC];VTE*vt;char pad10[0x140];PARAM*params;char pad154[0x5C];M3 matrix;char pad1E0[0x16E4];O*object;char pad18C8[0x698];float base;char pad1F64[8];float left;char pad1F70[8];float middle;char pad1F7C[8];float right;char pad1F88[8];ANIM*anim;float amount,weight;char pad1F9C[4];qword offset;};
-struct CLOCK{float time,dt;};
 struct SMP{float a,b,c;};
 extern "C" CLOCK g_clock;
 extern "C" M3 D_002DDFA0;
@@ -125,7 +125,6 @@ typedef char VTE_Size[(sizeof(VTE)==8)?1:-1];
 typedef char O_Size[(sizeof(O)==16)?1:-1];
 typedef char PARAM_Size[(sizeof(PARAM)==32)?1:-1];
 typedef char SMP_Size[(sizeof(SMP)==12)?1:-1];
-typedef char CLOCK_Size[(sizeof(CLOCK)==8)?1:-1];
 typedef char P_Size[(sizeof(P)==8112)?1:-1];
 typedef char qword_Alignment[(__alignof__(qword)==16)?1:-1];
 typedef char U_Alignment[(__alignof__(U)==16)?1:-1];
@@ -145,7 +144,7 @@ typedef char PARAM_weight_Offset[((unsigned)&((PARAM*)0)->weight==28)?1:-1];
 typedef char SMP_a_Offset[((unsigned)&((SMP*)0)->a==0)?1:-1];
 typedef char SMP_b_Offset[((unsigned)&((SMP*)0)->b==4)?1:-1];
 typedef char SMP_c_Offset[((unsigned)&((SMP*)0)->c==8)?1:-1];
-typedef char CLOCK_time_Offset[((unsigned)&((CLOCK*)0)->time==0)?1:-1];
+typedef char CLOCK_time_Offset[((unsigned)&((CLOCK*)0)->t==0)?1:-1];
 typedef char CLOCK_dt_Offset[((unsigned)&((CLOCK*)0)->dt==4)?1:-1];
 typedef char P_vt_Offset[((unsigned)&((P*)0)->vt==12)?1:-1];
 typedef char P_params_Offset[((unsigned)&((P*)0)->params==336)?1:-1];

@@ -1,3 +1,4 @@
+#include "clock.h"
 #include "util.h"
 
 static __inline__ float sqrtf(float g) { float r; __asm__ __volatile__("sqrt.s %0, %1" : "=&f"(r) : "f"(g)); return r; }
@@ -41,11 +42,6 @@ typedef struct JOY {
     float gDpad;     /* 0x10EC */
 } JOY;
 
-typedef struct CLOCK {
-    char pad[0x3C];
-    float tReal;  /* 0x3C */
-    float x40;    /* 0x40 */
-} CLOCK;
 
 typedef struct G { char pad[0x30C]; int x30c; int x310; void *x314; char pad318[0x3A0 - 0x318]; int x3a0; } G;
 typedef struct SND { float t; } SND;
@@ -123,26 +119,26 @@ int func_00187998(JOY *p)
                 p->uDeflect = 1.0f;
             }
         }
-        p->dx = (p->x - x) / g_clock.x40;
-        p->dy = (p->y - y) / g_clock.x40;
-        p->dx2 = (p->x2 - x2) / g_clock.x40;
-        p->dy2 = (p->y2 - y2) / g_clock.x40;
+        p->dx = (p->x - x) / g_clock.dtFrame;
+        p->dy = (p->y - y) / g_clock.dtFrame;
+        p->dx2 = (p->x2 - x2) / g_clock.dtFrame;
+        p->dy2 = (p->y2 - y2) / g_clock.dtFrame;
         func_0014BF48(D_002DDEC0, p, old & 0xFFFF);
-        p->tRead = g_clock.tReal;
+        p->tRead = g_clock.tFrame;
         if (p->grfbtn != 0 || p->uDeflect != 0.0f || p->uDeflect2 != 0.0f) {
 
-            p->tActive = g_clock.tReal;
+            p->tActive = g_clock.tFrame;
             p->x1020 = 0;
 
-            if (g_clock.tReal - D_002DEB30.t > 15.0f) {
+            if (g_clock.tFrame - D_002DEB30.t > 15.0f) {
                 func_001619A0(&D_002DEB30, 0xE, func_001C4840(g_sw));
-                D_002DEB30.t = g_clock.tReal;
+                D_002DEB30.t = g_clock.tFrame;
             }
         } else {
-            p->x1020 = (int)(g_clock.tReal - p->tActive);
+            p->x1020 = (int)(g_clock.tFrame - p->tActive);
         }
     } else {
-        if (g_clock.tReal - p->tRead >= 2.0f)
+        if (g_clock.tFrame - p->tRead >= 2.0f)
             fRet = 0;
     }
     return fRet;
