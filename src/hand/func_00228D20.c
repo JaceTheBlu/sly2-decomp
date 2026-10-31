@@ -4,7 +4,7 @@ struct N { int x0; struct O *po; int x8; struct N *next; };
 struct G;
 extern struct G g_sw;
 void func_00229738(struct O *po, struct N *pn);
-void func_00229710(struct O *po, struct N *pn);
+void AddSoXa__FP2SOP2XA(struct O *po, struct N *pn);
 void func_002296C0(struct G *pg, struct N *pn);
 void func_00228D20(void *pv, struct N **ppn)
 {
@@ -18,7 +18,7 @@ void func_00228D20(void *pv, struct N **ppn)
             if (b & 0x80000000L)
                 func_00229738(po, pn);
             else
-                func_00229710(po, pn);
+                AddSoXa__FP2SOP2XA(po, pn);
         }
         if (pn->po->bits & 0x100000000L) {
             ppn = &pn->next;

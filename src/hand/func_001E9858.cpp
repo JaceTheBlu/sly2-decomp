@@ -37,7 +37,7 @@ void func_001F36A8(S *);
 M3 *func_001A6318(S *);
 void func_0016EF00(CONFIG *, int);
 void func_001AE5A0(void *, const void *, unsigned);   /* memcpy */
-void *func_001AE1D0(AL *);                            /* allocate (size, align) */
+void *PvAllocSwImpl__Fi(AL *);                            /* allocate (size, align) */
 void func_001E6F60(void *, qword, void *, qword *, qword *, float *, float *);
 M3 *func_0011B830(M3 *, qword, qword);
 void func_001E9858(S *);
@@ -100,7 +100,7 @@ void func_001E9858(S *p)
                 func_001AE5A0(vertices, e->vertices, e->n * 16);
                 w.phase.request.cb = e->n * 16;
                 phase->request.align = 16;
-                U *out = (U *)func_001AE1D0(&phase->request);
+                U *out = (U *)PvAllocSwImpl__Fi(&phase->request);
                 e->samples = out;
                 for (k = 0; k < e->n; k++) {
                     qword world = Point(&object->mat, vertices[k].q);

@@ -10,7 +10,7 @@ extern struct CLK D_002DDED0;
 extern float D_002C3C68[];
 M4 *func_0011C318(M4 *,const M4 *);
 M4 *func_0011C168(M4 *,const M4 *,const M4 *);
-float func_0011D018(float,float,float,float *,float *);
+float GSmooth__FfffP3SMPPf(float,float,float,float *,float *);
 static __inline__ void CopyMatrix(M4 *destination,const M4 *source) {
     register qword row0 __asm__("$2");
     register qword row1 __asm__("$3");
@@ -81,7 +81,7 @@ void func_00203E08(struct S *input)
         pt=pv;ps=old->f;
         j=3;
         while(--j>=0){
-            float next=func_0011D018(*ps,*pt,clock->dt,D_002C3C68,0);
+            float next=GSmooth__FfffP3SMPPf(*ps,*pt,clock->dt,D_002C3C68,0);
             *pd=(next-*ps)/clock->dt;
             ++pt;++ps;++pd;
         }

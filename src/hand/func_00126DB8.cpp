@@ -23,7 +23,7 @@ struct SPF {
 extern "C" {
 FRAME *func_00256DD0();
 CRef func_00127838(NODE *p, FRAME *pframe);
-CRef func_00127C00(FRAME *pframe, int sym, CRef *pref);
+CRef RefAddBinding__6CFrameUiP4CRef(FRAME *pframe, int sym, CRef *pref);
 void func_00127B18(FRAME *pframe, FRAME *pframeParent);
 CRef func_00126DB8(P *p, FRAME *pframe);
 }
@@ -41,7 +41,7 @@ CRef func_00126DB8(P *p, FRAME *pframe)
         for (pn = (NODE *)pargs->ref.u.pv; pn; pn = pn->pnext) {
             NODE *pb = (NODE *)pn->ref.u.pv;
             refVal = func_00127838(pb->pnext, pframe);
-            refT = func_00127C00(spf.p, pb->ref.u.n, &refVal);
+            refT = RefAddBinding__6CFrameUiP4CRef(spf.p, pb->ref.u.n, &refVal);
         }
         func_00127B18(spf.p, pframe);
     } else {

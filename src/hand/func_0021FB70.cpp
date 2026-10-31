@@ -3,7 +3,7 @@
 // carried object's gravity give CalculateLaunchVelocity (func_001D6848) a velocity whose elevation follows lmAim; the
 // apex and the end point after tPredict seconds bound a box for FindSwObjectsInBox (func_0020FAA0). 28 samples along the
 // arc are line-tested (func_0014CC58); at the first hit the flight time is the closest non-negative root of the vertical
-// motion (func_0011D508). The flight time may change by at most 3 * dt per frame; up to 30 points of the arc are written
+// motion (CSolveQuadratic__FfffPf). The flight time may change by at most 3 * dt per frame; up to 30 points of the arc are written
 // back to front into the marker's ring of frames (matrix along the arc, func_0011B830), and the four-clip / two-clip
 // blends get the distance (lmAim) and heading-error (radTurnAim) weights, rate limited by 2 * dt when fUpdateBlends.
 // How it matched (Lilly's agent, T1604): fresh8's stack layout plus
@@ -59,13 +59,13 @@ extern "C" {
  void func_0020FAA0(SW *,qword,qword,int (*)(void *,SO *),void *,int *,SO ***); // FindSwObjectsInBox
  int func_0021FB18(void *,SO *);
  SO *func_0014CC58(int,qword,qword,int,SO **,HIT *);
- int func_0011D508(float,float,float,float *);
+ int CSolveQuadratic__FfffPf(float,float,float,float *);
  M3 *func_0011B830(M3 *,qword,qword);
- V *func_00256D18(V *,qword);
+ V *__as__6VECTORG9VU_VECTOR(V *,qword);
  void func_0021C5F8(MARKER *,qword);
  float func_002458F0(float,float);
  float func_00204740(LO *);                    // JtGetFacingAngle
- float func_0011CF60(float);                   // RadNormalize
+ float RadNormalize__Ff(float);                   // RadNormalize
  void func_001384C0(ASEGBL *);
 }
 // A vector in a VU0 register, passed by value
@@ -133,7 +133,7 @@ extern "C" void func_0021FB70(JTTHROW *pjtthrow,int fUpdateBlends)
   HIT hit;
   if(func_0014CC58(1,posPrev,pos,cso,apso,&hit)){
    V at;
-   int ct=func_0011D508(GZOfQw(vAccel)*0.5f,GZOfQw(vLaunch),GZOfQw(posLaunch)-hit.pos.f[2],at.f);
+   int ct=CSolveQuadratic__FfffPf(GZOfQw(vAccel)*0.5f,GZOfQw(vLaunch),GZOfQw(posLaunch)-hit.pos.f[2],at.f);
    float tBest=0.0f,sBest=D_002A96A0;
    for(int it=0;it<ct;it++){
     float tRoot=at.f[it];
@@ -172,7 +172,7 @@ extern "C" void func_0021FB70(JTTHROW *pjtthrow,int fUpdateBlends)
     qword dpos=QwSub(pos,posBefore);
     func_0011B830(&matRot,dpos,D_002A2DC0.q);
     M4 *pmat=&mat;
-    func_00256D18(&mat.position,pos);
+    __as__6VECTORG9VU_VECTOR(&mat.position,pos);
     pmat->basis=matRot;
     posBefore=pos;
     mat.basis.r[2].n[3]=0;
@@ -193,7 +193,7 @@ extern "C" void func_0021FB70(JTTHROW *pjtthrow,int fUpdateBlends)
  dpos.q=QwSub(posAim,posHeroNow);
  float rad=func_002458F0(dpos.f[1],dpos.f[0]);
  float radHero=func_00204740(pjtthrow->pstepplayer);
- rad=func_0011CF60(rad-radHero);
+ rad=RadNormalize__Ff(rad-radHero);
  float uTurn=GClamp(rad/pjtthrow->radTurnAim,-1.0f,1.0f)*0.5f+0.5f;
  if(fUpdateBlends){
   float uFarOld=pjtthrow->ablC[1].gWeight,uTurnOld;

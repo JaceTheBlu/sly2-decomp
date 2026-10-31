@@ -9,7 +9,7 @@ typedef struct N {int a,b;char pad8[0x2C];int c;int pad38;int d;S *owner;int pri
 struct S {char pad[0x50];int count;void *data;int state;char pad5c[4];int tick;char pad64[0x5C];N *file;};
 typedef struct {char pad[0xC];int priority;} POOL;
 extern "C" FRAME *func_001AE478(FRAME *);
-extern "C" void func_001AE4A0(FRAME *,int);
+extern "C" void _$_18CBinaryInputStream(FRAME *,int);
 extern "C" BIS *func_001848A8(BIS *,int,void *,int);
 extern "C" void func_00184950(BIS *,int);
 extern "C" void func_00258248(KEY *);
@@ -77,7 +77,7 @@ extern "C" void func_002124F0(S *p) {
     if(!func_00233470(work.tmp.magic,D_002A8AE8,4)&&version==6)goto load;
 fail:
     func_00184950(bs,2);
-    func_001AE4A0(&work.frame,2);
+    _$_18CBinaryInputStream(&work.frame,2);
     return;
 load:
     p->file->priority=D_003E1C70.priority;
@@ -85,5 +85,5 @@ load:
     func_00214460(p,bs,p);
     p->file->last=D_003E1C70.priority;
     func_00184950(bs,2);
-    func_001AE4A0(&work.frame,2);
+    _$_18CBinaryInputStream(&work.frame,2);
 }

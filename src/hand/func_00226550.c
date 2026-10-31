@@ -24,7 +24,7 @@ void func_00156728(void *pv);
 void func_001F8DD8(struct S *p);
 void func_001BE1E8(void);
 void func_001EC968(void);
-void func_001AB1A0(void *pv);
+void UpdateSave__FP4SAVE(void *pv);
 void func_001FD830(void *pv);
 void func_0014D478(void *pv);
 void func_0020F7E0(struct S *p);
@@ -80,7 +80,7 @@ void func_00226550(struct S *p)
         func_00149C80(p);
         D_002DD2FC = dli.m_pdliNext;
     }
-    func_001AB1A0(D_002E65E0);
+    UpdateSave__FP4SAVE(D_002E65E0);
     func_001FD830(g_sndmgr);
     if (0.0f < D_002DDED0.g10)
         func_0014D478(g_cm);

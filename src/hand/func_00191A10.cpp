@@ -58,16 +58,16 @@ float func_001E6620(FOCUS *);
 float func_001E6648(FOCUS *);
 float func_001E6610(FOCUS *);
 float func_001E6630(FOCUS *);
-float func_0011D018(float, float, float, SMP *, float *);
+float GSmooth__FfffP3SMPPf(float, float, float, SMP *, float *);
 void func_001940B0(CONTEXT *, int);
 void func_00204660(ACTOR *, float);
 float func_00204740(ACTOR *);
-float func_0011CF60(float);
+float RadNormalize__Ff(float);
 void func_00192BD8(CONTEXT *, int);
 void func_0020BB58(PROGRAM *, float);
 void func_0020BC08(PROGRAM *);
 void func_001441E8(ACTOR *, float);
-void func_001E6ED8(FOCUS *, qword, void *, U *, U *, float *, float *, float);
+void UpdateUbgSgs__FP3UBG(FOCUS *, qword, void *, U *, U *, float *, float *, float);
 void func_00195A00(void *, int, int, int);
 float func_002458F0(float, float);
 void func_001E6F60(FOCUS *, qword, void *, void *, U *, void *, void *);
@@ -190,8 +190,8 @@ extern "C" void func_00191A10(CONTEXT *ctx)
             FOCUS *focus;
             if (func_00132B10(ctx->focus, 12) && !(focus = ctx->focus)->cyclic) {
                 float lo, hi;
-                func_0011D018(ctx->value, func_001E6620(focus) + 30.0f, D_002DDED0.dt, &smp, &lo);
-                func_0011D018(ctx->value, func_001E6648(focus) - 30.0f, D_002DDED0.dt, &smp, &hi);
+                GSmooth__FfffP3SMPPf(ctx->value, func_001E6620(focus) + 30.0f, D_002DDED0.dt, &smp, &lo);
+                GSmooth__FfffP3SMPPf(ctx->value, func_001E6648(focus) - 30.0f, D_002DDED0.dt, &smp, &hi);
                 s = GClamp(lateral, lo, hi);
             } else {
                 s = lateral;
@@ -232,7 +232,7 @@ extern "C" void func_00191A10(CONTEXT *ctx)
                 func_001940B0(ctx, 3);
         }
         func_00204660(ctx->actor, heading);
-        if (ctx->step == 5 && 0.25f < __builtin_fabsf(func_0011CF60(func_00204740(ctx->actor) - heading)))
+        if (ctx->step == 5 && 0.25f < __builtin_fabsf(RadNormalize__Ff(func_00204740(ctx->actor) - heading)))
             step = 5;
         func_00192BD8(ctx, step);
         break;
@@ -263,7 +263,7 @@ extern "C" void func_00191A10(CONTEXT *ctx)
     case 3: {
         FOCUS *focus = ctx->focus;
         U point, tangent;
-        func_001E6ED8(focus, *ctx->actor->ppos, 0, &point, &tangent, &ctx->parameter, &ctx->value, ctx->parameter);
+        UpdateUbgSgs__FP3UBG(focus, *ctx->actor->ppos, 0, &point, &tangent, &ctx->parameter, &ctx->value, ctx->parameter);
         if (focus->flags && !focus->cyclic &&
             (ctx->parameter < func_001E6610(focus) + 0.01f || func_001E6630(focus) - 0.01f < ctx->parameter)) {
             func_00195A00(ctx->actor->control, 0, 0, 0);
@@ -323,10 +323,10 @@ extern "C" void func_00191A10(CONTEXT *ctx)
             if (focus->cyclic) {
                 limit = smp.svFast;
             } else if (ctx->reversed) {
-                func_0011D018(ctx->value, 50.0f, D_002DDED0.dt, &smp, &limit);
+                GSmooth__FfffP3SMPPf(ctx->value, 50.0f, D_002DDED0.dt, &smp, &limit);
                 limit = -limit;
             } else {
-                func_0011D018(ctx->value, func_001E6648(focus) - 50.0f, D_002DDED0.dt, &smp, &limit);
+                GSmooth__FfffP3SMPPf(ctx->value, func_001E6648(focus) - 50.0f, D_002DDED0.dt, &smp, &limit);
             }
             float ratio = (limit - smp.svSlow) / (smp.svFast - smp.svSlow);
             float amount = pjoy->amount;
@@ -338,7 +338,7 @@ extern "C" void func_00191A10(CONTEXT *ctx)
                 g = amount;
         }
         if (ctx->reversed)
-            heading = func_0011CF60(heading + 3.1415927f);
+            heading = RadNormalize__Ff(heading + 3.1415927f);
         if (0.0f < g) {
             func_00192BD8(ctx, 4);
             func_0020BB58(&ctx->program240, g);

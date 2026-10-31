@@ -2,7 +2,7 @@ typedef int qword __attribute__((mode(TI)));
 struct CTX { int a[4]; };
 struct REQ { int cb; int align; };
 void func_001AE478(struct CTX *c);
-void func_001AE4A0(struct CTX *c, int n);
+void _$_18CBinaryInputStream(struct CTX *c, int n);
 void *func_001AE318(struct REQ *r);
 void func_001AE5A0(void *dst, void *src, int cb);
 int func_001BF900(void *ctx, qword a, qword b, int n);
@@ -37,5 +37,5 @@ void func_001BFC18(void *ctx, int *pc, qword **ap)
     if (k < n && k >= 3) func_001BFC18(ctx, &k, tmp);
     func_001AE5A0(ap, tmp, k * 4);
     *pc = k;
-    func_001AE4A0(&c, 2);
+    _$_18CBinaryInputStream(&c, 2);
 }

@@ -6,7 +6,7 @@ extern struct E28 *D_003DCFF4;
 extern struct E20 *D_003DCFFC;
 void Read__18CBinaryInputStreamiPv(void *pbis, int cb, void *pv);
 int func_00117C20(void *pbis);
-void *func_001AE1D0(struct AR *par);
+void *PvAllocSwImpl__Fi(struct AR *par);
 void func_001EB1A8(void *pbis, struct Z *pz)
 {
     struct AR ar;
@@ -15,14 +15,14 @@ void func_001EB1A8(void *pbis, struct Z *pz)
     if (pz->c1) {
         ar.cb = pz->c1 * 4;
         ar.cbAlign = 0x10;
-        pz->ap1 = func_001AE1D0(&ar);
+        pz->ap1 = PvAllocSwImpl__Fi(&ar);
         for (i = 0; i < pz->c1; i++)
             pz->ap1[i] = &D_003DCFF4[func_00117C20(pbis)];
     }
     if (pz->c2) {
         ar.cb = pz->c2 * 4;
         ar.cbAlign = 0x10;
-        pz->ap2 = func_001AE1D0(&ar);
+        pz->ap2 = PvAllocSwImpl__Fi(&ar);
         for (i = 0; i < pz->c2; i++) {
             int k = func_00117C20(pbis);
             if (k == 0xFFFF) pz->ap2[i] = 0;

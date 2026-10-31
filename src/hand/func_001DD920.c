@@ -16,7 +16,7 @@ extern int D_002C35B8[];
 extern char D_002C35F0[];
 void func_001DD8E0(void);
 void func_001DA808(OBJ *);
-int func_00187D80(PAD *, int);
+int PvAllocSwCopyImpl__FiPv(PAD *, int);
 int func_00187DD0(PAD *, int);
 void func_00187DE0(PAD *, int);
 void func_001B04E0(int);
@@ -39,7 +39,7 @@ void func_001DD920(OBJ *p)
         return;
     if (p->pad10 == 0)
         return;
-    if (func_00187D80(p->pad10, 0x800)) {
+    if (PvAllocSwCopyImpl__FiPv(p->pad10, 0x800)) {
         if ((D_002E65E0.xFD50 = D_002E65E0.xFD54) != 0) {
             func_001ACC38(D_002E6550, 1);
             func_00165E38(D_002E65E0.xFD50);
@@ -55,7 +55,7 @@ void func_001DD920(OBJ *p)
     }
     if (func_001A2C98() < 2)
         return;
-    if (!func_00187D80(p->pad10, 0x10))
+    if (!PvAllocSwCopyImpl__FiPv(p->pad10, 0x10))
         return;
     pv = func_0015E938(&g_sw, 5, 0x5D6, 0);
     if (pv == 0)

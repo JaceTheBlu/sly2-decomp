@@ -14,7 +14,7 @@ struct OBJ {
     int f7C;
 };
 void *func_001AE318(MSG *);
-void *func_001AE1D0(MSG *);
+void *PvAllocSwImpl__Fi(MSG *);
 void func_001AE5A0(void *, void *, int);
 void func_001E0290(OBJ *, int);
 void func_001A5C28(OBJ *, void *);
@@ -35,7 +35,7 @@ extern "C" void func_001DFB10(OBJ *p, void *x)
         p->cMax = Max(p->c, p->cMax) + 1;
         pmsg->cb = p->cMax * sizeof(ENT);
         pmsg->nKind = 0x10;
-        p->ae = (ENT *)func_001AE1D0(pmsg);
+        p->ae = (ENT *)PvAllocSwImpl__Fi(pmsg);
         func_001AE5A0(p->ae, aeOld, p->c * sizeof(ENT));
     }
 }

@@ -25,20 +25,20 @@ extern CLOCK D_002DDED0;
 extern GAME g_sw;
 extern "C" {
 FRAME *func_001AE478(FRAME *);
-void func_001AE4A0(FRAME *,int);
+void _$_18CBinaryInputStream(FRAME *,int);
 DZG *func_001585D8(DZG *,int,XP **,int,P **);
 void func_00158668(DZG *,DZ *,DZS *);
 void func_00158988(DZG *,int);
 void func_00158E20(DZG *,float,float);
 void func_0011A6B8(DZG *);
-void func_001A7E60(GAME *,int,XP **);
-void func_001A7FC0(GAME *,int,XP **);
-float func_0011D448(float,float);
+void FindClosestPointOnLine__FP6VECTORN20PfT3(GAME *,int,XP **);
+void FindClosestPointOnLineSegment__FP6VECTORN20PfT3(GAME *,int,XP **);
+float GRandInRange__Fff(float,float);
 void func_00158B20(DZG *,int);
 void func_001F9C48(P *);
 }
 // Stack frame mark: ctor 0x1AE478, dtor 0x1AE4A0 (called with the 2.95 in-charge flag 2).
-struct FRAME {FRAME(){func_001AE478(this);}~FRAME(){func_001AE4A0(this,2);}};
+struct FRAME {FRAME(){func_001AE478(this);}~FRAME(){_$_18CBinaryInputStream(this,2);}};
 
 #define FLT_MAX 3.40282347e+38f
 
@@ -111,8 +111,8 @@ extern "C" void func_001F9410(GAME *game,int flags,int objectCount,P **objects,i
     int fResting=flags&1;
     int j=fResting;
     if(fResting){
-        func_001A7E60(game,contactCount,contacts);
-        func_001A7FC0(game,contactCount,contacts);
+        FindClosestPointOnLine__FP6VECTORN20PfT3(game,contactCount,contacts);
+        FindClosestPointOnLineSegment__FP6VECTORN20PfT3(game,contactCount,contacts);
         int n;for(n=0;n<contactCount;n++){
             contact=contacts[n];
             row=&group.rows[n];
@@ -124,7 +124,7 @@ extern "C" void func_001F9410(GAME *game,int flags,int objectCount,P **objects,i
         for(;j<contactCount;j++){
             contact=contacts[j];
             row=&group.rows[j];
-            float factor=1.0f+contact->elasticity*func_0011D448(0.9f,1.1f);
+            float factor=1.0f+contact->elasticity*GRandInRange__Fff(0.9f,1.1f);
             row->target.value=Dot(contact->velocity.q,contact->normal.q)*factor;
             float magnitude=LengthSquared(contact->velocity.q);
             if(maximum<magnitude)maximum=magnitude;
@@ -146,8 +146,8 @@ extern "C" void func_001F9410(GAME *game,int flags,int objectCount,P **objects,i
         }
         if(k>=objectCount){
             for(k=0;k<objectCount;k++)func_001F9C48(objects[k]);
-            func_001A7E60(&g_sw,contactCount,contacts);
-            func_001A7FC0(&g_sw,contactCount,contacts);
+            FindClosestPointOnLine__FP6VECTORN20PfT3(&g_sw,contactCount,contacts);
+            FindClosestPointOnLineSegment__FP6VECTORN20PfT3(&g_sw,contactCount,contacts);
         }
     }else{
         for(k=0;k<objectCount;k++)Callback(objects[k],66);

@@ -8,9 +8,9 @@ void *func_001AE318(struct M *pm);
 void Read__18CBinaryInputStreamiPv(void *q, int a, void *x);
 void func_001EA568(void *x);
 void func_00170730(void *p);
-void func_001AE4A0(struct L *pl, int n);
+void _$_18CBinaryInputStream(struct L *pl, int n);
 void Skip__18CBinaryInputStreami(void *q, int a);
-void func_00170828(void *p);
+void AddJsgContext__FP3JSG3OID(void *p);
 void func_0020F640(void *p, void *q)
 {
     func_00117988(q, 0x10);
@@ -26,9 +26,9 @@ void func_0020F640(void *p, void *q)
         Read__18CBinaryInputStreamiPv(q, D_003E1C30, x);
         func_001EA568(x);
         func_00170730(p);
-        func_001AE4A0(&l, 2);
+        _$_18CBinaryInputStream(&l, 2);
     } else {
         Skip__18CBinaryInputStreami(q, D_003E1C30);
-        func_00170828(p);
+        AddJsgContext__FP3JSG3OID(p);
     }
 }

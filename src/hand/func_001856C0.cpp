@@ -18,7 +18,7 @@ typedef struct PARAMS { float a, b, duration; } PARAMS;
 extern "C" {
 extern float D_002DDED4, D_002A5688;
 extern void func_0011EE08(qword, qword, qword, qword *, float *, float *);
-extern float func_0011D018(float, float, float, PARAMS *, float *);
+extern float GSmooth__FfffP3SMPPf(float, float, float, PARAMS *, float *);
 extern void func_001193C0(qword *, qword, float);
 static inline qword Transform(const M4 &m, qword p)
 {
@@ -57,7 +57,7 @@ static inline void ClosestPoint(const qword &point, const qword &start, const qw
 }
 static inline void Evaluate(const float &r, const float &d, const float &dt, PARAMS *params, float *out)
 {
-    func_0011D018(r, d, dt, params, out);
+    GSmooth__FfffP3SMPPf(r, d, dt, params, out);
 }
 static inline void BuildPlane(qword *plane, const qword &normal, const float &g)
 {

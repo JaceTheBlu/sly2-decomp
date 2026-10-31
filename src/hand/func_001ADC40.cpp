@@ -9,7 +9,7 @@ extern "C" {
  void*func_002581C0(REF*,void*,void*);
  void func_00129EC8(REF*);
  void*func_001AE478(void*);
- void func_001AE4A0(void*,int);
+ void _$_18CBinaryInputStream(void*,int);
  void*func_001D89A8(void*,...);
  int func_001DDD40(int);
  void*func_0013E368(void*,int);
@@ -18,7 +18,7 @@ extern "C" {
  char*func_0021ED58(char*,const char*);
  int func_001B0078(void*);
 }
-struct FRAME{FRAME()__asm__("func_001AE478");~FRAME(){func_001AE4A0(this,2);}};
+struct FRAME{FRAME()__asm__("func_001AE478");~FRAME(){_$_18CBinaryInputStream(this,2);}};
 static inline float GetG(REF&r,void*a,B*b){func_002581C0(&r,a,b);float g=r.g;func_00129EC8(&r);return g;}
 static inline int GetN(REF&r,void*a,B*b){func_002581C0(&r,a,b);int n=r.n;func_00129EC8(&r);return n;}
 extern "C" void func_001ADC40(char*buf,int idx){
@@ -31,7 +31,7 @@ extern "C" void func_001ADC40(char*buf,int idx){
   int tag;
   if(value)tag=GetN(ref,value,pb);else tag=GetN(ref,pg->fallback,pb);
   func_0021ECD8(buf,D_002A6EC8,(char*)func_0013E368(&g_sw,func_001DDD40(tag)),func_001D82B8(g_sw.object,pb));
-  func_001AE4A0(frame,2);
+  _$_18CBinaryInputStream(frame,2);
  }else{
   switch(func_001B0078(D_003D9ED0)){
    case 0x1E:case 0x1F:func_0021ED58(buf,(char*)func_0013E368(pg,0x44));break;

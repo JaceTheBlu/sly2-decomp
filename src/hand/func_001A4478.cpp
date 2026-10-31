@@ -46,7 +46,7 @@ extern CAMERA g_cm;
 extern "C" {
 void func_001A3F78(WORLD *world, qword pos, int capacity, RESULT *results);
 void func_0011E2D8(qword a, qword b, qword c, M3 *pm);
-qword *func_00256D18(qword *p, qword v);
+qword *__as__6VECTORG9VU_VECTOR(qword *p, qword v);
 int func_001A4258(qword pos, float radius, int csphere, SPHERE *asphere);
 }
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1,%0" : "=j"(q) : "r"(f)); } };
@@ -180,7 +180,7 @@ extern "C" void func_001A4478(WORLD *world, M4 *transform, P *p)
             basis.row[2].q = Scale(dir, VU_FLOAT(extent));
             PACKET packet;
             U *row = packet.basis;
-            func_00256D18(&packet.position.q, center);
+            __as__6VECTORG9VU_VECTOR(&packet.position.q, center);
             row[0] = basis.row[0];
             row[1] = basis.row[1];
             row[2] = basis.row[2];

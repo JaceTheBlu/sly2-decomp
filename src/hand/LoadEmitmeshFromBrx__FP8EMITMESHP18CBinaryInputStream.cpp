@@ -7,11 +7,11 @@ extern "C" {
 int func_00117C20(CBinaryInputStream *pbis);
 void ReadVector__18CBinaryInputStreamP6VECTOR(CBinaryInputStream *pbis, qword *pv);
 float func_00117E38(CBinaryInputStream *pbis);
-void *func_001AE1D0(AL *pal);
+void *PvAllocSwImpl__Fi(AL *pal);
 void *func_001AE2A0(AL *pal);
 }
 extern qword D_002A2DC0;
-static inline void *PvAlloc(int cb, int cbAlign) { AL al(cb, cbAlign); return func_001AE1D0(&al); }
+static inline void *PvAlloc(int cb, int cbAlign) { AL al(cb, cbAlign); return PvAllocSwImpl__Fi(&al); }
 static inline void *PvAllocClear(int cb, int cbAlign) { AL al(cb, cbAlign); return func_001AE2A0(&al); }
 static inline qword Sub(qword a, qword b) { qword d; __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 static inline qword Add(qword a, qword b) { qword d; __asm__("vadd.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }

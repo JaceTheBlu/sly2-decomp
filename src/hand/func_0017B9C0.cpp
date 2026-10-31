@@ -11,7 +11,7 @@ extern "C"{
  extern CLOCK D_002DDED0;
  extern RANGE D_002BE740;
  extern POLY D_002BE720,D_002BE730;
- float func_0011D448(float,float);
+ float GRandInRange__Fff(float,float);
  qword func_001A62E8(P*);
  void func_0011ED40(qword,qword,qword,qword*,float*,float*);
 }
@@ -68,7 +68,7 @@ extern "C" void func_0017B9C0(C*p){
  __asm__("sqc2 %4,%0\n\tdaddu %2,%z5,$zero\n\tlwc1 %1,-0x18f0(%3)\n\taddiu %3,%3,-0x18f0"
    :"=m"(work.bestPoint.q),"=f"(lower),"=&r"(best),"+r"(randomAddress)
    :"j"(zero),"J"(0),"m"(*(float*)(randomAddress-0x18f0)));
- p->time=now+func_0011D448(lower,((RANGE*)randomAddress)->hi);
+ p->time=now+GRandInRange__Fff(lower,((RANGE*)randomAddress)->hi);
  work.origin.q=func_001A62E8(p->actor);
  // D_002A55FC supplies the initial selection cost.
  int i;P*actor;unsigned int limitHigh;

@@ -26,7 +26,7 @@ extern LM D_002C0CF0, D_002C0CF8, D_002C0CE0;       // random ranges: two offset
 extern float D_002C0CE8, D_002C0CEC, D_002A76E8;
 void *func_001C4840(GAME *);
 qword func_001A62E8(void *);
-float func_0011D448(float, float);
+float GRandInRange__Fff(float, float);
 qword func_0011E1A0(float, float, float);
 M3 func_0011B830(qword, qword);
 qword func_001D69F0(qword, qword, qword, float);
@@ -73,7 +73,7 @@ static inline qword Transform(const M3 &m, qword q)
             : "=j"(r) : "j"(m.r[0]), "j"(m.r[1]), "j"(m.r[2]), "j"(q));
     return r;
 }
-static inline float Rand(const LM &lm) { return func_0011D448(lm.gMin, lm.gMax); }
+static inline float Rand(const LM &lm) { return GRandInRange__Fff(lm.gMin, lm.gMax); }
 static inline void SetState(SO *p, int state) { VTE *v = p->vt; ((void (*)(void *, int))v[76].fn)((char *)p + v[76].delta, state); }
 static inline void Reset(SO *p) { VTE *v = p->vt; ((void (*)(void *))v[8].fn)((char *)p + v[8].delta); }
 static inline void SetParent(SO *p, SO *parent) { VTE *v = p->vt; ((void (*)(void *, SO *))v[39].fn)((char *)p + v[39].delta, parent); }

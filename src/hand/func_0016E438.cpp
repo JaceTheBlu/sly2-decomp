@@ -12,7 +12,7 @@ struct HEADER{ushort flags,base,weight,pad6,position,positionEnd,color,end,bones
 struct REQUEST{int bytes,alignment;REQUEST(int cb,int a):bytes(cb),alignment(a){}};
 extern "C"{
 void*func_001AE478(void*);
-void func_001AE4A0(void*,int);
+void _$_18CBinaryInputStream(void*,int);
 void*func_001AE2A0(const REQUEST&);
 void func_0014E270(ENV*,float*,float);
 void*func_002333B4(void*,int,uint);
@@ -24,8 +24,8 @@ extern uint D_002BE540[];
 extern UPK D_002BE558[];
 extern char D_00000000[],D_00000738[],D_000007F0[];
 }
-struct MARK{MARK(){func_001AE478(this);}~MARK(){func_001AE4A0(this,2);}};
-struct LEASE{~LEASE(){}void Acquire(){func_001AE478(this);}void Release(){func_001AE4A0(this,2);}};
+struct MARK{MARK(){func_001AE478(this);}~MARK(){_$_18CBinaryInputStream(this,2);}};
+struct LEASE{~LEASE(){}void Acquire(){func_001AE478(this);}void Release(){_$_18CBinaryInputStream(this,2);}};
 static inline void*Allocate(int bytes){return func_001AE2A0(REQUEST(bytes,16));}
 typedef char PARAM_Size[sizeof(PARAM)==12?1:-1];
 typedef char D_Size[sizeof(D)==20?1:-1];

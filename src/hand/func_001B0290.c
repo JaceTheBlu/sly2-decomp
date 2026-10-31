@@ -16,7 +16,7 @@ char *func_001C4840(G *g);
 int func_00132B10(void *p, int k);
 void func_0019CD38(void *p, int k);
 int func_002127C8(void);
-int func_00210AE0(void);
+int _IppoFindPo__FP2PO(void);
 int func_00132EA0(void *p);
 void func_001AF4D8(MENU *pm, int c, M *am, int x, void *p);
 
@@ -41,13 +41,13 @@ int func_001B0290(X *px)
         case 0x6A:
             f = 0;
             if (D_003DA3C0.x24) {
-                if (func_00210AE0()) f = 1;
+                if (_IppoFindPo__FP2PO()) f = 1;
             }
             break;
         case 0x6B:
             f = 0;
             if (g_sw.x3B0C) {
-                if (func_00210AE0()) f = 1;
+                if (_IppoFindPo__FP2PO()) f = 1;
             }
             break;
         case 0x43:
@@ -62,7 +62,7 @@ int func_001B0290(X *px)
         case 0x2C:
             break;
         case 0x42:
-            f = func_00210AE0() != 0;
+            f = _IppoFindPo__FP2PO() != 0;
             break;
         }
         if (f) {

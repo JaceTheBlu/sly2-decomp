@@ -24,7 +24,7 @@ typedef struct DL { O *pvFirst; O *pvLast; int ibDle; } DL;
 extern DL D_003E1A40;
 O *func_0013E3C8(int a, int b, int c, int d);
 void func_002333B4(void *p, int c, int n);
-void *func_001AE1D0(AREQ *preq);
+void *PvAllocSwImpl__Fi(AREQ *preq);
 void func_0011A220(DL *pdl, O *p);
 void func_0011A2E8(DL *pdl, O *p);
 
@@ -50,17 +50,17 @@ O *func_001BDA00(void)
             pm[0] = 1.0f;
             req.cb = 0x80;
             req.align = 0x10;
-            q->xEC = (float *)func_001AE1D0(&req);
+            q->xEC = (float *)PvAllocSwImpl__Fi(&req);
             for (j = 0; j < 32; j++) q->xEC[j] = (float)j;
             req.cb = 0x80;
             req.align = 0x10;
-            q->xF0 = func_001AE1D0(&req);
+            q->xF0 = PvAllocSwImpl__Fi(&req);
             req.cb = 0x200;
             req.align = 0x10;
-            q->xF4 = func_001AE1D0(&req);
+            q->xF4 = PvAllocSwImpl__Fi(&req);
             req.cb = 0x1F0;
             req.align = 0x10;
-            q->x1EC = func_001AE1D0(&req);
+            q->x1EC = PvAllocSwImpl__Fi(&req);
             ((void (*)(void *))q->vt[9].pfn)((char *)q + q->vt[9].d);
             func_0011A220(&D_003E1A40, q);
         }

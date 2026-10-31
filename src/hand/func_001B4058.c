@@ -7,7 +7,7 @@ void func_001B3510(struct S *p);
 void func_001B3700(struct S *p);
 void func_00234CA0(int n);
 int func_00234A40(int n);
-void func_001B32B8(void *p);
+void Update__10CMpegAudio(void *p);
 void func_001B4058(struct S *p)
 {
     while (p->x240 == 1) func_001B41D0(p, 0);
@@ -20,5 +20,5 @@ void func_001B4058(struct S *p)
     }
     while (p->x240) func_001B41D0(p, 0);
     func_00234A40(p->x23C);
-    func_001B32B8(p->x180);
+    Update__10CMpegAudio(p->x180);
 }

@@ -38,7 +38,7 @@ extern char D_002DD598[];
 extern "C" {
 int func_00117C80(void *);
 T *func_001AE2A0(SZ *);
-E *func_001AE1D0(SZ *);
+E *PvAllocSwImpl__Fi(SZ *);
 SP func_0012A3D8(void *);
 void func_00118420(void *);
 CRef func_001FFA70(void *, T *, int);
@@ -59,7 +59,7 @@ extern "C" void func_001FF858(G *pg, int a, void *px)
     pt->c = c;
     {
         SZ sz(c * 8, 0x10);
-        pt->ae = func_001AE1D0(&sz);
+        pt->ae = PvAllocSwImpl__Fi(&sz);
     }
     for (i = 0; i < c; i++) {
         E *pe = &pt->ae[i];

@@ -82,9 +82,9 @@ void func_001F4898(SO *, qword);
 qword func_001F5860(SO *);
 qword func_001D6848(float, qword, qword, qword);                 // CalculateLaunchVelocity
 void func_0011B7E0(MATRIX3 *, qword);
-float func_0011D448(float, float);                               // GRandInRange
+float GRandInRange__Fff(float, float);                               // GRandInRange
 }
-static inline float GRandInRange(const LM &lm) { return func_0011D448(lm.gMin, lm.gMax); }
+static inline float GRandInRange(const LM &lm) { return GRandInRange__Fff(lm.gMin, lm.gMax); }
 struct VV { qword q; VV() {} VV(const qword &v) { q = v; } operator qword() const { return q; } };
 struct VU_FLOAT {
     qword q;
@@ -232,9 +232,9 @@ extern "C" void func_001D6B00(LAUNCH *plaunch, SO *pso)
     }
     if (plaunch->lmSpin.gMax > 0.0f) {
         float g = GRandInRange(plaunch->lmSpin);
-        float x = func_0011D448(-1.0f, 1.0f);
-        float y = func_0011D448(-1.0f, 1.0f);
-        float z = func_0011D448(-1.0f, 1.0f);
+        float x = GRandInRange__Fff(-1.0f, 1.0f);
+        float y = GRandInRange__Fff(-1.0f, 1.0f);
+        float z = GRandInRange__Fff(-1.0f, 1.0f);
         qword w = NormalizeTo(QwToVf(VECTOR(x, y, z).q)) * VU_FLOAT(g);
         pso->SetAngularVelocity(w);
     }

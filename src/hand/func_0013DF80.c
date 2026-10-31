@@ -6,7 +6,7 @@ extern char D_002DD590[];
 extern char D_003E1C20[];
 int func_00117BD0(void *pbs);
 int func_00117D50(void *pbs);
-void *func_001AE1D0(struct AREQ *preq);
+void *PvAllocSwImpl__Fi(struct AREQ *preq);
 void func_00118380(void *pbs, int *pn, void *pv, int n);
 void func_00118420(void *pbs);
 void func_00210BE0(void *pv);
@@ -27,7 +27,7 @@ void func_0013DF80(struct P *p, void *pbs)
     p->c = func_00117D50(pbs);
     req.cbAlign = 0x10;
     req.cb = p->c * sizeof(struct E);
-    p->ae = (struct E *)func_001AE1D0(&req);
+    p->ae = (struct E *)PvAllocSwImpl__Fi(&req);
     for (; i < p->c; i++) {
         struct E *pe = &p->ae[i];
         int j;

@@ -9,7 +9,7 @@ struct S {
 };
 struct ZPR { char ab[0x630]; };
 extern char D_002DEB30[];
-void *func_001AE1D0(struct MSG *pmsg);
+void *PvAllocSwImpl__Fi(struct MSG *pmsg);
 void *func_001AE2A0(struct MSG *pmsg);
 void func_0011A050(void *p, int n);
 void func_001703F8(struct ZPR *pz, int a, int b);
@@ -25,7 +25,7 @@ void func_0020E180(struct S *p)
     for (i = 0; i < 3; i++) {
         msg.cb = 0x4800;
         msg.nKind = 0x10;
-        p->a3CD4[i] = func_001AE1D0(&msg);
+        p->a3CD4[i] = PvAllocSwImpl__Fi(&msg);
     }
     msg.cb = 0x8000;
     msg.nKind = 0x10;

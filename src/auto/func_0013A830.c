@@ -45,5 +45,5 @@ extern M2C_UNK D_390;
 extern M2C_UNK D_870;
 
 void func_0013A830(s32 arg0) {
-    func_00160918(arg0, (s32) &D_0025A0C0, (s32) &D_0025AF90);
+    EnsureVu1Code__FP4VIFSPvT1(arg0, (s32) &D_0025A0C0, (s32) &D_0025AF90);
 }

@@ -20,7 +20,7 @@ void func_00168638(EFFECT *,const M4 *,void *,float,float);
 void *func_002333B4(void *,int,unsigned int);
 qword func_001A62E8(P *);
 float func_00245000(float);
-qword *func_00256D18(qword *,qword);
+qword *__as__6VECTORG9VU_VECTOR(qword *,qword);
 M4 *func_0011C168(M4 *,const M4 *,const M4 *);
 M4 *func_0011C318(M4 *,const M4 *);
 }
@@ -67,7 +67,7 @@ extern "C" void func_00207690(P *p)
             offset.f[0]=(1.0f-across)*p->pivot[0];
             offset.f[2]=(1.0f-along)*p->pivot[2];
             offset.f[1]=(1.0f-across)*p->pivot[1];
-            func_00256D18(&local.rows[3].q,offset.q);
+            __as__6VECTORG9VU_VECTOR(&local.rows[3].q,offset.q);
             local.rows[3].f[3]=1.0f;
             M4 *productPointer=&product;
             M4 *basisPointer=&basis;

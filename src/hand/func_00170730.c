@@ -4,7 +4,7 @@ extern int D_003DCF9C, D_003DCF98;
 extern int D_002DE598;
 void __4GIFS(struct B *pb);
 struct MK *func_001AE478(struct MK *pm);
-void func_001AE4A0(struct MK *pm, int n);
+void _$_18CBinaryInputStream(struct MK *pm, int n);
 void func_001572E0(struct B *pb, int n);
 void func_001574B8(struct B *pb);
 int func_001ECC28(int a, void *p, struct B *pb);
@@ -31,5 +31,5 @@ void func_00170730(void *p) {
         func_00157348(&b, 0, &n);
         func_0016F8B8(D_002DE598, n);
     }
-    func_001AE4A0(&mk, 2);
+    _$_18CBinaryInputStream(&mk, 2);
 }

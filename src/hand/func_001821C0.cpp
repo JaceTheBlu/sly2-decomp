@@ -13,7 +13,7 @@ extern qword D_002A2DC0;
 extern "C" void func_001F3C70(P*);
 extern "C" M3 func_0011B830(qword,qword);
 extern "C" M3 func_0011B500(qword,float);
-extern "C" qword*func_00256D18(qword*,qword);
+extern "C" qword*__as__6VECTORG9VU_VECTOR(qword*,qword);
 extern "C" void func_001A5EE8(void*,M4*,float,float);
 extern "C" float fabsf(float);
 static inline qword Load(const qword*p){return *p;}
@@ -45,7 +45,7 @@ extern "C" void func_001821C0(P*p){
    m=func_0011B830(n->dir,D_002A2DC0);
    if(1.0f<fabsf(n->lateral))pos=AddLateral(pos,n,n->lateral);
    {float roll=n->roll;register float epsilon __asm__("$f1")=0.01f; /* the one pin */if(epsilon<fabsf(roll))m=Mul(m,func_0011B500(D_002A2DC0,roll));}
-   func_00256D18(&mm.r[3].q,pos);
+   __as__6VECTORG9VU_VECTOR(&mm.r[3].q,pos);
    pm->r[0].q=m.r[0];pm->r[1].q=m.r[1];pm->r[2].q=m.r[2];
    mm.r[0].i[3]=mm.r[1].i[3]=mm.r[2].i[3]=0;
    pm->r[3].f[3]=1.0f;

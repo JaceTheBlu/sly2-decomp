@@ -4,7 +4,7 @@ struct SO;
 struct AL { int cb; int cbAlign; AL(int c, int a) { cb = c; cbAlign = a; } };
 extern "C" {
 void func_001AE478(void *p);
-void func_001AE4A0(void *p, int n);
+void _$_18CBinaryInputStream(void *p, int n);
 qword func_00153E60(T *p);
 void *func_001AE318(AL *pal);
 qword func_001A6F00(SO *pso, int z, qword v);
@@ -16,7 +16,7 @@ extern char g_sw[];
 extern qword D_002BDBF0[];
 int func_001545F0(T *p, SO *pso);
 }
-class FRAME { public: FRAME() { func_001AE478(this); } ~FRAME() { func_001AE4A0(this, 2); } };
+class FRAME { public: FRAME() { func_001AE478(this); } ~FRAME() { _$_18CBinaryInputStream(this, 2); } };
 
 
 int func_001545F0(T *p, SO *pso)

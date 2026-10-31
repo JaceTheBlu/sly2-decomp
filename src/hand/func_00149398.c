@@ -2,7 +2,7 @@ struct P2 { int a, b; };
 void func_001A5C48(void *p);
 void func_00148740(void *p);
 void func_00149718(void *p, int n);
-int func_001AE1D0(struct P2 *p);
+int PvAllocSwImpl__Fi(struct P2 *p);
 void func_00149398(char *p)
 {
     func_001A5C48(p);
@@ -12,6 +12,6 @@ void func_00149398(char *p)
         struct P2 s;
         s.a = 0x100;
         s.b = 0x10;
-        *(int *)(p + 0x2C4) = func_001AE1D0(&s);
+        *(int *)(p + 0x2C4) = PvAllocSwImpl__Fi(&s);
     }
 }

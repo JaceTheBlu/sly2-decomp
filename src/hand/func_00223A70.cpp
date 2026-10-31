@@ -13,7 +13,7 @@ extern WORLD g_sw;
 extern float D_002A9700;
 extern "C" {
 void *func_001AE478(void *);
-void func_001AE4A0(void *,int);
+void _$_18CBinaryInputStream(void *,int);
 qword func_001A62E8(void *);
 int func_0014F030(void *,SO *);
 void func_0020FAA0(WORLD *,qword,qword,int (*)(void *,SO *),void *,int *,SO ***);
@@ -24,7 +24,7 @@ qword func_0014EDA0(CAMERA *,int,SO **,float (*)(void *,qword,qword,N *),qword,q
 void func_0011EF08(qword,float *,float *,float *);
 qword func_0011E1A0(float,float,float);
 }
-struct MARK {MARK(){(void)func_001AE478(this);}~MARK(){func_001AE4A0(this,2);}};
+struct MARK {MARK(){(void)func_001AE478(this);}~MARK(){_$_18CBinaryInputStream(this,2);}};
 struct WORK {V minimum,maximum,origin,candidate;MARK mark;V offset,rayEnd,best,scalar;int count;SO **objects;float low,high,phase,radius,height;};
 static inline qword Min(qword a,qword b){qword r;__asm__("vmini.xyz %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword Max(qword a,qword b){qword r;__asm__("vmax.xyz %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}

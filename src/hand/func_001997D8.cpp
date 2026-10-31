@@ -28,7 +28,7 @@ extern qword D_002A2DC0;
 extern qword D_002A2DB0;
 extern "C" {
 void func_0011E2D8(qword a, qword b, qword c, qword *pm);
-qword *func_00256D18(qword *pq, qword q);
+qword *__as__6VECTORG9VU_VECTOR(qword *pq, qword q);
 void func_001995D8(struct P *p, const M4 *pm, int n, U *apt);
 int func_0014C6A0(struct S0 *s, qword a, qword b, int n, HIT *ph);
 }
@@ -49,7 +49,7 @@ extern "C" int func_001997D8(struct P *p, qword q1, qword q2)
     m.r[0].q = q2;
     func_0011E2D8(q2, D_002A2DC0, D_002A2DB0, &m.r[1].q);
     M4 *pm = &m4;
-    (void)func_00256D18(&m4.pos.q, q1);
+    (void)__as__6VECTORG9VU_VECTOR(&m4.pos.q, q1);
     pm->m = m;
     m4.m.r[0].i[3] = m4.m.r[1].i[3] = m4.m.r[2].i[3] = 0;
     pm->pos.f[3] = 1.0f;

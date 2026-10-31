@@ -11,7 +11,7 @@ extern struct G g_sw;
 qword func_00190C58(struct P *p);
 qword func_001A62E8(void *p);
 qword func_0022FCC8(int n, void *p, qword q);
-void func_00256D18(qword *pq, qword q);
+void __as__6VECTORG9VU_VECTOR(qword *pq, qword q);
 void func_0011C168(struct MATRIX4 *pm, void *p, struct T *t);
 void func_00186A50(struct P *p, int n);
 static __inline__ qword VAdd(qword a, qword b) { qword r; __asm__("vadd.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
@@ -28,7 +28,7 @@ void func_00190D10(struct P *p)
     d = VSub(a, b);
     a = func_0022FCC8(0, p->x19c4->xa0, d);
     t = p->x19c4;
-    func_00256D18(&t->x30, VAdd(t->x30, a));
+    __as__6VECTORG9VU_VECTOR(&t->x30, VAdd(t->x30, a));
     ((float *)&t->x30)[3] = 1.0f;
     n = ++g_sw.x3d58;
     p->x19c4->xa4 = n;

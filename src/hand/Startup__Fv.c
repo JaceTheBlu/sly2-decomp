@@ -1,0 +1,47 @@
+/* Run the 19 initialization stages with CProg color and remaining-count updates. */
+struct B { char data[0x70]; };
+struct C { int c; } __attribute__((aligned(16)));
+extern char D_002A6A58[], D_002C46D8[], D_002C46C0[], D_002DDED0[];
+extern void (*D_002BFCE0[])(void);
+void func_001700D0(void);
+struct B *__5CProgP4RGBAN31(struct B *b, struct C *c0, struct C *c1, struct C *c2, struct C *c3);
+int kprintf(char *format, ...);
+void func_001C2A78(int n);
+void Begin__5CProg(struct B *b);
+void func_0014D0B8(void *p, int n);
+void SetRemain__5CProgi(struct B *b, int n);
+void End__5CProg(struct B *b);
+void func_001C2BA8(int n);
+void Startup__Fv(void)
+{
+    struct B b;
+    struct C c0, c1, c2, c3;
+    unsigned int i;
+    int f;
+    {
+    register unsigned int a2 __asm__("$5")=0x80003F3F;
+    register unsigned int a3 __asm__("$6")=0x8000003F;
+    register unsigned int a0 __asm__("$3")=0x807F0000;
+    register unsigned int a1 __asm__("$2")=0x803F3F3F;
+    c2.c=a2;
+    c3.c=a3;
+    c0.c=a0;
+    c1.c=a1;
+    }
+    __5CProgP4RGBAN31(&b, &c0, &c1, &c2, &c3);
+    kprintf(D_002A6A58, D_002C46D8, D_002C46C0, 0x2B0);
+    func_001C2A78(1);
+    Begin__5CProg(&b);
+    f = 0;
+    for (i = 0; i < 19; i++) {
+        func_0014D0B8(D_002DDED0, 1);
+        if (f)
+            SetRemain__5CProgi(&b, 19 - i);
+        else if (D_002BFCE0[i] == func_001700D0)
+            f = 1;
+        D_002BFCE0[i]();
+    }
+    SetRemain__5CProgi(&b, 0);
+    End__5CProg(&b);
+    func_001C2BA8(1);
+}

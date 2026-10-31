@@ -4,11 +4,11 @@ static __inline__ float GetX(qword q) { float x; __asm__("" : "=r"(x) : "0"(q));
 static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0,%0" : "=r"(y) : "0"(q)); return y; }
 static __inline__ float GetZ(qword q) { float z; __asm__("pextuw %0,$0,%0" : "=r"(z) : "0"(q)); return z; }
 float func_002458F0(float y, float x);
-float func_0011CF60(float g);
+float RadNormalize__Ff(float g);
 void func_0011EFB0(qword v, float *pradPan, float *pradTilt, float *pr)
 {
     if (pradPan) {
-        *pradPan = func_0011CF60(func_002458F0(GetY(v), GetX(v)));
+        *pradPan = RadNormalize__Ff(func_002458F0(GetY(v), GetX(v)));
     }
     if (pradTilt) {
         qword d, l;
@@ -16,7 +16,7 @@ void func_0011EFB0(qword v, float *pradPan, float *pradTilt, float *pr)
         __asm__("vmul.xy %0, %1, %1\n\tvaddy.x %0, %0, %0y" : "=j"(d) : "j"(v), "j"(v)); /* 2nd "j"(v) unused: allocation only (keeps v in memory) */
         __asm__("vsqrt $Q, %1x\n\tvwaitq\n\tvaddq.x %0, $vf0, $Q" : "=j"(l) : "j"(d));
         g = GetZ(v);
-        *pradTilt = func_0011CF60(func_002458F0(g, GetX(l)));
+        *pradTilt = RadNormalize__Ff(func_002458F0(g, GetX(l)));
     }
     if (pr) {
         qword d, one, l, t;

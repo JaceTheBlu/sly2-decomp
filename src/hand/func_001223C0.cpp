@@ -13,7 +13,7 @@ struct CRef {
 extern "C" {
 CRef func_00129DA8(CRef *pref);
 int func_0011D3F8(int a, int b);
-float func_0011D448(float a, float b);
+float GRandInRange__Fff(float a, float b);
 CRef func_001223C0(void *pbasic, CRef *aref);
 }
 CRef func_001223C0(void *pbasic, CRef *aref)
@@ -24,7 +24,7 @@ CRef func_001223C0(void *pbasic, CRef *aref)
     } else {
         float g0 = func_00129DA8(&aref[0]).u.g;
         float g1 = func_00129DA8(&aref[1]).u.g;
-        ref = func_0011D448(g0, g1);
+        ref = GRandInRange__Fff(g0, g1);
     }
     return ref;
 }

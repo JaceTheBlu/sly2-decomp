@@ -6,7 +6,7 @@ void func_00231768(struct S *p, void *pbis);
 void func_00117FD0(void *pbis, void *pv);
 void func_00118220(void *pbis, void *pv, void *pv2);
 MARK *func_001AE478(MARK *pm);
-void func_001AE4A0(MARK *pm, int n);
+void _$_18CBinaryInputStream(MARK *pm, int n);
 void *func_001AE318(MSG *pmsg);
 void *func_001AE238(MSG *pmsg, void *pv);
 void func_00221818(struct S *p, int id);
@@ -52,5 +52,5 @@ void func_00220FD0(struct S *p, void *pbis)
         break;
     }
     if (!p->p10C) p->flags &= ~2;
-    func_001AE4A0(&mark, 2);
+    _$_18CBinaryInputStream(&mark, 2);
 }

@@ -35,7 +35,7 @@ struct SUPPORT { qword pos; SURF *apsurf[2]; int fUsed; int pad; };
 struct SWALLOC { int cb; int cbAlign; };
 struct STACKSCOPE;
 extern "C" STACKSCOPE *func_001AE478(STACKSCOPE *);
-extern "C" void func_001AE4A0(STACKSCOPE *, int);
+extern "C" void _$_18CBinaryInputStream(STACKSCOPE *, int);
 struct STACKSCOPE { STACKSCOPE(); ~STACKSCOPE(); };
 struct VTE { short delta, pad; M4 *(*pfn)(void *); };
 struct SHAPE;
@@ -50,7 +50,7 @@ extern const qword D_002C2150[5];
 
 extern "C" {
 qword func_001A6F00(OWNER *, OWNER *, qword);
-qword *func_00256D18(qword *, qword);
+qword *__as__6VECTORG9VU_VECTOR(qword *, qword);
 M4 func_0011C318(const M4 *);
 void func_00119390(VECTOR4 *, qword, qword);
 void *func_002333B4(void *, int, uint);
@@ -110,7 +110,7 @@ static inline qword Lerp(qword a, const VU_FLOATQ &sa, qword b, const VU_FLOATQ 
 /* through a pointer: sp-based r[0] store, pointer-based for the rest, as in the target */
 static inline void BuildFrame(M4 *pm, const M4 *src, qword pos)
 {
-    func_00256D18(&pm->r[3].q, pos);
+    __as__6VECTORG9VU_VECTOR(&pm->r[3].q, pos);
     pm->r[0].q = src->r[0].q;
     pm->r[1].q = src->r[1].q;
     pm->r[2].q = src->r[2].q;

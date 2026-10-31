@@ -18,9 +18,9 @@ extern "C" {
 void func_0014FD40(X *p);
 M3 func_0011BC00(M4 *pm, M3 *pm2);
 void func_0011BCF8(M3 *pm, float *pg, qword *pv);
-float func_0011D018(float gCur, float gTarget, float dt, void *psmp, float *pdgNext); /* GSmooth */
+float GSmooth__FfffP3SMPPf(float gCur, float gTarget, float dt, void *psmp, float *pdgNext); /* GSmooth */
 M3 func_0011B500(qword v, float g);
-qword *func_00256D18(qword *p, qword v);
+qword *__as__6VECTORG9VU_VECTOR(qword *p, qword v);
 void func_0014E168(CM *p, M4 *m);
 void func_0014F5A0(CM *p, float g);
 void func_00151950(X *p);
@@ -70,7 +70,7 @@ void func_00151950(X *p)
         if (rad < 0.0001f) {
             mNew = m.m3;
         } else {
-            float g = func_0011D018(rad, 0.0f, D_002DDED0.dt, D_002BDAB0, 0);
+            float g = GSmooth__FfffP3SMPPf(rad, 0.0f, D_002DDED0.dt, D_002BDAB0, 0);
             mNew = Mul(func_0011B500(axis.q, g), m.m3);
         }
         qword d = Sub(g_cm.pos, m.q.r[3]);
@@ -79,8 +79,8 @@ void func_00151950(X *p)
         if (dist < 0.0001f)
             pos = m.q.r[3];
         else
-            pos = AddScaled(m.q.r[3], d, VU_FLOAT(func_0011D018(dist, 0.0f, D_002DDED0.dt, D_002BDAC0, 0) / dist));
-        func_00256D18(&m.q.r[3], pos);
+            pos = AddScaled(m.q.r[3], d, VU_FLOAT(GSmooth__FfffP3SMPPf(dist, 0.0f, D_002DDED0.dt, D_002BDAC0, 0) / dist));
+        __as__6VECTORG9VU_VECTOR(&m.q.r[3], pos);
         m.m3 = mNew;
         m.af[3][3] = 1.0f;
         m.af[2][3] = 0.0f;

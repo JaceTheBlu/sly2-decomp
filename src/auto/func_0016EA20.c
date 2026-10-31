@@ -111,5 +111,5 @@ Please include it in the input .s file(s), or in an additional file.
 */
 
 void func_0016EA20(s32 arg0) {
-    func_00160918(arg0, (s32) &D_0025B880, (s32) &D_0025C1B0);
+    EnsureVu1Code__FP4VIFSPvT1(arg0, (s32) &D_0025B880, (s32) &D_0025C1B0);
 }

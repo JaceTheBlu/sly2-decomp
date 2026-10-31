@@ -42,7 +42,7 @@ extern qword D_002A2DC0,D_002A2DD0;
 
 void func_001F36E0(O *);
 MARK *func_001AE478(MARK *);
-void func_001AE4A0(MARK *,int);
+void _$_18CBinaryInputStream(MARK *,int);
 void *func_001AE318(const REQ *);
 int func_00229D60(void *,COLL *);
 int func_001F7E08(O *,int (*)(void *,COLL *),void *,COLL **);
@@ -125,5 +125,5 @@ extern "C" void func_00228E50(O *p){
    Signal(o,o->flags&0x80000000L?5:4,(PAIR *)work.request);
   }
  }
- func_00228D20(p,work.head);func_001AE4A0(&work.mark,2);
+ func_00228D20(p,work.head);_$_18CBinaryInputStream(&work.mark,2);
 }

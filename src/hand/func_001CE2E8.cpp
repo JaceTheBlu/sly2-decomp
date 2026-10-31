@@ -33,7 +33,7 @@ extern "C" {
 extern DLI *D_002DD2FC; /* innermost active list iterator */
 extern CLOCK D_002DDED0;
 FRAME *func_001AE478(FRAME *);
-void func_001AE4A0(FRAME *, int);
+void _$_18CBinaryInputStream(FRAME *, int);
 void *func_001AE318(const REQ *);
 int func_00118A88(void *, int, qword, float, int *, ENTRY **);
 int func_0014C6D8(SHAPE *, ENTRY *, qword, qword, int, XP *);
@@ -74,7 +74,7 @@ void func_001CE2E8(P *p)
                         SetAlign(&phase.request, 16);
                         entries = (ENTRY *)func_001AE318(&phase.request);
                         if (func_00118A88(shape->tree, 0x7FFFFFFF, Origin(p->state), p->state->radius, &remaining, &entries) != 2) {
-                            func_001AE4A0(&frame, 2);
+                            _$_18CBinaryInputStream(&frame, 2);
                             continue;
                         }
                         entries--;
@@ -92,7 +92,7 @@ void func_001CE2E8(P *p)
                         } while (i < count);
                     }
                     D_002DD2FC = phase.rip.outer;
-                    func_001AE4A0(&frame, 2);
+                    _$_18CBinaryInputStream(&frame, 2);
                 }
             }
             D_002DD2FC = shapes.outer;

@@ -142,8 +142,8 @@ extern "C"
 void *func_002333B4(void *pv, int b, uint cb);                       // memset
 void func_001AE5A0(void *pvDst, const void *pvSrc, uint cb);         // CopyAb
 qword func_001A6F00(SO *psoFrom, SO *psoTo, qword pos);              // ConvertLoPos
-float func_0011CF60(float rad);                                      // RadNormalize
-void func_0011D608(float rad, float *pgSin, float *pgCos);           // CalculateSinCos
+float RadNormalize__Ff(float rad);                                      // RadNormalize
+void CalculateSinCos__FfPfT1(float rad, float *pgSin, float *pgCos);           // CalculateSinCos
 MATRIX4 func_0011C318(const MATRIX4 *pmat);                          // the inverse of a 4x4 matrix
 MATRIX4 func_0011C168(const MATRIX4 &matL, const MATRIX4 &matR);     // MATRIX4 operator*
 }
@@ -387,7 +387,7 @@ extern "C" void func_0022B7D8(WR *pwr)
                         VU_FLOAT gDot = VuDot(VU_VECTOR(posWorld), Normalize(VU_VECTOR(pwre->axis)));
                         float rScale = pwre->spatialFrequency * 6.2831855f;
                         float rad = GFromVu(gDot) * rScale;
-                        func_0011D608(func_0011CF60(rad), &gSin, &gCos);
+                        CalculateSinCos__FfPfT1(RadNormalize__Ff(rad), &gSin, &gCos);
                         pwarpvtx->ag[is] = gCos * *pu;
                         pwarpvtx->ag[is + 1] = gSin * *pu;
                         break;

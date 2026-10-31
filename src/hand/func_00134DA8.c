@@ -44,7 +44,7 @@ qword func_0011E1A0(float a, float b, float c);
 void func_001A0450(struct P *p, void *pv, int n);
 qword func_00204E38(struct P *p, struct S1030 *px, float g);
 void func_00131A00(struct S1030 *px, float g);
-float func_0011CF60(float g);
+float RadNormalize__Ff(float g);
 float func_0011CFE0(float g, float dg);
 void func_00135EB0(struct P *p);
 void func_001A1358(void *pv);
@@ -167,7 +167,7 @@ void func_00134DA8(struct P *p)
             float g1 = GClamp(GEval(&D_002BC950, p->p150->g1C), &D_002BBB60);
             float z = 0.0f;
             if (z < p->p150->g1C) {
-                float d = func_0011CF60(p->p150->g18 - p->g1A8);
+                float d = RadNormalize__Ff(p->p150->g18 - p->g1A8);
                 func_00204660(p, p->g1A8 + func_0011CFE0(d, g1 * D_002BC960 * D_002DDED0.dt));
             }
             SetVel(p, func_0011E1A0(p->p150->g18 + 3.1415927f, g0 * LenXY(p->v1520) * p->p1030->g40, z), p->x14F0, p->x15F0);

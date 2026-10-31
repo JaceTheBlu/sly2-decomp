@@ -16,7 +16,7 @@ extern char D_002E0D00[];
 void func_001F36E0(OBJ *);
 int func_0014FD50(void *);
 int func_00187E88(void *);
-int func_00187D80(void *, int);
+int PvAllocSwCopyImpl__FiPv(void *, int);
 void *func_001F07E8(void *);
 OBJ *func_0015E938(struct G *, int, int, OBJ *);
 void func_001DC260(void *, int);
@@ -50,7 +50,7 @@ void func_001D72A8(OBJ *p)
                 return;
             if (pe->p != func_001F07E8(p->x188))
                 continue;
-            if (!func_00187D80(pad, pe->fl))
+            if (!PvAllocSwCopyImpl__FiPv(pad, pe->fl))
                 continue;
             if (pe->n == -1)
                 continue;

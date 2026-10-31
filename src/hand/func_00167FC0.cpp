@@ -4,7 +4,7 @@ struct G;
 extern G g_sw;
 extern char D_0025E090[];
 extern char D_0025E668[];
-extern "C" void func_00160918(VIFS *pvifs, void *pvStart, void *pvEnd);
+extern "C" void EnsureVu1Code__FP4VIFSPvT1(VIFS *pvifs, void *pvStart, void *pvEnd);
 extern "C" int func_0015E9C8(G *pg, int kind, int n, int m, int c, void **apv);
 extern "C" void func_001AE5A0(void *pvDst, void *pvSrc, unsigned int cb);
 static inline int Min(int a, int b) { return a < b ? a : b; }
@@ -14,7 +14,7 @@ extern "C" void func_00167FC0(VIFS *pvifs)
     int i;
     X *px;
     int cActive = 0;
-    func_00160918(pvifs, D_0025E090, D_0025E668);
+    EnsureVu1Code__FP4VIFSPvT1(pvifs, D_0025E090, D_0025E668);
     pvifs->AddDmaCnt();
     pvifs->AddVifFlusha();
     pvifs->AddVifBaseOffset(0x32, 0);

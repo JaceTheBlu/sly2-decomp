@@ -14,7 +14,7 @@ struct S { char pad[0x90]; int *a90; int c94; void *a98; int *a9C; int cA0; void
 extern "C" void *func_001AE318(ALLOCREQ *preq);
 extern "C" void *func_001AE238(ALLOCREQ *preq, void *pv);
 extern "C" void *func_001AE2A0(ALLOCREQ *preq);
-extern "C" void *func_001AE1D0(ALLOCREQ *preq);
+extern "C" void *PvAllocSwImpl__Fi(ALLOCREQ *preq);
 extern "C" void func_001A5C28(S *p, CBinaryInputStream *pbis);
 extern "C" void func_00118420(CBinaryInputStream *pbis);
 static inline void *PvAllocReq(ALLOCREQ *preq, int cb, int nKind)
@@ -39,7 +39,7 @@ static inline void *PvAllocB(ALLOCREQ *preq, int cb, int nKind)
 {
     preq->cb = cb;
     preq->nKind = nKind;
-    return func_001AE1D0(preq);
+    return PvAllocSwImpl__Fi(preq);
 }
 extern "C" void func_001635F8(S *p, CBinaryInputStream *pbis)
 {

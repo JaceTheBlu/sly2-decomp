@@ -19,7 +19,7 @@ extern "C" {
 void func_0014FD40(X *p);
 qword func_001A62E8(ALO *p);
 M3 *func_0011B7E0(M3 *pm, qword v);
-qword *func_00256D18(qword *p, qword v);
+qword *__as__6VECTORG9VU_VECTOR(qword *p, qword v);
 void func_0014E168(CM *p, M4 *m);
 void func_0014F5A0(CM *p, float g);
 void func_00151C38(X *p);
@@ -91,7 +91,7 @@ void func_00151C38(X *p)
         M3 m3;
         func_0011B7E0(&m3, Sub(pos.q, pos2.q));
         M4 *pm4 = &m4;
-        func_00256D18(&pm4->q.r[3], pos2.q);
+        __as__6VECTORG9VU_VECTOR(&pm4->q.r[3], pos2.q);
         pm4->q.r[0] = m3.r[0];
         pm4->q.r[1] = m3.r[1];
         pm4->q.r[2] = m3.r[2];

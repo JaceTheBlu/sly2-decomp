@@ -9,7 +9,7 @@ int func_00117D50(BIS *pbis);
 int func_00117DB8(BIS *pbis);
 int func_00117D00(BIS *pbis);
 int func_00117BD0(BIS *pbis);
-void *func_001AE1D0(AREQ *preq);
+void *PvAllocSwImpl__Fi(AREQ *preq);
 void *func_001AE2A0(AREQ *preq);
 void *func_001AE238(AREQ *preq, void *pv);
 void ReadCb8__18CBinaryInputStreamPv(BIS *pbis, void *pv);
@@ -39,7 +39,7 @@ void func_0012F590(void *px, BIS *pbis, int fTime, int *pc, ENT **pa) { int i; i
        preq = &req; req.cb = 0xC; preq->cbAlign = 0x10; pe->u8.pv = func_001AE238(preq, &t); break; }
    case 1: case 2: case 21: pe->u8.n = func_00117D50(pbis); break;
    case 4: case 11: case 12: case 22: pe->u8.n = func_00117DB8(pbis); break;
-   case 24: { AREQ req; char *p; req.cb = 0x18; req.cbAlign = 0x10; p = (char *)func_001AE1D0(&req);
+   case 24: { AREQ req; char *p; req.cb = 0x18; req.cbAlign = 0x10; p = (char *)PvAllocSwImpl__Fi(&req);
        ReadCb8__18CBinaryInputStreamPv(pbis, p); ReadCb8__18CBinaryInputStreamPv(pbis, p + 8); ReadCb8__18CBinaryInputStreamPv(pbis, p + 0x10); pe->u8.pv = p; break; }
    }
  } }

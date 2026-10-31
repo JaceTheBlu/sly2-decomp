@@ -11,7 +11,7 @@ extern int D_002C4368[11];
 extern float D_002C4338[11];
 void func_0020FA10();
 MARK *func_001AE478(MARK *pm);
-void func_001AE4A0(MARK *pm, int n);
+void _$_18CBinaryInputStream(MARK *pm, int n);
 void func_0020FC60(struct G *pg, qword pos, void (*pfn)(), void *pv, float r, int *pc, struct A ***papa);
 qword func_0011E208(float a, float b, float c);
 qword func_0011E9F8(qword v, float r);
@@ -44,5 +44,5 @@ void func_00224BF8(struct S *p, int a, int b, qword pos, float r)
     for (m = 0; m < cx; m++)
         func_001F7598(&ax[m]);
     func_00156698(g_sw.x402C, pos, p)->x54 = 1;
-    func_001AE4A0(&mark, 2);
+    _$_18CBinaryInputStream(&mark, 2);
 }

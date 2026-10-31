@@ -5,7 +5,7 @@ void Read__18CBinaryInputStreamiPv(void *pbis, int cb, void *pv);
 void Skip__18CBinaryInputStreami(void *pbis, int cb);
 int func_0013FAD0(int cch, void *pw);
 struct Y *func_001ED5D0(int id);
-void *func_001AE1D0(struct AR *par);
+void *PvAllocSwImpl__Fi(struct AR *par);
 void func_001ED278(int *p);
 void func_001EA8A8(void *pbis, struct X *px)
 {
@@ -31,7 +31,7 @@ void func_001EA8A8(void *pbis, struct X *px)
             int *pn;
             u.ar.cb = cb;
             u.ar.cbAlign = 0x10;
-            px->pv = func_001AE1D0(&u.ar);
+            px->pv = PvAllocSwImpl__Fi(&u.ar);
             Read__18CBinaryInputStreamiPv(pbis, cb, px->pv);
             for (pn = px->pv; pn < px->pv + px->c; pn++)
                 func_001ED278(pn);

@@ -44,7 +44,7 @@ void func_001DEF98(P *, ENTRY *, qword *, float *);
 void func_001A5FB8(void *, qword, qword, float, float);
 M3 func_0011B830(qword, qword);
 M4 func_0011C210(qword, const M3 *, const U *);
-qword *func_00256D18(qword *, qword);
+qword *__as__6VECTORG9VU_VECTOR(qword *, qword);
 void func_001A5EE8(void *, const M4 *, float, float);
 }
 static inline qword Subtract(qword a, qword b)
@@ -131,7 +131,7 @@ extern "C" void func_001DF5B0(P *p)
                     matrix = func_0011C210(points[j].q, &basis, &scale);
                 } else {
                     M4 *pm = &matrix;
-                    func_00256D18(&matrix.rows[3].q, points[j].q);
+                    __as__6VECTORG9VU_VECTOR(&matrix.rows[3].q, points[j].q);
                     matrix.rows[0] = basis.rows[0]; pm->rows[1] = basis.rows[1]; pm->rows[2] = basis.rows[2];
                     matrix.rows[0].bits[3] = matrix.rows[1].bits[3] = matrix.rows[2].bits[3] = 0;
                     pm->rows[3].f[3] = 1.0f;

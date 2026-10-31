@@ -11,11 +11,11 @@ union V {qword q;float f[4];};
 struct LO {char padE4[0xE4];float radius;char padE8[0x20];int state;};
 struct P {char pad20[0x20];qword position;};
 struct QUERY {int count;LO **objects;};
-// Stack-scope object (sp+0): func_001AE478 opens it, func_001AE4A0(this,2) frees the stack memory taken since.
+// Stack-scope object (sp+0): func_001AE478 opens it, _$_18CBinaryInputStream(this,2) frees the stack memory taken since.
 struct FRAME;
 extern "C" FRAME *func_001AE478(FRAME *);
-extern "C" void func_001AE4A0(FRAME *,int);
-struct FRAME {FRAME(){func_001AE478(this);}~FRAME(){func_001AE4A0(this,2);}};
+extern "C" void _$_18CBinaryInputStream(FRAME *,int);
+struct FRAME {FRAME(){func_001AE478(this);}~FRAME(){_$_18CBinaryInputStream(this,2);}};
 extern "C" qword func_001A62E8(LO *);
 extern "C" int func_00202350(void *,LO *);
 extern "C" void func_0020FAA0(void *,qword,qword,int (*)(void *,LO *),void *,int *,LO ***);

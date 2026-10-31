@@ -15,7 +15,7 @@ extern struct E2 *D_003DCFF4;
 void __4GIFS(struct DMAS *);
 void __4VIFS(struct X *);
 struct M *func_001AE478(struct M *);
-void func_001AE4A0(struct M *, int);
+void _$_18CBinaryInputStream(struct M *, int);
 void func_001572E0(struct X *, int);
 void func_001574B8(struct X *);
 void func_00226D10(struct X *);
@@ -98,7 +98,7 @@ int func_001ECE58(struct BS *pbs, int k)
     }
     {
         int r = result;
-        func_001AE4A0(&m, 2);
+        _$_18CBinaryInputStream(&m, 2);
         return r;
     }
 }

@@ -11,7 +11,7 @@ int func_00117D50(BIS *pbis);
 int func_00117DB8(BIS *pbis);
 int func_00117D00(BIS *pbis);
 int func_00117BD0(BIS *pbis);
-void *func_001AE1D0(AREQ *preq);
+void *PvAllocSwImpl__Fi(AREQ *preq);
 void *func_001AE2A0(AREQ *preq);
 OBJ *func_0012B3B0(int id);
 OBJ *func_0012CB98(int id);
@@ -23,7 +23,7 @@ void func_0012F2A8(X *px, BIS *pbis) { int i; AREQ req;
  px->g74 = func_00117E38(pbis);
  px->c = func_00117D50(pbis);
  req.cbAlign = 0x10; req.cb = px->c * 8;
- px->aent = (ENT *)func_001AE1D0(&req);
+ px->aent = (ENT *)PvAllocSwImpl__Fi(&req);
  for (i = 0; i < px->c; i++) {
    ENT *pe = &px->aent[i];
    pe->n = func_00117DB8(pbis);

@@ -21,7 +21,7 @@ extern "C"{
  M3*func_001A6318(P*);
  void func_001E6F60(P*,qword,void*,qword*,qword*,float*,float*);
  float func_002458F0(float,float);
- float func_0011CF60(float);
+ float RadNormalize__Ff(float);
  void func_0011B500(M3*,float,qword);
  M3*func_0011B830(M3*,qword,qword);
  void func_001C3500(P*,int,M3*,float);
@@ -98,7 +98,7 @@ extern "C" void func_00179FA0(C*p){
   }
   if(func_00132B10(p->target,13)){
    active|=func_00207A20(0x1B);
-   if(!p->reverse)heading=func_0011CF60(heading+3.1415927410125732421875f);
+   if(!p->reverse)heading=RadNormalize__Ff(heading+3.1415927410125732421875f);
    p->basisValid=1;
    func_0011B500(&work.temp.first.rotation,heading,D_002A2DC0);
    p->matrix=work.temp.first.rotation;

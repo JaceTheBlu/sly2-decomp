@@ -12,7 +12,7 @@ struct W { char pad[0x3D40]; char pool[1]; };
 extern float D_002BFD30, D_002BFD34;
 struct C *func_0011CCC0(void *pool);
 qword func_0022FC48(int n, void *p, qword pos);
-void func_001A7FC0(struct W *pw, int n, struct C **ppc);
+void FindClosestPointOnLineSegment__FP6VECTORN20PfT3(struct W *pw, int n, struct C **ppc);
 void func_001A7C18(struct W *pw, struct S *a, struct S *b, qword pos, qword dir, int k, int x, int y, struct C **ppc, float g)
 {
     U u;
@@ -56,7 +56,7 @@ void func_001A7C18(struct W *pw, struct S *a, struct S *b, qword pos, qword dir,
         if (plo)
             plo->vt[55].pfn((struct LO *)((char *)plo + plo->vt[55].d), c, i);
     }
-    func_001A7FC0(pw, 1, &c);
+    FindClosestPointOnLineSegment__FP6VECTORN20PfT3(pw, 1, &c);
     {
         struct C *t = c;
         while (t->next)

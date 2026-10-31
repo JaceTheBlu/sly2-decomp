@@ -4,7 +4,7 @@ struct DESC { int cb; int align; DESC(int c, int a) { cb = c; align = a; } };
 struct MARK { int a[4]; };
 extern "C" {
 void *func_001AE478(MARK *);
-void func_001AE4A0(MARK *, int);
+void _$_18CBinaryInputStream(MARK *, int);
 void *func_001AE318(DESC *);
 int func_00117DB8(void *);
 void func_00116D70(void *, int);
@@ -25,5 +25,5 @@ extern "C" void func_002566D8(O *p, void *pv)
         ((void (*)(void *, void *, void *))p->vt[4].pfn)((char *)p + p->vt[4].d, buf, pv);
         ((void (*)(void *, void *))p->vt[5].pfn)((char *)p + p->vt[5].d, buf);
     } while (--n);
-    func_001AE4A0(&m, 2);
+    _$_18CBinaryInputStream(&m, 2);
 }

@@ -1,7 +1,7 @@
 // func_001E6F60: closest point of a path (a chain of control points, transformed by the path's
 // own matrix) to a query point. mode 0 walks every segment, projects the point on it (clamped to the segment), keeps the
 // nearest candidate and reports its position, direction, interpolated time and the path value at that time. mode 1 only
-// measures the distances to the control points and hands the nearest vertex time to func_001E6ED8.
+// measures the distances to the control points and hands the nearest vertex time to UpdateUbgSgs__FP3UBG.
 // Matching notes (found by reading the local-alloc / global-alloc / reload dumps):
 //  * Spill slots of start / end / point follow the order in which the three pseudos get their stack home, i.e. the order in which
 //    they are first address-wrapped while expanding the loop head: `Sub(end=TransformPoint(..), start)` then `Sub(point, start)`
@@ -26,7 +26,7 @@ extern "C" {
 extern float D_002A8138;
 qword func_001FA970(SPACE *, qword);
 float func_001E63C0(PATH *, float);
-void func_001E6ED8(PATH *, qword, SPACE *, qword *, qword *, float *, float *, float);
+void UpdateUbgSgs__FP3UBG(PATH *, qword, SPACE *, qword *, qword *, float *, float *, float);
 }
 struct VU_FLOAT {
     qword q;
@@ -130,7 +130,7 @@ extern "C" void func_001E6F60(PATH *p, qword point, SPACE *space, qword *outPosi
             float distance = Length(displacement);
             if (distance < best) { best = distance; closestIndex = index; }
         }
-        func_001E6ED8(p, point, space, outPosition, outDirection, outTime, outValue, p->times[closestIndex]);
+        UpdateUbgSgs__FP3UBG(p, point, space, outPosition, outDirection, outTime, outValue, p->times[closestIndex]);
         break;
     }
     }

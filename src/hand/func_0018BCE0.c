@@ -29,7 +29,7 @@ extern void func_00189C40(void *p, void *a, float g, void *geometry, void *respo
 #define C40(p,a,b,c,d,g) func_00189C40(p,a,g,b,c,d)
 
 extern int func_00189EC8(void *p, void *a, void *response);
-extern void func_0018ED70(void *p);
+extern void EnsureAloSfx__FP3ALO(void *p);
 extern int func_00132B10(void *p, int n);
 extern void func_001E7380(void *p, qword q, void *metric, qword *point, qword *direction, float *normalized, float *distance, float g);
 extern void func_0018C250(void *p, int a, int b);
@@ -116,7 +116,7 @@ void func_0018BCE0(char *p)
         }
         break;
     }
-    func_0018ED70(p);
+    EnsureAloSfx__FP3ALO(p);
     if (F(int, 0x18D8) == 0) {
         if (func_00132B10(F(void *, 0x1854), 0xB)) {
             void *po2 = F(void *, 0x1854);

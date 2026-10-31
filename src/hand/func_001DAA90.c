@@ -14,7 +14,7 @@ typedef struct {
 extern struct G g_sw;
 extern int D_002C3258[];
 void func_001DA808(OBJ *);
-int func_00187D80(void *, int);
+int PvAllocSwCopyImpl__FiPv(void *, int);
 void *func_001C4840(struct G *);
 int func_00132B10(void *, int);
 void func_001DB520(OBJ *, int);
@@ -36,7 +36,7 @@ void func_001DAA90(OBJ *p)
         return;
     if (p->x10 == 0)
         return;
-    if (p->x30 && func_00187D80(p->x10, 0x10)) {
+    if (p->x30 && PvAllocSwCopyImpl__FiPv(p->x10, 0x10)) {
         func_001DB520(p, -1);
         return;
     }
@@ -46,7 +46,7 @@ void func_001DAA90(OBJ *p)
         return;
     }
     func_001DA858(p);
-    if (func_00187D80(p->x10, 0x7E8)) {
+    if (PvAllocSwCopyImpl__FiPv(p->x10, 0x7E8)) {
         r = func_001DAE20(p, p->x48);
         if (r == 0 || !(r->fl & 1))
             func_001DA950(p, 1, 0xE2);
@@ -54,7 +54,7 @@ void func_001DAA90(OBJ *p)
             func_001DA950(p, 1, 0x31);
     }
     for (i = 0; i < 3; i++) {
-        if (!func_00187D80(p->x10, D_002C3258[i]))
+        if (!PvAllocSwCopyImpl__FiPv(p->x10, D_002C3258[i]))
             continue;
         r = func_001DAE20(p, p->x48);
         if (r == 0 || !(r->fl & 4)) {

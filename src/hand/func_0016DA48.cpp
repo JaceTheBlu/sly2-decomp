@@ -6,12 +6,12 @@ extern char D_00001AA0[];
 extern int D_003E12C8;
 extern QW D_002DF800[];
 extern int D_002DEB70[2];
-extern "C" void func_00160918(VIFS *pvifs, void *pvStart, void *pvEnd);
+extern "C" void EnsureVu1Code__FP4VIFSPvT1(VIFS *pvifs, void *pvStart, void *pvEnd);
 extern "C" void func_0016D698(int n, GIFS *pgifs, short **pps);
 extern "C" void func_0016D6C8(GIFS *pgifs, uint grf, short **pps);
 extern "C" void func_0016DA48(VIFS *pvifs, int n1, int n2)
 {
-    func_00160918(pvifs, D_0025C1C0, D_0025E040);
+    EnsureVu1Code__FP4VIFSPvT1(pvifs, D_0025C1C0, D_0025E040);
     pvifs->AddDmaCnt();
     if (n2 != 7 && D_003E12C8) {
         pvifs->AddVifFlush();

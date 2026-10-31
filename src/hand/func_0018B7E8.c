@@ -26,7 +26,7 @@ struct P{
 union PHASE{qword direction;U scalar;};
 extern qword D_002A2DD0;extern char g_sw[];
 extern float D_002BF3C0,D_002BF3C4,D_002BF3C8,D_002BF3CC,D_002BF35C;
-float func_00204740(struct P*);float func_0011CF60(float);
+float func_00204740(struct P*);float RadNormalize__Ff(float);
 void func_00194A40(void*,struct P*,unsigned int);
 void func_0018B2C0(struct P*);void func_0018A8C8(struct P*);void func_0018F0A8(struct P*);
 struct BINDING*func_0012FF10(void*,struct P*,void*,int);
@@ -69,7 +69,7 @@ static inline void PrepareAnimation(struct P*p,U*u,struct MODEL**modelOut,struct
 static inline float Z(qword q){float r;__asm__("pextuw %0,$zero,%1":"=r"(r):"r"(q));return r;}
 void func_0018B7E8(struct P*p){
  union PHASE phase;U scalar;float initialHeading;
- initialHeading=func_00204740(p);(void)func_0011CF60(p->state->heading-initialHeading);
+ initialHeading=func_00204740(p);(void)RadNormalize__Ff(p->state->heading-initialHeading);
  func_00194A40(g_sw,p,0xFFFF);
  func_0018B2C0(p);func_0018A8C8(p);func_0018F0A8(p);
  switch(p->mode){
@@ -101,7 +101,7 @@ void func_0018B7E8(struct P*p){
  case 24:{
   register float one __asm__("$f20");register float weight __asm__("$f1");qword velocity;struct VTE*entry;
   func_001441E8(p,D_002BF3C4);
-  if(p->submode==12){float angle=func_0011CF60(func_00204740(p)-p->heading);if(__builtin_fabsf(angle)<D_002BF3C8)func_0018C250(p,24,13);}
+  if(p->submode==12){float angle=RadNormalize__Ff(func_00204740(p)-p->heading);if(__builtin_fabsf(angle)<D_002BF3C8)func_0018C250(p,24,13);}
   else func_00204660(p,p->state->heading);
   one=1.0f;entry=&p->vt[34];velocity=((qword(*)(void*))entry->fn)((char*)p+entry->delta);
   weight=D_002BF3CC*func_0011CFE0(Z(velocity)/(p->factor*D_002BF35C),one);

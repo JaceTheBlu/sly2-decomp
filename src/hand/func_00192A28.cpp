@@ -1,7 +1,7 @@
 typedef int qword __attribute__((mode(TI)));
 extern "C" {
 void func_001AE478(void *p);
-void func_001AE4A0(void *p, int n);
+void _$_18CBinaryInputStream(void *p, int n);
 void *func_00154180(void *a, void *b);
 void func_00154080(void *a, void *b, int c);
 qword func_001A62E8(void *p);
@@ -11,7 +11,7 @@ void func_00154568(void);
 extern char g_sw[];
 extern float D_002BF638;
 }
-class FRAME { public: FRAME() { func_001AE478(this); } ~FRAME() { func_001AE4A0(this, 2); } };
+class FRAME { public: FRAME() { func_001AE478(this); } ~FRAME() { _$_18CBinaryInputStream(this, 2); } };
 struct E { int x0; int x4; };
 struct F { char pad[0xF8]; int xf8; };
 struct O { char pad[0xF64]; F *xf64; char pad2[0xFE0 - 0xF68]; O *xfe0; };

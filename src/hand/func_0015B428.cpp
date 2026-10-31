@@ -28,7 +28,7 @@ void func_001394C8(PRG *pprg, EMITTER *p);
 BLK *func_00138FF8(void *pv, PRG *pprg);
 void *func_002333B4(void *pv, int b, int cb);
 int func_0011D3F8(int nMin, int nMax);
-float func_0011D448(float gMin, float gMax);
+float GRandInRange__Fff(float gMin, float gMax);
 void func_0015B428(EMITTER *p, EMITX *px, int c, qword *apos, qword *av, float *ag1, float *ag2, qword *aa, qword *ab);
 }
 
@@ -41,7 +41,7 @@ static inline float Dot(qword a, qword b)
     return g;
 }
 
-static inline float GRand(LM *plm) { return func_0011D448(plm->gMin, plm->gMax); }
+static inline float GRand(LM *plm) { return GRandInRange__Fff(plm->gMin, plm->gMax); }
 
 void func_0015B428(EMITTER *p, EMITX *px, int c, qword *apos, qword *av, float *ag1, float *ag2, qword *aa, qword *ab)
 {
@@ -83,7 +83,7 @@ void func_0015B428(EMITTER *p, EMITX *px, int c, qword *apos, qword *av, float *
                 if (!p->kF0 && 0.0f < Dot(g_cm.dir, pfr->av[i]))
                     pd->g8 = -g;
                 if (p->fF4)
-                    pd->gC = func_0011D448(-3.14159265f, 3.14159265f);
+                    pd->gC = GRandInRange__Fff(-3.14159265f, 3.14159265f);
             }
             if (pprg->k160 == 2) {
                 PAIR *ppair = &pblk->apair[i];

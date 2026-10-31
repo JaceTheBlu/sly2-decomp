@@ -20,7 +20,7 @@ extern G g_sw;
 extern char D_002DEB30[];
 extern "C" void func_00165DC0(G *pg, O *p);
 extern "C" void func_00165E10(G *pg, O *p);
-extern "C" W *func_00210B70();
+extern "C" W *SwitchToPo__FP2PO();
 extern "C" int func_00210A88();
 extern "C" W *func_00210990(int n);
 extern "C" int func_00162670(O *p);
@@ -38,7 +38,7 @@ extern "C" void func_00162A60(O *p)
     func_00165DC0(&g_sw, 0);
     if (g_sw.f3b14 && g_sw.f3b14->f7c && g_sw.f3b14->f7c == p)
         func_00165E10(&g_sw, 0);
-    W *pw1 = func_00210B70();
+    W *pw1 = SwitchToPo__FP2PO();
     W *pw2 = func_00210990(func_00210A88());
     if (FSame(pw1, pw2)) {
         g_sw.f3c88 = 0x189;

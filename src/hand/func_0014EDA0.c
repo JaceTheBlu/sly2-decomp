@@ -6,7 +6,7 @@ struct LO { char pad[0x70]; int c70; struct E *ae74; };
 struct AL { int cb; int cbAlign; };
 extern float D_002BD8D4;
 void func_001AE478(void *p);
-void func_001AE4A0(void *p, int n);
+void _$_18CBinaryInputStream(void *p, int n);
 void *func_001AE318(struct AL *pal);
 int func_001A93C8(qword pos, struct LO *po, struct E *pe, float g, int a, int b, int cMax, struct X *ax);
 void func_0011AD30(int c, float *aDot, float *aW, float *aZ, float g);
@@ -80,7 +80,7 @@ qword func_0014EDA0(void *p, int c, struct LO **apo, float (*pfn)(void *, qword,
             r = func_0011E9F8(q, h);
         }
         __asm__("vadd.xyzw %0, %1, %2" : "=j"(r) : "j"(v), "j"(r));
-        func_001AE4A0(&frame, 2);
+        _$_18CBinaryInputStream(&frame, 2);
         return r;
     }
 }

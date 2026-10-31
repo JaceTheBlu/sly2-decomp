@@ -1,5 +1,5 @@
 // func_001A8B50: edge/edge and vertex/face contacts between two clipped shapes.
-// ClsgClipSoAllEdges + func_001A81F8 clip each shape's edges against the other, CategorizeAlsg sorts each side's LSGs, func_001A87F0 adds the
+// ClsgClipSoAllEdges + ClsgClipSoBspEdges__FP2SOT0iP3BSPiP3LSG clip each shape's edges against the other, CategorizeAlsg sorts each side's LSGs, func_001A87F0 adds the
 // vertex contacts of both sides; then every free LSG of side 0 either follows the func_001A86B8 edge path of side 1 (closest points of the
 // two edges via func_0011EA60, kind 3) or, when no side-1 LSG shares a surface with its edge, contacts the nearer endpoint against the
 // farther plane (kind 1). With no new contact and one side empty, a kind-13 contact at the shape position is added.
@@ -29,7 +29,7 @@ struct XP { char pad0[0x9C]; int kind; void *first, *second; int padA8; XP *next
 extern "C" {
 extern U D_002A2DC0;
 int ClsgClipSoAllEdges(SCENE *, SHAPE *, SHAPE *, NODE *, int, LSG *) __asm__("ClsgClipSoAllEdges__FP2SOT0P3BSPiP3LSG");
-int func_001A81F8(SCENE *, SHAPE *, SHAPE *, int, NODE *, int, LSG *);
+int ClsgClipSoBspEdges__FP2SOT0iP3BSPiP3LSG(SCENE *, SHAPE *, SHAPE *, int, NODE *, int, LSG *);
 void CategorizeAlsg(int, LSG *, int *, int *, LSG **, LSG **) __asm__("CategorizeAlsg__FiP3LSGPiT2PP3LSGT4");
 void func_001A87F0(SCENE *, SHAPE *, SHAPE *, int, int *, LSG **, CONTACT **);
 int func_001A86B8(SURF *, int, int, LSG *, LSG **);
@@ -95,7 +95,7 @@ extern "C" void func_001A8B50(SCENE *scene, SHAPE *a, SHAPE *b, int nodeCount, N
     U apos[2];
     CONTACT *old = *out;
     aclsg[0] = ClsgClipSoAllEdges(scene, b, a, last, 128, aalsg[0]);
-    int clsg1 = func_001A81F8(scene, a, b, nodeCount, nodes, 128, aalsg[1]);
+    int clsg1 = ClsgClipSoBspEdges__FP2SOT0iP3BSPiP3LSG(scene, a, b, nodeCount, nodes, 128, aalsg[1]);
     aclsg[1] = clsg1;
     if (!aclsg[0] && !clsg1)
         return;

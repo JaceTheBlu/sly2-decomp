@@ -5,11 +5,11 @@ struct Q { char pad[0x124]; struct R *x124; int x128; };
 struct B { int c; int *p; };
 struct S { char pad[0x10]; int c10; int p14[2]; struct B *x1C; int c20; struct Q **a24; };
 int func_001AE478(struct H *p);
-void func_001AE4A0(struct H *p, int n);
+void _$_18CBinaryInputStream(struct H *p, int n);
 int *func_001AE378(struct A *pa);
-void *func_001AE1D0(struct A *pa);
+void *PvAllocSwImpl__Fi(struct A *pa);
 static inline int *Alloc1(struct A *pa) { pa->align = 0x10; return func_001AE378(pa); }
-static inline void *Alloc2(struct A *pa) { pa->align = 0x10; return func_001AE1D0(pa); }
+static inline void *Alloc2(struct A *pa) { pa->align = 0x10; return PvAllocSwImpl__Fi(pa); }
 void func_001C1260(struct S *p)
 {
     struct H h;
@@ -39,5 +39,5 @@ void func_001C1260(struct S *p)
             pb->p[pb->c++] = k;
         }
     }
-    func_001AE4A0(&h, 2);
+    _$_18CBinaryInputStream(&h, 2);
 }

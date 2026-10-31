@@ -60,16 +60,16 @@ uint func_00117C80(STREAM*) __asm__("U32Read__18CBinaryInputStream");
 short func_00117D50(STREAM*) __asm__("S16Read__18CBinaryInputStream");
 int func_00117DB8(STREAM*) __asm__("S32Read__18CBinaryInputStream");
 void func_00117F18(STREAM*,M4*);
-void*func_001AE1D0(const REQUEST&);
+void*PvAllocSwImpl__Fi(const REQUEST&);
 void*func_001AE238(const REQUEST&,void*);
 MARK*func_001AE478(MARK*);
-void func_001AE4A0(MARK*,int);
+void _$_18CBinaryInputStream(MARK*,int);
 BINDING*func_0016C8E0(P*,STREAM*);
 M4*func_0011C168(M4*,const M4*,const M4*);
 void func_001AE5A0(void*,const void*,uint) __asm__("CopyAb__FPvT0Ui");
 }
-struct MARK{MARK(){func_001AE478(this);}~MARK(){func_001AE4A0(this,2);}};
-static inline void*Allocate(int bytes){return func_001AE1D0(REQUEST(bytes,16));}
+struct MARK{MARK(){func_001AE478(this);}~MARK(){_$_18CBinaryInputStream(this,2);}};
+static inline void*Allocate(int bytes){return PvAllocSwImpl__Fi(REQUEST(bytes,16));}
 static inline void*Reallocate(int bytes,void*old){return func_001AE238(REQUEST(bytes,16),old);}
 extern "C" void func_00169AC8(P*p,const D*sourceD,const E*sourceE,const SPHERE*sourceSphere,D*desc,E*entry,SPHERE*sphere,int groups,const int*counts,FACE**faces,STREAM*stream){
     M4 matrix;

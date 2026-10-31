@@ -1,6 +1,6 @@
 typedef unsigned int uint;
-struct FRAME;extern "C" void func_001AE4A0(FRAME*,int);
-struct FRAME {FRAME()__asm__("func_001AE478");~FRAME(){func_001AE4A0(this,2);}};
+struct FRAME;extern "C" void _$_18CBinaryInputStream(FRAME*,int);
+struct FRAME {FRAME()__asm__("func_001AE478");~FRAME(){_$_18CBinaryInputStream(this,2);}};
 struct REQUEST {uint bytes,alignment;};
 struct X;
 extern "C" void func_00258248(X *px);

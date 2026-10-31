@@ -12,7 +12,7 @@ void *func_002333B4(void *, int, int);
 void func_0011A220(void *, S *);
 void func_00256EE0(S *, int);
 int func_001F0638(S *);
-int func_001F0438(P *, int);
+int IsmsFindSmRequired__FP2SM3OID(P *, int);
 void func_001F13A8(S *, int, int);
 void func_001F0D88(S *, int);
 }
@@ -43,7 +43,7 @@ extern "C" void func_001F01B8(P *p, int a, int b, int c, int d, S **pps)
     ps->pvt->a3.pfn((char *)ps + ps->pvt->a3.d, 2, 0, 0, 0, 0);
     if (func_001F0638(ps)) return;
     if (b != -1) {
-        int v = func_001F0438(p, b);
+        int v = IsmsFindSmRequired__FP2SM3OID(p, b);
         ps->n34 = v;
         ps->n3C = v;
         func_001F13A8(ps, -1, v);

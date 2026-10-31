@@ -790,7 +790,7 @@ extern "C" void func_0022FA20(SO *pso);
 extern "C" void func_00186A50(SO *pso, void *pv);
 void UpdateXflock(SO *pso, struct XFLOCK *pxflock);
 void UpdateChainLink(SO *pso, struct CHAINLINK *plink);
-extern "C" float *func_00256D18(float *pg, qword qw);
+extern "C" float *__as__6VECTORG9VU_VECTOR(float *pg, qword qw);
 struct GFTUNE
 {
     float g;
@@ -1002,7 +1002,7 @@ void UpdateSoSlots(SO *pso)
                         VU_FLOAT vfHalf = VuFloat(dt * 0.5f);
                         qword qwSum = QwAdd(qwVel, *(qword *)&pxf->vUnkB0);
                         qword qwPos = QwMulAddX(qwPos0, qwSum, vfHalf.qw);
-                        func_00256D18(pxf->mat.mat[3], qwPos);
+                        __as__6VECTORG9VU_VECTOR(pxf->mat.mat[3], qwPos);
                         *(qword *)&pxf->vUnkB0 = qwVel;
                         pxf->mat.mat[3][3] = 1.0f;
                         pxf->nStampWorld = ++g_sw.nStampXf;
@@ -1376,7 +1376,7 @@ void UpdateSoSlots(SO *pso)
                     HermiteVec4((*(float *)&pxf->pxfRef - D_002DDED0.t) + D_002DDED0.dt, D_002DDED0.dt, 1.0f, *(qword *)pxf->mat.mat[3], *(qword *)&pxf->vUnkB0, pxf->qwRest, pxf->qwUnkD0, &vecPos, &vecVel, 0);
                 }
                 fIdle = 0;
-                func_00256D18(pxf->mat.mat[3], *(qword *)&vecPos);
+                __as__6VECTORG9VU_VECTOR(pxf->mat.mat[3], *(qword *)&vecPos);
                 pxf->mat.mat[3][3] = 1.0f;
                 *(qword *)&pxf->vUnkB0 = *(qword *)&vecVel;
                 pxf->nStampWorld = ++g_sw.nStampXf;
@@ -1416,7 +1416,7 @@ void UpdateSoSlots(SO *pso)
                         SlotSetRole(pso, pxf, 0x13);
                     }
                     qword qwPos0 = *(qword *)pxf->mat.mat[3];
-                    func_00256D18(pxf->mat.mat[3], QwAddMulXMulX(qwPos0, qwV0, qwV1, VuFloat(dt * 0.5f).qw));
+                    __as__6VECTORG9VU_VECTOR(pxf->mat.mat[3], QwAddMulXMulX(qwPos0, qwV0, qwV1, VuFloat(dt * 0.5f).qw));
                     *(qword *)&pxf->vUnkB0 = qwV1;
                     pxf->mat.mat[3][3] = 1.0f;
                     break;

@@ -8,7 +8,7 @@ extern char g_cm[];
 extern char g_sw[];
 ti128 func_0014F268(void *, ti128);
 struct C *func_001AE478(struct C *);
-void func_001AE4A0(struct C *, int);
+void _$_18CBinaryInputStream(struct C *, int);
 void func_0020FA10();
 void func_0020FAA0(void *, ti128, ti128, void (*)(), int, int *, int *);
 int func_0014CC58(int, ti128, ti128, int, int, struct LSG *);
@@ -23,5 +23,5 @@ void func_001356E8(struct S *p) {
     func_0020FAA0(g_sw, v1, v2, func_0020FA10, p->fec, &cso, &aso);
     if (func_0014CC58(1, v1, v2, cso, aso, &lsg)) p->v16f0 = lsg.pos;
     else p->v16f0 = v2;
-    func_001AE4A0(&ctx, 2);
+    _$_18CBinaryInputStream(&ctx, 2);
 }

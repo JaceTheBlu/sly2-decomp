@@ -9,12 +9,12 @@ int func_00117C20(BIS *pbis);
 float func_00117E38(BIS *pbis);
 int func_00117BD0(BIS *pbis);
 void ReadVector__18CBinaryInputStreamP6VECTOR(BIS *pbis, qword *pv);
-void *func_001AE1D0(AREQ *preq);
+void *PvAllocSwImpl__Fi(AREQ *preq);
 void *func_001AE2A0(AREQ *preq);
 void func_00119308(FACE *pface, qword a, qword b, qword c);
 void func_00117FD0(BIS *pbis, GEOM *pg);
 }
-static inline void *PvAlloc1D0(int cb) { AREQ req; req.cbAlign = 0x10; req.cb = cb; return func_001AE1D0(&req); }
+static inline void *PvAlloc1D0(int cb) { AREQ req; req.cbAlign = 0x10; req.cb = cb; return PvAllocSwImpl__Fi(&req); }
 static inline void *PvAlloc2A0(int cb) { AREQ req; req.cbAlign = 0x10; req.cb = cb; return func_001AE2A0(&req); }
 void func_00117FD0(BIS *pbis, GEOM *pg) { int i;
  pg->cpos = func_00117C20(pbis);

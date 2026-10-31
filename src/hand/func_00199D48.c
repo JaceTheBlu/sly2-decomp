@@ -55,7 +55,7 @@ extern qword D_002A2DC0;
 extern char g_sw[];
 extern int func_00144068(LO *);
 extern int func_001999D0(P *,SHAPE *,qword,int,void *,U *);
-extern void func_001A7FC0(void *,int,CONTACT **);
+extern void FindClosestPointOnLineSegment__FP6VECTORN20PfT3(void *,int,CONTACT **);
 extern BSPNODE *func_00118FB0(BSPNODE *,BSPNODE *,qword);
 static inline qword Scalar(float f)
 {
@@ -121,7 +121,7 @@ CONTACT *func_00199D48(P *p,int *outSide,qword *outNormal)
             }
             if (!func_001999D0(p,shape,InputPosition(contact,side),contact->kind,info,&direction)) continue;
             if ((p->self->ec->flags&2) || (shape->owner->ec->flags&2))
-                func_001A7FC0(g_sw,1,&contact);
+                FindClosestPointOnLineSegment__FP6VECTORN20PfT3(g_sw,1,&contact);
             if (0.0f < D_002C3C60[side]*contact->difference.f[2]) continue;
             {
                 qword back; qword lift; qword value; U *selected;

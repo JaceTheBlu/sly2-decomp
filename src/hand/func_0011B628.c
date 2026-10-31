@@ -4,14 +4,14 @@ static __inline__ float GetX(qword q) { float x; __asm__("mtc1 %1,%0" : "=f"(x) 
 static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0,%1" : "=r"(y) : "r"(q)); return y; }
 static __inline__ float GetZ(qword q) { float z; __asm__("pextuw %0,$0,%1" : "=r"(z) : "r"(q)); return z; }
 typedef struct { VECTOR r[3]; } MATRIX3;
-void func_0011D608(float g, float *ps, float *pc);
+void CalculateSinCos__FfPfT1(float g, float *ps, float *pc);
 MATRIX3 *func_0011B628(MATRIX3 *pmat, qword v)
 {
     float sx, cx, sy, cy, sz, cz;
     float sxsy, cxsy;
-    func_0011D608(GetX(v), &sx, &cx);
-    func_0011D608(GetY(v), &sy, &cy);
-    func_0011D608(GetZ(v), &sz, &cz);
+    CalculateSinCos__FfPfT1(GetX(v), &sx, &cx);
+    CalculateSinCos__FfPfT1(GetY(v), &sy, &cy);
+    CalculateSinCos__FfPfT1(GetZ(v), &sz, &cz);
     sxsy = sx * sy;
     cxsy = cx * sy;
     pmat->r[0].z = -sy;

@@ -6,14 +6,14 @@
 typedef int qword __attribute__((mode(TI)));
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } VU_FLOAT(const float *pg) { __asm__("qmtc2.ni %1, %0" : "=j,j"(q) : "r,V"(*(const int *)pg)); } /* never-chosen "V" (non-offsettable mem) alternative: allocation-only (the word stays a MEM until reload) */ };
 struct CLOCK { float t, dt, x8, xC, dtPrev; };
-struct FRAME { int n; FRAME(); ~FRAME(); }; /* out-of-line ctor/dtor: func_001AE478 / func_001AE4A0(this, 2) */
+struct FRAME { int n; FRAME(); ~FRAME(); }; /* out-of-line ctor/dtor: func_001AE478 / _$_18CBinaryInputStream(this, 2) */
 extern "C" {
 extern CLOCK D_002DDED0;
 extern qword D_002BD8F0, D_002BD900;
 extern float D_002BD8D8, D_002BD8DC;
 extern char g_sw[];
 void *func_001AE478(FRAME *p);
-void func_001AE4A0(FRAME *p, int n);
+void _$_18CBinaryInputStream(FRAME *p, int n);
 void func_0020FAA0(void *g, qword a, qword b, void *pfn, void *o, int *pi, int *pj);
 qword func_0014EDA0(void *p, int i, int j, void *pfn, qword a, qword v, float g, float h);
 void func_0014F030(void);

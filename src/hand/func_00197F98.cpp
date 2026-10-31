@@ -69,9 +69,9 @@ void func_00195FB8(CONTEXT *, int, void *);
 void func_002309E8(SPACE *, SPACE *, M4 *, float, M4 *);
 void func_00117120(float, float, float, qword, qword, qword, qword, qword *, qword *, qword *);
 float func_00204740(ACTOR *);
-float func_0011CF60(float);
-void func_0011D608(float, float *, float *);
-float func_0011D018(float, float, float, SMP *, float *);
+float RadNormalize__Ff(float);
+void CalculateSinCos__FfPfT1(float, float *, float *);
+float GSmooth__FfffP3SMPPf(float, float, float, SMP *, float *);
 void func_001384C0(CLIP *);
 void func_001E67B8(void *, float, qword *, qword *);
 void func_001CC2E8(void *);
@@ -354,13 +354,13 @@ extern "C" void func_00197F98(CONTEXT *p)
     case 20: {
         float headingOld = func_00204740(p->actor);
         float s, c;
-        func_0011D608(func_0011CF60(input->heading - headingOld), &s, &c);
+        CalculateSinCos__FfPfT1(RadNormalize__Ff(input->heading - headingOld), &s, &c);
         float lateral = s * input->amount;
         float forward = c * input->amount;
         float mix = (forward + 1.0f) * 0.5f;
         if (p->scriptFocus) {
             DATA *data = p->scriptFocus->data;
-            data->amount = func_0011D018(data->amount, GLerp(D_002BF798, mix), D_002DDED0.dt, &D_002BF860, 0);
+            data->amount = GSmooth__FfffP3SMPPf(data->amount, GLerp(D_002BF798, mix), D_002DDED0.dt, &D_002BF860, 0);
         }
         float turn = GLerp(D_002BF870, mix) * lateral * D_002DDED0.dt;
         p->blend0 = GLerp(D_002BF850, mix);

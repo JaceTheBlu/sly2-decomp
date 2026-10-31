@@ -2,7 +2,7 @@ void *func_0015E938(void *pv, int k, int id);
 void *func_001EC918(int id);
 int func_00132B10(void *p, int cid);
 void func_001F80D0(void *p, float f);
-void func_001EE3B0(void *p, float f);
+void SetEyesClosed__FP4EYESf(void *p, float f);
 void func_00210678(void *pv, int id1, int id2, float f)
 {
     void *p1 = 0;
@@ -20,5 +20,5 @@ void func_00210678(void *pv, int id1, int id2, float f)
     if (p1)
         func_001F80D0(p1, f);
     if (p2)
-        func_001EE3B0(p2, f);
+        SetEyesClosed__FP4EYESf(p2, f);
 }

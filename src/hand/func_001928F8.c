@@ -8,7 +8,7 @@ struct CLOCK { float t; float dt; };
 extern struct CLOCK D_002DDED0;
 void func_00192BD8(struct P *p, int n);
 void func_0018E540(struct O *o, int n);
-void func_0018ED70(struct O *o);
+void EnsureAloSfx__FP3ALO(struct O *o);
 void func_001CCAC0(void *p, int n);
 void func_00192A28(struct P *p);
 void func_001928F8(struct P *p, int n, int a, int b)
@@ -29,7 +29,7 @@ void func_001928F8(struct P *p, int n, int a, int b)
         n = 0;
         o->x1854 = a;
         func_0018E540(o, 0);
-        func_0018ED70(o);
+        EnsureAloSfx__FP3ALO(o);
         break;
     }
     case 5: case 9:

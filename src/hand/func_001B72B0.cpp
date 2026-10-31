@@ -35,7 +35,7 @@ extern "C" M4 func_0022FF40(NODE *, NODE *, const M4 &);
 extern "C" VU_VECTOR func_0022FC48(NODE *, NODE *, VU_VECTOR);
 extern "C" VU_VECTOR func_0011BFF0(const M3 *);
 extern "C" void func_0011B628(M3 *, VU_VECTOR);
-extern "C" qword *func_00256D18(qword *, VU_VECTOR);
+extern "C" qword *__as__6VECTORG9VU_VECTOR(qword *, VU_VECTOR);
 extern "C" void func_0011C318(M4 *, const M4 *);
 extern "C" M4 func_0011C168(const M4 &, const M4 &);
 
@@ -71,7 +71,7 @@ extern "C" void func_001B72B0(P *const p, NODE *stop, const M4 *input, VU_VECTOR
         func_0011C318(&replace, &result);
         rotation.q = func_0011BFF0(&replace.basis);
         func_0011B628(&result.basis, rotation.q);
-        func_00256D18(&replace.position.q, chain[right]->local.position.q);
+        __as__6VECTORG9VU_VECTOR(&replace.position.q, chain[right]->local.position.q);
         M4 *pmat = &replace;
         pmat->basis = result.basis;
         replace.basis.row[0].i[3] = replace.basis.row[1].i[3] = replace.basis.row[2].i[3] = 0;

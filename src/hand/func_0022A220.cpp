@@ -30,7 +30,7 @@ void func_00119390(UQ *, qword, qword);
 UQ *func_002564C0(UQ *);
 UQ *func_002564B8(UQ *);
 FRAME *func_001AE478(FRAME *);
-void func_001AE4A0(FRAME *, int);
+void _$_18CBinaryInputStream(FRAME *, int);
 void *func_001AE318(REQ *);
 int func_0014F030(void *, O *);
 void func_0020FAA0(WORLD *, qword, qword, int (*)(void *, O *), void *, int *, O ***);
@@ -205,7 +205,7 @@ extern "C" void func_0022A220(O *po)
         ppface = apface;
         TREE *ptree = &pso->tree;
         int res = func_00118D08(ptree->anode, ptree->anode + ptree->cnode, 4, corner, &cface, &ppface);
-        switch (res) { case 0: func_001AE4A0(&frame, 2); return; case 1: continue; case 2: break; }
+        switch (res) { case 0: _$_18CBinaryInputStream(&frame, 2); return; case 1: continue; case 2: break; }
         c = ppface - apface;
         UQ d[6][2];
         for (j = 0; j < c; ) {
@@ -259,5 +259,5 @@ extern "C" void func_0022A220(O *po)
     }
     po->fHit = 1;
     po->dz = (sMax - sBase) * LenXY(Sub(posCam, posSrc));
-    func_001AE4A0(&frame, 2);
+    _$_18CBinaryInputStream(&frame, 2);
 }

@@ -18,7 +18,7 @@ void func_001D9870();
 int func_002121E8(POOL*,int);
 void func_001AEAA8(P*,int);
 int func_001880D8(INPUT*);
-uint func_00187D80(INPUT*,uint);
+uint PvAllocSwCopyImpl__FiPv(INPUT*,uint);
 void func_001AF490(P*);
 void func_001AF608(P*);
 void func_001AF660(P*);
@@ -107,7 +107,7 @@ extern "C" void func_001AEEE0(P*p){
   if(func_002121E8(group->pool,group->meta->reverse))break;goto activate;
  case 7:{
   if(!p->input)break;
-  uint flags;flags=func_00187D80(p->input,0x870);
+  uint flags;flags=PvAllocSwCopyImpl__FiPv(p->input,0x870);
   if(flags&0x800){func_001AF660(p);break;}
   if((flags&0x10)||(group->count==0&&flags)){if(group->back)func_001AF490(p);else func_001AF608(p);break;}
   if(p->depth>0&&(flags&0x40)){
@@ -146,7 +146,7 @@ extern "C" void func_001AEEE0(P*p){
  case 10:{
   if(!p->input)break;
   ITEM*item;item=&group->items[group->index];
-  uint flags;flags=func_00187D80(p->input,0x850);
+  uint flags;flags=PvAllocSwCopyImpl__FiPv(p->input,0x850);
   if(flags&0x800){func_001AFF88(p,item);
 func_001AF660(p);break;}
   if(flags&0x10)func_001AFF88(p,item);

@@ -2,7 +2,7 @@ struct VTE { short d; short p; void (*pfn)(void *); };
 struct VT { VTE a[3]; };
 struct P { char pad[0xC]; VT *pvt; char pad2[0x24 - 0x10]; void *p24; char pad3[0x30 - 0x28]; void *p30; int n34; int n38; int n3C; };
 extern "C" int func_001F0638(P *);
-extern "C" int func_001F0438(void *, int);
+extern "C" int IsmsFindSmRequired__FP2SM3OID(void *, int);
 extern "C" void func_00130B18(void *);
 extern "C" void func_001F13A8(P *, int, int);
 extern "C" void func_001F0D88(P *, int);
@@ -15,7 +15,7 @@ extern "C" void func_001F09D8(P *p, int n)
 {
     if (!func_001F0638(p)) {
         Lock l(p);
-        int m = func_001F0438(p->p24, n);
+        int m = IsmsFindSmRequired__FP2SM3OID(p->p24, n);
         if (p->n34 == m && (p->n3C == m || p->n3C == -1)) return;
         {
             void *pv = p->p30;

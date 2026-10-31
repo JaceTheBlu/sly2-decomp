@@ -21,11 +21,11 @@ qword func_001A62E8(void *p);
 float func_00204740(struct A *a);
 void func_0011EFB0(qword v, float *a, float *b, float *c);
 int func_0011D910(void *p, float f);
-float func_0011CF60(float f);
+float RadNormalize__Ff(float f);
 qword *func_001A6318(struct A *a);
 void func_0011E958(qword v, int n, float *pf);
 void func_001AE478(struct X *x);
-void func_001AE4A0(struct X *x, int n);
+void _$_18CBinaryInputStream(struct X *x, int n);
 int func_0020FA10(void);
 void func_0020FAA0(struct G *g, qword a, qword b, int (*fn)(void), int z, int *pa, int *pb);
 struct R *func_0014CC58(int n, qword a, qword b, int c, int d, struct Y *y);
@@ -71,12 +71,12 @@ int func_00175D00(struct S *p) {
     func_0011EFB0(d, &f[0], &f[1], &f[2]);
     if (!func_0011D910(p->p10->aF48, f[2])) return 0;
     {
-        float h = func_0011CF60(f[0] - g);
+        float h = RadNormalize__Ff(f[0] - g);
         if (!func_0011D910(p->p10->aF50, h)) return 0;
     }
     func_0011E958(*func_001A6318(p->p10), 0, &f[3]);
     {
-        float h = func_0011CF60(f[1] - f[3]);
+        float h = RadNormalize__Ff(f[1] - f[3]);
         if (!func_0011D910(p->p10->aF58, h)) return 0;
     }
     if (!k) {
@@ -92,10 +92,10 @@ int func_00175D00(struct S *p) {
         func_0020FAA0(&g_sw, pa, pb, func_0020FA10, p->p10->nEC, &na, &nb);
         r = func_0014CC58(0, pa, pb, na, nb, &y);
         if (r && r->p4->p14->p0 != p->p30) {
-            func_001AE4A0(&x, 2);
+            _$_18CBinaryInputStream(&x, 2);
             return 0;
         }
-        func_001AE4A0(&x, 2);
+        _$_18CBinaryInputStream(&x, 2);
         return 1;
     }
 }

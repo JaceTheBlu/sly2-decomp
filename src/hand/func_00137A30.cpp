@@ -24,7 +24,7 @@ struct XV { virtual void f1(); virtual void f2(); virtual void f3(); virtual voi
 struct ELEM { float g; X *px; };
 extern "C" {
 X *func_0013E3C8(int a, void *p, int b, int c);
-void *func_001AE1D0(const AREQ &req);
+void *PvAllocSwImpl__Fi(const AREQ &req);
 void *func_001AE238(const AREQ &req, void *pv);
 void *func_001AE378(const AREQ &req);
 void *func_001AE2A0(const AREQ &req);
@@ -65,13 +65,13 @@ void func_00137A30(void *p, int cb, int c, ELEM *aelem, int n, int *pa, int *pb,
         pxNew->cElem = c;
         pxNew->aelem = aelem;
         pxNew->n = n;
-        pxNew->ae3 = (E3 *)func_001AE1D0(AREQ(n * 12));
+        pxNew->ae3 = (E3 *)PvAllocSwImpl__Fi(AREQ(n * 12));
         for (int ie = 0; ie < n; ie++) {
             E3 *pe3 = &pxNew->ae3[ie];
             pe3->a = pa[ie];
             int b = pb[ie];
             pe3->b = b;
-            pe3->pv = func_001AE1D0(AREQ(b * 8));
+            pe3->pv = PvAllocSwImpl__Fi(AREQ(b * 8));
         }
         
         if (pxCopy) {

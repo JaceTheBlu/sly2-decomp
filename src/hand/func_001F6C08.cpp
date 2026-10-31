@@ -14,10 +14,10 @@ struct PLANE {U normal;U extra;};
 struct P {char pad0[0x10];MESH *mesh;char pad14[0x68];U *positions;int planeCount;PLANE *planes;char pad88[8];int pointCount;U *source;int triCount;void *triSource;int edgeCount;EDGE *edges;};
 struct FRAME;
 extern "C" FRAME *func_001AE478(FRAME *);
-extern "C" void func_001AE4A0(FRAME *,int);
+extern "C" void _$_18CBinaryInputStream(FRAME *,int);
 struct FRAME {FRAME(){}~FRAME(){}};
 struct MSG {int bytes,alignment;};
-extern "C" void *func_001AE1D0(MSG *);
+extern "C" void *PvAllocSwImpl__Fi(MSG *);
 extern "C" void *func_001AE2A0(MSG *);
 extern "C" void *func_001AE378(MSG *);
 static inline qword Sub(qword a,qword b) {qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"0"(a),"j"(b));return r;}
@@ -35,7 +35,7 @@ extern "C" void func_001F6C08(P *p)
     func_001AE478(&storage);
     MSG *allocation=&request;
     request.bytes=triBytes;allocation->alignment=alignment;
-    p->mesh=(MESH *)func_001AE1D0(allocation);
+    p->mesh=(MESH *)PvAllocSwImpl__Fi(allocation);
     request.bytes=p->pointCount*16;allocation->alignment=alignment;
     p->mesh->velocity=(qword *)func_001AE2A0(allocation);
     request.bytes=p->pointCount*16;allocation->alignment=alignment;
@@ -69,5 +69,5 @@ extern "C" void func_001F6C08(P *p)
         cross.q=Cross(first.q,second.q);
         if(Dot(cross.q,plane->normal.q)<0.0f){int t=ptri->vertex[1];ptri->vertex[1]=ptri->vertex[2];ptri->vertex[2]=t;}
     }
-    func_001AE4A0(&storage,2);
+    _$_18CBinaryInputStream(&storage,2);
 }

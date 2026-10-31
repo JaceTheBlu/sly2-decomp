@@ -5,7 +5,7 @@ struct R { float a, b; };
 extern struct R D_002A53C0, D_002A53C8;
 void func_0011EFB0(qword v, float *pa, float *pb, float *pc);
 int func_0011D910(struct R *pr, float g);
-float func_0011CF60(float g);
+float RadNormalize__Ff(float g);
 int func_00172798(struct S *p) {
     float a, b, c;
     qword d;
@@ -18,7 +18,7 @@ int func_00172798(struct S *p) {
     if (p->c >= 0x40) return 0;
     pe = &p->ae[p->c++];
     pe->pos = p->pos820;
-    f = func_0011CF60(a - p->g10);
+    f = RadNormalize__Ff(a - p->g10);
     pe->g = f;
     if (f < 0.0f) pe->g = 6.28318530718f - f;
     return 1;

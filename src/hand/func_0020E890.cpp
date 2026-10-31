@@ -18,7 +18,7 @@ extern SW g_sw;
 extern "C" {
 void func_00160E68(int);
 FRAME *func_001AE478(FRAME *);
-void func_001AE4A0(FRAME *,int);
+void _$_18CBinaryInputStream(FRAME *,int);
 void func_001C2A78(int);
 void func_00258248(KEY *);
 STREAM *func_001848A8(STREAM *,int,void *,int);
@@ -47,7 +47,7 @@ void func_00129EC8(REF *);
 ACTOR *func_0015E938(SW *,int,int,void *);
 int func_00132B10(ACTOR *,int);
 int func_001C4080(ACTOR *);
-int func_00210AE0(void);
+int _IppoFindPo__FP2PO(void);
 void func_00212A70(WIDGET *,int);
 void func_0014D478(void *);
 void func_0014D8C0(void *);
@@ -88,14 +88,14 @@ extern "C" void func_0020E890(SW *p)
     keyPointer->kind=2;
     func_00258248(keyPointer);
     int hasFile=NonZero(request.header.words[1]^request.header.words[15]);
-    if(hasFile&&!SetKey(&key,&request.header)){func_001AE4A0(scope,2);return;}
+    if(hasFile&&!SetKey(&key,&request.header)){_$_18CBinaryInputStream(scope,2);return;}
     HEADER *current=&p->current; const HEADER *requested=&request.header; int changed=!Same(requested,current);
     STREAM stream;
     register STREAM *argument __asm__("$4")=StreamHome(&stream);
     register STREAM *reader __asm__("$21");
     __asm__("daddu %0,%1,$zero":"=r"(reader):"r"(argument));
     func_001848A8(argument,0xD8000,D_002F7980,0);
-    if(hasFile&&!func_00184D60(reader,&key)){func_00184950(reader,2);func_001AE4A0(scope,2);return;}
+    if(hasFile&&!func_00184D60(reader,&key)){func_00184950(reader,2);_$_18CBinaryInputStream(scope,2);return;}
     SetDecompress__18CBinaryInputStreamiPUc(reader,0x4000,(void *)0x70000000);
     func_00184CA0(reader);
     func_0020E068(p);
@@ -137,7 +137,7 @@ extern "C" void func_0020E890(SW *p)
             }
         }
     }
-    if(!func_00210AE0()){
+    if(!_IppoFindPo__FP2PO()){
         ACTOR *actor=func_001C4840(p);
         if(actor&&func_00132B10(actor,0x34)&&actor->widget&&!actor->widget->shown)func_00212A70(actor->widget,1);
     }
@@ -148,5 +148,5 @@ extern "C" void func_0020E890(SW *p)
     func_0022B420(D_00443740);
     if(!hasFile)func_001A4E80(D_002E1E88);
     func_00184950(reader,2);
-    func_001AE4A0(scope,2);
+    _$_18CBinaryInputStream(scope,2);
 }

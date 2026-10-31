@@ -13,7 +13,7 @@ struct P {
 void func_001A5E28(struct P *);
 void func_00149718(struct P *, int);
 struct CTX *func_001AE478(struct CTX *);
-void func_001AE4A0(struct CTX *, int);
+void _$_18CBinaryInputStream(struct CTX *, int);
 void func_001AE5A0(void *, void *, int);
 int func_0015E9C8(struct G *, int, int, int, int, void **);
 int func_001A61A0(void *);
@@ -97,6 +97,6 @@ void func_00149440(struct P *p)
             }
         }
         func_00149718(p, fFound);
-        func_001AE4A0(&ctx, 2);
+        _$_18CBinaryInputStream(&ctx, 2);
     }
 }

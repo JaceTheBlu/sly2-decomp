@@ -25,14 +25,14 @@ extern char g_sw[];
 extern qword D_002A2DA0, D_002A2DC0, D_002A2DD0, D_002A2DE0;
 extern float D_002C0D74, D_002C0D78;
 void func_001AE478(FRAME *);
-void func_001AE4A0(FRAME *, int);
+void _$_18CBinaryInputStream(FRAME *, int);
 qword func_001A62E8(P *);
 int func_001C5570(void *, SOPART *);
 void func_0020FAA0(void *, qword, qword, int (*)(void *, SOPART *), void *, int *, SOPART ***);
 int func_001A93C8(qword, float, SOPART *, void *, int, void *, int, CMCONTACT *);
 float func_0011E290(qword, qword, qword *, qword *);
 }
-class FRAME { public: FRAME() { func_001AE478(this); } ~FRAME() { func_001AE4A0(this, 2); } };
+class FRAME { public: FRAME() { func_001AE478(this); } ~FRAME() { _$_18CBinaryInputStream(this, 2); } };
 
 struct VU_FLOAT {
     qword qw;

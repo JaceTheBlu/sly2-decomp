@@ -6,7 +6,7 @@ void *func_001AE378(struct R *);
 void func_001F31E0(struct S *, void *);
 void func_0013C440(struct S *);
 void *func_001AE238(struct R *, void *);
-void func_001AE4A0(struct C *, int);
+void _$_18CBinaryInputStream(struct C *, int);
 static inline struct R *SetReq(struct R *pr, int cb, int cbAlign) { pr->cb = cb; pr->cbAlign = cbAlign; return pr; }
 void func_0013BE58(struct S *p, void *a) {
     struct C ctx;
@@ -16,5 +16,5 @@ void func_0013BE58(struct S *p, void *a) {
     func_001F31E0(p, a);
     func_0013C440(p);
     p->pv = func_001AE238(SetReq(&req, p->c * 0x2c, 0x10), p->pv);
-    func_001AE4A0(&ctx, 2);
+    _$_18CBinaryInputStream(&ctx, 2);
 }

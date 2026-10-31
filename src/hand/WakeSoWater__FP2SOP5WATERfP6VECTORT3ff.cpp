@@ -67,7 +67,7 @@ extern CLOCK D_002DDED0;
 extern int D_002BDEB0[];
 extern qword D_002A2DC0;
 extern char g_sw[];
-float func_0011D448(float lo, float hi);
+float GRandInRange__Fff(float lo, float hi);
 int func_0011D3F8(int lo, int hi);
 int func_00132B10(SO *p, int n);
 void func_001FB1F8(void *p, float g);
@@ -116,7 +116,7 @@ void WakeSoWater(SO *p, WATER *pwater, qword pos, qword v, float dt, float gFrac
     float g = 0.0f;
     VTE *pvte = &p->pvt->a[33];
     float d = GetX(Length(Sub(pos, pvte->pfn((char *)p + pvte->d))));
-    int fWake = func_0011D448(g, 3.0f) < dt;
+    int fWake = GRandInRange__Fff(g, 3.0f) < dt;
     SND *psnd;
     float t, u;
     psnd = 0;

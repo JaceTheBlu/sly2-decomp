@@ -13,7 +13,7 @@ extern struct VS D_002C0C10[];
 extern struct FS D_002C0C90[];
 static inline float sqrtf_(float x) { float r; __asm__ __volatile__("sqrt.s %0, %1" : "=&f"(r) : "f"(x)); return r; }
 void *func_001AE2A0(struct A *pa);
-void *func_001AE1D0(struct A *pa);
+void *PvAllocSwImpl__Fi(struct A *pa);
 void func_001C0880(int *p);
 void func_001C0648(struct S *p)
 {
@@ -32,7 +32,7 @@ void func_001C0648(struct S *p)
         pd->c = ps->c;
         a.cb = pd->c * 8 + 8;
         a.align = 0x10;
-        pd->ae = func_001AE1D0(&a);
+        pd->ae = PvAllocSwImpl__Fi(&a);
         for (j = 0; j < pd->c; j++)
             { struct E8 *pe = &pd->ae[j]; pe->pv = &p->aE4[ps->ai[j]]; }
     }

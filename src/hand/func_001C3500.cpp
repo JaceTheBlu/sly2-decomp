@@ -12,7 +12,7 @@ float func_001E6620(PATH *);           // low distance bound
 float func_001E6648(PATH *);           // high distance bound
 float func_001E6610(PATH *);           // start distance
 void func_001E67B8(PATH *, float, qword *, qword *);
-float func_0011D898(float, float);     // wrap into range
+float GModPositive__Fff(float, float);     // wrap into range
 float func_001E6728(PATH *, float);
 void func_001E6F10(PATH *, float, qword *, qword *);
 M3 func_0011BA08(qword, qword);
@@ -91,7 +91,7 @@ extern "C" void func_001C3500(PATH *p, float distance, int forward, M3 *out)
                 if (sample < low || high < distance)
                     continue;
             } else
-                sample = low + func_0011D898(sample - low, high - low);
+                sample = low + GModPositive__Fff(sample - low, high - low);
             float r = 50.0f;
             func_001E6F10(p, func_001E6728(p, sample + r), &fwd.q, 0);
             func_001E6F10(p, func_001E6728(p, sample - r), &back.q, 0);

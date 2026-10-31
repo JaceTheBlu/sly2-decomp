@@ -19,13 +19,13 @@ typedef struct EMITO { int grf; int x4; float g8; float gC; qword v10; qword v20
 typedef struct EMITR { int *p104; int *p100; EMITTER *p; } EMITR;
 
 extern char D_002BDEC0[];
-extern float func_0011D448(float lo, float hi);
+extern float GRandInRange__Fff(float lo, float hi);
 extern float func_0011D948(void *p, float g);
 typedef union V4 { qword q; float a[4]; } V4;
 extern V4 func_00256CE8(float g);
 extern V4 func_00256D08(qword *pv);
 extern qword func_00256D28(qword a, qword b);
-extern void func_00256D18(qword *pv, qword a);
+extern void __as__6VECTORG9VU_VECTOR(qword *pv, qword a);
 extern void func_0015BD20(int c, EMITB *pb, EMITR *pr);
 extern qword func_001A6F00(int x, int y, qword v);
 extern void *func_001FBB90(int id);
@@ -51,7 +51,7 @@ void func_0015C690(EMITTER *p, EMITO *po)
     if (po->grf & 0x80)
         c = po->x38;
     else
-        c = (int)func_0011D448(p->gF4, p->gF8);
+        c = (int)GRandInRange__Fff(p->gF4, p->gF8);
     if (po->grf & 1)
         emitp.x0 = po->x4;
     if (po->grf & 2)
@@ -81,7 +81,7 @@ void func_0015C690(EMITTER *p, EMITO *po)
         b.g50 *= gs;
         b.g54 *= gs;
         { float h = 0.5f; g = (h < g) ? g : h; }
-        func_00256D18(b.vE0, func_00256D28(func_00256CE8(g).q, func_00256D08(b.vE0).q));
+        __as__6VECTORG9VU_VECTOR(b.vE0, func_00256D28(func_00256CE8(g).q, func_00256D08(b.vE0).q));
     }
     if (b.x4 == 1) {
         if (po->grf & 0x10)

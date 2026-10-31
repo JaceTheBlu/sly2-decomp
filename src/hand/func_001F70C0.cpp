@@ -8,7 +8,7 @@ struct TREE {int count,flag,unused;void *nodes;};
 struct P {LO *owner;int flags;float radius;int material;char pad10[0xC];int pinnedCount;char pad20[0x48];TREE tree;GEO local,world;};
 struct FRAME {int pad[4];};
 extern "C" FRAME *func_001AE478(FRAME *);
-extern "C" void func_001AE4A0(FRAME *,int);
+extern "C" void _$_18CBinaryInputStream(FRAME *,int);
 struct MSG {int bytes,alignment;};
 extern "C" void *func_001AE378(MSG *);
 extern "C" void func_001AE5A0(void *,const void *,unsigned int);
@@ -42,5 +42,5 @@ extern "C" void func_001F70C0(P *source,LO *space,int inserted,P *dest)
     func_00166270(&temporary,&transform,&dest->local);
     func_00166270(&dest->local,&space->matrix,&dest->world);
     func_001191E8(&source->tree,&source->world,&dest->tree,&dest->world);
-    func_001AE4A0(&frame,2);
+    _$_18CBinaryInputStream(&frame,2);
 }

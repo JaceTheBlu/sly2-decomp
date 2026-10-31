@@ -10,7 +10,7 @@ extern qword D_002A2DC0;
 extern qword D_002A2DD0;
 extern "C" {
 MARK *func_001AE478(MARK *pm);
-void func_001AE4A0(MARK *pm, int n);
+void _$_18CBinaryInputStream(MARK *pm, int n);
 void *func_001AE318(MSG *pmsg);
 qword func_001A62E8(void *p);
 int func_00132B10(struct J *pj, int k);
@@ -62,7 +62,7 @@ extern "C" float func_00229468(struct S *p, struct J *pj, qword *ppos, qword *pn
     if (!func_0014CDB0(work.a.q, work.b.q, c, apv, 0x10, work.alsg)) {
         if (pnormal)
             *pnormal = D_002A2DC0;
-        func_001AE4A0(&work.mark, 2);
+        _$_18CBinaryInputStream(&work.mark, 2);
         return 0.0f;
     }
     if (ppos)
@@ -80,6 +80,6 @@ extern "C" float func_00229468(struct S *p, struct J *pj, qword *ppos, qword *pn
             *pnormal = D_002A2DC0;
     }
     g = work.alsg[0].g44 - work.alsg[0].g40;
-    func_001AE4A0(&work.mark, 2);
+    _$_18CBinaryInputStream(&work.mark, 2);
     return g;
 }

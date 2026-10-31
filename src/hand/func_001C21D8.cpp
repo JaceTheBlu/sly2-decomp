@@ -16,7 +16,7 @@ struct NODE { NAV *pnav; EDGE *pedge; NODE *pnodeParent; float gCost; float gEst
 
 extern "C" {
 void *func_001AE478(void *pframe);
-void func_001AE4A0(void *pframe, int n);
+void _$_18CBinaryInputStream(void *pframe, int n);
 void *func_001AE378(MSG *pmsg);
 void *func_001AE318(MSG *pmsg);
 void *func_002333B4(void *pv, int b, unsigned int cb);

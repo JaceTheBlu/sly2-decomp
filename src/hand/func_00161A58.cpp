@@ -27,11 +27,11 @@ extern "C"{
  void func_001613F8(P*);
  void func_00166008();
  void func_001AB630(BANK*);
- int func_00210AE0();
+ int _IppoFindPo__FP2PO();
  void func_001D8FF8(void*);
  void func_00165280(P*);
  LEASE*func_001AE478(LEASE*);
- void func_001AE4A0(LEASE*,int);
+ void _$_18CBinaryInputStream(LEASE*,int);
  void func_00165C98(int*,P***);
  void func_00164270(P*);
  void func_001643B0(P*);
@@ -46,7 +46,7 @@ extern "C"{
  CRef*func_001291A8(CRef*,const CRef*);
  void func_00129EC8(CRef*);
 }
-struct LEASE{LEASE(){func_001AE478(this);}void Release(){func_001AE4A0(this,2);}};
+struct LEASE{LEASE(){func_001AE478(this);}void Release(){_$_18CBinaryInputStream(this,2);}};
 struct OVERRIDE{CONTEXT*context;P*object;int oldX,oldY;
  OVERRIDE(P*p,int x,int y):context(0),object(p){if(object){oldX=object->x;object->x=x;oldY=object->y;object->y=y;}}
  ~OVERRIDE(){if(context){context->x=oldX;context->y=oldY;}if(object){object->x=oldX;object->y=oldY;}}
@@ -102,7 +102,7 @@ extern "C" void func_00161A58(P*p,int action){
   if(g_sw.flags&1){func_001613F8(p);D_002E65E0.selected=0;}
   else if(g_sw.flags&0x40)func_00166008();
   func_001AB630(&D_002E65E0);
-  if(func_00210AE0())break;
+  if(_IppoFindPo__FP2PO())break;
   if(D_002E65E0.mode!=6||D_002E65E0.selected||!D_002E65E0.current)break;
   if(GetFloat(g_sw.primary,D_003D4A60)!=0.0f)break;
   if(GetFloat(g_sw.primary,D_002E65E0.current)!=0.0f)func_001D8FF8(D_002E65E0.current);

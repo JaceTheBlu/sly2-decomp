@@ -11,7 +11,7 @@ struct CLOCK {float time,dt;};
 extern CLOCK D_002DDED0;
 extern G g_sw;
 extern "C" void func_00230630(P *,OWNER *);
-extern "C" qword *func_00256D18(qword *,qword);
+extern "C" qword *__as__6VECTORG9VU_VECTOR(qword *,qword);
 extern "C" M3 *func_0011B570(M3 *,qword);
 static inline M3 BuildRotation(qword vector) return matrix {func_0011B570(&matrix,vector);}
 extern "C" void NormalizeRotateMatrix3__FP7MATRIX3(M3 *);
@@ -44,7 +44,7 @@ extern "C" void func_001F9C48(P *p)
     clock=&D_002DDED0;
     {qword point=position->position.q;
     qword k=Scalar(clock->dt*coefficient,&scalar);
-    func_00256D18(&position->position.q,AddScaled(point,position->velocity.q,k));}
+    __as__6VECTORG9VU_VECTOR(&position->position.q,AddScaled(point,position->velocity.q,k));}
     position->position.f[3]=1.0f;
     global=&g_sw;
     position->stamp=++global->stamp;

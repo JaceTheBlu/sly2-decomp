@@ -1,7 +1,7 @@
 typedef int qword __attribute__((mode(TI)));
 extern "C" {
 void func_001AE478(void *p);
-void func_001AE4A0(void *p, int n);
+void _$_18CBinaryInputStream(void *p, int n);
 void func_0020FAA0(void *g, qword a, qword b, void *p1, void *p2, int *pi, int *pj);
 struct HIT;
 int func_0014CC58(int z, qword a, qword b, int i, int j, HIT *phit);

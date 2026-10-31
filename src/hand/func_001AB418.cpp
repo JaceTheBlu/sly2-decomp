@@ -32,7 +32,7 @@ void func_001AB418(MC *p, int state);
 CRef Eval(int, SLOT *) __asm__("func_002581C0");
 static inline float GetF(int k, SLOT *p) { return Eval(k, p).u.g; }
 struct X { int A() __asm__("func_001AB0A0"); int B() __asm__("func_001AB0F0"); };
-void StartThread(void *, int (X::*)()) __asm__("func_001AAF90");
+void StartThread(void *, int (X::*)()) __asm__("CreateMemcardThread__FP7MEMCARDii");
 
 void func_001AB418(MC *p, int state)
 {

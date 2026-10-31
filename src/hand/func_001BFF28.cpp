@@ -24,13 +24,13 @@ extern "C" {
 TRI *func_001BF1F8(G *, BSP *, qword, int);
 qword func_001BFDB0(TRI *, qword);
 void func_001AE478(void *);
-void func_001AE4A0(void *, int);
+void _$_18CBinaryInputStream(void *, int);
 void *func_001AE318(AREQ *);
 void func_001BF980(G *, V *, V *, int, int *, V **);
 void func_001BFC18(G *, int *, V **);
 int func_001BFF28(G *, qword, qword, int, U *);
 }
-struct MARK { MARK() { func_001AE478(this); } ~MARK() { func_001AE4A0(this, 2); } };
+struct MARK { MARK() { func_001AE478(this); } ~MARK() { _$_18CBinaryInputStream(this, 2); } };
 // the unused second output keeps gcse from hoisting the qmtc2 out of the loops (not single_set)
 static inline qword ToVF(qword v) { qword r; int dummy; __asm__("qmtc2.ni %2,%0" : "=j"(r), "=r"(dummy) : "r"(v)); return r; }
 static inline int Dist2DI(qword a, qword b)

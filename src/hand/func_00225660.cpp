@@ -21,7 +21,7 @@ extern "C" qword SourcePosition(void * source) __asm__("func_001A62E8");
 
 extern "C" int func_0015E9C8(struct G *pg, int a, int b, int c, int cMax, struct O **apo);
 extern "C" int func_00206EB0(struct O *po, int k);
-extern "C" void func_00229710(struct O *po, struct N *node);
+extern "C" void AddSoXa__FP2SOP2XA(struct O *po, struct N *node);
 extern "C" void func_00209E28(struct O *po, int k);
 static __inline__ float GDist(qword a, qword b)
 {
@@ -89,7 +89,7 @@ extern "C" void func_00225660(struct P *p, int k)
             p->po = poBest;
             p->hook.owner = p;
             p->hook.object = poBest;
-            func_00229710(poBest, &p->hook);
+            AddSoXa__FP2SOP2XA(poBest, &p->hook);
             q = poBest->vt[33].pfn((char *)poBest + poBest->vt[33].d);
             s=LoadCoefficient();
             u.q = q;

@@ -16,7 +16,7 @@ extern const struct K D_002A5140;
 extern float D_002A5148;
 void func_002586D8(struct EMITTER *p);
 void func_00149A50(void *pg, struct EMITTER *p, struct K k, int n);
-float func_0011D448(float gMin, float gMax);
+float GRandInRange__Fff(float gMin, float gMax);
 void func_0015A150(struct EMITTER *p);
 void func_0015A138(struct EMITTER *p, float g);
 struct EMITTER *func_0015E938(void *pg, int kind, int oid, int n);
@@ -52,24 +52,24 @@ void PostEmitterLoad__FP7EMITTER(struct EMITTER *pemitter)
     switch (pemitter->kind) {
     case 2:
         pemitter->g138 = D_002A5148;
-        pemitter->g130 = func_0011D448(pemitter->lmF8.gMin, pemitter->lmF8.gMax);
+        pemitter->g130 = GRandInRange__Fff(pemitter->lmF8.gMin, pemitter->lmF8.gMax);
         if (pemitter->n114)
             func_0015A150(pemitter);
-        else if (func_0011D448(0.0f, 1.0f) <= pemitter->g104)
-            func_0015A138(pemitter, func_0011D448(pemitter->lm108.gMin, pemitter->lm108.gMax));
+        else if (GRandInRange__Fff(0.0f, 1.0f) <= pemitter->g104)
+            func_0015A138(pemitter, GRandInRange__Fff(pemitter->lm108.gMin, pemitter->lm108.gMax));
         break;
     case 3:
         pemitter->g138 = D_002A5148;
-        pemitter->g130 = func_0011D448(pemitter->lmF8.gMin, pemitter->lmF8.gMax) * 60.0f;
+        pemitter->g130 = GRandInRange__Fff(pemitter->lmF8.gMin, pemitter->lmF8.gMax) * 60.0f;
         if (pemitter->n114)
             func_0015A150(pemitter);
-        else if (func_0011D448(0.0f, 1.0f) <= pemitter->g104)
-            func_0015A138(pemitter, func_0011D448(pemitter->lm108.gMin, pemitter->lm108.gMax));
+        else if (GRandInRange__Fff(0.0f, 1.0f) <= pemitter->g104)
+            func_0015A138(pemitter, GRandInRange__Fff(pemitter->lm108.gMin, pemitter->lm108.gMax));
         break;
     case 0:
     case 1:
         pemitter->g134 = pemitter->g138 = 1.0f;
-        pemitter->g130 = func_0011D448(pemitter->lmF8.gMin, pemitter->lmF8.gMax);
+        pemitter->g130 = GRandInRange__Fff(pemitter->lmF8.gMin, pemitter->lmF8.gMax);
         break;
     }
     pemitter->g13C = 1.0f;

@@ -17,7 +17,7 @@ struct X {
     struct SND *pC0;
 };
 void func_0014FD40(struct X *p);
-float func_0011D018(void *p, float *pdg, float g, float gTarget, float dt);
+float GSmooth__FfffP3SMPPf(void *p, float *pdg, float g, float gTarget, float dt);
 float func_0011D948(void *p, float g);
 void func_001FB2C0(struct SND *p, float g);
 void func_001FB1F8(struct SND *p, float g);
@@ -28,7 +28,7 @@ void func_0011B628(M3 *pm, qword v);
 void func_0011C950(M3 *a, M3 *b, void *p, M3 *out, int n, float g);
 qword func_0011BFF0(M3 *pm);
 float func_0011D2D0(void *p, int n, float a, float b, float c);
-qword *func_00256D18(qword *p, qword v);
+qword *__as__6VECTORG9VU_VECTOR(qword *p, qword v);
 void func_0014E168(struct CM *p, M4 *m);
 void func_0014F5A0(struct CM *p, float g);
 void func_0011BC88(M4 *pm, float *pa, float *pb);
@@ -55,7 +55,7 @@ void func_00150A28(struct X *p)
     if (D_002DDED0.dt == 0.0f)
         return;
     if (0.0f <= p->g18) {
-        float g = GClamp(func_0011D018(D_002BD9B8, 0, p->gAC, p->g18, D_002DDED0.dt), 0.0f, 1.0f);
+        float g = GClamp(GSmooth__FfffP3SMPPf(D_002BD9B8, 0, p->gAC, p->g18, D_002DDED0.dt), 0.0f, 1.0f);
         p->gB0 = (g - p->gAC) / D_002DDED0.dt;
         p->gAC = g;
     }
@@ -84,7 +84,7 @@ void func_00150A28(struct X *p)
         p->g70 = func_0011D2D0(D_002BD9E8, 0, p->g70, p->gA0, D_002DDED0.dt);
         {
         M4 *pm4 = &m4;
-        func_00256D18(&pm4->q.r[3], p->q50);
+        __as__6VECTORG9VU_VECTOR(&pm4->q.r[3], p->q50);
         pm4->q.r[0] = m60.r[0];
         pm4->q.r[1] = m60.r[1];
         pm4->q.r[2] = m60.r[2];

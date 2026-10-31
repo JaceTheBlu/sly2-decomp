@@ -15,7 +15,7 @@ extern qword D_002A2DA0,D_002A2DB0,D_002A2DC0;
 extern "C" {
 O *func_001CE888(void*,void*,void*);
 qword func_0022FC48(void*,LO*,qword);
-float func_0011D448(float,float);
+float GRandInRange__Fff(float,float);
 void func_0011E2D8(qword,qword,qword,qword*);
 M3 func_0011B628(qword);
 M3 func_0011BA08(qword,qword);
@@ -39,12 +39,12 @@ O *func_001CF6B0(EMIT*p,LO*visual,LO*space,qword position,qword direction){
    float zero=0.0f;
    U local;local.q=func_0022FC48(0,space,position);
    float size=Polynomial(&p->size,(D_002DDED0.t-p->start)/p->duration);
-   size*=func_0011D448(0.8f,1.4f);
+   size*=GRandInRange__Fff(0.8f,1.4f);
    object->vt[1].fn((char*)object+object->vt[1].delta,local.q,0,size);
    object->visual=visual;object->duration=5.0f;object->spin=-size;object->space=space;
    M3 frame;frame.r[2]=direction;
    func_0011E2D8(direction,D_002A2DA0,D_002A2DB0,frame.r);
-   U angles;angles.f[1]=zero;angles.f[0]=zero;angles.f[2]=func_0011D448(zero,6.28318548f);
+   U angles;angles.f[1]=zero;angles.f[0]=zero;angles.f[2]=GRandInRange__Fff(zero,6.28318548f);
    M3 rotation;
    rotation=func_0011B628(angles.q);
    {M3 orient=Mul(frame,rotation);

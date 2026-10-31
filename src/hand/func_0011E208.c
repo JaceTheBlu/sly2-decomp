@@ -6,13 +6,13 @@ static __inline__ qword Make(float x, float y, float z)
             : "=&r"(q), "=&r"(t) : "f"(x), "f"(y), "f"(z));
     return q;
 }
-void func_0011D608(float g, float *ps, float *pc);
+void CalculateSinCos__FfPfT1(float g, float *ps, float *pc);
 qword func_0011E208(float radPan, float radTilt, float r)
 {
     union { qword q; float f[4]; } v;
     float sp, cp, st, ct;
-    func_0011D608(radPan, &sp, &cp);
-    func_0011D608(radTilt, &st, &ct);
+    CalculateSinCos__FfPfT1(radPan, &sp, &cp);
+    CalculateSinCos__FfPfT1(radTilt, &st, &ct);
     v.q = Make(ct * cp * r, ct * sp * r, st * r);
     return v.q;
 }

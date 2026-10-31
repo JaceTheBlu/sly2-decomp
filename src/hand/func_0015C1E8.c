@@ -7,7 +7,7 @@ struct O { int a[3]; struct VTE *vt; int pad[6]; unsigned long fl; };
 struct DA { int n0; int cMax; int c; struct O **a; };
 struct S { char pad[0xE0]; int c; struct O **apo; };
 void func_001AE478(struct C *);
-void func_001AE4A0(struct C *, int);
+void _$_18CBinaryInputStream(struct C *, int);
 void func_00231170(struct S *p, void *q);
 void func_0013F888(struct DA *pda);
 void func_002317E0(struct S *p, void *q, struct DA *pda);
@@ -33,5 +33,5 @@ void func_0015C1E8(struct S *p, void *q)
             p->apo[p->c++] = o;
         }
     }
-    func_001AE4A0(&ctx, 2);
+    _$_18CBinaryInputStream(&ctx, 2);
 }

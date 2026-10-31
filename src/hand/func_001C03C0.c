@@ -13,7 +13,7 @@ int func_00117BD0(void *pbis);
 void ReadVector__18CBinaryInputStreamP6VECTOR(void *pbis, struct V *pv);
 float func_00117E38(void *pbis);
 void *func_001AE2A0(struct A *pa);
-void *func_001AE1D0(struct A *pa);
+void *PvAllocSwImpl__Fi(struct A *pa);
 void func_001C0880(int *p);
 void func_001C03C0(struct S *p, void *pbis)
 {
@@ -34,7 +34,7 @@ void func_001C03C0(struct S *p, void *pbis)
         pd->c = func_00117BD0(pbis);
         a.cb = pd->c * 8 + 8;
         a.align = 0x10;
-        pd->ae = func_001AE1D0(&a);
+        pd->ae = PvAllocSwImpl__Fi(&a);
         for (j = 0; j < pd->c; j++) {
             struct E8 *pe = &pd->ae[j];
             pe->pv = &p->aE4[func_00117C20(pbis)];
