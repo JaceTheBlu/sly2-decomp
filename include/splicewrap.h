@@ -5,7 +5,7 @@
 #ifndef SPLICEWRAP_H
 #define SPLICEWRAP_H
 #include "m2c_prelude.h"
-typedef struct CRef { s32 m_tagk; s32 m_tag; } CRef;
+#include "cref.h"
 typedef s32 OTYP;                                        /* splice argument type code */
 /* CRef RefSetArgsFromSplice(int cref, CRef *aref, OTYP *aotyp, ...): checks the arg count/types and
  * stores each decoded argument through the trailing pointers. */

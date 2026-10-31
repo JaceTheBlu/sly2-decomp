@@ -1,8 +1,8 @@
+#include "clock.h"
 struct JOY {
     char pad[0x1024]; int dirX; int dirY; float tNextX; float tRepX; float tNextY; float tRepY;
     float gX; float gY; float gMag; char p1[0x6C]; int grfHeld;
 };
-struct CLOCK { char pad[0x3C]; float g3c; };
 extern struct CLOCK g_clock;
 int PvAllocSwCopyImpl__FiPv(struct JOY *p, int grf);
 static __inline__ float GClamp(float g, float lo, float hi)
@@ -25,7 +25,7 @@ int func_00187E88(struct JOY *p)
         if (p->dirX) {
             g = 0.3333f;
             p->tRepX = g;
-            p->tNextX = g_clock.g3c + g;
+            p->tNextX = g_clock.tFrame + g;
         }
     } else {
         int fHeld = 0;
@@ -40,10 +40,10 @@ int func_00187E88(struct JOY *p)
         }
         if (!fHeld) {
             p->dirX = 0;
-        } else if (p->tNextX <= g_clock.g3c) {
+        } else if (p->tNextX <= g_clock.tFrame) {
             g = GClamp(2.0f * p->tRepX / 3.0f, 0.1f, 0.3333f);
             p->tRepX = g;
-            p->tNextX = g_clock.g3c + g;
+            p->tNextX = g_clock.tFrame + g;
         } else {
             return 0;
         }

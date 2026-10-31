@@ -1,5 +1,5 @@
+#include "cref.h"
 struct C { int a[4]; };
-struct CRef { int m_tagk; int m_n; };
 struct S { char pad[0x184]; int f184; };
 extern char D_003D4A60[];
 void func_001AE478(struct C *);
@@ -12,7 +12,7 @@ static inline int NFromRef(void *pv)
     struct CRef ref;
     int n;
     func_002581C0(&ref, pv, D_003D4A60);
-    n = ref.m_n;
+    n = ref.m_tag;
     func_00129EC8(&ref);
     return n;
 }

@@ -1,4 +1,4 @@
-struct CRef { int m_tagk; int m_tag; };
+#include "cref.h"
 struct BINDING { int a, b; unsigned int sym; CRef ref; BINDING *pnext; };
 class CFrame {
 public:

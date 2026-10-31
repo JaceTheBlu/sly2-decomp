@@ -1,3 +1,4 @@
+#include "clock.h"
 // Render thread of the loading screen: waits for the start semaphore, then keeps drawing a pulsing
 // (scale + opacity) quad every frame until the frame-end semaphore is signalled.
 //
@@ -11,7 +12,6 @@ struct SEMA {int count,maxCount,initialCount,waitThreads;uint attributes,option;
 struct M2 {float a[8];M2(){}void Identity();};
 extern "C" void *func_002333B4(void *,int,int);
 inline void M2::Identity(){func_002333B4(this,0,sizeof(*this));a[0]=a[3]=1.0f;}
-struct CLOCK {float t,dt,ratio,realRatio,realDt,realT;char pad18[0x24];float frameT,frameDt;ulong tick;};
 struct FR {int n0;void *p4;char pad8[0x1C];void *packet;char pad28[8];int flags;};
 extern VIFS D_002DEA28;
 extern GIFS D_002DEA00;
@@ -53,7 +53,7 @@ extern "C" void func_001C9190(void *)
             BeginFrame();
             func_00234A90(D_003D3A40,&status);
             if(status.count!=0)break;
-            float t=-*D_002DD314+g_clock.frameT;
+            float t=-*D_002DD314+g_clock.tFrame;
             float scale=1.0f+D_002C10B0*func_00245000(t*D_002C10B4);
             matrix.Identity();
             matrix.a[0]=D_002C10A0*scale;

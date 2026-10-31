@@ -1,4 +1,4 @@
-typedef struct CRef { int m_tagk; int m_tag; } CRef;
+#include "cref.h"
 void func_00123EB0(CRef *ret, void *pbasic, int cref, CRef *aref, int k);
 CRef *func_00123FB8(CRef *ret, void *pbasic, int cref, CRef *aref)
 {

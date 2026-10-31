@@ -1,4 +1,4 @@
-typedef struct CRef { int m_tagk; int m_tag; } CRef;
+#include "cref.h"
 CRef *__4CRefP1O(CRef *ret, int *p)
 {
     ret->m_tag = (int)p;

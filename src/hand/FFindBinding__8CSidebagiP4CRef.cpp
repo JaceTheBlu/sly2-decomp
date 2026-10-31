@@ -1,4 +1,4 @@
-struct CRef { int m_tagk; int m_tag; };
+#include "cref.h"
 void func_00129658(CRef *pref, CRef *prefSrc) asm("func_00129658");
 struct BINDING { int pad[2]; int sym; CRef ref; BINDING *pnext; };
 class CSidebag {

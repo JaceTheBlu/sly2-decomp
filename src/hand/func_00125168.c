@@ -1,5 +1,5 @@
+#include "cref.h"
 typedef int qword __attribute__((mode(TI)));
-typedef struct CRef { int m_tagk; int m_tag; } CRef;
 typedef struct VECTOR { float x, y, z, w; } __attribute__((aligned(16))) VECTOR;
 typedef struct CM { char pad[0x4C]; float g; char pad2[0x10]; qword mat[4]; } CM;
 extern CM g_cm;

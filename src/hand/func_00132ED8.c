@@ -1,4 +1,4 @@
-struct CRef { int m_tagk; void *pv; };
+#include "cref.h"
 struct N;
 struct SP { struct N *p; };
 struct N { int cref; int x4; struct CRef ref; struct SP sp; };
@@ -23,7 +23,7 @@ struct SP *func_00132ED8(struct SP *ret, int a1, int a2, struct X *px)
         struct CRef *pref = &sp.p->ref;
         __as__4CRefP4NODE(pref, func_00256B48());
     }
-    p = (struct N *)sp.p->ref.pv;
+    p = (struct N *)sp.p->ref.m_p;
     __as__4CRefP3T19(&p->ref, a2);
     {
         struct N *pn = func_00256B48();

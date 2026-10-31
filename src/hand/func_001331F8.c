@@ -1,5 +1,5 @@
+#include "cref.h"
 #include "clock.h"
-struct CRef { int m_tagk; void *pv; };
 struct N;
 struct SP { struct N *p; };
 struct N { int cref; int x4; struct CRef ref; struct SP sp; };

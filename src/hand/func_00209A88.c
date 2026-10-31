@@ -1,4 +1,4 @@
-struct CRef { int tagk; int tag; };
+#include "cref.h"
 struct S { char pad[0x2C0]; long n; };
 void *func_00207AA0(long n, char *ab);
 void __1RiiPPv(struct CRef *ret, void *p, int n, char *ab);

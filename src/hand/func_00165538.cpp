@@ -1,3 +1,4 @@
+#include "cref.h"
 struct X;
 class CSave {
 public:
@@ -48,7 +49,6 @@ inline CSave::~CSave()
         m_p4->fF8 = m_nC;
     }
 }
-struct CRef { int m_tagk; int m_tag; };
 struct G { char pad[0x3B0C]; X *f3b0c; char pad2[0x3E38 - 0x3B10]; int f3e38; };
 extern G g_sw;
 extern char D_002A5238[];

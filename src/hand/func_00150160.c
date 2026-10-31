@@ -1,3 +1,4 @@
+#include "cref.h"
 #include "util.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
@@ -13,7 +14,6 @@ extern float D_002BD990, D_002BD994, D_002BD998, D_002BD99C;
 extern char D_002BD9A0[];
 extern struct LM D_002BD9B0;
 extern char D_002BBB60[], D_002BBB68[];
-struct CRef { int m_tagk; int m_n; };
 struct SND { char pad[0x4E]; short c4E; };
 struct JOY { char pad[0x103C]; float g103C; float g1040; char pad2[0x1074 - 0x1044]; float g1074; };
 struct X {
@@ -76,7 +76,7 @@ void func_00150160(struct X *p, void *pv, struct JOY *pjoy)
     gPan = -__builtin_fabsf(pjoy->g103C) * pjoy->g103C * D_002BD990;
     gTilt = -__builtin_fabsf(pjoy->g1040) * pjoy->g1040 * D_002BD994;
     func_002581C0(&ref, g_sw.p3B4C, D_003D4A60);
-    f = ref.m_n;
+    f = ref.m_tag;
     func_00129EC8(&ref);
     if (f)
         gTilt = -gTilt;

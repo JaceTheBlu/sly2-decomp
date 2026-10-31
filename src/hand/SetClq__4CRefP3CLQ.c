@@ -1,5 +1,5 @@
+#include "cref.h"
 typedef int TI __attribute__((mode(TI)));
-typedef struct CRef { int m_tagk; void *m_p; } CRef;
 typedef struct VR { TI vec; int cref; } VR;
 extern char D_004521B8[];
 VR *func_0011CCC0(void *pslotheap);

@@ -1,4 +1,4 @@
-typedef struct CRef { int tagk; int tag; } CRef;
+#include "cref.h"
 extern int D_002C2D8C;
 extern void *D_003E0FD8;
 extern char D_003D4A60[];
@@ -16,7 +16,7 @@ int func_001D55B8(void) {
         CRef ref;
         int n;
         func_002581C0(&ref, D_003E0FD8, D_003D4A60);
-        n = ref.tag;
+        n = ref.m_tag;
         func_00129EC8(&ref);
         return n ^ 1;
     }

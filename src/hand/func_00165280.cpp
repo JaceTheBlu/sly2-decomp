@@ -1,3 +1,4 @@
+#include "cref.h"
 struct X;
 class CSave {
 public:
@@ -49,7 +50,6 @@ inline CSave::~CSave()
         m_p4->fF8 = m_nC;
     }
 }
-struct CRef { int m_tagk; int m_tag; };
 class FRAME {
 public:
     int a[4];

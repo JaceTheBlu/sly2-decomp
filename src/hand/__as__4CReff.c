@@ -1,4 +1,4 @@
-typedef struct CRef { int m_tagk; float m_g; } CRef;
+#include "cref.h"
 void Decref__4CRef(CRef *pref);
 CRef *__as__4CReff(CRef *pref, float g)
 {

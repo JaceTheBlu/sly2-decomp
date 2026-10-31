@@ -1,5 +1,5 @@
+#include "cref.h"
 typedef struct CLQ { int a, b; } CLQ;
-typedef struct CRef { int m_tagk; void *m_p; } CRef;
 typedef struct LR { CLQ v; int cref; } LR;
 extern char D_004521D0[];
 LR *func_0011CCC0(void *pslotheap);

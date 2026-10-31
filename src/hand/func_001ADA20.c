@@ -1,4 +1,4 @@
-struct CRef { int m_tagk; float m_tag; };
+#include "cref.h"
 struct E { int x0, x4, x8, xC, x10; int x14; int x18; };
 struct G { int pad[9]; int x24; };
 struct GD { char pad[0x3B1C]; int x3B1C; };
@@ -27,7 +27,7 @@ void func_001ADA20(char *buf)
     struct E *e = &D_003D9EDC[g->x24];
     func_002581C0(&ref, gd->x3B1C, &D_002E6604[e->x14]);
     }
-    f = ref.m_tag;
+    f = ref.m_g;
     func_00129EC8(&ref);
     switch (func_001B0078(g)) {
     case 0x1E:

@@ -1,5 +1,5 @@
+#include "cref.h"
 typedef int TI __attribute__((mode(TI)));
-typedef struct CRef { int m_tagk; void *m_p; } CRef;
 void Decref__4CRef(CRef *pref);
 CRef *__4CRefRC4CRef(CRef *pref, CRef *prefSrc);
 void InitTag__4CRef(CRef *pref, int tagk);

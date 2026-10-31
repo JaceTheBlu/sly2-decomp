@@ -1,5 +1,5 @@
+#include "cref.h"
 // func_0015CF30: UI menu state machine. func_002121E8 takes (p, r) with r = func_0015D5C8(p); the n12C==0 flag uses a shared "setf: f = 1" block (reorg fills both beql/bnel slots from it).
-struct CRef { int m_tagk; int m_n; };
 struct CRefG { int m_tagk; float m_g; };
 struct X {
     char pad[0x110]; int n110; int n114; int n118; int n11C; int n120; int pad124; int n128; int n12C; float g130;
@@ -93,7 +93,7 @@ void func_0015CF30(struct X *p)
             if (pv) {
                 struct CRef ref;
                 func_002581C0(&ref, pv, D_003D4A60);
-                c = ref.m_n;
+                c = ref.m_tag;
                 func_00129EC8(&ref);
                 if (c >= 100)
                     goto setf;

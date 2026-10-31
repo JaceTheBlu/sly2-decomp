@@ -1,4 +1,4 @@
-struct CRef { int m_tagk; void *m_p; };
+#include "cref.h"
 struct OBJ;
 struct PRM { int a; int k; int rest[8]; };
 extern "C" {

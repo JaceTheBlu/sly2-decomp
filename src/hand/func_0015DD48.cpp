@@ -1,6 +1,6 @@
+#include "clock.h"
 extern "C" {
 struct RGBA { unsigned char r, g, b, a; RGBA() {} };
-typedef struct CLOCK { float t; float dt; } CLOCK;
 extern CLOCK g_clock;
 typedef struct X {
     char pad[0x50];

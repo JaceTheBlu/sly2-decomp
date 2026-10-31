@@ -1,7 +1,7 @@
+#include "cref.h"
 struct VTE { short d; short pad; void (*pfn)(); };
 struct E { int id; int a, b; };
 struct P { char pad[0xC]; struct VTE *vt; char pad2[0x1180 - 0x10]; struct E ae[3]; };
-struct CRef { int tagk; int tag; };
 extern char D_002A4D50[];
 extern char D_002A4D58[];
 int sprintf(char *, const char *, ...);
@@ -17,7 +17,7 @@ void func_00141EF8(struct P *p)
         sprintf(ach, D_002A4D50, i);
         e = &p->vt[103];
         func_001D8A38(&r, ((void *(*)(void *))e->pfn)((char *)p + e->d), D_002A4D58, ach, 0);
-        p->ae[i].id = r.tag;
+        p->ae[i].id = r.m_tag;
         func_00129EC8(&r);
     }
     {

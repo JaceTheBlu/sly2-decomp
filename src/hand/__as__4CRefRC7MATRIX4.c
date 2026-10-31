@@ -1,5 +1,5 @@
+#include "cref.h"
 typedef struct MATRIX4 { float m[4][4]; } __attribute__((aligned(16))) MATRIX4;
-typedef struct CRef { int m_tagk; void *m_p; } CRef;
 typedef struct MR { MATRIX4 mat; int cref; } MR;
 extern char D_004521A0[];
 MR *func_0011CCC0(void *pslotheap);

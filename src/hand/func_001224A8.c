@@ -1,4 +1,4 @@
-typedef struct CRef { int m_tagk; int m_tag; } CRef;
+#include "cref.h"
 typedef float (*PFNG)(float);
 extern PFNG D_002BBB70[];
 void __as__4CReff(CRef *pref, float g);

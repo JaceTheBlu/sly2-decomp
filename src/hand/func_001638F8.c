@@ -1,4 +1,4 @@
-typedef struct CRef { int m_tagk; int m_tag; } CRef;
+#include "cref.h"
 struct E16 {int oidA,oidB,flags,level;};
 struct E24 {int state,oid,index,id,enabled,level;};
 struct SL {void*first;void*last;int nextOffset;};

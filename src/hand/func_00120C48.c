@@ -1,4 +1,4 @@
-typedef struct CRef { int m_tagk; void *m_p; } CRef;
+#include "cref.h"
 void InitTag__4CRef(CRef *pref, int tagk);
 void func_00129658(CRef *pref, CRef *prefSrc);
 void __as__3SPMP4NODE(void *p, void *q);

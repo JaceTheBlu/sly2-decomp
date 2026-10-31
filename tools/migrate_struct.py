@@ -17,7 +17,7 @@ no unions, nested types or methods):
 Files it cannot handle are listed and left alone.  Run tools/objcheck.py check afterwards: a source whose code
 changes, or that no longer compiles, must be reverted (git checkout FILE).
 """
-import os, re, sys, glob
+import os, re, sys, glob, collections
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SIZES = {'char': 1, 'uchar': 1, 'unsigned char': 1, 'signed char': 1, 'u8': 1, 's8': 1, 'byte': 1,
@@ -57,8 +57,20 @@ def parse_fields(body):
 def canonical(struct, header):
     t = re.sub(r'/\*.*?\*/|//[^\n]*', '', open(os.path.join(ROOT, 'include', header)).read(), flags=re.S)
     t = re.sub(r'typedef\s+unsigned long\s+(\w+)\s*;', lambda m: SIZES.setdefault(m.group(1), 8) and '', t)
-    m = re.search(r'struct\s+%s\s*\{(.*?)\};' % struct, t, re.S)
-    return parse_fields(m.group(1))
+    m = re.search(r'struct\s+%s\s*\{((?:[^{}]|\{[^{}]*\})*)\};' % struct, t, re.S)
+    # anonymous unions: every member is a candidate at the union's offset
+    out = []; off = 0
+    for part in re.split(r'(union\s*\{[^{}]*\}\s*;)', m.group(1)):
+        if part.startswith('union'):
+            members = parse_fields(re.search(r'\{([^{}]*)\}', part).group(1))
+            al = max(sz for n, o, sz, c, k in members); off = (off + al - 1) // al * al
+            out += [(n, off, sz, c, k) for n, o, sz, c, k in members]
+            off += max(sz * c for n, o, sz, c, k in members)
+        elif part.strip():
+            for n, o, sz, c, k in parse_fields(part):
+                off = (off + sz - 1) // sz * sz
+                out.append((n, off, sz, c, k)); off += sz * c
+    return out
 
 
 def main():
@@ -66,7 +78,8 @@ def main():
     dry = '--dry-run' in sys.argv
     struct, header = a[0], a[1]
     canon = canonical(struct, header)
-    by_off = {(o, sz): (n, cnt, k) for n, o, sz, cnt, k in canon}
+    by_off = collections.defaultdict(list)   # (offset, size) -> canonical candidates (several for a union)
+    for n, o, sz, cnt, k in canon: by_off[o, sz].append((n, cnt, k))
     files = [os.path.abspath(f) for f in a[2:]] or sorted(glob.glob(os.path.join(ROOT, 'src', '**', '*.c*'), recursive=True))
     defre = re.compile(r'^[ \t]*(?:typedef[ \t]+)?struct[ \t]+%s[ \t]*\{([^{}]*)\}[ \t]*(?:%s[ \t]*)?;[ \t]*\n' % (struct, struct), re.M)
     done = 0; skipped = {}
@@ -83,9 +96,11 @@ def main():
         ok = True
         for n, o, sz, cnt, k in fields:
             if re.fullmatch(r'pad\w*|_?unk\w*', n): continue
-            c = by_off.get((o, sz))
-            if c is None or c[1] != cnt: ok = False; skipped[rel] = f'field {n} @0x{o:X} has no canonical counterpart'; break
-            if c[2] != k: ok = False; skipped[rel] = f'field {n} @0x{o:X} is {k}, canonical {c[0]} is {c[2]}'; break
+            cands = [c for c in by_off.get((o, sz), []) if c[1] == cnt]
+            if not cands: ok = False; skipped[rel] = f'field {n} @0x{o:X} has no canonical counterpart'; break
+            same = [c for c in cands if c[2] == k]
+            if not same: ok = False; skipped[rel] = f'field {n} @0x{o:X} is {k}, canonical {cands[0][0]} is {cands[0][2]}'; break
+            c = next((x for x in same if x[0] == n), same[0])
             if c[0] != n: ren[n] = c[0]
         if not ok: continue
         # other local structs of the file must not have fields with the renamed names

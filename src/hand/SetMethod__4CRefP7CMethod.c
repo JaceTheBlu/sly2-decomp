@@ -1,4 +1,4 @@
-typedef struct CRef { int m_tagk; int m_tag; } CRef;
+#include "cref.h"
 void Decref__4CRef(CRef *pref);
 CRef *SetMethod__4CRefP7CMethod(CRef *pref, int *p)
 {

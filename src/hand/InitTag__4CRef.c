@@ -1,5 +1,5 @@
+#include "cref.h"
 typedef int qword __attribute__((mode(TI)));
-typedef struct CRef { int m_tagk; void *m_pv; } CRef;
 typedef struct SLOTHEAP { int a[6]; } SLOTHEAP;
 typedef struct NV { qword v; int cref; } NV;
 typedef struct NM { qword m[4]; int cref; } NM;
@@ -18,35 +18,35 @@ void InitTag__4CRef(CRef *pref, int tagk)
     case 0x1A: {
         NV *p = (NV *)func_0011CCC0(&D_00452188);
         p->cref = 0;
-        pref->m_pv = p;
+        pref->m_p = p;
         p->cref++;
         break;
     }
     case 0x1B: {
         NM *p = (NM *)func_0011CCC0(&D_004521A0);
         p->cref = 0;
-        pref->m_pv = p;
+        pref->m_p = p;
         p->cref++;
         break;
     }
     case 0x1C: {
         NV *p = (NV *)func_0011CCC0(&D_004521B8);
         p->cref = 0;
-        pref->m_pv = p;
+        pref->m_p = p;
         p->cref++;
         break;
     }
     case 0x1D: {
         N2 *p = (N2 *)func_0011CCC0(&D_004521D0);
         p->cref = 0;
-        pref->m_pv = p;
+        pref->m_p = p;
         p->cref++;
         break;
     }
     case 0x1E: {
         N3 *p = (N3 *)func_0011CCC0(&D_004521E8);
         p->cref = 0;
-        pref->m_pv = p;
+        pref->m_p = p;
         p->cref++;
         break;
     }
@@ -56,7 +56,7 @@ void InitTag__4CRef(CRef *pref, int tagk)
     case 0x22:
     case 0x23:
     default:
-        pref->m_pv = 0;
+        pref->m_p = 0;
         break;
     }
 }

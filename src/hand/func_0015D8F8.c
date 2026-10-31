@@ -1,4 +1,4 @@
-typedef struct CRef { int m_tagk; int m_tag; } CRef;
+#include "cref.h"
 struct X { char pad[0x110]; int i; };
 struct G { char pad[0x3B7C]; void *ap[9]; char pad2[0x4774 - 0x3BA0]; struct X *px; };
 extern struct G g_sw;

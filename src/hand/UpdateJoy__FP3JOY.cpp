@@ -1,3 +1,4 @@
+#include "clock.h"
 struct JOY {
     char pad0[0x1000];
     int nPort;      /* 0x1000 */
@@ -11,7 +12,6 @@ struct JOY {
     int fRumbleEnabled; /* 0x10E8 */
 };
 
-struct CLOCK { char pad[0x3C]; float tReal; };
 extern "C" CLOCK g_clock;
 
 extern "C" {
@@ -51,7 +51,7 @@ void UpdateJoy(JOY *pjoy)
 
 
     if (pjoy->joys != 3 && pjoy->joyk != 0) {
-        if (g_clock.tReal - pjoy->tJoys >= 2.0f)
+        if (g_clock.tFrame - pjoy->tJoys >= 2.0f)
             state = 0;
     }
 

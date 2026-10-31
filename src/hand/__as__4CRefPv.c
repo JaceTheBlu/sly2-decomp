@@ -1,4 +1,4 @@
-typedef struct CRef { int m_tagk; void *m_p; } CRef;
+#include "cref.h"
 typedef struct VT { short d; short pad; void (*fn)(void *); } VT;
 typedef struct O { int pad[3]; VT *vt; } O;
 void Decref__4CRef(CRef *pref);

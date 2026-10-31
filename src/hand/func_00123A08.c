@@ -1,4 +1,4 @@
-typedef struct CRef { int m_tagk; float m_g; } CRef;
+#include "cref.h"
 extern float g_clock;
 CRef *func_00123A08(CRef *ret)
 {
