@@ -111,7 +111,7 @@ def fingerprint(src, tab):
         words = struct.unpack_from('<%dI' % (s['size'] // 4), d, sec['off'] + s['value'])
         rel = sorted([(o - s['value']) // 4, t, ident(n, tab)] for o, (t, n) in relocs.get(s['shndx'], {}).items()
                      if s['value'] <= o < s['value'] + s['size'])
-        out[ident(s['name'], tab)] = [''.join('%08x' % w for w in words), rel]
+        out[s['name']] = [''.join('%08x' % w for w in words), rel]   # raw symbol name; see ident() for its address
     return out
 
 
@@ -169,13 +169,14 @@ def main():
               if r['status'] == 'match'}
         funcs = {}; nonmatching = {}
         for s, fp in res.items():
-            for k, v in (fp or {}).items():
+            for raw, v in (fp or {}).items():
+                k = ident(raw, tab)
                 if k.startswith('@') and (s.replace(os.sep, '/'), int(k[1:], 16)) not in ok:
                     nonmatching[s + ' ' + k] = v; continue
                 if v not in funcs.setdefault(key(k), []): funcs[key(k)].append(v)
         os.makedirs(os.path.dirname(BASELINE), exist_ok=True)
         json.dump({'commit': git('rev-parse', 'HEAD').strip(), 'functions': funcs, 'nonmatching': nonmatching,
-                   'failed': fail}, open(BASELINE, 'w'))
+                   'sources': res, 'failed': fail}, open(BASELINE, 'w'))
         print(f'baseline: {len(funcs)} functions from {len(res)} sources at {git("rev-parse", "--short", "HEAD").strip()}'
               f' -> {os.path.relpath(BASELINE, M.ROOT)}')
         for s in fail: print('  BUILD FAILED (not in baseline):', s)
@@ -185,10 +186,10 @@ def main():
     base = json.load(open(BASELINE))
     # a relocation target the baseline only knew by name may have been given an address since (a rename that
     # added the name to symbol_addrs.txt): resolve the baseline's names again with today's table
-    for vs in base['functions'].values():
-        for v in vs:
-            for r in v[1]:
-                if not r[2].startswith('@'): r[2] = ident(r[2], tab)
+    for v in [v for vs in base['functions'].values() for v in vs] + \
+             [v for fp in base.get('sources', {}).values() for v in (fp or {}).values()]:
+        for r in v[1]:
+            if not r[2].startswith('@'): r[2] = ident(r[2], tab)
     rest = [x for x in a[1:] if not x.startswith('--')]
     if '--all' in a: srcs = all_sources()
     elif rest: srcs = [os.path.abspath(x) for x in rest]
@@ -198,9 +199,13 @@ def main():
     for s, fp in sorted(res.items()):
         if fp is None:
             print('BUILD FAILED', s); bad += 1; continue
-        for k, v in sorted(fp.items()):
+        for raw, v in sorted(fp.items()):
             n += 1
-            bs = base['functions'].get(key(k))
+            k = ident(raw, tab)
+            own = (base.get('sources', {}).get(s) or {}).get(raw)
+            # the same symbol in the same source: compare with itself (inline copies of a named function, such as
+            # a constructor emitted in every file that uses it, must not be compared with the real one)
+            bs = [own] if own is not None else base['functions'].get(key(k))
             if bs is None:
                 print(f'NEW        {s}: {k} (not in baseline)'); bad += 1
             elif v not in bs and base.get('nonmatching', {}).get(s + ' ' + k) == v:
@@ -214,7 +219,7 @@ def main():
                         if x != y: print(f'           first difference: baseline {x}  now {y}'); break
                     else: print(f'           baseline {len(b[1])} relocations, now {len(v[1])}')
     if '--all' in a:
-        seen = {key(k) for fp in res.values() for k in (fp or {})}
+        seen = {key(ident(k, tab)) for fp in res.values() for k in (fp or {})}
         for k in sorted(set(base['functions']) - seen): print('MISSING   ', k); bad += 1
     print(f'{n} functions in {len(res)} sources checked, {bad} problem(s)')
     sys.exit(1 if bad else 0)

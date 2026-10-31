@@ -3,7 +3,9 @@
 
   rename.py OLD NEW [OLD NEW ...]      e.g. rename.py func_0013DA18 LoadSwFromBrx D_003DD490 g_sw
   rename.py --map FILE                 one "OLD NEW" pair per line (# comments allowed)
-  options: --dry-run   show what would change, write nothing
+  options: --dry-run      show what would change, write nothing
+           --merge-used   NEW may already appear in the sources (callers that already use the name for this
+                          address, see tools/resolve_names.py)
 
 OLD is the current name of a function (func_XXXXXXXX or an existing name) or a data symbol (D_XXXXXXXX or a name
 already given with type:data).  NEW is the symbol name: a plain C name (LoadSwFromBrx) or a g++ 2.95 mangled name
@@ -55,7 +57,8 @@ def source_files():
 
 def main():
     args = sys.argv[1:]
-    dry = '--dry-run' in args; args = [a for a in args if a != '--dry-run']
+    dry = '--dry-run' in args; merge = '--merge-used' in args
+    args = [a for a in args if a not in ('--dry-run', '--merge-used')]
     pairs = []
     if args[:1] == ['--map']:
         for line in open(args[1]):
@@ -82,7 +85,7 @@ def main():
         if not IDENT.match(new): errors.append(f'{new}: not a valid identifier'); continue
         alias = new in syms and syms[new][0] == r[0]   # merging into the name the address already has elsewhere
         if new in syms and new not in olds and not alias: errors.append(f'{new}: already a symbol (0x{syms[new][0]:06X})'); continue
-        if new in used and new not in olds and not alias: errors.append(f'{new}: already used as an identifier in the sources'); continue
+        if new in used and new not in olds and not alias and not merge: errors.append(f'{new}: already used as an identifier in the sources'); continue
         if news.count(new) > 1: errors.append(f'{new}: given twice'); continue
         plan.append((old, new, r[0], r[1]))
     if errors:
