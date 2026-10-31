@@ -183,6 +183,12 @@ def main():
     if not os.path.exists(BASELINE):
         sys.exit('no baseline: run `objcheck.py baseline` on a clean, fully matching tree first')
     base = json.load(open(BASELINE))
+    # a relocation target the baseline only knew by name may have been given an address since (a rename that
+    # added the name to symbol_addrs.txt): resolve the baseline's names again with today's table
+    for vs in base['functions'].values():
+        for v in vs:
+            for r in v[1]:
+                if not r[2].startswith('@'): r[2] = ident(r[2], tab)
     rest = [x for x in a[1:] if not x.startswith('--')]
     if '--all' in a: srcs = all_sources()
     elif rest: srcs = [os.path.abspath(x) for x in rest]
