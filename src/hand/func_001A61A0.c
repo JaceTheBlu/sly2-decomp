@@ -1,5 +1,5 @@
+#include "dl.h"
 typedef unsigned long ulong;
-struct DL { void *a, *b; int c; };
 extern struct DL D_003DD4BC;
 int func_0011A380(struct DL *pdl, void *pv);
 struct S { char pad[0x14]; void *x14; char pad2[0x10]; ulong fl; };

@@ -1,5 +1,5 @@
+#include "dl.h"
 typedef struct MSG { int cb; int nKind; } MSG;
-typedef struct DL { void *pvFirst; void *pvLast; int ibDle; } DL;
 typedef struct DZG {
     int cpsoMax;
     int cpso;

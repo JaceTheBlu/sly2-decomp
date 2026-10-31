@@ -1,3 +1,4 @@
+#include "util.h"
 #include "clock.h"
 // func_001D2610: MATCH. Mode-1 update of a vehicle with attached weapons (called from
 // func_001D19A8): pick a ready attachment (func_001D2240) or a target object (func_001D22D0), run the state machine
@@ -20,7 +21,6 @@
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
 struct M3 { U rows[3]; };
-struct LM { float min, max; };
 struct BINDING { char pad0[0x28]; float pitch; };
 struct P;
 struct ATTACH {
@@ -235,7 +235,7 @@ extern "C" void func_001D2610(P *p)
                 continue;
             if (attach->constraint && !func_00227C90(attach->constraint, target))
                 continue;
-            if (0.0f < attach->enterRange.max && p->state != 1)
+            if (0.0f < attach->enterRange.gMax && p->state != 1)
                 continue;
             if (attach->mesh) {
                 M3 m = *func_001A6318(attach->anchor);
@@ -248,7 +248,7 @@ extern "C" void func_001D2610(P *p)
             }
             func_001F0660(attach->binding, 0x68);
             float t = g_clock.t;
-            p->nextAttack = t + GRandInRange__Fff(attach->fireInterval.min, attach->fireInterval.max);
+            p->nextAttack = t + GRandInRange__Fff(attach->fireInterval.gMin, attach->fireInterval.gMax);
         }
     }
 }

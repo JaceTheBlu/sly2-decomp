@@ -1,4 +1,4 @@
-typedef struct LM { float gMin; float gMax; } LM;
+#include "util.h"
 float RadNormalize__Ff(float rad);
 float GLimitAbs__Fff(float g, float gLimit);
 

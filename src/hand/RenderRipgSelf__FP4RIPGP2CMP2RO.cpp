@@ -1,6 +1,5 @@
+#include "dl.h"
 #include "clock.h"
-struct DL { void *head; void *tail; int ibDle; };
-struct DLI { DL *m_pdl; void **m_ppv; int m_ibDle; DLI *m_pdliNext; };
 extern DLI *g_pdliFirst;
 extern CLOCK g_clock;
 struct VTE { short d; short pad; void (*pf)(); };

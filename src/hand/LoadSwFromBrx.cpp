@@ -1,3 +1,4 @@
+#include "util.h"
 // LoadSwFromBrx = LoadSwFromBrx(SW *psw, CBinaryInputStream *pbis).
 // Reads the level body: the world-entry table (0x6C-byte WE records at psw+0x3F08, count psw+0x3F04), sound section, save vars,
 // level table, language strings, cells, options of g_sw / g_cm, then per world entry its objects (LoadSwObjectsFromBrx into a
@@ -72,7 +73,6 @@ struct LO { int pad[3]; VTE *pvt; };
 struct WE {
     int c0; LO **apo; int c8; int cC; int x10; int x14; void *pv18; char ab1C[0x40]; int x5C; int x60; int pad64[2];
 };
-struct RGBA { unsigned char r, g, b, a; };
 struct SW {
     char pad0[0x39D0]; void *p39D0; int x39D4; void *p39D8; int x39DC; void *p39E0; void *p39E4; int x39E8;
     char pad39EC[0x3E00 - 0x39EC]; RGBA rgba; char pad3E04[0x3E38 - 0x3E04]; int x3E38;

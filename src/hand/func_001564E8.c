@@ -1,4 +1,4 @@
-typedef struct LM { float gMin; float gMax; } LM;
+#include "util.h"
 extern float D_002BDCD0;
 extern LM D_002BDCD8;
 struct S { char pad[0x40]; int fl; char pad2[0x10]; float g54; LM lm; float g60; };

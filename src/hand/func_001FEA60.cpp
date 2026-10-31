@@ -1,7 +1,7 @@
+#include "util.h"
 class X;
 typedef void (X::*PMF)();
 struct P {char pad0[0x13C];float weights[8][4];int pad1BC;float outputs[4];char pad1D0[0x30];X *object;int count;X *refs[8];X *component;};
-struct LM {float low,high;};
 extern LM D_002BBB60;
 extern PMF D_002A8298,D_002A82A0;
 extern "C" float func_0011D948(LM *,float);
@@ -49,8 +49,8 @@ typedef char layout_int[(sizeof(int)==4)?1:-1];
 typedef char layout_float[(sizeof(float)==4)?1:-1];
 typedef char layout_member_pointer[(sizeof(PMF)==8)?1:-1];
 typedef char layout_limit[(sizeof(LM)==8)?1:-1];
-typedef char layout_limit_low[((unsigned)&((LM*)0)->low==0)?1:-1];
-typedef char layout_limit_high[((unsigned)&((LM*)0)->high==4)?1:-1];
+typedef char layout_limit_low[((unsigned)&((LM*)0)->gMin==0)?1:-1];
+typedef char layout_limit_high[((unsigned)&((LM*)0)->gMax==4)?1:-1];
 typedef char layout_weights[((unsigned)&((P*)0)->weights==0x13C)?1:-1];
 typedef char layout_weight_stride[(sizeof(((P*)0)->weights[0])==0x10)?1:-1];
 typedef char layout_outputs[((unsigned)&((P*)0)->outputs==0x1C0)?1:-1];

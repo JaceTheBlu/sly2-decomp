@@ -1,4 +1,4 @@
-struct RGBA { unsigned char r, g, b, a; };
+#include "util.h"
 struct S {
     int x0; unsigned char *pch; int x8; int xC; int x10;
     struct RGBA c1; struct RGBA c0; struct RGBA c2;

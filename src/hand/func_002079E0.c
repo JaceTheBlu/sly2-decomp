@@ -1,5 +1,5 @@
+#include "dl.h"
 extern float D_002A8868;
-struct DL { void *a, *b; int c; };
 extern struct DL D_003E1444;
 struct S { char pad[0xFF8]; float t; };
 void func_001F3EA8(struct S *p);

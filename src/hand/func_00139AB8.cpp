@@ -1,3 +1,4 @@
+#include "dl.h"
 // func_00139AB8 (0x139AB8): DMA-double-buffered VU particle update over the DLI list at p->dl (0x448), accumulating the
 // bounding box of every particle batch in vMin/vMax (func_00139950, microprogram), then sets the bounding sphere
 // p->vF0 = centre, p->g100 = radius + p->g120 (or calls virtual slot 9 when p->c444 drops to 0).
@@ -10,8 +11,6 @@ typedef int qword __attribute__((mode(TI)));
 #define FLT_MAX 3.40282347e+38f /* $LC0/$LC1 at 0x2A4AF4/0x2A4AF8: this function's literal pool */
 struct VECTOR { union { struct { float x, y, z; } v; qword q; }; };
 struct M4 { qword a[4]; };
-struct DL { void *head; void *tail; int ibDle; };
-struct DLI { DL *m_pdl; void **m_ppv; int m_ibDle; DLI *m_pdliNext; };
 struct BUF { char ab[0x2B0]; char ab2[0x560 - 0x2B0]; char ab3[0x840 - 0x560]; };
 struct Q { BUF abuf[2]; int i; int c; };
 struct SBE { int cb; char *pv; };

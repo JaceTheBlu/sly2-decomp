@@ -1,3 +1,4 @@
+#include "util.h"
 #include "clock.h"
 // func_00151340 (Lilly's agent, T1649): joystick / random-target camera spring. MATCH.
 // Keys: the sibling helper style of func_00151700 / func_0014EB70 (by-value VU_FLOAT temps -> the sqc2 0(sp) after each qmtc2,
@@ -9,7 +10,6 @@ extern "C" CLOCK g_clock;
 struct CM;
 extern "C" CM g_cm;
 struct CLQ { float g0, g1, g2, pad; };
-struct LM { float gMin, gMax; };
 extern "C" CLQ D_002BDA10;
 extern "C" LM D_002BDA20;
 extern "C" CLQ D_002BDA30;

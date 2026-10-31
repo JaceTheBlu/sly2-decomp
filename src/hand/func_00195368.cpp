@@ -1,3 +1,4 @@
+#include "util.h"
 #include "clock.h"
 // func_00195368 = EmitJtGrabSparkles(SW *psw, STEPPLAYER *pstepplayer, int ccand, JTGRABCAND *ajtgrabcand)
 // (name and JTGRABCAND layout from src/hand/func_00194A40.cpp / func_00194F70.cpp; psw is unused).
@@ -24,7 +25,6 @@ struct VU_VECTOR
     VU_VECTOR(const VECTOR &v) { q = v.q; }
 };
 
-struct LM { float gMin, gMax; };
 struct GRABSPOT
 {
     char pad0[0x20];

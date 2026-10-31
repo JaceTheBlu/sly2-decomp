@@ -1,9 +1,9 @@
+#include "util.h"
 #include "clock.h"
 // func_00178EE0: laneG10v2 (no pins) + VU_FLOAT(float) qmtc2 constructor building the speed in place, and the 1e-4 length test read with GXOfQw (gcc emits the qmfc2, asm mtc1).
 typedef int qword __attribute__((mode(TI)));
 struct MATRIX3 { float mat[3][4]; };
 struct CLQ { float g0, g1, g2; };
-struct LM { float gMin, gMax; };
 struct ACTOR { char pad[0xFD0]; char control[1]; };
 struct MODEL { char pad[0x10]; qword velocity; };
 struct CONTROL { char pad[0x24]; void *animation; };

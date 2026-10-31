@@ -1,4 +1,4 @@
-struct RGBA { unsigned char r, g, b, a; };
+#include "util.h"
 struct E { int n; void *p; struct RGBA c; };
 extern struct E D_003D3A00[5];
 extern char D_002C1740[], D_002C19C0[], D_002C1AC8[], D_002C1B50[], D_002C1BD8[];
@@ -6,7 +6,7 @@ extern int D_002DD2E0, D_002DD2E4, D_002DD2E8, D_002DD2EC, D_002DD2F0, D_002DD2F
 extern char D_004520A8[], D_004520D0[], D_004520F8[], D_00452120[], D_00452148[], D_00452170[];
 void *func_002333B4(void *p, int c, int cb);
 void __8SLOTHEAPiii(void *p, int cb, int c, int align);
-static inline void SetRgba(struct RGBA *pc, int r, int g, int b, int a) { pc->r = r; pc->g = g; pc->b = b; pc->a = a; }
+static inline void SetRgba(struct RGBA *pc, int r, int g, int b, int a) { pc->bRed = r; pc->bGreen = g; pc->bBlue = b; pc->bAlpha = a; }
 static inline void InitE(struct E *pe, int n, void *p, int r, int g, int b, int a)
 {
     func_002333B4(pe, 0, sizeof(struct E));

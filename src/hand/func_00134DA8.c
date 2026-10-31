@@ -1,3 +1,4 @@
+#include "util.h"
 #include "clock.h"
 /* MATCH: case 5 uses LenXY5, which adds allocation-only "r"(p150) on the vsqrt asm and two "r"(p1030) on the qmfc2 asm (one "r"(p1030): 5). One register pin (MulT vf3). */
 /* v6: aligned 7 -> 1. Case 11 uses PullB: qmtc2 into a plain qword t, then VOLATILE stores p->v190 = r and u.q = t (keeps the v190 store before the u store in sched1, so u lives longer and local-alloc gives r vf1 / u vf2 like the target; the lw p1030 now hoists too). Cases 10/14 keep Pull (their target order differs). Left: case 5 lw p150 before the LenXY vmul. */
@@ -8,7 +9,6 @@
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } VUF;
 struct M3 { qword r[3]; };
-struct LM { float gMin; float gMax; };
 struct POLY { float a; float b; float c; };
 struct S150 { char pad[0x18]; float g18; float g1C; };
 struct S1030 { char pad[0x1C]; float g1C; char pad20[0x20]; float g40; };

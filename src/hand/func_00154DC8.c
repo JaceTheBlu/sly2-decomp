@@ -1,4 +1,4 @@
-struct LM { float a, b; };
+#include "util.h"
 struct X { char pad[0xA8]; float *pg; };
 struct G { char pad[0x3B0C]; struct X *px; };
 extern struct G g_sw;

@@ -1,6 +1,5 @@
+#include "dl.h"
 #include "clock.h"
-typedef struct DL { void *head; void *tail; int ibDle; } DL;
-typedef struct DLI { DL *m_pdl; void **m_ppv; int m_ibDle; struct DLI *m_pdliNext; } DLI;
 extern DLI *g_pdliFirst;     /* g_pdliFirst */
 extern struct CLOCK g_clock;
 extern char D_002E65E0[];

@@ -1,3 +1,4 @@
+#include "util.h"
 #include "clock.h"
 // func_00180668: MATCH, no register pins. From laneH9v5 (aligned 3): the case-3 first refresh subtract (target - previousTarget) uses QwSubC, the same vsub with a clobber of the dead vf3. Reload hands out spill regs round-robin over {v0,v1,vf1,vf2,vf3}; after the case 1/2 vsub (target vf1, self vf2) the next VF reload would get vf3; with vf3 clobbered (and prev in vf1) the target reload gets vf2 as in the target.
 typedef int qword __attribute__((mode(TI)));
@@ -6,7 +7,6 @@ typedef union U{qword q;float f[4];int i[4];}U;
 struct VTE{short delta,pad;qword(*fn)(void*);};
 struct FRAME{char pad0[0xA0];void*space;};
 struct NODE{char pad0[12];VTE*vt;char pad10[0x18];ulong flags;char pad30[0x2C];FRAME*frame;char pad60[0x8C];void*group;};
-struct LM{float low,high;};
 struct RULE{int distanceEnabled,angleEnabled;LM enterDistance,stayDistance,enterAngle,stayAngle;};
 struct POLY{float a,b,c;};
 struct P{NODE node;char padF0[0xD0];int state;float stateTime;int cooldown,active;void*binding;NODE*target;void*curve;float progress;qword previousSelf,previousTarget;float stamp,heading;char pad208[8];qword output;char pad220[0x50];RULE rules[5];float scale;char pad33C[4];POLY remaining;char pad34C[4];POLY angle;char pad35C[4];POLY simpleAngle;char pad36C[4];LM simpleClamp;};
@@ -65,14 +65,14 @@ static inline qword RSub(const qword&a,const qword&b){qword r;__asm__("vsub.xyzw
 static inline qword RDot(const qword&a,const qword&b){qword r,one;__asm__("vmul.xyz %0,%2,%3\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(r),"=j"(one):"j"(a),"j"(b));return r;}
 static inline qword RAddScaled(const qword&base,const qword&v,const VU_FLOAT&g){qword r;__asm__("vadda.xyzw ACC,%1,$vf0\n\tvmaddx.xyzw %0,%2,%3x":"=j"(r):"j"(base),"j"(v),"j"(g.qw));return r;}
 static inline float REvaluate(const POLY&p,const float&t){return p.a+t*(p.b+t*p.c);}
-static inline float RLimit(float f,const LM&p){float low=p.low,high=p.high,r;if(f<low)r=low;else if(high<f)r=high;else r=f;return r;}
+static inline float RLimit(float f,const LM&p){float low=p.gMin,high=p.gMax,r;if(f<low)r=low;else if(high<f)r=high;else r=f;return r;}
 static inline float RGXOfQw(const qword&qw){float x;__asm__("mtc1 %1,%0":"=f"(x):"r"(qw));return x;}
 static inline float RGXOfVf(const qword&qw){float x;__asm__("mtc1 %1,%0":"=f"(x):"r"(qw),"j"(qw));return x;} /* allocation-only "j": the value stays in a VF register */
 static inline VU_FLOAT RVuFloat(const float&g){VU_FLOAT v;__asm__("qmtc2.ni %1,%0":"=j"(v.qw):"r"(g));return v;}
 static inline ulong Alive(NODE*p){return (p->flags>>60)&1;}
 static inline float Evaluate(POLY*p,float t){return p->a+t*(p->b+t*p->c);}
-static inline float Limit(float f,LM*p){float low=p->low,high=p->high,r;if(f<low)r=low;else if(high<f)r=high;else r=f;return r;}
-static inline float Clamp(float f,LM*p){float low=p->low,high=p->high;if(f<low)f=low;else if(high<f)f=high;return f;}
+static inline float Limit(float f,LM*p){float low=p->gMin,high=p->gMax,r;if(f<low)r=low;else if(high<f)r=high;else r=f;return r;}
+static inline float Clamp(float f,LM*p){float low=p->gMin,high=p->gMax;if(f<low)f=low;else if(high<f)f=high;return f;}
 
 extern "C" void func_00180668(P*p){
  U nearest,direction,unit;

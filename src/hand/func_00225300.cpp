@@ -1,3 +1,4 @@
+#include "util.h"
 // State-5 update: fade the actor in, hand it control of the source's basis, then drop a prize and leave state 3.
 // No actor -> state 3; actor without a live 0xB0 behaviour -> state 2. Otherwise copy the source's (or own) world basis
 // into the actor's control record (+0xFD0), set the behaviour to state 4 once within 100 units, fade the actor's colour
@@ -21,7 +22,6 @@ struct R { char pad[0x30]; int state; };
 struct S { char pad[0xC]; VE *vt; char pad10[0x140]; int state; float time; char pad158[0x58]; struct O *source; struct A *actor; };
 extern "C" {
 extern struct CLOCK { float t,dt; } g_clock;
-struct LM { float gMin, gMax; };
 extern float D_002C43B0,D_002C43C0[3];
 extern LM D_002BBB60;
 extern char g_sw[];

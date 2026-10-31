@@ -1,5 +1,5 @@
+#include "util.h"
 typedef int qword __attribute__((mode(TI)));
-struct RGBA { unsigned char r, g, b, a; };
 struct QQ { qword a, b; };
 struct Z { int x0; int k; char pad8[8]; int id; };
 struct Y { struct RGBA c0; struct RGBA c1; char pad8[8]; struct QQ q; struct Z *pz; char pad34[0x24]; int x58; char pad5c[0x14]; };

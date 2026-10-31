@@ -1,3 +1,4 @@
+#include "util.h"
 // func_00155FB0: matched from v8.
 // g_normalZ: Sly 1 name of the (0,0,1) vector at g_normalZ.
 // The clamp scale lives in a function-scope VUV sc (declared after lm) so its slot sits at 0x30 before frame.
@@ -7,7 +8,6 @@
 typedef int qword __attribute__((mode(TI)));
 struct M3 { qword r[3]; };
 struct VECTOR { float x, y, z, w; };
-struct LM { float gMin, gMax; };
 class SO;
 struct VT { char pad[0x108]; short d; short pad2; qword (*pfn)(SO *); };
 class SO { public: char pad[0xC]; VT *pvt; };

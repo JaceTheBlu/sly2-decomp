@@ -1,4 +1,4 @@
-struct RGBA { unsigned char r, g, b, a; };
+#include "util.h"
 class CRichText {
 public:
     char pad[0x154];

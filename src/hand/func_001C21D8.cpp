@@ -1,3 +1,4 @@
+#include "dl.h"
 // func_001C21D8: A* path search over the navigation polygons (lilly5, T1831; = lilly4 with the minimal probe).
 // BYTE-IDENTICAL (matchtool MATCH), but NOT promotable under AGENT_GUIDE "Not accepted": the target's never-touched
 // object at sp+0x30 is still an invented `EMPTY e` (without it every SImode home is 4 bytes low: 18/321, aligned 0).
@@ -7,7 +8,6 @@
 // never-touched RAII-style object (inline empty dtor) or a volatile. Rest of the code is lilly4 (StoreX estimate).
 typedef int qword __attribute__((mode(TI)));
 struct MSG { int cb; int nKind; };
-struct DL { void *pvFirst; void *pvLast; int ibDle; };
 struct NAV { char pad[0x124]; int index; };
 struct EDGE { char pad[0x128]; NAV *pnavDest; int pad12C; qword posBegin; qword posEnd; };
 struct ADJ { int cedge; int *aiedge; };
@@ -86,7 +86,7 @@ extern "C" int func_001C21D8(GRAPH *pgraph, void *pvActor, qword posGoal, int fE
     pnode->state = 2;
     AppendNode(&dlOpen, pnode);
     while (!FIsDlEmpty__FP2DL(&dlOpen)) {
-        pnode = (NODE *)dlOpen.pvFirst;
+        pnode = (NODE *)dlOpen.head;
         if (fExact) {
             if (pnode->pnav == pnavGoal)
                 break;
@@ -134,7 +134,7 @@ extern "C" int func_001C21D8(GRAPH *pgraph, void *pvActor, qword posGoal, int fE
             pnodeDest->gEstimate = gEstimate;
             pnodeDest->state = 2;
             NODE *pnodeNext;
-            for (pnodeNext = (NODE *)dlOpen.pvFirst; pnodeNext; pnodeNext = pnodeNext->pnodeNext) {
+            for (pnodeNext = (NODE *)dlOpen.head; pnodeNext; pnodeNext = pnodeNext->pnodeNext) {
                 if (pnodeNext->gEstimate > pnodeDest->gEstimate)
                     break;
             }

@@ -1,10 +1,10 @@
+#include "dl.h"
 // MATCH, from the 116/aligned-25 draft: (1) no f4/f2 locals (`(grf >> 2) & 1` and `grf & 2` at their uses), so the vtable address is hoisted into fp; (2) func_00230018 takes pn as a 3rd argument; (3) pn->xC before pn->x14; (4) floats before pp in the prototype (prologue copy order).
 struct VTE { short d; short pad; void (*pfn)(); };
 struct POLY { float a, b, c; };
 struct E60 { unsigned int k; int x4; };
 struct E68 { int x0; int x4; int x8; };
 struct EV { int a[4]; };
-struct DL { void *pvFirst; void *pvLast; int ibDle; };
 struct T {
     int x0; char pad4[0x50 - 4]; struct DL dl50; int x5C; struct E60 *ae60; int c64; struct E68 *ae68; int x6C;
     int x70; int pad74; float g78; int pad7C; struct POLY poly; int pad8C; float g90; float g94; int cev; struct EV *aev; int xA0;

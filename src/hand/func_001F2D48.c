@@ -1,6 +1,5 @@
+#include "dl.h"
 typedef unsigned long ulong;
-typedef struct DL { void *head; void *tail; int ibDle; } DL;
-typedef struct DLI { DL *m_pdl; void **m_ppv; int m_ibDle; struct DLI *m_pdliNext; } DLI;
 extern DLI *g_pdliFirst;
 struct VTE { short d; short pad; void (*pfn)(void *); };
 struct O { char pad[0xC]; struct VTE *pvt; char pad2[0x28 - 0x10]; ulong fl; };

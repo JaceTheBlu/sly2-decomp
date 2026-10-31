@@ -1,3 +1,4 @@
+#include "util.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct M3 { qword row[3]; };
@@ -5,7 +6,6 @@ struct M4 { qword row[4]; };
 struct VEC { qword q; } __attribute__((aligned(16)));
 struct VECTOR4 { float x, y, z, w; } __attribute__((aligned(16)));
 struct VU_FLOAT { qword qw; };
-struct LM { float gMin, gMax; };
 struct LO { char pad0[0x28]; unsigned long flags; char pad30[8]; float sRadius; char pad3C[0x144]; void *pv180; };
 struct SEL { int kind; int unk4; LO *plo; char padC[8]; int fBusy; float tUntil; };
 struct SET {

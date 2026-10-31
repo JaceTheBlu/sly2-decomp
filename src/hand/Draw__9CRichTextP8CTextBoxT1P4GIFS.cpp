@@ -1,4 +1,4 @@
-struct RGBA { unsigned char r, g, b, a; };
+#include "util.h"
 struct GIFS;
 struct FONT { char pad[0xC]; int dy; char pad10[4]; float ry; };
 struct CFont;

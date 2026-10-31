@@ -1,3 +1,4 @@
+#include "util.h"
 #include "clock.h"
 // func_0021FB70 = UpdateJtThrowArc (Lilly's Sly2Port name, 0x21FB70): while the hero holds an object (JTTHROW, jts 23)
 // it predicts the arc the object would fly to the aim point. The launch point (vLaunchLocal in the hero's space) and the
@@ -33,7 +34,6 @@ struct CARRIED {char unk0[0xE8];GRAVITY *pgravity;void *pvFilter;};
 // A frame of the aim marker's arc: the time it was written, 1 when the point exists, a length (0) and the matrix
 struct ARCFRAME {float t,gValid,s;M4 mat;};
 struct MARKER {char unk0[0x158];int cframe;ARCFRAME *aframe;};
-struct LM {float gMin,gMax;};
 struct CLQ {float g0,g1,g2;};
 // JTTHROW blend entry (Lilly's JTAIRBL)
 struct BL {float gWeight;ASEGBL *pasegbl;int unk8;};

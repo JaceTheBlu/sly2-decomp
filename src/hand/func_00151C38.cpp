@@ -1,3 +1,4 @@
+#include "util.h"
 // func_00151C38: matched from the v7 draft. Normalize's sqrt and divide are two asms (sqrt into a
 // separate length temp), which lengthens the VU chain so the scheduler orders the block like the target; Cross lists `a`
 // twice (allocation-only operand) so the VF numbering matches.
@@ -8,7 +9,6 @@ union M4 { struct { qword r[4]; } q; M3 m3; float af[4][4]; };
 struct CM;
 extern "C" CM g_cm;
 struct CLQ { float g0, g1, g2, pad; };
-struct LM { float gMin, gMax; int pad[2]; };
 extern "C" float D_002BDACC;
 extern "C" CLQ D_002BDAD0, D_002BDAF0, D_002BDB10, D_002BDB30;
 extern "C" LM D_002BDAE0, D_002BDB00, D_002BDB20, D_002BDB40;

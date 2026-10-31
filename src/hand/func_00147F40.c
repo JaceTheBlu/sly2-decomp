@@ -1,6 +1,5 @@
+#include "dl.h"
 typedef int qword __attribute__((mode(TI)));
-typedef struct DL { void *head; void *tail; int ibDle; } DL;
-typedef struct DLI { DL *m_pdl; void **m_ppv; int m_ibDle; struct DLI *m_pdliNext; } DLI;
 extern DLI *g_pdliFirst;
 struct SO;
 struct VT { char pad[0xB0]; short d16; short p16; void (*pfn22)(struct SO *); short d17; short p17; void (*pfn23)(struct SO *); };

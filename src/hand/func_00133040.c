@@ -1,8 +1,8 @@
+#include "dl.h"
 struct N { float t; int f4; int *pc; int fc; struct N *pnext; };
 struct G { char pad[0x3d6c]; int c3d6c; };
 struct S { char pad[0x39fc]; int pool39fc; };
 extern struct G g_sw;
-struct DL { struct N *head; struct N *tail; int ibDle; };
 extern struct DL D_003E0E80;
 struct N *func_0011CCC0(void *);
 void func_0011A0C0(struct DL *, struct N *, struct N *);

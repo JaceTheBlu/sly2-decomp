@@ -1,3 +1,4 @@
+#include "dl.h"
 typedef struct VTE { short d; short pad; void (*pfn)(); } VTE;
 typedef struct AREQ { int cb; int align; } AREQ;
 typedef struct O {
@@ -20,7 +21,6 @@ typedef struct O {
     int x1E8;
     void *x1EC;
 } O;
-typedef struct DL { O *pvFirst; O *pvLast; int ibDle; } DL;
 extern DL D_003E1A40;
 O *PloNew__F3CIDP2SO3OIDi(int a, int b, int c, int d);
 void func_002333B4(void *p, int c, int n);
@@ -35,7 +35,7 @@ O *func_001BDA00(void)
     AREQ req;
     float *pm;
 
-    p = D_003E1A40.pvFirst;
+    p = D_003E1A40.head;
     if (!p) {
         for (i = 0; i < 16; i++) {
             O *q = PloNew__F3CIDP2SO3OIDi(0xE, 0, 0x2CD, -1);
@@ -64,7 +64,7 @@ O *func_001BDA00(void)
             ((void (*)(void *))q->vt[9].pfn)((char *)q + q->vt[9].d);
             func_0011A220(&D_003E1A40, q);
         }
-        p = D_003E1A40.pvFirst;
+        p = D_003E1A40.head;
     }
     func_0011A2E8(&D_003E1A40, p);
     p->x1E8 = -1;

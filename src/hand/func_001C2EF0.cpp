@@ -1,3 +1,4 @@
+#include "util.h"
 // func_001C2EF0: launches `count` objects from an owner's source object towards the player.
 // The first object is the owner's existing one (+0x158), the others come from its factory (func_001CB250); new
 // objects of class 0x5A are put into state 2.  Each launch aims at a random point around the target: a random
@@ -17,7 +18,6 @@ struct M3 { qword r[3]; };
 struct VTE { short delta, pad; void *fn; };
 struct SO { char pad0[0xC]; VTE *vt; char pad10[0x60]; qword position; };
 struct OWNER { char pad0[0x150]; SO *source; void *factory; SO *first; };
-struct LM { float gMin, gMax; };
 struct GAME { int dummy; };
 extern "C" {
 extern GAME g_sw;

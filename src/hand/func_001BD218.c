@@ -1,5 +1,4 @@
-typedef struct DL { void *head; void *tail; int ibDle; } DL;
-typedef struct DLI { DL *m_pdl; void **m_ppv; int m_ibDle; struct DLI *m_pdliNext; } DLI;
+#include "dl.h"
 extern DLI *g_pdliFirst;
 struct VE { short d; short pad; void (*pfn)(); };
 struct S { char pad[0xC]; struct VE *vt; char pad1[0x1C4 - 0x10]; DL dl; char pad2[0x1D8 - 0x1D0]; int x1D8; };

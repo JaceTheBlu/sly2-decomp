@@ -11,8 +11,9 @@ no unions, nested types or methods):
     definition in include/HEADER (or one element of a canonical array: `a[3]` -> `art[3]` style is not attempted,
     such files are skipped);
   - the local definition is removed and `#include "HEADER"` added;
-  - accesses `.old` / `->old` become the canonical names, only when no other local struct of the file has a field
-    called `old` (else the file is skipped).
+  - accesses `.old` / `->old` become the canonical names.  A renamed access that belonged to another struct cannot
+    pass unnoticed: it either fails to compile (no such member) or changes the code, and objcheck reports both
+    (--careful skips files where another local struct has a field of the same name instead).
 Files it cannot handle are listed and left alone.  Run tools/objcheck.py check afterwards: a source whose code
 changes, or that no longer compiles, must be reverted (git checkout FILE).
 """
@@ -25,8 +26,13 @@ SIZES = {'char': 1, 'uchar': 1, 'unsigned char': 1, 'signed char': 1, 'u8': 1, '
          'long': 8, 'ulong': 8, 'unsigned long': 8, 'TICK': 8, 's64': 8, 'u64': 8, 'double': 8}
 
 
+def kind(ty, ptr):
+    return 'p' if ptr else ('f' if ty in ('float', 'f32', 'double') else 'i')
+
+
 def parse_fields(body):
-    """[(name, offset, elem size, count)] for a simple struct body, or None."""
+    """[(name, offset, elem size, count, kind)] for a simple struct body, or None.  kind: f float, p pointer, i int."""
+    body = re.sub(r'\bstruct\s+(?=[A-Za-z_]\w*\s*\*)', '', body)   # `struct DLI *pdliNext`
     if re.search(r'\b(union|struct|class|enum)\b|\(|\{|::|operator|public:|private:|virtual|static', body): return None
     off = 0; out = []; align = 1
     for decl in [d.strip() for d in body.split(';') if d.strip()]:
@@ -44,7 +50,7 @@ def parse_fields(body):
                 try: n *= int(eval(dexpr.replace('U', ''), {}))
                 except Exception: return None
             off = (off + sz - 1) // sz * sz; align = max(align, sz)
-            out.append((name, off, sz, n)); off += sz * n
+            out.append((name, off, sz, n, kind(ty, ptr))); off += sz * n
     return out
 
 
@@ -60,9 +66,9 @@ def main():
     dry = '--dry-run' in sys.argv
     struct, header = a[0], a[1]
     canon = canonical(struct, header)
-    by_off = {(o, sz): (n, cnt) for n, o, sz, cnt in canon}
+    by_off = {(o, sz): (n, cnt, k) for n, o, sz, cnt, k in canon}
     files = [os.path.abspath(f) for f in a[2:]] or sorted(glob.glob(os.path.join(ROOT, 'src', '**', '*.c*'), recursive=True))
-    defre = re.compile(r'^[ \t]*(?:typedef[ \t]+)?struct[ \t]+%s[ \t]*\{([^{}]*)\}[ \t]*;[ \t]*\n' % struct, re.M)
+    defre = re.compile(r'^[ \t]*(?:typedef[ \t]+)?struct[ \t]+%s[ \t]*\{([^{}]*)\}[ \t]*(?:%s[ \t]*)?;[ \t]*\n' % (struct, struct), re.M)
     done = 0; skipped = {}
     for p in files:
         if os.sep + 'lib' + os.sep in p: continue
@@ -75,15 +81,16 @@ def main():
         if fields is None: skipped[rel] = 'not a simple struct'; continue
         ren = {}
         ok = True
-        for n, o, sz, cnt in fields:
+        for n, o, sz, cnt, k in fields:
             if re.fullmatch(r'pad\w*|_?unk\w*', n): continue
             c = by_off.get((o, sz))
             if c is None or c[1] != cnt: ok = False; skipped[rel] = f'field {n} @0x{o:X} has no canonical counterpart'; break
+            if c[2] != k: ok = False; skipped[rel] = f'field {n} @0x{o:X} is {k}, canonical {c[0]} is {c[2]}'; break
             if c[0] != n: ren[n] = c[0]
         if not ok: continue
         # other local structs of the file must not have fields with the renamed names
         others = t[:ms[0].start()] + t[ms[0].end():]
-        if ren and any(re.search(r'\{[^{}]*\b%s\b[^{}]*\}' % re.escape(old), others) for old in ren):
+        if '--careful' in sys.argv and ren and any(re.search(r'\{[^{}]*\b%s\b[^{}]*\}' % re.escape(old), others) for old in ren):
             skipped[rel] = 'a renamed field name is also used by another struct'; continue
         u = others
         for old, new in ren.items():

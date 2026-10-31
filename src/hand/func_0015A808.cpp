@@ -1,3 +1,4 @@
+#include "util.h"
 // func_0015A808: EMITB choose emit position/direction.
 // Notes: the unused case-1 VU_VECTOR[3] frees the stack slot that case 3's an[] reuses; VLen = one length-squared asm
 // plus a separate vsqrt asm; Normalize returns its VU_VECTOR by value (gives dir its stack slot).
@@ -14,7 +15,6 @@ struct EMITMESH { int cpos; qword *apos; int ctri; TRI *atri; qword *anormal; fl
 struct BOXE { float xMin, yMin, zMin, pad; float xMax, yMax, zMax; };
 struct MESHO { char pad[0xE8]; int cs; int padEC; float *as; };
 struct EMITO { void *palo; MESHO *pmesh; };
-struct LM { float gMin, gMax; };
 struct EP {
     int kind;
     int kindDir;

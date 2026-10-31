@@ -1,6 +1,6 @@
+#include "util.h"
 struct CLOCK { float t; float dt; char pad[0x34]; float t3c; };
 extern struct CLOCK g_clock;
-struct LM { float low, high; };
 struct H { char pad[8]; struct LM window; };
 struct G { char pad[0x104]; struct H *x104; char pad1[4]; float f10C; unsigned packetOffset; char pad2[0x23C - 0x114]; int x23C; volatile int stage; };
 struct DMA;

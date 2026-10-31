@@ -1,3 +1,4 @@
+#include "util.h"
 // func_001C6FD8: spray up to cRequested objects of a kind (0x5B / 0x5D, made by func_001C6CE8) out of a
 // point. The seed is dropped to the ground (posOrig), snapped onto the region (posSnap, height from posOrig or from the
 // nearest object) and raised again; then up to 50 candidate landing points are tried on a widening spiral around posSnap.
@@ -16,7 +17,6 @@
 typedef int qword __attribute__((mode(TI)));
 union VECTOR4 { qword q; float f[4]; };
 struct CLQ { float g0, g1, g2, gUnused; };
-struct LM { float gMin, gMax; };
 struct FRAME { int n; FRAME(); ~FRAME(); };
 struct ALLOCREQ { int cb, cbAlign; ALLOCREQ(int c, int a) { cb = c; cbAlign = a; } };
 struct REGION;

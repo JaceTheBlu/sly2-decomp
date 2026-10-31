@@ -1,4 +1,4 @@
-struct DL { void *head; void *tail; int ibDle; };
+#include "dl.h"
 struct N { int id; struct N *pnParent; int x8; int xC; int x10; struct N *pnNext; struct DL dl; int pad; };
 struct AL { int cb; int cbAlign; };
 extern char g_sw[];

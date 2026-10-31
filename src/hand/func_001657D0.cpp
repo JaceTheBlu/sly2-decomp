@@ -1,3 +1,4 @@
+#include "dl.h"
 #include "clock.h"
 class OBase {
 public:
@@ -28,7 +29,6 @@ public:
     char pad5[0xF4 - 0xB8];
     int ff4;
 };
-struct DL { void *pvFirst; void *pvLast; int ibDle; };
 extern CLOCK g_clock;
 extern DL D_003E0F90;
 extern char D_002DEB30[];

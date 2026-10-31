@@ -1,3 +1,4 @@
+#include "util.h"
 #include "clock.h"
 // MATCH. Case 3 builds CLQ clq = {-0.25, 0.0015625} and LM lm = {0.1, 1.0} on the
 // stack: q->x1C = GLimitLm(&lm, GFromClq(|d.xy|, &clq)), q->x18 = atan2(d.y, d.x) with d = pos(p->p38) - pos(p->p10).
@@ -7,7 +8,6 @@ struct Q { char pad[0x18]; float x18; float x1C; char pad2[0x30 - 0x20]; int x30
 struct PO { char pad[0x2DC]; int x2DC; };
 struct P { char pad[0x10]; struct PO *p10; char pad2[0x30 - 0x14]; int x30; float x34; void *p38; };
 struct CLQ { float g0, g1, g2, gPad; } __attribute__((aligned(16)));
-struct LM { float gMin, gMax; };
 extern struct CLOCK g_clock;
 void func_001EF0C0(struct P *p, struct Q *q);
 qword func_001A62E8(void *p);

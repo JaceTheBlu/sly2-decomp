@@ -1,3 +1,4 @@
+#include "util.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 extern struct CLOCK g_clock;
@@ -7,7 +8,6 @@ struct G { char pad[0x3B4C]; void *p3B4C; char pad2[0x4750 - 0x3B50]; float g475
 extern struct G g_sw;
 extern char D_003D4A60[];
 struct POLY { float c0, c1, c2; };
-struct LM { float gMin, gMax; };
 extern struct POLY D_002BD980;
 extern float D_002BD990, D_002BD994, D_002BD998, D_002BD99C;
 extern char D_002BD9A0[];

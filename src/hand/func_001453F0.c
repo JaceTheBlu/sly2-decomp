@@ -1,6 +1,6 @@
+#include "util.h"
 // func_001453F0: camera/AI state update. Keys: `f = func_001459C0(p) != 0; if (f)` (stops loop.c hoisting constant 1), inline GClamp.
 typedef int qword __attribute__((mode(TI)));
-struct LM { float gMin, gMax; };
 struct D { char pad[0x10]; void *p10; };
 struct C { char pad[0xDC]; struct D *pd; };
 struct PO { char pad[0xE8]; struct C *pc; char pad2[0x2DC - 0xEC]; int x2DC; char pad3[0x1030 - 0x2E0]; void *p1030; };

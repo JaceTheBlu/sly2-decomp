@@ -1,3 +1,4 @@
+#include "util.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union U{qword q;float f[4];int i[4];}U;
 typedef struct NODE{char pad0[0xE0];struct NODE*nextE0;char padE4[4];unsigned flags;char padEC[0x18];struct NODE*next104;char pad108[4];float reach;char pad110[0x64];struct NODE*next174;char pad178[0x3C];struct NODE*next1B4;}NODE;
@@ -6,7 +7,6 @@ typedef struct P{char pad0[0x10];NODE*actor;char pad14[0x28];float time;char pad
 typedef struct ROW{U point;float angle;}ROW;
 typedef struct QUERY{U point;float heading;unsigned count;ROW row[64];U candidate,delta,scalar;}QUERY;
 typedef struct WORK{QUERY query;NODE*result256[256];NODE*result32[32];NODE*result128[128];}WORK;
-typedef struct LM{float low,high;}LM;
 extern NODE*D_003E13FC,*D_003E13F0,*D_003E1408,*D_003E13E4,*D_003E13C0,*D_003E13D8,*D_003E13CC,*D_003E13B4,*D_003E1450;
 extern char g_sw;
 extern qword D_002A2DA0,g_normalZ;
@@ -112,9 +112,9 @@ extern "C" void func_001728B0(P*p){
  qword anchor=QwAdd(origin,func_0011E1A0(w.query.heading+3.1415927f,-350.0f,0.0f));
  while(accepted<4){
   float angle,length;qword point;
-  lastAngle+=GRandInRange__Fff(D_002BE5A8.low,D_002BE5A8.high);
+  lastAngle+=GRandInRange__Fff(D_002BE5A8.gMin,D_002BE5A8.gMax);
   angle=lastAngle+w.query.heading;
-  length=GRandInRange__Fff(D_002BE5B0.low,D_002BE5B0.high);
+  length=GRandInRange__Fff(D_002BE5B0.gMin,D_002BE5B0.gMax);
   point=QwAdd(anchor,func_0011E1A0(angle,length,0.0f));
   {PAIR*pair=&p->pair[accepted];pair->candidate.q=point;pair->original.q=point;}accepted++;
  }
@@ -160,5 +160,5 @@ typedef char WORK_query_Offset[((unsigned)&((WORK*)0)->query==0)?1:-1];
 typedef char WORK_result256_Offset[((unsigned)&((WORK*)0)->result256==2128)?1:-1];
 typedef char WORK_result32_Offset[((unsigned)&((WORK*)0)->result32==3152)?1:-1];
 typedef char WORK_result128_Offset[((unsigned)&((WORK*)0)->result128==3280)?1:-1];
-typedef char LM_low_Offset[((unsigned)&((LM*)0)->low==0)?1:-1];
-typedef char LM_high_Offset[((unsigned)&((LM*)0)->high==4)?1:-1];
+typedef char LM_low_Offset[((unsigned)&((LM*)0)->gMin==0)?1:-1];
+typedef char LM_high_Offset[((unsigned)&((LM*)0)->gMax==4)?1:-1];

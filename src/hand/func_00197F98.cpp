@@ -1,3 +1,4 @@
+#include "util.h"
 #include "clock.h"
 // func_00197F98: per-frame movement / jump-target update of a player context (MATCH; T1870, Lilly's agent; = lilly30 + FloatUse + EMPTY).
 // Joystick combo timers, a search over the two jump-target lists (D_003E13E4 sources / D_003E1420 objects) that picks the best
@@ -44,7 +45,6 @@ struct BASE_E0 { char data[0xE0]; };
 struct BASE_190 { char data[0x190]; };
 struct PATH : BASE_E0, SAMPLER {};
 struct SPLINE : BASE_190, SAMPLER {};
-struct LM { float low, high; };
 struct SMP { float a, b, c; };
 struct VU_FLOAT { qword q; };
 
@@ -159,7 +159,7 @@ static inline float GNormalize(U &v, const qword &vDefault)
         v.q = QwDivQ(v.q, l);
     return GFromQw(l);
 }
-static inline float GLerp(const LM &lm, float u) { return (1.0f - u) * lm.low + u * lm.high; }
+static inline float GLerp(const LM &lm, float u) { return (1.0f - u) * lm.gMin + u * lm.gMax; }
 static inline float GClamp(float g, float lo, float hi) { if (g < lo) return lo; if (hi < g) return hi; return g; }
 static inline int FMoving(qword v) { return D_002BF848 < GLengthXY(v); }
 

@@ -1,7 +1,7 @@
+#include "util.h"
 
 static __inline__ float sqrtf(float g) { float r; __asm__ __volatile__("sqrt.s %0, %1" : "=&f"(r) : "f"(g)); return r; }
 
-typedef struct LM { float gMin, gMax; } LM;
 
 typedef struct JOY {
     char pad0[0x1000];

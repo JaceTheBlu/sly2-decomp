@@ -1,4 +1,4 @@
-typedef struct LM { float gMin; float gMax; } LM;
+#include "util.h"
 struct S { char pad[0x234]; LM lm; int i23C; float ag[16]; int c280; };
 float GLimitLm__FP2LMf(LM *plm, float g);
 static inline int Max(int a, int b) { return a < b ? b : a; }

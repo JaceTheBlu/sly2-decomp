@@ -1,3 +1,4 @@
+#include "util.h"
 // func_001D6B00: launch an object (pso) from a launcher (plaunch). The launch point is the target point in
 // the source's frame, optionally advanced by a predicted time (clqPredict over the distance, clamped to lmPredict), then
 // moved by clqOffset(distance) along the direction to it. Depending on the object's class it gets a speed vector (0x52),
@@ -20,7 +21,6 @@ union MATRIX4 { qword r[4]; float m[4][4]; };
 struct MATRIX3 { qword r[3]; };
 struct XF { MATRIX4 mat; MATRIX4 matWorld; };
 struct CLQ { float g0, g1, g2, gUnused; };
-struct LM { float gMin, gMax; };
 struct VECTOR4 { qword q; VECTOR4(const qword &v) { q = v; } VECTOR4(const VECTOR4 &v) { q = v.q; } };
 struct SO;
 struct BASIC {

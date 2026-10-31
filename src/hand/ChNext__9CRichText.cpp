@@ -1,6 +1,6 @@
+#include "util.h"
 // MATCH from v2 (1 diff): ONE register pin, `one` in $19 for the three m_fDirty = 1 stores. Without it,
 // the null-font branch's m_fDirty = 1 is CSE'd into fDone's s1 (target keeps the hoisted const-1 in s3).
-struct RGBA { unsigned char r, g, b, a; };
 class CFont {
 public:
     int pad0[3];
@@ -60,9 +60,9 @@ unsigned char CRichText::ChNext()
                     n = n * 16 + d;
                 }
                 if (pchT - m_pchCur >= 7) {
-                    m_rgbaSet.r = (((n >> 16) & 0xFF) + 1) >> 1;
-                    m_rgbaSet.g = (((n & 0xFF00) >> 8) + 1) >> 1;
-                    m_rgbaSet.b = ((n & 0xFF) + 1) >> 1;
+                    m_rgbaSet.bRed = (((n >> 16) & 0xFF) + 1) >> 1;
+                    m_rgbaSet.bGreen = (((n & 0xFF00) >> 8) + 1) >> 1;
+                    m_rgbaSet.bBlue = ((n & 0xFF) + 1) >> 1;
                     m_rgbaCur = m_rgbaSet;
                     m_pchCur += 7;
                 } else {
@@ -92,7 +92,7 @@ unsigned char CRichText::ChNext()
                     m_font.m_rxScale *= r;
                     m_font.m_ryScale *= r;
                     RGBA rgba = m_rgbaFont;
-                    rgba.a = m_rgbaCur.a;
+                    rgba.bAlpha = m_rgbaCur.bAlpha;
                     m_rgbaCur = rgba;
                     m_fDirty = one;
                 } else {

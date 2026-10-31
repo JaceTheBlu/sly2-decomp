@@ -1,5 +1,5 @@
+#include "util.h"
 typedef int qword __attribute__((mode(TI)));
-struct RGBA { unsigned char r, g, b, a; };
 struct GS { int a[12]; };
 struct PROG { int cRetry; int nRemain; int nTarget; int nMax; char pad[0x50 - 0x10]; int x50; struct RGBA c54, c58, c5C, c60; };
 void __4GIFS(struct GS *p);

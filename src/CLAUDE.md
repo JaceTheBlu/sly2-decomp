@@ -27,3 +27,15 @@ inside `extern "C" { … }` so the symbol is the plain name.
   units is phase 5; do not start it ad hoc.
 - Shared types go in `include/` (one header per class/subsystem). Never edit a shared header without running
   `objcheck.py check --all`: every includer may change.
+
+## Shared types (phase 2)
+
+- Headers in `include/`: `clock.h` (CLOCK, g_clock), `dl.h` (DL, DLE, DLI), `util.h` (LM, RGBA), plus the older
+  `bis.h`, `vec.h`, `mat.h`, `dmas.h`, `gifs.h`, `vifs.h`, `heap.h`, `qw.h`.
+- Field names: when Sly 1 names a field (`sly1/include/*.h`), use its name (DL `head`/`tail`, DLI `m_pdl`…, RGBA
+  `bRed`…), so the two projects can be read side by side; otherwise use the name that explains the code that
+  reads or writes the field, with the offset in a comment.
+- Headers must compile as C and C++: `struct X {…};` plus `typedef struct X X;` under `#ifndef __cplusplus`;
+  globals without `extern "C"` (g++ 2.95 does not mangle variables).
+- Migrate users with `tools/migrate_struct.py STRUCT HEADER`, then `tools/objcheck.py check`; revert
+  (`git checkout`) every file that fails to build or changes code, and fix those by hand later.

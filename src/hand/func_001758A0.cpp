@@ -1,3 +1,4 @@
+#include "util.h"
 #include "clock.h"
 // func_001758A0: pick the first enabled response ENTRY of p that accepts target (range, height, angle, optional
 // line of sight), ask p's HandleSpliceEvent(0x18) about it with a CRef(true), then run the response.
@@ -10,7 +11,6 @@ struct M4 { U row[4]; };
 struct VTE { short delta, pad; void *fn; };
 struct NAME { unsigned identity; };
 struct SCALE { char pad[0x20]; float value; };
-struct LM { float low, high; };
 struct ENTRY {
     char pad0[0x50];
     LM distance, height;
@@ -185,7 +185,7 @@ extern "C" ENTRY *func_001758A0(P *p, P *target, void *gate)
         }
         gain = D_002BE600.a + distance * (D_002BE600.b + distance * D_002BE600.c);
         {
-            float lo = D_002BBB60.low, hi = D_002BBB60.high;
+            float lo = D_002BBB60.gMin, hi = D_002BBB60.gMax;
             if (gain < lo)
                 gain = lo;
             else if (hi < gain)

@@ -1,6 +1,6 @@
+#include "util.h"
 typedef unsigned char uchar;
 struct JOY { char pad[0x1018]; float g1018; };
-struct LM { float gMin; float gMax; };
 struct VEC2 { float x; float y; };
 extern VEC2 D_002BE950[4];
 static inline float SqrtF(float g) { float r; __asm__ volatile("sqrt.s %0, %1" : "=&f"(r) : "f"(g)); return r; }

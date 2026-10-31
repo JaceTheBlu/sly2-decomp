@@ -1,5 +1,5 @@
+#include "util.h"
 typedef struct CRef { int m_tagk; union { int n; float g; void *pv; } u; } CRef;
-typedef struct LM { float gMin; float gMax; } LM;
 void Decref__4CRef(CRef *pref);
 void func_00129DA8(CRef *pref, CRef *prefSrc);
 static __inline__ float GLimit(float g, float gMin, float gMax)

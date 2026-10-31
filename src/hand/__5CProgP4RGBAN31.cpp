@@ -1,4 +1,4 @@
-struct RGBA { unsigned char r, g, b, a; };
+#include "util.h"
 class CProg {
 public:
     int m_cRetry; int m_nRemain; int m_nTarget; int m_nMax; char m_fActive; char pad[0x3f]; int m_n50;

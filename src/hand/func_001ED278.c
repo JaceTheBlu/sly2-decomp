@@ -1,4 +1,4 @@
-struct RGBA { unsigned char r, g, b, a; };
+#include "util.h"
 struct VECTOR { float x, y, z, w; } __attribute__((aligned(16)));
 extern int D_003E12C8;
 void func_0011DCD8(struct RGBA *prgba, struct VECTOR *pv);
@@ -12,6 +12,6 @@ void func_001ED278(struct RGBA *prgba)
         rgba = *prgba;
         func_0011DCD8(&rgba, &v);
         func_001ED2D8(&v);
-        func_0011DD30(&v, prgba->a, prgba);
+        func_0011DD30(&v, prgba->bAlpha, prgba);
     }
 }

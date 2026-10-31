@@ -1,3 +1,4 @@
+#include "util.h"
 #include "clock.h"
 // func_00142AF8: MATCH from fresh5 (aligned 18). Every matrix product is written with Lilly's
 // MATRIX3 operator* (the NRV helper from src/hand/func_0021CB18.cpp / func_001F4558.cpp: rows read into qword locals, each
@@ -5,7 +6,6 @@
 // The one remaining trick is fresh3's commented clobber of the dead a0 in the c4678 block.
 typedef int qword __attribute__((mode(TI)));
 struct M3 { qword r[3]; };
-struct LM { float gMin; float gMax; };
 struct R { char pad[0x40]; M3 m40; char pad1[0xA0 - 0x70]; void *pA0; };
 struct Q { char pad[8]; R *p8; };
 struct S {

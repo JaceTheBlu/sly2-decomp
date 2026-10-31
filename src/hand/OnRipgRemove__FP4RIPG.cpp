@@ -1,5 +1,4 @@
-struct DL { void *head; void *tail; int ibDle; };
-struct DLI { DL *m_pdl; void **m_ppv; int m_ibDle; DLI *m_pdliNext; };
+#include "dl.h"
 extern DLI *g_pdliFirst;
 struct RIP;
 struct RIPG { char pad[0x10]; int x10; char p1[0xEC - 0x14]; void *xEC; char p2[0x15C - 0xF0]; DL dl; };

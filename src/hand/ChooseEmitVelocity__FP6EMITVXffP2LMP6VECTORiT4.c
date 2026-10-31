@@ -1,8 +1,8 @@
+#include "util.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } U;
 typedef struct { qword r[3]; } M3;
 struct EMITVX { int c; float dTilt; float dPan; float tiltBase; float panBase; };
-struct LM { float gMin; float gMax; };
 extern qword D_002A2DA0;
 extern qword D_002A2DB0;
 float GRandInRange__Fff(float a, float b);

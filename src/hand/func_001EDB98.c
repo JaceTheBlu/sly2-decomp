@@ -1,4 +1,4 @@
-struct LM { float gMin; float gMax; };
+#include "util.h"
 struct SAA { char pad[0xC]; struct LM lm1; struct LM lm2; unsigned short c; };
 struct P { char pad[0x1C]; int cframe; char pad1[0x50 - 0x20]; struct LM lm1; struct LM lm2; float g60; float g64; float g68; float g6C; };
 void InitSaa__FP7SHUFFLEP4SAAF(struct P *p, struct SAA *psaa);

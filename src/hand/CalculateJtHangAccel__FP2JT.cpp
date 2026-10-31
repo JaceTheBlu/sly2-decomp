@@ -1,3 +1,4 @@
+#include "util.h"
 #include "clock.h"
 // CalculateJtHangAccel__FP2JT MATCH, from laneH15v4 + a "memory" clobber on the dt empty asm with base assigned after it (orders the point/spin loads after the dt spill store). laneH15v4: laneH14v1 + "0V" on the dt empty asm (input stays a MEM, reload lw goes straight into the output reg), allocation-only 2nd "j" on the radius scale, QwDivideBy(g first) for the final divide, and the 2nd clamp written out in the body (g=g0; g+=...; lo/hi locals; if/else-if in place): aligned 1.
 // CalculateJtHangAccel__FP2JT laneH14v1: laneH11v1 with `state.rotation=LoadRotateMatrix__FUx(...)` assigned directly (no M3 rotation local) and QwRotateVec(&state.rotation,...): the 11B570 return temp at 0x190 is then freed and reused by the later VU_FLOAT temps like the target (0x1C0 before). Still aligned 30 (those stores still differ in vf number: rotation rows vf9/8/7 vs target vf10/9/8).
@@ -16,7 +17,6 @@ struct LINK{int header;NODE*object;};
 struct DELTA{U first,second;};
 struct P{char pad0[0xC];VTE*vt;char pad10[0xD8];ACCEL*accel;char padEC[0x17D8];NODE*target;char pad18C8[8];int state;float stamp;char pad18D8[0x24];int reverse;LINK*other;char pad1904[0xC];DELTA response[2];};
 struct CLQ{float g0,g1,g2;};
-struct LM{float gMin,gMax;};
 struct SMPA{float a,b,duration,limit;};
 struct STATE{U direction,position,velocity;M3 rotation;};
 struct VU_FLOAT{qword qw;};

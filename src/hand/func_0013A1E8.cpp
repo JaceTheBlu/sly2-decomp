@@ -1,3 +1,4 @@
+#include "dl.h"
 // func_0013A1E8: light-list VU upload.
 // Collects the lights of p->xE0's list whose position (PosLoWorld 0x1A62E8 + PmatLoWorld 0x1A6318 rotating p->vF0)
 // passes the camera tests func_0014F850 / func_0014F898, as M4s in a stack array (or the single D_002A2D30 when the
@@ -23,7 +24,6 @@ struct VU_FLOAT {
        (sched1 then keeps the lw and the lui apart, and both get v0 like the target) */
     VU_FLOAT(const float *pf, CM *pcm) { __asm__("lw %0, %1" : "=r"(q) : "m"(*pf), "r"(pcm)); }
 };
-struct DL { void *head; void *tail; int ibDle; };
 struct LO;
 struct EX { int pad[2]; struct LO **pplo; };
 struct LO { char pad[0x10]; LO *x10; char pad14[0x38 - 0x14]; float g38; char pad3C[0xE4 - 0x3C]; EX *xE4; char padE8[0x11C - 0xE8]; LO *x11C; char pad120[8]; LO *x128; };

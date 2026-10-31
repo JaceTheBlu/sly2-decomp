@@ -1,5 +1,5 @@
+#include "util.h"
 #include "clock.h"
-struct LM { float lo; float hi; };
 struct S {
     char pad[0x1000]; int x1000; int x1004; int x1008; int a; int b; float t; int x1018; char p0[8];
     int x1024; int x1028; char p1[0x10]; float x103c; float x1040; float x1044; char p2[4]; int x104c;
@@ -36,10 +36,10 @@ void SetJoyJoys__FP3JOY4JOYS4JOYK(struct S *p, int a, int b)
         p->x10ac = 0.0f;
         p->x1024 = 0;
         for (i = 0; i < 4; i++) {
-            p->alm2[i].lo = -0.75f;
-            p->alm1[i].lo = -0.75f;
-            p->alm2[i].hi = 0.75f;
-            p->alm1[i].hi = 0.75f;
+            p->alm2[i].gMin = -0.75f;
+            p->alm1[i].gMin = -0.75f;
+            p->alm2[i].gMax = 0.75f;
+            p->alm1[i].gMax = 0.75f;
         }
     }
     p->a = a;

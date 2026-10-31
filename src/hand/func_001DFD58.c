@@ -1,4 +1,4 @@
-typedef struct DL { void *pvFirst; void *pvLast; int ibDle; } DL;
+#include "dl.h"
 typedef struct OBJ OBJ;
 typedef struct VT { struct { short d; short pad; void (*pfn)(void *, int, int, int, int, int); } a[8]; } VT;
 struct OBJ {

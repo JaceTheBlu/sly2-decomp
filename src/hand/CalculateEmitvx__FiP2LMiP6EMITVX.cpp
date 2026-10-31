@@ -1,4 +1,4 @@
-struct LM { float gMin; float gMax; };
+#include "util.h"
 struct EMITVX { int c; float dg; float drad; float g; float rad; };
 float RadNormalize(float rad) asm("RadNormalize__Ff");
 float GRandInRange(float gMin, float gMax) asm("GRandInRange__Fff");

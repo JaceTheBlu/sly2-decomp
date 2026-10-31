@@ -1,4 +1,4 @@
-typedef struct DLI { void *m_pdl; void **m_ppv; int m_ibDle; struct DLI *m_pdliNext; } DLI;
+#include "dl.h"
 struct X { int a; int x4; void (*pfn)(void *); void *pv; int x10; int x14; };
 struct H { struct X *pxFirst; struct X *pxLast; int ibDle; float gC; };
 extern DLI *g_psliFirst;

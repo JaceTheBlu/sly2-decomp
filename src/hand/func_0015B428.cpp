@@ -1,3 +1,4 @@
+#include "util.h"
 // MATCH, from fresh3 (56). Fixes: (1) for-increment written `k++, i++` (loop.c prepends each biv to loop_iv_list, so the LAST-incremented biv's giv inits are emitted first in the preheader; the target computes i*16 before k*16/k*4, which clobbers v1 and stops reload inheriting k from the k<c test); (2) Dot's d output `=j` (not earlyclobber) so it shares a's vf2.
 // DRAFT: fresh rewrite, aligned 49 (old 80). Outer while(k<c && (pblk || (pblk=alloc))) gives the target loop shape; GRand(&p->lm) inline gives the hoisted plm slot; unsigned n0 &= ~1u gives lui/ori. Left: giv bases (target base = &apd[i] for a-side, separate &afr[1].apos[i] giv for the copy).
 typedef int qword __attribute__((mode(TI)));
@@ -16,7 +17,6 @@ struct PRG {
     char pad1A4[0x3B0 - 0x1A4]; int c3B0; char pad3B4[0x434 - 0x3B4]; int f434; int pad438; int k43C; int pad440;
     int c444; BLK *pblkFirst;
 };
-struct LM { float gMin, gMax; };
 struct EMITTER { char pad[0xC8]; int fC8; char padCC[0xF0 - 0xCC]; int kF0; int fF4; LM lm; };
 struct EMITX { PRG **ppprg; void *ppripg; EMITTER *pemitter; };
 struct CM { char pad[0x70]; qword dir; };
