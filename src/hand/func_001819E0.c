@@ -6,7 +6,7 @@ struct S { char pad[0x1C8]; int c; struct E ae[4]; struct Q *pqFirst; };
 void func_0017F6B0(struct S *p);
 void ClearDle__FP3DLE(struct DLE *pdle);
 void func_0011A220(void *pdl, void *pv);
-void func_0011A200(void *pdl);
+void ClearDl__FP2DL(void *pdl);
 void func_00181A90(struct S *p, struct E *pe);
 void func_001819E0(struct S *p)
 {
@@ -20,7 +20,7 @@ void func_001819E0(struct S *p)
         func_0011A220(q->pr->dl, q);
         q = qNext;
     }
-    func_0011A200(&p->pqFirst);
+    ClearDl__FP2DL(&p->pqFirst);
     for (i = 0; i < p->c; i++) {
         struct E *pe = &p->ae[i];
         pe->d = pe->b;

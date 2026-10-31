@@ -22,12 +22,12 @@ void *PvAllocStackImpl__FP7SWALLOC(MSG *pmsg);
 void *func_002333B4(void *pv, int b, unsigned int cb);
 qword func_001A62E8(void *pv);
 NAV *func_001C0D70(qword pos, int f);
-void func_0011A200(DL *pdl);
+void ClearDl__FP2DL(DL *pdl);
 void InitDl__FP2DLi(DL *pdl, int ibDle);
 void func_0011A220(DL *pdl, void *pv);
 void func_0011A2E8(DL *pdl, void *pv);
 void func_0011A280(DL *pdl, void *pvNext, void *pv);
-int func_0011A3B0(DL *pdl);
+int FIsDlEmpty__FP2DL(DL *pdl);
 int func_001C26E0(GRAPH *pgraph, EDGE *pedge, void *pvActor);
 int func_001C0920(NAV *pnav, qword pos, int f);
 }
@@ -73,9 +73,9 @@ extern "C" int func_001C21D8(GRAPH *pgraph, void *pvActor, qword posGoal, int fE
     }
     DL dlOpen;
     DL dlClosed;
-    func_0011A200(&dlOpen);
+    ClearDl__FP2DL(&dlOpen);
     InitDl__FP2DLi(&dlOpen, 0x18);
-    func_0011A200(&dlClosed);
+    ClearDl__FP2DL(&dlClosed);
     InitDl__FP2DLi(&dlClosed, 0x18);
     EMPTY e;
     NODE *pnode = &anode[pnavStart->index];
@@ -85,7 +85,7 @@ extern "C" int func_001C21D8(GRAPH *pgraph, void *pvActor, qword posGoal, int fE
 
     pnode->state = 2;
     AppendNode(&dlOpen, pnode);
-    while (!func_0011A3B0(&dlOpen)) {
+    while (!FIsDlEmpty__FP2DL(&dlOpen)) {
         pnode = (NODE *)dlOpen.pvFirst;
         if (fExact) {
             if (pnode->pnav == pnavGoal)
@@ -142,7 +142,7 @@ extern "C" int func_001C21D8(GRAPH *pgraph, void *pvActor, qword posGoal, int fE
         }
     }
     int c = 0;
-    if (!func_0011A3B0(&dlOpen)) {
+    if (!FIsDlEmpty__FP2DL(&dlOpen)) {
         if (!fExact && !pnode->pnodeParent) {
             apedge[0] = 0;
             c = 1;

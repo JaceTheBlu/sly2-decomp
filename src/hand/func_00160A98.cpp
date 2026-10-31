@@ -22,7 +22,7 @@ extern DL D_002DEB00;
 extern int D_002DEB18;
 void FinalizeFrameVifs(VIFS *pvifs, int *pcqw, QW **paqw);
 void FinalizeFrameGifs(GIFS *pgifs, int *pcqw, QW **paqw);
-extern "C" void func_0011A200(DL *pdl);
+extern "C" void ClearDl__FP2DL(DL *pdl);
 extern "C" void func_00234A40(int sid);
 extern "C" void func_00160A98()
 {
@@ -30,9 +30,9 @@ extern "C" void func_00160A98()
     FinalizeFrameGifs(&D_002DEA00, &g_pfrmOpen->cqwGifs, &g_pfrmOpen->aqwGifs);
     g_pfrmOpen->cqw20 = g_pfrmOpen->aqwVifs + g_pfrmOpen->cqwVifs - g_pfrmOpen->aqw24;
     g_pfrmOpen->dl34 = D_002DEAF0;
-    func_0011A200(&D_002DEAF0);
+    ClearDl__FP2DL(&D_002DEAF0);
     g_pfrmOpen->dl40 = D_002DEB00;
-    func_0011A200(&D_002DEB00);
+    ClearDl__FP2DL(&D_002DEB00);
     g_pfrmOpen = 0;
     func_00234A40(D_002DEB18);
 }

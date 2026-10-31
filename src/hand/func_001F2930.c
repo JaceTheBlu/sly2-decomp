@@ -9,7 +9,7 @@ struct G;
 extern struct G g_sw;
 int func_0011A380(void *, void *);
 void func_0011A2E8(void *, void *);
-int func_0011A3B0(void *);
+int FIsDlEmpty__FP2DL(void *);
 void func_001A00D0(struct G *, int, struct E *);
 void func_001F4E28(struct P *);
 void func_001337D0(struct G *, struct Q *);
@@ -22,7 +22,7 @@ void func_001F2930(struct P *p, struct E *pe)
     func_0011A2E8(p->pq->dl, pe);
     if (pe->fl & (1L << 51)) func_001A00D0(&g_sw, 0, pe);
     func_001F4E28(p);
-    if (func_0011A3B0(p->pq->dl)) {
+    if (FIsDlEmpty__FP2DL(p->pq->dl)) {
         struct Q *pq = p->pq;
         ((struct Q2 *)pq->p60)->pq = 0;
         p->pq = 0;

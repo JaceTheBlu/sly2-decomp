@@ -38,7 +38,7 @@ void *PvAllocStackImpl__FP7SWALLOC(const REQ *);
 int PruneBsp__FP3BSPT0fUxPiPP3BSP(void *, int, qword, float, int *, ENTRY **);
 int func_0014C6D8(SHAPE *, ENTRY *, qword, qword, int, XP *);
 int FIsBasicDerivedFrom__FP5BASIC3CID(void *, int);
-int func_0011A3B0(DL *);
+int FIsDlEmpty__FP2DL(DL *);
 void func_001CE2E8(P *);
 }
 /* the scratch request and the rip iterator share one stack slot */
@@ -97,6 +97,6 @@ void func_001CE2E8(P *p)
             }
             g_pdliFirst = shapes.outer;
         }
-        if (func_0011A3B0(&p->rips)) p->vt[9].fn((char *)p + p->vt[9].delta);
+        if (FIsDlEmpty__FP2DL(&p->rips)) p->vt[9].fn((char *)p + p->vt[9].delta);
     }
 }

@@ -10,7 +10,7 @@ void func_001FB2F8(void *p, int n);
 void func_00258040(void **pp, void *p);
 void func_001FB018(void *p);
 void DecomposeRotateMatrixPanTilt__FP7MATRIX3PfT1(void *pmat, float *pa, float *pb);
-void func_0014F610(struct G *pg, float g);
+void SetCmNearClip__FP2CMf(struct G *pg, float g);
 void Reset__6CPZOOM(struct A *a);
 void func_00150938(struct A *a, int n)
 {
@@ -32,7 +32,7 @@ void func_00150938(struct A *a, int n)
     a->nB0 = 0;
     a->gB8 = pg->g24 / a->gB4;
     a->gBC = pg->g24;
-    func_0014F610(pg, 49.0f);
+    SetCmNearClip__FP2CMf(pg, 49.0f);
     Reset__6CPZOOM(a);
     pg->c4A4++;
     D_003E1BE0 = D_002DDED0.t;

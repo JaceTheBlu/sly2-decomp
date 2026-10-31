@@ -22,7 +22,7 @@ int func_00117DB8(void *);
 int func_00117D00(void *);
 float func_00117E38(void *);
 void func_00117FD0(void *,GEO *);
-void func_00118220(void *,GEO *,TREE *);
+void ReadVbsp__18CBinaryInputStreamPiPP4VBSP(void *,GEO *,TREE *);
 void ReadMatrix__18CBinaryInputStreamP7MATRIX3(void *,STATE *);
 void func_00167320(DATA *,P *,void *);
 void *PvAllocSwClearImpl__FP7SWALLOC(MSG *);
@@ -63,7 +63,7 @@ extern "C" void func_001F31E0(P *p,void *stream)
         func_00117FD0(stream,local);
         if(!e->object){e->object=D_002C44F0;e->world=e->local;}
         else CloneGeom__FP4GEOMP7MATRIX4T0(local,0,&e->world);
-        func_00118220(stream,&e->world,&e->tree);
+        ReadVbsp__18CBinaryInputStreamPiPP4VBSP(stream,&e->world,&e->tree);
         e->id=func_00117C80(stream);
         e->flags.fields.state=func_00117D50(stream);
         e->pinned=func_00117D50(stream);

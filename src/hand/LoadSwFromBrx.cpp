@@ -51,7 +51,7 @@ void *PchzFidName(void *p);
 void __3OBJiPvi(void *p, int k, void *pv, int n);
 void func_00184950(void *p, int n);
 void func_0020F5D0(int n, BIS *pbis);
-void func_001FF858(void *psw, int n, BIS *pbis);
+void LoadSwSpliceFromBrx__FP2SWP18CBinaryInputStream(void *psw, int n, BIS *pbis);
 void func_001EB748(void *pa, void *pb, BIS *pbis);
 void func_001C0EC0(void *psw, BIS *pbis);
 struct LO;
@@ -163,7 +163,7 @@ extern "C" void LoadSwFromBrx(SW *psw, BIS *pbis)
         OBJ obj(0x403F, ab, 0);
         func_0020F5D0(1, pbis);
         D_003E1C34 = func_00117DB8(pbis);
-        func_001FF858(psw, pwe->x10, pbis);
+        LoadSwSpliceFromBrx__FP2SWP18CBinaryInputStream(psw, pwe->x10, pbis);
         func_001EB748(&zpr0, &zpr1, pbis);
         func_001C0EC0(psw, pbis);
         {

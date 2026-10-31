@@ -25,7 +25,7 @@ SP Set__3SPFP5FRAME(int);
 void func_00259A88(O *);
 CRef func_00127838(int, O *);
 }
-extern "C" CRef func_001FFA70(void *p, Q *pq, int i)
+extern "C" CRef RefEvalModule__FiP2SW(void *p, Q *pq, int i)
 {
     CRef r;
     if (pq->ae[i].a && !pq->ae[i].b) {

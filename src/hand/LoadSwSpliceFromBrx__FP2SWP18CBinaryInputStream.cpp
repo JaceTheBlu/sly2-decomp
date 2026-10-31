@@ -41,10 +41,10 @@ T *PvAllocSwClearImpl__FP7SWALLOC(SZ *);
 E *PvAllocSwImpl__Fi(SZ *);
 SP func_0012A3D8(void *);
 void func_00118420(void *);
-CRef func_001FFA70(void *, T *, int);
+CRef RefEvalModule__FiP2SW(void *, T *, int);
 void func_00128148(void *);
 }
-extern "C" void func_001FF858(G *pg, int a, void *px)
+extern "C" void LoadSwSpliceFromBrx__FP2SWP18CBinaryInputStream(G *pg, int a, void *px)
 {
     int c = func_00117C80(px);
     int i;
@@ -75,7 +75,7 @@ extern "C" void func_001FF858(G *pg, int a, void *px)
         }
     }
     for (i = 0; i < c; i++) {
-        func_001FFA70(pg, pt, i);
+        RefEvalModule__FiP2SW(pg, pt, i);
     }
     pg->pt = pt;
     pt->pNext = pg->ptFirst;

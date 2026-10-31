@@ -1,0 +1,6 @@
+# Sly 1 names that tools/sly1match.py proposed and a review rejected.  sly1match.py --apply skips them.
+# name  # reason
+_$_4CRef  # code sets a tag and returns the ref, not a destructor (SetBifk__4CRef4BIFK fits)
+SetCmPosMat__FP2CMP6VECTORP7MATRIX3  # code allocates from a pool and calls PdlFromSwOid
+PframeNew__Fv  # code initialises an object it is given, it does not create one
+main  # gcc compiles a function named main differently: func_001A7518 keeps its name

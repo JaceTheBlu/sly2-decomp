@@ -3,12 +3,12 @@ struct P { char pad[0x2C0]; qword pos; qword vel; qword pos2; qword vel2; };
 struct O { char pad[0x4F4]; int x4F4; };
 struct S { qword a; qword b; qword c[2]; qword d; };
 extern qword D_002A2DD0;
-qword func_0014E698(struct P *p, struct S *ps);
+qword CalcCmAdjust__FP2CMP2SOP6CPDEFIP6VECTOR(struct P *p, struct S *ps);
 int FIsBasicDerivedFrom__FP5BASIC3CID(struct O *po, int k);
 void SpringCm__FP2CMPUxP6VECTORUxff(struct P *p, qword *ppos, qword *pvel, qword target, float k1, float k2);
 void func_0014E768(struct P *p, struct O *po, struct S *ps)
 {
-    qword q = func_0014E698(p, ps);
+    qword q = CalcCmAdjust__FP2CMP2SOP6CPDEFIP6VECTOR(p, ps);
     if (FIsBasicDerivedFrom__FP5BASIC3CID(po, 0x34)) {
         switch (po->x4F4) {
         case 0:

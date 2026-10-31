@@ -15,7 +15,7 @@ void *func_002333B4(void *, int, int);
 void func_00227788(void *);
 void func_00259B48(void *, void *);
 void func_0011CDB8(void *);
-void func_0011A200(void *);
+void ClearDl__FP2DL(void *);
 void func_001FEDF0(struct P *);
 void func_001FD700(struct P *p)
 {
@@ -46,6 +46,6 @@ void func_001FD700(struct P *p)
     p->n68 = 3;
     func_0011CDB8(p->s1C);
     func_0011CDB8(p->s34);
-    func_0011A200(p->s4C);
+    ClearDl__FP2DL(p->s4C);
     func_001FEDF0(p);
 }

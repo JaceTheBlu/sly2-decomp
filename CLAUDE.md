@@ -66,7 +66,18 @@ Newest first. Each entry: what changed, how it was verified, the metrics after i
 - `docs/NAMING_REVIEW.md`: 280 matcher-chosen names for `func_` addresses, 40 names that contradict the existing
   name of their address, 10 names used for several addresses. To review by hand.
 
-Metrics: 538/6,136 game functions named (8.8%), 46 globals named, 2,374 `D_` left.
+- sly1match.py, second round: constants (lui/ori/li immediates) blended into the code similarity; a call in common
+  counts as evidence only when few Sly 1 functions call that name (Decref is called everywhere); a gap of several
+  functions needs evidence beyond order (functions swap places inside a file between the games). Self-test: no
+  mistake over 8 draws (~430 re-found pairs). `--apply` renames, skipping `config/sly1_rejects.txt` (reviewed
+  rejects, with reasons). 15 more names (SetCm*Clip/Fog, InitCoin, SetBifk__4CRef4BIFK…).
+- Vtables found: the class table at 0x2BAAE8 (199 records of 20 bytes: super, cid, end of subtree, object size,
+  factory function); each factory stores the class's vtable (8-byte entries `{short delta, pfn}`, vptr at +0xC).
+  Slot 6 returns the class record (used by `FIsBasicDerivedFrom`). Only 13 classes can be identified from methods
+  that already have names, and the executable has no class-name strings (no RTTI names, Splice names live in the
+  game data, not the ELF), so vtable naming is postponed until more methods are named.
+
+Metrics: 553/6,136 game functions named (9.0%), 46 globals named, 2,374 `D_` left.
 
 ### 2026-10-31 — Phase 1 started: Sly 1 names
 

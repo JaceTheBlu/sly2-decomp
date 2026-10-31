@@ -4,7 +4,7 @@ struct O { char pad[0x28]; long bits; };
 struct S { char pad[0xE4]; char aE4[0x18]; char aFC[0x10]; struct O *p10C; int c; void *a; void *cur; int x11C; char pad2[0x164 - 0x120]; int flags; };
 void func_00231768(struct S *p, void *pbis);
 void func_00117FD0(void *pbis, void *pv);
-void func_00118220(void *pbis, void *pv, void *pv2);
+void ReadVbsp__18CBinaryInputStreamPiPP4VBSP(void *pbis, void *pv, void *pv2);
 MARK *func_001AE478(MARK *pm);
 void _$_18CBinaryInputStream(MARK *pm, int n);
 void *PvAllocStackImpl__FP7SWALLOC(MSG *pmsg);
@@ -21,7 +21,7 @@ void func_00220FD0(struct S *p, void *pbis)
     void *pv;
     func_00231768(p, pbis);
     func_00117FD0(pbis, p->aE4);
-    func_00118220(pbis, p->aE4, p->aFC);
+    ReadVbsp__18CBinaryInputStreamPiPP4VBSP(pbis, p->aE4, p->aFC);
     func_001AE478(&mark);
     {
         MSG *pm = &msg;

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Find the Sly 1 counterpart of Sly 2 functions, to borrow their names.  Writes config/sly1_matches.csv.
 
-  sly1match.py SLY1_DIR [--eval]
+  sly1match.py SLY1_DIR [--eval | --apply]
 
 SLY1_DIR is a checkout of https://github.com/TheOnlyZac/sly1.  Its names, file splits and C sources are used; no
 Sly 1 executable is needed.  The Sly 1 C sources are compiled once (with the Sly 1 compiler, ee-gcc 2.95.2-274,
@@ -27,6 +27,7 @@ from concurrent.futures import ThreadPoolExecutor
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 OBJ = os.path.join(ROOT, 'build', 'sly1_obj')
+CW = float(os.environ.get('SLY1_CW', 0.3))   # weight of constant agreement in the similarity
 CT, CM = float(os.environ.get('SLY1_CT', 0.8)), float(os.environ.get('SLY1_CM', 0.1))   # content: min similarity, min lead
 SLY1_CC = os.path.join(ROOT, 'tools', 'compilers', 'bundle', 'ee-gcc2.95.2-274')
 
@@ -48,6 +49,20 @@ def tok(w):
         return 'C%d.%d.%d' % (op, fmt, (w & 0x3f) if fmt >= 0x10 or op == 0x12 else 0)
     if op == 0x1c: return 'M%d.%d' % (w & 0x3f, (w >> 6) & 0x1f)
     return 'O%d' % {0x1F: 0x3F, 0x1E: 0x37}.get(op, op)
+
+
+def consts(ws, skip):
+    """Constants written in the code (lui/ori/andi/li/slti immediates, not the relocated ones): float literals
+    such as 0x3F80 (1.0f) or masks survive between the two games, unlike registers and struct offsets."""
+    c = collections.Counter()
+    for i, w in enumerate(ws):
+        if i in skip: continue
+        op, rs, imm = w >> 26, (w >> 21) & 31, w & 0xFFFF
+        if op == 0xF and imm: c['U%x' % imm] += 1
+        elif op in (0xC, 0xD) and imm > 1: c['O%x' % imm] += 1
+        elif op == 0x9 and rs == 0 and imm not in (0, 1, 0xFFFF): c['L%x' % imm] += 1
+        elif op in (0xA, 0xB) and imm > 1: c['S%x' % imm] += 1
+    return c
 
 
 def grams(t):
@@ -96,7 +111,8 @@ def load_sly1_objects():
             ws = struct.unpack_from('<%dI' % (s['size'] // 4), d, secs[s['shndx']]['off'] + s['value'])
             calls = [n for o, (t, n) in sorted(rel.get(s['shndx'], {}).items()) if t == 4 and s['value'] <= o < s['value'] + s['size']]
             g, n = grams([tok(w) for w in ws])
-            out[s['name']] = dict(grams=g, n=n, ocalls=calls)
+            skip = {(o - s['value']) // 4 for o in rel.get(s['shndx'], {}) if s['value'] <= o < s['value'] + s['size']}
+            out[s['name']] = dict(grams=g, n=n, ocalls=calls, consts=consts(ws, skip))
     return out
 
 
@@ -137,12 +153,14 @@ def load_sly1(d):
             calls = {c for c in re.findall(r'\b([A-Za-z_]\w*)\s*\(', t[i:j]) if c in known}
             if calls or j - i > 2: body.setdefault(name, set()).update(calls)
     objs = load_sly1_objects()
+    NCALLERS.clear()
     for f in out:
         f['calls'] = body.get(base_name(f['name']))   # None: no source to compare with
         o = objs.get(f['name'])
         if o:
-            f.update(grams=o['grams'], n=o['n'], ocalls=o['ocalls'])
+            f.update(grams=o['grams'], n=o['n'], ocalls=o['ocalls'], consts=o['consts'])
             f['calls'] = (f['calls'] or set()) | {base_name(c) for c in o['ocalls']}
+    for f in out: NCALLERS.update(f['calls'] or ())
     return out
 
 
@@ -165,7 +183,9 @@ def load_sly2():
         calls = [] if not fp else [int(t[1:], 16) for i, ty, t in fp[0][1] if ty == 4 and t.startswith('@')]
         f = dict(addr=a, name=r['Name'], names={r['Name']} | alias[a], size=s, calls=calls)
         if fp:
-            hx = fp[0][0]; f['grams'], f['n'] = grams([tok(int(hx[k:k + 8], 16)) for k in range(0, len(hx), 8)])
+            hx = fp[0][0]; ws = [int(hx[k:k + 8], 16) for k in range(0, len(hx), 8)]
+            f['grams'], f['n'] = grams([tok(w) for w in ws])
+            f['consts'] = consts(ws, {r[0] for r in fp[0][1]})
         out.append(f)
     out.sort(key=lambda f: f['addr'])
     return out
@@ -181,19 +201,33 @@ def size_score(s2, s1):
     return -2.0
 
 
-def call_score(f2, f1, names2):
-    """+ for each Sly 2 callee whose Sly 1 name is among f1's callees, - when f1's callees are known and none match."""
+NCALLERS = collections.Counter()   # Sly 1: how many functions call each name (filled by load_sly1)
+RARE = 8
+
+
+def call_score(f2, f1, names2, rare_only=False):
+    """+ for each Sly 2 callee whose Sly 1 name is among f1's callees (3 for a rarely called name, 1 for a common
+    one such as Decref), - when f1's callees are known and none match."""
     if f1['calls'] is None: return 0.0
     known = {base_name(names2[c]) for c in f2['calls'] if c in names2}
     if not known: return 0.0
-    hit = sum(1 for k in known if k in f1['calls'])
-    return 3.0 * hit if hit else -3.0
+    hits = [k for k in known if k in f1['calls']]
+    if not hits: return -3.0
+    sc = sum(3.0 if NCALLERS[k] <= RARE else 1.0 for k in hits)
+    if rare_only: sc = sum(3.0 for k in hits if NCALLERS[k] <= RARE)
+    return sc
 
 
 def similarity(f2, f1):
+    """Opcode-pattern similarity, blended with constant agreement when both functions have constants."""
     if 'grams' not in f1 or 'grams' not in f2: return None
     a, b = f1['grams'], f2['grams']
-    return sum((a & b).values()) / max(sum(a.values()), sum(b.values()), 1)
+    s = sum((a & b).values()) / max(sum(a.values()), sum(b.values()), 1)
+    c1, c2 = f1.get('consts'), f2.get('consts')
+    if CW and c1 and c2 and sum(c1.values()) + sum(c2.values()) >= 4:
+        cs = sum((c1 & c2).values()) / max(sum(c1.values()), sum(c2.values()))
+        s = (1 - CW) * s + CW * cs
+    return s
 
 
 def nw(xs, ys, pair, gap=-1.5):
@@ -304,7 +338,15 @@ class Matcher:
             exact = g1 == g2 and len(idx2) == len(idx1) == len(al) and all(a == b for a, b, _ in al)
             for a, b, p in al:
                 if p is None or p < (0 if exact else 1): continue
-                if not exact and not self.evidence(self.L2[idx2[a]], self.L1[idx1[b]], names2): continue
+                # functions can swap places inside a source file between the two games: reject a pair when another
+                # function of the same gap fits clearly better (either way round)
+                alt = max([pair(a, x) or -9 for x in range(len(idx1)) if x != b] +
+                          [pair(y, b) or -9 for y in range(len(idx2)) if y != a] + [-9])
+                if alt > p + 0.5: continue
+                ev = self.evidence(self.L2[idx2[a]], self.L1[idx1[b]], names2)
+                if not exact and not ev: continue
+                # an exact gap of several functions only fixes the order, which can change: want evidence too
+                if exact and len(idx2) > 1 and (p < 1 or not ev): continue
                 n += self.add(idx2[a], idx1[b], 'gap', round(min(0.95, (0.85 if exact else 0.55) + min(p, 5) / 50), 2))
         return n
 
@@ -317,7 +359,7 @@ class Matcher:
     def evidence(self, f2, f1, names2):
         """Something beyond size says these two are the same function."""
         s = similarity(f2, f1)
-        return (s is not None and s >= 0.6) or call_score(f2, f1, names2) > 0
+        return (s is not None and s >= 0.6) or call_score(f2, f1, names2, rare_only=True) > 0
 
     def extend(self):
         names2 = self.names2(); n = 0
@@ -340,6 +382,27 @@ class Matcher:
         return self.res
 
 
+def apply(L2, L1, res):
+    """Rename the func_ functions that got a Sly 1 partner (tools/rename.py), except: addresses that already have
+    another name in symbol_addrs.txt, names listed in config/sly1_rejects.txt, Sly 1 placeholder names."""
+    rej = {l.split('#')[0].split()[0] for l in open(os.path.join(ROOT, 'config', 'sly1_rejects.txt'))
+           if l.split('#')[0].strip()}
+    alias = collections.defaultdict(set)
+    for l in open(os.path.join(ROOT, 'config', 'symbol_addrs.txt')):
+        m = re.match(r'(\S+)\s*=\s*0x([0-9A-Fa-f]+);.*type:func', l)
+        if m: alias[int(m.group(2), 16)].add(m.group(1))
+    pairs = []
+    for i, (j, m, sc) in sorted(res.items()):
+        f, n = L2[i], L1[j]['name']
+        if not re.fullmatch(r'func_[0-9A-F]{8}', f['name']) or alias[f['addr']] - {f['name']}: continue
+        if n in rej or re.match(r'Unknown\d', n): continue
+        pairs.append((f['name'], n, m, sc))
+    mp = os.path.join(ROOT, 'build', 'sly1_names.map')
+    open(mp, 'w').write(''.join(f'{o} {n}  # {m} {sc}\n' for o, n, m, sc in pairs))
+    print(f'{len(pairs)} names to apply ({mp})')
+    if pairs: sys.exit(subprocess.run([sys.executable, os.path.join(ROOT, 'tools', 'rename.py'), '--map', mp]).returncode)
+
+
 def main():
     if len(sys.argv) < 2: print(__doc__); sys.exit(2)
     build_sly1_objects(sys.argv[1])
@@ -357,6 +420,8 @@ def main():
                                                            for (m, ok), n in sorted(stats.items())))
         return
     res = Matcher(L2, L1).run()
+    if '--apply' in sys.argv:
+        return apply(L2, L1, res)
     rows = [(f'0x{L2[i]["addr"]:06X}', L2[i]['name'], L1[j]['name'], f'0x{L1[j]["addr"]:06X}', m, s) for i, (j, m, s) in sorted(res.items())]
     with open(os.path.join(ROOT, 'config', 'sly1_matches.csv'), 'w', newline='') as fh:
         w = csv.writer(fh, lineterminator='\n'); w.writerow(['sly2_addr', 'sly2_name', 'name', 'sly1_addr', 'method', 'score']); w.writerows(rows)

@@ -10,7 +10,7 @@ int func_00117C20(CBinaryInputStream *pbis);
 void *PvAllocSwClearImpl__FP7SWALLOC(MSG *pmsg);
 extern char D_002BBAF0[];
 
-void func_00118220(CBinaryInputStream *pbis, OWNER *powner, TREE *ptree)
+void ReadVbsp__18CBinaryInputStreamPiPP4VBSP(CBinaryInputStream *pbis, OWNER *powner, TREE *ptree)
 {
     int i;
     MSG msg;

@@ -13,7 +13,7 @@ void Skip__18CBinaryInputStreami(void *pbis, int cb);
 int func_001C9940(int, int);
 int func_001C99D8(int, int, int *);
 int PloFindSwObject__FP2SWi3OIDP2LO(struct G *, int, int, int, int);
-int func_0015E958(struct G *, int, int, int, int);
+int PloFindSwNearest__FP2SW3OIDP2LO(struct G *, int, int, int, int);
 int func_0013FAD0(int c, short *a);
 int func_0015E988(int, int);
 struct LO *PloNew__F3CIDP2SO3OIDi(int cid, void *psw, int oid, int n);
@@ -71,7 +71,7 @@ void LoadSwObjectsFromBrx__FP2SOP18CBinaryInputStreamP14CLoadCollector(void *psw
                 }
                 obj.x4 = 1;
             } else {
-                if (func_0015E958(pg, 0x805, oid, 0, r)) {
+                if (PloFindSwNearest__FP2SW3OIDP2LO(pg, 0x805, oid, 0, r)) {
                     goto skip;
                 }
                 obj.x4 = 0;
