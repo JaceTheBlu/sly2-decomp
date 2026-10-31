@@ -1,10 +1,10 @@
+#include "clock.h"
 struct VTE { short d; short pad; void (*pfn)(); };
 struct O { char pad[0xC]; struct VTE *vt; char pad1[0x158 - 0x10]; int x158; char pad2[0x1A0 - 0x15C]; int x1A0; };
 struct Q { int x0; };
 struct P { char pad[0x150]; void *p150; char pad0[0x20C - 0x154]; float g20C; char padA[0x2C0 - 0x210]; char a2C0[0x1030 - 0x2C0]; void *p1030;
     char pad1[0x13D0 - 0x1034]; int x13D0; char pad2[0x16B0 - 0x13D4]; int x16B0; struct Q *pq; char pad3[0x186C - 0x16B8]; struct O *po; };
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 int func_00131968(void *pv);
 void func_00136040(struct P *p, int n);
 void func_00224258(struct O *po, int n);
@@ -34,7 +34,7 @@ void func_00136118(struct P *p)
             common:
                 func_00136298(p);
                 func_00195A00(p->a2C0, 0xB, 0, 0);
-            } else if (0.1f < D_002DDED0.t - p->g20C) {
+            } else if (0.1f < g_clock.t - p->g20C) {
                 func_00136040(p, 2);
             } else {
                 func_00136040(p, 1);

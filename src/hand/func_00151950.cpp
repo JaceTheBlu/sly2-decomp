@@ -1,8 +1,8 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct M3 { qword r[3]; };
 union M4 { struct { qword r[4]; } q; M3 m3; float af[4][4]; };
-struct CLOCK { float t; float dt; };
-extern "C" CLOCK D_002DDED0;
+extern "C" CLOCK g_clock;
 struct CM {
     char pad0[0x20]; float g20; float g24; char pad1[0x60 - 0x28];
     M3 mat; qword pos; char pad2[0x300 - 0xA0]; int n300;
@@ -70,7 +70,7 @@ void func_00151950(X *p)
         if (rad < 0.0001f) {
             mNew = m.m3;
         } else {
-            float g = GSmooth__FfffP3SMPPf(rad, 0.0f, D_002DDED0.dt, D_002BDAB0, 0);
+            float g = GSmooth__FfffP3SMPPf(rad, 0.0f, g_clock.dt, D_002BDAB0, 0);
             mNew = Mul(LoadRotateMatrixRad__FfUx(axis.q, g), m.m3);
         }
         qword d = Sub(g_cm.pos, m.q.r[3]);
@@ -79,7 +79,7 @@ void func_00151950(X *p)
         if (dist < 0.0001f)
             pos = m.q.r[3];
         else
-            pos = AddScaled(m.q.r[3], d, VU_FLOAT(GSmooth__FfffP3SMPPf(dist, 0.0f, D_002DDED0.dt, D_002BDAC0, 0) / dist));
+            pos = AddScaled(m.q.r[3], d, VU_FLOAT(GSmooth__FfffP3SMPPf(dist, 0.0f, g_clock.dt, D_002BDAC0, 0) / dist));
         __as__6VECTORG9VU_VECTOR(&m.q.r[3], pos);
         m.m3 = mNew;
         m.af[3][3] = 1.0f;

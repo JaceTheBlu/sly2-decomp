@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; int i[4]; } U;
 struct VE { short d; short pad; void *pfn; };
@@ -6,8 +7,7 @@ struct O { char pad[0xC]; struct VE *vt; char pad1[0xE8-0x10]; struct X *xE8; ch
 struct P { struct O *o; int state; };
 extern "C" qword D_002A2DD0;
 extern "C" float D_002BFA90[];
-struct CLOCK { float t,dt; };
-extern "C" struct CLOCK D_002DDED0;
+extern "C" struct CLOCK g_clock;
 
 extern "C" void func_001F5E10(struct O *p,qword a,int n,qword b,float *c);
 static inline qword Broadcast(float g) { qword q; __asm__("qmtc2.ni %1,%0" : "=j"(q) : "r"(g));return q; }
@@ -34,7 +34,7 @@ extern "C" void func_001A1148(struct P *p)
   func_001F5E10(p->o,D_002A2DD0,0,v.q,D_002BFA90);
   if(p->o->f198!=zero) {
    u.f[2]=zero;u.f[1]=zero;u.f[0]=zero;
-   u.f[2]=(-p->o->f198-v.f[2])/D_002DDED0.dt;
+   u.f[2]=(-p->o->f198-v.f[2])/g_clock.dt;
    p->o->Set(u.q);
   }
   break;

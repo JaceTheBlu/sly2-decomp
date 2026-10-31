@@ -7,7 +7,7 @@ struct S {
 };
 struct VE { short d; short pad; float *(*pf)(void *); };
 struct VT { struct VE e[32]; };
-extern struct { float t; float dt; } D_002DDED0;
+extern struct { float t; float dt; } g_clock;
 extern float D_002C3C80[3];
 extern float D_002BBB60[2];
 void func_001F36E0(struct S *p);
@@ -43,5 +43,5 @@ void func_00203FC0(struct S *p)
         break;
     }
     if (p->n208)
-        p->t20C = D_002DDED0.t;
+        p->t20C = g_clock.t;
 }

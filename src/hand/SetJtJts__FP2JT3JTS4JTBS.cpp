@@ -1,6 +1,6 @@
 // SetJtJts__FP2JT3JTS4JTBS: ported from Lilly's personal Sly 2 decomp (src/P2/jtstate.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002BF358 (D_002BF358), D_002BF35C (D_002BF35C), D_002BF3E0 (D_002BF3E0), D_002BF3E4 (D_002BF3E4), D_002BF3E8 (D_002BF3E8), D_002DDED0 (g_clock), D_002DEB30 (g_game), D_002A2DD0 (g_qwZero), g_sw (g_sw)
+// Globals: D_002BF358 (D_002BF358), D_002BF35C (D_002BF35C), D_002BF3E0 (D_002BF3E0), D_002BF3E4 (D_002BF3E4), D_002BF3E8 (D_002BF3E8), g_clock (g_clock), D_002DEB30 (g_game), D_002A2DD0 (g_qwZero), g_sw (g_sw)
 // 0x0018C250 SetJtJts
 typedef unsigned char    uint8_t;
 typedef unsigned short   uint16_t;
@@ -310,7 +310,7 @@ struct CLOCK
       int cWrapAround;
       undefined4 unk_0x5c;
 };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 struct EDGE
 {
     ushort aipos[2];
@@ -1975,7 +1975,7 @@ void SetJtJts(JT *pjt, JTS jts, JTBS jtbs)
                 pjt->gUnk1998 = 1.0f;
                 ACT1 *pact1 = (ACT1 *)pjt->nUnk1a00;
                 svt = 0.0f;
-                pjt->janim.tHang = D_002DDED0.t;
+                pjt->janim.tHang = g_clock.t;
                 paseg = pjt->pasegHang;
                 ClearXyz((VECTOR *)&pact1->qwRest);
                 tStart = 0.5f;
@@ -2046,7 +2046,7 @@ void SetJtJts(JT *pjt, JTS jts, JTBS jtbs)
                 ClearXyz(&pjt->vUnk190);
                 ChooseJtSmashTarget(pjt);
                 paseg = pjt->pasegUnk1a80;
-                pjt->tUnk19b0 = D_002DDED0.t + D_002BF3E4;
+                pjt->tUnk19b0 = g_clock.t + D_002BF3E4;
                 break;
             case JTS_Unk0E:
                 SetJtAnimState(pjt, -1);
@@ -2245,12 +2245,12 @@ void SetJtJts(JT *pjt, JTS jts, JTBS jtbs)
     if (jts != pjt->jts)
     {
         pjt->jts = jts;
-        pjt->tUnk18cc = D_002DDED0.t;
+        pjt->tUnk18cc = g_clock.t;
     }
     if (jtbs != pjt->jtbs)
     {
         pjt->jtbs = jtbs;
-        pjt->tUnk18d4 = D_002DDED0.t;
+        pjt->tUnk18d4 = g_clock.t;
     }
     pjt->VUnk89();
     SetJtChannelMask(pjt, grf);

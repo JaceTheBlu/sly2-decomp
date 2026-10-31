@@ -1,5 +1,5 @@
 typedef struct CLOCK { float t; float dt; } CLOCK;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern float D_003E1BE0;
 struct G { char pad[0x24]; float g24; char pad2[0x60 - 0x28]; char mat[0x4A4 - 0x60]; int c4A4; };
 extern struct G g_cm;
@@ -35,5 +35,5 @@ void func_00150938(struct A *a, int n)
     SetCmNearClip__FP2CMf(pg, 49.0f);
     Reset__6CPZOOM(a);
     pg->c4A4++;
-    D_003E1BE0 = D_002DDED0.t;
+    D_003E1BE0 = g_clock.t;
 }

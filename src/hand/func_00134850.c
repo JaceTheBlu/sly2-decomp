@@ -1,3 +1,4 @@
+#include "clock.h"
 struct VTE { short d; short pad; void *pfn; };
 struct PO { char pad[0x1C]; float g1C; char pad1[0x30 - 0x20]; int x30; };
 struct P {
@@ -8,8 +9,7 @@ struct P {
     char a11B0[0x13D0 - 0x11B0]; int state; float t13D4; char pad6[0x16B4 - 0x13D8]; int x16B4;
     char pad7[0x1870 - 0x16B8]; int x1870;
 };
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002BC930;
 void func_00195A00(void *pv, int a, int b, int c);
 int func_00140AF8(struct P *p, int n);
@@ -52,14 +52,14 @@ void func_00134850(struct P *p)
         case 3:
             if (p->x4C8 == 1 || p->x4C8 == 12)
                 break;
-            if (0.1f < D_002DDED0.t - p->g20C)
+            if (0.1f < g_clock.t - p->g20C)
                 func_00195A00(p->a2C0, 0, 0, 0);
             break;
         case 5:
         case 7:
         case 12:
         default:
-            if (0.1f < D_002DDED0.t - p->g20C)
+            if (0.1f < g_clock.t - p->g20C)
                 func_00195A00(p->a2C0, 0, 0, 0);
             break;
         }
@@ -141,7 +141,7 @@ void func_00134850(struct P *p)
                 func_00135248(p, 0);
             break;
         case 14:
-            if (D_002BC930 < D_002DDED0.t - p->t13D4)
+            if (D_002BC930 < g_clock.t - p->t13D4)
                 func_00135248(p, 0);
             break;
         }

@@ -10,7 +10,7 @@ struct LM{float low,high;};
 struct WORK{U ahead,behind;LM limit;U point,world,target;};
 struct CLOCK{float t,dt;};
 extern "C"{
-extern CLOCK D_002DDED0;extern U g_normalZ;extern P*D_002E1E40;
+extern CLOCK g_clock;extern U g_normalZ;extern P*D_002E1E40;
 void func_001333C0(PATH*,P*);void func_00133448(PATH*,P*);
 void func_00204F78(P*,PATH*,int);
 float func_001E6728(PATH*,float);void func_001E6F10(PATH*,float,U*,U*);
@@ -120,7 +120,7 @@ extern "C" void func_0019EAB0(C*p,int next){
  }
  case 0:if(p->actor==D_002E1E40)func_0018E540(p->actor,p->actor->alternate?10:2);break;
  }
- p->state=next;p->time=D_002DDED0.t;
+ p->state=next;p->time=g_clock.t;
  ASEG*clip=0;float position=0.0f,speed=1.0f;int flags=1;
  switch(next){
  case -1:{

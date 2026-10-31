@@ -1,3 +1,4 @@
+#include "clock.h"
 struct LM { float lo; float hi; };
 struct S {
     char pad[0x1000]; int x1000; int x1004; int x1008; int a; int b; float t; int x1018; char p0[8];
@@ -6,8 +7,7 @@ struct S {
     struct LM alm2[4]; float x10a4; float x10a8; float x10ac; float x10b0; int x10b4; int x10b8;
     int x10bc; char x10c0[0xC]; char x10cc[4];
 };
-struct CLOCK { char pad[0x3C]; float g3c; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 void func_001D5150(void *p, int a, int b);
 void func_002333B4(void *pv, int b, int cb);
 void SetJoyJoys__FP3JOY4JOYS4JOYK(struct S *p, int a, int b)
@@ -44,5 +44,5 @@ void SetJoyJoys__FP3JOY4JOYS4JOYK(struct S *p, int a, int b)
     }
     p->a = a;
     p->b = b;
-    p->t = D_002DDED0.g3c;
+    p->t = g_clock.tFrame;
 }

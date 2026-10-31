@@ -16,7 +16,7 @@ struct FR {int n0;void *p4;char pad8[0x1C];void *packet;char pad28[8];int flags;
 extern VIFS D_002DEA28;
 extern GIFS D_002DEA00;
 extern FR *g_pfrmOpen;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern float *D_002DD314;
 extern int D_003D3A3C,D_003D3A40,D_003D3A44,D_002DEDBC,D_002DEB18;
 extern uint D_002BE538;
@@ -29,12 +29,12 @@ extern "C" int func_00234A90(int,SEMA *);
 extern "C" float func_00245000(float);
 extern "C" void func_001C93E0(GIFS *,M2 *,float);
 extern "C" void func_00160A98(void);
-extern "C" void func_0014D0B8(CLOCK *,int);
+extern "C" void MarkClockTick__FP5CLOCKi(CLOCK *,int);
 void OpenFrame(void);
 static inline void Clamp(float *value,const float *bounds){float low=bounds[0],high=bounds[1];if(*value<low)*value=low;else if(high<*value)*value=high;}
 static inline void BeginFrame()
 {
-    func_0014D0B8(&D_002DDED0,1);
+    MarkClockTick__FP5CLOCKi(&g_clock,1);
     OpenFrame();
     uchar *pb=D_002DEA28.m_pb;
     g_pfrmOpen->packet=pb;
@@ -53,7 +53,7 @@ extern "C" void func_001C9190(void *)
             BeginFrame();
             func_00234A90(D_003D3A40,&status);
             if(status.count!=0)break;
-            float t=-*D_002DD314+D_002DDED0.frameT;
+            float t=-*D_002DD314+g_clock.frameT;
             float scale=1.0f+D_002C10B0*func_00245000(t*D_002C10B4);
             matrix.Identity();
             matrix.a[0]=D_002C10A0*scale;

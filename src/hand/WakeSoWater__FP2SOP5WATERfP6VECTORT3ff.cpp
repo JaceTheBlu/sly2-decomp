@@ -1,3 +1,4 @@
+#include "clock.h"
 // WakeSoWater (0x15A2C0): wake sound, ripple and splash for an SO moving through WATER.
 // (Lilly's agent, T1683) MATCH, no register pins. Built from the lilly1/v3 drafts.
 //
@@ -60,10 +61,9 @@ struct WATER { char pad[0x18]; int x18; char pad1c[0x178 - 0x1C]; EX *px178; EX 
 struct RIP { char pad[0x1C]; EX *pex; float g20; float g24; char pad28[0xEC - 0x28]; EVTT *pvt; };
 struct E { int x0, x4; EX *p8; EX *pC; WATER *p10; };
 union V4 { qword q; float a[4]; };
-struct CLOCK { float t; };
 
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern int D_002BDEB0[];
 extern qword g_normalZ;
 extern char g_sw[];
@@ -141,9 +141,9 @@ void WakeSoWater(SO *p, WATER *pwater, qword pos, qword v, float dt, float gFrac
         if (!fWake) {
             u = 1.0f - t * (1.0f - gFrac);
             if (psnd) {
-                fWake = u < D_002DDED0.t - psnd->t;
+                fWake = u < g_clock.t - psnd->t;
             } else {
-                float tc = D_002DDED0.t;
+                float tc = g_clock.t;
                 int c0 = (int)(tc / u);
                 int c1 = (int)((tc + dt) / u);
                 fWake = c0 != c1;
@@ -158,7 +158,7 @@ void WakeSoWater(SO *p, WATER *pwater, qword pos, qword v, float dt, float gFrac
                 prip->g24 = gScale * 0.6f;
                 prip->pex = pwater->px17C;
                 if (psnd)
-                    psnd->t = D_002DDED0.t;
+                    psnd->t = g_clock.t;
                 if (500.0f < d && pwater->px178) {
                     EMITP emitp = { 1, 0, pwater->px178->id, pwater->px17C->id, pwater->x18, 0, {{ 8.0f, 12.0f, 1.0f }} };
                     EMITV emitv = { {{ d * 0.5f, d * 0.75f, 0.0f, 1.0f }}, p->pxE8->v, g_normalZ, 0, 0, 1.0f, 5.0f,

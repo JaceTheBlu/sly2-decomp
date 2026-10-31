@@ -1,3 +1,4 @@
+#include "clock.h"
 // Update zoom from target bounds or controller input.
 typedef int qword __attribute__((mode(TI)));
 union V {qword q;float f[4];};
@@ -9,7 +10,6 @@ struct SHAPE {char pad[0x30];float radius;};
 struct O {char pad[0x60];void *component;char pad64[0x88];SHAPE *shape;};
 struct CONTROL {char pad[0x24];float zoom;};
 struct S {char pad[0x150];CONTROL *control;char pad154[0x2C];O *target;int aim,follow;char pad18c[0x20];RANGE range;float blend,velocity,strength;};
-struct CLOCK {float t,dt;};
 extern "C" {
 qword func_001A62E8(void *);
 M3 *func_001A6318(void *);
@@ -17,7 +17,7 @@ void func_002309E8(void *,void *,M4 *,M4 *,float);
 float func_00244B68(float);
 float func_0011D948(void *,float);
 float func_0011D1C0(float,float,float,float,SMP *,float *);
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern float D_002DDF7C;
 extern char D_002BBB60[];
 extern float D_002C4418[2],D_002C4420[3];
@@ -53,7 +53,7 @@ extern "C" void func_00225E98(S *p){
         scratch.q=ToVF(func_001A62E8(p));
         float angle=func_00244B68(radius/(Length(Sub(scratch.q,func_001A62E8(p->target)))*0.5f));
         angle=angle+angle;
-        CLOCK *clock=&D_002DDED0;
+        CLOCK *clock=&g_clock;
         angle=Max(angle,p->range.lo);
         func_002309E8(p->target->component,0,&m,0,clock->dt);
         scratch.q=LoadVF(m.r[3]);future.q=scratch.q;
@@ -77,12 +77,12 @@ extern "C" void func_00225E98(S *p){
         spring=D_002A97B0;
         float rate=(1.0f-delta)*D_002C4418[0]+delta*D_002C4418[1];
         spring.d*=rate;spring.a*=rate;spring.b*=rate;
-        p->blend=func_0011D1C0(p->blend,p->velocity,target,D_002DDED0.dt,&spring,&p->velocity);
+        p->blend=func_0011D1C0(p->blend,p->velocity,target,g_clock.dt,&spring,&p->velocity);
     }else {
         if(p->control){
             float blend=p->blend,zoom=p->control->zoom;
             p->velocity=(D_002C4420[0]+blend*(D_002C4420[1]+blend*D_002C4420[2]))*zoom*Abs(zoom);
-            p->blend=func_0011D948(D_002BBB60,blend+p->velocity*D_002DDED0.dt);
+            p->blend=func_0011D948(D_002BBB60,blend+p->velocity*g_clock.dt);
         }
     }
     p->strength=Blend(&p->range,1.0f-p->blend);

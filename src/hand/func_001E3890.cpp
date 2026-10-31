@@ -1,6 +1,6 @@
 // func_001E3890: ported from Lilly's personal Sly 2 decomp (src/P2/jsg.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002BD850 (D_002BD850), D_002C3620 (D_002C3620), D_002C3624 (D_002C3624), D_002C3628 (D_002C3628), D_002C362C (D_002C362C), D_003DA530 (D_003DA530), D_002DDED0 (g_clock), g_cm (g_cm), D_002DFC00 (g_joy), g_sndmgr (g_sndmgr), D_004435F0 (g_subtitle), g_sw (g_sw)
+// Globals: D_002BD850 (D_002BD850), D_002C3620 (D_002C3620), D_002C3624 (D_002C3624), D_002C3628 (D_002C3628), D_002C362C (D_002C362C), D_003DA530 (D_003DA530), g_clock (g_clock), g_cm (g_cm), D_002DFC00 (g_joy), g_sndmgr (g_sndmgr), D_004435F0 (g_subtitle), g_sw (g_sw)
 // 0x001E3890 FIsJsgCommandComplete__FP3JSGP8RELAYCMD  (T1306, our name; MATCH)
 // Whether the command the script is on has finished, by kind; UpdateJsg asks it of the current command (a command that is fAsync is not asked) and
 // ReleaseJsgJtIfComplete of the one that took the character. A kind with nothing to wait for (and every kind past the table) is complete at once.
@@ -339,7 +339,7 @@ struct CLOCK
       int cWrapAround;
       undefined4 unk_0x5c;
 };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 struct SOPART;
 struct WRBG;
 struct SUBGLOBX
@@ -2858,9 +2858,9 @@ static inline float TJsgNow(JSG *pjsg)
 {
     if (GrfUpdateLo(pjsg->prelay) & 0x100)
     {
-        return D_002DDED0.tReal;
+        return g_clock.tReal;
     }
-    return D_002DDED0.t;
+    return g_clock.t;
 }
 int FIsJsgCommandComplete(JSG *pjsg, RELAYCMD *prelaycmd) __asm__("func_001E3890");
 int FIsJsgCommandComplete(JSG *pjsg, RELAYCMD *prelaycmd)
@@ -3180,7 +3180,7 @@ int FIsJsgCommandComplete(JSG *pjsg, RELAYCMD *prelaycmd)
         fComplete = prelaycmd->rumble.dtRumble < TJsgNow(pjsg) - pjsg->tCommand;
         break;
     case RELAYCK_CamBlendTo:
-        fComplete = pjsg->tBlendEnd <= D_002DDED0.t;
+        fComplete = pjsg->tBlendEnd <= g_clock.t;
         if (fComplete)
         {
             if (prelaycmd->camBlendTo.nUnk16 != 0)

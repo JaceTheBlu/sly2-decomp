@@ -27,7 +27,7 @@ extern M2C_UNK D_002C4420;
 extern M2C_UNK s_mpupkcb;
 extern M2C_UNK _vt$4VIFS;
 extern void **g_pdliFirst;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDED4;
 extern M2C_UNK g_cm;
 extern f32 D_002DDF7C;

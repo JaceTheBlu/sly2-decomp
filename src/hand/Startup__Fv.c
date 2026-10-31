@@ -1,14 +1,14 @@
 /* Run the 19 initialization stages with CProg color and remaining-count updates. */
 struct B { char data[0x70]; };
 struct C { int c; } __attribute__((aligned(16)));
-extern char D_002A6A58[], D_002C46D8[], D_002C46C0[], D_002DDED0[];
+extern char D_002A6A58[], D_002C46D8[], D_002C46C0[], g_clock[];
 extern void (*D_002BFCE0[])(void);
 void func_001700D0(void);
 struct B *__5CProgP4RGBAN31(struct B *b, struct C *c0, struct C *c1, struct C *c2, struct C *c3);
 int kprintf(char *format, ...);
 void func_001C2A78(int n);
 void Begin__5CProg(struct B *b);
-void func_0014D0B8(void *p, int n);
+void MarkClockTick__FP5CLOCKi(void *p, int n);
 void SetRemain__5CProgi(struct B *b, int n);
 void End__5CProg(struct B *b);
 void func_001C2BA8(int n);
@@ -34,7 +34,7 @@ void Startup__Fv(void)
     Begin__5CProg(&b);
     f = 0;
     for (i = 0; i < 19; i++) {
-        func_0014D0B8(D_002DDED0, 1);
+        MarkClockTick__FP5CLOCKi(g_clock, 1);
         if (f)
             SetRemain__5CProgi(&b, 19 - i);
         else if (D_002BFCE0[i] == func_001700D0)

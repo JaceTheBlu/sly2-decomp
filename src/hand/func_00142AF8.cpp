@@ -1,10 +1,10 @@
+#include "clock.h"
 // func_00142AF8: MATCH from fresh5 (aligned 18). Every matrix product is written with Lilly's
 // MATRIX3 operator* (the NRV helper from src/hand/func_0021CB18.cpp / func_001F4558.cpp: rows read into qword locals, each
 // result row stored through a VU_VECTOR4 copy), and the first func_0022FD38 call is a plain assignment (no dead-copy wrapper).
 // The one remaining trick is fresh3's commented clobber of the dead a0 in the c4678 block.
 typedef int qword __attribute__((mode(TI)));
 struct M3 { qword r[3]; };
-struct CLOCK { float t; float dt; };
 struct LM { float gMin; float gMax; };
 struct R { char pad[0x40]; M3 m40; char pad1[0xA0 - 0x70]; void *pA0; };
 struct Q { char pad[8]; R *p8; };
@@ -20,7 +20,7 @@ struct P {
 };
 struct GS { char pad[0x4678]; int c4678; char pad1[0x4690 - 0x467C]; S *ps4690; };
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern int D_002DD640;
 extern float D_002A4D68;
 extern qword D_002A2DA0;
@@ -83,7 +83,7 @@ void func_00142AF8(P *p)
         f = 1;
     if (p->nF04 != -1)
         f = 0;
-    if (p->g114C < D_002DDED0.t && (p->n1148 != 0 || f)) {
+    if (p->g114C < g_clock.t && (p->n1148 != 0 || f)) {
         p->n1148 = !p->n1148;
         func_00142880(p);
     }

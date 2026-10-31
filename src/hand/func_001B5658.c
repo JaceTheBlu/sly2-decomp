@@ -25,7 +25,7 @@ typedef struct P {
     R *x151C;
 } P;
 typedef struct { float t,dt; } CLOCK;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 typedef char R_x74_Offset[FIELD_OFFSET(R,x74)==116?1:-1];
 typedef char B_pr_Offset[FIELD_OFFSET(B,pr)==20?1:-1];
 typedef char B_x1C_Offset[FIELD_OFFSET(B,x1C)==28?1:-1];
@@ -70,7 +70,7 @@ void func_001B5658(P *p, int k)
         p->x1458 = k;
         break;
     }
-    __asm__("daddu %0,$%5,$zero\n\tdaddu %1,$%5,$zero\n\tlwc1 %2,%6\n\taddiu %3,$zero,%7\n\tmtc1 $%5,%4":"=&r"(pr),"=&r"(pv),"=f"(now),"=r"(n),"=f"(f):"J"(0),"m"(D_002DDED0.t),"I"(1));
+    __asm__("daddu %0,$%5,$zero\n\tdaddu %1,$%5,$zero\n\tlwc1 %2,%6\n\taddiu %3,$zero,%7\n\tmtc1 $%5,%4":"=&r"(pr),"=&r"(pv),"=f"(now),"=r"(n),"=f"(f):"J"(0),"m"(g_clock.t),"I"(1));
     p->x145C=now;
     if(k==n)goto state1;
     if(k<2){if(k==0)goto state0;goto done;}

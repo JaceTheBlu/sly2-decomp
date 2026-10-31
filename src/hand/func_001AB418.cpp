@@ -1,3 +1,4 @@
+#include "clock.h"
 struct CRef;
 extern "C" void func_00129EC8(CRef *);
 struct CRef {
@@ -14,11 +15,10 @@ struct MC {
     int xFD50; SLOT *pslotCur; int xFD58; THR *thr[1];
 };
 struct G { char pad[0x3B1C]; int x3B1C; };
-struct CLOCK { char pad[0x3C]; float t3c; };
 struct ST { char pad[0x44]; int x44; };
 extern "C" {
 extern G g_sw;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern ST D_002E6550;
 extern char D_002E65A0[];
 void func_001ACC38(ST *, int);
@@ -77,5 +77,5 @@ void func_001AB418(MC *p, int state)
         break;
     }
     p->state = state;
-    p->x10 = D_002DDED0.t3c;
+    p->x10 = g_clock.tFrame;
 }

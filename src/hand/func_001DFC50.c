@@ -1,6 +1,6 @@
 typedef struct DL { void *pvFirst; void *pvLast; int ibDle; } DL;
 typedef struct DLI { DL *pdl; void **ppv; int ibDle; struct DLI *pdliNext; } DLI;
-extern struct CLOCK { float a[20]; } D_002DDED0;
+extern struct CLOCK { float a[20]; } g_clock;
 extern DLI *g_pdliFirst;
 typedef struct {
     char pad[0x40];
@@ -41,9 +41,9 @@ void func_001DFC50(OBJ *p)
     if ((fl ^ 1) & 1)
         fl = *(unsigned int *)fl;
     if (fl & 0x100)
-        p->t += D_002DDED0.a[16];
+        p->t += g_clock.a[16];
     else
-        p->t += D_002DDED0.a[1];
+        p->t += g_clock.a[1];
     InitDli(&dli, &p->dl);
     while ((pv = PvNextDli(&dli)) != 0)
         func_001E1C40(pv);

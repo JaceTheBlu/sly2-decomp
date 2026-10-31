@@ -1,8 +1,8 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 static __inline__ float GetX(qword q) { float x; __asm__("mtc1 %1,%0" : "=f"(x) : "r"(q)); return x; }
 static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0,%1" : "=r"(y) : "r"(q)); return y; }
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern qword D_002A2DD0;
 extern float D_002C09F0;
 struct VT { short d; short pad; void *pfn; };
@@ -41,7 +41,7 @@ void func_001B86B0(struct P *p, int k)
     if (k == p->x1810)
         return;
     p->x1810 = k;
-    p->g1814 = D_002DDED0.t;
+    p->g1814 = g_clock.t;
     if (k == -1)
         return;
     p->x1820 = 0;
@@ -69,7 +69,7 @@ void func_001B86B0(struct P *p, int k)
             g = *pg;
     }
     if (g != 0.0f)
-        func_00131A90(p->panim, D_002DDED0.t + g / p->panim->g40);
+        func_00131A90(p->panim, g_clock.t + g / p->panim->g40);
     if (p->panim) {
         struct R *r = PchnFindAseg__FP4ASEGP3ALOii(p->panim->p14, p, 1, 1);
         if (r) {

@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct P8 { int a, b; };
 struct W { char pad[0x1000]; int x1000; };
@@ -8,8 +9,7 @@ struct S {
     char p2[0x80 - 0x3C]; int x80; struct O *x84; int x88; struct O *x8C; int x90;
     int x94; int x98; int x9C; int xA0; int xA4; float xA8;
 };
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern struct P8 D_002A77C8;
 extern char g_sw[];
 void func_0012E460(int *p);
@@ -29,7 +29,7 @@ void func_001CCAC0(struct S *p, int n)
         func_0012E460(&p->x9C);
     }
     p->xA4 = n;
-    p->xA8 = D_002DDED0.t;
+    p->xA8 = g_clock.t;
     switch (n) {
     case 0:
     case 1:

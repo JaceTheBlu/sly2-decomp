@@ -1,5 +1,5 @@
-struct CLOCK { float t; float dt; };
-extern CLOCK D_002DDED0 asm("D_002DDED0");
+#include "clock.h"
+extern CLOCK g_clock asm("g_clock");
 struct SAI { int a; };
 struct LOOP { char pad[0x1C]; int cframe; char pad1[0x34 - 0x20]; SAI sai; char pad2[0x50 - 0x38];
     float dtLoopMin; float dtLoopMax; float dtPauseMin; float dtPauseMax; float dframe; float iframe; float dtPause; float dtPauseRemaining; };
@@ -17,11 +17,11 @@ void UpdateLoop(LOOP *ploop, float dt)
 
     if (ploop->dtPauseRemaining > 0.0f)
     {
-        ploop->dtPauseRemaining -= D_002DDED0.dt;
+        ploop->dtPauseRemaining -= g_clock.dt;
         return;
     }
 
-    ploop->iframe += ploop->dframe * D_002DDED0.dt;
+    ploop->iframe += ploop->dframe * g_clock.dt;
 
     if (ploop->iframe >= (float)ploop->cframe)
     {

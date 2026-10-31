@@ -1,6 +1,6 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002BE7E8;
 extern char D_002BE7F0[];
 struct T { char pad[0x18]; float g18; float g1C; char pad2[8]; float g28; float g2C; };
@@ -60,7 +60,7 @@ void func_0017F930(struct S *p) {
     }
     if (p->p2A4) {
         float g = (p->n1C0 == 1) ? p->p150->g1C : 0.0f;
-        p->g2AC = GSmooth__FfffP3SMPPf(D_002BE7F0, 0, p->g2AC, g, D_002DDED0.dt);
+        p->g2AC = GSmooth__FfffP3SMPPf(D_002BE7F0, 0, p->g2AC, g, g_clock.dt);
         func_001FB1F8(p->p2A4, p->g2AC);
         if (0.0f < p->g2AC) {
             if (p->p2A4->s4E > 0) func_001FB060(p->p2A4);

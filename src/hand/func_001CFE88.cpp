@@ -10,7 +10,7 @@ struct S {
     char pad[0x14]; float start, duration; X *x; char pad20[0x40 - 0x20];
     M3 mat; qword pos, prev, vel, accel; char padB0[0xF0 - 0xB0]; qword axis; float angle;
 };
-extern struct CLOCK { float t, dt; } D_002DDED0;
+extern struct CLOCK { float t, dt; } g_clock;
 extern "C" {
 void func_002309E8(void *, int, M4 *, M4 *, float);
 void func_00117120(float, float, float, qword, qword, qword, qword, qword *, qword *, qword *);
@@ -40,7 +40,7 @@ static inline M3 Mul(const M3 &a, const M3 &b) return r {
 }
 void func_001CFE88(S *p)
 {
-    CLOCK *clock = &D_002DDED0;
+    CLOCK *clock = &g_clock;
     if (clock->t < p->start) return;
     M4 m;
     M3 spin;

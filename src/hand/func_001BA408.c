@@ -1,6 +1,6 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern int D_002E1E40;
 extern qword D_002A2DD0;
 struct VE { short d; short pad; void (*pfn)(); };
@@ -28,7 +28,7 @@ void func_001BA408(struct S *p, int st)
         func_00204D48(p, 1.0f);
     }
     p->x1018 = st;
-    p->f101C = D_002DDED0.t;
+    p->f101C = g_clock.t;
     if (st != 1) return;
     ApplyAseg__FP4ASEGP3ALOffiPP5ASEGA(p->x1020, p, 1, &p->x1024, 0.0f, 1.0f);
     VCALL0(p->x1024, 1);

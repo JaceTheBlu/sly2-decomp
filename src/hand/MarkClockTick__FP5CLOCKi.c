@@ -4,7 +4,7 @@ struct CLOCK {
     char pad2[0x3C - 0x28]; float t3C; float dt40; ulong tick;
 };
 extern char D_002DEB30[];
-ulong func_0014D240(struct CLOCK *p);
+ulong TickNow__FP5CLOCK(struct CLOCK *p);
 void func_00161478(void *p);
 static __inline__ float GClamp(float g, float gMin, float gMax)
 {
@@ -14,9 +14,9 @@ static __inline__ float GClamp(float g, float gMin, float gMax)
     else r = g;
     return r;
 }
-void func_0014D0B8(struct CLOCK *p, int fPaused)
+void MarkClockTick__FP5CLOCKi(struct CLOCK *p, int fPaused)
 {
-    ulong tick = func_0014D240(p);
+    ulong tick = TickNow__FP5CLOCK(p);
     float dt = GClamp((float)(tick - p->tick) * 3.3908420e-9f, 1.0f / 60.0f, 1.0f / 30.0f);
     p->dtReal = dt * p->rDtReal;
     p->tReal += p->dtReal;

@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_0021FB70 = UpdateJtThrowArc (Lilly's Sly2Port name, 0x21FB70): while the hero holds an object (JTTHROW, jts 23)
 // it predicts the arc the object would fly to the aim point. The launch point (vLaunchLocal in the hero's space) and the
 // carried object's gravity give CalculateLaunchVelocity (func_001D6848) a velocity whose elevation follows lmAim; the
@@ -43,9 +44,8 @@ struct JTTHROW {
 };
 // What the line test reports (the hit point first)
 struct HIT {V pos;char unk10[0x50];};
-struct CLOCK {float t,dt;};
 extern SW g_sw;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern CLQ D_002C40F0;                         // the launch elevation over the aim distance
 extern float D_002C40E4;                       // 1.35: tPredict scale with power-up 0x24
 extern float D_002C4100,D_002C4104;            // 3.0 / 2.0: flight time / blend rate limits per second
@@ -147,7 +147,7 @@ extern "C" void func_0021FB70(JTTHROW *pjtthrow,int fUpdateBlends)
   }
   posPrev=pos;
  }
- float dtMax=D_002C4100*D_002DDED0.dt;
+ float dtMax=D_002C4100*g_clock.dt;
  pjtthrow->tFlight=GClamp(t,pjtthrow->tFlight-dtMax,pjtthrow->tFlight+dtMax);
  t=pjtthrow->tFlight;
  i=0;
@@ -181,7 +181,7 @@ extern "C" void func_0021FB70(JTTHROW *pjtthrow,int fUpdateBlends)
     pmat->position.f[3]=1.0f;
     pframe->gValid=1.0f;
    }else pframe->gValid=0.0f;
-   pframe->t=D_002DDED0.t;
+   pframe->t=g_clock.t;
    pframe->s=0.0f;
    pframe->mat=mat;
   }
@@ -199,7 +199,7 @@ extern "C" void func_0021FB70(JTTHROW *pjtthrow,int fUpdateBlends)
   float uFarOld=pjtthrow->ablC[1].gWeight,uTurnOld;
   if(uFarOld>0.5f)uTurnOld=pjtthrow->ablB[3].gWeight/uFarOld;
   else uTurnOld=pjtthrow->ablB[1].gWeight/(1.0f-uFarOld);
-  float dtFrame=D_002DDED0.dt;
+  float dtFrame=g_clock.dt;
   float du=D_002C4104*dtFrame;
   uFar=GClamp(uFar,uFarOld-du,uFarOld+du);
   uTurn=GClamp(uTurn,uTurnOld-du,uTurnOld+du);

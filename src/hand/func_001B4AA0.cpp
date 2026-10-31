@@ -34,7 +34,7 @@ typedef char P_root_Offset[FIELD_OFFSET(P,root)==5100?1:-1];
 typedef char P_flag_Offset[FIELD_OFFSET(P,flag)==5196?1:-1];
 typedef char P_kind_Offset[FIELD_OFFSET(P,kind)==6208?1:-1];
 typedef char P_extra_Offset[FIELD_OFFSET(P,extra)==6416?1:-1];
-extern "C" CLOCK D_002DDED0;
+extern "C" CLOCK g_clock;
 extern "C" float D_002C08DC,D_002C08E0;
 extern "C" void func_00195A00(void*,int,void*,void*);
 extern "C" void func_0019CC50(void*,int,void*,void*);
@@ -73,7 +73,7 @@ extern "C" void func_001B4AA0(P*p){
   switch(state){
   case 2:case 3:case 4:case 6:case 7:case 8:case 14:case 15:case 16:case 17:case 18:case 20:break;
   default:
-   if(D_002DDED0.time-p->changed>0.1f){
+   if(g_clock.time-p->changed>0.1f){
     switch(p->state){
     case 5:func_00195A00(&p->control,16,0,0);break;
     case 12:if(p->kind==3)func_00195A00(&p->control,11,0,0);break;

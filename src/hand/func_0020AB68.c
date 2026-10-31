@@ -1,5 +1,5 @@
 typedef int qword __attribute__((mode(TI)));
-extern struct { float t; float dt; } D_002DDED0;
+extern struct { float t; float dt; } g_clock;
 extern float D_002A88C4;
 struct C { char pad[0xC]; int fl; };
 struct O { char pad[0x60]; float f60; float f64; char pad2[0xC0 - 0x68]; struct C *pc; };
@@ -13,7 +13,7 @@ void func_0020AB68(struct S *p, struct O *po, int n, qword v)
     if (p->po) {
         float t;
         func_00209360(p->po->pc);
-        t = D_002DDED0.t;
+        t = g_clock.t;
         t += GRandInRange__Fff(p->po->f60, p->po->f64);
         p->po = 0;
         p->t = t;

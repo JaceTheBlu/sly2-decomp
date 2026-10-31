@@ -1,8 +1,8 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef struct { qword r[3]; } M3;
 typedef union { struct { qword r[4]; } q; M3 m3; float af[4][4]; } M4;
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 struct CM;
 extern struct CM g_cm;
 extern float D_003E1BE0;
@@ -52,11 +52,11 @@ static __inline__ float GFrac(float g, float a, float b)
 void func_00150A28(struct X *p)
 {
     func_0014FD40(p);
-    if (D_002DDED0.dt == 0.0f)
+    if (g_clock.dt == 0.0f)
         return;
     if (0.0f <= p->g18) {
-        float g = GClamp(GSmooth__FfffP3SMPPf(D_002BD9B8, 0, p->gAC, p->g18, D_002DDED0.dt), 0.0f, 1.0f);
-        p->gB0 = (g - p->gAC) / D_002DDED0.dt;
+        float g = GClamp(GSmooth__FfffP3SMPPf(D_002BD9B8, 0, p->gAC, p->g18, g_clock.dt), 0.0f, 1.0f);
+        p->gB0 = (g - p->gAC) / g_clock.dt;
         p->gAC = g;
     }
     if (p->gB0 != 0.0f) {
@@ -74,14 +74,14 @@ void func_00150A28(struct X *p)
         M3 m0, m30, m60, m90;
         M4 m4;
         float u;
-        p->q50 = func_0011F088(p->q50, p->q80, D_002DDED0.dt, D_002BD9C8, 0);
+        p->q50 = func_0011F088(p->q50, p->q80, g_clock.dt, D_002BD9C8, 0);
         func_0011B628(&m90, p->q60);
         m0 = m90;
         func_0011B628(&m90, p->q90);
         m30 = m90;
-        func_0011C950(&m0, &m30, D_002BD9D8, &m60, 0, D_002DDED0.dt);
+        func_0011C950(&m0, &m30, D_002BD9D8, &m60, 0, g_clock.dt);
         p->q60 = DecomposeRotateMatrixEuler__FP7MATRIX3(&m60);
-        p->g70 = func_0011D2D0(D_002BD9E8, 0, p->g70, p->gA0, D_002DDED0.dt);
+        p->g70 = func_0011D2D0(D_002BD9E8, 0, p->g70, p->gA0, g_clock.dt);
         {
         M4 *pm4 = &m4;
         __as__6VECTORG9VU_VECTOR(&pm4->q.r[3], p->q50);
@@ -102,13 +102,13 @@ void func_00150A28(struct X *p)
         func_0014F5A0(&g_cm, (1.0f - u) * p->gB8 + u * p->gBC);
         {
             qword a = p->q30;
-            p->q30 = func_0011F088(a, func_001507F8(p), D_002DDED0.dt, D_002BD9F8, 0);
+            p->q30 = func_0011F088(a, func_001507F8(p), g_clock.dt, D_002BD9F8, 0);
         }
         {
             qword a = p->q20;
-            p->q20 = func_0011F088(a, func_00150780(p), D_002DDED0.dt, D_002BD9F8, 0);
+            p->q20 = func_0011F088(a, func_00150780(p), g_clock.dt, D_002BD9F8, 0);
         }
         func_0014E1A8(&g_cm, p->q30, p->q20, 0.0f, 0.0f);
     }
-    D_003E1BE0 = D_002DDED0.t;
+    D_003E1BE0 = g_clock.t;
 }

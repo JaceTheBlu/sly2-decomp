@@ -17,7 +17,7 @@ struct C{P*actor;int kind;char pad8[8];int*counter;char pad14[8];ACTION action;c
 struct CLOCK{float time,dt;};
 struct G{char pad[0x4038];int channel;};
 extern "C"{
- extern CLOCK D_002DDED0;
+ extern CLOCK g_clock;
  extern char D_002DE578[],D_002DEB30[];
  extern G g_sw;
  extern qword D_002A2DD0,D_002BFB10;
@@ -99,7 +99,7 @@ extern "C" int func_001A19A0(C*p,RECORD*input){
  else delta=func_00155228(D_002DE578,input->delta);
  if(input->flags==0x100000){
   if(Add32(*p->counter,delta)>0){
-   if(p->mode!=1){p->mode=0;p->time=p->changed=D_002DDED0.time;}
+   if(p->mode!=1){p->mode=0;p->time=p->changed=g_clock.time;}
    *p->counter=Add32(*p->counter,delta);
    if(p->effect)func_001305B8(p->effect,p->actor,0.0f,1.0f,1,&p->output);
    goto sound;
@@ -120,7 +120,7 @@ notify:
   func_001619A0(D_002DEB30,0xF,input->object);
   p->record=*input;p->record.delta=delta;func_001A15B0(p,0);
   int n=Add32(*p->counter,p->record.delta);*p->counter=n>=0?n:0;
-  if(*p->counter>0){p->mode=1;p->time=D_002DDED0.time;}
+  if(*p->counter>0){p->mode=1;p->time=g_clock.time;}
   switch(input->flags){
   case 0x100:case 0x200:{
    func_001A16C8(p);

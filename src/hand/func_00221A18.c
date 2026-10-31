@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct E { int x0; char pad[0x8C]; };
 struct T { char pad[0x10C]; void *x10C; int x110; struct E *ae; char pad1[0x12C - 0x118]; int x12C; char pad2[0x140 - 0x130];
@@ -9,8 +10,7 @@ struct G { char pad[0x24]; float g24; char pad1[0x4C - 0x28]; float g4C; char pa
 extern struct G g_cm;
 extern char D_002C4120[];
 extern float D_002C41DC;
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 void func_0014FCC8(struct S *p, void *pj, struct T *pt);
 int FIsBasicDerivedFrom__FP5BASIC3CID(void *pj, int k);
 int func_0015E988(int a, int b);
@@ -64,9 +64,9 @@ void func_00221A18(struct S *p, void *pj, struct T *pt)
     p->x34 = 0;
     if (p->pt && p->pt->x184)
         func_0014D8C0(&g_cm);
-    p->g80 = D_002DDED0.t;
-    p->g60 = D_002DDED0.t;
-    p->g48 = D_002DDED0.t - D_002C41DC;
+    p->g80 = g_clock.t;
+    p->g60 = g_clock.t;
+    p->g48 = g_clock.t - D_002C41DC;
     p->x3C = 0;
     if (p->pt && p->pt->g188 != 0.0f)
         g_cm.g24 = p->pt->g188;

@@ -50,7 +50,7 @@ typedef struct CLOCK {
 typedef struct G { char pad[0x30C]; int x30c; int x310; void *x314; char pad318[0x3A0 - 0x318]; int x3a0; } G;
 typedef struct SND { float t; } SND;
 
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern G g_cm;
 extern SND D_002DEB30;
 extern char D_002DDEC0[];
@@ -123,26 +123,26 @@ int func_00187998(JOY *p)
                 p->uDeflect = 1.0f;
             }
         }
-        p->dx = (p->x - x) / D_002DDED0.x40;
-        p->dy = (p->y - y) / D_002DDED0.x40;
-        p->dx2 = (p->x2 - x2) / D_002DDED0.x40;
-        p->dy2 = (p->y2 - y2) / D_002DDED0.x40;
+        p->dx = (p->x - x) / g_clock.x40;
+        p->dy = (p->y - y) / g_clock.x40;
+        p->dx2 = (p->x2 - x2) / g_clock.x40;
+        p->dy2 = (p->y2 - y2) / g_clock.x40;
         func_0014BF48(D_002DDEC0, p, old & 0xFFFF);
-        p->tRead = D_002DDED0.tReal;
+        p->tRead = g_clock.tReal;
         if (p->grfbtn != 0 || p->uDeflect != 0.0f || p->uDeflect2 != 0.0f) {
 
-            p->tActive = D_002DDED0.tReal;
+            p->tActive = g_clock.tReal;
             p->x1020 = 0;
 
-            if (D_002DDED0.tReal - D_002DEB30.t > 15.0f) {
+            if (g_clock.tReal - D_002DEB30.t > 15.0f) {
                 func_001619A0(&D_002DEB30, 0xE, func_001C4840(g_sw));
-                D_002DEB30.t = D_002DDED0.tReal;
+                D_002DEB30.t = g_clock.tReal;
             }
         } else {
-            p->x1020 = (int)(D_002DDED0.tReal - p->tActive);
+            p->x1020 = (int)(g_clock.tReal - p->tActive);
         }
     } else {
-        if (D_002DDED0.tReal - p->tRead >= 2.0f)
+        if (g_clock.tReal - p->tRead >= 2.0f)
             fRet = 0;
     }
     return fRet;

@@ -11,7 +11,7 @@ typedef struct S {
     union U lo; union U hi; union U center; float radius;
 } S;
 extern DLI *g_pdliFirst;
-extern struct { float t; } D_002DDED0;
+extern struct { float t; } g_clock;
 extern const float D_002A77D0, D_002A77D4;
 void func_001F4B58(S *);
 static inline void InitDli(DLI *pdli, DL *pdl)
@@ -49,7 +49,7 @@ void func_001CDF88(S *p)
     phi->f[1] = phi->f[2] = D_002A77D4;
     hi.f[0] = D_002A77D4;
     while ((q = (S *)PvNextDli(&dli)) != 0) {
-        if (D_002DDED0.t >= q->time)
+        if (g_clock.t >= q->time)
             q->vt->a[4].pfn((char *)q + q->vt->a[4].d);
         lo.q = Min(lo.q, Min(q->cornerA, q->cornerB));
         hi.q = Max(hi.q, Max(q->cornerA, q->cornerB));

@@ -1,8 +1,8 @@
+#include "clock.h"
 struct K { int a; int b; };
 extern const struct K D_002A4E80;
 extern char g_sw[];
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 struct PG { char pad[0x18C4]; int x18C4; int x18C8; };
 extern struct PG *D_002E1E40;
 struct E { int pad[2]; int x8; void *pxC; char pad2[0x30]; };
@@ -30,8 +30,8 @@ void func_00148C98(struct P *p)
     case 2: {
         struct PG *pg = D_002E1E40;
         if (pg && pg->x18C8 == 3 && pg->x18C4 == p->x2F4)
-            p->x1E4 = D_002DDED0.t;
-        if (0.0f <= p->x1E8 && p->x1E8 < D_002DDED0.t - p->x1E4)
+            p->x1E4 = g_clock.t;
+        if (0.0f <= p->x1E8 && p->x1E8 < g_clock.t - p->x1E4)
             func_001490A0(p, 4);
         break;
     }

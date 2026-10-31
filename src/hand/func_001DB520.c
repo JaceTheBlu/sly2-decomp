@@ -23,7 +23,7 @@ typedef struct OBJ {
     int n;
     E *ae;
 } OBJ;
-extern struct CLOCK { float a[16]; } D_002DDED0;
+extern struct CLOCK { float a[16]; } g_clock;
 extern char g_sw[];
 extern E D_002C2DE8[], D_002C3028[], D_002C3148[];
 extern float D_002A79CC;
@@ -41,13 +41,13 @@ void func_001DB520(OBJ *p, int s)
     if (s == p->x40)
         return;
     if (p->x40 == -1) {
-        SetClockRate__FP5CLOCK3CRKf(&D_002DDED0, 0.0f, 0);
+        SetClockRate__FP5CLOCK3CRKf(&g_clock, 0.0f, 0);
         func_0020EFC0(g_sw, 0);
         VCALL(p, 10);
     }
     func_001DB390(p, -1);
     p->x40 = s;
-    p->x44 = D_002DDED0.a[15];
+    p->x44 = g_clock.a[15];
     switch (s) {
     case -1: {
         int i;
@@ -57,7 +57,7 @@ void func_001DB520(OBJ *p, int s)
             p->ae[i].cur = -1;
         p->n = 0;
         p->ae = 0;
-        SetClockRate__FP5CLOCK3CRKf(&D_002DDED0, 1.0f, 0);
+        SetClockRate__FP5CLOCK3CRKf(&g_clock, 1.0f, 0);
         func_0020F030(g_sw, 0);
         VCALL(p, 11);
         func_001DA950(p, -1, -1);

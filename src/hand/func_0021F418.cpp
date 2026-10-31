@@ -1,3 +1,4 @@
+#include "clock.h"
 // Update the controller target and consume state/animation transitions.
 typedef int qword __attribute__((mode(TI)));
 union V {qword q;float f[4];};
@@ -13,11 +14,10 @@ struct CONTROL {char pad[0x18];float heading,speed;};
 struct O {char pad[0xC];VE *vt;int id;char pad14[0x13C];CONTROL *control;int field154,sentinel,actorId;char pad160[0x30];V target;char pad1A0[4];int movement;char pad1A8[0x38];V direction;char pad1F0[0xE40];ASEGA *animation;char pad1034[0x39C];int mode;};
 struct EFFECT {char pad[0xC];VE *vt;};
 struct S {O *owner;int state;float time;O *peer,*selected;float idleThreshold,activeThreshold;RANGE bounds;float radius,scale;char pad2C[0x14];float blend0;char pad44[8];float blend1;char pad50[8];ASEG *animation0,*animation1,*animation2,*animation3;char pad68[0x30];ASEG *animation4,*animation5,*animation6;char padA4[0x18];ASEG *animation7;V targetLocal,secondary,targetWorld,velocity,transitionBegin,transitionEnd;float transitionStart,transitionDuration;int transitioning;EFFECT *effect;float distance;};
-struct CLOCK {float t,dt;};
 union SCRATCH {V vector;RANGE range;};
 struct WORK {SCRATCH scratch;V delta;float angle,radius;V ownerPosition,speed,vector,playerPosition;};
 extern O *D_002DD5BC;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern float D_002C40E0;
 extern V g_normalZ,D_002A2DA0,D_002A2DD0;
 extern "C" {
@@ -144,7 +144,7 @@ extern "C" void func_0021F418(S *s){
  if(initialState<7){
  if(initialState>=4){
   if(s->transitioning){
-   float begin=s->transitionStart,end=begin+s->transitionDuration,time=D_002DDED0.t;
+   float begin=s->transitionStart,end=begin+s->transitionDuration,time=g_clock.t;
    if(end<=time){s->transitioning=0;s->targetWorld.q=s->transitionEnd.q;}
    else{
     qword toward;s->targetWorld.q=TransitionBlend(s->transitionBegin,s->transitionEnd,time-begin,end-begin,w.scratch.vector,toward);
@@ -154,7 +154,7 @@ extern "C" void func_0021F418(S *s){
   else{
    CopyRange(w.scratch.range,s->bounds);
    if(func_001DAEA8(0x24))w.scratch.range.hi*=D_002C40E0;
-   float dt=PlanarSnapshot(Sub(s->targetWorld.q,w.ownerPosition.q),w.delta,D_002DDED0.dt);
+   float dt=PlanarSnapshot(Sub(s->targetWorld.q,w.ownerPosition.q),w.delta,g_clock.dt);
    float elevation;
    float scale;qword delta;
    float speed;

@@ -8,7 +8,7 @@ struct STATE{int kind,pad4,pad8,padC;union{qword data[6];struct{P*object;float a
 struct C{char pad0[16];P*actor;int pad14;H*helper;char pad1C[0x30-0x1C];STATE state;float started,expires;};
 struct CLOCK{float time,dt;};
 extern "C"{
- extern CLOCK D_002DDED0;
+ extern CLOCK g_clock;
  extern char g_sw[];
  void func_001EEF98(C*);
  int func_001EF0A8(C*);
@@ -81,7 +81,7 @@ extern "C" void func_00177618(C*p){
     else{
      P*selected=func_0020A408(p->actor,0);
      if(selected){next.kind=2;next.payload.s.object=selected;}
-     else if(p->state.kind==17&&D_002DDED0.time<p->expires)next.kind=17;
+     else if(p->state.kind==17&&g_clock.time<p->expires)next.kind=17;
      else{if(func_00177D48(p))next.kind=16;else next.kind=1;}
     }
    }else next.kind=12;

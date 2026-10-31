@@ -1,10 +1,10 @@
+#include "clock.h"
 /* Matched by Claude agent (2026-10-17): compare against the parameters directly (no local E copy) and `for (i = 0, pe = p->ae; ...)`. */
 struct VTE { short d; short pad; void (*pfn)(void *, ...); };
 struct O { int pad[3]; struct VTE *vt; };
 struct E { int prio; struct O *po; int a; int b; };
 struct P { char pad[0x30C]; int c; struct E ae[8]; char pad2[0x390 - 0x390]; float t; };
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 void func_0014E4C8(struct P *p, int grf, int prio, struct O *po, int a, int b)
 {
     struct E *peOut;
@@ -43,7 +43,7 @@ void func_0014E4C8(struct P *p, int grf, int prio, struct O *po, int a, int b)
     if (p->c > 0) {
         struct O *o;
         struct VTE *v;
-        p->t = D_002DDED0.t;
+        p->t = g_clock.t;
         o = p->ae[0].po;
         v = &o->vt[2];
         ((void (*)(void *, int, int))v->pfn)((char *)o + v->d, p->ae[0].a, p->ae[0].b);

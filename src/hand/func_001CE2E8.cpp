@@ -1,3 +1,4 @@
+#include "clock.h"
 /* func_001CE2E8: for an active particle system (mode 1), walk the subject nodes and their shape lists; for
  * every usable shape query its tree for candidate entries (scratch-frame allocation), then let each live rip test its contacts against the
  * shape (vtable slot 8, stop at the first hit); finally notify the owner (vtable slot 9) if the rip list reports a change.
@@ -26,12 +27,11 @@ struct OBJ { char padEC[0xEC]; STATE *state; };
 struct NODE { int pad; NODE *next; char pad8[4]; OBJ *object; };
 struct PVE { short delta, pad; void (*fn)(void *); };
 struct P { char padC[0xC]; PVE *vt; char pad10[0xDC]; STATE *state; char padF0[0x60]; int mode; char pad154[8]; DL rips; };
-struct CLOCK { float t, dt; };
 struct REQ { int cb, align; };
 struct FRAME { int a[4]; };
 extern "C" {
 extern DLI *g_pdliFirst; /* innermost active list iterator */
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 FRAME *func_001AE478(FRAME *);
 void _$_18CBinaryInputStream(FRAME *, int);
 void *PvAllocStackImpl__FP7SWALLOC(const REQ *);
@@ -82,7 +82,7 @@ void func_001CE2E8(P *p)
                     Init(&phase.rip, &p->rips);
                     RIP *rip;
                     for (rip = (RIP *)Next(&phase.rip); rip; rip = (RIP *)Next(&phase.rip)) {
-                        if (D_002DDED0.t <= rip->start) continue;
+                        if (g_clock.t <= rip->start) continue;
                         int count = func_0014C6D8(shape, entries, rip->extra, rip->position, 4, contacts);
                         int i = 0;
                         if (i < count) do {

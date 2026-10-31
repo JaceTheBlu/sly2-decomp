@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_00140F90 (0x140F90): message handler (p, msg, pv): msg 3 resets x1038 and stops the 0xDF0/0x11B0 actions, msg 9 (pso->p18 == p)
 // switches on pmsg->k (0x15E: x190 = -v and virtual slot 35 called with the 0x1B0 rows times v; 0x161/0x162; 0x27B/0x27C; 0x1C7/0x1C8),
 // msgs 4/5 call virtual slots 8/9 on the 0x1090 entries, msg 1 / msg 11 release 0x4D4 / 0x1310; then forwards to func_001EED78/func_001C3E20.
@@ -14,10 +15,9 @@ struct SO { char pad[0x18]; void *p18; };
 struct MSG { struct SO *pso; float g; int k; };
 struct MSGB { void *p0; void *p4; };
 struct ENT { void *po; int x4; };
-struct CLOCK { float t; float dt; };
 struct GS { char pad[0x4758]; float g4758; };
 struct GG { char pad[0x2010]; void *p2010; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern struct GS g_sw;
 extern DL D_003E148C;
 extern struct GG *D_002E1E40;
@@ -168,7 +168,7 @@ void func_00140F90(void *p, int msg, void *pv)
                                 func_00156780(po2);
                         }
                         g_pdliFirst = dli.m_pdliNext;
-                        g_sw.g4758 = D_002DDED0.t + D_002BCC94;
+                        g_sw.g4758 = g_clock.t + D_002BCC94;
                         break;
                     }
                     }

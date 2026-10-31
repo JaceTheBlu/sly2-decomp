@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_001B6078(p, next): func_001A7518 state transition of the animated actor (state at +0x13D0).
 // Exit work for the old state, then entry work for `next` (clip/template selection), then the shared
 // "ApplyAseg" tail that restarts the animation player (+0x1030) and the component (+0x1034).
@@ -68,8 +69,7 @@ struct P {
     ASEG *clip21;           // 0x1AEC
 };
 extern "C" {
-struct CLOCK { float t, dt; };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern U D_002A2DD0;
 extern int D_002DD5BC;
 void func_002303A0(P *, void *, int);
@@ -150,7 +150,7 @@ extern "C" void func_001B6078(P *p, int next)
     p->state = next;
     ASEG *clip = 0; void *source = 0; int flags = 1, id = -1, mode = 4; void *activation;
     float duration = 0.0f;
-    p->time = D_002DDED0.t;
+    p->time = g_clock.t;
     // enter the new state
     switch (next) {
     case 0:
@@ -198,7 +198,7 @@ extern "C" void func_001B6078(P *p, int next)
         func_001F14F8(source, p, id, flags, mode, component);
         if (clip || source) {
             if (clip) { if (duration == position) { ENTRY *e = PeaFindAsegLabel__FP4ASEG3OID(clip, 0x1AC); if (e) duration = e->value; } }
-            if (duration != 0.0f) func_00131A90(p->asega, D_002DDED0.t + duration / p->asega->rate);
+            if (duration != 0.0f) func_00131A90(p->asega, g_clock.t + duration / p->asega->rate);
         }
     }
     Call((OBJ *)p, 90);

@@ -5,7 +5,7 @@ struct VT {short delta,pad;void*fn;};
 struct P {char pad[0xC];VT*vt;char pad10[0x1E8-0x10];int disabled;char pad1EC[0x278-0x1EC];float deadline;char opaque27C[4];qword targetVelocity;};
 struct CLOCK {float t,dt;};
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern qword D_002A2DD0;
 V*func_001B2398(V*,P*,float);
 qword func_001A62E8(P*);
@@ -30,8 +30,8 @@ extern "C" void func_001B2468(P*p){
  if(p->disabled)return;
  WORK w;
  float remaining;
- {register float deadline __asm__("$f1")=p->deadline;register float now __asm__("$f2")=D_002DDED0.t;
- deadline-=now;register float frameStep __asm__("$f3")=D_002DDED0.dt;remaining=Max(deadline,0.0f)+frameStep;}
+ {register float deadline __asm__("$f1")=p->deadline;register float now __asm__("$f2")=g_clock.t;
+ deadline-=now;register float frameStep __asm__("$f3")=g_clock.dt;remaining=Max(deadline,0.0f)+frameStep;}
  func_001B2398(&w.output,p,Min(remaining,0.5f));
  int stationary=CaptureDestinationAndEqual(p,&w.output,&w.destination);
  if(stationary){
@@ -49,7 +49,7 @@ extern "C" void func_001B2468(P*p){
   __asm__("lqc2 %0,%5\n\tlqc2 %1,%6\n\tlqc2 %2,%7\n\tqmtc2.ni %8,%3\n\tvmulax.xyzw ACC,%1,%0x\n\tvmaddx.xyzw %4,%3,%2x":"=j"(factor),"=j"(difference),"=j"(minus),"=j"(value),"=j"(result):"m"(w.scale.q),"m"(w.delta.q),"m"(w.negative.q),"r"(velocity));
   *(qword*)&w.output=result;
  }else *(qword*)&w.output=p->targetVelocity;
- register CLOCK*clock __asm__("$17")=&D_002DDED0;
+ register CLOCK*clock __asm__("$17")=&g_clock;
  float frameDt=clock->dt;
  qword position=func_001A62E8(p);
  qword velocity=Velocity(p);

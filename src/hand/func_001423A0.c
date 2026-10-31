@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef struct { qword r[4]; } M4;
 struct BUF { char pad[0x30]; qword pos; };
@@ -8,8 +9,7 @@ struct P {
     char pad[0x4C8]; int x4C8; char pad1[0x4D4 - 0x4CC]; int x4D4; char pad2[0x934 - 0x4D8]; struct O *po;
     char pad3[0x994 - 0x938]; struct X994 *p994; char pad4[0x9A4 - 0x998]; int x9A4;
 };
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 void func_002309E8(void *a, int b, M4 *pm, int c, float g);
 qword func_001A62E8(void *p);
 static __inline__ qword Mul(M4 *pm, qword v)
@@ -44,6 +44,6 @@ int func_001423A0(struct P *p)
     v = Mul(&m, buf.pos);
     if (5.0f < GDist(func_001A62E8(p->po), v)) return 0;
     if (p->x9A4 != 1) return 1;
-    if (D_002DDED0.t < p->p994->t) return 0;
+    if (g_clock.t < p->p994->t) return 0;
     return 1;
 }

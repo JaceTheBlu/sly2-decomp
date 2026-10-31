@@ -1,5 +1,5 @@
-struct CLOCK { float t; float dt; };
-extern CLOCK D_002DDED0 asm("D_002DDED0");
+#include "clock.h"
+extern CLOCK g_clock asm("g_clock");
 enum EYESS { EYESS_Nil = -1, EYESS_Open = 0, EYESS_Closing = 1, EYESS_Closed = 2, EYESS_Opening = 3 };
 struct SAI { int a; };
 struct EYES { char pad[0x1C]; int cframe; char pad1[0x34 - 0x20]; SAI sai; char pad2[0x50 - 0x38]; float dtBlink; float dtOpenMin; float dtOpenMax; float uDoubleBlink;
@@ -17,12 +17,12 @@ void UpdateEyes__FP4EYESf(EYES *peyes)
     switch (peyes->eyess)
     {
     case EYESS_Open:
-        if (D_002DDED0.t - peyes->tEyess >= peyes->dtOpen)
+        if (g_clock.t - peyes->tEyess >= peyes->dtOpen)
             eyessNext = EYESS_Closing;
         break;
     case EYESS_Closing:
     {
-        float dframe = peyes->dframe * D_002DDED0.dt;
+        float dframe = peyes->dframe * g_clock.dt;
         peyes->iframe += dframe;
         if (peyes->iframe >= (float)peyes->cframe)
         {
@@ -36,7 +36,7 @@ void UpdateEyes__FP4EYESf(EYES *peyes)
             eyessNext = EYESS_Opening;
         break;
     case EYESS_Opening:
-        peyes->iframe -= peyes->dframe * D_002DDED0.dt;
+        peyes->iframe -= peyes->dframe * g_clock.dt;
         if (peyes->iframe <= peyes->cframe * peyes->uOpen)
             eyessNext = EYESS_Open;
         break;

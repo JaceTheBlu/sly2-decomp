@@ -20,7 +20,7 @@ extern s32 D_002C1F34;
 extern M2C_UNK D_002D77D8;
 extern M2C_UNK D_002D9978;
 extern s32 *g_pdliFirst;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern M2C_UNK g_cm;
 extern M2C_UNK D_002DEA00;
 extern M2C_UNK D_002DEA28;

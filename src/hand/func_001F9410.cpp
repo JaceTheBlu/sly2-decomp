@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_001F9410: solve the contacts of a group of touching objects (Sly 1 SolveSwGroup).
 // Builds a DZG over the contacts (func_001585D8), turns every contact into a DZ row with its limits,
 // sets each row's target (bounce or separating speed), solves (func_00158B20) and applies the
@@ -18,10 +19,9 @@ union FLOAT {float value;int bits;};
 struct DZ {int kind;float lower,upper,value;FLOAT target;int unused14;float *coefficients;int flags;DLE link;};
 struct DZS {char pad0[0x40];U normal;XP *source;float *coefficients;char pad58[8];};
 struct DZG {int capacity,count;DZ *rows;DL solved,pending,unused,active;int solvedCount;float *matrix,*inverse,*temporary,*results;int contactCount;XP **contacts;int objectCount;P **objects;DZS *states;};
-struct CLOCK {float time,dt;};
 struct GAME;
 struct FRAME;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern GAME g_sw;
 extern "C" {
 FRAME *func_001AE478(FRAME *);
@@ -48,7 +48,7 @@ static inline float Dot(qword a,qword b){qword one;float f;__asm__("vmul.xyz %0,
 // "memory": the game re-reads p->second after this dot product.
 static inline float LengthSquared(qword v){qword one;float f;__asm__("vmul.xyz %0,%0,%0\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"+j"(v),"=&j"(one): :"memory");__asm__("mtc1 %1,%0":"=f"(f):"r"(v));return f;}
 static inline float Sqrt(float f){float r;__asm__ volatile("sqrt.s %0,%1":"=f"(r):"f"(f));return r;}
-static inline float ClockDt(){return D_002DDED0.dt;}
+static inline float ClockDt(){return g_clock.dt;}
 static inline void Callback(P *p,int slot){VT *vt=p->vtable;vt[slot].function((char *)p+vt[slot].delta);}
 
 extern "C" void func_001F9410(GAME *game,int flags,int objectCount,P **objects,int contactCount,XP **contacts)

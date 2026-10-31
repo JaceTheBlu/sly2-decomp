@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct VTE { short d; short pad; void (*pfn)(void *); };
 struct O { char pad[0xC]; struct VTE *vt; char pad1[0x38 - 0x10]; int x38; char pad2[0xC0 - 0x3C]; int xC0; int xC4; float gC8; };
@@ -6,8 +7,7 @@ struct P {
     char pad[0x10]; void *p10; char pad1[4]; char m18[0x30 - 0x18]; struct X30 *p30; char pad2[0x60 - 0x34];
     int state; float tState; char pad3[0x80 - 0x68]; qword v80; int x90;
 };
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 void func_001EF0D8(void *p);
 struct O *func_00205438(void *p, int oid);
 int FIsBasicDerivedFrom__FP5BASIC3CID(void *p, int n);
@@ -26,7 +26,7 @@ void func_00145B18(struct P *p, int state)
     if (state == p->state) return;
     func_001EF0D8(p->m18);
     p->state = state;
-    p->tState = D_002DDED0.t;
+    p->tState = g_clock.t;
     switch (state) {
     case 0: {
         struct O *po = func_00205438(p->p10, 0xA8);

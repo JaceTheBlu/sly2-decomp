@@ -1,8 +1,8 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct X;
 extern "C" {
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002BE76C;
 extern float D_002BE770[16];
 struct X { qword a; qword v; X(); };
@@ -33,7 +33,7 @@ extern "C" void func_0017E0E0(struct S *p) {
     void *q;
     float ang, best;
     unsigned int i;
-    p->f3C = D_002DDED0.t;
+    p->f3C = g_clock.t;
     t = p->p18;
     a = func_001A62E8(p->p38);
     b = func_001A62E8(p->p10);

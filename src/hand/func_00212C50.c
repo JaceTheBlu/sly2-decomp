@@ -4,7 +4,7 @@ struct S {
     char pad2[0xA4-0x90]; int flag; char pad3[8]; int pauses;
 };
 struct Clock { char pad[0x3C]; float time; float dt; };
-extern struct Clock D_002DDED0;
+extern struct Clock g_clock;
 extern float D_002DDF10;
 void func_001A5E28(struct S *);
 int func_002121E8(struct S *,int);
@@ -17,11 +17,11 @@ void func_00212C50(struct S *p) {
     state=p->state;
     if(state==1) {
         if(p->mode==2) state=p->id1==-1 ? 2:3;
-    } else if(p->update != D_002DDED0.time) {
+    } else if(p->update != g_clock.time) {
         switch(state) {
         case 2:
             if(!func_002121E8(p,p->selected)) func_00212A50(p,1);
-            if(p->duration>0.0f && p->duration<D_002DDED0.time-p->time) func_00212A50(p,1);
+            if(p->duration>0.0f && p->duration<g_clock.time-p->time) func_00212A50(p,1);
             if(p->mode==1) state=p->id2==-1 ? 1:4;
             break;
         case 3:

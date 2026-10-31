@@ -1,5 +1,5 @@
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+#include "clock.h"
+extern struct CLOCK g_clock;
 extern char g_sw[];
 extern int D_002C0908[][5], D_002C0948[][5];
 extern float D_002C0900;
@@ -19,7 +19,7 @@ void func_001B5820(struct P *p)
     if (a != func_001F07C8(p->x1034)) return;
     if (a >= 0x1D0) return;
     if (a < 0x1CB) return;
-    p->f1524 -= D_002DDED0.dt;
+    p->f1524 -= g_clock.dt;
     if (func_001C46C0(p->x150, 0xF0, 0.0f)) {
         p->x152C--;
         p->f1528 = p->f1524;

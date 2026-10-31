@@ -13,14 +13,14 @@ struct RUMBLE {
     float dtRumins;
 };
 struct CLOCK { float a[20]; };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern "C" int func_00243870(int, int, byte *);
 void SetRumbleRums(RUMBLE *prumble, RUMS rums);
 void StopRumbleActuators(RUMBLE *prumble);
 void UpdateRumble(RUMBLE *prumble)
 {
     byte abShockDirect[6];
-    float dtReal = D_002DDED0.a[16];
+    float dtReal = g_clock.a[16];
 
     switch (prumble->rums) {
     case RUMS_Rumble:

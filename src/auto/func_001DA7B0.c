@@ -29,7 +29,7 @@ extern void *g_pdliFirst;
 extern s32 D_002DD318;
 extern M2C_UNK g_heapSw;
 extern M2C_UNK D_002DDEC0;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDF0C;
 extern M2C_UNK D_002DEB30;
 extern M2C_UNK D_002DEB80;

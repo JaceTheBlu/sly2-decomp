@@ -1,6 +1,6 @@
 // func_0021CB18: ported from Lilly's personal Sly 2 decomp (src/P2/chain.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002A2DA0 (D_002A2DA0), D_002DDED0 (g_clock), g_sw (g_sw)
+// Globals: D_002A2DA0 (D_002A2DA0), g_clock (g_clock), g_sw (g_sw)
 // 0x0021CB18 UpdateChainLink__FP2SOP9CHAINLINK (our name; role 0x10 of UpdateSoSlots 0x22DE88)
 // Runs for every link of a chain every frame. The first call of a frame (g_clock.t != tLast) simulates the links from this one to the end:
 // the start point is the anchor (link 0: the XF's world position; its velocity is the finite difference over dt, or the XF's own velocity
@@ -233,7 +233,7 @@ struct CLOCK
       int cWrapAround;
       undefined4 unk_0x5c;
 };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 struct SOPART;
 struct BND;
 struct WRBG;
@@ -842,7 +842,7 @@ void UpdateChainLink(SO *pso, CHAINLINK *plink)
     XF *pxf = plink->pxf;
     XF *pxfParent = pxf->pxfParent;
     VECTOR4 vecVel;
-    if (D_002DDED0.t != pchain->tLast)
+    if (g_clock.t != pchain->tLast)
     {
         qword qwPos;
         qword qwDirPrev;
@@ -859,7 +859,7 @@ void UpdateChainLink(SO *pso, CHAINLINK *plink)
             }
             else
             {
-                *(qword *)&vecVel = QwDivVf(QwSub(qwPos, pchain->posAnchorPrev), VuFloatFromMemWord(*(int *)&D_002DDED0.dt));
+                *(qword *)&vecVel = QwDivVf(QwSub(qwPos, pchain->posAnchorPrev), VuFloatFromMemWord(*(int *)&g_clock.dt));
             }
             pchain->posAnchorPrev = posAnchor;
             MATRIX3 matWorld3 = *(MATRIX3 *)&pxfParent->matWorld * plink->matRest;
@@ -886,7 +886,7 @@ void UpdateChainLink(SO *pso, CHAINLINK *plink)
                 qwDirPrev = QwSub(qwPos, *(qword *)pxfParent->matWorld.mat[3]);
             }
         }
-        float dtStep = D_002DDED0.dt / pchain->cstep;
+        float dtStep = g_clock.dt / pchain->cstep;
         int istep;
         for (istep = 0; istep < pchain->cstep; istep++)
         {
@@ -949,7 +949,7 @@ void UpdateChainLink(SO *pso, CHAINLINK *plink)
                 qwDPrev = qwD;
             }
         }
-        pchain->tLast = D_002DDED0.t;
+        pchain->tLast = g_clock.t;
     }
     qword qwPosParent = ConvertXfPos(0, pxfParent, plink->posTip);
     qword qwTo = QwSub(qwPosParent, *(qword *)pxf->mat.mat[3]);

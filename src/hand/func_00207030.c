@@ -5,7 +5,7 @@ struct Y { char pad[0x14]; struct Y14 *p14; };
 struct X { char pad[0x40]; void *p40; };
 struct Z { char pad[0x30]; int k30; char pad2[0x40 - 0x34]; int n40; float f44; };
 struct S { char pad[0x190]; struct V3 v190; char pad2[0xFBC - 0x19C]; int k; float t; void *pFC4; };
-extern struct { float t; float dt; } D_002DDED0;
+extern struct { float t; float dt; } g_clock;
 extern qword D_002A2DE0;
 extern qword D_002C3D30;
 extern float D_002A8698;
@@ -31,7 +31,7 @@ void func_00207030(struct S *p, int k)
         return;
     old = p->k;
     p->k = k;
-    p->t = D_002DDED0.t;
+    p->t = g_clock.t;
     switch (old) {
     case 8:
     case 0xD:

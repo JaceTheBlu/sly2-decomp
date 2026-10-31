@@ -9,7 +9,7 @@ struct P {char pad0[0xC];VT *vt;char pad1[0x5C-0x10];CONTROLLER *controller;
  float g270,g274,g278;};
 struct HIT { qword q[4];float t0,t1;int count;void *owner0,*owner1;};
 struct CLOCK {float t,dt;};
-extern "C" CLOCK D_002DDED0;
+extern "C" CLOCK g_clock;
 extern "C" qword D_002A2DD0;
 struct LO;
 extern "C" void func_001B1E88(P*,LO*,V*);
@@ -23,7 +23,7 @@ extern "C" void func_001B2228(P*p,LO*source,V*point){
  WORK w;
  w.pos.q=*(qword*)point;
  func_001B1E88(p,source,(V*)&w.pos);
- if(p->g270>0.0f)p->g278=D_002DDED0.t+p->g270;
+ if(p->g270>0.0f)p->g278=g_clock.t+p->g270;
  else{
   func_001B2398((V*)&w.velocity,p,0.5f);
   register qword copied __asm__("$2");register VT*table __asm__("$3");register float negative __asm__("$f0");
@@ -56,7 +56,7 @@ extern "C" void func_001B2228(P*p,LO*source,V*point){
   register float hi __asm__("$f3")=w.hit.t1;
   __asm__("max.s %0,%1,%2":"=f"(max):"f"(lo),"f"(hi));
   register float duration __asm__("$f2")=1.0f/max;
-  p->g278=D_002DDED0.t+duration;
+  p->g278=g_clock.t+duration;
  }
 }
 

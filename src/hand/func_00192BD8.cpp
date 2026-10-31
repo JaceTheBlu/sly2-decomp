@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_00192BD8: set the step of a hero action context (the struct at actor+0x4C0; func_001911A8 calls it).
 // Leaves the old step (cleanup per step / per action), then enters the new one: picks the animation clip, the
 // script, the flags and the blend for the new step and starts them on the actor.
@@ -58,12 +59,11 @@ struct CONTEXT {
     CLIP *clip4F0, *clip4F4, *clip4F8; int tag; int fInhibit; char pad504[0x50C - 0x504];
     CLIP *clip50C, *clip510, *clip514;
 };
-struct CLOCK { float t, dt; };
 struct VU_FLOAT { qword q; };
 union U { qword q; float f[4]; int i[4]; };
 
 extern "C" {
-extern CLOCK D_002DDED0;          // g_clock
+extern CLOCK g_clock;          // g_clock
 extern ACTOR *D_002E1E40;         // the player
 extern ACTOR *D_002F7900;
 extern MANAGER g_cm;
@@ -243,7 +243,7 @@ extern "C" void func_00192BD8(CONTEXT *p, int step)
             break;
         }
         p->previous = -1;
-        p->pactor->tStamp = D_002DDED0.t;
+        p->pactor->tStamp = g_clock.t;
         break;
     case 7:
         if (Less(step, 11) && !Less(step, 9)) {
@@ -509,7 +509,7 @@ extern "C" void func_00192BD8(CONTEXT *p, int step)
         break;
     }
     p->step = step;
-    p->tStep = D_002DDED0.t;
+    p->tStep = g_clock.t;
     if (step != -1) {
         func_00130658(&p->pactor->animation);
         func_001F15B8(&p->pactor->component);

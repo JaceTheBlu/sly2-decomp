@@ -189,7 +189,7 @@ struct RPL
 extern DMA D_002DEA28;
 extern G g_sw;
 extern VIEW g_cm;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern MATRIX4 D_002A2D30;
 extern "C" {
 void func_001681F8(MODEL *pmodel);
@@ -390,7 +390,7 @@ extern "C" void func_00168638(MODEL *pmodel, MATRIX4 *pmatWorld, float gFirst, f
     float gVis = GCullSphere(posCam, pos, &pmodel->powner->sph, sRadius, &dpos);
     if (gVis == 0.0f)
         return;
-    pmodel->t = D_002DDED0.t;
+    pmodel->t = g_clock.t;
     if (pmodel->nStamp != g_sw.nStamp)
         func_001681F8(pmodel);
     int i;

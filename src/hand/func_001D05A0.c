@@ -1,5 +1,5 @@
 typedef int qword __attribute__((mode(TI)));
-extern struct { float t; float dt; } D_002DDED0;
+extern struct { float t; float dt; } g_clock;
 extern char g_cm[];
 typedef struct { qword a; qword b; } Q2;
 typedef struct {
@@ -20,7 +20,7 @@ qword func_0014F268(void *, qword);
 static inline float GMax(float a, float b) { return a < b ? b : a; }
 void func_001D05A0(OBJ *p)
 {
-    func_00117120(GMax(p->x14 + p->x18 - D_002DDED0.t, D_002DDED0.dt), D_002DDED0.dt, 1.0f, p->x100, p->x90, p->xF0->a, p->xF0->b, &p->x100, &p->x90, 0);
+    func_00117120(GMax(p->x14 + p->x18 - g_clock.t, g_clock.dt), g_clock.dt, 1.0f, p->x100, p->x90, p->xF0->a, p->xF0->b, &p->x100, &p->x90, 0);
     p->x80 = p->x70;
     p->x70 = func_0014F268(g_cm, p->x100);
 }

@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_00137248: matched. len as an mtc1 asm from the qword (gcc emits the qmfc2), cz via a pextuw asm with a float "=r" output (gcc emits the mtc1).
 typedef int qword __attribute__((mode(TI)));
 struct M3 { qword r[3]; };
@@ -103,10 +104,9 @@ struct P : BASE {
 };
 struct PX { char pad[0x10DC]; P *py; };
 struct S { P *p; };
-struct CLOCK { float t; float dt; };
 struct SMP { float a, b, c; };
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern float D_002BC998, D_002BC99C, D_002BC9A0;
 extern SMP D_002BC9A8;
 extern qword g_normalZ, D_002A2DA0;
@@ -137,12 +137,12 @@ extern "C" void func_00137248(S *s)
     float dot = GetX(Dot(dv, n.q));
     float w = cz / len;
     float dgNext;
-    GSmooth__FfffP3SMPPf(len, D_002BC998, D_002DDED0.dt, &D_002BC9A8, &dgNext);
-    float g = func_0011CFE0(dgNext - dot, D_002BC9A0 * D_002DDED0.dt);
+    GSmooth__FfffP3SMPPf(len, D_002BC998, g_clock.dt, &D_002BC9A8, &dgNext);
+    float g = func_0011CFE0(dgNext - dot, D_002BC9A0 * g_clock.dt);
     qword t = AddScaled(dv, n.q, VU_FLOAT(g));
     M3 mc;
-    M3 m = LoadRotateMatrixRad__FfUx(g_normalZ, w * D_002DDED0.dt);
+    M3 m = LoadRotateMatrixRad__FfUx(g_normalZ, w * g_clock.dt);
     mc = m;
-    qword r = DivF(Sub(MulM3(mc, t), dv), VU_FLOATM(D_002DDED0.dt));
+    qword r = DivF(Sub(MulM3(mc, t), dv), VU_FLOATM(g_clock.dt));
     func_001FAC30(s->p, func_0011E9F8(r, gMax));
 }

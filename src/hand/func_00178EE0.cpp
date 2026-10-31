@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_00178EE0: laneG10v2 (no pins) + VU_FLOAT(float) qmtc2 constructor building the speed in place, and the 1e-4 length test read with GXOfQw (gcc emits the qmfc2, asm mtc1).
 typedef int qword __attribute__((mode(TI)));
 struct MATRIX3 { float mat[3][4]; };
@@ -13,13 +14,12 @@ struct P {
     char pad1C[0x4C - 0x1C]; unsigned int mode; char pad50[0x80 - 0x50]; qword target;
     char pad90[0xC4 - 0x90]; float rate; char padC8[8]; qword cached; float timeout;
 };
-struct CLOCK { float t, dt; };
 struct VU_FLOAT { qword qw; VU_FLOAT() {} VU_FLOAT(float g) { __asm__("qmtc2 %1, %0" : "=j"(qw) : "r"(g)); } };
 extern "C" {
 extern CLQ D_002BE6A0;
 extern LM D_002BBB60;
 extern float D_002BE694, D_002BE6B0;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern qword g_normalZ, D_002A2DD0;
 void func_001789F8(P *);
 qword func_001A62E8(ACTOR *);
@@ -185,7 +185,7 @@ extern "C" void func_00178EE0(P *p)
         }
         else
         {
-            p->timeout -= D_002DDED0.dt;
+            p->timeout -= g_clock.dt;
         }
     }
 }

@@ -52,7 +52,7 @@ extern s32 D_002DD648;
 extern u8 D_002DD680;
 extern s32 D_002DDE80;
 extern s32 D_002DDE84;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDED4;
 extern f32 D_002DDEE0;
 extern f32 D_002DDF0C;

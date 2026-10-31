@@ -22,7 +22,7 @@ typedef struct OBJ {
     int x260;
     int x264;
 } OBJ;
-extern struct CLOCK { float a[16]; } D_002DDED0;
+extern struct CLOCK { float a[16]; } g_clock;
 extern char g_sw[];
 void SetClockRate__FP5CLOCK3CRKf(struct CLOCK *, float, int);
 void func_0020EFC0(void *, int);
@@ -42,18 +42,18 @@ void func_001DC260(OBJ *p, int s)
     if (s == p->x40)
         return;
     if (p->x40 == -1) {
-        SetClockRate__FP5CLOCK3CRKf(&D_002DDED0, 0.0f, 0);
+        SetClockRate__FP5CLOCK3CRKf(&g_clock, 0.0f, 0);
         func_0020EFC0(g_sw, 0);
         VCALL(p, 10);
         func_00212A70(p->x24, 1);
     }
     old = p->x40;
     p->x40 = s;
-    p->x44 = D_002DDED0.a[15];
+    p->x44 = g_clock.a[15];
     switch (s) {
     case -1:
         VCALL(p->x24, 50);
-        SetClockRate__FP5CLOCK3CRKf(&D_002DDED0, 1.0f, 0);
+        SetClockRate__FP5CLOCK3CRKf(&g_clock, 1.0f, 0);
         func_0020F030(g_sw, 0);
         VCALL(p, 11);
         if (p->x24->x58 > 0)

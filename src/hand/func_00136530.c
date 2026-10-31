@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef struct { qword r[3]; qword pos; } M4;
 struct VT { short d; short pad; void *f; };
@@ -11,8 +12,7 @@ struct P {
     int k1800; float t1804; void *apv[2]; void *pv1810; void *pv1814;
 };
 extern struct G *D_002F7900;
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern qword D_002A2DD0;
 void SetLoParent__FP2LOP2SOi(struct P *, int, int);
 void func_0012E460(void *);
@@ -50,7 +50,7 @@ void func_00136530(struct P *p, int k)
         break;
     }
     p->k1800 = k;
-    p->t1804 = D_002DDED0.t;
+    p->t1804 = g_clock.t;
     pv = p->apv[k];
     switch (k) {
     case -1: {

@@ -10,7 +10,7 @@ struct TUNING {int unused0;ASEG *animation;int unused8;float afterStart,afterEnd
 struct P {char pad0[0x10];int state;float stateTime;char pad18[8];U previousVelocity;TUNING *tuning;ALO *subject;ASEGA *job;int index;U target;float arrival,end;ALO *related;int kind;int ballistic,steep;void *constraint;};
 struct CLOCK {float time,dt;};
 struct GAME;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern GAME g_sw;
 void ApplyAsegCur(ASEG *,ALO *,float,float,int,ASEGA **);
 extern "C" {
@@ -47,7 +47,7 @@ extern "C" void func_0020C2F8(P *p,int state)
     U scalar,delta,acceleration,velocity,finalVelocity;
     if(state==p->state)return;
     p->state=state;
-    p->stateTime=D_002DDED0.time;
+    p->stateTime=g_clock.time;
     switch(state){
     case 0:
         ApplyAsegCur(p->tuning->animation,p->subject,0.0f,1.0f,p->index,&p->job);
@@ -97,7 +97,7 @@ extern "C" void func_0020C2F8(P *p,int state)
         qword initialVelocity=Combine(delta.q,inverseTime,acceleration.q,scalar.q);
         Store(&velocity,initialVelocity);
         applyVelocity((char *)subject+adjustment,velocity.q);
-        p->arrival=D_002DDED0.time+time;
+        p->arrival=g_clock.time+time;
         p->end=p->arrival-p->tuning->minimumTime/playbackRate;
         if(p->ballistic){
             register qword timeScalar __asm__("vf1"),motionVelocity __asm__("vf2"),force __asm__("vf3");

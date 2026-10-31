@@ -16,7 +16,7 @@ struct M2 { struct O **ppo; int *pn; };
 struct M3 { struct K *pk; };
 extern struct N *D_003E15C0;
 extern char D_003E15A8[];
-extern float D_002DDED0;
+extern float g_clock;
 struct O *func_001A5BF0(void *);
 int func_001F78D8(struct O *, int);
 struct K *func_0011CCC0(void *);
@@ -42,7 +42,7 @@ struct O *func_001F7598(struct K *pk)
             pk->p48 = po;
             pkNew = func_0011CCC0(D_003E15A8);
             *pkNew = *pk;
-            pkNew->f4C = D_002DDED0;
+            pkNew->f4C = g_clock;
             ClearDle__FP3DLE(pkNew->dle);
             func_0011A220(&D_003E15C0, pkNew);
             if (pk->n44 & 0xF8) {

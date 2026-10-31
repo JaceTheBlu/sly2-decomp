@@ -33,7 +33,7 @@ extern f32 D_002C20A4;
 extern M2C_UNK D_002C20A8;
 extern M2C_UNK D_002C20C0;
 extern M2C_UNK D_002C94A0;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDED4;
 extern M2C_UNK g_cm;
 extern M2C_UNK g_sw;

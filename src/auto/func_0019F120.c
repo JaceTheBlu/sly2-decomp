@@ -28,7 +28,7 @@ extern M2C_UNK D_002BF9E0;
 extern f32 D_002BF9F0;
 extern M2C_UNK D_002BFA30;
 extern s32 D_002DD5BC;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDED4;
 extern M2C_UNK g_cm;
 extern M2C_UNK D_002DE2E0;
@@ -50,7 +50,7 @@ extern M2C_UNK D_004435F0;
 
 void func_0019F120(s32 arg0, s32 arg1) {
     if (M2C_FIELD(arg0, s32 *, 0x4748) != 0) {
-        if (D_002BF938 < (D_002DDED0 - M2C_FIELD(arg0, f32 *, 0x474C))) {
+        if (D_002BF938 < (g_clock - M2C_FIELD(arg0, f32 *, 0x474C))) {
             func_0019F170(arg0, 0);
         }
     }

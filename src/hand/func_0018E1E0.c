@@ -1,13 +1,13 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } VU;
 typedef struct { qword r[3]; } M3;
 struct O { char pad[0x190]; qword v190; char pad1[0x1B0 - 0x1A0]; M3 m1B0; char pad2[0x10DC - 0x1E0]; void *p10DC; };
-struct CLOCK { float t; float dt; };
 extern qword func_001A62E8(void *p);
 extern void func_002046B0(struct O *p, qword v);
 extern float GSmooth__FfffP3SMPPf(float g, float gTarget, float dt, void *pv, float *pg);
 extern M3 *func_0011B340(M3 *pmOut, M3 *pm);
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002BF414;
 extern char D_002BF418[];
 extern qword D_002A2DA0;
@@ -41,7 +41,7 @@ void func_0018E1E0(struct O *p)
     }
     __asm__("qmfc2.ni %0, %1" : "=r"(gLen) : "j"(l));
     func_002046B0(p, n.q);
-    GSmooth__FfffP3SMPPf(gLen, D_002BF414, D_002DDED0.dt * 0.5f, D_002BF418, &g);
+    GSmooth__FfffP3SMPPf(gLen, D_002BF414, g_clock.dt * 0.5f, D_002BF418, &g);
     func_0011B340(&m, &p->m1B0);
     __asm__("qmtc2.ni %1, %0" : "=j"(s) : "r"(*(int *)&g));
     u.q = s;

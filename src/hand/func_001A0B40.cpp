@@ -16,7 +16,7 @@ struct CM{char pad[0x90];U position;};
 struct POLY{float a,b,c;};
 struct LIMIT{float lo,hi;};
 extern "C"{
- extern CLOCK D_002DDED0;
+ extern CLOCK g_clock;
  extern CM g_cm;
  extern U D_002BFA00,D_002BFA10,D_002A2DD0;
  extern POLY D_002BFA20;
@@ -132,7 +132,7 @@ extern "C" void func_001A0B40(C*p,int next){
   if(FIsBasicDerivedFrom__FP5BASIC3CID(p->actor,0x35)){
    P*actor=p->actor;actor->first->inner->value->value.Clear();actor->second->inner->value->value.Clear();
   }
-  p->actor->frozen=1;p->changed=D_002DDED0.time;break;
+  p->actor->frozen=1;p->changed=g_clock.time;break;
  case 8:
   {qword moving=Vector(p->actor);P*actor=p->actor;
   register qword mv __asm__("vf4")=From(moving),axis __asm__("vf1"),dot __asm__("vf2"),one __asm__("vf3");float threshold;
@@ -176,7 +176,7 @@ extern "C" void func_001A0B40(C*p,int next){
   p->actor->control->yaw=p->actor->yaw;clip=p->clips[next];break;
  }
  func_001F4BF8(p->actor);
- p->mode=next;p->time=D_002DDED0.time;
+ p->mode=next;p->time=g_clock.time;
  if(next!=-1){
   if(!clip)clip=p->Default(next);
   func_00130658(&p->actor->asega);func_001F15B8(&p->actor->component);

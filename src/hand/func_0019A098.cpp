@@ -11,7 +11,7 @@ struct REQUEST{int bytes,alignment;};
 union WORK{REQUEST request;U scalar;};
 struct MARK;
 extern "C"{
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern qword g_normalZ;
 extern float D_002A656C;
 MARK*func_001AE478(MARK*);
@@ -58,7 +58,7 @@ typedef char WORK_request_Offset[FIELD_OFFSET(WORK,request)==0?1:-1];
 typedef char WORK_scalar_Offset[FIELD_OFFSET(WORK,scalar)==0?1:-1];
 typedef char U_q_Offset[FIELD_OFFSET(U,q)==0?1:-1];
 extern "C" int func_0019A098(P*p,float previous,float*stamp){
- float now=D_002DDED0.time;
+ float now=g_clock.time;
  if(now-previous<1.0f)return 0;
  if(stamp){if(now-*stamp<1.0f)return 0;*stamp=now;}
  if(p->mode)return 0;

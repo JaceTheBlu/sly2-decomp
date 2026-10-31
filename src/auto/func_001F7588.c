@@ -5,7 +5,7 @@ extern s128 D_002A2DD0;
 extern M2C_UNK D_002C3C20;
 extern M2C_UNK D_002C44F0;
 extern void *g_pdliFirst;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDED4;
 extern M2C_UNK g_sw;
 extern void *D_003E1218;

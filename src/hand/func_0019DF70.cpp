@@ -9,7 +9,7 @@ struct O { char pad[0xC]; VT *vt; char pad2[0x1030-0x10]; struct S1030 *x1030; }
 struct CURVE;
 struct P { struct O *x0; int x4; int x8; struct CURVE *xc; float x10; int x14; int x18; };
 struct CLOCK { float t; float dt; };
-extern "C" struct CLOCK D_002DDED0;
+extern "C" struct CLOCK g_clock;
 extern "C" qword D_002A2DD0;
 extern "C" void func_001C3500(struct CURVE *a, int b, M3 *pm, float g);
 extern "C" M3 *func_001A6318(struct O *o);
@@ -51,7 +51,7 @@ extern "C" void func_0019DF70(struct P *p)
     func_001C3500(p->xc, p->x18 == 0, &m, p->x10);
     if (p->x4 == 0 || p->x4 == 4) {
         struct O *o = p->x0;
-        float dt = D_002DDED0.dt;
+        float dt = g_clock.dt;
         float g = o->x1030->x14->x74 - o->x1030->x1c;
         M3 *pa;
         g = g > dt ? g : dt;
@@ -63,5 +63,5 @@ extern "C" void func_0019DF70(struct P *p)
     pm = &m2;
     m4 = CalculateDmat__FP7MATRIX3T0(func_001A6318(p->x0), pm);
     func_0011BCF8(&m4, &f, &vec);
-    {O *o=p->x0;VT *vt=o->vt;void (*call)(void *,qword)=(void(*)(void*,qword))vt[36].pfn;void *thisp=(char*)o+vt[36].d;call(thisp,Scale(vec.q,f/D_002DDED0.dt));}
+    {O *o=p->x0;VT *vt=o->vt;void (*call)(void *,qword)=(void(*)(void*,qword))vt[36].pfn;void *thisp=(char*)o+vt[36].d;call(thisp,Scale(vec.q,f/g_clock.dt));}
 }

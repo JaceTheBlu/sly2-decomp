@@ -1,9 +1,9 @@
+#include "clock.h"
 struct VTE { short d; short pad; void (*pfn)(void *); };
 struct LO { char pad[0xC]; struct VTE *vt; };
 struct X14 { struct LO *plo; };
 struct P { char pad[0xC]; struct VTE *vt; char pad1[0x14 - 0x10]; struct X14 *px14; char pad2[0x150 - 0x18]; int state; float tState; char pad3[0x160 - 0x158]; void *p160; };
-struct CLOCK { char pad[0x3C]; float t3C; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern struct P *D_002DD644;
 extern char g_sndmgr[];
 extern char g_sw[];
@@ -21,7 +21,7 @@ void func_00147410(struct P *p, int state)
     case -1:
         D_002DD644 = p;
         func_001FE5B8(g_sndmgr, 2, 0);
-        SetClockRate__FP5CLOCK3CRKf(&D_002DDED0, 8, 0.0f);
+        SetClockRate__FP5CLOCK3CRKf(&g_clock, 8, 0.0f);
         func_0020EFC0(g_sw, 0);
         p->vt[8].pfn((char *)p + p->vt[8].d);
         if (!func_001A61A0(p)) {
@@ -36,11 +36,11 @@ void func_00147410(struct P *p, int state)
         break;
     }
     p->state = state;
-    p->tState = D_002DDED0.t3C;
+    p->tState = g_clock.tFrame;
     switch (state) {
     case -1:
         D_002DD644 = 0;
-        SetClockRate__FP5CLOCK3CRKf(&D_002DDED0, 8, 1.0f);
+        SetClockRate__FP5CLOCK3CRKf(&g_clock, 8, 1.0f);
         func_001FE5B8(g_sndmgr, 2, 1);
         func_0020F030(g_sw, 0);
         p->vt[9].pfn((char *)p + p->vt[9].d);

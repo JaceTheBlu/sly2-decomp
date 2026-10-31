@@ -1,3 +1,4 @@
+#include "clock.h"
 /* func_001E9090: one simulation step of a rope-like path chain.
  *
  * The first point is the start offset transformed by the first space's matrix; its velocity comes from
@@ -40,8 +41,7 @@ struct CHAIN
     float *distance;        // rest distance along the chain
     float damping;
 };
-struct CLOCK { float t, dt; };
-extern CLOCK D_002DDED0;    // g_clock
+extern CLOCK g_clock;    // g_clock
 extern qword D_002A2DA0;    // fallback direction
 extern "C" {
 qword func_0022D348(SPACE *, SPACE *, qword);
@@ -106,7 +106,7 @@ static inline float Abs(float g) { return __builtin_fabsf(g); }
 
 void func_001E9090(CHAIN *p)
 {
-    float dt = D_002DDED0.dt;
+    float dt = g_clock.dt;
     VV prev = TransformPoint(p->first->matrix, p->start);
     int n = p->path->count;
     p->position[0].q = prev;

@@ -1,10 +1,10 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct M3 { qword r[3]; };
 struct PO { char pad[0x2DC]; int x2DC; float g2E0; char pad2[0xDF4 - 0x2E4]; int xDF4; char pad3[0x18C8 - 0xDF8]; int x18C8; char pad4[0x18D8 - 0x18CC]; int x18D8; };
 struct T { char pad[0x330]; int x330; };
 struct P { char pad[0x10]; struct PO *p10; char pad2[0x30 - 0x14]; int x30; float x34; struct T *p38; };
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern qword D_002A2DA0;
 extern float D_002BD360;
 extern float D_002BD368;
@@ -88,11 +88,11 @@ void func_001467A0(struct P *p)
                 func_00146E18(p, 0);
             break;
         case 2:
-            if (p->p10->x18D8 == -1 && 0.1f < D_002DDED0.t - p->x34)
+            if (p->p10->x18D8 == -1 && 0.1f < g_clock.t - p->x34)
                 func_00146E18(p, -1);
             break;
         case 3: {
-            float t = D_002DDED0.t;
+            float t = g_clock.t;
             if (0.1f < t - p->x34) {
                 struct PO *po = p->p10;
                 if (po->x2DC != -1) {
@@ -104,7 +104,7 @@ void func_001467A0(struct P *p)
             break;
         }
         case 4:
-            if (0.1f < D_002DDED0.t - p->x34 && p->p10->x18C8 != 13)
+            if (0.1f < g_clock.t - p->x34 && p->p10->x18C8 != 13)
                 func_00146E18(p, -1);
             break;
         }

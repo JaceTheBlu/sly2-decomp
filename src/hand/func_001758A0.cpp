@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_001758A0: pick the first enabled response ENTRY of p that accepts target (range, height, angle, optional
 // line of sight), ask p's HandleSpliceEvent(0x18) about it with a CRef(true), then run the response.
 // MATCH from lanef10v1 with real C++ locals instead of the SLOT union and explicit calls:
@@ -46,7 +47,6 @@ struct CREF {
     ~CREF() { func_00129EC8(this); }
 };
 struct POLY { float a, b, c; };
-struct CLOCK { float time, dt; };
 struct BASIC {
     char pad0[0xC];
     virtual void VUnk00();
@@ -54,7 +54,7 @@ struct BASIC {
     virtual void HandleSpliceEvent(unsigned symidEvent, int fPost, int cargs, void **ppvargs, CREF *pref);
 };
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern POLY D_002BE600;
 extern LM D_002BBB60;
 extern char g_sw[];
@@ -147,7 +147,7 @@ extern "C" ENTRY *func_001758A0(P *p, P *target, void *gate)
         if (!enabled)
             return 0;
     }
-    if (D_002DDED0.time < p->cooldown)
+    if (g_clock.t < p->cooldown)
         return 0;
     if (FIsBasicDerivedFrom__FP5BASIC3CID(target, 0x32)) {
         VTE *e = &target->vt[77];

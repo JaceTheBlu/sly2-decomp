@@ -1,7 +1,7 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct ALO;
-struct CLOCK { float t; float dt; };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 struct CM { char pad[0x1C]; float g1C; char pad2[0x90 - 0x20]; qword pos; };
 extern CM g_cm;
 struct EMITO { void *palo; int f4; };
@@ -79,7 +79,7 @@ LActive:
     int c = 0;
     switch (p->k) {
     case 3: {
-        float g = p->g144 + p->g130 * p->g13C * D_002DDED0.dt;
+        float g = p->g144 + p->g130 * p->g13C * g_clock.dt;
         c = (int)g;
         p->g144 = g - (float)c;
         if (1.0f < (float)c) {
@@ -115,7 +115,7 @@ LActive:
         break;
     }
     case 0: {
-        float g = p->g144 + p->g130 * p->g13C * D_002DDED0.dt;
+        float g = p->g144 + p->g130 * p->g13C * g_clock.dt;
         c = (int)g;
         p->g144 = g - (float)c;
         if (c != 0) {
@@ -159,9 +159,9 @@ LActive:
         p->pemitb->pemito->palo = palo;
     }
 
-    if (D_002DDED0.t >= p->g138) {
+    if (g_clock.t >= p->g138) {
         p->g130 = GRandInRange__Fff(p->gF8, p->gFC);
-        p->g138 = D_002DDED0.t + p->g134;
+        p->g138 = g_clock.t + p->g134;
     }
     ModifyEmitterParticles(p);
 }

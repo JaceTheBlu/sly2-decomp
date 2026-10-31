@@ -10,7 +10,7 @@ struct ACTOR{char pad[0x80];qword response;};
 struct P{char pad0[0xC];VTE*vt;char pad10[0xD8];ACTOR*actor;char padEC[0xF44];MODEL*model;char pad1034[0x894];int mode,unusedCC,submode;char pad18D4[0x1B0];void*lookup;};
 struct CLOCK{float time,dt;};struct WORK{U a,b;};
 extern "C"{
-extern CLOCK D_002DDED0;extern qword g_normalZ;
+extern CLOCK g_clock;extern qword g_normalZ;
 extern float D_002BF288,D_002BF28C,D_002BF290,D_002BF294;
 void func_001F9B20(P*);void func_00204108(P*);
 void func_001903B8(P*);void func_0019DF70(void*);void func_00196DF8(void*);
@@ -50,7 +50,7 @@ extern "C" void func_00188960(P*p){
    qword resp=p->actor->response;
    func_001FAC30(p,QwScaleX(resp,VuFloat(-1.0f)));
   }else w.b.f[2]=w.a.f[2];
-  func_001FAC30(p,func_0011E9F8(QwDivide(QwSub(w.b.q,w.a.q),VuFloatFromMemWord(*(int*)&D_002DDED0.dt)),D_002BF288));
+  func_001FAC30(p,func_0011E9F8(QwDivide(QwSub(w.b.q,w.a.q),VuFloatFromMemWord(*(int*)&g_clock.dt)),D_002BF288));
   break;
  }
  case 24:
@@ -59,7 +59,7 @@ extern "C" void func_00188960(P*p){
    e=&p->vt[34];qword direction=((qword(*)(void*))e->fn)((char*)p+e->delta);
    M4*m=func_001A6318(p);M3 basis;basis.r[0]=m->r[0];basis.r[1]=m->r[1];basis.r[2]=m->r[2];
    float projection=SProjectVector(position,basis.r[0].q,&w.a.q,&w.b.q);
-   float dt=D_002DDED0.dt;
+   float dt=g_clock.dt;
    float gAlong=projection-D_002BF290*dt;
    float gPerp=1.0f-D_002BF294*dt;
    float angle=GZOfQw(direction)*dt;
@@ -69,7 +69,7 @@ extern "C" void func_00188960(P*p){
    rotation=LoadRotateMatrixRad__FfUx(g_normalZ,angle);
    qword sum=QwAdd(w.a.q,w.b.q);
    qword moved=QwSub(QwRotateVecAt(&rotation,&sum),position);
-   qword velocity=QwDivide(moved,VuFloatFromMemWord(*(int*)&D_002DDED0.dt));
+   qword velocity=QwDivide(moved,VuFloatFromMemWord(*(int*)&g_clock.dt));
    func_001FAC30(p,func_0011E9F8(QwProjectOut(velocity,g_normalZ),D_002BF28C));
   }
   break;

@@ -1,9 +1,9 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct MATRIX4 { qword r[4]; };
 struct MATRIX3 { qword r[3]; };
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("" : "=r"(q) : "0"(*(int *)&f)); } };
-struct CLOCK { float t; float dt; };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern MATRIX4 D_002A2D30;
 struct X { float x, y, z, w; qword axis; float gRot; float gScale; };
 void LoadRotateMatrixRad__FfUx(MATRIX3 *pm, float g, qword axis);
@@ -30,10 +30,10 @@ MATRIX4 func_0015BFD8(X *p)
     MATRIX4 *pmRot = &mRot;
     if (p->gRot != 0.0f) {
         MATRIX3 m3;
-        LoadRotateMatrixRad__FfUx(&m3, p->gRot * D_002DDED0.dt, p->axis);
+        LoadRotateMatrixRad__FfUx(&m3, p->gRot * g_clock.dt, p->axis);
         *(MATRIX3 *)pmRot = m3;
     }
     MATRIX4 mD;
-    mD = *pmRot * mScale * VU_FLOAT(D_002DDED0.dt);
+    mD = *pmRot * mScale * VU_FLOAT(g_clock.dt);
     return *pmRot + mD;
 }

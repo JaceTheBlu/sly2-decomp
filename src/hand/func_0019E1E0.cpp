@@ -7,7 +7,7 @@ struct PATH{char pad0[0x28];ulong flags;char pad30[0xE4-0x30];int cyclic;};
 struct C{P*actor;int state;float time;PATH*path;float distance,speed;int descending;float reset;int previous;char pad24[12];U offset;char pad40[0x10];float weight0;char pad54[8];float speed0,weight1;char pad64[8];float speed1;ANIMATION*animation;};
 struct CLOCK{float time,dt;};struct SMP{float maximum,minimum,duration;};struct LM{float low,high;};struct WORK{U ahead,behind;union{U input;SMP smooth;}reuse;LM limit;};
 extern "C"{
-extern CLOCK D_002DDED0;extern U D_002A2DD0,g_normalZ;extern SMP D_002BF928;
+extern CLOCK g_clock;extern U D_002A2DD0,g_normalZ;extern SMP D_002BF928;
 qword func_0011F088(qword,qword,float,SMP*,U*);
 void func_00195A00(void*,int,void*,void*);int func_001C46C0(INPUT*,int,float);int func_001C4660(INPUT*,int,float);void func_001C4738(INPUT*,int);
 void func_0019CC50(void*,int,void*,void*);int func_00131968(ASEGA*);void func_0019EAB0(C*,int);
@@ -84,7 +84,7 @@ typedef char WORK_limit_Offset[FIELD_OFFSET(WORK,limit)==48?1:-1];
 typedef char CLOCK_time_Offset[FIELD_OFFSET(CLOCK,time)==0?1:-1];
 typedef char CLOCK_dt_Offset[FIELD_OFFSET(CLOCK,dt)==4?1:-1];
 extern "C" void func_0019E1E0(C*p){
- WORK w;float lowSpeed,highSpeed;P*actor=p->actor;actor->offset.q=func_0011F088(actor->offset.q,D_002A2DD0.q,D_002DDED0.dt,&D_002BF928,0);
+ WORK w;float lowSpeed,highSpeed;P*actor=p->actor;actor->offset.q=func_0011F088(actor->offset.q,D_002A2DD0.q,g_clock.dt,&D_002BF928,0);
  register float amount __asm__("$f4"),dot __asm__("$f3"),zero __asm__("$f2");register int previous __asm__("$5");
  {register INPUT*input __asm__("$18")=p->actor->input;
  if(!Eligible(p->path)){func_00195A00(p->actor->controller,0,0,0);return;}
@@ -127,14 +127,14 @@ extern "C" void func_0019E1E0(C*p){
  }
  else{speed=0.0f;mode=1;maximumInput=p->speed1;}
  if(p->descending)speed=-speed;
- register CLOCK*clock __asm__("$19")=&D_002DDED0;
+ register CLOCK*clock __asm__("$19")=&g_clock;
  register float nextMemory __asm__("$f0");register PATH*path __asm__("$3");
  __asm__("abs.s $f5,%2\n\tlwc1 $f2,4(%7)\n\t.set noat\n\tlui $1,0x3f80\n\tmtc1 $1,%2\n\t.set at\n\tneg.s %0,$f2\n\tlwc1 $f4,0x1c(%8)\n\tsub.s %2,%2,$f2\n\t.set noat\n\tlui $1,0x3e4c\n\tori $1,$1,0xcccd\n\tmtc1 $1,$f3\n\t.set at\n\tswc1 $f5,%3\n\tmul.s %0,%0,%6\n\tswc1 $f3,%4\n\tmul.s %2,%2,$f4\n\tsw $zero,%5\n\tdiv.s %0,%0,$f5\n\tlw %1,0xc(%8)\n\tadd.s %0,%0,%2":"=f"(nextMemory),"=r"(path),"+f"(maximumInput),"=m"(w.reuse.smooth.maximum),"=m"(w.reuse.smooth.duration),"=m"(w.reuse.smooth.minimum):"f"(speed),"r"(clock),"r"(p):"$1","$f2","$f3","$f4","$f5","memory");
  p->reset=nextMemory;
  if(!path->cyclic){func_0019E110(p,&w.limit);(void)GSmooth__FfffP3SMPPf(p->distance,w.limit.low,clock->dt,&w.reuse.smooth,&lowSpeed);(void)GSmooth__FfffP3SMPPf(p->distance,w.limit.high,clock->dt,&w.reuse.smooth,&highSpeed);float low=-highSpeed,high=-lowSpeed;if(speed<low)speed=low;else if(high<speed)speed=high;}
  register float stopped __asm__("$f21")=0.0f;
  p->speed=-speed;
- if(speed!=stopped){p->distance+=p->speed*D_002DDED0.dt;func_001F4BF8(p->actor);}
+ if(speed!=stopped){p->distance+=p->speed*g_clock.dt;func_001F4BF8(p->actor);}
  if(p->path->cyclic)p->distance=GModPositive__Fff(p->distance,func_001E6648(p->path));
  register float magnitude __asm__("$f2")=fabsf(speed);
  if(magnitude<0.01f)mode=1;

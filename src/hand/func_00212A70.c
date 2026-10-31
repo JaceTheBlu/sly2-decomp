@@ -6,7 +6,7 @@ struct S {
 struct G { char pad[0x3BEC]; int count; };
 struct Clock { char pad[0x3C]; float time; float dt; };
 extern struct G g_sw;
-extern struct Clock D_002DDED0;
+extern struct Clock g_clock;
 extern int D_002DD318;
 extern int D_002BE538;
 void SetClockRate__FP5CLOCK3CRKf(struct Clock *,int,float);
@@ -22,14 +22,14 @@ void func_00212A70(struct S *p,int state) {
     }
     if(p->pauses) {
         if(p->state<2 && state>=2) {
-            if(++D_002DD318==1) SetClockRate__FP5CLOCK3CRKf(&D_002DDED0,7,0.0f);
+            if(++D_002DD318==1) SetClockRate__FP5CLOCK3CRKf(&g_clock,7,0.0f);
         } else if(state<2 && p->state>=2) {
-            if(--D_002DD318==0) SetClockRate__FP5CLOCK3CRKf(&D_002DDED0,7,1.0f);
+            if(--D_002DD318==0) SetClockRate__FP5CLOCK3CRKf(&g_clock,7,1.0f);
         }
     }
     if(p->state==0) func_002124F0(p);
     p->state=state;
-    p->time=D_002DDED0.time;
+    p->time=g_clock.time;
     p->tick=D_002BE538;
     switch(state) {
     case 0: func_00212780(p); break;

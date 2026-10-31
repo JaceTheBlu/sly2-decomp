@@ -32,7 +32,7 @@ struct OFFSETINPUTS{qword own,other,copy;};
 extern "C"{
 extern OBJECT*D_002F7900;
 extern void*D_003E14BC;extern void*D_003E14B0;extern void*D_003E14B8;struct GAMESTATE{char pad[0x4028];void*context;};extern GAMESTATE g_sw;
-extern CLOCK D_002DDED0;extern float D_002BE620;
+extern CLOCK g_clock;extern float D_002BE620;
 void*func_002333B4(void*,int,unsigned);
 void func_00176750(S*,STATE*);
 qword func_001A62E8(void*);M4*func_001A6318(void*);
@@ -99,7 +99,7 @@ extern "C" int func_00176BE8(S*p,int event,MSG*msg){
  if(p->actor->selected==msg->data.object)func_0020A9A8(p->actor->tuning,5);
  if(msg->data.kind==0x80000&&(msg->data.flags&8)){
   if(p->current.kind==8){
-   HELPER*h=p->helper;func_0017A5B0(h,0);h->until=Max(D_002DDED0.t+D_002BE620,h->until);
+   HELPER*h=p->helper;func_0017A5B0(h,0);h->until=Max(g_clock.t+D_002BE620,h->until);
   }else{
    p->actor->otherProgress+=msg->data.amount;
    if(p->actor->otherProgress<=0){
@@ -145,7 +145,7 @@ extern "C" int func_00176BE8(S*p,int event,MSG*msg){
    p->actor->progress+=msg->data.amount;
    if(p->actor->progress>0){
     func_001305B8(p->actor->clip,p->actor,0.0f,1.0f,1,&p->actor->animation);
-    p->actor->animationTime=D_002DDED0.t;
+    p->actor->animationTime=g_clock.t;
    }else flags|=0x20;
   }else flags|=0x20;
  }

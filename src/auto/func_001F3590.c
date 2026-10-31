@@ -3,7 +3,7 @@ M2C_UNK ReadMatrix__18CBinaryInputStreamP7MATRIX3(s32, s32);                    
 extern f32 D_002C3B90;
 extern M2C_UNK D_002C44F0;
 extern void *g_pdliFirst;
-extern M2C_UNK D_002DDED0;
+extern M2C_UNK g_clock;
 extern f32 D_002DDED4;
 extern M2C_UNK g_sw;
 extern M2C_UNK D_003E11AC;

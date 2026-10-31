@@ -1,3 +1,4 @@
+#include "clock.h"
 // MATCH: v7 + case 5 `pvt = p->pvt` read after the qmtc2 asm, which gets a "memory" clobber (lw then can't fill the mfc1->qmtc2 slot). No register pins.
 // v7: aligned 12 -> 1 with NO register pins. Dist3 ends with the guide's mtc1-from-qword helper `__asm__("mtc1 %1, %0" : "=f"(g) : "r"(d), "f"(k))` (gcc emits the qmfc2 v1 itself, asm cost 1 so max.s follows the mtc1 like the target); the $3 pin and the qmfc2 asm are gone. Left (1): case 5 lw pvt fills the slot between the reload mfc1 and the qmtc2 asm. A "$3" clobber on the qmtc2 asm fixes the order but pvt then takes a2 (with the vmulx "$2") or v0 (without it); pins on pvt/pfn on top: 3-11. The game's mfc1 VU_FLOAT ctor asm: 16-22.
 // v6: aligned 1 -> 12 (WORSE, policy version). The case-3 mtc1 asm is replaced by a pointer pun `return *(float *)&t;` (gcc emits the same mtc1 v1,f1), "f"(k) moved to the qmfc2 asm as the allocation-only operand. gcc's own mtc1 (movsf) has scheduler cost 2, so the lw p->pe again fills the max.s hazard slot, and the p1C lw gets a0 (target v0). union{int;float} 14, float-typed $3 qmfc2 output 14, no "f"(k) 17, "f"(k) on a separate empty asm 26.
@@ -8,7 +9,6 @@
 typedef int qword __attribute__((mode(TI)));
 struct VTE { short d; short pad; void (*pfn)(); };
 struct VT { struct VTE a[64]; };
-struct CLOCK { float t; float dt; };
 struct GS { char pad[0x4638]; void *p4638; };
 struct ST { char pad[0xC]; int xC; char pad1[0x18 - 0x10]; int x18; int c1C; int a20[1]; };
 struct SA0 { int x0; int x4; float g8; };
@@ -26,7 +26,7 @@ struct O {
     char pad3[0x180 - 0x168]; float g180; int st; float g188; struct E *pe;
 };
 struct MSG { int k; void *p; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern struct GS g_sw;
 extern char D_002DEB30[];
 extern qword D_002A2DD0;
@@ -202,7 +202,7 @@ void func_0013C560(struct O *p, int st)
     }
 
     p->st = st;
-    p->g188 = D_002DDED0.t;
+    p->g188 = g_clock.t;
 
     switch (st) {
     case 0:

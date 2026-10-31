@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct VTE { short d; short pad; void (*pf)(); };
 struct LO { char pad[0xC]; struct VTE *vt; };
@@ -9,8 +10,7 @@ struct S {
     qword q170; qword q180; qword q190;
     char p2[0x1CC - 0x1A0]; float x1CC;
 };
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern qword D_002A2DD0;
 extern qword D_002C0D60;
 extern float D_002A773C;
@@ -66,7 +66,7 @@ void func_001C60B8(struct S *p, int n)
         break;
     }
     p->x150 = n;
-    p->x154 = D_002DDED0.t;
+    p->x154 = g_clock.t;
     if (anim != -1) {
         if (!p->x168) {
             p->x168 = func_001F0380(p->x164, p, anim, 0);

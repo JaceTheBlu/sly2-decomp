@@ -53,7 +53,7 @@ struct CLOCK
     float dt;
 };
 
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002C3C98[];
 extern float D_002C3CA8[];
 
@@ -129,19 +129,19 @@ extern "C" void func_002044B0(struct STEP *pstep, struct XP *pxp, int ixpd)
     float gVn = FloatOfVf(QwDot(QwSub(pxp->axpd[0].v, pxp->axpd[1].v), pxp->normal));
     float gVnMin;
     float gVnTarget;
-    GSmooth__FfffP3SMPPf(pxp->gDist, pstep->gUnk210, D_002DDED0.dt, D_002C3C98, &gVnMin);
-    GSmooth__FfffP3SMPPf(pxp->gDist, 0.0f, D_002DDED0.dt, D_002C3CA8, &gVnTarget);
+    GSmooth__FfffP3SMPPf(pxp->gDist, pstep->gUnk210, g_clock.dt, D_002C3C98, &gVnMin);
+    GSmooth__FfffP3SMPPf(pxp->gDist, 0.0f, g_clock.dt, D_002C3CA8, &gVnTarget);
     gVn = gVn > gVnMin ? gVn : gVnMin;
     if (gVn < gVnTarget)
     {
         float dg = gVnTarget - gVn;
-        float dgMax = D_002DDED0.dt * 9000.0f;
+        float dgMax = g_clock.dt * 9000.0f;
         gVn += dg < dgMax ? dg : dgMax;
     }
     else
     {
         float dg = gVnTarget - gVn;
-        float dgMin = D_002DDED0.dt * -4500.0f;
+        float dgMin = g_clock.dt * -4500.0f;
         gVn += dg > dgMin ? dg : dgMin;
     }
 

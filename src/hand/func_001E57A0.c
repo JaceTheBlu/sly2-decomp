@@ -7,7 +7,7 @@ struct G2 { char pad[0x30]; qword v30; };
 struct G { char pad[0x20]; float f20; char pad24[0x60 - 0x24]; struct G2 m60; char pad2[0x500 - 0xA0]; char m500[0x10]; int n510; };
 extern qword D_002A2DD0;
 extern float D_002A8124;
-extern struct { float t; float dt; } D_002DDED0;
+extern struct { float t; float dt; } g_clock;
 extern struct G g_cm;
 extern struct G2 D_002DDFA0;
 int func_0011D4D0(float, float, float);
@@ -32,7 +32,7 @@ void func_001E57A0(struct P *p, struct A *pa, struct A *pb, float t)
         p->f80 = D_002A8124;
     } else {
         pb->n4 = 0;
-        p->f80 = D_002DDED0.t + t;
+        p->f80 = g_clock.t + t;
     }
     p->sub.apt[0] = &pa->t;
     p->sub.apt[1] = &pb->t;

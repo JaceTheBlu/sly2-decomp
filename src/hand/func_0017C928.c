@@ -1,6 +1,6 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 struct VTE { short d; short pad; void (*pfn)(void *); };
 struct X { qword a; qword v; };
 struct O { char pad[0xC]; struct VTE *vt; char pad2[0x28]; int n38; int n3C; char pad3[0xA8 - 0x40]; void *pA8; int nAC; char pad4[0x10]; int nC0; };
@@ -16,7 +16,7 @@ void func_0017C928(struct S *p, int n) {
     if (n == p->n50) return;
     func_001EF0D8(p->a18);
     p->n50 = n;
-    p->f54 = D_002DDED0.t;
+    p->f54 = g_clock.t;
     switch (n) {
     case 1:
         {

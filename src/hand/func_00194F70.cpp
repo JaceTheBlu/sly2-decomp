@@ -1,3 +1,4 @@
+#include "clock.h"
 // MATCH: func_00194F70 = UpdateJtGrabCandidates(SW *psw, STEPPLAYER *pstepplayer, int ccand, JTGRABCAND *ajtgrabcand)
 // (name and structures from src/hand/func_00194A40.cpp, the GatherJtGrabCandidates port that calls it).
 // Merges this frame's sorted grab candidates into the four the world keeps (SW::ajtgrabcand): an old candidate
@@ -36,10 +37,9 @@ struct JTGRABCAND {
 };
 struct SW { char pad0[0x4678]; int cjtgrabcand; JTGRABCAND ajtgrabcand[4]; };
 struct STEPPLAYER { char pad0[0x9C4]; int idUnk9C4; };
-struct CLOCK { float t; float dt; };
 
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern int D_002E1E50;
 extern float D_002BF710, D_002BF714;
 extern SMP D_002BF718;
@@ -107,7 +107,7 @@ void func_00194F70(SW *psw, STEPPLAYER *pstepplayer, int ccand, JTGRABCAND *ajtg
                         }
                     }
                     if (D_002E1E50) {
-                        float dt = D_002DDED0.dt;
+                        float dt = g_clock.dt;
                         float dsPrev = pcandOld->dsParam;
                         float dsNew = dsPrev + dt * ((pcand->sParam - pcandOld->sParam) * D_002BF710 + (pcand->dsParam - dsPrev) * D_002BF714);
                         float dsAvg;
@@ -115,7 +115,7 @@ void func_00194F70(SW *psw, STEPPLAYER *pstepplayer, int ccand, JTGRABCAND *ajtg
                         dsAvg = (dsPrev + dsNew) * 0.5f;
                         pcandOld->sParam = pcandOld->sParam + dt * dsAvg;
                     } else {
-                        pcandOld->sParam = GSmooth__FfffP3SMPPf(pcandOld->sParam, pcand->sParam, D_002DDED0.dt, &D_002BF718, &pcandOld->dsParam);
+                        pcandOld->sParam = GSmooth__FfffP3SMPPf(pcandOld->sParam, pcand->sParam, g_clock.dt, &D_002BF718, &pcandOld->dsParam);
                     }
                     if (fWrap) {
                         if (asRange[1] < pcandOld->sParam)

@@ -1,6 +1,6 @@
 // func_00195A00: ported from Lilly's personal Sly 2 decomp (src/P2/jtair.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002BF750 (D_002BF750), D_002BF754 (D_002BF754), D_002BF758 (D_002BF758), D_002BF75C (D_002BF75C), D_002BF760 (D_002BF760), D_002BF764 (D_002BF764), D_002BF76C (D_002BF76C), D_002BF770 (D_002BF770), D_002BF730 (g_SheetMovementMiscJumpHorizontalSpeed), D_002BF768 (g_SheetMovementMiscTurnbuckleLaunchHorizontalSpeed), D_002DDED0 (g_clock), g_normalZ (g_normalZ)
+// Globals: D_002BF750 (D_002BF750), D_002BF754 (D_002BF754), D_002BF758 (D_002BF758), D_002BF75C (D_002BF75C), D_002BF760 (D_002BF760), D_002BF764 (D_002BF764), D_002BF76C (D_002BF76C), D_002BF770 (D_002BF770), D_002BF730 (g_SheetMovementMiscJumpHorizontalSpeed), D_002BF768 (g_SheetMovementMiscTurnbuckleLaunchHorizontalSpeed), g_clock (g_clock), g_normalZ (g_normalZ)
 // 0x00195A00 SetJtAirJump (curated name): starts a flight of the given kind. n2 picks the directional clip; plo is the object the sub-state works on.
 // Every kind but the double jump (6) restarts the record (its timers, zStart, the JT's landing clue). The launch velocity comes from JtPlanLaunchVz; kinds
 // 3 / 0xE add a push along the facing when the stick is at rest, 0x11 (wall run) flattens it and adds 400 up. Then the sub-state (SetJtAirState) and the
@@ -258,7 +258,7 @@ struct CLOCK
       int cWrapAround;
       undefined4 unk_0x5c;
 };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 struct SOPART;
 struct WRBG;
 struct SUBGLOBX
@@ -1340,7 +1340,7 @@ void SetJtAirJump(JTAIR *pjtair, int nKind, int n2, LO *plo)
     if (nKind != 6)
     {
         pjtair->nUnk40 = 0;
-        t = D_002DDED0.t;
+        t = g_clock.t;
         pjtair->tUnk4c = t;
         pjtair->tUnk48 = t;
         pjtair->tUnk44 = t;
@@ -1352,10 +1352,10 @@ void SetJtAirJump(JTAIR *pjtair, int nKind, int n2, LO *plo)
     }
     vel = JtPlanLaunchVz(pjtair, nKind);
     pjtair->pstepplayer->SetVelocity(vel);
-    t = D_002DDED0.t;
+    t = g_clock.t;
     pjtair->pstepplayer->tUnk131c = t;
     if (nKind != 6)
-        pjtair->tStart = D_002DDED0.t;
+        pjtair->tStart = g_clock.t;
     switch (nKind)
     {
         case 0:

@@ -22,7 +22,7 @@ extern M2C_UNK D_002BC9F0;
 extern M2C_UNK _vt$17CQueueInputMemory;
 extern M2C_UNK D_002CBE38;
 extern M2C_UNK g_heapSw;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern M2C_UNK g_cm;
 extern M2C_UNK D_002DEB30;
 extern M2C_UNK D_002DEDC0;

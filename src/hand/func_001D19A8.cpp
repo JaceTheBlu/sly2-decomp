@@ -14,7 +14,7 @@ struct SIDE {int id;REF *reference;void *binding;LIMITS angleLimits;};
 struct SOUND {char pad0[0x4E];short references;};
 struct P {char pad0[0xC];VENTRY *vt;char pad10[0x50];FRAME *space;char pad64[0x11C];int mode;char pad184[0xC];int count;char pad194[0xC];ENTRY entries[8];float width;int sideCount;SIDE sides[4];int attachCount;ATTACH *attachments[8];char pad51C[0x24];float heading,goalHeading,steering,wheelAngle,drive,turn,acceleration;char pad55C[0x3C];SOUND *sound;int unused59C;float soundRate;P *target;char pad5A8[0x18];float lastCorrection;};
 struct CLOCK {float time,dt;};
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern const qword g_normalZ;
 extern POLY D_002C2040,D_002C2060,D_002C2080;
 extern LIMITS D_002C2050,D_002C2070,D_002C2090;
@@ -107,7 +107,7 @@ extern "C" void func_001D19A8(P *p)
     asm("lwc1 $f3,%4\n\tmin.s %0,%0,%2\n\tlwc1 $f2,%5\n\tmul.s %0,%3,%0\n\tlw %1,%6\n\tmul.s %0,%0,$f3\n\tdiv.s %0,%0,$f2"
         :"+f"(limited),"=r"(table):"f"(p->drive),"f"(turnFactor),"m"(p->steering),"m"(p->width),"m"(p->vt):"$f2","$f3");
     p->turn=limited;
-    if(GetMatrixFrom(p,table)->basis.rows[2].f[2]>0.5f)p->lastCorrection=D_002DDED0.time;
+    if(GetMatrixFrom(p,table)->basis.rows[2].f[2]>0.5f)p->lastCorrection=g_clock.time;
     i=0;
     if(p->sideCount>0){
         LIMITS*limits=&p->sides[0].angleLimits;SIDE*side=p->sides;
@@ -126,7 +126,7 @@ extern "C" void func_001D19A8(P *p)
         ENTRY *entry=&p->entries[k];
         float desired;
         if(p->drive!=0.0f)desired=entry->steering*p->steering;else desired=0.0f;
-        entry->tilt=func_0011D2D0(entry->tilt,desired,D_002DDED0.dt,D_002C2098,0);
+        entry->tilt=func_0011D2D0(entry->tilt,desired,g_clock.dt,D_002C2098,0);
     }
     i=0;
     qword currentPosition=func_001A62E8(p);
@@ -195,7 +195,7 @@ extern "C" void func_001D19A8(P *p)
         }while(i<p->attachCount);
     }
     if(p->sound){
-        p->soundRate=GSmooth__FfffP3SMPPf(p->soundRate,p->drive/D_002C20A4,D_002DDED0.dt,D_002C20A8,0);
+        p->soundRate=GSmooth__FfffP3SMPPf(p->soundRate,p->drive/D_002C20A4,g_clock.dt,D_002C20A8,0);
         float rate=Clamp(p->soundRate,0.2f,1.0f);
         func_001FB1F8(p->sound,rate);
         func_001FB2C0(p->sound,rate*0.2f);

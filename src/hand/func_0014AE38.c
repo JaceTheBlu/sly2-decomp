@@ -1,8 +1,8 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 extern qword D_002A2DD0;
 extern char g_sw[];
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 struct V3 { int x; int y; int z; };
 struct VTE { short d; short pad; void *pfn; };
 struct LO { int pad[3]; struct VTE *vt; };
@@ -45,7 +45,7 @@ void func_0014AE38(struct P *p, int state)
         func_001F57C0(p->p10, 1);
         break;
     case 3: {
-        float t = D_002DDED0.t;
+        float t = g_clock.t;
         p->p10->xF04 = t + GRandInRange__Fff(p->p44->x60, p->p44->x64);
         p->p44 = 0;
         break;
@@ -53,7 +53,7 @@ void func_0014AE38(struct P *p, int state)
     }
     func_001EF0D8(p->x18);
     p->x30 = state;
-    p->x34 = D_002DDED0.t;
+    p->x34 = g_clock.t;
     switch (state) {
     case 0: {
         struct O9E *po = func_00205438(p->p10, 0x9E);
@@ -93,7 +93,7 @@ void func_0014AE38(struct P *p, int state)
         po->x64 = 25.0f;
         po->xC8 = func_001C4840(g_sw);
         VCALL0(po, 8);
-        p->p10->xF04 = D_002DDED0.t;
+        p->p10->xF04 = g_clock.t;
         func_001F5720(p->p10, 0);
         func_001F57C0(p->p10, 0);
         break;

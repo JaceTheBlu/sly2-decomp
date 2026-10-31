@@ -1,5 +1,5 @@
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+#include "clock.h"
+extern struct CLOCK g_clock;
 struct F { int a[0x18]; };
 struct S { int n0; int n; float t; };
 void *func_002333B4(void *pv, int c, int cb);
@@ -8,7 +8,7 @@ void func_0020D108(struct S *p, int n)
 {
     if (p->n == n) return;
     p->n = n;
-    p->t = D_002DDED0.t;
+    p->t = g_clock.t;
     if (n == 2) {
         struct F f;
         func_002333B4(&f, 0, sizeof f);

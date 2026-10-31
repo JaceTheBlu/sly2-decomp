@@ -1,6 +1,6 @@
 // func_001E1E30: ported from Lilly's personal Sly 2 decomp (src/P2/jsg.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002A7AD0 (D_002A7AD0), D_002DE570 (D_002DE570), D_003DA530 (D_003DA530), D_002DDED0 (g_clock), g_cm (g_cm), D_002DEB30 (g_game), D_003DA0C0 (g_hintbox), D_002DFC00 (g_joy), g_normalZ (g_normalZ), D_002A2DD0 (g_qwZero), g_sndmgr (g_sndmgr), D_004435F0 (g_subtitle), g_sw (g_sw)
+// Globals: D_002A7AD0 (D_002A7AD0), D_002DE570 (D_002DE570), D_003DA530 (D_003DA530), g_clock (g_clock), g_cm (g_cm), D_002DEB30 (g_game), D_003DA0C0 (g_hintbox), D_002DFC00 (g_joy), g_normalZ (g_normalZ), D_002A2DD0 (g_qwZero), g_sndmgr (g_sndmgr), D_004435F0 (g_subtitle), g_sw (g_sw)
 // 0x001E1E30 NextJsgCommand__FP3JSG  (T1200; was DispatchAsegEvent: it is Sly 1's NextJsgJsge)
 // Steps the script to the next command of its block and executes it. First the command's actor is chosen (the oid the command carries, else the
 // SetActor default, the block's object or the relay's firer), then the command runs by kind (the table in re/notes/relay-commands-t1289.md), and
@@ -350,7 +350,7 @@ struct CLOCK
       int cWrapAround;
       undefined4 unk_0x5c;
 };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 void SetClockRate(CLOCK *pclock, CRK crk, float rt);
 struct EDGE
 {
@@ -3033,7 +3033,7 @@ void NextJsgCommand(JSG *pjsg)
         break;
     }
     case RELAYCK_SetClockRate:
-        SetClockRate(&D_002DDED0, (CRK)6, prelaycmd->setClockRate.rate);
+        SetClockRate(&g_clock, (CRK)6, prelaycmd->setClockRate.rate);
         if (prelaycmd->setClockRate.rate == 0.0f)
         {
             RELAY *prelay = pjsg->prelay;
@@ -3872,10 +3872,10 @@ void NextJsgCommand(JSG *pjsg)
     }
     if (GrfUpdateLo(pjsg->prelay) & 0x100)
     {
-        pjsg->tCommand = D_002DDED0.tReal;
+        pjsg->tCommand = g_clock.tReal;
     }
     else
     {
-        pjsg->tCommand = D_002DDED0.t;
+        pjsg->tCommand = g_clock.t;
     }
 }

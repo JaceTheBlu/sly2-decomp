@@ -26,7 +26,7 @@ typedef struct OBJ {
     int x4C;
 } OBJ;
 extern struct G g_sw;
-extern struct { float t; float dt; } D_002DDED0;
+extern struct { float t; float dt; } g_clock;
 extern char D_002C3248[];
 Q *func_001C4840(struct G *);
 int FIsBasicDerivedFrom__FP5BASIC3CID(void *, int);
@@ -115,7 +115,7 @@ void func_001D9DF8(OBJ *p)
         if (p->x20 < p->x24)
             p->x20 = p->x24;
         else
-            p->x20 = GSmooth__FfffP3SMPPf(D_002C3248, 0, p->x20, p->x24, D_002DDED0.dt);
+            p->x20 = GSmooth__FfffP3SMPPf(D_002C3248, 0, p->x20, p->x24, g_clock.dt);
         func_00212E40(p->x38, 0x34F, 1.0f - p->x20);
         if (func_0011D4D0(p->x20, p->x24, 0.0001f))
             func_001D9B60(p, 1);
@@ -125,7 +125,7 @@ void func_001D9DF8(OBJ *p)
         if (p->x28 < p->x2C)
             p->x28 = p->x2C;
         else
-            p->x28 = GSmooth__FfffP3SMPPf(D_002C3248, 0, p->x28, p->x2C, D_002DDED0.dt);
+            p->x28 = GSmooth__FfffP3SMPPf(D_002C3248, 0, p->x28, p->x2C, g_clock.dt);
         func_00212E40(p->x38, 0x350, 1.0f - p->x28);
         if (func_0011D4D0(p->x28, p->x2C, 0.0001f))
             func_001D9B60(p, 1);

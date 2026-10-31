@@ -1,8 +1,8 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct X { char pad[0x1A8]; float g1A8; char pad2[0x1840 - 0x1AC]; int x1840; };
 struct P { char pad[0x10]; struct X *px; char pad2[0x30 - 0x14]; float g30; };
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern void *D_002E1E40;
 extern float D_002BD374, D_002BD378;
 void func_001EEF98(struct P *p);
@@ -39,7 +39,7 @@ void func_00146F18(struct P *p)
             g = func_002458F0(GetY(d), GetX(d));
             if (__builtin_fabsf(RadNormalize__Ff(g - p->g30)) < D_002BD374) {
                 gCur = func_00204740(p->px);
-                { float d = RadNormalize__Ff(g - gCur); float dt = D_002DDED0.dt; float k = D_002BD378; func_00204660(p->px, gCur + func_0011CFE0(d, k * dt)); }
+                { float d = RadNormalize__Ff(g - gCur); float dt = g_clock.dt; float k = D_002BD378; func_00204660(p->px, gCur + func_0011CFE0(d, k * dt)); }
             }
         }
         break;

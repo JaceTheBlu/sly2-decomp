@@ -1,6 +1,6 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern void *D_002E1E40;
 struct POLY { float c0, c1, c2; float pad; float gMin, gMax; float dt; };
 struct S { char pad[0xE8]; void *xE8; void *xEC; };
@@ -45,7 +45,7 @@ void func_001BA608(struct P *p)
             struct S *ps = p->po->pF64;
             if (func_00227C90(ps->xE8, func_001A62E8(D_002E1E40)))
                 func_001BA828(p, 0);
-            else if (p->po->poly.dt < D_002DDED0.t - p->g34)
+            else if (p->po->poly.dt < g_clock.t - p->g34)
                 func_001BA828(p, 2);
             break;
         }

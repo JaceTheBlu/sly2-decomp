@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_00180668: MATCH, no register pins. From laneH9v5 (aligned 3): the case-3 first refresh subtract (target - previousTarget) uses QwSubC, the same vsub with a clobber of the dead vf3. Reload hands out spill regs round-robin over {v0,v1,vf1,vf2,vf3}; after the case 1/2 vsub (target vf1, self vf2) the next VF reload would get vf3; with vf3 clobbered (and prev in vf1) the target reload gets vf2 as in the target.
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned long ulong;
@@ -8,7 +9,6 @@ struct NODE{char pad0[12];VTE*vt;char pad10[0x18];ulong flags;char pad30[0x2C];F
 struct LM{float low,high;};
 struct RULE{int distanceEnabled,angleEnabled;LM enterDistance,stayDistance,enterAngle,stayAngle;};
 struct POLY{float a,b,c;};
-struct CLOCK{float t,dt;};
 struct P{NODE node;char padF0[0xD0];int state;float stateTime;int cooldown,active;void*binding;NODE*target;void*curve;float progress;qword previousSelf,previousTarget;float stamp,heading;char pad208[8];qword output;char pad220[0x50];RULE rules[5];float scale;char pad33C[4];POLY remaining;char pad34C[4];POLY angle;char pad35C[4];POLY simpleAngle;char pad36C[4];LM simpleClamp;};
 struct VU_FLOAT{qword qw;};
 extern "C"{
@@ -16,7 +16,7 @@ extern qword D_002A2DD0,D_002A2DA0;
 extern float D_002BE820,D_002BE824,D_002BE828;
 extern POLY D_002BE830,D_002BE840,D_002BE860;
 extern LM D_002BE850,D_002BBB60;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern char D_002DE578[],g_sw[];
 void func_001F36E0(P*);
 int func_0017F550(P*);
@@ -123,13 +123,13 @@ dispatch:
   int refresh=0;
   if(D_002BE820<Length(QwSubC(target,p->previousTarget)))refresh=1;
   else if(D_002BE820<Length(QwSub(self,p->previousSelf)))refresh=1;
-  else if(D_002BE824<D_002DDED0.t-p->stamp)refresh=1;
+  else if(D_002BE824<g_clock.t-p->stamp)refresh=1;
   if(refresh){
    func_001C02D0(p->binding,self,target,p->curve);
    p->progress=0.0f;
    p->previousTarget=target;
    p->previousSelf=self;
-   p->stamp=D_002DDED0.t;
+   p->stamp=g_clock.t;
   }
   func_001E7380(p->curve,self,0,&nearest.q,p->progress,&direction.q,0,&p->progress);
   {

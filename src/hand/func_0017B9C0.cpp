@@ -8,7 +8,7 @@ struct C{char pad[0x10];P*actor;char pad14[0x38-0x14];P*preferred;P*near;P*selec
 struct WORK{float t,d,t2,d2;U origin,bestPoint;};
 struct CLOCK{float time,dt;};
 extern "C"{
- extern CLOCK D_002DDED0;
+ extern CLOCK g_clock;
  extern RANGE D_002BE740;
  extern POLY D_002BE720,D_002BE730;
  float GRandInRange__Fff(float,float);
@@ -60,7 +60,7 @@ extern "C" void func_0017B9C0(C*p){
  P*best;
  float lower;
  qword zero;
- float now=D_002DDED0.time;
+ float now=g_clock.time;
  if(now<p->time)return;
  // D_002BE710 holds the random-delay range.
  register unsigned int randomAddress __asm__("$2");

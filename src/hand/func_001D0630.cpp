@@ -5,7 +5,7 @@ struct G { char pad[0x60]; M3 mat; };
 struct SPIN { char pad[0x40]; qword axis; };
 struct S {char pad[0x14];float start,duration;char pad1C[0x40-0x1C];M3 mat;char pad70[0xF0-0x70];SPIN *spin;char padF4[0x100-0xF4];qword pos;};
 extern G g_cm;
-extern struct CLOCK {float t,dt;} D_002DDED0;
+extern struct CLOCK {float t,dt;} g_clock;
 extern "C" {
 qword func_0014F268(G*,qword);
 M3 CalculateDmat__FP7MATRIX3T0(const M3&,const M3&);
@@ -26,7 +26,7 @@ void func_001D0630(S *p) {
  qword view=func_0014F268(pg,p->pos);
  camera=CalculateDmat__FP7MATRIX3T0(p->mat,pg->mat);
  func_0011BCF8(&camera,&angle,&axis.q);
- float t=(D_002DDED0.t-p->start)/p->duration;
+ float t=(g_clock.t-p->start)/p->duration;
  fade=LoadRotateMatrixRad__FfUx(axis.q,angle*t);
  spin=LoadRotateMatrixRad__FfUx(p->spin->axis,(t+t)*3.14159274f);
  render=Mul(Mul(fade,spin),p->mat);

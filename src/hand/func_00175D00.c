@@ -1,6 +1,6 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 struct G;
 extern struct G g_sw;
 struct VTE { short d; short pad; void *pfn; };
@@ -81,7 +81,7 @@ int func_00175D00(struct S *p) {
     }
     if (!k) {
         if (p->n34 == 0) {
-            if (D_002DDED0.t - p->f38 < 3.0f) return 0;
+            if (g_clock.t - p->f38 < 3.0f) return 0;
         } else if (p->n34 != 2) {
             return 0;
         }

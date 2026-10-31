@@ -8,7 +8,7 @@ struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(
 struct CLOCK { float t, dt, x8, xC, dtPrev; };
 struct FRAME { int n; FRAME(); ~FRAME(); }; /* out-of-line ctor/dtor: func_001AE478 / _$_18CBinaryInputStream(this, 2) */
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern qword D_002BD8F0, D_002BD900;
 extern float D_002BD8D8, D_002BD8DC;
 extern char g_sw[];
@@ -41,7 +41,7 @@ static inline float Length(const qword &v) { return GXOfQw(QwSqrt(QwDot(v, v)));
 
 qword func_0014F110(void *p, qword pos, qword posTarget)
 {
-    CLOCK *pclock = &D_002DDED0;
+    CLOCK *pclock = &g_clock;
     int ii, jj;
     qword dpos = Sub(posTarget, pos);
     qword v = DivideBy(dpos, VU_FLOAT(&pclock->dtPrev));

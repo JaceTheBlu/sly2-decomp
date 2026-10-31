@@ -43,11 +43,25 @@ commit of this branch so far). Do not regenerate it on a dirty tree you have not
 | `tools/readability.py [--record]` | readability metrics; `--record` appends to `config/readability_history.csv` |
 | `tools/clean_history.py` | strip agent/lane/wave attributions from comments (already applied) |
 | `tools/sly1match.py SLY1_DIR [--eval]` | pair Sly 2 functions with Sly 1 counterparts → `config/sly1_matches.csv` |
+| `tools/migrate_struct.py STRUCT HEADER [--dry-run] [FILE…]` | replace local re-declarations of a struct by the shared header (fields matched by offset) |
 | `tools/resolve_names.py [--sly1 DIR] [--apply]` | give addresses to names the sources use without one (needs the executable) |
 
 ## Progress log
 
 Newest first. Each entry: what changed, how it was verified, the metrics after it.
+
+### 2026-10-31 — Phase 2 pilot: CLOCK in a shared header
+
+- `include/clock.h`: the Sly 2 `CLOCK` (0x60 bytes, worked out from `MarkClockTick`/`StartupClock`/`TickNow`:
+  game/real/frame times and steps, nine rates `art[9]` set by `SetClockRate`, 64-bit tick built from the COUNT
+  register and its wrap count). Named `g_clock` (was `D_002DDED0`), `MarkClockTick__FP5CLOCKi`,
+  `StartupClock__Fv`, `TickNow__FP5CLOCK`.
+- `tools/migrate_struct.py`: replaces simple local re-declarations by the header, matching fields by offset and
+  renaming accesses (`.time` → `.t`). CLOCK: 251 files migrated; 21 failed to compile (static asserts on
+  `sizeof(CLOCK)`, unusual accesses) and were reverted; none changed code. Local CLOCK definitions: 322 → 92.
+- Verified: objcheck --all 0 problems; progress.py with the executable 6,662/6,662.
+- Lesson: a canonical struct can be larger than the local stand-ins without changing code (no file used
+  `sizeof`, except the ones with static asserts, which fail loudly).
 
 ### 2026-10-31 — Game executable available; by-name symbols resolved
 

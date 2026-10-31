@@ -1,4 +1,4 @@
-extern struct { float t; float dt; } D_002DDED0;
+extern struct { float t; float dt; } g_clock;
 extern float D_002C3DAC;
 struct X { int pad; int n4; int pad2; float tC; };
 struct S { char pad[0x2C0]; long fl; char pad2[0x3D0 - 0x2C8]; int n3D0; char pad3[0xF64 - 0x3D4]; void *pF64; };
@@ -15,7 +15,7 @@ int func_0020A298(struct S *p, void *q, long mask)
     x = func_00154180(p->pF64, q);
     if (!x)
         goto ret1;
-    if (!x->n4 || D_002DDED0.t - x->tC < D_002C3DAC)
+    if (!x->n4 || g_clock.t - x->tC < D_002C3DAC)
         goto ret1;
     if (!(p->fl & mask))
         goto ret0;

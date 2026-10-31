@@ -37,7 +37,7 @@ extern f32 D_002BF58C;
 extern f32 D_002BF590;
 extern f32 D_002BF594;
 extern M2C_UNK D_002BF598;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDED4;
 extern M2C_UNK D_002DE2E0;
 extern M2C_UNK g_sw;

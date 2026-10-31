@@ -30,7 +30,7 @@ extern s32 D_002DD2EC;
 extern s32 D_002DD2F0;
 extern s32 D_002DD2F4;
 extern void *g_pdliFirst;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDF0C;
 extern M2C_UNK g_cm;
 extern M2C_UNK D_002DE5B0;
@@ -56,7 +56,7 @@ void func_0015DCD8(s32 arg0) {
     void *temp_v0;
 
     func_001A5E28(arg0);
-    if ((D_002DDED0 - M2C_FIELD(arg0, f32 *, 0x68)) > (M2C_FIELD(arg0, f32 *, 0x5C) + M2C_FIELD(arg0, f32 *, 0x60) + M2C_FIELD(arg0, f32 *, 0x64))) {
+    if ((g_clock - M2C_FIELD(arg0, f32 *, 0x68)) > (M2C_FIELD(arg0, f32 *, 0x5C) + M2C_FIELD(arg0, f32 *, 0x60) + M2C_FIELD(arg0, f32 *, 0x64))) {
         temp_v0 = M2C_FIELD(arg0, void **, 0xC);
         M2C_FIELD(temp_v0, void (**)(s32), 0x4C)(arg0 + M2C_FIELD(temp_v0, s16 *, 0x48));
     }

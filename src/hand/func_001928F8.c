@@ -1,11 +1,11 @@
+#include "clock.h"
 typedef struct { short d; short pad; void (*pfn)(void *, int); } VT;
 struct O { char pad[0xC]; VT *vt; char pad2[0x1854-0x10]; int x1854; };
 struct P {
     struct O *x0; float x4; int x8; int pad0c[2]; int x14; int x18; char pad[0x440-0x1C]; char x440[0x4C4-0x440];
     int x4c4; char pad2[0x500-0x4C8]; int x500;
 };
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 void func_00192BD8(struct P *p, int n);
 void func_0018E540(struct O *o, int n);
 void EnsureAloSfx__FP3ALO(struct O *o);
@@ -15,7 +15,7 @@ void func_001928F8(struct P *p, int n, int a, int b)
 {
     func_00192BD8(p, -1);
     p->x8 = n;
-    p->x4 = D_002DDED0.t;
+    p->x4 = g_clock.t;
     p->x18 = b;
     p->x14 = a;
     p->x0->vt[88].pfn((char *)p->x0 + p->x0->vt[88].d, 2);

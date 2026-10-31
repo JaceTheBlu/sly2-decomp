@@ -1,6 +1,6 @@
 // func_0018A8C8: ported from Lilly's personal Sly 2 decomp (src/P2/jtground.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002A2DA0 (D_002A2DA0), D_002BF354 (D_002BF354), D_002BF360 (D_002BF360), D_002BF364 (D_002BF364), D_002BF370 (D_002BF370), D_002DDED0 (g_clock), g_normalZ (g_normalZ)
+// Globals: D_002A2DA0 (D_002A2DA0), D_002BF354 (D_002BF354), D_002BF360 (D_002BF360), D_002BF364 (D_002BF364), D_002BF370 (D_002BF370), g_clock (g_clock), g_normalZ (g_normalZ)
 // 0x0018A8C8 JtChooseGroundState (curated name)
 typedef unsigned char    uint8_t;
 typedef unsigned int     uint32_t;
@@ -282,7 +282,7 @@ struct CLOCK
       int cWrapAround;
       undefined4 unk_0x5c;
 };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 struct SOPART;
 struct WRBG;
 struct SUBGLOBX
@@ -1592,7 +1592,7 @@ extern "C" void JtChooseGroundState(JT *pjt)
                     if (pjt->jtas != 8 && pjt->jtas != 9 || pjt->janim.fInputOpen)
                     {
     fell:
-                        if (D_002DDED0.t - pjt->tUnk20c > 0.1f)
+                        if (g_clock.t - pjt->tUnk20c > 0.1f)
                             SetJtAirJump(&pjt->jtair, 0, 0, 0);
                     }
                     break;
@@ -1758,7 +1758,7 @@ extern "C" void JtChooseGroundState(JT *pjt)
                         SetJtJts(pjt, JTS_Unk05, JTBS_4);
                     break;
                 case JTS_Hang:
-                    if (D_002DDED0.t - pjt->tUnk18cc > 0.25f)
+                    if (g_clock.t - pjt->tUnk18cc > 0.25f)
                     {
                         if (pjt->pctl->GrfConsumePressed(0x40, 0.25f))
                             SetJtAirJump(&pjt->jtair, 2, 0, 0);
@@ -1774,7 +1774,7 @@ extern "C" void JtChooseGroundState(JT *pjt)
                     {
                         if (0.7f < pjt->pxpFloor->normal.z)
                         {
-                            if (D_002DDED0.t - pjt->tUnk18cc > 0.4f)
+                            if (g_clock.t - pjt->tUnk18cc > 0.4f)
                                 SetJtJts(pjt, JTS_Stand, JTBS_Nil);
                         }
                     }
@@ -1789,7 +1789,7 @@ extern "C" void JtChooseGroundState(JT *pjt)
                     {
                         if (0.7f < pjt->pxpFloor->normal.z)
                         {
-                            if (D_002DDED0.t - pjt->tUnk18cc > 0.4f)
+                            if (g_clock.t - pjt->tUnk18cc > 0.4f)
                             {
                                 float tLabel = TFindAsegLabel(pjt->pasegUnk1a84, (OID)0x16D);
                                 ASEGA *pasega = pjt->pasegaUnk1030;
@@ -1816,7 +1816,7 @@ extern "C" void JtChooseGroundState(JT *pjt)
                     break;
                 }
                 case JTS_Unk11:
-                    if (!pjt->nUnk1d30 || D_002DDED0.t - pjt->tUnk18cc > D_002BF360)
+                    if (!pjt->nUnk1d30 || g_clock.t - pjt->tUnk18cc > D_002BF360)
                         SetJtJts(pjt, JTS_Stand, JTBS_Nil);
                     break;
                 case JTS_SurfaceClimb:

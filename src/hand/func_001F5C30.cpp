@@ -1,11 +1,11 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};
 struct M3 {U rows[3];M3(){} M3(const M3&m){rows[0]=m.rows[0];rows[1]=m.rows[1];rows[2]=m.rows[2];} M3&operator=(const M3&m){rows[0]=m.rows[0];rows[1]=m.rows[1];rows[2]=m.rows[2];return *this;}};
 struct OWNER {M3 matrix;char pad30[0x70];OWNER *parent;char padA4[0xC];qword velocity;char padC0[0x30];qword force;};
 struct P {char pad5C[0x5C];OWNER *owner;};
 struct COEF {float a,b,c;};
-struct CLOCK {float time,dt;};
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern "C" M3 func_0022FD38(OWNER *,OWNER *,const M3 *);
 extern "C" void NormalizeRotateMatrix3__FP7MATRIX3(M3 *);
 extern "C" M3 CalculateDmat__FP7MATRIX3T0(const M3 *,const M3 *);
@@ -42,7 +42,7 @@ extern "C" void func_001F5C30(P*p,const M3*orientation,const COEF*c,qword veloci
         float length=Length(direction);
         if(0.0001f<length){
             float gain=(d->c*length+d->b)+d->a/length;
-            float limit=1.0f/D_002DDED0.dt;
+            float limit=1.0f/g_clock.dt;
             U scalar;
             qword k;
             if(limit<gain)gain=limit;

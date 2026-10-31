@@ -3,7 +3,7 @@ struct VT {short adjustment,unused;void *function;};
 struct ACTOR {char pad0[0xF4];int id;int unusedF8,key;};
 struct X {char pad0[0xC];VT *vtable;char pad10[0x30];uint flags;char pad44[0x14];void *shown;char pad5C[0x98];ACTOR *actor;};
 struct P {int state;char pad4[0x70];int specialCount;char pad78[0x14];ACTOR *actor;char pad90[0x10];uint savedFlags;void *resource;X **model;X *primary,*secondary;char padB4[8];int selected,pending;};
-extern char g_sw[],g_sndmgr[],D_002DDED0[],D_002DE390[],D_002DEB30[];
+extern char g_sw[],g_sndmgr[],g_clock[],D_002DE390[],D_002DEB30[];
 extern "C" {
 void func_0020EFC0(void *,int);
 void func_0020F030(void *,int);
@@ -77,7 +77,7 @@ extern "C" void func_00202768(P *p,int nextState)
         break;
     case 8:
         Restore(*p->model,p->savedFlags);
-        SetClockRate__FP5CLOCK3CRKf(D_002DDED0,0,1.0f);
+        SetClockRate__FP5CLOCK3CRKf(g_clock,0,1.0f);
         func_001FE5B8(g_sndmgr,1,1);
         func_00213928(p->primary,0x358);
         break;
@@ -150,7 +150,7 @@ extern "C" void func_00202768(P *p,int nextState)
             __asm__("sw %1,%0" : "=m"(updated->flags) : "r"(inlineWord));
         }
         func_001FE5B8(g_sndmgr,1,0);
-        SetClockRate__FP5CLOCK3CRKf(D_002DDED0,0,0.0f);
+        SetClockRate__FP5CLOCK3CRKf(g_clock,0,0.0f);
         break;
     }
     case 9:

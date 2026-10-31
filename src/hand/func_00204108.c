@@ -4,12 +4,12 @@ typedef union { qword q; float f; } U;
 typedef struct { float x,y,z; } VECTOR3;
 typedef struct { qword row[3]; } M3;
 union FLOATWORD { float value; int bits; };
-extern struct { float t; union FLOATWORD delta; } D_002DDED0;
+extern struct { float t; union FLOATWORD delta; } g_clock;
 struct O { char pad[0xB0]; qword angularVelocity; char pad2[0x30]; qword angularForce; };
 struct S { char pad[0x5C]; struct O *po; char pad2[0x1A4 - 0x60]; int k; char pad3[8]; M3 desired; qword v1E0; char pad4[0x1F4 - 0x1F0]; float f1F4, f1F8, f1FC, f200; };
 void func_001F9B20(struct S *p);
-static inline int ClockWord(char*page){int word;__asm__ volatile("lw %0,%%lo(%2)(%1)":"=r"(word):"r"(page),"i"(&D_002DDED0.delta.bits),"m"(*(const int*)(page-0x212C)));return word;}
-static inline char*ClockPage(){register char*page __asm__("$2");__asm__("lui %0,%%hi(%1)":"=r"(page):"i"(&D_002DDED0.delta.bits));return page;}
+static inline int ClockWord(char*page){int word;__asm__ volatile("lw %0,%%lo(%2)(%1)":"=r"(word):"r"(page),"i"(&g_clock.delta.bits),"m"(*(const int*)(page-0x212C)));return word;}
+static inline char*ClockPage(){register char*page __asm__("$2");__asm__("lui %0,%%hi(%1)":"=r"(page):"i"(&g_clock.delta.bits));return page;}
 void func_001F59A0(struct S *,M3 *,VECTOR3 *);
 static inline void InitScalar(U *value,int bits) {
     register qword scalar __asm__("vf4");

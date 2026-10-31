@@ -1,7 +1,7 @@
 extern "C" {
 struct RGBA { unsigned char r, g, b, a; RGBA() {} };
 typedef struct CLOCK { float t; float dt; } CLOCK;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 typedef struct X {
     char pad[0x50];
     RGBA rgba50, rgba54, rgba58;
@@ -46,7 +46,7 @@ extern "C" void func_0015DD48(X *p)
     RGBA rgba;
     RGBA a, b;
     float d;
-    float dt = D_002DDED0.t - p->t68;
+    float dt = g_clock.t - p->t68;
     R *pr;
     int x;
     Q *pq;

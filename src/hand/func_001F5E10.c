@@ -1,11 +1,11 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union {qword q;float f[4];} V;
 struct COEF {float a,b,c;};
 struct VE {short d,pad;qword(*fn)(void*);};
 struct OWNER {char pad[0xA0];void *parent;char padA4[0x4C];qword force;};
 struct S {char pad[0xC];struct VE *vt;char pad10[0x48];struct OWNER *owner;};
-struct CLOCK {float time,dt;};
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 qword func_001A62E8(struct S*);
 qword func_0022FCC8(void*,void*,qword);
 static inline qword Sub(qword x,qword y){register qword a __asm__("vf1")=x,b __asm__("vf2")=y,r __asm__("vf3");__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
@@ -42,7 +42,7 @@ void func_001F5E10(struct S*input,qword position,struct COEF*positionCoefficient
    if(1.0e-4f<distance){
      register void *parent asm("a1");
      float value=(d->c*distance+d->b)+d->a/distance;
-     float limit=1.0f/D_002DDED0.dt;
+     float limit=1.0f/g_clock.dt;
      if(limit<value)value=limit;
      scale2.q=Scalar(value);
      {register qword oldValue asm("v0")=owner->force;old2.q=oldValue;}parent=owner->parent;argument.q=LoadVector(&scale2);

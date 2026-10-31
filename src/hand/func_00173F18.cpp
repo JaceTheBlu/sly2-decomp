@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct M3 { qword row[3]; };
 struct M4 { qword row[4]; };
@@ -11,7 +12,6 @@ struct SET {
     char pad0[0x50]; int csel; SEL *asel; char pad58[0x38];
     int cplo; LO **aplo; int cpos; qword *apos;
 };
-struct CLOCK { float t, dt; };
 struct CAMERA { char pad0[0x60]; qword dir; };
 inline void *operator new(unsigned, void *p) { return p; }
 struct FRAME { int unk[4]; };
@@ -20,7 +20,7 @@ extern "C" {
 extern float D_002A53E0;
 extern float D_002BE5E4;
 extern float D_002BE5E8;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern LM D_002BBB60;
 extern CAMERA g_cm;
 extern qword g_normalZ;
@@ -126,7 +126,7 @@ extern "C" SEL *func_00173F18(SET *pset, qword pos, qword *pposOut, M3 *pmatOut,
         LO *plo;
         if (psel->fBusy)
             goto next;
-        if (D_002DDED0.t < psel->tUntil)
+        if (g_clock.t < psel->tUntil)
             goto next;
         plo = psel->plo;
         if (!plo)

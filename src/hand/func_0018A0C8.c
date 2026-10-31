@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef struct { float x, y, z, w; } VEC;
 typedef union { qword q; VEC v; } UV;
@@ -9,8 +10,7 @@ struct S {
     char p2[0xE1C]; void *x1028; char p3[8]; void *x1034; char p4[0x4DC]; int x1514; char p5[8];
     char x1520[0x100]; char x1620[0x3B4]; int x19d4, x19d8, x19dc, x19e0; char p6[0xC]; int x19f0, x19f4;
 };
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 int func_001430C8(struct S *p);
 void func_001F1350(void *p, int n);
 float func_0011CFE0(float g, float h);
@@ -30,7 +30,7 @@ void func_0018A0C8(struct S *p)
         e = &o->vt[34];
         u.q = ((qword (*)(void *))e->pfn)((char *)o + e->d);
         u.v.z = func_0011CFE0(u.v.z, 10.0f);
-        func_00204660(p, p->g1a8 + u.v.z * D_002DDED0.dt);
+        func_00204660(p, p->g1a8 + u.v.z * g_clock.dt);
     }
     if (p->x19f0) {
         func_00189C40(p, p->x19d8, p->x19e0, p->x19f0, 5.0f, p->x1520);

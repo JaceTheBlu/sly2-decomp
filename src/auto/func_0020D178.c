@@ -50,7 +50,7 @@ extern M2C_UNK D_002C3EB0;
 extern M2C_UNK D_002DC018;
 extern void *D_002DD5BC;
 extern s32 D_002DD648;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern M2C_UNK g_cm;
 extern s32 D_002DE570;
 extern M2C_UNK D_002DEB30;

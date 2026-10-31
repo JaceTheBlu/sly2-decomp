@@ -19,7 +19,7 @@ struct WORK {M4 original,sample,start,final;VIEWS views;qword velocity,destinati
 extern "C" {
 extern qword D_002C1EE0;
 extern float D_002C1EF0;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 void func_0012E460(JOB **);
 float TFindAsegLabel__FP4ASEG3OID(MOTION *,int);
 void PredictAsegEffect(MOTION *,float,float,LO *,SPACE *,SPACE *,M4 *,M4 *);
@@ -136,7 +136,7 @@ extern "C" void func_001CCC88(P *input,LO *other){
   :"=&r"(receiver),"=&r"(apply),"=m"(work.views.scalar.q),"=m"(work.endVelocity):"m"(table[35].delta),"m"(table[35].fn),"j"(inverse),"j"(negativeOrEnd),"r"(object));
  work.views.scalar.q=positive;apply(receiver,callbackVelocity);
  }
- float endTime=D_002DDED0.time+phase;
+ float endTime=g_clock.time+phase;
  qword position=func_0022FC48(0,object->position->space,work.final.rows[3]);
  qword endVelocity=func_0022FCC8(0,object->position->space,work.endVelocity);
  {

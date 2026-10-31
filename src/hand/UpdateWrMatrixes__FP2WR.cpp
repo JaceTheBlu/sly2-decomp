@@ -1,3 +1,4 @@
+#include "clock.h"
 // UpdateWrMatrixes (0x22C028). Circle case: the scalar-home sqc2 stores and one combine carry "memory" clobbers to fix their order.
 typedef int qword __attribute__((mode(TI)));
 union V {qword q;float f[4];};
@@ -10,8 +11,7 @@ struct BEND {ONZ bend,swivel;};
 union PAYLOAD {CIRCLE circle;BEND bend;};
 struct WRE {int kind,index;char pad8[8];V axis,vectorA;PAYLOAD data;};
 struct WR {char pad[0x50];float time;int count,count58,index5C;WRE entries[8];int count6E0;char pad6E4[0xC];M4 matrices[4],coordinates[4];char pad8F0[0xC];void *source;};
-struct CLOCK {float t,dt;};
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern "C" {
 void func_001A5E28(WR *);
 void func_0022B7D8(WR *);
@@ -33,7 +33,7 @@ static inline qword UnitFresh(qword v){qword len,one,r;__asm__("vmul.xyz %0,%2,%
 static inline qword Rotate(const M3 &m,qword v){__asm__("vmulax.xyz ACC,%1,%0x\n\tvmadday.xyz ACC,%2,%0y\n\tvmaddz.xyz %0,%3,%0z":"+j"(v):"j"(*(const qword *)m.f[0]),"j"(*(const qword *)m.f[1]),"j"(*(const qword *)m.f[2]));return v;}
 void UpdateWrMatrixes(WR *p){
  func_001A5E28(p);
- if(D_002DDED0.t==p->time)return;
+ if(g_clock.t==p->time)return;
  if(p->source)func_0022B7D8(p);
  for(int i=0;i<p->count;i++){
   WRE *entry=&p->entries[i];
@@ -43,7 +43,7 @@ void UpdateWrMatrixes(WR *p){
   case 0:{
    V position,uv,temporary;
    float sine,cosine;
-   float angle=(D_002DDED0.t*entry->data.circle.frequency+entry->data.circle.phase)*6.2831855f;
+   float angle=(g_clock.t*entry->data.circle.frequency+entry->data.circle.phase)*6.2831855f;
    CalculateSinCos__FfPfT1(RadNormalize__Ff(angle),&sine,&cosine);
    int column=entry->data.circle.column,next=column+1;
    V *pos0=&matrix->r[column],*pos1=&matrix->r[next],*uv0=&coordinates->r[column],*uv1=&coordinates->r[next];
@@ -73,5 +73,5 @@ void UpdateWrMatrixes(WR *p){
   }
   }
  }
- p->time=D_002DDED0.t;
+ p->time=g_clock.t;
 }

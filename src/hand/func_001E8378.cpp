@@ -1,3 +1,4 @@
+#include "clock.h"
 /* func_001E8378 (Lilly's range): one RK4-style step of a spring rope (CHAIN, same struct as matched func_001E9090).
  * Matching tricks (T1869, see notes/190000-1F0000_lanes.md):
  *  - the 4 empty volatile asms at the end of the pass loop add 4 RTL insns (no code) so the hoisted start/startVel/end/endVel
@@ -42,8 +43,7 @@ struct CHAIN
     float bend, bendDamping;
     float shape, shapeDamping;
 };
-struct CLOCK { float t, dt; };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern float D_002C3658[4];
 extern float D_002C3668[4];
 extern qword D_002A2DA0;
@@ -187,7 +187,7 @@ void func_001E8378(CHAIN *p)
     func_001AE5A0(accV, p->velocity, count * 16);
     for (int pass = 0; pass < 4; pass++) {
         float w = D_002C3658[pass];
-        float h = w * D_002DDED0.dt;
+        float h = w * g_clock.dt;
         Blend(&newP[0], &p->position[0], start, w);
         Blend(&newV[0], &p->velocity[0], startVel, w);
         Blend(&newP[count - 1], &p->position[count - 1], end, w);
@@ -242,7 +242,7 @@ void func_001E8378(CHAIN *p)
                 F = VecCombo3(F, VU_FLOAT(p->shape * (len - amplitude * r4 * (1.0f - r))), dir.q, VU_FLOAT(&p->shapeDamping), proj.q);
             }
             float wk = D_002C3668[pass];
-            float k = wk * D_002DDED0.dt;
+            float k = wk * g_clock.dt;
             Store(&accV[i], AddScaled(accV[i].q, VU_FLOAT(k), F));
             Store(&accP[i], AddScaled2I(accP[i].q, VU_FLOAT(k * 0.5f), p->velocity[i].q, newV[i].q));
             Store(&force[i], F);

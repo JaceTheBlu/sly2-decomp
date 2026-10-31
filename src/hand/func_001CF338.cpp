@@ -6,7 +6,7 @@ struct LO { char pad[0x38]; float radius; };
 struct S { char pad[0x14]; float start,duration; LO *lo; POLY size; int pad2; POLY alpha; };
 struct G { char pad[0x90]; qword pos; };
 extern G g_cm;
-extern struct CLOCK { float t,dt; } D_002DDED0;
+extern struct CLOCK { float t,dt; } g_clock;
 extern struct LIMIT { float lo,hi; } D_002BBB60;
 extern "C" {
 int func_0014F850(G*,qword,qword);
@@ -25,7 +25,7 @@ int func_001CF338(S*p,qword pos,const M3&mat)
 
     float proj;
     qword delta;
-    float t=(D_002DDED0.t-p->start)/p->duration;
+    float t=(g_clock.t-p->start)/p->duration;
     float alpha=Clamp(Poly(&p->alpha,t),D_002BBB60.lo,D_002BBB60.hi);
     float size=Poly(&p->size,t);
     G *pg=&g_cm;

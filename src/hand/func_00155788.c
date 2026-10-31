@@ -1,5 +1,5 @@
 typedef struct CLOCK { float t; float dt; } CLOCK;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 struct VTE { short d; short pad; void (*pfn)(); };
 struct O { int a[3]; struct VTE *vt; char pad[0x20]; int n30; int pad34; void *p38; int pad3c; int n40; char pad3[8]; int n4C; };
 struct T { char pad[0x33C]; int n33C; char pad2[0x1018 - 0x340]; int n1018; };
@@ -15,7 +15,7 @@ void func_00155788(struct S *p, int k)
         p->pq->n20 = 1;
     func_001EF0D8(p->ab18);
     p->k30 = k;
-    p->t34 = D_002DDED0.t;
+    p->t34 = g_clock.t;
     switch (k) {
     case 0: {
         struct O *o = func_00205438(p->pt, 0xB5);

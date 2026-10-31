@@ -16,7 +16,7 @@ extern const char D_002A8B80[],D_002A8B88[];
 extern char D_004435F0[];
 extern RGBA D_004435F4;
 extern SCROLL D_003DA0C0;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern const float D_002C40B8;
 extern "C" void *func_0013E368(WORLD *,int);
 extern "C" char *func_0021ED58(char *,const char *);
@@ -82,7 +82,7 @@ extern "C" void func_00216BC8(S *p,T *t,DATA *data,int unused){
         func_0021EDA0(marquee,D_002A8B88);
         func_0021EDA0(marquee,text);
         func_0021EDA0(marquee,D_002A8B88);
-        elapsed=D_002DDED0.t-D_003DA0C0.time;
+        elapsed=g_clock.t-D_003DA0C0.time;
         if(elapsed<D_002C40B8){
             data->fade*=elapsed/D_002C40B8;
         }else{

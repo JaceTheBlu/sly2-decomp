@@ -6,7 +6,7 @@ struct O { char pad[0xC]; VT *vt; char pad2[0xE8-0x10]; struct E8 *xe8; };
 struct S { char pad[0x1BC]; int x1bc; float x1c0; float x1c4; };
 struct P { struct O *x0; int x4; int x8; int pad[2]; struct S *x14; int x18; float x1c; };
 struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 struct SMP { float a,b,c; };
 extern struct SMP D_002BF700;
 void func_001E67B8(struct S *s, U *position, U *direction, float g);
@@ -78,13 +78,13 @@ void func_00194170(struct P *p)
             int bits;
             goal = s->x1c0;
             __asm__("qmfc2.ni %0,%1" : "=r"(bits) : "j"(direction));
-            dt = D_002DDED0.dt;
+            dt = g_clock.dt;
             __asm__ __volatile__("mtc1 %1,%0" : "=f"(d2) : "r"(bits));
         }
     }
     (void)GSmooth__FfffP3SMPPf(d1, goal, dt, psmp, &a);
     }
-    (void)GSmooth__FfffP3SMPPf(d1, -s->x1c0, D_002DDED0.dt, psmp, &b);
+    (void)GSmooth__FfffP3SMPPf(d1, -s->x1c0, g_clock.dt, psmp, &b);
     x = GClamp(s->x1c4 * d2, b, a) - d2;
     __asm__("qmtc2.ni %1, %0" : "=j"(k.q) : "r"(x));
     __asm__("vmulx.xyzw %0, %1, %2x" : "=j"(r.q) : "j"(w.q), "j"(k.q));

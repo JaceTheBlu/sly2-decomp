@@ -1,3 +1,4 @@
+#include "clock.h"
 /* MATCH: from v8 (3). 2nd block: dt read as the scalar D_002DDED4 (g_clock.dt) through an "rV" asm input: expand keeps the MEM (V allows memory) but only r fits at reload, so reload loads it at the asm through the dying %hi reg (target lw v0,lo(v0) after the lqc2s); vsub then pin-free as "+j"(d = s.pos). */
 /* v8: aligned 7 -> 3. posT load: x8 ($v0) and a dummy z ($v1) kept live across it by two commented empty allocation-only asms, so the reload reg for the spilled posT is $a1 like the target (find_reg takes the first free reg in alloc order); the keep-alive asm has an output (+r po) so it is not volatile and reload_cse removes the a1 reload. Left: 2nd-block dt load (target: lui early + lw v0,lo(v0) right before the vsub = reload of a MEM). */
 /* v7: aligned 8 -> 7. Allocation-only "r"(p->x8) on the 2nd-block vsub/qmtc2 asm gives x8 $v1. Left: posT lq v0+por (target lq a1), lw dt scheduled before the lqc2s and dt in $a0 (target: reload-style lw v0,lo(v0) right before the vsub). */
@@ -21,8 +22,7 @@ struct P {
 extern char g_sw[];
 extern qword D_002A2DD0;
 extern float D_002A45A8;
-struct CLOCK { float t; int dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern int D_002DDED4;  /* g_clock.dt */
 void *PloFindSwObject__FP2SWi3OIDP2LO(void *pg, int k, int n, void *pv);
 void *func_001C4AF8(void *pg, qword pos);

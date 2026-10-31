@@ -2,7 +2,7 @@
 M2C_UNK func_001291A8(M2C_UNK *, M2C_UNK *, s32, s32); /* extern */
 M2C_UNK func_00129EC8(M2C_UNK *);                   /* extern */
 s32 PvAllocStackImpl__FP7SWALLOC(s32 *);                           /* extern */
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern M2C_UNK D_002DE578;
 extern M2C_UNK D_002DEB30;
 extern M2C_UNK D_002E1E88;

@@ -6,7 +6,7 @@ struct VT {short delta,pad;void (*fn)(void *);};
 struct P {char padC[0xC];VT *vt;char pad10[0x48];OWNER *position,*rotation;char pad60[0x88];void *enabled;char padEC[4];U force[2];};
 struct G {char pad3D58[0x3D58];int stamp;};
 struct CLOCK {float time,dt;};
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern G g_sw;
 extern "C" void func_00230598(P *,OWNER *);
 extern "C" qword func_0022FCC8(void *,OWNER *,qword);
@@ -75,7 +75,7 @@ extern "C" void func_001F9E70(P *input)
             int incrementNear=0;NearVector(&incrementNear,D_002A2DD0,shift);
             if(!incrementNear){
                 qword point;qword *positionAddress=PointAddress(position,&point);
-                qword delta;float halfDt=HalfAndDelta(D_002DDED0.dt,0.5f,shift,&delta);
+                qword delta;float halfDt=HalfAndDelta(g_clock.dt,0.5f,shift,&delta);
                 qword k=Scalar(halfDt,&scalar);
                 __as__6VECTORG9VU_VECTOR(positionAddress,AddScaled(point,delta,k));
                 position->position.f[3]=1.0f;
@@ -83,7 +83,7 @@ extern "C" void func_001F9E70(P *input)
             }
             incrementNear=0;NearVector(&incrementNear,D_002A2DD0,turn);
             if(!incrementNear){
-                frame=Mul(BuildRotation(Scale(turn,Scalar(D_002DDED0.dt*0.5f,&scalar))),rotation->matrix);
+                frame=Mul(BuildRotation(Scale(turn,Scalar(g_clock.dt*0.5f,&scalar))),rotation->matrix);
                 NormalizeRotateMatrix3__FP7MATRIX3(&frame);
                 rotation->matrix=frame;
                 rotation->matrix.r[1].i[3]=0;

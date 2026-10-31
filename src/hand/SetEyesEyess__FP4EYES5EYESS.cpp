@@ -1,5 +1,5 @@
-struct CLOCK { float t; float dt; };
-extern CLOCK D_002DDED0 asm("D_002DDED0");
+#include "clock.h"
+extern CLOCK g_clock asm("g_clock");
 enum EYESS { EYESS_Nil = -1, EYESS_Open = 0, EYESS_Closing = 1, EYESS_Closed = 2 };
 struct EYES { char pad[0x1C]; int cframe; char pad1[0x50 - 0x20]; float dtBlink; float dtOpenMin; float dtOpenMax; float uDoubleBlink;
     int pad60; EYESS eyess; float tEyess; float dtOpen; float dframe; float iframe; float uOpen; };
@@ -28,5 +28,5 @@ void SetEyesEyess(EYES *peyes, EYESS eyess)
     }
 
     peyes->eyess = eyess;
-    peyes->tEyess = D_002DDED0.t;
+    peyes->tEyess = g_clock.t;
 }

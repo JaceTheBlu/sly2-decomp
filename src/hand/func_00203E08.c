@@ -6,7 +6,7 @@ struct B {union V *v;};
 struct M {struct X *px;char pad4[0xC];struct B *pb;char pad14[8];int count;char pad20[0x5C];union V *points;};
 struct S {char pad258[0x258];struct M *pm0,*pm1;};
 struct CLK {float time,dt;};
-extern struct CLK D_002DDED0;
+extern struct CLK g_clock;
 extern float D_002C3C68[];
 M4 *func_0011C318(M4 *,const M4 *);
 M4 *__ml__FRC7MATRIX4T0(M4 *,const M4 *,const M4 *);
@@ -68,7 +68,7 @@ void func_00203E08(struct S *input)
     i=((struct S*)context)->pm1->count;
     if(--i>=0){
     pv=v.f;
-    clock=&D_002DDED0;
+    clock=&g_clock;
     do{
         register float *nextGoal __asm__("$22");
         int nextIndex=i-1;

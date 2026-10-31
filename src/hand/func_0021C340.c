@@ -9,7 +9,7 @@ struct RGBA { byte c[4]; };
 struct Batch { int count; char pad4[8]; U *positions; byte *uv; struct RGBA *colors; int pad18; struct Sample *samples; };
 struct N { void *record; int count; struct Batch *batches; struct N *next; };
 struct S { char pad[0xDC]; struct N *nodes; char padE0[0x4C]; float g; char pad130[0x20]; float fade; int pad154; int count; struct Ring *array; int index; char pad164[0x1C]; void *follow; };
-extern struct CLOCK { float t,dt; } D_002DDED0;
+extern struct CLOCK { float t,dt; } g_clock;
 void func_001F3C70(struct S *);
 static inline qword Broadcast(float f) { qword r; __asm__("qmtc2.ni %1,%0" : "=j"(r) : "r"(f)); return r; }
 static inline qword Transform(const struct M4 *m,qword p) {
@@ -55,7 +55,7 @@ void func_0021C340(struct S *p) {
                 StoreXYZ(out,pos);
                 out++;
                 if(color) {
-                    float fade=1.0f-(D_002DDED0.t-a->t)/p->fade;
+                    float fade=1.0f-(g_clock.t-a->t)/p->fade;
                     if(fade<0.0f) fade=0.0f;
                     else if(1.0f<fade) fade=1.0f;
                     color->c[3]=(int)(a->g*fade*s->alpha);

@@ -1,6 +1,6 @@
 // func_0018D760: ported from Lilly's personal Sly 2 decomp (src/P2/jtgadget.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002BF3EC (g_SheetMiscVariablesStatesThiefReflexesClock), D_002BF3F0 (g_SheetMiscVariablesStatesTimeRushClock), D_002DDED0 (g_clock), g_cm (g_cm), D_002DFBC0 (g_grfjoyt)
+// Globals: D_002BF3EC (g_SheetMiscVariablesStatesThiefReflexesClock), D_002BF3F0 (g_SheetMiscVariablesStatesTimeRushClock), g_clock (g_clock), g_cm (g_cm), D_002DFBC0 (g_grfjoyt)
 // 0x0018D760 FCanUseGadget__2JTi  (T1329)  Virtual 98: may Sly use the gadget in the state he is in? Nothing while the look mode runs (FJtModeActive). Thief reflexes (0x1D) and time rush (0x2A)
 // work in every state but jts 4 (hurt), and only while the clock's power-up rate is 1 (nothing runs) or is this gadget's own rate (the press that ends it). Else the state decides: the
 // air / grab / pipe records say (FJtairCanUseGadget, FJtgrabCanUseGadget, FJtpipeCanUseGadget), hang (3) allows only the look mode, the ground states (0, 1, 5, 10, 0xC) allow the
@@ -208,7 +208,7 @@ struct CLOCK
       int cWrapAround;
       undefined4 unk_0x5c;
 };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 struct SOPART;
 struct WRBG;
 struct SUBGLOBX
@@ -1440,9 +1440,9 @@ int JT::FCanUseGadget(int idGadget)
     {
         if (jts == JTS_Unk04)
             return 0;
-        if (D_002DDED0.art[CRK_PowerUp] == 1.0f)
+        if (g_clock.art[CRK_PowerUp] == 1.0f)
             return 1;
-        return D_002DDED0.art[CRK_PowerUp] == (idGadget == 0x1D ? D_002BF3EC : D_002BF3F0);
+        return g_clock.art[CRK_PowerUp] == (idGadget == 0x1D ? D_002BF3EC : D_002BF3F0);
     }
     switch (jts)
     {

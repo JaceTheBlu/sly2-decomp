@@ -1,3 +1,4 @@
+#include "clock.h"
 // MATCH. Case 3 builds CLQ clq = {-0.25, 0.0015625} and LM lm = {0.1, 1.0} on the
 // stack: q->x1C = GLimitLm(&lm, GFromClq(|d.xy|, &clq)), q->x18 = atan2(d.y, d.x) with d = pos(p->p38) - pos(p->p10).
 // What finished it (the old 1-off was the por/li.s order of the clq init): see notes/140000.md (T1657).
@@ -5,10 +6,9 @@ typedef int qword __attribute__((mode(TI)));
 struct Q { char pad[0x18]; float x18; float x1C; char pad2[0x30 - 0x20]; int x30; };
 struct PO { char pad[0x2DC]; int x2DC; };
 struct P { char pad[0x10]; struct PO *p10; char pad2[0x30 - 0x14]; int x30; float x34; void *p38; };
-struct CLOCK { float t; };
 struct CLQ { float g0, g1, g2, gPad; } __attribute__((aligned(16)));
 struct LM { float gMin, gMax; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 void func_001EF0C0(struct P *p, struct Q *q);
 qword func_001A62E8(void *p);
 float func_002458F0(float y, float x);
@@ -58,7 +58,7 @@ void func_00146B18(struct P *p, struct Q *q)
         qword d = Sub(func_001A62E8(p->p38), func_001A62E8(p->p10));
         q->x1C = 1.0f;
         q->x18 = GAtanR(d);
-        if (D_002DDED0.t - p->x34 < 0.1f) {
+        if (g_clock.t - p->x34 < 0.1f) {
             q->x30 |= 0x80;
             func_001C45A8(q);
         }
@@ -82,7 +82,7 @@ void func_00146B18(struct P *p, struct Q *q)
         }
         q->x1C = s;
         q->x18 = GAtanXY2(d, b);
-        if (D_002DDED0.t - p->x34 < 0.1f && p->p10->x2DC == -1) {
+        if (g_clock.t - p->x34 < 0.1f && p->p10->x2DC == -1) {
             q->x30 |= 0x40;
             func_001C45A8(q);
         }
@@ -92,7 +92,7 @@ void func_00146B18(struct P *p, struct Q *q)
         qword d = Sub(func_001A62E8(p->p38), func_001A62E8(p->p10));
         q->x1C = 1.0f;
         q->x18 = GAtanR(d);
-        if (D_002DDED0.t - p->x34 < 0.1f) {
+        if (g_clock.t - p->x34 < 0.1f) {
             q->x30 |= 0x80;
             func_001C45A8(q);
         }

@@ -30,7 +30,7 @@ struct PX : P {
 };
 extern "C" {
 extern DLI *g_pdliFirst;
-extern float D_002DDED0[];
+extern float g_clock[];
 extern int D_002C3C5C;
 extern SPRBUF D_003DD2C0[2];
 extern void *D_002DE59C;
@@ -65,7 +65,7 @@ static inline void *PvNextDli(DLI *pdli)
 static inline VU_FLOATM VuFloatDt()
 {
     VU_FLOATM v;
-    __asm__("lw %0, %1" : "=r"(v.qw) : "m"(D_002DDED0[1]));
+    __asm__("lw %0, %1" : "=r"(v.qw) : "m"(g_clock[1]));
     return v;
 }
 static inline char *PvSprBuf(int i)

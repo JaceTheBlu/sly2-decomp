@@ -10,7 +10,7 @@ struct P {char pad[0xC];VTE*vt;char pad10[0x2CC];int state;char pad2E0[0xB14];in
 struct HIT {L*target;int pad4;P*source;int tag,kind;char pad14[0xC];U point,direction;char pad40[0x20];};
 struct MSG {int type;char pad4[0x1C];U position;};
 struct CLOCK {float time,dt;};
-extern "C" CLOCK D_002DDED0;
+extern "C" CLOCK g_clock;
 extern "C" qword func_001A62E8(P*);
 extern "C" void*func_002333B4(void*,int,int);
 extern "C" P*func_001F7598(HIT*);
@@ -57,11 +57,11 @@ extern "C" void func_001A2460(P*p){
  register U*predpos __asm__("$20")=&predicted.r[3];
  for(;i<p->count;i++){
   ENTRY*entry=&p->entries[i];
-  if(D_002DDED0.time-entry->time<0.05f)continue;
+  if(g_clock.time-entry->time<0.05f)continue;
   P*object=entry->object;
   position.q=func_001A62E8(object);
   void*frame=((void*(*)(void*,M4*))object->vt[32].fn)((char*)object+object->vt[32].delta,pbase);
-  func_002309E8(frame,0,ppred,0,D_002DDED0.dt);
+  func_002309E8(frame,0,ppred,0,g_clock.dt);
   predicted=__ml__FRC7MATRIX4T0(ppred,pbase);
   int crossed=0;
   if(point.f[2]<=position.f[2]){if(predpos->f[2]<=point.f[2])crossed=1;}
@@ -73,7 +73,7 @@ extern "C" void func_001A2460(P*p){
    msg.type=4;
    EFFECT*effect=p->link->effect;
    ((void(*)(void*,MSG*))effect->vt[51].fn)((char*)effect+effect->vt[51].delta,&msg);
-   entry->time=D_002DDED0.time;
+   entry->time=g_clock.time;
   }
  }
 }

@@ -15,7 +15,7 @@ typedef struct R { unsigned int x0; char pad[0x30 - 4]; float g30; int x34; int 
 typedef struct CLOCK { float t; float dt; } CLOCK;
 struct SMP {float a,b,duration;};
 
-extern "C" CLOCK D_002DDED0;
+extern "C" CLOCK g_clock;
 extern "C" SMP D_002BF348;
 
 extern "C" float func_00204740(A *p);
@@ -129,7 +129,7 @@ tail:
         } else {
             k = 0.0f;
         }
-        ps->p68->p114->g10 = GSmooth__FfffP3SMPPf(&D_002BF348, ps->p68->p114->g10, k, D_002DDED0.dt, 0);
+        ps->p68->p114->g10 = GSmooth__FfffP3SMPPf(&D_002BF348, ps->p68->p114->g10, k, g_clock.dt, 0);
     }
     switch (ps->x8) {
     case 0:

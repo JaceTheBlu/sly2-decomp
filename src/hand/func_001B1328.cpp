@@ -1,3 +1,4 @@
+#include "clock.h"
 // Mover/follower state controller: switch from the current state to `next`.
 // Leaving states -1/0/2/3 restores the group's default action; entering a state sets up its velocity, mode, timers or
 // effect; afterwards the new state, its time stamp and (except for state 2) the state's animation entry are recorded.
@@ -10,9 +11,8 @@ struct PATH;struct ASEG;struct ASEGA;struct EFFECT;struct SOURCE;
 struct ENT{ASEG*clip;int flags;int pad;};   // per-state animation table entry (12 bytes)
 struct P{char pad0[12];VE*vt;char pad10[0x5C-0x10];void*group;char pad60[0x158-0x60];float low0,high0,low1,high1,lead;char pad16c[4];PATH*path;float parameter,phase;char pad17c[4];ENT aseg[4];char pad1B0[0x1C4-0x1B0];ASEGA*animation;char pad1c8[8];F speed;int oldMode;float heading;char pad1dc[4];M3 basis;float spin[3];float ratio;int state;float changed,randomDeadline,deadline;int amount;char pad234[12];U damageOffset;};
 struct WORK{U first,second,direction,velocity,scalar;float angle,parameter;};
-struct CLOCK{float t,dt;};
 extern "C"{
- extern CLOCK D_002DDED0;extern U D_002A2DD0,D_002A2DA0;extern char g_sw[],D_002DE578[];
+ extern CLOCK g_clock;extern U D_002A2DD0,D_002A2DA0;extern char g_sw[],D_002DE578[];
  void func_002303A0(P*,void*,int);void func_0022C840(P*,void*);void func_0022C818(P*,void*);
  float GRandInRange__Fff(float,float);void DecomposeSphere__FUxPfN21(qword,float*,float*,float*);
  void func_001B1818(P*,float);void func_001B17B8(P*,float);
@@ -65,9 +65,9 @@ extern "C" void func_001B1328(P*p,int next){
  switch(old){case -1:case 0:case 2:case 3:func_002303A0(p,p->group,p->oldMode);func_0022C840(p,p->group);break;}
  switch(next){
  case 0:
-  SetVelocity(p,D_002A2DD0.q);func_0022C818(p,p->group);{float now=D_002DDED0.t;p->randomDeadline=now+GRandInRange__Fff(p->low0,p->high0);}break;
+  SetVelocity(p,D_002A2DD0.q);func_0022C818(p,p->group);{float now=g_clock.t;p->randomDeadline=now+GRandInRange__Fff(p->low0,p->high0);}break;
  case 1:
-  SetMode(p);{float now=D_002DDED0.t;p->randomDeadline=now+GRandInRange__Fff(p->low1,p->high1);}break;
+  SetMode(p);{float now=g_clock.t;p->randomDeadline=now+GRandInRange__Fff(p->low1,p->high1);}break;
  case 2:{
   p->phase=-p->phase;float negative=-1.0f;M4*m=GetMatrix(p);
   qword row=m->row[0].q;qword factor=SplatInto(negative,&w.first);qword scaled=ScaleX(row,factor);
@@ -87,9 +87,9 @@ extern "C" void func_001B1328(P*p,int next){
    p->phase=phase;
    travel/=speed;
    float end=func_001E6648(p->path);
-   p->deadline=D_002DDED0.t+travel+(end-w.parameter)/p->speed.value-p->lead;
+   p->deadline=g_clock.t+travel+(end-w.parameter)/p->speed.value-p->lead;
   }else{
-   P*near=func_001C4AF8(g_sw,w.first.q);w.second=w.first;w.first.q=func_001A62E8(near);p->deadline=D_002DDED0.t+2.0f;
+   P*near=func_001C4AF8(g_sw,w.first.q);w.second=w.first;w.first.q=func_001A62E8(near);p->deadline=g_clock.t+2.0f;
   }
   qword ff=w.first.q;qword ss=w.second.q;qword gap=Sub(ss,ff);
   w.direction.q=gap;w.direction.i[2]=0;
@@ -108,7 +108,7 @@ extern "C" void func_001B1328(P*p,int next){
   func_00154E10(D_002DE578,func_001A6F00(p,0,p->damageOffset.q),p->amount,-100,p);Call(p,9);break;
  }
  }
- p->state=next;p->changed=D_002DDED0.t;
+ p->state=next;p->changed=g_clock.t;
  if(next!=2){
   func_001305B8(p->aseg[next].clip,p,0.0f,1.0f,p->aseg[next].flags|1,&p->animation);
  }

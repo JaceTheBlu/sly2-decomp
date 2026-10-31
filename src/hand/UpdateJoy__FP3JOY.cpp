@@ -12,7 +12,7 @@ struct JOY {
 };
 
 struct CLOCK { char pad[0x3C]; float tReal; };
-extern "C" CLOCK D_002DDED0;
+extern "C" CLOCK g_clock;
 
 extern "C" {
 int func_00243388(int port, int slot);
@@ -51,7 +51,7 @@ void UpdateJoy(JOY *pjoy)
 
 
     if (pjoy->joys != 3 && pjoy->joyk != 0) {
-        if (D_002DDED0.tReal - pjoy->tJoys >= 2.0f)
+        if (g_clock.tReal - pjoy->tJoys >= 2.0f)
             state = 0;
     }
 

@@ -1,6 +1,6 @@
+#include "clock.h"
 struct VTE { short d; short pad; void (*pf)(); };
-struct CLOCK { float t, dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern char g_sw[];
 struct S { char pad[0xC]; struct VTE *vt; char p1[0x1C8 - 0x10]; int x1C8; float x1CC; };
 int func_001C4BD8(void *pg, int c, void **ap);
@@ -11,7 +11,7 @@ void func_001C5D18(struct S *p)
     void *ap[0x10];
     int i, n;
     if (!p->x1C8) return;
-    if (p->x1CC < D_002DDED0.t) {
+    if (p->x1CC < g_clock.t) {
         ((void (*)(void *, int))p->vt[76].pf)((char *)p + p->vt[76].d, 1);
         return;
     }

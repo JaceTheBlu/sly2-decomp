@@ -1343,3 +1343,7 @@ PloFindSwNearest__FP2SW3OIDP2LO = 0x15E958; // type:func
 InitCoin__FP4COIN = 0x1C7648; // type:func
 LoadSwSpliceFromBrx__FP2SWP18CBinaryInputStream = 0x1FF858; // type:func
 RefEvalModule__FiP2SW = 0x1FFA70; // type:func
+g_clock = 0x2DDED0; // type:data
+MarkClockTick__FP5CLOCKi = 0x14D0B8; // type:func
+StartupClock__Fv = 0x14CFE0; // type:func
+TickNow__FP5CLOCK = 0x14D240; // type:func

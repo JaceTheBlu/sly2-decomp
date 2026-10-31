@@ -1,3 +1,4 @@
+#include "clock.h"
 // Transition actor controller state.
 typedef int qword __attribute__((mode(TI)));
 union V {qword q;float f[4];};
@@ -6,9 +7,8 @@ struct NODE {M3 basis;qword orientation;char pad40[0x60];NODE *parent;char padA4
 struct O;
 struct S {char pad[0x58];NODE *positionNode,*rotationNode;char pad60[0xF0];int state;float time;int sentinel,kind;O *nearest;char pad164[4];void *animation;char pad16C[0x10];void *rotationJob,*positionJob;char pad184[0xC];qword direction;};
 struct WORLD;
-struct CLOCK {float t,dt;};
 extern WORLD g_sw;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern qword g_normalZ;
 extern float D_002A97A8;
 extern O *D_002E1E40;
@@ -63,7 +63,7 @@ static inline M3 MakeBasis(qword direction,qword rawUp) return result;{
 extern "C" void func_00224EC8(S *p,int state){
  int old=p->state;
  if(state==old)return;
- p->state=state;p->time=D_002DDED0.t;p->sentinel=-1;
+ p->state=state;p->time=g_clock.t;p->sentinel=-1;
  func_0012E460(&p->positionJob);
  func_0012E460(&p->rotationJob);
  if(old==0||old==4)func_00134320(&g_sw,p);

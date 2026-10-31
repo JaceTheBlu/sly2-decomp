@@ -7,7 +7,7 @@ struct BBOX {float min[4],max[4];char pad20[0x40];struct O*owner;};
 struct G;
 struct Q { char pad[0xEC]; struct BBOX *xEC; };
 struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern struct G g_sw;
 extern float D_002C08E4;
 extern qword D_002C08F0;
@@ -149,14 +149,14 @@ void func_001B50B0(struct P *p)
     }
     func_001B82A0(p);
     func_001A1358(p->xDF0);
-    if (p->p1430 && p->g1434 + 0.1f < D_002DDED0.t) {
+    if (p->p1430 && p->g1434 + 0.1f < g_clock.t) {
         if (!p->p1430->xEC || !func_00133D08(&g_sw, p->xEC, p->p1430->xEC))
             p->p1430 = 0;
         if (!p->p1430)
             func_00134320(&g_sw, p);
     }
     if (p->x1ACC) {
-        if (D_002DDED0.t - p->g1AC8 < D_002C08E4)
+        if (g_clock.t - p->g1AC8 < D_002C08E4)
             func_0012D108(p->x1ACC, D_002C08F0);
         else
             func_0012D108(p->x1ACC, D_002A2DE0);

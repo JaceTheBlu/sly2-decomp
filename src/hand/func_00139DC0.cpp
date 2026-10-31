@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_00139DC0 (0x139DC0): CPU fallback of func_00139AB8 (taken when p->x160 != 0 or D_002BC9C0 is set). For every particle
 // batch in the DLI list at p->dl it copies the live particles (b.w > clock.t) from abuf[i] to abuf[(i + 1) & 1]: x160 0 =
 // velocity transformed by func_0015BFD8's matrix, 1 = plain copy, 2 = func_00117120 path; x43C == 2 updates c.w through
@@ -37,10 +38,9 @@ struct P {
     char pad0[0xC]; struct VT *pvt; char pad10[0xF0 - 0x10]; qword vF0; float g100; char pad104[0x120 - 0x104]; float g120;
     char pad124[0x160 - 0x124]; int x160; char pad164[0x170 - 0x164]; char x170[0x43C - 0x170]; int x43C; int pad440; int c444; struct DL dl;
 };
-struct CLOCK { float t; float dt; };
 #define CA(p) ((VEC *)((int)(p) - 0x560))
 #define CB(p) ((VEC *)((int)(p) - 0x2B0))
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern struct DLI *g_pdliFirst;
 extern int D_002BC9C0;
 extern "C" {
@@ -104,8 +104,8 @@ void func_00139DC0(struct P *p)
         iNext = (pq->i + 1) & 1;
         pbn = &pq->abuf[iNext];
         for (i = 0; i < pq->c; i++) {
-            struct CLOCK *pclock = &D_002DDED0;
-            float t = D_002DDED0.t;
+            struct CLOCK *pclock = &g_clock;
+            float t = g_clock.t;
             float tEnd = pb->b[i].v.w;
             if (tEnd <= t) {
                 cDead++;

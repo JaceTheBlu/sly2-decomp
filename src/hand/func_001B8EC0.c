@@ -14,7 +14,7 @@ typedef struct P {
     char pad190C[0x1AC0 - 0x190C];
     int x1AC0;
 } P;
-extern float D_002DDED0;
+extern float g_clock;
 extern float D_002C0A30;
 extern float D_002C0A34;
 int func_00131968(void *p);
@@ -37,7 +37,7 @@ void func_001B8EC0(P *p)
                 func_001B6078(p, 0);
             } else if (p->x1908) {
                 func_001B8D30(p, 2);
-            } else if (!p->x1AC0 && D_002DDED0 - p->x1844 > D_002C0A30) {
+            } else if (!p->x1AC0 && g_clock - p->x1844 > D_002C0A30) {
                 func_001B8D30(p, 3);
             }
             break;
@@ -52,7 +52,7 @@ void func_001B8EC0(P *p)
         case 3:
             if (!p->x1030 || func_00131968(p->x1030)) {
                 func_001B6078(p, 0);
-            } else if (D_002DDED0 - p->x1844 > D_002C0A34 && p->x150->x80 == 1 && 0.0f < p->x150->x1C) {
+            } else if (g_clock - p->x1844 > D_002C0A34 && p->x150->x80 == 1 && 0.0f < p->x150->x1C) {
                 func_001B6078(p, 0);
             }
             break;

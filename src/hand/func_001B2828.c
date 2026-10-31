@@ -1,5 +1,5 @@
 struct CLOCK { float t; float dt; char pad[0x34]; float t3c; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 struct LM { float low, high; };
 struct H { char pad[8]; struct LM window; };
 struct G { char pad[0x104]; struct H *x104; char pad1[4]; float f10C; unsigned packetOffset; char pad2[0x23C - 0x114]; int x23C; volatile int stage; };
@@ -29,7 +29,7 @@ void func_001B2828(void)
         D_002F66B0.stage = 2;
         func_0016F6B8();
         x = 0;
-        if (D_002F66B0.x104 && func_0011D910(&D_002F66B0.x104->window, D_002DDED0.t3c - D_002F66B0.f10C))
+        if (D_002F66B0.x104 && func_0011D910(&D_002F66B0.x104->window, g_clock.t3c - D_002F66B0.f10C))
             x = (struct QW *)(D_002F66B0.packetOffset + 0x41DC00);
         Draw(x, &D_002F66B0);
         Draw(x, &D_002F66B0);

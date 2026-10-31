@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_001911A8: per-frame update of a hero's action context (the struct at actor+0x4C0; func_00134850 calls it in
 // its state 3). It dispatches on the context's action and loops while the action changed the step (and not to -1).
 // Action 8 / step "other" probes the ground below the actor: a box query along the actor's up axis, a line test
@@ -40,14 +41,13 @@ struct CONTEXT {
     ACTOR *pactor; float tStamp; int action; int step; float tHold; ACTOR *pactorFocus; char pad18[8]; float gParam;
     char pad24[0x440 - 0x24]; ATTACH attach; char pad478[0x500 - 0x478]; int fInhibit;
 };
-struct CLOCK { float t, dt; };
 struct SWALLOC { int cb, cbAlign; };
 struct STACKSCOPE { STACKSCOPE(); ~STACKSCOPE(); };   // 0x1AE478 / 0x1AE4A0(this, 2)
 struct VU_FLOAT { qword q; };
 
 extern "C" {
 extern SW g_sw;                                   // the world
-extern CLOCK D_002DDED0;                                // g_clock
+extern CLOCK g_clock;                                // g_clock
 extern uint D_002DFBC4;
 extern qword g_normalZ;                                // (0, 0, 1)
 extern float D_002BF5B0, D_002BF5B4, D_002BF5B8;
@@ -168,7 +168,7 @@ extern "C" void func_001911A8(CONTEXT *p)
         step = p->step;
         switch (p->action) {
         case 1:
-            if (0.15f < D_002DDED0.t - p->tHold && func_001C46C0(pjoy, 0x40, 0.25f)) {
+            if (0.15f < g_clock.t - p->tHold && func_001C46C0(pjoy, 0x40, 0.25f)) {
                 func_00195A00((char *)p->pactor + 0x2C0, 7, 0, p->pactorFocus);
                 break;
             }
@@ -218,7 +218,7 @@ extern "C" void func_001911A8(CONTEXT *p)
         case 10:
             if (!p->pactor->pasega || func_00131968(p->pactor->pasega)) {
                 SetControl(p->pactor, 0);
-            } else if (D_002BF5B8 < D_002DDED0.t - p->tStamp) {
+            } else if (D_002BF5B8 < g_clock.t - p->tStamp) {
                 if (0.0f < p->pactor->pjoy->amount || (p->pactor->pjoy->grfbtn & 0xD0)) {
                     SetControl(p->pactor, 0);
                     return;

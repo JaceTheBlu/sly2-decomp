@@ -3,7 +3,7 @@ union U {qword q;float f;};
 struct M3 {U r[3];M3(){} M3(const M3&m){r[0]=m.r[0];r[1]=m.r[1];r[2]=m.r[2];} M3 &operator=(const M3&m){r[0]=m.r[0];r[1]=m.r[1];r[2]=m.r[2];return *this;}};struct M4 {qword a,b,c,d;};
 struct PHYS {qword accel,axis;float rate,scale;};
 struct S {char pad[0x40];M3 mat;qword pos,prev,vel;PHYS phys;qword omega;float gE0,gE4;};
-extern struct CLOCK {float time;union{float dt;int dtbits;};} D_002DDED0;
+extern struct CLOCK {float time;union{float dt;int dtbits;};} g_clock;
 extern "C" {
 int func_001CF010(qword);int func_001CEFC8(qword);int func_001CF058(qword);
 M3*LoadRotateMatrixRad__FfUx(M3*,qword,float);M4 *func_0015BFD8(M4*,PHYS*);
@@ -34,18 +34,18 @@ static inline void Multiply(R3*scratch,R3*out,const R3*a,const M3&b){
 }
 static inline qword Point(const M4 &m,qword a){register qword r __asm__("vf3")=m.a;__asm__("vmulax.xyz $ACC,%1,%5x\n\tvmadday.xyz $ACC,%2,%5y\n\tvmaddaz.xyz $ACC,%3,%5z\n\tvmaddw.xyz %0,%4,$vf0w":"+j"(r):"j"(m.a),"j"(m.b),"j"(m.c),"j"(m.d),"j"(a));return r;}
 static inline qword AddScaled(qword a,qword b,qword s){qword r;__asm__("vadda.xyzw $ACC,%1,$vf0\n\tvmaddx.xyzw %0,%2,%3x":"=j"(r):"j"(a),"j"(b),"j"(s));return r;}
-static inline int ClockWord(char*page){int word;__asm__("lw %0,%%lo(%2)(%1)":"=r"(word):"r"(page),"i"(&D_002DDED0.dtbits),"m"(*(const int*)(page-0x212C)));return word;}
-static inline char*ClockPage(){register char*page __asm__("$2");__asm__("lui %0,%%hi(%1)":"=r"(page):"i"(&D_002DDED0.dtbits));return page;}
+static inline int ClockWord(char*page){int word;__asm__("lw %0,%%lo(%2)(%1)":"=r"(word):"r"(page),"i"(&g_clock.dtbits),"m"(*(const int*)(page-0x212C)));return word;}
+static inline char*ClockPage(){register char*page __asm__("$2");__asm__("lui %0,%%hi(%1)":"=r"(page):"i"(&g_clock.dtbits));return page;}
 static inline void PublishBasisStart(S*p,qword first,qword second){__asm__("sqc2 %3,0x40(%2)\n\tsqc2 %4,0x50(%2)":"=m"(p->mat.r[0].q),"=m"(p->mat.r[1].q):"r"(p),"j"(first),"j"(second));}
 void func_001CF0A0(S*p){
  WORK w;
  if(!func_001CF010(p->omega)) {
-  qword omega=Scale(p->omega,Broadcast(&w.shared.math.first,p->gE4*D_002DDED0.dt+1.0f));
+  qword omega=Scale(p->omega,Broadcast(&w.shared.math.first,p->gE4*g_clock.dt+1.0f));
   p->omega=omega;
   float length=Float(Sqrt(Sq(omega)));
   if(0.0001f<length){
    w.shared.math.first.q=Normalize(omega,length,&w.shared.math.second);
-   LoadRotateMatrixRad__FfUx((M3*)&w.rotation,w.shared.math.first.q,length*D_002DDED0.dt);
+   LoadRotateMatrixRad__FfUx((M3*)&w.rotation,w.shared.math.first.q,length*g_clock.dt);
    Multiply(&w.shared.math.scratch,&w.product,&w.rotation,p->mat);
    PublishBasisStart(p,w.product.r[0].q,w.product.r[1].q);p->mat.r[2]=w.shared.math.scratch.r[2];
   }

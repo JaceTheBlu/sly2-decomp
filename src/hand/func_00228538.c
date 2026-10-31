@@ -1,9 +1,9 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct G;
 extern struct G g_sw;
 extern char D_002F66B0[];
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 struct S { char pad[0xEC]; void *xEC; char pad1[0x138 - 0xF0]; int x138; int k; float t140; int x144; int c; int *a; int x150; int x154; float t158; float dt; };
 void func_001A5E28(struct S *p);
 void func_001B3A48(void *a, int b);
@@ -19,7 +19,7 @@ void func_00228538(struct S *p)
     func_001A5E28(p);
     switch (p->k) {
     case 4:
-        if (0.0f < p->t158 && p->t158 <= D_002DDED0.t) {
+        if (0.0f < p->t158 && p->t158 <= g_clock.t) {
             int i;
             for (i = 0; i < p->c; i++)
                 func_001B3A48(D_002F66B0, p->a[i]);
@@ -40,7 +40,7 @@ void func_00228538(struct S *p)
             break;
         case 1:
             if (f) func_00228358(p, 0);
-            else if (D_002DDED0.t - p->t140 > p->dt) func_00228358(p, 3);
+            else if (g_clock.t - p->t140 > p->dt) func_00228358(p, 3);
             break;
         case 0:
             if (!f) func_00228358(p, 1);

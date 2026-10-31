@@ -1,3 +1,4 @@
+#include "clock.h"
 struct VTE { short d; short pad; int (*pfn)(void *, ...); };
 struct E { int id; int state; int x; };
 struct X150 { char pad[0x30]; int grf; };
@@ -6,8 +7,7 @@ struct P {
     char pad[0xC]; struct VTE *vt; char pad1[0x150 - 0x10]; struct X150 *p150; char pad2[0x1180 - 0x154];
     struct E ae[3]; char pad3[0x1304 - 0x11A4]; float t1304;
 };
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern int D_002C3258[];
 extern struct T D_002BCD00[];
 int func_001C46C0(struct X150 *p, int mask, float g);
@@ -35,7 +35,7 @@ void func_00141A50(struct P *p)
                     int n = func_001441A0(p);
                     if (n < D_002BCD00[id].xC) {
                         func_001FB2F8(func_001FBB90(0x2E), 0);
-                        p->t1304 = D_002DDED0.t;
+                        p->t1304 = g_clock.t;
                     } else {
                         func_00141C08(p, pe, D_002BCD00[id].x0);
                     }

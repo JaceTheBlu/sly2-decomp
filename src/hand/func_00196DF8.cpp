@@ -6,7 +6,7 @@ struct CLOCK{float time,dt;};struct SMP{float maximum,minimum,duration;};struct 
 /* The basis writer and later vectors share their actual stack homes. */
 union BASE_PHASE{M3 returned;struct{U local,acceleration,corrected,scalar;}vectors;};
 union WORK{struct{U local,scalar;M3 basis,rotation,returned;U original;}turn;struct{U direction;M3 basis;BASE_PHASE phase;}move;U scalar;};
-extern "C"{extern CLOCK D_002DDED0;extern U D_002A2DA0,g_normalZ,D_002A2DD0;extern SMP D_002BF7A8,D_002BF7B8,D_002BF7C8;extern float D_002BF7D4,D_002BF7F0,D_002BF7F4,D_002BF7F8,D_002BF810,D_002BF814;extern PARAMS D_002BF7E0;extern POLY D_002BF800;extern RANGE D_002BBB60;
+extern "C"{extern CLOCK g_clock;extern U D_002A2DA0,g_normalZ,D_002A2DD0;extern SMP D_002BF7A8,D_002BF7B8,D_002BF7C8;extern float D_002BF7D4,D_002BF7F0,D_002BF7F4,D_002BF7F8,D_002BF810,D_002BF814;extern PARAMS D_002BF7E0;extern POLY D_002BF800;extern RANGE D_002BBB60;
 qword func_001A6FC0(ACTOR*,ACTOR*,qword);M3*LoadRotateMatrix__FUx(M3*,qword);M3*func_0011B7E0(M3*,qword);M4*func_001A6318(ACTOR*);float GSmooth__FfffP3SMPPf(float,float,float,SMP*,float*);qword func_0011E9F8(qword,float);void func_001FAC30(ACTOR*,qword);void func_001F5E10(ACTOR*,qword,PARAMS*,qword,PARAMS*);void func_00196AA8(CONTEXT*,U*);}
 static inline qword Velocity(ACTOR*p){VTE&v=p->vt[33];return ((qword(*)(void*))v.fn)((char*)p+v.delta);}
 static inline qword Scalar(float f){qword q;__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(f));return q;}
@@ -81,7 +81,7 @@ extern "C" void func_00196DF8(CONTEXT*p){WORK w;
   w.turn.local.q=func_001A6FC0(empty,actor,original);
   register unsigned clockWord __asm__("$16");register float updatedX __asm__("$f0"),updatedY __asm__("$f0");register M3*rotationOutput __asm__("$4");register qword rotation __asm__("vf2");
   __asm__("lui %0,%%hi(%6)\n\taddiu %0,%0,%%lo(%6)\n\tli.s $f1,0.5\n\tlw $3,%4\n\taddiu %1,%5,0x50\n\tlwc1 $f0,4(%0)\n\tlw $2,0x5C($3)\n\tmfc1 $3,$f0\n\tmul.s $f0,$f0,$f1\n\tqmtc2.ni $3,$vf5\n\tlqc2 $vf2,0xB0($2)\n\tsqc2 $vf5,%3\n\tmfc1 $3,$f0\n\tqmtc2.ni $3,$vf4\n\tlqc2 $vf3,0xF0($2)\n\tsqc2 $vf4,%3\n\tvadda.xyzw $ACC,$vf2,$vf0\n\tvmaddx.xyzw $vf2,$vf3,$vf5x\n\tlqc2 $vf1,0xB0($2)\n\tvadd.xyzw $vf1,$vf1,$vf2\n\tvmulx.xyzw %2,$vf1,$vf4x"
-   :"=&r"(clockWord),"=r"(rotationOutput),"=j"(rotation),"=m"(w.turn.scalar.q):"m"(p->actor),"p"(&w),"i"(&D_002DDED0):"$2","$3","$f0","$f1","vf1","vf3","vf4","vf5","at","memory");
+   :"=&r"(clockWord),"=r"(rotationOutput),"=j"(rotation),"=m"(w.turn.scalar.q):"m"(p->actor),"p"(&w),"i"(&g_clock):"$2","$3","$f0","$f1","vf1","vf3","vf4","vf5","at","memory");
   (void)LoadRotateMatrix__FUx(rotationOutput,rotation);
   {
    register M4*matrix __asm__("$2")=func_001A6318(p->actor);
@@ -152,7 +152,7 @@ extern "C" void func_00196DF8(CONTEXT*p){WORK w;
   register unsigned clockHigh __asm__("$4");register float step __asm__("$f1"),inverseTime __asm__("$f0");
   register qword row0 __asm__("vf2"),row1 __asm__("vf3"),row2 __asm__("vf4"),local __asm__("vf1");
   __asm__("lui $2,%%hi(%9)\n\tlqc2 %3,0x40(%7)\n\tdaddu %0,$2,$zero\n\tlqc2 %4,0x50(%7)\n\tlqc2 %5,0x60(%7)\n\taddiu $2,$2,%%lo(%9)\n\tlwc1 %1,4($2)\n\tlqc2 %6,0xA0(%8)\n\tli.s %2,1.0"
-   :"=&r"(clockHigh),"=f"(step),"=f"(inverseTime),"=j"(row0),"=j"(row1),"=j"(row2),"=j"(local):"p"(&w),"r"(p),"i"(&D_002DDED0):"$2","at","memory");
+   :"=&r"(clockHigh),"=f"(step),"=f"(inverseTime),"=j"(row0),"=j"(row1),"=j"(row2),"=j"(local):"p"(&w),"r"(p),"i"(&g_clock):"$2","at","memory");
   __asm__("vmul.xyzw $vf7,%1,%0\n\tvmaxw.xyzw $vf8,$vf0,$vf0w\n\tvmul.xyzw $vf6,%2,%0\n\tvmul.xyzw $vf5,%3,%0\n\tvadday.x $ACC,$vf7,$vf7y\n\tvmaddz.x %0,$vf8,$vf7z\n\tvaddax.y $ACC,$vf6,$vf6x\n\tvmaddz.y %0,$vf8,$vf6z\n\tvaddax.z $ACC,$vf5,$vf5x\n\tvmaddy.z %0,$vf8,$vf5y"
    :"+j"(local):"j"(row0),"j"(row1),"j"(row2):"vf5","vf6","vf7","vf8");
   register int mode __asm__("$3");
@@ -175,7 +175,7 @@ extern "C" void func_00196DF8(CONTEXT*p){WORK w;
    register float elapsed __asm__("$f1"),stamp __asm__("$f3"),low __asm__("$f4"),c1 __asm__("$f0"),c2 __asm__("$f2");
    register unsigned rangeHigh __asm__("$3"),address __asm__("$2");
    __asm__("lwc1 %1,%%lo(%5)(%0)\n\tlui %3,%%hi(%6)\n\tlwc1 %2,%4\n\tlui %0,%%hi(%7)"
-    :"+r"(clockHigh),"=f"(elapsed),"=f"(stamp),"=r"(rangeHigh):"m"(p->stamp),"i"(&D_002DDED0),"i"(&D_002BBB60),"i"(&D_002BF800):"memory");
+    :"+r"(clockHigh),"=f"(elapsed),"=f"(stamp),"=r"(rangeHigh):"m"(p->stamp),"i"(&g_clock),"i"(&D_002BBB60),"i"(&D_002BF800):"memory");
    __asm__("addiu %0,%3,%%lo(%6)\n\tlwc1 %1,%%lo(%7)(%4)\n\tsub.s %2,%2,%5"
     :"=&r"(address),"=&f"(low),"+f"(elapsed):"r"(clockHigh),"r"(rangeHigh),"f"(stamp),"i"(&D_002BF800),"i"(&D_002BBB60):"memory");
    __asm__("lwc1 %1,8(%0)\n\tlwc1 %2,4(%0)\n\tlwc1 %3,%%lo(%6)(%4)\n\taddiu %0,%5,%%lo(%7)"

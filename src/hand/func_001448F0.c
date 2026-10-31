@@ -1,7 +1,7 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct P { void *p0; char pad[0xC]; qword pos; int d20; float t24; int f28; };
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002BD2D8;
 extern float D_002BD2D0;
 qword func_001A62E8(void *p);
@@ -44,6 +44,6 @@ void func_001448F0(struct P *p, qword pos)
         p->pos = pos;
         r = func_001A62E8(p->p0);
         p->d20 = IDist(r, p->pos);
-        p->t24 = D_002DDED0.t + D_002BD2D0;
+        p->t24 = g_clock.t + D_002BD2D0;
     }
 }

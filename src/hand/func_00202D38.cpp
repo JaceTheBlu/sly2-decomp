@@ -14,7 +14,7 @@ struct CLOCK {float time,dt;};
 struct PLAYER {char pad0[0x150];void *control;};
 struct VU_FLOAT {qword qw;};
 extern CM g_cm;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern PLAYER *D_002E1E40;
 extern char D_002DE2E0[];
 extern "C" {
@@ -62,7 +62,7 @@ extern "C" void func_00202D38(P *p)
     if(!p->primary)return;
     if(!p->secondary)return;
     if(p->refreshPending){p->refreshPending=0;func_0019CCE8(p->model);}
-    if(p->choiceTime+5.0f<D_002DDED0.time)func_00213928(p->primary,0x35B);
+    if(p->choiceTime+5.0f<g_clock.time)func_00213928(p->primary,0x35B);
     if(p->state<8)if(p->state>=2){
         func_00202540(p);
         func_002020C8(p);
@@ -140,7 +140,7 @@ extern "C" void func_00202D38(P *p)
                 else{p->pending=p->primary->emptyChoice;func_00202768(p,2);}
                 changed=1;
             }
-            if(changed){func_00213B00(p->primary,0x35B);p->choiceTime=D_002DDED0.time;}
+            if(changed){func_00213B00(p->primary,0x35B);p->choiceTime=g_clock.time;}
         }
         break;
     case 9:

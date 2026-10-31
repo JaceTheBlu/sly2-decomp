@@ -1,5 +1,5 @@
 typedef struct CLOCK { float t; float dt; } CLOCK;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern char D_002DEB30[];
 struct VTE { short d; short pad; void (*pfn)(); };
 struct E { int id; int n; float t; float tC; };
@@ -14,14 +14,14 @@ void func_00154080(struct O *o, struct E *pe, int nNew)
     if (!pe || nNew == pe->n)
         return;
     if (pe->n == 0)
-        pe->tC = D_002DDED0.t;
+        pe->tC = g_clock.t;
     args.pe = pe;
     args.pn = &pe->n;
     args.pnNew = &nNew;
     e = &o->vt[3];
     e->pfn((char *)o + e->d, 0x1C, 0, 3, &args, 0);
     pe->n = nNew;
-    pe->t = D_002DDED0.t;
+    pe->t = g_clock.t;
     if (nNew == 1) {
         void *q = o->p10;
         if (q && FIsBasicDerivedFrom__FP5BASIC3CID(q, 0x33))

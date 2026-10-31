@@ -1,7 +1,7 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t, dt; };
 extern "C" {
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002C0D50;
 }
 class LOB {
@@ -68,7 +68,7 @@ void func_001C5E48(P *p)
         if (p->f1c4 && *(float *)((char *)&p->pos + 8) < 25.0f) {
             p->f1c4 = 0;
             p->SetState(0);
-        } else if (D_002C0D50 < D_002DDED0.t - p->t154) {
+        } else if (D_002C0D50 < g_clock.t - p->t154) {
             p->SetState(2);
         } else {
             func_001C55E0(p);

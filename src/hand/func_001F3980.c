@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned long ulong;
 struct VTE { short d; short p; void (*pfn)(void *); };
@@ -5,8 +6,7 @@ struct E { char pad[0x10]; ulong fl; char pad2[0xB0 - 0x18]; };
 struct Q { char pad[0x98]; short h98; char pad2[0xB0 - 0x9A]; qword vB0; char padC0[0xF0 - 0xC0]; int aF0[3]; };
 struct R { char pad[0x60]; qword v60; qword v70; };
 struct P { char pad[0xC]; struct VTE *pvt; char pad2[0x58 - 0x10]; struct Q *p58; struct Q *p5C; char pad3[0xE0 - 0x60]; int nE0; struct E *aE4; struct R *pE8; };
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 void func_001F3900(struct P *);
 void func_001F6EF8(struct E *, float);
 int func_00230380(int);
@@ -24,7 +24,7 @@ void func_001F3980(struct P *p)
     func_001F3900(p);
     for (i = 0; i < p->nE0; i++) {
         struct E *pe = &p->aE4[i];
-        if (*(int *)&pe->fl) func_001F6EF8(pe, D_002DDED0.dt);
+        if (*(int *)&pe->fl) func_001F6EF8(pe, g_clock.dt);
     }
     if (p->pE8) {
         if (p->p58) p->pE8->v60 = p->p58->vB0;

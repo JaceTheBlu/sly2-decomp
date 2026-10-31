@@ -30,13 +30,13 @@ extern int D_002F68F8;
 extern int D_002C0268;
 extern int D_002BD4C0;
 extern G D_002E65E0;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern JOY D_002DFC00;
 void *PvAllocStackClearImpl__FP7SWALLOC(const AREQ &r);
 int FOpenFile__18CBinaryAsyncStreamP13CFileLocation(CBinaryAsyncStream *ps, X *px);
 void func_001B3EC0(P *p, CBinaryAsyncStream *ps);
 int func_0024B610(MPEG *p);
-void func_0014D0B8(CLOCK *p, int k);
+void MarkClockTick__FP5CLOCKi(CLOCK *p, int k);
 void func_001871C0(JOY *p);
 void UpdateSave__FP4SAVE(G *g);
 uint PvAllocSwCopyImpl__FiPv(JOY *p, uint k);
@@ -107,7 +107,7 @@ extern "C" void func_001B3BD0(P *p, K *k)
         func_001B3EC0(p, &strm);
         while (!func_0024B610(&p->x118)) {
             int f;
-            func_0014D0B8(&D_002DDED0, 1);
+            MarkClockTick__FP5CLOCKi(&g_clock, 1);
             func_001871C0(&D_002DFC00);
             if (!D_002E65E0.xFD50) UpdateSave__FP4SAVE(&D_002E65E0);
             f = 0;

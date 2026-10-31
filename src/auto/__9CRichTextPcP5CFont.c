@@ -20,7 +20,7 @@ extern u8 D_002BE328;
 extern M2C_UNK D_002BE338;
 extern M2C_UNK D_002C44F0;
 extern void *g_pdliFirst;
-extern M2C_UNK D_002DDED0;
+extern M2C_UNK g_clock;
 extern s32 D_002DDF54;
 extern M2C_UNK D_002DE578;
 extern s32 D_002DE594;

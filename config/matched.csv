@@ -1972,12 +1972,12 @@ PsoHitTestLineObjects__FiP6VECTORT1iPP2SOP3LSG,0x14CC58,85,match,src/hand/PsoHit
 func_0014CDB0,0x14CDB0,54,match,src/hand/func_0014CDB0.c
 func_0014CE88,0x14CE88,77,match,src/auto/func_0014CE88.c
 func_0014CFC0,0x14CFC0,8,match,src/auto/func_0014CFC0.c
-func_0014CFE0,0x14CFE0,34,match,src/hand/func_0014CFE0.c
+StartupClock__Fv,0x14CFE0,34,match,src/hand/StartupClock__Fv.c
 func_0014D068,0x14D068,19,match,src/hand/func_0014D068.c
-func_0014D0B8,0x14D0B8,70,match,src/hand/func_0014D0B8.c
+MarkClockTick__FP5CLOCKi,0x14D0B8,70,match,src/hand/MarkClockTick__FP5CLOCKi.c
 SetClockRate__FP5CLOCK3CRKf,0x14D1D0,9,match,src/hand/SetClockRate__FP5CLOCK3CRKf.c
 func_0014D1F8,0x14D1F8,17,match,src/hand/func_0014D1F8.c
-func_0014D240,0x14D240,16,match,src/hand/func_0014D240.c
+TickNow__FP5CLOCK,0x14D240,16,match,src/hand/TickNow__FP5CLOCK.c
 func_0014D280,0x14D280,77,match,src/auto/func_0014D280.c
 func_0014D3B8,0x14D3B8,8,match,src/auto/func_0014D3B8.c
 func_0014D3D8,0x14D3D8,38,match,src/auto/func_0014D3D8.c

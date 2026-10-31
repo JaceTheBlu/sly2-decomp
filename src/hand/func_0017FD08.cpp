@@ -1,6 +1,6 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t; float dt; };
-extern "C" struct CLOCK D_002DDED0;
+extern "C" struct CLOCK g_clock;
 extern "C" qword D_002A2DD0;
 extern "C" char D_002DEB30[];
 struct M4 { qword r[4]; };
@@ -77,7 +77,7 @@ void func_0017FD08(struct S *p, int n) {
         break;
     }
     p->n1C0 = n;
-    p->f1C4 = D_002DDED0.t;
+    p->f1C4 = g_clock.t;
     switch (n) {
     case -1:
         {

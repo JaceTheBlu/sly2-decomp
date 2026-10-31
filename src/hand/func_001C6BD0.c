@@ -1,9 +1,9 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct VTE { short d; short pad; void (*pf)(); };
 struct V3 { float x, y, z; };
 struct X { char pad[0xB0]; struct V3 v; };
-struct CLOCK { float t, dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern char D_002A2D00[];
 extern const float D_002A7758;
 struct S { char pad[0xC]; struct VTE *vt; char p1[0x58 - 0x10]; struct X *x58; struct X *x5C; char p2[0x160 - 0x60]; float x160;
@@ -28,5 +28,5 @@ void func_001C6BD0(struct S *p, qword q1, qword q2, float f1, float f2)
     p->x1C4 = 0;
     ((void (*)(void *, int))VT(p, 76).pf)((char *)p + VT(p, 76).d, 3);
     p->x180 = q2;
-    p->x1CC = (f2 == D_002A7758) ? D_002A7758 : D_002DDED0.t + f2;
+    p->x1CC = (f2 == D_002A7758) ? D_002A7758 : g_clock.t + f2;
 }

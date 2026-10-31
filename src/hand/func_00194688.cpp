@@ -1,6 +1,6 @@
 // func_00194688: ported from Lilly's personal Sly 2 decomp (src/P2/jtgrab.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002BF664 (D_002BF664), D_002E1E4C (D_002E1E4C), D_002E1E40 (g_SheetGangSly), D_002DDED0 (g_clock)
+// Globals: D_002BF664 (D_002BF664), D_002E1E4C (D_002E1E4C), D_002E1E40 (g_SheetGangSly), g_clock (g_clock)
 // 0x00194688 AddJtGrabCandidate__FP2SWP10STEPPLAYERUxP2LOP8GRABSPOTiP10JTGRABCAND  (MATCHES Sly 2; our name)
 // Tests one grab spot against the hero (qwPosJt is the hero's position) and, when the hero may take hold of it, puts it into the
 // sorted array of ccandMax candidates: by priority (higher first), then by distance, one entry per group (the nearer spot of a
@@ -192,7 +192,7 @@ struct CLOCK
       int cWrapAround;
       undefined4 unk_0x5c;
 };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 struct EDGE
 {
     ushort aipos[2];
@@ -1456,7 +1456,7 @@ void AddJtGrabCandidate(SW *psw, STEPPLAYER *pstepplayer, qword qwPosJt, LO *plo
     MoveJtGrabCands(&ajtgrabcand[i + 1], &ajtgrabcand[i], (ccandMax - i) * sizeof(JTGRABCAND) - sizeof(JTGRABCAND));
     cand.plo = plo;
     cand.pspot = pspot;
-    cand.tUnk14 = D_002DDED0.t;
+    cand.tUnk14 = g_clock.t;
     cand.ploUnk10 = 0;
     cand.dsParam = 0.0f;
     ajtgrabcand[i] = cand;

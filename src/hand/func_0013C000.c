@@ -1,8 +1,8 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef struct { qword q[4]; } M4;
 typedef union { qword q; float f[4]; } VU;
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002A4B30[];
 struct RANGE { float a; float b; };
 extern struct RANGE D_002BBB60;
@@ -32,7 +32,7 @@ void func_0013C000(struct P *p)
         VU v;
         M4 m;
         M4 mT;
-        float dt = D_002DDED0.t - p->x188;
+        float dt = g_clock.t - p->x188;
         if (p->x180 <= dt) {
             v = p->v170;
         } else {

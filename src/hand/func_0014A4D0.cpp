@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_0014A4D0. From v4: the vsub reads q (the pinned Add result) with `posT = q` after it, and its posMe operand is repeated as an allocation-only operand (reload then puts posMe in vf4 like the target).
 typedef int qword __attribute__((mode(TI)));
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } };
@@ -10,11 +11,10 @@ struct PSO { char pad[0xC]; VTE *vt; char pad1[0x258 - 0x10]; PATH *ppath; char 
 struct LO { char pad[0xC]; VTE *vt; };
 struct W { char pad[0x1010]; LO *plo; };
 struct P { char pad[0x10]; W *pw; char pad1[0x48 - 0x14]; float t48; };
-struct CLOCK { float t; float dt; };
 extern "C" {
 extern G g_sw;
 extern SO *D_003E1450;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern float D_002BD460;
 extern float D_002BD468[2];
 extern float D_002BD470, D_002BD474, D_002BD478, D_002BD47C;
@@ -87,8 +87,8 @@ void func_0014A4D0(P *p)
         v = ((qword (*)(void *))e->pfn)((char *)pso + e->d);
     }
     if (FLess(D_002BD460, Len(v)))
-        p->t48 = D_002DDED0.t;
-    float dt = D_002DDED0.t - p->t48;
+        p->t48 = g_clock.t;
+    float dt = g_clock.t - p->t48;
     if (GRandInRange__Fff(D_002BD468[0], D_002BD468[1]) < dt && !func_0020F0B0(pg)) {
         if (FIsBasicDerivedFrom__FP5BASIC3CID(pso, 0x34) && pso->x2DC == 0x11) {
             PATH *ppath = pso->ppath;

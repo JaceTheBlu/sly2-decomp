@@ -1,3 +1,4 @@
+#include "clock.h"
 /* func_00193A68: func_0011E1A0's qword result assigned plainly so gcc emits the qmtc2 itself; Dot's float via an mtc1 asm fed by gcc's own qmfc2. */
 
 typedef int qword __attribute__((mode(TI)));
@@ -7,8 +8,7 @@ struct O {char pad[0x150];struct T*x150;char pad154[0x240-0x154];qword pos;};
 struct P {struct O*o;char pad4[0x260-4];float x260;char pad264[0x2A0-0x264];float x2A0;};
 struct CURVE;
 struct SMP {float g0,g1,g2;};
-struct CLOCK {float t,dt;};
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002BF668;
 extern qword g_normalZ,D_002A2DD0;
 void func_001E67B8(struct CURVE*,float,qword*,qword*);
@@ -30,7 +30,7 @@ void func_00193A68(struct P*p,struct CURVE*curve,qword*outPos,qword*outVel,float
  dot=Dot(v,dir.q);dead.q=v;
  current=func_001E63C0(curve,t);
  smp.g1=p->x260;smp.g0=p->x2A0;smp.g2=D_002BF668;
- (void)GSmooth__FfffP3SMPPf(current,50.0f,D_002DDED0.dt,&smp,&low);
- (void)GSmooth__FfffP3SMPPf(current,func_001E6648(curve)-50.0f,D_002DDED0.dt,&smp,&high);
+ (void)GSmooth__FfffP3SMPPf(current,50.0f,g_clock.dt,&smp,&low);
+ (void)GSmooth__FfffP3SMPPf(current,func_001E6648(curve)-50.0f,g_clock.dt,&smp,&high);
  {float hi=high;*outPos=Sub(pos.q,p->o->pos);{float g;if(dot<low)g=low;else if(hi<dot)g=hi;else g=dot;*outVel=Scale(dir.q,g);}}
 }

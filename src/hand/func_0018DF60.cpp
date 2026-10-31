@@ -10,7 +10,7 @@ struct ANIM;
 struct P{char pad[0xC];VTE*vt;char pad10[0x140];PARAM*params;char pad154[0x5C];M3 matrix;char pad1E0[0x16E4];O*object;char pad18C8[0x698];float base;char pad1F64[8];float left;char pad1F70[8];float middle;char pad1F7C[8];float right;char pad1F88[8];ANIM*anim;float amount,weight;char pad1F9C[4];qword offset;};
 struct CLOCK{float time,dt;};
 struct SMP{float a,b,c;};
-extern "C" CLOCK D_002DDED0;
+extern "C" CLOCK g_clock;
 extern "C" M3 D_002DDFA0;
 extern "C" qword g_normalZ;
 extern "C" SMP D_002BF3F8,D_002BF408;
@@ -76,7 +76,7 @@ extern "C" void func_0018DF60(P*p){
  U direction,position,scratch,negative;
  *(M3*)&p->matrix=*(M3*)&m;
  M4*current=func_001A6318(p);
- CLOCK*clock=&D_002DDED0;
+ CLOCK*clock=&g_clock;
  float factor=0.5f;
  unsigned samplePage=SmoothSamplePage();M3*receiver,*optional;SMP*sample;float smoothDt=SmoothInputs(current,clock,factor,samplePage,receiver,optional,sample);
  func_0011C950(receiver,&p->matrix,sample,optional,&direction.q,smoothDt);

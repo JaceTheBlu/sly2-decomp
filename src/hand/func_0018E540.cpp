@@ -67,7 +67,7 @@ struct P{
  ASEG * clip23;
 };
 extern "C"{
-extern CLOCK D_002DDED0;extern int D_002BF448[];extern float D_002BF430,D_002BF434,D_002BF438,D_002BF43C,D_002BF440;
+extern CLOCK g_clock;extern int D_002BF448[];extern float D_002BF430,D_002BF434,D_002BF438,D_002BF43C,D_002BF440;
 extern void*D_002E1E44;extern void*D_002E1E48;
 void func_001F2AD0(P*,ACTION*);void func_001F4BF8(P*);void func_001CCAC0(void*,int);
 EFFECT*func_001FBB90(int);void func_001FB2F8(EFFECT*,void*);void func_001FB3F0(EFFECT*,qword);
@@ -100,7 +100,7 @@ extern "C" void func_0018E540(P*p,int state){
   register P*receiver __asm__("$4");register float half __asm__("$f1"),duration __asm__("$f0");
   __asm__("daddu %0,%3,$zero\n\t.set noat\n\tlui $1,0x3f00\n\tmtc1 $1,%1\n\t.set at\n\taddiu %2,$zero,15":"=r"(receiver),"=f"(half),"=r"(enterEffect):"r"(p):"$1");
   __asm__("lwc1 %0,%1":"=f"(duration):"m"(clip->duration));start=duration*half;
-  func_001F4BF8(receiver);sharedDelay=0.1f;sharedDeadline=D_002DDED0.t;goto deadline_add;}
+  func_001F4BF8(receiver);sharedDelay=0.1f;sharedDeadline=g_clock.t;goto deadline_add;}
 
  case 3:{
   WORK work;
@@ -124,12 +124,12 @@ extern "C" void func_0018E540(P*p,int state){
  }
  case 4:enter4:{func_0018F560(p,&p->blend4,p->blend4.clip);enterEffect=11;
   register float deadline __asm__("$f0"),delay __asm__("$f1");
-  __asm__ __volatile__("lui $4,%%hi(%4)\n\tlui $2,%%hi(%3)\n\tlwc1 %1,%%lo(%3)($2)\n\tlui $3,%%hi(%5)\n\tlwc1 %0,%%lo(%4)($4)\n\tlwc1 %2,%%lo(%5)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay):"i"(&D_002BF434),"i"(&D_002DDED0),"i"(&D_002BF430):"$2","$3","$4","memory");
+  __asm__ __volatile__("lui $4,%%hi(%4)\n\tlui $2,%%hi(%3)\n\tlwc1 %1,%%lo(%3)($2)\n\tlui $3,%%hi(%5)\n\tlwc1 %0,%%lo(%4)($4)\n\tlwc1 %2,%%lo(%5)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay):"i"(&D_002BF434),"i"(&g_clock),"i"(&D_002BF430):"$2","$3","$4","memory");
   __asm__("add.s %0,%0,%2\n\tlw %1,%3":"+f"(deadline),"=r"(clip):"f"(delay),"m"(p->blend4.clip));
   p->deadline=deadline;break;}
  case 5:enter5:{func_0018F560(p,&p->blend5,p->blend5.clip);enterEffect=11;
   register float deadline __asm__("$f0"),delay __asm__("$f1");
-  __asm__ __volatile__("lui $4,%%hi(%4)\n\tlui $2,%%hi(%3)\n\tlwc1 %1,%%lo(%3)($2)\n\tlui $3,%%hi(%5)\n\tlwc1 %0,%%lo(%4)($4)\n\tlwc1 %2,%%lo(%5)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay):"i"(&D_002BF438),"i"(&D_002DDED0),"i"(&D_002BF430):"$2","$3","$4","memory");
+  __asm__ __volatile__("lui $4,%%hi(%4)\n\tlui $2,%%hi(%3)\n\tlwc1 %1,%%lo(%3)($2)\n\tlui $3,%%hi(%5)\n\tlwc1 %0,%%lo(%4)($4)\n\tlwc1 %2,%%lo(%5)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay):"i"(&D_002BF438),"i"(&g_clock),"i"(&D_002BF430):"$2","$3","$4","memory");
   __asm__("add.s %0,%0,%2\n\tlw %1,%3":"+f"(deadline),"=r"(clip):"f"(delay),"m"(p->blend5.clip));
   p->deadline=deadline;break;}
  case 6:enter6:{func_0018F560(p,&p->blend6,p->blend6.clip);enterEffect=11;stopDelay=D_002BF430;clip=p->blend6.clip;
@@ -148,13 +148,13 @@ extern "C" void func_0018E540(P*p,int state){
   sharedDelay=D_002BF438;
  }
  deadline_clock_read:
- __asm__ __volatile__("lwc1 %0,%%lo(%2)(%1)":"=f"(sharedDeadline):"r"(clockHigh),"i"(&D_002DDED0):"memory");
+ __asm__ __volatile__("lwc1 %0,%%lo(%2)(%1)":"=f"(sharedDeadline):"r"(clockHigh),"i"(&g_clock):"memory");
  deadline_add:p->deadline=sharedDeadline+sharedDelay;break;
  case 8:clip=p->clip8;break;
  case 9:clip=p->clip9;break;
  case 12:{
   register float deadline __asm__("$f0"),delay __asm__("$f1");register int attack __asm__("$5");
-  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&D_002DDED0),"i"(&D_002BF43C):"$2","$3","$4","memory");
+  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&g_clock),"i"(&D_002BF43C):"$2","$3","$4","memory");
   sharedDeadline=deadline;
   __asm__("add.s %0,%0,%3\n\tlw %1,%4\n\tsw %5,%2":"+f"(sharedDeadline),"=r"(sharedMode),"=m"(p->attack):"f"(delay),"m"(p->mode),"r"(attack):"memory");
   clip=p->clip12;
@@ -162,7 +162,7 @@ extern "C" void func_0018E540(P*p,int state){
  }
  case 13:{
   register float deadline __asm__("$f0"),delay __asm__("$f1");register int attack __asm__("$5");
-  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&D_002DDED0),"i"(&D_002BF43C):"$2","$3","$4","memory");
+  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&g_clock),"i"(&D_002BF43C):"$2","$3","$4","memory");
   sharedDeadline=deadline;
   __asm__("add.s %0,%0,%3\n\tlw %1,%4\n\tsw %5,%2":"+f"(sharedDeadline),"=r"(sharedMode),"=m"(p->attack):"f"(delay),"m"(p->mode),"r"(attack):"memory");
   clip=p->clip13;
@@ -171,55 +171,55 @@ extern "C" void func_0018E540(P*p,int state){
  if(!sharedMode&&func_001F0400(p->sm,0x17B)>=0)func_001F09D8(p->component,0x17B);break;
  case 14:{
   register float deadline __asm__("$f0"),delay __asm__("$f1");register int attack __asm__("$2");
-  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&D_002DDED0),"i"(&D_002BF43C):"$3","$4","memory");
+  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&g_clock),"i"(&D_002BF43C):"$3","$4","memory");
   __asm__("add.s %0,%0,%3\n\tsw %4,%2\n\tlw %1,%5":"+f"(deadline),"=r"(clip),"=m"(p->attack):"f"(delay),"r"(attack),"m"(p->clip14):"memory");
   p->deadline=deadline;
   break;}
  case 15:{
   register float deadline __asm__("$f0"),delay __asm__("$f1");register int attack __asm__("$2");
-  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&D_002DDED0),"i"(&D_002BF43C):"$3","$4","memory");
+  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&g_clock),"i"(&D_002BF43C):"$3","$4","memory");
   __asm__("add.s %0,%0,%3\n\tsw %4,%2\n\tlw %1,%5":"+f"(deadline),"=r"(clip),"=m"(p->attack):"f"(delay),"r"(attack),"m"(p->clip15):"memory");
   p->deadline=deadline;
   break;}
  case 16:{
   register float deadline __asm__("$f0"),delay __asm__("$f1");register int attack __asm__("$2");
-  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&D_002DDED0),"i"(&D_002BF43C):"$3","$4","memory");
+  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&g_clock),"i"(&D_002BF43C):"$3","$4","memory");
   __asm__("add.s %0,%0,%3\n\tsw %4,%2\n\tlw %1,%5":"+f"(deadline),"=r"(clip),"=m"(p->attack):"f"(delay),"r"(attack),"m"(p->clip16):"memory");
   p->deadline=deadline;
   break;}
  case 17:{
   register float deadline __asm__("$f0"),delay __asm__("$f1");register int attack __asm__("$2");
-  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&D_002DDED0),"i"(&D_002BF43C):"$3","$4","memory");
+  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&g_clock),"i"(&D_002BF43C):"$3","$4","memory");
   __asm__("add.s %0,%0,%3\n\tsw %4,%2\n\tlw %1,%5":"+f"(deadline),"=r"(clip),"=m"(p->attack):"f"(delay),"r"(attack),"m"(p->clip17):"memory");
   p->deadline=deadline;
   break;}
  case 18:{
   register float deadline __asm__("$f0"),delay __asm__("$f1");register int attack __asm__("$2");
-  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&D_002DDED0),"i"(&D_002BF43C):"$3","$4","memory");
+  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&g_clock),"i"(&D_002BF43C):"$3","$4","memory");
   __asm__("add.s %0,%0,%3\n\tsw %4,%2\n\tlw %1,%5":"+f"(deadline),"=r"(clip),"=m"(p->attack):"f"(delay),"r"(attack),"m"(p->clip18):"memory");
   p->deadline=deadline;
   break;}
  case 19:{
   register float deadline __asm__("$f0"),delay __asm__("$f1");register int attack __asm__("$2");
-  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&D_002DDED0),"i"(&D_002BF43C):"$3","$4","memory");
+  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&g_clock),"i"(&D_002BF43C):"$3","$4","memory");
   __asm__("add.s %0,%0,%3\n\tsw %4,%2\n\tlw %1,%5":"+f"(deadline),"=r"(clip),"=m"(p->attack):"f"(delay),"r"(attack),"m"(p->clip19):"memory");
   p->deadline=deadline;
   break;}
  case 20:{
   register float deadline __asm__("$f0"),delay __asm__("$f1");register int attack __asm__("$2");
-  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&D_002DDED0),"i"(&D_002BF43C):"$3","$4","memory");
+  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&g_clock),"i"(&D_002BF43C):"$3","$4","memory");
   __asm__("add.s %0,%0,%3\n\tsw %4,%2\n\tlw %1,%5":"+f"(deadline),"=r"(clip),"=m"(p->attack):"f"(delay),"r"(attack),"m"(p->clip20):"memory");
   p->deadline=deadline;
   break;}
  case 21:{
   register float deadline __asm__("$f0"),delay __asm__("$f1");register int attack __asm__("$2");
-  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&D_002DDED0),"i"(&D_002BF43C):"$3","$4","memory");
+  __asm__ __volatile__("lui $2,%%hi(%4)\n\tlui $4,%%hi(%5)\n\tlwc1 %1,%%lo(%4)($2)\n\tlui $3,%%hi(%6)\n\tlwc1 %0,%%lo(%5)($4)\n\taddiu %3,$zero,1\n\tlwc1 %2,%%lo(%6)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay),"=r"(attack):"i"(&D_002BF440),"i"(&g_clock),"i"(&D_002BF43C):"$3","$4","memory");
   __asm__("add.s %0,%0,%3\n\tsw %4,%2\n\tlw %1,%5":"+f"(deadline),"=r"(clip),"=m"(p->attack):"f"(delay),"r"(attack),"m"(p->clip21):"memory");
   p->deadline=deadline;
   break;}
  case 22:case 23:{clip=state==22?p->clip22:p->clip23;
   register float deadline __asm__("$f0"),delay __asm__("$f1");
-  __asm__ __volatile__("lui $2,%%hi(%3)\n\tlui $4,%%hi(%4)\n\tlwc1 %1,%%lo(%3)($2)\n\tlui $3,%%hi(%5)\n\tlwc1 %0,%%lo(%4)($4)\n\tlwc1 %2,%%lo(%5)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay):"i"(&D_002BF440),"i"(&D_002DDED0),"i"(&D_002BF43C):"$2","$3","$4","memory");
+  __asm__ __volatile__("lui $2,%%hi(%3)\n\tlui $4,%%hi(%4)\n\tlwc1 %1,%%lo(%3)($2)\n\tlui $3,%%hi(%5)\n\tlwc1 %0,%%lo(%4)($4)\n\tlwc1 %2,%%lo(%5)($3)":"=f"(deadline),"=f"(delay),"=f"(stopDelay):"i"(&D_002BF440),"i"(&g_clock),"i"(&D_002BF43C):"$2","$3","$4","memory");
   register int mode __asm__("$2");
   __asm__("add.s %0,%0,%3\n\tlw %1,%4\n\tsw $zero,%2":"+f"(deadline),"=r"(mode),"=m"(p->attack):"f"(delay),"m"(p->mode):"memory");
   p->deadline=deadline;
@@ -240,11 +240,11 @@ extern "C" void func_0018E540(P*p,int state){
  }
  p->state=state;
  register ASEG*clipArgument __asm__("$4");register float startArgument __asm__("$f12"),rateArgument __asm__("$f13"),now __asm__("$f0");
- __asm__ __volatile__("lui $2,%%hi(%4)\n\tdaddu %0,%5,$zero\n\tmov.s %1,%6\n\tlwc1 %3,%%lo(%4)($2)\n\tmov.s %2,%7":"=r"(clipArgument),"=f"(startArgument),"=f"(rateArgument),"=f"(now):"i"(&D_002DDED0),"r"(clip),"f"(start),"f"(rate):"$2","memory");
+ __asm__ __volatile__("lui $2,%%hi(%4)\n\tdaddu %0,%5,$zero\n\tmov.s %1,%6\n\tlwc1 %3,%%lo(%4)($2)\n\tmov.s %2,%7":"=r"(clipArgument),"=f"(startArgument),"=f"(rateArgument),"=f"(now):"i"(&g_clock),"r"(clip),"f"(start),"f"(rate):"$2","memory");
  p->reset=0;p->stateTime=now;
  func_001305B8(clipArgument,p,startArgument,rateArgument,1,&p->current);
  if(stopDelay!=0.0f){register ASEGA*current __asm__("$4");register float stopTime __asm__("$f12");
-  __asm__ __volatile__("lui $3,%%hi(%2)\n\tlw %0,%3\n\tlwc1 %1,%%lo(%2)($3)":"=r"(current),"=f"(stopTime):"i"(&D_002DDED0),"m"(p->current):"$3","memory");
+  __asm__ __volatile__("lui $3,%%hi(%2)\n\tlw %0,%3\n\tlwc1 %1,%%lo(%2)($3)":"=r"(current),"=f"(stopTime):"i"(&g_clock),"m"(p->current):"$3","memory");
   func_00131A90(current,stopTime+stopDelay);
  }
  Emit(p,enterEffect);

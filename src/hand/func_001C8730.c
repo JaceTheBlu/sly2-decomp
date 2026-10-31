@@ -1,3 +1,4 @@
+#include "clock.h"
 struct VTE { short d; short pad; void (*pf)(); };
 struct LO { char pad[0xC]; struct VTE *vt; };
 struct S {
@@ -5,8 +6,7 @@ struct S {
     char p0[0x180 - 0x10]; int x180; float x184; int p188[2]; struct LO *x190; int x194; int p198; void *x19C; int p1A0; int x1A4;
     char p1[0x1F4 - 0x1A8]; void *x1F4; int p1F8; void *x1FC; int x200; int p204[2]; void *a20C[6];
 };
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern char g_sndmgr[];
 extern char g_sw[];
 void func_001FE738(void *p);
@@ -46,7 +46,7 @@ void func_001C8730(struct S *p, int n)
         break;
     }
     p->x180 = n;
-    p->x184 = D_002DDED0.t;
+    p->x184 = g_clock.t;
     switch (n) {
     case -1:
         return;

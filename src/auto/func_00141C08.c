@@ -42,7 +42,7 @@ extern M2C_UNK _vt$17CQueueInputMemory;
 extern M2C_UNK D_002CBE38;
 extern M2C_UNK g_heapSw;
 extern s32 D_002DD5BC;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDED4;
 extern M2C_UNK g_cm;
 extern M2C_UNK D_002DE2E0;
@@ -73,7 +73,7 @@ void func_00141C08(s32 arg0, s32 arg1, s32 arg2) {
             M2C_FIELD(temp_v0_2, void (**)(s32, s32), 0x334)(arg0 + M2C_FIELD(temp_v0_2, s16 *, 0x330), M2C_FIELD(arg1, s32 *, 0));
         }
         M2C_FIELD(arg1, s32 *, 4) = arg2;
-        M2C_FIELD(arg1, f32 *, 8) = (f32) D_002DDED0;
+        M2C_FIELD(arg1, f32 *, 8) = (f32) g_clock;
         switch (arg2) {                             /* irregular */
         case 2:
             temp_v0_3 = M2C_FIELD(arg0, void **, 0xC);

@@ -20,7 +20,7 @@ struct A { char pad[0xC]; VE *vt; char pad10[0xFB4]; void *color; char padFC8[8]
 struct R { char pad[0x30]; int state; };
 struct S { char pad[0xC]; VE *vt; char pad10[0x140]; int state; float time; char pad158[0x58]; struct O *source; struct A *actor; };
 extern "C" {
-extern struct CLOCK { float t,dt; } D_002DDED0;
+extern struct CLOCK { float t,dt; } g_clock;
 struct LM { float gMin, gMax; };
 extern float D_002C43B0,D_002C43C0[3];
 extern LM D_002BBB60;
@@ -73,12 +73,12 @@ extern "C" void func_00225300(struct S *p) {
                     if(Length(Sub(pos,other))<100.0f)func_0017A8C8(r,4);
                 }
                 if(p->actor->color) {
-                    float t=(D_002DDED0.t-p->time)/D_002C43B0;
+                    float t=(g_clock.t-p->time)/D_002C43B0;
                     float g=D_002C43C0[0]+t*(D_002C43C0[1]+t*D_002C43C0[2]);
                     Clamp(&g,&D_002BBB60);
                     func_0012D108(p->actor->color,Splat(g));
                 }
-                if(D_002C43B0<D_002DDED0.t-p->time) {
+                if(D_002C43B0<g_clock.t-p->time) {
                     func_001C6FD8(g_sw,0x5D,func_001A62E8(p->source),p,1);
                     p->actor->vt[9].fn((char*)p->actor+p->actor->vt[9].d);
                     // PIN: &D_002DEB30 straight into $a0 keeps %hi(D_002DEB30) inside the loop (see the header).

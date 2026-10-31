@@ -1,4 +1,4 @@
-// g_clock (D_002DDED0) must be a struct: a scalar float global is assumed not to alias the struct-field stores, which lets gcc CSE the clock reloads.
+// g_clock (g_clock) must be a struct: a scalar float global is assumed not to alias the struct-field stores, which lets gcc CSE the clock reloads.
 typedef int qword __attribute__((mode(TI)));
 typedef union {qword q;float f[4];} U;
 struct VT{short delta,pad;void*fn;};
@@ -11,7 +11,7 @@ struct M3{qword r[3];};
 struct LINK{struct LO**pp;};
 struct CRef{int tag;void*value;};
 extern char g_sw[];
-struct CLOCK{float t,dt;};extern struct CLOCK D_002DDED0;extern float D_002BE5CC,D_002BE5D0,D_002BE5D4,D_002BE5D8;
+struct CLOCK{float t,dt;};extern struct CLOCK g_clock;extern float D_002BE5CC,D_002BE5D0,D_002BE5D4,D_002BE5D8;
 void func_001A5E28(struct P*);
 qword func_00173A18(struct P*);
 void func_00173D18(struct P*,qword);
@@ -39,8 +39,8 @@ void func_00173A68(struct P*p){
  func_001A5E28(p);
  pos=func_00173A18(p);
  func_00173D18(p,pos);
- if(D_002DDED0.t<p->next)return;
- p->next=D_002DDED0.t+D_002BE5D0;
+ if(g_clock.t<p->next)return;
+ p->next=g_clock.t+D_002BE5D0;
  if(p->count==p->capacity){int close=DistanceXY(pos,p->last)<D_002BE5D4;if(close)return;}
  event=0;context=func_001C4840(g_sw);
  {
@@ -50,7 +50,7 @@ void func_00173A68(struct P*p){
    if(!event->kind)event=0;
    else switch(p->mode){
    case 0:return;
-   case 1:if(D_002DDED0.t-event->time>D_002BE5CC)return;break;
+   case 1:if(g_clock.t-event->time>D_002BE5CC)return;break;
    case 2:break;
    }
   }
@@ -68,12 +68,12 @@ void func_00173A68(struct P*p){
  func_001F7C68(object,0.5f);
  if(event)func_00154038(object->xF64,event->tag,2);
  entry->object=object;
- entry->time=D_002DDED0.t;
+ entry->time=g_clock.t;
  entry->selector=selector;
  p->count++;
  selector->used=1;
  link.pp=&object;
- p->next=D_002DDED0.t+D_002BE5D8;
+ p->next=g_clock.t+D_002BE5D8;
  ((void(*)(void*,int,int,int,void*const*,struct CRef*))p->vt[3].fn)((char*)p+p->vt[3].delta,0x19,0,1,(void*const*)&link,0);
 }
 

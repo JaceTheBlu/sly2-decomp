@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_00191A10: per-frame update of a hero's movement/action context (the struct at actor+0x4C0; called from the
 // actor's mode handler, see func_0018B7E8 / func_00134DA8). Dispatches on the context's action, then commits the
 // animation / axis weights for the resulting step.
@@ -39,11 +40,10 @@ struct CONTEXT {
     char pad224[0x240 - 0x224]; PROGRAM program240; char pad2E4[0x330 - 0x2E4]; ENTRY axes2[8]; void *request2;
     char pad434[0x440 - 0x434]; char sub[0x10];
 };
-struct CLOCK { float t, dt; };
 struct VU_FLOAT { qword q; };
 
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern ACTOR *D_002E1E40;
 extern qword D_002A2DA0;                    // (1, 0, 0, 0)
 extern float D_002BF5BC, D_002BF5C0, D_002BF5C4, D_002BF5C8, D_002BF5CC;
@@ -164,7 +164,7 @@ extern "C" void func_00191A10(CONTEXT *ctx)
         smp.svSlow = 0.0f;
         smp.dtFast = 0.3f;
         U vel;
-        func_0011F088(pos.q, goal.q, D_002DDED0.dt, &smp, &vel);
+        func_0011F088(pos.q, goal.q, g_clock.dt, &smp, &vel);
         float lateral;
         qword offset;
         if (FIsBasicDerivedFrom__FP5BASIC3CID(ctx->focus, 38)) {
@@ -190,8 +190,8 @@ extern "C" void func_00191A10(CONTEXT *ctx)
             FOCUS *focus;
             if (FIsBasicDerivedFrom__FP5BASIC3CID(ctx->focus, 12) && !(focus = ctx->focus)->cyclic) {
                 float lo, hi;
-                GSmooth__FfffP3SMPPf(ctx->value, func_001E6620(focus) + 30.0f, D_002DDED0.dt, &smp, &lo);
-                GSmooth__FfffP3SMPPf(ctx->value, func_001E6648(focus) - 30.0f, D_002DDED0.dt, &smp, &hi);
+                GSmooth__FfffP3SMPPf(ctx->value, func_001E6620(focus) + 30.0f, g_clock.dt, &smp, &lo);
+                GSmooth__FfffP3SMPPf(ctx->value, func_001E6648(focus) - 30.0f, g_clock.dt, &smp, &hi);
                 s = GClamp(lateral, lo, hi);
             } else {
                 s = lateral;
@@ -323,10 +323,10 @@ extern "C" void func_00191A10(CONTEXT *ctx)
             if (focus->cyclic) {
                 limit = smp.svFast;
             } else if (ctx->reversed) {
-                GSmooth__FfffP3SMPPf(ctx->value, 50.0f, D_002DDED0.dt, &smp, &limit);
+                GSmooth__FfffP3SMPPf(ctx->value, 50.0f, g_clock.dt, &smp, &limit);
                 limit = -limit;
             } else {
-                GSmooth__FfffP3SMPPf(ctx->value, func_001E6648(focus) - 50.0f, D_002DDED0.dt, &smp, &limit);
+                GSmooth__FfffP3SMPPf(ctx->value, func_001E6648(focus) - 50.0f, g_clock.dt, &smp, &limit);
             }
             float ratio = (limit - smp.svSlow) / (smp.svFast - smp.svSlow);
             float amount = pjoy->amount;
@@ -370,7 +370,7 @@ extern "C" void func_00191A10(CONTEXT *ctx)
                 ACTOR *actor = ctx->actor;
                 float turn = -actor->velocity.f[1] / D_002BF5CC;
                 actor->velocity.q = QwScaleX(D_002A2DA0, QwDot(actor->velocity.q, D_002A2DA0));
-                func_00204660(ctx->actor, ctx->actor->heading + turn * D_002DDED0.dt);
+                func_00204660(ctx->actor, ctx->actor->heading + turn * g_clock.dt);
             } else {
                 func_00192BD8(ctx, 9);
             }

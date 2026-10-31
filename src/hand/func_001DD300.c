@@ -29,7 +29,7 @@ typedef struct OBJ {
     int x120;
     int x124;
 } OBJ;
-extern struct CLOCK { float a[16]; } D_002DDED0;
+extern struct CLOCK { float a[16]; } g_clock;
 extern char g_sw[];
 extern int D_003E0F9C;
 void func_0020EFC0(void *, int);
@@ -51,7 +51,7 @@ void func_001DD300(OBJ *p, int s)
     }
     old = p->x40;
     p->x40 = s;
-    p->x44 = D_002DDED0.a[15];
+    p->x44 = g_clock.a[15];
     switch (s) {
     case -1:
         func_0020F030(g_sw, 0);

@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
 struct VTE { short delta,pad; void (*fn)(void *,qword,float,int); };
@@ -10,9 +11,8 @@ struct S {
 };
 struct Q { char pad[0x18]; float duration; void *owner; char pad20[0xEC-0x20]; struct VTE *vt; void *emit; };
 struct CAMERA { char pad[0x60]; qword a,b; };
-struct CLOCK { float t; };
 extern struct CAMERA g_cm;
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern qword D_002C0D80;
 extern float D_002C0D90;
 extern struct G g_sw;
@@ -46,13 +46,13 @@ void func_001C6308(struct S *p)
     side=Dot(direction,g_cm.b)<0;
     if(side!=p->previous) {
         if(GRandInRange__Fff(0,1)<p->probability) {
-            if(D_002C0D90<D_002DDED0.t-p->last) {
+            if(D_002C0D90<g_clock.t-p->last) {
                 if(Dot(direction,g_cm.a)<0)emitter=p->left;
                 else emitter=p->right;
                 if(!emitter)goto changed;
                 q=func_001CE888(&g_sw,(void *)4,0);
                 if(!q)goto changed;
-                p->last=D_002DDED0.t;
+                p->last=g_clock.t;
                 {
                     struct VTE *method=&q->vt[1];
                     void *ctx=(char *)q+method->delta;

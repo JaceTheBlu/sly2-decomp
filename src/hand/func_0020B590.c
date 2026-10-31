@@ -5,7 +5,7 @@ struct O {
 };
 struct S { char pad[0x50]; int c; struct O **apo; };
 struct L { int k; int rest[27]; };
-extern struct { float t; float dt; } D_002DDED0;
+extern struct { float t; float dt; } g_clock;
 extern float D_002C3DBC;
 extern const float D_002A88CC;
 void func_001A5E28(struct S *p);
@@ -23,7 +23,7 @@ void func_0020B590(struct S *p)
     apo = p->apo;
     for (i = 0; i < c; i++) {
         struct O *o = apo[i];
-        if (((int)(o->fl28 >> 60) & 1) && D_002DDED0.t - o->tFF8 > D_002C3DBC) {
+        if (((int)(o->fl28 >> 60) & 1) && g_clock.t - o->tFF8 > D_002C3DBC) {
             switch (o->k1000) {
             case 0:
                 break;

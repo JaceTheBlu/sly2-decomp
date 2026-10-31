@@ -11,7 +11,7 @@ struct DV{char pad[0x20];qword value;};
 struct P{char pad[0x60];struct SPACE*space;char pad64[0x1030-0x64];struct MODEL*model;char pad1034[0x10DC-0x1034];struct OWNER*owner;char pad10E0[0x19A0-0x10E0];struct FOCUS*focus;char pad19A4[0x19EC-0x19A4];struct DV*dvResidual;char pad19F0[8];struct DV*dvYaw;struct DV*dvX;char pad1A00[0x1BD4-0x1A00];int valid;float height,time;char pad1BE0[0x10];qword anchor,position,euler,localPoint;};
 struct WORK{union{struct M4 predicted;U scalar;}phase;struct M4 transform;U axis;struct M3 rotation;U relative,residual,gain;};
 extern float D_002BF380,D_002BF3A0,D_002BF3B8,D_002BF3BC;
-extern qword D_002BF390;extern struct LM D_002BF3A8,D_002BF3B0;extern struct CLOCK D_002DDED0;
+extern qword D_002BF390;extern struct LM D_002BF3A8,D_002BF3B0;extern struct CLOCK g_clock;
 void func_002046F0(struct P*,struct AIM*);void func_002309E8(struct SPACE*,struct SPACE*,struct M4*,struct M4*,float);
 qword func_0022FC48(struct SPACE*,struct SPACE*,qword);qword func_0022FCC8(struct SPACE*,struct SPACE*,qword);
 float func_002458F0(float,float);float func_0011D948(struct LM*,float);
@@ -92,11 +92,11 @@ void func_0018B460(struct P*p){
   }
   {register int near __asm__("$2")=1;float distance=CorrectionDistance(p,residual);if(distance<limit){}else near=0;if(near){
    func_0012DA30(p->dvYaw,tilt);func_0012DA30(p->dvResidual,w.residual.q);func_0012DA30(p->dvX,axis);
-   p->valid=1;p->time=D_002DDED0.time;return;
+   p->valid=1;p->time=g_clock.time;return;
   }}
  }}
  {register float remaining __asm__("$f0")=p->time,after __asm__("$f2"),gain __asm__("$f3");
-  {register float life __asm__("$f1")=D_002BF3BC,now __asm__("$f3")=D_002DDED0.time;remaining=remaining+life;after=D_002DDED0.dt;remaining=remaining-now;after=remaining-after;}
+  {register float life __asm__("$f1")=D_002BF3BC,now __asm__("$f3")=g_clock.time;remaining=remaining+life;after=g_clock.dt;remaining=remaining-now;after=remaining-after;}
   {register float zero __asm__("$f1")=0.0f;if(zero<after)gain=after/remaining;else gain=zero;}
   {register qword bits __asm__("$2");__asm__("mfc1 %0,%2\n\tsq %0,%1":"=&r"(bits),"=m"(w.gain.q):"f"(gain));}
   {

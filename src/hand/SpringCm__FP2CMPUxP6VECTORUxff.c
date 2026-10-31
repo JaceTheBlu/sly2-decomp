@@ -2,7 +2,7 @@
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } VU;
 struct CLOCK { float t; union { float g; int n; } dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 struct P { char pad[0x300]; int f300; };
 void SpringCm__FP2CMPUxP6VECTORUxff(struct P *p, qword *ppos, float *pvel, qword target, float k1, float k2)
 {
@@ -19,7 +19,7 @@ void SpringCm__FP2CMPUxP6VECTORUxff(struct P *p, qword *ppos, float *pvel, qword
         pvel[0] = 0.0f;
         return;
     }
-    pclock = &D_002DDED0;
+    pclock = &g_clock;
     __asm__("qmtc2.ni %1, %0" : "=j"(s1) : "r"(k1));
     d = *ppos;
     __asm__("qmtc2.ni %1, %0" : "=j"(s2) : "r"(k2));

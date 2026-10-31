@@ -5,7 +5,7 @@ struct N { struct Endpoint e[2]; qword q80; float value; char pad94[8]; int kind
 struct L { struct N *first; struct L *next; struct N **back; };
 struct G { char pad[0x64]; struct L *groups; struct N *def; };
 struct P { char pad[0xEC]; struct G *g; char padF0[0x118]; struct N *best; float t; char pad210[0x20]; qword position; };
-extern float D_002A85F4,D_002DDED0;
+extern float D_002A85F4,g_clock;
 struct SW;
 extern struct SW g_sw;
 void func_001F4F10(struct P *);
@@ -30,7 +30,7 @@ void func_00204768(struct P *p)
         }
     }
     p->best=best;
-    if(best){p->t=D_002DDED0;p->position=*(qword *)((char *)best+0x50);}
+    if(best){p->t=g_clock;p->position=*(qword *)((char *)best+0x50);}
     {
         struct N *removed=0;
         group=p->g->groups;

@@ -74,7 +74,7 @@ typedef char P_m1618_Offset[FIELD_OFFSET(P,m1618)==5656?1:-1];
 typedef char P_m161C_Offset[FIELD_OFFSET(P,m161C)==5660?1:-1];
 typedef char P_m1620_Offset[FIELD_OFFSET(P,m1620)==5664?1:-1];
 typedef char P_m1624_Offset[FIELD_OFFSET(P,m1624)==5668?1:-1];
-extern "C" CLOCK D_002DDED0;
+extern "C" CLOCK g_clock;
 extern "C" M4 D_002A2D30;
 extern "C" float D_002C0A3C,D_002C0A40;
 extern "C" void func_0012E460(MOTION**);
@@ -101,7 +101,7 @@ extern "C" void func_001B93E8(P*p,int state) {
  if(p->state==state)return;
  if(p->state==1){func_0012E460(&p->m13FC);func_0012E460(&p->m1400);}
  p->state=state;
- p->time=D_002DDED0.time;
+ p->time=g_clock.time;
  OWNER*owner;
  switch(state){
  case 0:p->flag=0;break;
@@ -125,7 +125,7 @@ extern "C" void func_001B93E8(P*p,int state) {
   func_001B72B0(p,0,&predicted,&work.row[0].q,&work.row[1].q);
   if(FIsBasicDerivedFrom__FP5BASIC3CID(owner,0x38))func_00209E28(owner,(int)p);
   func_001B7700(p,work.row[1].q,&event->time,&duration,&work.row[2].q,&work.row[3].q);
-  p->m13FC=func_0012DE58(owner,owner->left,(void*)5,D_002DDED0.time+duration,work.row[1].q,work.row[3].q);
+  p->m13FC=func_0012DE58(owner,owner->left,(void*)5,g_clock.time+duration,work.row[1].q,work.row[3].q);
   VTE*entry=&owner->vt[35];
   void*receiver=(char*)owner+entry->delta;
   qword velocity=func_0022FCC8(owner->left->parent,0,work.row[2].q);

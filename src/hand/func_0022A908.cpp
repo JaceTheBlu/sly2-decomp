@@ -1,3 +1,4 @@
+#include "clock.h"
 // RenderWaypt (cid 107 slot 39): fades the job marker in/out by the world clock, draws its three child SOs
 // scaled by the camera distance, and the job's name plate above it. Member names are descriptive guesses.
 // What decided the match: tStart reused for both fade times (one pseudo -> the game's f4/f3 registers), clamp
@@ -40,10 +41,9 @@ struct WAYPT
 };
 struct SW { char pad[0x3B0C]; int fUnk3B0C; char pad3B10[0xC40]; float tUnk4750, tUnk4754; char pad4758[0xC]; int cUnk4764, cUnk4768; };
 struct CM { char pad[0x90]; qword pos; };
-struct CLOCK { float t; };
 extern SW g_sw;      // g_sw
 extern CM g_cm;      // g_cm
-extern CLOCK D_002DDED0;   // g_clock
+extern CLOCK g_clock;   // g_clock
 extern qword g_normalZ;   // g_normalZ
 extern LM D_002BBB60;      // g_lmZeroOne
 extern float D_002C4494, D_002C4498, D_002C449C, D_002C44D8;
@@ -122,9 +122,9 @@ extern "C" void func_0022A908(WAYPT *pwaypt)
 {
     func_001F3C70(pwaypt);
     float tStart = GMax(g_sw.tUnk4750 + D_002C4494, g_sw.tUnk4754 + D_002C4498);
-    float uShow = GLimitG(GEvaluateClq(&D_002C44A0, D_002DDED0.t - tStart), D_002BBB60.gMin, D_002BBB60.gMax);
+    float uShow = GLimitG(GEvaluateClq(&D_002C44A0, g_clock.t - tStart), D_002BBB60.gMin, D_002BBB60.gMax);
     tStart = g_sw.tUnk4750 + D_002C449C;
-    float uLabel = GLimitG(GEvaluateClq(&D_002C44B0, D_002DDED0.t - tStart), D_002BBB60.gMin, D_002BBB60.gMax);
+    float uLabel = GLimitG(GEvaluateClq(&D_002C44B0, g_clock.t - tStart), D_002BBB60.gMin, D_002BBB60.gMax);
     switch (pwaypt->nMode)
     {
     case 0:

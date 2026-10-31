@@ -15,7 +15,7 @@ struct REQUEST{int flag;float a,b;int pad;U point,direction;};
 struct C{char pad0[0x10];P*actor;char pad14[0x40-0x14];CONTROL*control;char pad44[12];int mode;float time;int pad58;P*target;int owned;DELTA*delta;};
 struct CLOCK{float time,dt;};
 extern "C"{
- extern CLOCK D_002DDED0;
+ extern CLOCK g_clock;
  extern float D_002BE6FC,D_002BE700,D_002BE704;
  extern F D_002BE708;
  extern U g_normalZ;

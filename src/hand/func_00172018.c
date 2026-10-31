@@ -1,6 +1,6 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 struct X { qword a; qword v; };
 struct A { char pad[0xFD0]; char aFD0[4]; };
 struct S { char pad[0x10]; struct A *p10; int pad2; void *p18; char pad3[0x14]; int n30; float f34; float f38; float f3C; char pad4[8]; int n48; };
@@ -59,9 +59,9 @@ void func_00172018(struct S *p) {
                     func_00172320(p, 1);
                 }
                 p->n48 = 0;
-            } else if (p->f38 < D_002DDED0.t || func_00174FB8(p->p18)) {
+            } else if (p->f38 < g_clock.t || func_00174FB8(p->p18)) {
                 func_00172320(p, 4);
-            } else if (D_002DDED0.t > p->f3C) {
+            } else if (g_clock.t > p->f3C) {
                 func_00172320(p, 3);
             } else {
                 qword a = func_00172760(p);
@@ -81,7 +81,7 @@ void func_00172018(struct S *p) {
                     func_00172320(p, 1);
                 }
                 p->n48 = 0;
-            } else if (p->f38 < D_002DDED0.t) {
+            } else if (p->f38 < g_clock.t) {
                 func_00172320(p, 4);
             } else {
                 func_00172F10(p);

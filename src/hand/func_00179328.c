@@ -1,6 +1,6 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 struct G;
 extern struct G g_sw;
 extern qword D_002A2DD0;
@@ -63,8 +63,8 @@ void func_00179328(struct S *p) {
         void *o = func_001C4840(&g_sw);
         if (o && func_001A6AF8(p->n50, o) && (o == D_002F7900 || (p->n5C & 0x40000))) {
             TriggerJoyRumbleRumk__FP3JOY4RUMKf(D_002DFC00, 3, 1.50000005960464477539e-01f);
-            p->fB0 = D_002DDED0.t + 5.00000044703483581543e-02f;
+            p->fB0 = g_clock.t + 5.00000044703483581543e-02f;
         }
-        p->fB4 = D_002DDED0.t + 1.33333340287208557129e-01f;
+        p->fB4 = g_clock.t + 1.33333340287208557129e-01f;
     }
 }

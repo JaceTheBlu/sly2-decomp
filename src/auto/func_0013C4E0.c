@@ -28,7 +28,7 @@ extern M2C_UNK D_002CB5D8;
 extern s128 *g_pdliFirst;
 extern M2C_UNK D_002DD5C0;
 extern M2C_UNK D_002DD600;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern M2C_UNK g_cm;
 extern s32 D_002DE59C;
 extern M2C_UNK D_002DEA28;

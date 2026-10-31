@@ -1,7 +1,7 @@
 typedef struct { float a, b; } F2;
 struct G { char pad[0x24]; float x24; char pad2[0x60 - 0x28]; int x60; };
 extern struct G g_cm;
-extern struct { float t; float dt; } D_002DDED0;
+extern struct { float t; float dt; } g_clock;
 extern float D_003E1BE0;
 extern F2 D_002BD950, D_002BD958, D_002BD960, D_002BD968, D_002BD970;
 struct X {
@@ -62,5 +62,5 @@ void func_0014FF38(struct X *p)
     p->x30 = g_cm.x24;
     SetCmNearClip__FP2CMf(&g_cm, 49.0f);
     p->x54++;
-    D_003E1BE0 = D_002DDED0.t;
+    D_003E1BE0 = g_clock.t;
 }

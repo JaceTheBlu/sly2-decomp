@@ -1,5 +1,5 @@
-struct CLOCK { float t; float dt; };
-extern CLOCK D_002DDED0 asm("D_002DDED0");
+#include "clock.h"
+extern CLOCK g_clock asm("g_clock");
 struct SAI { int a; };
 struct PINGPONG { char pad[0x1C]; int cframe; char pad1[0x34 - 0x20]; SAI sai; char pad2[0x50 - 0x38];
     float dtLoopMin; float dtLoopMax; float dtPauseMin; float dtPauseMax; float dframe; float iframe; float dtPause; float dtPauseRemaining; };
@@ -14,11 +14,11 @@ void UpdatePingpong(PINGPONG *ppingpong, float dt)
 
     if (ppingpong->dtPauseRemaining > 0.0f)
     {
-        ppingpong->dtPauseRemaining -= D_002DDED0.dt;
+        ppingpong->dtPauseRemaining -= g_clock.dt;
         return;
     }
 
-    float dframe = ppingpong->dframe * D_002DDED0.dt;
+    float dframe = ppingpong->dframe * g_clock.dt;
     ppingpong->iframe += dframe;
 
     if (ppingpong->iframe >= (float)ppingpong->cframe)

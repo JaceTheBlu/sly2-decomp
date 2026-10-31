@@ -4,7 +4,7 @@ extern s128 D_002A2DA0;
 extern s128 D_002A2DD0;
 extern M2C_UNK D_002CAF08;
 extern M2C_UNK D_002CAF48;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDED4;
 extern f32 D_002DDF10;
 extern M2C_UNK g_cm;

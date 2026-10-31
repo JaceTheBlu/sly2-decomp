@@ -19,7 +19,7 @@ extern f32 D_002BD8D4;
 extern f32 D_002BD8D8;
 extern f32 D_002BD8DC;
 extern M2C_UNK D_002BD8E0;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDED4;
 extern f32 D_002DDEE0;
 extern M2C_UNK D_002DDF30;

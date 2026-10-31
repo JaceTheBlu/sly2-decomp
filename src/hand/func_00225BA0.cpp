@@ -1,3 +1,4 @@
+#include "clock.h"
 // Update target-facing angles or integrate angular input.
 typedef int qword __attribute__((mode(TI)));
 struct M3 {qword r[3];};
@@ -5,8 +6,7 @@ union V {qword q;float f[4];};
 struct BOUND {float lo,hi;};
 struct CONTROL {char pad[0x10];float x,y;char pad18[8];float z;};
 struct S {char pad[0x150];CONTROL *control;char pad154[0x2C];void *target;int aim;int pad188;float pitch,yaw,vpitch,vyaw;BOUND yawRange,pitchRange;char pad1ac[0x10];float strength;char pad1c0[0xC];int output;char pad1d0[8];void *rotation;};
-struct CLOCK {float t,dt;};
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern int D_003E0FE0;
 extern char D_003D4A60[];
 extern float D_002C4408[];
@@ -56,7 +56,7 @@ extern "C" void func_00225BA0(S *p){
             float ay=cubeY*accel;
             if(!func_002581C0(D_003E0FE0,D_003D4A60).value)ay=-ay;
             if(ay*p->vyaw<=0.0f)p->vyaw=0.0f;
-            CLOCK *clock=&D_002DDED0;
+            CLOCK *clock=&g_clock;
             const float *damping=D_002C4408;
             p->vpitch=GSmooth__FfffP3SMPPf(p->vpitch,0.0f,clock->dt,damping,0);
             p->vyaw=GSmooth__FfffP3SMPPf(p->vyaw,0.0f,clock->dt,damping,0);

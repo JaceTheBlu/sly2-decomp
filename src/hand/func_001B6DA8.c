@@ -2,7 +2,7 @@
 typedef int qword __attribute__((mode(TI)));
 struct VT { short d; short pad; void *pfn; };
 struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern char g_sw[];
 extern qword g_normalZ;
 union WORD{int bits;float value;};extern union WORD D_002C09A8;
@@ -72,7 +72,7 @@ void func_001B6DA8(struct P *p, int s)
     if (p->x13D8 == -1)
         Zero(&p->v190);
     p->x13D8 = s;
-    p->g13DC = D_002DDED0.t;
+    p->g13DC = g_clock.t;
     switch (s) {
     case 0:
         break;
@@ -95,7 +95,7 @@ void func_001B6DA8(struct P *p, int s)
         __asm__("qmtc2.ni %5,%1\n\tvsub.xyzw %0,%0,%6\n\tlw %2,%8\n\tvadda.xyzw $ACC,%0,$vf0\n\tvmaddx.xyzw %3,%7,%1x\n\tqmfc2.ni %4,%3":"+&j"(v),"=&j"(k),"=r"(setter),"=j"(r),"=r"(argument):"r"(bits),"j"(d),"j"(up),"m"(vt[35].pfn));
         u.q=k;
         setter((char*)p+delta,argument);
-        p->g131C = D_002DDED0.t;
+        p->g131C = g_clock.t;
         break;
     }
     case 2: {

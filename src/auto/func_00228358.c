@@ -15,7 +15,7 @@ extern M2C_UNK D_002C44A0;
 extern M2C_UNK D_002C44B0;
 extern M2C_UNK D_002C44C0;
 extern M2C_UNK D_002C44D0;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDED4;
 extern M2C_UNK g_cm;
 extern M2C_UNK D_002DEB30;
@@ -31,6 +31,6 @@ void func_00228358(s32 arg0, s32 arg1) {
             M2C_FIELD(&g_sw, s32 *, 0x3C84) = arg0;
         }
         M2C_FIELD(arg0, s32 *, 0x13C) = arg1;
-        M2C_FIELD(arg0, f32 *, 0x140) = (f32) D_002DDED0;
+        M2C_FIELD(arg0, f32 *, 0x140) = (f32) g_clock;
     }
 }

@@ -1,5 +1,5 @@
-struct CLOCK { float t; float dt; };
-extern CLOCK D_002DDED0 asm("D_002DDED0");
+#include "clock.h"
+extern CLOCK g_clock asm("g_clock");
 struct SAI { int a; };
 struct SHUFFLE { char pad[0x1C]; int cframe; char pad1[0x28 - 0x20]; unsigned short iframe; char pad2[0x34 - 0x2A]; SAI sai;
     char pad3[0x50 - 0x38]; float dtPauseMin; float dtPauseMax; float dtPause; };
@@ -14,7 +14,7 @@ void UpdateShuffle(SHUFFLE *pshuffle, float dt)
 
     if (pshuffle->dtPause > 0.0f)
     {
-        pshuffle->dtPause -= D_002DDED0.dt;
+        pshuffle->dtPause -= g_clock.dt;
         return;
     }
 

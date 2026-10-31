@@ -1,3 +1,4 @@
+#include "clock.h"
 struct NODE;
 struct OBJ;
 struct CRef {
@@ -18,8 +19,7 @@ struct CRef {
 extern char D_004520A8[];
 struct G;
 extern G g_sw;
-struct CLOCK { float t; float dt; };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 struct R { char pad[0xC]; int n; };
 extern "C" {
 void FreeSlotheapPv__FP8SLOTHEAPPv(void *pheap, void *pv);
@@ -48,4 +48,4 @@ struct SPN {
     NODE *operator->() { return p; }
 };
 extern "C" CRef func_00123BD8(int c, CRef *aref);
-CRef func_00123BD8(int c, CRef *aref) { CRef res(-1, 0x15); SPN sp; OBJ *pobj = (OBJ *)aref[1].u.pv; NODE *pnNew = func_00256B48(); sp.Set(pnNew); sp->ref = func_00256B48(); NODE *pn = sp->ref.u.pnode; pn->ref = pobj; if (c >= 3) { NODE *pnT = pn; for (NODE *pw = aref[2].u.pnode; pw; pw = pw->pnext.p) { pnT->SetNext(func_00256B48()); pnT = pnT->pnext.p; CRef *pref = &pnT->ref; *pref = func_00256B48(); NODE *pc = pref->u.pnode; pc->ref.SetTag(0x12); pc->SetNext(func_00256B48()); pc->pnext.p->ref = pw->ref; } } G *pg = &g_sw; float t = D_002DDED0.t; R *pr = func_00133040(pg, 0, sp.p, t + func_00129DA8(aref).u.g); res = pr->n; return res; }
+CRef func_00123BD8(int c, CRef *aref) { CRef res(-1, 0x15); SPN sp; OBJ *pobj = (OBJ *)aref[1].u.pv; NODE *pnNew = func_00256B48(); sp.Set(pnNew); sp->ref = func_00256B48(); NODE *pn = sp->ref.u.pnode; pn->ref = pobj; if (c >= 3) { NODE *pnT = pn; for (NODE *pw = aref[2].u.pnode; pw; pw = pw->pnext.p) { pnT->SetNext(func_00256B48()); pnT = pnT->pnext.p; CRef *pref = &pnT->ref; *pref = func_00256B48(); NODE *pc = pref->u.pnode; pc->ref.SetTag(0x12); pc->SetNext(func_00256B48()); pc->pnext.p->ref = pw->ref; } } G *pg = &g_sw; float t = g_clock.t; R *pr = func_00133040(pg, 0, sp.p, t + func_00129DA8(aref).u.g); res = pr->n; return res; }

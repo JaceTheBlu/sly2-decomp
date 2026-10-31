@@ -11,7 +11,7 @@ struct SW {char pad0[0x3BF0];int pending;REQUEST request;HEADER current;int unus
 struct FRAME;
 struct STREAM;
 struct REF;
-extern char D_002DDED0[],g_cm[],D_002DEB30[],D_002F7980[],D_002F66B0[],D_00443740[],D_002E1E88[];
+extern char g_clock[],g_cm[],D_002DEB30[],D_002F7980[],D_002F66B0[],D_00443740[],D_002E1E88[];
 extern char D_002A8A88[];
 extern ACTOR *D_002E1E40,*D_002DD5BC,*D_002F7900;
 extern SW g_sw;
@@ -60,7 +60,7 @@ struct FRAME {FRAME(){}~FRAME(){}};
 struct STREAM {int flags;char pad4[0x2C];void *vtable;int spoolBytes;char *spool;int fileHandle,position,writePosition,capacity,input,secondaryHandle,state54,state58,state5C,state60;};
 struct REF {int tag,value;REF(const REF &);~REF(){func_00129EC8(this);}};
 extern "C" REF func_001D8A38(const char *,...);
-static inline float Time(){return *(float *)D_002DDED0;}
+static inline float Time(){return *(float *)g_clock;}
 static inline int Same(const HEADER *a,const HEADER *b){if(a==b)return true;if(!b)return false;return (a->words[2]^a->words[14])==(b->words[2]^b->words[14]);}
 static inline int SetKey(KEY *key,const HEADER *header){if(!header)return false;int c=header->words[0],a=header->words[13],d=header->words[15],b=header->words[1];key->kind=2;key->tag=b^d;key->name=(c^a)+0xCA0;return key->tag!=0;}
 static inline void Activate(ACTOR *actor){VT *entry=&actor->vtable[8];((void (*)(void *))entry->function)((char *)actor+entry->delta);}
@@ -99,7 +99,7 @@ extern "C" void func_0020E890(SW *p)
     SetDecompress__18CBinaryInputStreamiPUc(reader,0x4000,(void *)0x70000000);
     func_00184CA0(reader);
     func_0020E068(p);
-    func_0014D068(D_002DDED0);
+    func_0014D068(g_clock);
     func_00187078(8);
     func_002333B4(&g_sw,0,0x4790);
     func_002333B4(&g_sw,0,0x4790);

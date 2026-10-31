@@ -138,7 +138,7 @@ extern s32 D_002DD2E8;
 extern s32 D_002DD2EC;
 extern s32 D_002DD2F0;
 extern s32 D_002DD2F4;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDED4;
 extern s64 D_002DDF18;
 extern M2C_UNK g_cm;

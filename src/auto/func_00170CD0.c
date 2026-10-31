@@ -21,7 +21,7 @@ extern f32 D_002BE5D4;
 extern f32 D_002BE5D8;
 extern f32 D_002BE5DC;
 extern f32 D_002BE5E0;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern M2C_UNK g_cm;
 extern M2C_UNK g_sw;
 extern void *D_003E13B4;

@@ -1,5 +1,5 @@
-struct CLOCK { float t; };
-extern CLOCK D_002DDED0;
+#include "clock.h"
+extern CLOCK g_clock;
 struct PO { char pad[0x1024]; int x1024; };
 enum HFDK { HFDK_Nil };
 struct JT { PO *p0; char pad[0x28]; HFDK hfdk; float tHfdk; int x34; char pad2[0x50-0x38]; int x50; char pad3[0x68-0x54]; int x68; };
@@ -7,7 +7,7 @@ void SetJtHfdk(JT *pjt, HFDK hfdk)
 {
     if (hfdk == pjt->hfdk) return;
     pjt->hfdk = hfdk;
-    pjt->tHfdk = D_002DDED0.t;
+    pjt->tHfdk = g_clock.t;
     pjt->x50 = 0;
     switch (hfdk) {
     case 3:

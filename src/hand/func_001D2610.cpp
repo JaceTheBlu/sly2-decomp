@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_001D2610: MATCH. Mode-1 update of a vehicle with attached weapons (called from
 // func_001D19A8): pick a ready attachment (func_001D2240) or a target object (func_001D22D0), run the state machine
 // (0 approach/orbit the target, 1 attack in place, 2 pursue the object, 3 back away) until the state is stable, steer
@@ -20,7 +21,6 @@ typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
 struct M3 { U rows[3]; };
 struct LM { float min, max; };
-struct CLOCK { float t, dt; };
 struct BINDING { char pad0[0x28]; float pitch; };
 struct P;
 struct ATTACH {
@@ -34,7 +34,7 @@ struct P {
     char pad520[0x20]; float heading, goalHeading, steering, wheelAngle, drive; char pad554[0x50];
     P *target; void *navigator; PATH *path; float cursor, nextAttack; P *selectedObject; ATTACH *selectedAttach;
 };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern const qword D_002A2DA0, g_normalZ;
 extern float D_002C20E8, D_002C20EC, D_002C20F0, D_002C20F4, D_002C20F8;
 extern "C" {
@@ -190,7 +190,7 @@ extern "C" void func_001D2610(P *p)
         p->drive = 0.0f;
         p->goalHeading = p->heading;
         p->wheelAngle = func_002458F0(GetY(delta), GetX(delta));
-        if (p->nextAttack < D_002DDED0.t) {
+        if (p->nextAttack < g_clock.t) {
             ATTACH *attach = func_001D2240(p);
             if (attach) {
                 if (attach->mesh) {
@@ -205,7 +205,7 @@ extern "C" void func_001D2610(P *p)
                 }
             fire:
                 func_001F0660(attach->binding, 0x68);
-                float t = D_002DDED0.t;
+                float t = g_clock.t;
                 p->nextAttack = t + GRandInRange__Fff(1.0f, 1.5f);
             }
         }
@@ -228,7 +228,7 @@ extern "C" void func_001D2610(P *p)
         break;
     }
 
-    if (D_002DDED0.t > p->nextAttack) {
+    if (g_clock.t > p->nextAttack) {
         for (int i = 0; i < p->attachCount; i++) {
             ATTACH *attach = p->attachments[i];
             if (!func_001D4E08(attach))
@@ -247,7 +247,7 @@ extern "C" void func_001D2610(P *p)
                     continue;
             }
             func_001F0660(attach->binding, 0x68);
-            float t = D_002DDED0.t;
+            float t = g_clock.t;
             p->nextAttack = t + GRandInRange__Fff(attach->fireInterval.min, attach->fireInterval.max);
         }
     }

@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_00152C58: MATCH. The last diff was the daddu a0/sb order in the key loop: in sched1 the f12 = scale arg move
 // (reg weight 0) took the t=1 alu slot ahead of a0 = &fontBig (weight +1), so a0 got a later luid than the a[0] store. Pinning scale to $f12 removes that move.
 typedef int qword __attribute__((mode(TI)));
@@ -32,9 +33,8 @@ struct P {
     char pad[0x50]; int state; char pad54[0x5C - 0x54]; float dt; int c; char pad64[0x70 - 0x64];
     ENT ae[6]; int stateHint; int iHint; char pad198[0x1A0 - 0x198]; qword pos; qword vel;
 };
-struct CLOCK { float t; float dt; };
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern char g_sndmgr[];
 extern float D_002BDB50, D_002BDB54, D_002BDB58, D_002BDB5C, D_002BDBB0;
 extern KEY D_002BDB70[4];
@@ -127,7 +127,7 @@ void func_00152C58(P *p)
                 break;
             }
             if (p->stateHint == 1) {
-                func_00117120(GMax(pe->t - t, D_002DDED0.dt), D_002DDED0.dt, 1.0f, p->pos, p->vel, pe->pos, D_002BDBD0, &p->pos, &p->vel, 0);
+                func_00117120(GMax(pe->t - t, g_clock.dt), g_clock.dt, 1.0f, p->pos, p->vel, pe->pos, D_002BDBD0, &p->pos, &p->vel, 0);
             }
         }
         tb.x = ((float *)&p->pos)[0] - dxB * 0.5f;

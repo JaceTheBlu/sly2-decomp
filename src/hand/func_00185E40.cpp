@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_00185E40 laneH20v1: MATCH. laneH19v2 + loop 2 through an inline StoreAddRot(&samples[i],target,&p->basis,&p->points[i].q) that rotates inside its body. A nested inline call argument is expanded before the other arguments, so in H19v2 the points address came first in the loop body; now the samples address does, the giv list (prepended) is reversed, and loop.c emits the points init `addiu v1,s1,0x1F30` before `addiu v0,sp,0x160` like the target. One register pin (direction vf2), allocation-only operands commented.
 // func_00185E40 laneH19v2: v1 + loop 2 stores through an inline StoreAddM(&samples[i],a,b) (operator=-style, the address is an inline param) with an allocation-only "m"(d->q) input. gcse no longer shares the loop base with the 1856C0 arg, so loop.c builds a fresh `addiu v0,sp,0x160` (no lw 0x250), the loop is still reversed, and the "m" ref keeps samples v0 / points v1. Left: the two giv inits come out samples-then-points (target points first), aligned 1 / 2 lines.
 // func_00185E40 laneH19v1: laneH18v3 + MulM3 through QwRotateVecR, a rotate helper with the matrix rows as operands %1..%3 and the vector last (like QwTransformPos). local-alloc ties an asm output to its operand 1 when it dies there, so c1 now reuses inv r0 (vf5) and the movement load schedules before c1 (13 -> 1). Only the loop-2 `lw 0x250` reload is left.
@@ -24,10 +25,9 @@ struct AXIS{float weight;int active;char pad8[8];U direction;};
 struct TRIREF{int index;float u,v;};
 struct LIST{int count;qword planes[8];};
 struct P{char pad0[0xC];VTE*vt;char pad10[0x140];CONTROL*control;char pad154[0x3C];U acceleration;char pad1A0[0x10];M3 basis;char pad1E0[0x1C30];AXIS axes[8];REQUEST*request;int pad1F14;void*mesh;TRIREF triangle;U points[3];};
-struct CLOCK{float time,dt;};
 struct VU_FLOAT{qword qw;VU_FLOAT(){}VU_FLOAT(float f){__asm__("mfc1 %0,%1":"=r"(qw):"f"(f));}};
 extern "C"{
-extern U g_normalZ;extern M3 D_002DDFA0;extern CLOCK D_002DDED0;extern PARAMS D_002BE920,D_002BE930,D_002BE940;
+extern U g_normalZ;extern M3 D_002DDFA0;extern CLOCK g_clock;extern PARAMS D_002BE920,D_002BE930,D_002BE940;
 qword func_001A62E8(P*);M4*func_001A6318(P*);
 void func_00185310(void*,qword,TRIREF*,TRIREF*,qword*,qword*);
 M3 func_0011B830(qword,qword);M3 func_0011B340(M3*);qword*__as__6VECTORG9VU_VECTOR(qword*,qword);
@@ -91,9 +91,9 @@ extern "C" void func_00185E40(P*p){
  qword unit=QwDivide(surface,QwSqrt(QwDot(surface,surface)));
  {M3 m=func_0011B830(unit,g_normalZ.q);p->basis.r[0]=m.r[0];p->basis.r[1]=m.r[1];p->basis.r[2]=m.r[2];}
  U angular,linear;
- func_0011C950(func_001A6318(p),&p->basis,&D_002BE920,0,&angular.q,D_002DDED0.dt*0.5f);
+ func_0011C950(func_001A6318(p),&p->basis,&D_002BE920,0,&angular.q,g_clock.dt*0.5f);
  SetVec(p,36,angular.q);
- func_0011F088(position,target,&D_002BE930,&linear.q,D_002DDED0.dt*0.5f);
+ func_0011F088(position,target,&D_002BE930,&linear.q,g_clock.dt*0.5f);
  LIST planes;U samples[3];
  for(i=0;i<3;i++)StoreAddRot(&samples[i],target,&p->basis,&p->points[i].q);
  func_001856B8(p->mesh,&planes);

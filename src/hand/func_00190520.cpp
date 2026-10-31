@@ -14,7 +14,7 @@ extern "C"{
  void func_00190BE0(P*,float*);float RadNormalize__Ff(float);void func_00204660(P*,float);qword func_001A62E8(P*);M3* LoadRotateMatrixRad__FfUx(M3*,qword,float);float func_002458F0(float,float);
  void SetJtJts__FP2JT3JTS4JTBS(P*,int,int);void CalculateJtHangAccel__FP2JT(P*);void func_001F5078(P*);int func_001C4660(PL*,uint,float);void func_001C4738(PL*,int);void func_0019CC50(void*,int,P*,void*);
  float GSmooth__FfffP3SMPPf(float,float,float,LM*,float*);void ReblendAsegbl__FP6ASEGBL(ANIMATION*);float func_0011CFE0(float,float);
- extern CLOCK D_002DDED0;extern qword g_normalZ;
+ extern CLOCK g_clock;extern qword g_normalZ;
  extern float D_002BF554,D_002BF558,D_002BF55C,D_002BF560,D_002BF564,D_002BF568,D_002BF56C,D_002BF58C,D_002BF590;
  extern LM D_002BF570,D_002BF580;
 }
@@ -77,7 +77,7 @@ extern "C" void func_00190520(P*p){
  if(p->flipped)w.heading=RadNormalize__Ff(w.heading+3.1415927410125732421875f);
  func_00204660(p,w.heading);
  float inputDifference=RadNormalize__Ff(p->input->angle-p->angle);
- if(p->input->amount>0.3f){float d=Abs(inputDifference);if(d<1.0471975803375244140625f){near=1;p->farTime=D_002DDED0.time;}else if(d>2.094395160675048828125f){far=1;p->farTime=D_002DDED0.time;}}
+ if(p->input->amount>0.3f){float d=Abs(inputDifference);if(d<1.0471975803375244140625f){near=1;p->farTime=g_clock.time;}else if(d>2.094395160675048828125f){far=1;p->farTime=g_clock.time;}}
  else p->previous=-1;
  w.reference.q=func_001A62E8(p->target);register P*receiver __asm__("$4");
  __asm__("sq %2,%1\n\tdaddu %0,%3,$zero" : "=r"(receiver),"=m"(w.target.q) : "r"(w.reference.q),"r"(p));
@@ -110,13 +110,13 @@ extern "C" void func_00190520(P*p){
  switch(next){
  case 0:
   if(far)next=2;
-  else if(near){if(D_002DDED0.time-p->changed>D_002BF554){p->previous=0;next=1;}}
-  else if(D_002DDED0.time-p->farTime>D_002BF55C)next=1;
+  else if(near){if(g_clock.time-p->changed>D_002BF554){p->previous=0;next=1;}}
+  else if(g_clock.time-p->farTime>D_002BF55C)next=1;
   break;
  case 2:
   if(near)next=0;
-  else if(far){if(D_002DDED0.time-p->changed>D_002BF558){p->previous=2;next=1;}}
-  else if(D_002DDED0.time-p->farTime>D_002BF55C)next=1;
+  else if(far){if(g_clock.time-p->changed>D_002BF558){p->previous=2;next=1;}}
+  else if(g_clock.time-p->farTime>D_002BF55C)next=1;
   break;
  case 1:
   if(near&&p->previous!=0){next=0;p->previous=-1;}
@@ -141,12 +141,12 @@ extern "C" void func_00190520(P*p){
  switch(p->state){case 0:activeTarget=1.0f;speedTarget=1.0f;break;case 2:activeTarget=1.0f;speedTarget=0.0f;break;case 1:{register float half __asm__("$f0"),zero __asm__("$f20");const uint halfBits=0x3F000000;const int zeroBits=0;
  __asm__(".set noat\n\tlui $1,%2\n\tmtc1 $1,%0\n\tmtc1 %z3,%1\n\t.set at" : "=f"(half),"=f"(zero) : "i"(halfBits>>16),"rJ"(zeroBits) : "$1");
  activeTarget=zero;speedTarget=activeTarget;if(p->speedBlend>half)speedTarget=1.0f;break;}}
- p->activeBlend=GSmooth__FfffP3SMPPf(p->activeBlend,activeTarget,D_002DDED0.dt,&D_002BF570,0);
- p->speedBlend=GSmooth__FfffP3SMPPf(p->speedBlend,speedTarget,D_002DDED0.dt,&D_002BF580,0);
+ p->activeBlend=GSmooth__FfffP3SMPPf(p->activeBlend,activeTarget,g_clock.dt,&D_002BF570,0);
+ p->speedBlend=GSmooth__FfffP3SMPPf(p->speedBlend,speedTarget,g_clock.dt,&D_002BF580,0);
  float active=p->activeBlend,speed=p->speedBlend;float idle=1.0f-active;float combined=active*speed;float activeOnly=active*(1.0f-speed);p->combined=combined;p->idle=idle;p->activeOnly=activeOnly;ReblendAsegbl__FP6ASEGBL(p->animation);
  float steering=Clamp(angle/D_002BF58C,-1.0f,1.0f);
  float target=p->animation->gain*(steering+1.0f);target*=0.5f;
- p->curve->slope=func_0011CFE0((target-p->curve->value)/D_002DDED0.dt,D_002BF590);
+ p->curve->slope=func_0011CFE0((target-p->curve->value)/g_clock.dt,D_002BF590);
 }
 
 typedef char final_offset_0_0[FIELD_OFFSET(VE,delta)==0?1:-1];

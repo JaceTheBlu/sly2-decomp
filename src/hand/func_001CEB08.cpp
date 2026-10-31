@@ -7,7 +7,7 @@ struct CLOCK {float time,dt;};
 struct PROX {float fraction,distance;};
 struct WORK {U temporary,scalar,tangent,afterTangent;PROX proximity;qw contact;U firstTorque,frictionTorque,frictionAxis,inertia,normal,offset;};
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern float D_002C1F60,D_002C1F64,D_002C1F68,D_002C1F6C;
 extern qw D_002A2DA0,D_002A2DD0;
 int FIsBasicDerivedFrom__FP5BASIC3CID(void*,int);
@@ -40,7 +40,7 @@ int func_001CEB08(RIP*p,SHAPE*incomingShape,qw point,qw normal){
  WORK w;float radius,elastic,friction;void*owner;
  {register qw incomingNormal __asm__("vf8");__asm__("qmtc2.ni %1,%0":"=j"(incomingNormal):"r"(normal));
  if(p->kind==8){w.contact=point;radius=p->radius;elastic=p->restitution;friction=p->friction;}else{w.contact=point;radius=100.0f;elastic=0.7f;friction=0.8f;}
- radius*=Evaluate(&p->scale,(D_002DDED0.time-p->start)/p->duration);
+ radius*=Evaluate(&p->scale,(g_clock.time-p->start)/p->duration);
  owner=OwnerAndNormal(shape,w,incomingNormal);}
  int special=FIsBasicDerivedFrom__FP5BASIC3CID(owner,0x59);register qw sampledNormal __asm__("vf8")=w.normal.q;
  if(special){

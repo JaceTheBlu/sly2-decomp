@@ -2,7 +2,7 @@
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } U;
 struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002BE6C8, D_002BE6CC;
 struct VTE { short d; short pad; void *pfn; };
 struct C { char pad[0x1C]; float g1C; };
@@ -35,7 +35,7 @@ void func_0017AC90(struct S *p) {
         case 1:
             if (p->n50 == 1 && p->p10->n208) {
                 func_0017B1A8(p, 3);
-            } else if (p->p10->p58->p90 != p->p64 || p->p10->p58->p90->g1C < D_002DDED0.t) {
+            } else if (p->p10->p58->p90 != p->p64 || p->p10->p58->p90->g1C < g_clock.t) {
                 func_0017B1A8(p, 2);
             } else if (GetZ(v) < 0.0f && p->n50 == 0) {
                 func_0017B1A8(p, 1);
@@ -57,7 +57,7 @@ void func_0017AC90(struct S *p) {
             register void*nullSource __asm__("$5");
             register void*nullOutput __asm__("$7");
             register struct X*frameLink __asm__("$3");
-            struct CLOCK *clock=&D_002DDED0;
+            struct CLOCK *clock=&g_clock;
             a.q = func_001A62E8(p->p10);
             {
                 struct A *pa = p->p10;
@@ -77,7 +77,7 @@ void func_0017AC90(struct S *p) {
             __asm__("qmtc2.ni %1, %0" : "=j"(ud.q) : "r"(clock));
             __asm__("vdiv $Q, $vf0w, %1x\n\tvwaitq\n\tvmulq.xyzw %0, %2, $Q" : "=j"(vel.q) : "j"(ud.q), "j"(c));
             if (p->n50 == 4) {
-                if (a.f[2] < t.f[2] || D_002BE6CC < D_002DDED0.t - p->g54) {
+                if (a.f[2] < t.f[2] || D_002BE6CC < g_clock.t - p->g54) {
                     func_0017B1A8(p, 5);
                     break;
                 }

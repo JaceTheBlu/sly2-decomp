@@ -1,3 +1,4 @@
+#include "clock.h"
 // Change a selector's input mode and, when the joystick points somewhere, move the selection to the
 // enabled item that lies closest along that direction from the current one.
 typedef int qword __attribute__((mode(TI)));
@@ -26,8 +27,7 @@ struct HIT { qword position, other, normal; char pad30[0x10]; float fraction; ch
 
 // D_002DDF0C is read as a field of the clock struct: a struct field at a fixed address may alias
 // sel->mode (a scalar global may not), which keeps the clock load after the mode store.
-struct CLOCK { char pad[0x3C]; float t3C; };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern float D_002C3280, D_002C3274, D_002C3278, D_002C327C, D_002A79C8;
 
 extern "C" {
@@ -81,7 +81,7 @@ void func_001DB0C8(SELECTOR *sel, int mode)
     if (mode == sel->mode)
         return;
     sel->mode = mode;
-    sel->tChanged = D_002DDED0.t3C;
+    sel->tChanged = g_clock.tFrame;
     if (mode == -1 || sel->selected == -1)
         return;
     ITEM *current = func_001DAE20(sel, sel->selected);

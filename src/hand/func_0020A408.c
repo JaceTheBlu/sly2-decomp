@@ -5,7 +5,7 @@ struct VE { short d; short pad; int (*pf)(void *, struct O *); };
 struct VT { struct VE e[90]; };
 struct X { int a; int b; };
 extern struct { char pad[0x148C]; struct O *first; } D_003E0000;
-extern float D_002DDED0;
+extern float g_clock;
 extern float D_002C3DB0;
 int func_00208D70(struct S *p);
 int func_0020A168(struct S *p, struct O *a, struct O *b);
@@ -30,7 +30,7 @@ struct O *func_0020A408(struct S *p, struct O *def)
         if (x) {
             if (!x->b) {
                 func_00154080(p->pF64, x, 2);
-                p->tF04 = D_002DDED0 + D_002C3DB0;
+                p->tF04 = g_clock + D_002C3DB0;
             }
             return def;
         }

@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_00197F98: per-frame movement / jump-target update of a player context (MATCH; T1870, Lilly's agent; = lilly30 + FloatUse + EMPTY).
 // Joystick combo timers, a search over the two jump-target lists (D_003E13E4 sources / D_003E1420 objects) that picks the best
 // intercept (func_0019A4A0 + func_0011EE08) and switches to mode 6/8, goal prediction for modes 6..18 (func_002309E8 forecast +
@@ -43,13 +44,12 @@ struct BASE_E0 { char data[0xE0]; };
 struct BASE_190 { char data[0x190]; };
 struct PATH : BASE_E0, SAMPLER {};
 struct SPLINE : BASE_190, SAMPLER {};
-struct CLOCK { float t, dt; };
 struct LM { float low, high; };
 struct SMP { float a, b, c; };
 struct VU_FLOAT { qword q; };
 
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern ACTOR *D_002E1E40;
 extern SOURCE *D_003E13E4;
 extern OBJECT *D_003E1420;
@@ -170,15 +170,15 @@ extern "C" void func_00197F98(CONTEXT *p)
     case 0:
         if (0.9f < input->amount) {
             p->combo = 1;
-            p->tPress = D_002DDED0.t;
-        } else if (D_002BF834 < D_002DDED0.t - p->tRelease)
+            p->tPress = g_clock.t;
+        } else if (D_002BF834 < g_clock.t - p->tRelease)
             p->jump = 1;
         break;
     case 1:
         if (input->amount < 0.9f) {
             p->combo = 2;
-            p->tRelease2 = D_002DDED0.t;
-            if (D_002DDED0.t - p->tPress < D_002BF838)
+            p->tRelease2 = g_clock.t;
+            if (g_clock.t - p->tPress < D_002BF838)
                 p->jump = 1;
         }
         break;
@@ -270,7 +270,7 @@ extern "C" void func_00197F98(CONTEXT *p)
         }
         if (srcBest || objBest) {
             BODY *body = p->actor->body;
-            body->deadline = D_002DDED0.t + tBest;
+            body->deadline = g_clock.t + tBest;
             body->goal.q = func_0022FC48(0, body->frame, posBest.q);
             SPACE *frame = body->frame;
             U v;
@@ -294,7 +294,7 @@ extern "C" void func_00197F98(CONTEXT *p)
         point.q = QwSub(func_001A62E8(p->source), p->actor->offset.q);
     predict: {
         BODY *body = p->actor->body;
-        float dt = body->deadline - D_002DDED0.t;
+        float dt = body->deadline - g_clock.t;
         SPACE *frame = GetFrame(p->source);
         M4 forecast, derivative;
         func_002309E8(frame, 0, &forecast, dt, &derivative);
@@ -330,7 +330,7 @@ extern "C" void func_00197F98(CONTEXT *p)
     switch (p->mode) {
     case 6: case 8 ... 16: case 18: {
         BODY *body = p->actor->body;
-        float dt = body->deadline - D_002DDED0.t + D_002DDED0.dt;
+        float dt = body->deadline - g_clock.t + g_clock.dt;
         U accel0, accel1;
         func_00117120(dt, 0.0f, 1.0f, body->position.q, body->velocity.q, body->goal.q, body->velocityGoal.q, 0, 0, &accel0.q);
         func_00117120(dt, dt, 1.0f, body->position.q, body->velocity.q, body->goal.q, body->velocityGoal.q, 0, 0, &accel1.q);
@@ -360,9 +360,9 @@ extern "C" void func_00197F98(CONTEXT *p)
         float mix = (forward + 1.0f) * 0.5f;
         if (p->scriptFocus) {
             DATA *data = p->scriptFocus->data;
-            data->amount = GSmooth__FfffP3SMPPf(data->amount, GLerp(D_002BF798, mix), D_002DDED0.dt, &D_002BF860, 0);
+            data->amount = GSmooth__FfffP3SMPPf(data->amount, GLerp(D_002BF798, mix), g_clock.dt, &D_002BF860, 0);
         }
-        float turn = GLerp(D_002BF870, mix) * lateral * D_002DDED0.dt;
+        float turn = GLerp(D_002BF870, mix) * lateral * g_clock.dt;
         p->blend0 = GLerp(D_002BF850, mix);
         p->blend1 = GLerp(D_002BF858, mix);
 

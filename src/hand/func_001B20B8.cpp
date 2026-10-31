@@ -1,6 +1,6 @@
 // func_001B20B8: ported from Lilly's personal Sly 2 decomp (src/P2/accmiss.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002DDED0 (g_clock)
+// Globals: g_clock (g_clock)
 // 0x001B20B8 VUnk69__6ACCMISS  vtable slot 69
 typedef unsigned char    uint8_t;
 typedef unsigned int     uint32_t;
@@ -209,7 +209,7 @@ struct CLOCK
       int cWrapAround;
       undefined4 unk_0x5c;
 };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 struct SOPART;
 struct WRBG;
 struct SUBGLOBX
@@ -438,8 +438,8 @@ void ACCMISS::VUnk69()
         float sv = GLength(qwVel);
         qword qwDir = QwDivFloat(qwVel, sv);
         SMP smp = { svFast, 0.0f, 1.0f };
-        float svNew = GSmooth(sv, svTarget, D_002DDED0.dt, &smp, 0);
-        qword qwDv = QwDivBits(QwSub(QwMulX(qwDir, VuFloat(svNew)), qwVel), *(int *)&D_002DDED0.dt);
+        float svNew = GSmooth(sv, svTarget, g_clock.dt, &smp, 0);
+        qword qwDv = QwDivBits(QwSub(QwMulX(qwDir, VuFloat(svNew)), qwVel), *(int *)&g_clock.dt);
         AddSoVelocity(this, QwApplyConstrInXf((CONSTR *)((char *)psophys + 0xB0), pxfUnk58, qwDv));
     }
 }

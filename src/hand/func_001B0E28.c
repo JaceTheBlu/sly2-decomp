@@ -1,5 +1,5 @@
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+#include "clock.h"
+extern struct CLOCK g_clock;
 extern float D_002A70E0;
 struct S { char pad[0x168]; float f168; int x16C; char pad1[0x1C4 - 0x170]; int x1C4; char pad2[0x220 - 0x1C8]; int x220; int x224; float f228; float f22C; };
 void func_001F36E0(struct S *p);
@@ -16,13 +16,13 @@ void func_001B0E28(struct S *p)
     switch (st) {
     case 0:
         st = func_001B1900(p);
-        if (st != 3 && p->f228 <= D_002DDED0.t) {
+        if (st != 3 && p->f228 <= g_clock.t) {
             if (p->x16C) st = 1;
         }
         break;
     case 1:
         st = func_001B1900(p);
-        if (st != 3 && p->f228 <= D_002DDED0.t) st = 0;
+        if (st != 3 && p->f228 <= g_clock.t) st = 0;
         break;
     case 2:
         st = func_001B1900(p);
@@ -32,7 +32,7 @@ void func_001B0E28(struct S *p)
         if (!p->x1C4 && func_001B1868(p)) st = 4;
         break;
     case 4:
-        if (p->f22C <= D_002DDED0.t) {
+        if (p->f22C <= g_clock.t) {
             func_001F7BF8(p, p->f168);
             p->f22C = D_002A70E0;
         }

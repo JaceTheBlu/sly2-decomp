@@ -1,7 +1,7 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct VTE { short d; short pad; void (*pf)(); };
-struct CLOCK { float t, dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 struct LO { char pad[0xC]; struct VTE *vt; char p1[0x28 - 0x10]; unsigned long x28; char p2[0xE8 - 0x30]; int xE8; };
 struct G { char pad[0x150]; int x150; };
 struct S { char pad[0x8]; struct G *pg; char p0[0x14 - 0xC]; float x14; float x18; char p1[0x70 - 0x1C]; qword x70;
@@ -11,7 +11,7 @@ void func_001CF268(struct S *p)
 {
     struct LO *plo;
     int f;
-    if (D_002DDED0.t - p->x14 > p->x18) {
+    if (g_clock.t - p->x14 > p->x18) {
         func_001CE980(p);
         return;
     }

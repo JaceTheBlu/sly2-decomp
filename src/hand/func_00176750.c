@@ -1,6 +1,6 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002BE618[2];
 struct VTE { short d; short pad; void (*pfn)(void *); };
 struct B6 { qword q[6]; };
@@ -24,7 +24,7 @@ void func_00176750(struct S *p, struct F *m) {
     if (func_00177DC0(m, &p->f30)) return;
     func_001EF0D8(p->a18);
     p->f30 = *m;
-    p->fA0 = D_002DDED0.t;
+    p->fA0 = g_clock.t;
     fl = 0;
     switch (m->a) {
     case 5:
@@ -77,7 +77,7 @@ void func_00176750(struct S *p, struct F *m) {
         break;
     case 17:
         { struct O *o = func_00205438(p->p10, 0x9E); o->n3C = 0x1A; o->n38 = m->u.s.n10; VCALL(o) }
-        { float t = D_002DDED0.t; p->fA4 = t + GRandInRange__Fff(D_002BE618[0], D_002BE618[1]); }
+        { float t = g_clock.t; p->fA4 = t + GRandInRange__Fff(D_002BE618[0], D_002BE618[1]); }
         break;
     case 18:
         { struct O *o = func_00205438(p->p10, 0xBD); o->n38 = m->u.s.n10; o->u40.f40 = m->u.s.f14; VCALL(o) }

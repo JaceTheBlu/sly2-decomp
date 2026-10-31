@@ -14,7 +14,7 @@ extern M2C_UNK D_002BD410;
 extern f32 D_002BD450;
 extern void *g_pdliFirst;
 extern s32 D_002DD644;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDED4;
 extern M2C_UNK g_cm;
 extern M2C_UNK D_002DEA00;

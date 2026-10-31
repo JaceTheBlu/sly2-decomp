@@ -1,6 +1,6 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 struct W { int pad[0x28 / 4]; int n28; };
 struct G { char pad[0x45CC]; struct W *p45CC; };
 extern struct G g_sw;
@@ -83,6 +83,6 @@ void func_0017DA28(struct S *p) {
         }
     }
     func_0017D450(p, k);
-    p->fA0 = D_002DDED0.t;
+    p->fA0 = g_clock.t;
     p->nA4 = g_sw.p45CC->n28;
 }

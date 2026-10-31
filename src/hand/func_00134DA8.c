@@ -1,3 +1,4 @@
+#include "clock.h"
 /* MATCH: case 5 uses LenXY5, which adds allocation-only "r"(p150) on the vsqrt asm and two "r"(p1030) on the qmfc2 asm (one "r"(p1030): 5). One register pin (MulT vf3). */
 /* v6: aligned 7 -> 1. Case 11 uses PullB: qmtc2 into a plain qword t, then VOLATILE stores p->v190 = r and u.q = t (keeps the v190 store before the u store in sched1, so u lives longer and local-alloc gives r vf1 / u vf2 like the target; the lw p1030 now hoists too). Cases 10/14 keep Pull (their target order differs). Left: case 5 lw p150 before the LenXY vmul. */
 /* v5: aligned 16 -> 7. MulT: r pinned to vf3 (one commented pin) + inputs (r[1], r[2]) order. Left: case 5 LenXY lw p150 after vaddy (target before vmul), case 11 Pull: lw p1030 / u vs r VF swap (vf1/vf2) and sqc2 order. */
@@ -20,8 +21,7 @@ struct P {
     int x14E0; char pad14E4[0x14F0 - 0x14E4]; char x14F0[0x1520 - 0x14F0]; qword v1520; char pad1530[0x15F0 - 0x1530];
     int x15F0; char pad15F4[0x1600 - 0x15F4]; char x1600[0x16B0 - 0x1600]; int x16B0; char pad16B4[0x181C - 0x16B4]; int x181C;
 };
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern char g_sw[];
 extern struct LM D_002BBB60;
 extern struct POLY D_002BC940;
@@ -168,7 +168,7 @@ void func_00134DA8(struct P *p)
             float z = 0.0f;
             if (z < p->p150->g1C) {
                 float d = RadNormalize__Ff(p->p150->g18 - p->g1A8);
-                func_00204660(p, p->g1A8 + func_0011CFE0(d, g1 * D_002BC960 * D_002DDED0.dt));
+                func_00204660(p, p->g1A8 + func_0011CFE0(d, g1 * D_002BC960 * g_clock.dt));
             }
             SetVel(p, func_0011E1A0(p->p150->g18 + 3.1415927f, g0 * LenXY(p->v1520) * p->p1030->g40, z), p->x14F0, p->x15F0);
         }

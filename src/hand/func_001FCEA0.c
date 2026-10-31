@@ -1,10 +1,10 @@
 struct G { char pad[0x13C]; float a[8][4]; float g1BC; float b[4]; char pad2[0x1F0 - 0x1D0]; long l1F0; long l1F8; };
 extern struct G g_sndmgr;
 struct CLOCK;
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 void func_002319E8(int);
 int func_00233048(int, int, int, int, int, int, int);
-long func_0014D240(struct CLOCK *);
+long TickNow__FP5CLOCK(struct CLOCK *);
 void func_001FCEA0(void)
 {
     int i, j;
@@ -16,7 +16,7 @@ void func_001FCEA0(void)
         g_sndmgr.b[i] = 1.0f;
         for (j = 0; j < 8; j++) g_sndmgr.a[j][i] = 1.0f;
     }
-    t = func_0014D240(&D_002DDED0);
+    t = TickNow__FP5CLOCK(&g_clock);
     g_sndmgr.l1F0 = t;
     g_sndmgr.l1F8 = t;
 }
