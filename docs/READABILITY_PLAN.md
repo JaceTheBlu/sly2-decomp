@@ -81,6 +81,10 @@ Globals `D_`: same approach (Sly 1 + usage), starting with the ~200 most referen
 
 Exit criterion: ≥ 80% of game functions named, 100% of the 300 most-called.
 
+Status (2026-10-31): `tools/sly1match.py` covers source 1 without the Sly 1 executable (408 pairs, 79 new names;
+no mistake in its self-test). The by-name callees (461 names already written in the sources but never given an
+address), the vtables and the Splice table all need the Sly 2 executable.
+
 ### Phase 2 — Shared headers and types (≈ 3–5 months, the bulk of the work)
 
 1. **Class hierarchy**: rebuild `LO → ALO → SO → PO → …` (and `CRef`, `CLOCK`, `VECTOR`, `MATRIX3/4`…) from Sly 1,

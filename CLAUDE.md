@@ -42,10 +42,32 @@ commit of this branch so far). Do not regenerate it on a dirty tree you have not
 | `tools/rename.py OLD NEW […]` / `--map FILE` / `--dry-run` | rename a function or global everywhere (config, sources, file names). NEW may be an existing alias at the same address |
 | `tools/readability.py [--record]` | readability metrics; `--record` appends to `config/readability_history.csv` |
 | `tools/clean_history.py` | strip agent/lane/wave attributions from comments (already applied) |
+| `tools/sly1match.py SLY1_DIR [--eval]` | pair Sly 2 functions with Sly 1 counterparts → `config/sly1_matches.csv` |
 
 ## Progress log
 
 Newest first. Each entry: what changed, how it was verified, the metrics after it.
+
+### 2026-10-31 — Phase 1 started: Sly 1 names
+
+- `tools/sly1match.py` pairs Sly 2 functions with Sly 1 ones from a `TheOnlyZac/sly1` checkout (names, splat file
+  splits, and its C sources compiled with the Sly 1 compiler into `build/sly1_obj/`). Evidence: same name, opcode
+  similarity, aligned call lists, order inside a Sly 1 source file. `--eval` hides 20% of the anchors: over six
+  draws (~200 re-found pairs) it made no mistake. Looser settings were tried and rejected (1–3 mistakes per draw).
+- Applied 79 names (`config/sly1_matches.csv` keeps method and score of each). All were read against the code;
+  rejected `_$_4CRef` and `SetCmPosMat` (code does something else). Skipped 8 addresses that already have an alias
+  in `symbol_addrs.txt`.
+- `main` stays `func_001A7518`: gcc compiles a function named `main` differently (objcheck caught it).
+- objcheck fixes: (1) relocation targets that resolve to no address were all normalised to one placeholder, so any
+  two compared equal: now compared by exact name; (2) C++-linkage calls to `func_X` (`func_0011CF60__Ff`) resolve
+  to the address in the name; (3) baseline names are re-resolved with today's symbol table, so a name gaining an
+  address is not reported as a change. Baseline regenerated at `a2b07c1`.
+- Found: 461 functions are called by name in the sources (1,511 calls, e.g. `InitTag__4CRefi` 88×,
+  `FIsBasicDerivedFrom__FP5BASIC3CID` 74×) but have no address in `symbol_addrs.txt`: nothing checks those names
+  today, and a full link would fail on them. With the game executable each one can be resolved from the original
+  `jal` target (see next steps).
+
+Metrics: 430/6,136 game functions named (7.0%).
 
 ### 2026-10-30 — Phase 0 (tooling) done, first names
 
@@ -65,11 +87,21 @@ of 5,908 game files: 3,223 local types, 2,474 pads, 1,929 `M2C_*`, 637 m2c temps
 
 ## Next steps
 
-1. Phase 1, Sly 1 names: clone `TheOnlyZac/sly1`, match functions by similarity and regenerate
-   `config/sly1_matches.csv`; apply high-confidence names with `rename.py --map`.
-2. Review the ~70 other names mentioned in matching notes (comments such as "0x13E510 PloCloneLo").
-3. Name the Splice wrappers from the Splice registration table.
-4. Pilot phase 2 on `CLOCK`, `VECTOR`, `MATRIX3/4` to measure the real cost per class.
+Needs the game executable (`disc/SCUS_973.16`, from the owner's disc) — the biggest remaining name sources:
+1. Resolve the 461 by-name callees: for each relocation to an unknown name, read the `jal` target in the original
+   code and add `NAME = 0xADDR; // type:func` (then check that every caller agrees on the address).
+2. Vtables: a Sly 1 class vtable layout names every method slot of the matching Sly 2 vtable.
+3. Splice registration table: script names of the 373 wrappers and of the engine functions they call.
+
+Without it:
+4. Review the ~70 names mentioned in matching notes (comments such as "0x13E510 PloCloneLo").
+5. Sly 1 matching beyond the current 408 pairs: Sly 2 has ~2,000 more functions in Sly 1 source files that are
+   not paired; more evidence is needed (data/string references would help most, again from the executable).
+6. Pilot phase 2 on `CLOCK`, `VECTOR`, `MATRIX3/4` (Sly 1 headers in `sly1/include/` give field names).
+
+Running sly1match.py: `python3 tools/sly1match.py ~/sly1 [--eval]` (clone `https://github.com/TheOnlyZac/sly1`
+first). Re-running it after names were applied reports them as anchors; keep the committed
+`config/sly1_matches.csv`, which records how each name was found, unless new pairs are being added.
 
 ## Open questions / known issues
 
