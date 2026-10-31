@@ -10,7 +10,7 @@ struct A { int cb; int align; };
 struct R { int n; struct LO **ap; int x8; int c; int x10; void *x14; void **ap18; char pad[0x64 - 0x1C]; struct X *x64; struct Z *x68; };
 struct G { char pad[0x3F04]; int c3F04; struct R *ar; };
 void *func_001C9940(int i, int c);
-void *func_001AE2A0(struct A *pa);
+void *PvAllocSwClearImpl__FP7SWALLOC(struct A *pa);
 qword func_001A62E8(struct LO *p);
 struct MAT3 *func_001A6318(struct LO *p);
 void func_0011B3D0(struct MAT3 *pm);
@@ -36,7 +36,7 @@ void func_001CA500(struct G *pg)
         }
         a.cb = pr->n * 64;
         a.align = 0x10;
-        pr->x64 = func_001AE2A0(&a);
+        pr->x64 = PvAllocSwClearImpl__FP7SWALLOC(&a);
         for (k = 0; k < pr->n; k++) {
             px = &pr->x64[k];
             plo = pr->ap[pr->c * pr->n + k];
@@ -46,7 +46,7 @@ void func_001CA500(struct G *pg)
         }
         a.cb = (pr->x8 - pr->c) * 0x50;
         a.align = 0x10;
-        pr->x68 = func_001AE2A0(&a);
+        pr->x68 = PvAllocSwClearImpl__FP7SWALLOC(&a);
         for (j = pr->c; j < pr->x8; j++)
             SetIdent(&pr->x68[j - pr->c].mat);
     }

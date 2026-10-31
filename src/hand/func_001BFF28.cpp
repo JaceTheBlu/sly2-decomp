@@ -25,7 +25,7 @@ TRI *func_001BF1F8(G *, BSP *, qword, int);
 qword func_001BFDB0(TRI *, qword);
 void func_001AE478(void *);
 void _$_18CBinaryInputStream(void *, int);
-void *func_001AE318(AREQ *);
+void *PvAllocStackImpl__FP7SWALLOC(AREQ *);
 void func_001BF980(G *, V *, V *, int, int *, V **);
 void func_001BFC18(G *, int *, V **);
 int func_001BFF28(G *, qword, qword, int, U *);
@@ -82,11 +82,11 @@ int func_001BFF28(G *g, qword from, qword to, int capacity, U *out)
     } else {
         MARK mark;
         write = out + 1;
-        V **path = (V **)func_001AE318(AREQ().Set(0x200));
+        V **path = (V **)PvAllocStackImpl__FP7SWALLOC(AREQ().Set(0x200));
         V initial;
         initial.pos.q = start;
         initial.cEdge = 3;
-        initial.aEdge = (E *)func_001AE318(AREQ().Set(0x18));
+        initial.aEdge = (E *)PvAllocStackImpl__FP7SWALLOC(AREQ().Set(0x18));
         qword sv = ToVF(start);
         for (int i = 0; i < 3; i++) {
             V *v = first->apv[i];

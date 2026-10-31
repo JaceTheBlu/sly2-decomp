@@ -26,7 +26,7 @@ void func_00257AB0(void);
 void func_00257C18(void);
 void func_001AE478(CTX *);
 void _$_18CBinaryInputStream(CTX *, int);
-void *func_001AE318(MSG *);
+void *PvAllocStackImpl__FP7SWALLOC(MSG *);
 void func_001285D8(GC *, void *);
 void func_001281B0(GC *);
 
@@ -35,7 +35,7 @@ static inline void *AllocA(int c)
     MSG msg;
     msg.cb = c * 4;
     msg.nKind = 0x10;
-    return func_001AE318(&msg);
+    return PvAllocStackImpl__FP7SWALLOC(&msg);
 }
 
 static inline void InitStack(int *pc, void ***pap, int c)

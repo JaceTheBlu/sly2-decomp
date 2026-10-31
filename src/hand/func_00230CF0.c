@@ -29,7 +29,7 @@ int func_00131968(A *);
 int func_0012CEE0(C *);
 void func_0022DD00(LO *, P *);
 qword func_0022CA18(P *, P *);
-qword func_0011BFF0(qword *);
+qword DecomposeRotateMatrixEuler__FP7MATRIX3(qword *);
 M4 func_0022C8C0(P *, qword);
 void func_00117120(float, float, float, qword, qword, qword, qword, qword *, int, int);
 
@@ -79,7 +79,7 @@ void func_00230CF0(A *a, int flag)
             v = p->xC0[0];
             break;
         case 5:
-            v = func_0011BFF0(p->xC0);
+            v = DecomposeRotateMatrixEuler__FP7MATRIX3(p->xC0);
             break;
         default:
             v = D_002A2DD0;

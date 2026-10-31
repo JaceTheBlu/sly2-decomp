@@ -7,7 +7,7 @@
 //  * The radius temporary VU_FLOAT(const float *, int) is a volatile empty asm (word load into a 128-bit GPR value); it acts as the
 //    scheduler barrier that keeps the camera/bound loads before the call arguments, which is what puts the camera address
 //    straight into $a0 and the bound pointer in $v1.
-//  * D_002A2DC0 must NOT be const: a const global would be an unchanging load that sched2 moves above the spill store of `dir`.
+//  * g_normalZ must NOT be const: a const global would be an unchanging load that sched2 moves above the spill store of `dir`.
 //  * `dir` is a plain qword that lives across func_0011B830, so it is spilled (store right after the vsub, reload for the
 //    argument and for Length). Length lists its input twice (as in the other matched Length/Dot helpers), which decides the
 //    reload register.
@@ -30,7 +30,7 @@ struct P {
 };
 struct CAMERA { char pad0[0x90]; U position; };
 extern CAMERA g_cm;
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 struct VU_FLOAT {
     qword q;
     VU_FLOAT(float f) { __asm__("qmtc2.ni %1,%0" : "=j"(q) : "r"(f)); }
@@ -104,7 +104,7 @@ extern "C" void func_001DF5B0(P *p)
         qword dir;
         if (p->stretch || p->endpoints[0].object || p->endpoints[1].object) {
             dir = Subtract(points[1].q, points[0].q);
-            basis = func_0011B830(dir, D_002A2DC0);
+            basis = func_0011B830(dir, g_normalZ);
         }
         if (p->stretch) {
             float length = Length(dir);

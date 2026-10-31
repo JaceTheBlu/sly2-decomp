@@ -9,7 +9,7 @@ struct S { int x0; int c; A *aa; char pad[0x58 - 0xC]; int cso; SO **apso; B *ab
 extern "C" {
 void func_001AE478(void *p);
 void _$_18CBinaryInputStream(void *p, int n);
-void *func_001AE318(const AL &al);
+void *PvAllocStackImpl__FP7SWALLOC(const AL &al);
 qword func_0011E9F8(qword v, float g);
 void func_00158E20(S *p, float g1, float g2);
 }
@@ -26,7 +26,7 @@ void func_00158E20(S *p, float g1, float g2)
     int i;
     SO *pso;
     { register int n asm("$3") = p->cso;  /* register pin: cso in v1 like the target */
-      func_001AE318(AL(n * 32, 0x10)); }
+      PvAllocStackImpl__FP7SWALLOC(AL(n * 32, 0x10)); }
     for (i = 0; i < p->c; i++) {
         A *pa = &p->aa[i];
         if (pa->g == 0.0f) continue;

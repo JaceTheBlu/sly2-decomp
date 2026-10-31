@@ -3,7 +3,7 @@ union U { qword q; float f[4]; };
 struct B { qword x,y; };
 struct MIX_STATE {union U direction,scalar;};
 struct S { char pad[0x70]; qword pos; char pad80[0x10]; qword vel; };
-extern qword D_002A2DD0,D_002A2DA0,D_002A2DC0;
+extern qword D_002A2DD0,D_002A2DA0,g_normalZ;
 union FLOATWORD {float value;int bits;};
 struct CLOCK {float time;union FLOATWORD dt;};
 extern union FLOATWORD D_002DDED4;
@@ -48,7 +48,7 @@ static inline qword NormalizeAndAxes(const struct S*owner,qword*rawPage,qword*xA
          "vadday.x $ACC,%1,%1y\n\tvmaddz.x %1,$vf3,%1z\n\t"
          "lui %2,%%hi(%5)\n\taddiu %2,%2,%%lo(%5)\n\taddiu %3,%3,%%lo(%6)"
    :"=j"(velocity),"=j"(length),"=&r"(up),"+r"(x)
-   :"m"(owner->vel),"i"(&D_002A2DC0),"i"(&D_002A2DA0):"vf3");
+   :"m"(owner->vel),"i"(&g_normalZ),"i"(&D_002A2DA0):"vf3");
  __asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q\n\tlq %1,%4\n\t"
          "vdiv $Q,$vf0w,%0x\n\tvwaitq\n\tvmulq.xyzw %0,%3,$Q\n\tlq %2,%5"
    :"+&j"(length),"=&r"(upValue),"=r"(xValue)

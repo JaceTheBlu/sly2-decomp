@@ -10,9 +10,9 @@ union U{qword q;float f[4];};union SCR{REQ req;U u;};
 struct WORK{FRAME frame;SCR scratch;HIT hits[16];int count;ENTRY*end;U position,endpoint;};
 extern "C" FRAME*func_001AE478(FRAME*);
 extern "C" void _$_18CBinaryInputStream(FRAME*,int);
-extern "C" void*func_001AE318(REQ*);
-extern "C" int func_00118A88(ENTRY*,int,qword,float,int*,ENTRY**);
-extern "C" int func_00118668(ENTRY*,int,qword,qword,int,HIT*);
+extern "C" void*PvAllocStackImpl__FP7SWALLOC(REQ*);
+extern "C" int PruneBsp__FP3BSPT0fUxPiPP3BSP(ENTRY*,int,qword,float,int*,ENTRY**);
+extern "C" int ClsgClipEdgeToBsp__FP3BSPT0UxUxiP3LSG(ENTRY*,int,qword,qword,int,HIT*);
 extern "C" void func_00119390(qword*,qword,qword);
 static inline float Max(float a,float b){float r;__asm__("max.s %0,%1,%2":"=f"(r):"f"(a),"f"(b));return r;}
 static inline qword Sub(qword a,qword b){__asm__("vsub.xyzw %0,%0,%1":"+j"(a):"j"(b));return a;}
@@ -23,11 +23,11 @@ extern "C" void func_001A9108(ENTRY*tree,int mask,void*geometry,qword pos,OUT*ou
  float radius=Max(radius0,100.0f);
  func_001AE478(&work.frame);
  ENTRY*first;
- {REQ*r=&work.scratch.req;r->bytes=0xFFFC;r->alignment=16;first=(ENTRY*)func_001AE318(r);}
+ {REQ*r=&work.scratch.req;r->bytes=0xFFFC;r->alignment=16;first=(ENTRY*)PvAllocStackImpl__FP7SWALLOC(r);}
  int limit=0x1555;
  if(radius<52000.0f)do {
   work.end=first;work.count=limit;
-  int status=func_00118A88(tree,mask,work.position.q,radius,&work.count,&work.end);
+  int status=PruneBsp__FP3BSPT0fUxPiPP3BSP(tree,mask,work.position.q,radius,&work.count,&work.end);
   if(status<0)goto more;
   if(status<2)goto more;
   if(status!=2)goto more;
@@ -44,7 +44,7 @@ extern "C" void func_001A9108(ENTRY*tree,int mask,void*geometry,qword pos,OUT*ou
    __asm__("qmtc2.ni %1,%0":"=j"(factor):"r"(radius+1.0f));
    __asm__("lq %0,%5\n\tsqc2 %8,%4\n\tlw %1,%6\n\tqmtc2.ni %0,%2\n\tlqc2 %3,%7\n\taddiu %1,%1,-12\n\tvadda.xyzw ACC,%2,$vf0\n\tvmaddx.xyzw %3,%3,%8x":"=&r"(argument),"=&r"(last),"=j"(positionVector),"=&j"(to),"=m"(work.scratch.u.q):"m"(work.position.q),"m"(work.end),"m"(poly->plane),"j"(factor));
    work.endpoint.q=to;
-   int found=func_00118668(last,0x7FFFFFFF,to,argument,16,work.hits);
+   int found=ClsgClipEdgeToBsp__FP3BSPT0UxUxiP3LSG(last,0x7FFFFFFF,to,argument,16,work.hits);
    register qword snapshot __asm__("vf1")=work.endpoint.q;
    if(found>0){
     if(work.hits[0].time>best){

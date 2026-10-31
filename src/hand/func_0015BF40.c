@@ -1,7 +1,7 @@
 typedef int qword __attribute__((mode(TI)));
 struct S { char pad[0x58]; float g58; int pad5c; qword q60; qword v70; float g80; };
 struct O { qword q0; qword v10; float g20; float g24; };
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 static __inline__ qword VLen(qword c)
 {
     qword l, one;
@@ -30,7 +30,7 @@ static __inline__ void VNormalize(qword *pr, qword c, qword k)
 void func_0015BF40(struct O *po, struct S *ps)
 {
     po->q0 = ps->q60;
-    VNormalize(&po->v10, ps->v70, D_002A2DC0);
+    VNormalize(&po->v10, ps->v70, g_normalZ);
     po->g20 = ps->g80;
     po->g24 = ps->g58;
 }

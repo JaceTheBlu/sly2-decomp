@@ -1,8 +1,8 @@
 /* func_001E9C88: samples the path po from its start to its end in steps of D_002C367C, collects the distinct
  * objects found at each sample (func_001C0D70) into apv[64] and the parameter ranges where consecutive samples
  * do not stay inside one object (func_001C0920) into aseg[64] (joining the first/last range when po->fE4), then copies
- * both lists to the heap (func_001AE238) into ps.
- * Matching note: the &apv argument of the final func_001AE238 call must go through an inline helper; integrate.c
+ * both lists to the heap (PvAllocSwCopyImpl__FP7SWALLOCPv) into ps.
+ * Matching note: the &apv argument of the final PvAllocSwCopyImpl__FP7SWALLOCPv call must go through an inline helper; integrate.c
  * then puts sp+0x200 straight into a1, so gcse has nothing to hoist and the apv[cpv++] cursor (s6) keeps an
  * un-noted init in the loop preheader. The MSG request reuses pos2's stack slot. */
 typedef int qword __attribute__((mode(TI)));
@@ -16,9 +16,9 @@ float func_001E6648(struct O *);
 void func_001E6F10(struct O *, float, qword *, qword *);
 void *func_001C0D70(qword, int);
 int func_001C0920(void *, qword, int);
-void *func_001AE238(struct MSG *, void *);
+void *PvAllocSwCopyImpl__FP7SWALLOCPv(struct MSG *, void *);
 void func_001AE5A0(void *, const void *, unsigned);
-static inline void *PvReallocMsg(struct MSG *pmsg, int cb, int nKind, void *pv) { pmsg->cb = cb; pmsg->nKind = nKind; return func_001AE238(pmsg, pv); }
+static inline void *PvReallocMsg(struct MSG *pmsg, int cb, int nKind, void *pv) { pmsg->cb = cb; pmsg->nKind = nKind; return PvAllocSwCopyImpl__FP7SWALLOCPv(pmsg, pv); }
 void func_001E9C88(struct S *ps, struct O *po)
 {
     struct SEG aseg[64];

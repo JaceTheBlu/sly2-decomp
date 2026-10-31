@@ -6,7 +6,7 @@ typedef struct SURF { char pad[0x10]; EDGE *pedgeFirst; int pad2; int grf; } SUR
 typedef struct ENT { int x0; int x4; SURF *psurf; } ENT;
 typedef struct GEOM { char pad[0x94]; qword *apos; char pad2[0x9C - 0x98]; VTX *avtx; } GEOM;
 typedef struct SO { char pad[0x74]; void *pbsp; } SO;
-int func_00118668(void *bsp, int max, qword a, qword b, int clsgMax, LSG *alsg);
+int ClsgClipEdgeToBsp__FP3BSPT0UxUxiP3LSG(void *bsp, int max, qword a, qword b, int clsgMax, LSG *alsg);
 // Clip edges of selected surfaces and attach their originating edge.
 int ClsgClipSoBspEdges__FP2SOT0iP3BSPiP3LSG(void *unused, SO *pso, GEOM *pgeom, int cent, ENT *aent, int clsgMax, LSG *alsg)
 {
@@ -31,7 +31,7 @@ int ClsgClipSoBspEdges__FP2SOT0iP3BSPiP3LSG(void *unused, SO *pso, GEOM *pgeom, 
                 if ((pvtx->grf ^ 1) & 1)
                     continue;
             }
-            clsg += func_00118668(pso->pbsp, 0x7FFFFFFF, apos[pedge->ipos[0]], apos[pedge->ipos[1]], clsgMax - clsg, &alsg[clsg]);
+            clsg += ClsgClipEdgeToBsp__FP3BSPT0UxUxiP3LSG(pso->pbsp, 0x7FFFFFFF, apos[pedge->ipos[0]], apos[pedge->ipos[1]], clsgMax - clsg, &alsg[clsg]);
             for (; ilsg < clsg; ilsg++)
                 alsg[ilsg].pedge = pedge;
         }

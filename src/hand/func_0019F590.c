@@ -21,7 +21,7 @@ float func_00196928(qword a, qword b, float c, float d, float e, float f);
 void func_002046B0(struct P *p, qword q);
 void func_0014D8C0(struct D *d);
 void func_00195A00(void *p, int a, int b, int c);
-int func_00132B10(int a, int b);
+int FIsBasicDerivedFrom__FP5BASIC3CID(int a, int b);
 void func_00148300(struct G *g, int a);
 void func_0019B110(void *p, int a);
 void func_0015E1D8(int a);
@@ -44,9 +44,9 @@ void func_0019F590(struct P *p, E *q)
                 func_0014D8C0(&g_cm);
                 func_00195A00(p->x2c0, 0xB, 0, 0);
                 if (e.x4) {
-                    if (func_00132B10(e.x0, 0x13) || func_00132B10(e.x0, 0xB) || func_00132B10(e.x0, 0xD) ||
-                        func_00132B10(e.x0, 0x27) || func_00132B10(e.x0, 0xC) || func_00132B10(e.x0, 0x22) ||
-                        func_00132B10(e.x0, 0x26)) {
+                    if (FIsBasicDerivedFrom__FP5BASIC3CID(e.x0, 0x13) || FIsBasicDerivedFrom__FP5BASIC3CID(e.x0, 0xB) || FIsBasicDerivedFrom__FP5BASIC3CID(e.x0, 0xD) ||
+                        FIsBasicDerivedFrom__FP5BASIC3CID(e.x0, 0x27) || FIsBasicDerivedFrom__FP5BASIC3CID(e.x0, 0xC) || FIsBasicDerivedFrom__FP5BASIC3CID(e.x0, 0x22) ||
+                        FIsBasicDerivedFrom__FP5BASIC3CID(e.x0, 0x26)) {
                         func_00148300(&g_sw, e.x0);
                         func_0019B110(p->x2c0, e.x0);
                     }

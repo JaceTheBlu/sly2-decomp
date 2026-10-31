@@ -16,10 +16,10 @@ float func_002458F0(float y, float x);
 qword func_001C1EC0(struct X *s, qword v);
 qword func_0011E1A0(float a, float b, float c);
 int func_001C0B50(void *q, qword v, qword *out);
-void func_002562A8(struct X *x);
+void __1M(struct X *x);
 void func_0017DD38(void *p, struct X *x);
 }
-inline X::X() { func_002562A8(this); }
+inline X::X() { __1M(this); }
 extern "C" {
 }
 static __inline__ float GetX(qword q) { float x; __asm__("mtc1 %1,%0" : "=f"(x) : "r"(q)); return x; }

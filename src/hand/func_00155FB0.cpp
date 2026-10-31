@@ -1,5 +1,5 @@
 // func_00155FB0: matched from v8.
-// g_normalZ: Sly 1 name of the (0,0,1) vector at D_002A2DC0.
+// g_normalZ: Sly 1 name of the (0,0,1) vector at g_normalZ.
 // The clamp scale lives in a function-scope VUV sc (declared after lm) so its slot sits at 0x30 before frame.
 // Sub2 clobbers vf4, which is dead there (the next write to vf4 is the qmtc2 of func_0011E208's result), so the pos reload takes vf2.
 // The empty volatile asm in the loop stops jump threading of the two f tests.
@@ -34,7 +34,7 @@ qword func_00258480(qword a, qword b, qword c, qword d);
 void __as__6VECTORG9VU_VECTOR(VECTOR *pv, qword v);
 float func_002458F0(float y, float x);
 qword func_0011E1A0(float a, float b, float c);
-void func_0011EFB0(qword v, float *pa, float *pb, float *pc);
+void DecomposeSphere__FUxPfN21(qword v, float *pa, float *pb, float *pc);
 FRAME *func_001AE478(FRAME *pf);
 void _$_18CBinaryInputStream(FRAME *pf, int n);
 void func_001B44D8(int *pc, void **pa);
@@ -108,7 +108,7 @@ qword func_00155FB0(void *p, qword pos)
         M3 *pm2 = func_001A6318(pso);
         off.q = func_0011E1A0(func_002458F0(((float *)pm)[1], ((float *)pm2)[0]), D_002BDC98, 0.0f);
     }
-    func_0011EFB0(Sub(Add(posTarget, off.q), pos), &pan, &tilt, &s);
+    DecomposeSphere__FUxPfN21(Sub(Add(posTarget, off.q), pos), &pan, &tilt, &s);
     func_001AE478(&frame);
     func_001B44D8(&c, &av);
     gBest = D_002A513C;

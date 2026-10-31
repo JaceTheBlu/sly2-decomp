@@ -2,7 +2,7 @@
 M2C_UNK SetDecompress__18CBinaryInputStreamiPUc(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_00129EC8(void *);                      /* extern */
 M2C_UNK __4GIFS(M2C_UNK *);                   /* extern */
-s32 func_001AE318(s32 *);                           /* extern */
+s32 PvAllocStackImpl__FP7SWALLOC(s32 *);                           /* extern */
 extern M2C_UNK D_0025AFA0;
 extern M2C_UNK D_0025B870;
 extern M2C_UNK D_002A8A78;
@@ -76,5 +76,5 @@ extern M2C_UNK D_100;
 extern M2C_UNK D_C0;
 
 void func_00210940(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
-    M2C_FIELD(arg0, s32 *, 0x4638) = func_0015E938(arg0, 5, 0x620, 0, arg4, arg5, arg6);
+    M2C_FIELD(arg0, s32 *, 0x4638) = PloFindSwObject__FP2SWi3OIDP2LO(arg0, 5, 0x620, 0, arg4, arg5, arg6);
 }

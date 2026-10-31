@@ -3,7 +3,7 @@ struct VT { VTE a[3]; };
 struct P { char pad[0xC]; VT *pvt; char pad2[0x24 - 0x10]; void *p24; char pad3[0x30 - 0x28]; void *p30; int n34; int n38; int n3C; };
 extern "C" int func_001F0638(P *);
 extern "C" int IsmsFindSmRequired__FP2SM3OID(void *, int);
-extern "C" void func_00130B18(void *);
+extern "C" void RetractAsega__FP5ASEGA(void *);
 extern "C" void func_001F13A8(P *, int, int);
 extern "C" void func_001F0D88(P *, int);
 struct Lock {
@@ -22,7 +22,7 @@ extern "C" void func_001F09D8(P *p, int n)
             int old;
             if (pv) {
                 p->p30 = 0;
-                func_00130B18(pv);
+                RetractAsega__FP5ASEGA(pv);
             }
             old = p->n34;
             p->n38 = -1; p->n3C = m; p->n34 = m;

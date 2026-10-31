@@ -13,11 +13,11 @@ static __inline__ qword Make(float x, float y, float z)
             : "=&r"(q), "=&r"(t) : "f"(x), "f"(y), "f"(z));
     return q;
 }
-qword func_0011BFF0(void *p);
+qword DecomposeRotateMatrixEuler__FP7MATRIX3(void *p);
 qword func_0014F478(char *p)
 {
     union { qword q; float f; } r;
-    qword v = func_0011BFF0(p + 0x60);
+    qword v = DecomposeRotateMatrixEuler__FP7MATRIX3(p + 0x60);
     r.q = Make(GetX(v) * 57.295776f, GetY(v) * 57.295776f, GetZ(v) * 57.295776f);
     return r.q;
 }

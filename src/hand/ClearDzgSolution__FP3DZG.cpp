@@ -20,7 +20,7 @@ struct DZG {
 
 extern "C" {
 void func_0011A200(DL *pdl);
-void func_0011A210(DLE *pdle);
+void ClearDle__FP3DLE(DLE *pdle);
 void func_0011A220(DL *pdl, void *pv);
 }
 
@@ -37,7 +37,7 @@ void ClearDzgSolution(DZG *pdzg)
     for (i = 0; i < pdzg->cdzs; i++) {
         DZS *pdzs = &pdzg->adzs[i];
         pdzs->gC = pdzs->g10 = 0.0f;
-        func_0011A210(&pdzs->dle);
+        ClearDle__FP3DLE(&pdzs->dle);
         func_0011A220(&pdzg->dlD, pdzs);
     }
 }

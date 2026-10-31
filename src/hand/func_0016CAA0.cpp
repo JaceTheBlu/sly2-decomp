@@ -12,7 +12,7 @@ struct REQUEST{int bytes,alignment;REQUEST(int cb,int a):bytes(cb),alignment(a){
 extern "C"{
 void*func_001AE478(void*);
 void _$_18CBinaryInputStream(void*,int);
-void*func_001AE2A0(const REQUEST&);
+void*PvAllocSwClearImpl__FP7SWALLOC(const REQUEST&);
 OBJECT*func_001EC8F8(int);
 int func_001EC688(OBJECT*,int,int,VIFS*);
 void func_001699E8(OWNER*,D*,E*,SPHERE*,int,int,const int*,FACE**,CBinaryInputStream*);
@@ -24,7 +24,7 @@ extern char D_00000000[],D_00001910[],D_00001A68[];
 }
 struct MARK{MARK(){func_001AE478(this);}~MARK(){_$_18CBinaryInputStream(this,2);}};
 struct LEASE{LEASE(){func_001AE478(this);}void Release(){_$_18CBinaryInputStream(this,2);}};
-static inline void*Allocate(int bytes){return func_001AE2A0(REQUEST(bytes,16));}
+static inline void*Allocate(int bytes){return PvAllocSwClearImpl__FP7SWALLOC(REQUEST(bytes,16));}
 typedef char D_Size[sizeof(D)==20?1:-1];
 typedef char BONE_Size[sizeof(BONE)==80?1:-1];
 typedef char E_Size[sizeof(E)==28?1:-1];

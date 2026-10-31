@@ -19,7 +19,7 @@ typedef int qword __attribute__((mode(TI)));
 typedef unsigned int uint;
 #define FIELD_OFFSET(t, m) ((uint)&(((t *)0)->m))
 
-/* 16-byte vector whose default constructor is the shared vector initialiser (func_002564B8). */
+/* 16-byte vector whose default constructor is the shared vector initialiser (__3VUF). */
 union U { qword q; float f[4]; U(); };
 typedef union { qword q[2]; uint a[8]; } MASK;      /* 256-bit object mask */
 struct HOME { qword q; };
@@ -50,8 +50,8 @@ typedef struct {
 } WORLD;
 
 extern "C" void *func_002333B4(void *, int, uint);  /* memset */
-extern "C" U *func_002564B8(U *);                   /* vector init, returns its receiver */
-inline U::U() { (void)func_002564B8(this); }
+extern "C" U *__3VUF(U *);                   /* vector init, returns its receiver */
+inline U::U() { (void)__3VUF(this); }
 
 /* dot(plane.xyz, pos.xyz) - plane.w, via VU0 macro mode */
 static inline float PlaneDistance(HOME *first, HOME *second, qword plane, qword pos)

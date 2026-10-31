@@ -11,8 +11,8 @@ typedef struct {
     union { fractype ll; } fraction;
 } fp_number_type;
 
-extern fp_number_type D_00450230;
-#define nan() (&D_00450230)
+extern fp_number_type __thenan_df;
+#define nan() (&__thenan_df)
 #define IMPLICIT_1 ((fractype)1 << 60)
 #define IMPLICIT_2 ((fractype)1 << 61)
 #define LSHIFT(X) (X = ((X) & 1) | ((X) >> 1))

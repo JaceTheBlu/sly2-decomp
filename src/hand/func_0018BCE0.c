@@ -30,9 +30,9 @@ extern void func_00189C40(void *p, void *a, float g, void *geometry, void *respo
 
 extern int func_00189EC8(void *p, void *a, void *response);
 extern void EnsureAloSfx__FP3ALO(void *p);
-extern int func_00132B10(void *p, int n);
+extern int FIsBasicDerivedFrom__FP5BASIC3CID(void *p, int n);
 extern void func_001E7380(void *p, qword q, void *metric, qword *point, qword *direction, float *normalized, float *distance, float g);
-extern void func_0018C250(void *p, int a, int b);
+extern void SetJtJts__FP2JT3JTS4JTBS(void *p, int a, int b);
 extern qword func_001A62E8(void *p);
 extern void func_0011E7C8(qword a, qword b, qword c, qword d, float *parameters, float *distance, qword *direction);
 extern void func_00189618(void *p);
@@ -118,17 +118,17 @@ void func_0018BCE0(char *p)
     }
     EnsureAloSfx__FP3ALO(p);
     if (F(int, 0x18D8) == 0) {
-        if (func_00132B10(F(void *, 0x1854), 0xB)) {
+        if (FIsBasicDerivedFrom__FP5BASIC3CID(F(void *, 0x1854), 0xB)) {
             void *po2 = F(void *, 0x1854);
             for (i = 0; i < 3; i++)
                 func_001E7380(po2, ((qword *)A(0x1890))[i], 0, &av[i], 0, 0, 0, F(float, 0x1858));
             goto loop;
         L16:
-            func_0018C250(p, 0x16, -1);
+            SetJtJts__FP2JT3JTS4JTBS(p, 0x16, -1);
             goto end;
         } else {
             qword q;
-            if (!func_00132B10(F(void *, 0x1854), 0x13))
+            if (!FIsBasicDerivedFrom__FP5BASIC3CID(F(void *, 0x1854), 0x13))
                 goto end;
             q = func_001A62E8(F(void *, 0x1854));
             av[2] = q;
@@ -142,16 +142,16 @@ void func_0018BCE0(char *p)
             func_0011E7C8(aq[i - 1], aq[i], av[i - 1], av[i], u.f, ag, &w.q);
 
             if (ag[0] < F(float, 0x19AC)) {
-                if (func_00132B10(F(void *, 0x1854), 0x13)) {
+                if (FIsBasicDerivedFrom__FP5BASIC3CID(F(void *, 0x1854), 0x13)) {
                     po = F(struct X1854 *, 0x1854);
                     F(struct X1854 *, 0x18C4) = po;
                     if (po->x124 == 3)
                         goto L16;
-                    func_0018C250(p, 3, 1);
+                    SetJtJts__FP2JT3JTS4JTBS(p, 3, 1);
                 } else {
                     F(void *, 0xF5C) = F(void *, 0x1854);
                     F(float, 0xF60) = F(float, 0x1858);
-                    func_0018C250(p, 8, -1);
+                    SetJtJts__FP2JT3JTS4JTBS(p, 8, -1);
                 }
                 break;
             }

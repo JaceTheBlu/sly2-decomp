@@ -23,11 +23,11 @@ void *func_00205438(struct A *a, int k);
 void func_001E9C30(void *o);
 void func_0017CDB8(void *o, int n);
 void func_0017D110(void *o, int n);
-void func_002562A8(struct X *x);
-inline X::X() { func_002562A8(this); }
-int func_00132B10(void *o, int n);
+void __1M(struct X *x);
+inline X::X() { __1M(this); }
+int FIsBasicDerivedFrom__FP5BASIC3CID(void *o, int n);
 void func_0017DD38(void *o, struct X *x);
-void func_0012F9B8(void *o, int a, int b, void *c, float f, float g);
+void ApplyAseg__FP4ASEGP3ALOffiPP5ASEGA(void *o, int a, int b, void *c, float f, float g);
 void *func_001711F0(void *p, int id);
 void func_001EEFC0(struct S *p);
 void func_001EF038(struct S *p);
@@ -133,7 +133,7 @@ extern "C" void func_001715F0(struct S *p, struct CMD *c)
             void *o = func_001715B8(p, qq->n4);
             if (o) {
                 func_00171AF8(p, o, 0, &p->g48);
-                if (func_00132B10(o, 10)) x.p0 = o;
+                if (FIsBasicDerivedFrom__FP5BASIC3CID(o, 10)) x.p0 = o;
                 else x.p4 = o;
             }
         }
@@ -151,7 +151,7 @@ extern "C" void func_001715F0(struct S *p, struct CMD *c)
         break;
     }
     case 8: {
-        func_0012F9B8(func_001715B8(p, c->n4), 0, 0, &t, 0.0f, 1.0f);
+        ApplyAseg__FP4ASEGP3ALOffiPP5ASEGA(func_001715B8(p, c->n4), 0, 0, &t, 0.0f, 1.0f);
         break;
     }
     case 9:

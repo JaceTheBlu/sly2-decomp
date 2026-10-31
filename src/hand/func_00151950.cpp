@@ -16,10 +16,10 @@ struct Y { char pad[0x1BC]; float g1BC; char pad1[0x1D0 - 0x1C0]; LO *plo; int n
 struct X { Y *py; };
 extern "C" {
 void func_0014FD40(X *p);
-M3 func_0011BC00(M4 *pm, M3 *pm2);
+M3 CalculateDmat__FP7MATRIX3T0(M4 *pm, M3 *pm2);
 void func_0011BCF8(M3 *pm, float *pg, qword *pv);
 float GSmooth__FfffP3SMPPf(float gCur, float gTarget, float dt, void *psmp, float *pdgNext); /* GSmooth */
-M3 func_0011B500(qword v, float g);
+M3 LoadRotateMatrixRad__FfUx(qword v, float g);
 qword *__as__6VECTORG9VU_VECTOR(qword *p, qword v);
 void func_0014E168(CM *p, M4 *m);
 void func_0014F5A0(CM *p, float g);
@@ -65,13 +65,13 @@ void func_00151950(X *p)
         M3 mNew;
         union { qword q; } axis;
         float rad;
-        mRel = func_0011BC00(&m, &g_cm.mat);
+        mRel = CalculateDmat__FP7MATRIX3T0(&m, &g_cm.mat);
         func_0011BCF8(&mRel, &rad, &axis.q);
         if (rad < 0.0001f) {
             mNew = m.m3;
         } else {
             float g = GSmooth__FfffP3SMPPf(rad, 0.0f, D_002DDED0.dt, D_002BDAB0, 0);
-            mNew = Mul(func_0011B500(axis.q, g), m.m3);
+            mNew = Mul(LoadRotateMatrixRad__FfUx(axis.q, g), m.m3);
         }
         qword d = Sub(g_cm.pos, m.q.r[3]);
         float dist = Length(d);

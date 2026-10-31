@@ -18,7 +18,7 @@ void func_0022B7D8(WR *);
 float RadNormalize__Ff(float);
 void CalculateSinCos__FfPfT1(float,float *,float *);
 float func_0022BF70(ONZ *);
-M3 func_0011B500(qword,float);
+M3 LoadRotateMatrixRad__FfUx(qword,float);
 }
 static inline qword ScalarLoad(const float &f){int bits;qword q;__asm__("lw %0,%1":"=r"(bits):"m"(f));__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(bits));return q;}
 static inline qword Scalar(float f){qword q;__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(f));return q;}
@@ -64,9 +64,9 @@ void UpdateWrMatrixes(WR *p){
    V rotated;
    float bend=func_0022BF70(&entry->data.bend.bend);
    float swivel=func_0022BF70(&entry->data.bend.swivel);
-   first=func_0011B500(UnitFresh(entry->vectorA.q),swivel);
+   first=LoadRotateMatrixRad__FfUx(UnitFresh(entry->vectorA.q),swivel);
    rotated.q=Rotate(first,Unit(entry->axis.q));
-   result=func_0011B500(UnitFresh(rotated.q),bend);
+   result=LoadRotateMatrixRad__FfUx(UnitFresh(rotated.q),bend);
 
    matrix->r[0].f[0]=result.f[0][0]-1.0f;matrix->r[0].f[1]=result.f[0][1];matrix->r[0].f[2]=result.f[0][2];matrix->r[1].f[0]=result.f[1][0];matrix->r[1].f[1]=result.f[1][1]-1.0f;matrix->r[1].f[2]=result.f[1][2];matrix->r[2].f[0]=result.f[2][0];matrix->r[2].f[1]=result.f[2][1];matrix->r[2].f[2]=result.f[2][2]-1.0f;
    break;

@@ -7,7 +7,7 @@ struct CRef {
 struct NODE;
 extern char D_004520A8[];
 extern "C" {
-void func_0011CD98(void *pheap, void *pv);
+void FreeSlotheapPv__FP8SLOTHEAPPv(void *pheap, void *pv);
 void func_002550F8(void *pv);
 }
 struct SPM {
@@ -19,7 +19,7 @@ struct NODE {
     int x4;
     CRef ref;
     SPM pnext;
-    void operator delete(void *pv) { func_002550F8(pv); func_0011CD98(D_004520A8, pv); }
+    void operator delete(void *pv) { func_002550F8(pv); FreeSlotheapPv__FP8SLOTHEAPPv(D_004520A8, pv); }
 };
 struct O { int cref; };
 extern "C" void func_00257078(O *, int);
@@ -31,7 +31,7 @@ struct SP {
 struct OSP { O *p; };
 extern "C" {
 int func_00256DD0(void);
-SP func_00257058(int);
+SP Set__3SPFP5FRAME(int);
 void func_00133000(void *pv, NODE *pn, O *po, int n);
 }
 
@@ -76,7 +76,7 @@ void func_00149C80(MGR *p)
             void (CObj::*pmf)(int) = pcb->pmf;
             (pcb->pobj->*pmf)(pcb->arg);
             CB *pcbNext = pcb->pnext;
-            func_0011CD98(p->poolCb, pcb);
+            FreeSlotheapPv__FP8SLOTHEAPPv(p->poolCb, pcb);
             pcb = pcbNext;
         }
     }
@@ -91,13 +91,13 @@ void func_00149C80(MGR *p)
             func_00133000(posp, pev->pnode, posp->p, 0);
         } else {
             int x = func_00256DD0();
-            SP sp = func_00257058(x);
+            SP sp = Set__3SPFP5FRAME(x);
             func_00133000(p, pev->pnode, sp.p, 0);
         }
         func_0011A118(&p->levs, pev);
         NODE *pn = pev->pnode;
         if (--pn->cref == 0)
             delete pn;
-        func_0011CD98(p->poolEv, pev);
+        FreeSlotheapPv__FP8SLOTHEAPPv(p->poolEv, pev);
     }
 }

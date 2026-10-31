@@ -17,8 +17,8 @@ void func_001F36E0(OBJ *);
 int func_0014FD50(void *);
 int func_00187E88(void *);
 int PvAllocSwCopyImpl__FiPv(void *, int);
-void *func_001F07E8(void *);
-OBJ *func_0015E938(struct G *, int, int, OBJ *);
+void *GetSmaCur__FP3SMA(void *);
+OBJ *PloFindSwObject__FP2SWi3OIDP2LO(struct G *, int, int, OBJ *);
 void func_001DC260(void *, int);
 void func_001DFD58(OBJ *, int);
 void func_001D77D0(OBJ *, int);
@@ -48,7 +48,7 @@ void func_001D72A8(OBJ *p)
             pe = &p->ae[i];
             if (i >= p->c)
                 return;
-            if (pe->p != func_001F07E8(p->x188))
+            if (pe->p != GetSmaCur__FP3SMA(p->x188))
                 continue;
             if (!PvAllocSwCopyImpl__FiPv(pad, pe->fl))
                 continue;
@@ -58,7 +58,7 @@ void func_001D72A8(OBJ *p)
                 func_001DC260(D_003DA150, 0);
                 break;
             }
-            q = func_0015E938(&g_sw, 4, pe->n, p);
+            q = PloFindSwObject__FP2SWi3OIDP2LO(&g_sw, 4, pe->n, p);
             if (q) {
                 func_001DFD58(q, 0);
                 return;

@@ -49,7 +49,7 @@ extern "C" {
 extern SW g_sw;                                   // the world
 extern CLOCK D_002DDED0;                                // g_clock
 extern uint D_002DFBC4;
-extern qword D_002A2DC0;                                // (0, 0, 1)
+extern qword g_normalZ;                                // (0, 0, 1)
 extern float D_002BF5B0, D_002BF5B4, D_002BF5B8;
 int func_001C46C0(JOY *, uint, float);
 int func_001C4660(JOY *, uint, float);
@@ -58,7 +58,7 @@ void func_00195A00(void *, int, int, ACTOR *);
 void func_0019CC50(void *, int, int, int);
 int func_00131968(ASEGA *);
 void func_00192BD8(CONTEXT *, int);                     // set the step
-void *func_001AE318(SWALLOC *);                         // stack allocation in the current STACKSCOPE
+void *PvAllocStackImpl__FP7SWALLOC(SWALLOC *);                         // stack allocation in the current STACKSCOPE
 qword func_001A62E8(ACTOR *);                           // world position
 int func_0020F948(void *, SO *);
 void func_0020FAA0(SW *, qword, qword, int (*)(void *, SO *), void *, int *, SO ***);   // objects in a box
@@ -67,10 +67,10 @@ void func_001F38A8(SO *);
 qword func_0011F288(int, qword *);                      // min of points
 qword func_0011F2B8(int, qword *);                      // max of points
 void func_001A9B28(SW *, SO *, SO *, int, BSP *, XP **);
-int func_00118A88(BSP *, BSP *, float, qword, int *, BSP **);   // prune a BSP to a sphere
+int PruneBsp__FP3BSPT0fUxPiPP3BSP(BSP *, BSP *, float, qword, int *, BSP **);   // prune a BSP to a sphere
 void func_001A8B50(SW *, SO *, SO *, int, BSP *, BSP *, XP **);
 void func_001CD098(ATTACH *, ACTOR *);
-int func_00132B10(ACTOR *, int);
+int FIsBasicDerivedFrom__FP5BASIC3CID(ACTOR *, int);
 int func_001423A0(ACTOR *);
 int func_001441A0(ACTOR *);
 uint func_00141EA8(ACTOR *, int);
@@ -80,7 +80,7 @@ void FreeSwXpList(SW *, XP *);
 static inline void SetControl(ACTOR *p, int n) { VTE &v = p->vt[88]; ((void (*)(void *, int))v.fn)((char *)p + v.delta, n); }
 static inline int CanAct(ACTOR *p, int n) { VTE &v = p->vt[99]; return ((int (*)(void *, int))v.fn)((char *)p + v.delta, n); }
 static inline void Notify(ACTOR *p, ACTOR *q) { VTE &v = p->vt[51]; ((void (*)(void *, ACTOR *))v.fn)((char *)p + v.delta, q); }
-static inline void *PvAllocStack(int cb) { SWALLOC swalloc; swalloc.cb = cb; swalloc.cbAlign = 0x10; return func_001AE318(&swalloc); }
+static inline void *PvAllocStack(int cb) { SWALLOC swalloc; swalloc.cb = cb; swalloc.cbAlign = 0x10; return PvAllocStackImpl__FP7SWALLOC(&swalloc); }
 
 static inline VU_FLOAT VuFloat(float g) { VU_FLOAT v; __asm__("qmtc2.ni %1,%0" : "=j"(v.q) : "r"(g)); return v; }
 // The never-chosen "V" alternative is allocation-only: the word stays a MEM until reload (as in func_0014F110).
@@ -113,7 +113,7 @@ static inline void ProbeGround(CONTEXT *p)
     int i;
     qword pos = func_001A62E8(p->pactor);
     qword posBase = QwAdd(pos, p->pactor->posOffset);
-    qword posEnd = QwAdd(posBase, QwScale(D_002A2DC0, VuFloat(&D_002BF5B0)));
+    qword posEnd = QwAdd(posBase, QwScale(g_normalZ, VuFloat(&D_002BF5B0)));
     int cso;
     SO **apso;
     func_0020FAA0(&g_sw, posEnd, posBase, func_0020F948, p->pactor->pvFilter, &cso, &apso);
@@ -146,7 +146,7 @@ static inline void ProbeGround(CONTEXT *p)
         } else {
             int cbspLeft = cbspMax;
             BSP *pbsp = absp;
-            if (func_00118A88(pso->absp, (BSP *)0x7FFFFFFF, sRadius, posMid, &cbspLeft, &pbsp) == 2) {
+            if (PruneBsp__FP3BSPT0fUxPiPP3BSP(pso->absp, (BSP *)0x7FFFFFFF, sRadius, posMid, &cbspLeft, &pbsp) == 2) {
                 int cbsp = pbsp - absp;
                 pbsp--;
                 func_001A8B50(&g_sw, psoSelf, pso, cbsp, pso->absp, pbsp, &pxp);
@@ -231,7 +231,7 @@ extern "C" void func_001911A8(CONTEXT *p)
                 SetControl(p->pactor, 0);
             break;
         case 5:
-            if (func_00132B10(p->pactorFocus, 11) && func_001423A0(p->pactor)) {
+            if (FIsBasicDerivedFrom__FP5BASIC3CID(p->pactorFocus, 11) && func_001423A0(p->pactor)) {
                 p->pactor->ptarget = p->pactorFocus;
                 p->pactor->gTarget = p->gParam;
                 SetControl(p->pactor, 8);

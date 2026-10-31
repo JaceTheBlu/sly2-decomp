@@ -14,7 +14,7 @@ extern "C" qword func_001A62E8(O*);
 extern "C" qword*__as__6VECTORG9VU_VECTOR(qword*,qword);
 extern "C" float func_002450F0(float);
 extern "C" void func_0011C448(float,float,float,float,float,float,M4*);
-extern "C" void func_0014D8F8(M4*,M4*,M4*);
+extern "C" void CombineEyeLookAtProj(M4*,M4*,M4*);
 extern "C" void func_001574B8(V*);
 extern "C" void func_00226D10(V*);
 extern "C" void func_002270C8(V*,int,QW*,int);
@@ -65,7 +65,7 @@ extern "C" void func_001BE6F0(P*p,V*v){
  slope*=4096.0f;
  aspect*=4096.0f;
  func_0011C448((float)p->width/aspect,(float)p->height/slope,0.0f,0.0f,p->camera->clipFar,p->camera->clipNear,&projection);
- func_0014D8F8(pv,&projection,&product);
+ CombineEyeLookAtProj(pv,&projection,&product);
  {O*camera=p->camera;
   float z=(camera->clipFar+camera->clipNear)/(camera->clipFar-camera->clipNear);
   float k=1.0f-z;

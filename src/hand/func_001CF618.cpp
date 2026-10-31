@@ -3,7 +3,7 @@ struct M { qword a, b, c; };
 struct S { char pad[0x70]; qword q70; char p1[0x90 - 0x80]; qword q90; char p2[0xF4 - 0xA0]; int f; };
 struct G { char pad[0x60]; qword q60; };
 extern G g_cm;
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern "C" {
 M func_0011B830(qword a, qword b);
 int func_001CF338(S *p, qword q, M m);
@@ -19,7 +19,7 @@ void func_001CF618(S *p)
         s.q = k;
         __asm__("vmulx.xyzw %0, %1, %2x" : "=j"(v) : "j"(g_cm.q60), "j"(k));
     } else {
-        v = D_002A2DC0;
+        v = g_normalZ;
     }
     m = func_0011B830(p->q90, v);
     func_001CF338(p, p->q70, m);

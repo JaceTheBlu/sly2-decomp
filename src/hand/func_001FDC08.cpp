@@ -7,7 +7,7 @@ struct P {char pad5C[0x5C];int modeA,modeB,selected;char pad68[0xA0];float weigh
 extern char g_sw[];
 extern float D_002DDF10;
 struct PLAYER *func_001C4A48(void *);
-int func_00132B10(void *,int);
+int FIsBasicDerivedFrom__FP5BASIC3CID(void *,int);
 float GSmooth__FfffP3SMPPf(float,float,float,struct COEF *,float *);
 void func_001FC2E0(struct REF *,int,float);
 static __inline__ float Sqrt(float f){float r;__asm__ __volatile__("sqrt.s %0,%1":"=f"(r):"f"(f));return r;}
@@ -21,7 +21,7 @@ void func_001FDC08(struct P *input)
     p->selected=1;
     if(p->modeA)p->selected=2;
     else if(p->modeB)p->selected=0;
-    else if(func_001C4A48(g_sw) && func_00132B10(func_001C4A48(g_sw),0x34)){
+    else if(func_001C4A48(g_sw) && FIsBasicDerivedFrom__FP5BASIC3CID(func_001C4A48(g_sw),0x34)){
         struct PLAYER *player=func_001C4A48(g_sw);
         if(player->state==3)p->selected=0;
         else if(player->state==4)p->selected=2;

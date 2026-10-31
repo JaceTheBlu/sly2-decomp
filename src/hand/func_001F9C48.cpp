@@ -12,8 +12,8 @@ extern CLOCK D_002DDED0;
 extern G g_sw;
 extern "C" void func_00230630(P *,OWNER *);
 extern "C" qword *__as__6VECTORG9VU_VECTOR(qword *,qword);
-extern "C" M3 *func_0011B570(M3 *,qword);
-static inline M3 BuildRotation(qword vector) return matrix {func_0011B570(&matrix,vector);}
+extern "C" M3 *LoadRotateMatrix__FUx(M3 *,qword);
+static inline M3 BuildRotation(qword vector) return matrix {LoadRotateMatrix__FUx(&matrix,vector);}
 extern "C" void NormalizeRotateMatrix3__FP7MATRIX3(M3 *);
 extern "C" void func_001F3900(P *);
 extern "C" void func_001F38A8(NODE *);

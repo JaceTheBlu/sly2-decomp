@@ -18,7 +18,7 @@ int func_00230348(int);
 int func_00230380(int);
 M4 func_0022CDC0(P *);
 M4 func_0011C318(P *);
-M4 func_0011C168(M4 *, M4 *);
+M4 __ml__FRC7MATRIX4T0(M4 *, M4 *);
 void func_0022C818(S *, P *);
 
 void func_002303A0(S *s, P *p, int n)
@@ -42,7 +42,7 @@ void func_002303A0(S *s, P *p, int n)
             break;
         case 6: case 7: {
             M4 r = func_0011C318(p);
-            t = func_0011C168(&m, &r);
+            t = __ml__FRC7MATRIX4T0(&m, &r);
             m = t;
             SetV(&p->xB0, m.mat[1][2], m.mat[2][0], m.mat[0][1]);
             break;

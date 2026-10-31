@@ -1,6 +1,6 @@
 // func_001E1E30: ported from Lilly's personal Sly 2 decomp (src/P2/jsg.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002A7AD0 (D_002A7AD0), D_002DE570 (D_002DE570), D_003DA530 (D_003DA530), D_002DDED0 (g_clock), g_cm (g_cm), D_002DEB30 (g_game), D_003DA0C0 (g_hintbox), D_002DFC00 (g_joy), D_002A2DC0 (g_normalZ), D_002A2DD0 (g_qwZero), g_sndmgr (g_sndmgr), D_004435F0 (g_subtitle), g_sw (g_sw)
+// Globals: D_002A7AD0 (D_002A7AD0), D_002DE570 (D_002DE570), D_003DA530 (D_003DA530), D_002DDED0 (g_clock), g_cm (g_cm), D_002DEB30 (g_game), D_003DA0C0 (g_hintbox), D_002DFC00 (g_joy), g_normalZ (g_normalZ), D_002A2DD0 (g_qwZero), g_sndmgr (g_sndmgr), D_004435F0 (g_subtitle), g_sw (g_sw)
 // 0x001E1E30 NextJsgCommand__FP3JSG  (T1200; was DispatchAsegEvent: it is Sly 1's NextJsgJsge)
 // Steps the script to the next command of its block and executes it. First the command's actor is chosen (the oid the command carries, else the
 // SetActor default, the block's object or the relay's firer), then the command runs by kind (the table in re/notes/relay-commands-t1289.md), and
@@ -2770,7 +2770,7 @@ extern char D_003DA530[];
 extern LO *D_002DE570;
 extern float D_002A7AD0;
 extern qword D_002A2DD0;
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 static inline LO *PloJsgActorDefault(JSG *pjsg)
 {
     if (pjsg->ploActorDefault)
@@ -3139,12 +3139,12 @@ void NextJsgCommand(JSG *pjsg)
         {
             pjsg->ploActor->TranslateToPos(*(qword *)&pos);
         }
-        mat = LoadRotateMatrixRad(rad, D_002A2DC0);
+        mat = LoadRotateMatrixRad(rad, g_normalZ);
         pjsg->ploActor->RotateToMat((MATRIX4 *)&mat);
         if (FIsBasicDerivedFrom(pjsg->ploActor, (CID)52))
         {
             STEPPLAYER *pstepplayer = (STEPPLAYER *)pjsg->ploActor;
-            pstepplayer->qwUnk1060 = QwAddScaledX(*(qword *)&pos, D_002A2DC0, VuFloatFromMemWord(pstepplayer->nUnk1048));
+            pstepplayer->qwUnk1060 = QwAddScaledX(*(qword *)&pos, g_normalZ, VuFloatFromMemWord(pstepplayer->nUnk1048));
             if (!prelaycmd->teleportTo.fAir && pstepplayer->cUnk12f4 == 0)
             {
                 SetJtAirJump(&pstepplayer->jtair, 0xB, 0, 0);

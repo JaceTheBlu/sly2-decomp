@@ -9,7 +9,7 @@ struct E {struct ASEG *animation;int pad[3];qword velocity;FLOATWORD speed;int p
 struct P {char pad[0x10];qword direction;struct ALO *root;struct ASEGA *active;struct E *entries,*best;int flags,forward,backward;};
 extern const float D_002A8904;
 extern float D_002C3DE4;
-extern "C" struct TAG *func_0012F938(struct ASEG*,int);
+extern "C" struct TAG *PeaFindAsegLabel__FP4ASEG3OID(struct ASEG*,int);
 void ApplyAsegCur(struct ASEG*,struct ALO*,float,float,int,struct ASEGA**);
 extern "C" void func_001333C0(struct ASEGA*,int);
 static inline qword Dot(qword a,qword b){qword r,one;
@@ -54,7 +54,7 @@ extern "C" void func_0020CB28(struct P*p,qword v)
    int id;
    if(p->forward){id=0x17D;animation=best->animation;}
    else {id=0x17F;animation=best->animation;}
-   tag=func_0012F938(animation,id);
+   tag=PeaFindAsegLabel__FP4ASEG3OID(animation,id);
    if(tag)time=tag->value;
    ApplyAsegCur(best->animation,p->root,time,1.0f,p->flags,&p->active);
    func_001333C0(p->active,(int)p);

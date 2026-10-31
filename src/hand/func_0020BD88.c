@@ -9,9 +9,9 @@ struct MARKER {union FLOATWORD value;int kind,id,unused;};
 struct V3 { float x, y, z; };
 struct S { int h; void *po; float a; float b; float c; float ca; float cb; union FLOATWORD dist; struct V3 v; int pad; int f; };
 extern char g_sw[];
-void *func_0015E938(void *p, int n, int h, void *arg);
-struct MARKER *func_0012F938(void *po, int n);
-struct C *func_0012FF10(void *po, void *arg, int kind, int check);
+void *PloFindSwObject__FP2SWi3OIDP2LO(void *p, int n, int h, void *arg);
+struct MARKER *PeaFindAsegLabel__FP4ASEG3OID(void *po, int n);
+struct C *PchnFindAseg__FP4ASEGP3ALOii(void *po, void *arg, int kind, int check);
 
 void func_0020BD88(struct S *p, void *arg)
 {
@@ -27,17 +27,17 @@ void func_0020BD88(struct S *p, void *arg)
     if (p->f)
         return;
     if (!p->po) {
-        p->po = func_0015E938(g_sw, 4, p->h, arg);
+        p->po = PloFindSwObject__FP2SWi3OIDP2LO(g_sw, 4, p->h, arg);
         if (!p->po)
             return;
     }
-    pa = func_0012F938(p->po, 0x22);
+    pa = PeaFindAsegLabel__FP4ASEG3OID(p->po, 0x22);
     if (!pa)
         return;
-    pb = func_0012F938(p->po, 0x23);
+    pb = PeaFindAsegLabel__FP4ASEG3OID(p->po, 0x23);
     if (!pb)
         return;
-    pc = func_0012F938(p->po, 0x24);
+    pc = PeaFindAsegLabel__FP4ASEG3OID(p->po, 0x24);
     if (!pc)
         return;
     p->a = pa->value.value;
@@ -45,7 +45,7 @@ void func_0020BD88(struct S *p, void *arg)
     p->c = pc->value.value;
     p->cb = p->c - p->b;
     p->ca = p->c - p->a;
-    c = func_0012FF10(p->po, arg, 1, 1);
+    c = PchnFindAseg__FP4ASEGP3ALOii(p->po, arg, 1, 1);
     if (!c)
         goto initialized;
     c->pcv->vt[3].pf((char *)c->pcv + c->pcv->vt[3].d, &v0.q, 0, p->a, 1.0f);

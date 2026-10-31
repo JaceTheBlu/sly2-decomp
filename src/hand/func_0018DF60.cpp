@@ -12,14 +12,14 @@ struct CLOCK{float time,dt;};
 struct SMP{float a,b,c;};
 extern "C" CLOCK D_002DDED0;
 extern "C" M3 D_002DDFA0;
-extern "C" qword D_002A2DC0;
+extern "C" qword g_normalZ;
 extern "C" SMP D_002BF3F8,D_002BF408;
 extern "C" M4*func_001A6318(P*);
 extern "C" qword func_001A62E8(P*);
 extern "C" void func_0011C950(M3*,M3*,SMP*,M3*,qword*,float);
 extern "C" qword func_0011F088(qword,qword,SMP*,qword*,float);
 extern "C" qword func_001A6FC0(O*,O*,qword);
-extern "C" void func_001384C0(ANIM*);
+extern "C" void ReblendAsegbl__FP6ASEGBL(ANIM*);
 static inline qword Make(float x,float y,float z){qword q,t;__asm__("mfc1 %0,%2\n\tmfc1 %1,%3\n\tpextlw %0,%1,%0\n\tmfc1 %1,%4\n\tpcpyld %0,%1,%0":"=&r"(q),"=&r"(t):"f"(x),"f"(y),"f"(z));return q;}
 static inline float Max(float a,float b){float r;__asm__("max.s %0,%1,%2":"=f"(r):"f"(a),"f"(b));return r;}
 static inline qword Normalize(qword vin,const U*negative,U*u){
@@ -30,7 +30,7 @@ static inline qword Normalize(qword vin,const U*negative,U*u){
  __asm__("vmul.xyz %0,%3,%3\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z\n\tlqc2 %2,%4":"=j"(d),"=&j"(one),"=j"(fallback):"j"(v),"m"(negative->q));
  __asm__("vsqrt Q,%1x\n\tvwaitq\n\tvaddq.x %0,$vf0,Q":"+j"(one):"j"(d));
  register int lenBits __asm__("$3");register unsigned page __asm__("$2");register qword up __asm__("vf1");
- __asm__("lui %0,%%hi(%5)\n\tqmfc2.ni %1,%4\n\taddiu %0,%0,%%lo(%5)\n\tmtc1 %1,%2\n\tlqc2 %3,0(%0)":"=&r"(page),"=&r"(lenBits),"=f"(len),"=j"(up):"j"(one),"i"(&D_002A2DC0):"memory");
+ __asm__("lui %0,%%hi(%5)\n\tqmfc2.ni %1,%4\n\taddiu %0,%0,%%lo(%5)\n\tmtc1 %1,%2\n\tlqc2 %3,0(%0)":"=&r"(page),"=&r"(lenBits),"=f"(len),"=j"(up):"j"(one),"i"(&g_normalZ):"memory");
  qword r;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(r):"j"(up),"j"(fallback));register qword bits __asm__("$2");__asm__("qmfc2.ni %0,%1":"=r"(bits):"j"(fallback));u->q=bits;
  if(len<0.0001f)return r;
  __asm__("vdiv Q,$vf0w,%1x\n\tvwaitq\n\tvmulq.xyzw %0,%2,Q":"=j"(r):"j"(one),"j"(v));
@@ -109,7 +109,7 @@ extern "C" void func_0018DF60(P*p){
  __asm__("lw %0,%5\n\tsub.s %1,%1,%3\n\tlwc1 %2,%6\n\tmul.s %3,%3,%2\n\tswc1 %2,%4":"=&r"(animation),"+&f"(middle),"=f"(weight),"+f"(left),"=m"(p->weight):"m"(p->anim),"m"(params->weight));
  __asm__("sub.s %0,%0,%4\n\tmul.s %1,%1,%4\n\tmul.s %2,%2,%4\n\tswc1 %5,%3":"+&f"(one),"+&f"(right),"+&f"(middle),"=m"(p->left):"f"(weight),"f"(left));
  p->right=right;p->middle=middle;p->base=one;
- func_001384C0(animation);
+ ReblendAsegbl__FP6ASEGBL(animation);
 }
 
 typedef char Qword_Size[(sizeof(qword)==16)?1:-1];

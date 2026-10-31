@@ -23,7 +23,7 @@ void func_0019CC30(void *);
 void func_0021F388(void *);
 void func_0019DE58(void *);
 int func_0015E650(struct G *, int, int, struct P *, int, void **);
-void *func_001AE2A0(struct AREQ *);
+void *PvAllocSwClearImpl__FP7SWALLOC(struct AREQ *);
 void func_00141EF8(struct P *);
 void func_001440D0(struct P *, int);
 int func_001F8278(struct P *);
@@ -55,7 +55,7 @@ void func_001400B8(struct P *p)
         preq->cb = c * 8;
         p->cpo = c;
         preq->cbAlign = 0x10;
-        p->apo = func_001AE2A0(preq);
+        p->apo = PvAllocSwClearImpl__FP7SWALLOC(preq);
         for (i = 0; i < c; i++) {
             struct O *po;
             struct VTE *e;

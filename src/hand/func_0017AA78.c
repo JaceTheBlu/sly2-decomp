@@ -2,7 +2,7 @@ typedef int qword __attribute__((mode(TI)));
 typedef union {qword q;float g[4];} U;
 struct P{char pad0[0x10];void*actor;char pad14[0x5C-0x14];void*target;};
 struct REQUEST{int flag;float along,up;int padC;qword point,direction;};
-extern qword D_002A2DC0,D_002A2DA0;
+extern qword g_normalZ,D_002A2DA0;
 extern float D_002BE6C4;
 qword func_001A62E8(void*);
 static inline qword ToVU(qword word){qword r;__asm__("qmtc2.ni %1,%0":"=j"(r):"r"(word));return r;}
@@ -16,9 +16,9 @@ static inline void PublishPoint(U*home,qword scalar,qword*out,qword point){__asm
 void func_0017AA78(struct P*p,struct REQUEST*request,qword*outPoint,qword*outDirection){
 
  qword first=ToVU(func_001A62E8(p->actor));
- qword direction=Normal(Reject(Sub(first,func_001A62E8(p->target)),D_002A2DC0),D_002A2DA0);
+ qword direction=Normal(Reject(Sub(first,func_001A62E8(p->target)),g_normalZ),D_002A2DA0);
  {U scalar;
- register unsigned int addressWord __asm__("$2")=(unsigned int)&D_002A2DC0;
+ register unsigned int addressWord __asm__("$2")=(unsigned int)&g_normalZ;
  register qword along __asm__("vf4"),up __asm__("vf5"),point __asm__("vf2"),height __asm__("vf6");
  __asm__("lw $3,%5\n\tlqc2 %2,0(%0)\n\tqmtc2.ni $3,%1\n\tlw %0,%6\n\tlqc2 %3,%7\n\tqmtc2.ni %0,%4":"+&r"(addressWord),"=j"(along),"=j"(up),"=j"(point),"=j"(height):"m"(request->along),"m"(request->up),"m"(request->point):"$3","memory");
  {unsigned int high;

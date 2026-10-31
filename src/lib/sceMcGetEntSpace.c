@@ -7,7 +7,7 @@ extern RpcCD D_00450880;
 extern McSend D_00450930;
 extern int D_00451E40[];
 extern int D_002C8354;
-extern int D_002C8350;
+extern int _mc_errno;
 void func_00243ED8(void *);
 int func_00234A70(int);
 int func_00234A40(int);
@@ -31,6 +31,6 @@ int sceMcGetEntSpace(int port, int slot, const char *path)
         func_00234A40(D_002C8354);
         return -91;
     }
-    D_002C8350 = 0x12;
+    _mc_errno = 0x12;
     return 0;
 }

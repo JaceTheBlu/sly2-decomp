@@ -8,15 +8,15 @@ struct P { char pad[0x48]; float g48; };
 extern float D_002BD8D8;
 extern char D_002BD8E0[];
 extern float D_002DDEE0;
-void *func_002564B8(void *p);
+void *__3VUF(void *p);
 void GSmooth__FfffP3SMPPf(float g, float gTarget, float dt, void *pv, float *pr);
 static __inline__ float GDistPlane(qword plane, qword pos)
 {
     U d, one;
     qword td, tone;
     float dist;
-    func_002564B8(&d);
-    func_002564B8(&one);
+    __3VUF(&d);
+    __3VUF(&one);
     __asm__("vmul.xyz %0, %2, %3\n\tvaddw.x %1, $vf0, $vf0w\n\tvadday.x $ACC, %0, %0y\n\tvmaddaz.x $ACC, %1, %0z\n\tvmsubw.x %0, %1, %2w" : "=&j"(td), "=&j"(tone) : "j"(plane), "j"(pos));
     /* "r,j"(td): the j alternative is allocation-only (keeps td a VF reg, so it is stored with sqc2 and moved with
        qmfc2 v0); the unused "i,r"(0) operand makes that alternative always need a reload, so reload picks "r".

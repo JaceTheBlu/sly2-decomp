@@ -3,7 +3,7 @@
 // vertex contacts of both sides; then every free LSG of side 0 either follows the func_001A86B8 edge path of side 1 (closest points of the
 // two edges via func_0011EA60, kind 3) or, when no side-1 LSG shares a surface with its edge, contacts the nearer endpoint against the
 // farther plane (kind 1). With no new contact and one side empty, a kind-13 contact at the shape position is added.
-// LSG / EDGE / SURF layouts and names as in Lilly's matched ClsgClipEdgeToBsp port (src/hand/func_00118668.cpp).
+// LSG / EDGE / SURF layouts and names as in Lilly's matched ClsgClipEdgeToBsp port (src/hand/ClsgClipEdgeToBsp__FP3BSPT0UxUxiP3LSG.cpp).
 // How it matched:
 //  - Separate Sly-1-style local arrays (one frame base each, shared by gcse with the call arguments); the side-1 loop indexes &aalsg[1][i].
 //  - Lilly's QwMix(VuFloat(1 - t), a, VuFloat(t), b) lerps reproduce the dead VU_FLOAT stores at 0x6900.
@@ -15,8 +15,8 @@ typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
 struct VV { qword q; VV() {} VV(const qword &v) { q = v; } operator qword() const { return q; } };
 struct SCALAR;
-extern "C" SCALAR *func_002564B8(SCALAR *);
-struct SCALAR { qword q; SCALAR() { (void)func_002564B8(this); } };
+extern "C" SCALAR *__3VUF(SCALAR *);
+struct SCALAR { qword q; SCALAR() { (void)__3VUF(this); } };
 struct SCENE;
 struct CONTACT;
 struct SPACE { char pad0[0x70]; U position; };
@@ -27,7 +27,7 @@ struct NODE { unsigned int left, right; SURF *psurf; };
 struct LSG { U apos[2], anormal[2]; float au[2]; int lsgk; SURF *apsurf[2]; EDGE *pedge; int iiposSwap; LSG *plsgNext; };
 struct XP { char pad0[0x9C]; int kind; void *first, *second; int padA8; XP *next; };
 extern "C" {
-extern U D_002A2DC0;
+extern U g_normalZ;
 int ClsgClipSoAllEdges(SCENE *, SHAPE *, SHAPE *, NODE *, int, LSG *) __asm__("ClsgClipSoAllEdges__FP2SOT0P3BSPiP3LSG");
 int ClsgClipSoBspEdges__FP2SOT0iP3BSPiP3LSG(SCENE *, SHAPE *, SHAPE *, int, NODE *, int, LSG *);
 void CategorizeAlsg(int, LSG *, int *, int *, LSG **, LSG **) __asm__("CategorizeAlsg__FiP3LSGPiT2PP3LSGT4");
@@ -159,5 +159,5 @@ extern "C" void func_001A8B50(SCENE *scene, SHAPE *a, SHAPE *b, int nodeCount, N
     next:;
     }
     if (old == *out && (!aclsg[0] || !aclsg[1]))
-        func_001A7C18(scene, a, b, a->space->position.q, 0.0f, D_002A2DC0.q, 13, 0, 0, out);
+        func_001A7C18(scene, a, b, a->space->position.q, 0.0f, g_normalZ.q, 13, 0, 0, out);
 }

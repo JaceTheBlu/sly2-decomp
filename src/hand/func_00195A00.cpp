@@ -1,6 +1,6 @@
 // func_00195A00: ported from Lilly's personal Sly 2 decomp (src/P2/jtair.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002BF750 (D_002BF750), D_002BF754 (D_002BF754), D_002BF758 (D_002BF758), D_002BF75C (D_002BF75C), D_002BF760 (D_002BF760), D_002BF764 (D_002BF764), D_002BF76C (D_002BF76C), D_002BF770 (D_002BF770), D_002BF730 (g_SheetMovementMiscJumpHorizontalSpeed), D_002BF768 (g_SheetMovementMiscTurnbuckleLaunchHorizontalSpeed), D_002DDED0 (g_clock), D_002A2DC0 (g_normalZ)
+// Globals: D_002BF750 (D_002BF750), D_002BF754 (D_002BF754), D_002BF758 (D_002BF758), D_002BF75C (D_002BF75C), D_002BF760 (D_002BF760), D_002BF764 (D_002BF764), D_002BF76C (D_002BF76C), D_002BF770 (D_002BF770), D_002BF730 (g_SheetMovementMiscJumpHorizontalSpeed), D_002BF768 (g_SheetMovementMiscTurnbuckleLaunchHorizontalSpeed), D_002DDED0 (g_clock), g_normalZ (g_normalZ)
 // 0x00195A00 SetJtAirJump (curated name): starts a flight of the given kind. n2 picks the directional clip; plo is the object the sub-state works on.
 // Every kind but the double jump (6) restarts the record (its timers, zStart, the JT's landing clue). The launch velocity comes from JtPlanLaunchVz; kinds
 // 3 / 0xE add a push along the facing when the stick is at rest, 0x11 (wall run) flattens it and adds 400 up. Then the sub-state (SetJtAirState) and the
@@ -1308,7 +1308,7 @@ static inline float GZOfQw(qword qw)
 qword JtPlanLaunchVz(JTAIR *pjtair, int nKind);
 void SetPlayerTn(STEPPLAYER *pstepplayer, TN *ptn);
 void DecomposeCylind(qword v, float *prad, float *psXY, float *pz);
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern qword D_002BF770;
 extern float D_002BF750;
 extern float D_002BF754;
@@ -1489,7 +1489,7 @@ void SetJtAirJump(JTAIR *pjtair, int nKind, int n2, LO *plo)
         case 0x11:
             if (pjtair->nState == -1)
             {
-                pjtair->pstepplayer->SetVelocity(QwAdd(QwProjectOut(velWall, D_002A2DC0), D_002BF770));
+                pjtair->pstepplayer->SetVelocity(QwAdd(QwProjectOut(velWall, g_normalZ), D_002BF770));
                 pjtair->fCanDoubleJump = 1;
             }
             SetJtAirState(pjtair, 0x16, 0);

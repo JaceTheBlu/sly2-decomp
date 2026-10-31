@@ -18,7 +18,7 @@ extern "C" M4 *func_0022CCD0(M4 *pm, struct O *pa, const M3 *basis, qword v);
 extern "C" M4 *func_0022CB90(M4 *pr, struct O *pa, const M3 *basis, qword c, qword d);
 extern "C" M4 *func_0022CC00(M4 *pm, struct O *po, qword v);
 extern "C" qword func_0022CA18(struct O *pa, const M4 *matrix);
-extern "C" qword func_0011BFF0(const M3 *rotation);
+extern "C" qword DecomposeRotateMatrixEuler__FP7MATRIX3(const M3 *rotation);
 extern "C" void func_00117120(float g0, float g1, float g2, qword q0, qword q1, qword q2, qword q3, qword *pa, qword *pb, qword *pc);
 static __inline__ void Eval(struct O *po, qword *pa, qword *pb, qword *pc)
 {
@@ -70,7 +70,7 @@ extern "C" M4 *func_0022CDC0(M4 *pr, struct O *po)
                         initial = po->data.r[0];
                         break;
                     case 5:
-                        initial = func_0011BFF0(&po->data.rotation);
+                        initial = DecomposeRotateMatrixEuler__FP7MATRIX3(&po->data.rotation);
                         break;
                     default:
                         initial = DefaultPoint();

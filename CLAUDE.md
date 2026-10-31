@@ -43,10 +43,30 @@ commit of this branch so far). Do not regenerate it on a dirty tree you have not
 | `tools/readability.py [--record]` | readability metrics; `--record` appends to `config/readability_history.csv` |
 | `tools/clean_history.py` | strip agent/lane/wave attributions from comments (already applied) |
 | `tools/sly1match.py SLY1_DIR [--eval]` | pair Sly 2 functions with Sly 1 counterparts → `config/sly1_matches.csv` |
+| `tools/resolve_names.py [--sly1 DIR] [--apply]` | give addresses to names the sources use without one (needs the executable) |
 
 ## Progress log
 
 Newest first. Each entry: what changed, how it was verified, the metrics after it.
+
+### 2026-10-31 — Game executable available; by-name symbols resolved
+
+- `disc/SCUS_973.16` provided by the owner (SHA-1 checked, git-ignored). `tools/progress.py`: 6,662/6,662.
+- `tools/resolve_names.py` reads the original `jal` / `%hi`+`%lo` target of every relocation to a name with no
+  address. 497 names are used consistently, 20 are used for several addresses (local stand-in classes `X`, `Y`,
+  `O`… reused with different meanings; two copies of `__clz_tab`). Applied:
+  - 111 `func_` addresses renamed (the name also exists in Sly 1), the other names registered as aliases, so every
+    name written in the sources now has its address checked;
+  - 46 global data names (`g_pdliFirst`, `g_heapSw`, `s_smpChase*`, vtables `_vt$4DMAS`…, SDK internals), 24 `D_`
+    names replaced by them.
+- Kept `func_001AE478` (STACKSCOPE constructor): renaming it to `__5FRAME` made local classes' inline
+  constructors, which compile to that very symbol, call themselves. objcheck caught it.
+- objcheck: a symbol is compared with its own baseline in the same source first (inline copies of a named function
+  are no longer compared with the real one).
+- `docs/NAMING_REVIEW.md`: 280 matcher-chosen names for `func_` addresses, 40 names that contradict the existing
+  name of their address, 10 names used for several addresses. To review by hand.
+
+Metrics: 538/6,136 game functions named (8.8%), 46 globals named, 2,374 `D_` left.
 
 ### 2026-10-31 — Phase 1 started: Sly 1 names
 
@@ -87,10 +107,10 @@ of 5,908 game files: 3,223 local types, 2,474 pads, 1,929 `M2C_*`, 637 m2c temps
 
 ## Next steps
 
-Needs the game executable (`disc/SCUS_973.16`, from the owner's disc) — the biggest remaining name sources:
-1. Resolve the 461 by-name callees: for each relocation to an unknown name, read the `jal` target in the original
-   code and add `NAME = 0xADDR; // type:func` (then check that every caller agrees on the address).
-2. Vtables: a Sly 1 class vtable layout names every method slot of the matching Sly 2 vtable.
+With the game executable (`disc/SCUS_973.16`; not in git, ask the owner in a new container):
+1. ~~Resolve the by-name callees~~ (done, `tools/resolve_names.py`).
+2. Vtables: the vtable addresses found by resolve_names (`_vt$…` references) and the Sly 1 class layouts name
+   method slots.
 3. Splice registration table: script names of the 373 wrappers and of the engine functions they call.
 
 Without it:

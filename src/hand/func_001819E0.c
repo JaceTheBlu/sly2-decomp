@@ -4,7 +4,7 @@ struct Q { char pad[0x20]; struct R *pr; char p1[0x3C]; struct DLE dle; };
 struct E { int a; int b; int c; int d; char p[0xC]; int x1c; float g; int x24; int x28; float h; };
 struct S { char pad[0x1C8]; int c; struct E ae[4]; struct Q *pqFirst; };
 void func_0017F6B0(struct S *p);
-void func_0011A210(struct DLE *pdle);
+void ClearDle__FP3DLE(struct DLE *pdle);
 void func_0011A220(void *pdl, void *pv);
 void func_0011A200(void *pdl);
 void func_00181A90(struct S *p, struct E *pe);
@@ -16,7 +16,7 @@ void func_001819E0(struct S *p)
     q = p->pqFirst;
     while (q) {
         struct Q *qNext = (struct Q *)q->dle.next;
-        func_0011A210(&q->dle);
+        ClearDle__FP3DLE(&q->dle);
         func_0011A220(q->pr->dl, q);
         q = qNext;
     }

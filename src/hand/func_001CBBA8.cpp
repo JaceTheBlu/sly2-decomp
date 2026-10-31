@@ -10,7 +10,7 @@ struct START {qword q;START(const U&source,float zero,float*lowOut,float*highOut
  q=point;*lowOut=low;*highOut=high;
 }};struct M3 {qword a,b,c;};struct S;
 extern float D_002C1EC4,D_002C1EC8;
-extern qword D_002A2DC0,D_002A2DA0;
+extern qword g_normalZ,D_002A2DA0;
 extern "C" {
 float func_001E8008(S*,float,float);void func_001E6F10(S*,qword*,qword*,float);
 float GRandInRange__Fff(float,float);qword func_0011E1A0(float,float,float);
@@ -52,7 +52,7 @@ void func_001CBBA8(S*p,qword*posOut,qword*dirOut,float g){
  S*sampleReceiver;float sampleTime;SamplerArguments(p,x,&sampleReceiver,&sampleTime);
  func_001E6F10(sampleReceiver,&pos.q,&basis.c,sampleTime);
  const qword*fallbackAddress;float epsilon;
- qword cross=CrossAndFallbackAddress(basis.c,D_002A2DC0,&fallbackAddress,&epsilon);
+ qword cross=CrossAndFallbackAddress(basis.c,g_normalZ,&fallbackAddress,&epsilon);
  qword right=NormalizeOr(cross,fallbackAddress,epsilon);
  basis.a=CrossKeepSecond(right,&basis.c);basis.b=right;
  float r=GRandInRange__Fff(-1.0f,1.0f);register float zero __asm__("$f22")=0.0f;float ar=__builtin_fabsf(r);

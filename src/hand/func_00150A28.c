@@ -26,7 +26,7 @@ void func_001FB018(struct SND *p);
 qword func_0011F088(qword a, qword b, float g, void *p, int n);
 void func_0011B628(M3 *pm, qword v);
 void func_0011C950(M3 *a, M3 *b, void *p, M3 *out, int n, float g);
-qword func_0011BFF0(M3 *pm);
+qword DecomposeRotateMatrixEuler__FP7MATRIX3(M3 *pm);
 float func_0011D2D0(void *p, int n, float a, float b, float c);
 qword *__as__6VECTORG9VU_VECTOR(qword *p, qword v);
 void func_0014E168(struct CM *p, M4 *m);
@@ -80,7 +80,7 @@ void func_00150A28(struct X *p)
         func_0011B628(&m90, p->q90);
         m30 = m90;
         func_0011C950(&m0, &m30, D_002BD9D8, &m60, 0, D_002DDED0.dt);
-        p->q60 = func_0011BFF0(&m60);
+        p->q60 = DecomposeRotateMatrixEuler__FP7MATRIX3(&m60);
         p->g70 = func_0011D2D0(D_002BD9E8, 0, p->g70, p->gA0, D_002DDED0.dt);
         {
         M4 *pm4 = &m4;

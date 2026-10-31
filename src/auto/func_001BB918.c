@@ -2,7 +2,7 @@
 M2C_UNK CopyAb__FPvT0Ui(s32 *, s32, s32);           /* extern */
 M2C_UNK func_001573C0(void *, s32, M2C_UNK, s32);   /* extern */
 M2C_UNK __4GIFS(void *, s64);                 /* extern */
-s32 *func_001AE318(s32 *, s32, s32, s32);           /* extern */
+s32 *PvAllocStackImpl__FP7SWALLOC(s32 *, s32, s32, s32);           /* extern */
 extern f32 D_002A76D0;
 extern f32 D_002A76D4;
 extern f32 D_002C0AB0;
@@ -14,7 +14,7 @@ extern f32 D_002C0AC4;
 extern M2C_UNK D_002C0BF8;
 extern M2C_UNK D_002C1F00;
 extern M2C_UNK D_002C1F10;
-extern s32 *D_002DD2FC;
+extern s32 *g_pdliFirst;
 extern M2C_UNK D_003DD020;
 extern M2C_UNK D_003DD4BC;
 extern s32 D_003E1A40;

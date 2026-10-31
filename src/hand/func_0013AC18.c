@@ -12,7 +12,7 @@ extern struct G g_sw;
 extern struct { struct SO *p; } D_003E13B4;
 void func_00133A38(struct G *pg, struct X *pa, struct X *pb, int n);
 qword func_001A62E8(void *p);
-int func_0014C748(qword a, qword b, qword c, int n, struct HIT *phit, float g);
+int ClsgClipEdgeToSphere__FUxfUxUxiP3LSG(qword a, qword b, qword c, int n, struct HIT *phit, float g);
 void func_0013AC18(struct P *p)
 {
     int i;
@@ -44,7 +44,7 @@ void func_0013AC18(struct P *p)
             qword a = func_001A62E8(pso);
             struct X *px = plo->px;
             qword b = p->pc->q50;
-            if (func_0014C748(a, b, func_001A62E8(p), 1, &hit, px->g30)) {
+            if (ClsgClipEdgeToSphere__FUxfUxUxiP3LSG(a, b, func_001A62E8(p), 1, &hit, px->g30)) {
                 struct E *pe;
                 qword d, t;
                 register qword vp __asm__("vf2");

@@ -13,7 +13,7 @@ float GRandInRange__Fff(float a, float b);
 struct O *func_00205438(void *p, int n);
 void func_0020A9A8(void *p, int n);
 qword func_001A62E8(int p);
-void func_002562A8(struct X *x);
+void __1M(struct X *x);
 void func_0017DD38(void *p, struct X *x);
 int func_001C0D70(qword v, int n);
 void func_00154038(void *p, int a, int b);
@@ -58,7 +58,7 @@ void func_00176458(struct S *p, int n) {
             o->n38 = 0x1C;
             v1 = func_001A62E8(p->n30);
             v2 = func_001A62E8(p->n30);
-            func_002562A8(&x);
+            __1M(&x);
             x.v = v2;
             func_0017DD38(o, &x);
             o->nA8 = p->n30;

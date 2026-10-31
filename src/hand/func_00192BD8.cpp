@@ -67,9 +67,9 @@ extern CLOCK D_002DDED0;          // g_clock
 extern ACTOR *D_002E1E40;         // the player
 extern ACTOR *D_002F7900;
 extern MANAGER g_cm;
-extern qword D_002A2DA0, D_002A2DC0, D_002A2DD0, D_002BF650;
+extern qword D_002A2DA0, g_normalZ, D_002A2DD0, D_002BF650;
 extern float D_002BF63C, D_002BF640;
-int func_00132B10(void *, int);
+int FIsBasicDerivedFrom__FP5BASIC3CID(void *, int);
 qword func_001A62E8(void *);
 M3 *func_001A6318(void *);
 void func_001E6F60(SOURCE *, qword, void *, void *, void *, float *, float *);
@@ -190,7 +190,7 @@ extern "C" void func_00192BD8(CONTEXT *p, int step)
         p->pactor->x1038 = -1;
         break;
     case -1:
-        if (p->focus && func_00132B10(p->focus, 10)) {
+        if (p->focus && FIsBasicDerivedFrom__FP5BASIC3CID(p->focus, 10)) {
             SOURCE *source = p->focus;
             func_001E6F60(source, func_001A62E8(p->pactor), 0, 0, 0, &p->param, &p->value);
         }
@@ -251,7 +251,7 @@ extern "C" void func_00192BD8(CONTEXT *p, int step)
             if (source->other) {
                 qword pos = func_001A62E8(source->other);
                 SetVector(p->pactor, 29, Sub(pos, p->pactor->posOffset));
-                p->pactor->motion = AddScaled(pos, D_002A2DC0, VuFloat(p->pactor->height));
+                p->pactor->motion = AddScaled(pos, g_normalZ, VuFloat(p->pactor->height));
                 func_002046B0(p->pactor, func_001A6318(source->other)->row[0]);
                 SetPointer(p->pactor, 30, p->pactor->local);
                 SetVector(p->pactor, 35, D_002A2DD0);
@@ -406,7 +406,7 @@ extern "C" void func_00192BD8(CONTEXT *p, int step)
         case 0:
             clip = p->clip170;
             if (!p->pactor->focus) {
-                if (func_00132B10(p->focus, 12)) {
+                if (FIsBasicDerivedFrom__FP5BASIC3CID(p->focus, 12)) {
                     SOURCE *source = p->focus;
                     if (source->actor)
                         func_00140C88(p->pactor, source->actor);
@@ -415,7 +415,7 @@ extern "C" void func_00192BD8(CONTEXT *p, int step)
                         p->aux->target = source;
                         func_00140C88(p->pactor, p->aux);
                     }
-                } else if (func_00132B10(p->focus, 34)) {
+                } else if (FIsBasicDerivedFrom__FP5BASIC3CID(p->focus, 34)) {
                     SOURCE *source = p->focus;
                     if (source->owner)
                         func_00140C88(p->pactor, source->owner);
@@ -427,7 +427,7 @@ extern "C" void func_00192BD8(CONTEXT *p, int step)
                         p->aux->value = source->parameter;
                         func_00140C88(p->pactor, p->aux);
                     }
-                } else if (func_00132B10(p->focus, 38)) {
+                } else if (FIsBasicDerivedFrom__FP5BASIC3CID(p->focus, 38)) {
                     SOURCE *source = p->focus;
                     if (source->owner)
                         func_00140C88(p->pactor, source->owner);
@@ -516,7 +516,7 @@ extern "C" void func_00192BD8(CONTEXT *p, int step)
         func_001305B8(clip, p->pactor, blend, speed, flags, &p->pactor->animation);
         func_001F1448(script, p->pactor, -1, flags, &p->pactor->component);
         Notify(p->pactor, 90);
-        if (func_00132B10(p->pactor, 53))
+        if (FIsBasicDerivedFrom__FP5BASIC3CID(p->pactor, 53))
             func_0018C120(p->pactor, special);
     }
 }

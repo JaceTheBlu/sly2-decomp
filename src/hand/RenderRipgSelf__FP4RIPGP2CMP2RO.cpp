@@ -1,6 +1,6 @@
 struct DL { void *head; void *tail; int ibDle; };
 struct DLI { DL *m_pdl; void **m_ppv; int m_ibDle; DLI *m_pdliNext; };
-extern DLI *D_002DD2FC;
+extern DLI *g_pdliFirst;
 struct CLOCK { float t, dt; };
 extern CLOCK D_002DDED0;
 struct VTE { short d; short pad; void (*pf)(); };
@@ -13,8 +13,8 @@ static inline void InitDli(DLI *pdli, DL *pdl)
     pdli->m_pdl = pdl;
     pdli->m_ppv = (void **)pdl;
     pdli->m_ibDle = pdl->ibDle;
-    pdli->m_pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->m_pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static inline void *PvNextDli(DLI *pdli)
 {
@@ -31,5 +31,5 @@ void RenderRipgSelf(RIPG *pripg, CM *pcm, RO *pro)
         if (D_002DDED0.t <= prip->tStart) continue;
             ((void (*)(void *))prip->vt[6].pf)((char *)prip + prip->vt[6].d);
     }
-    D_002DD2FC = dli.m_pdliNext;
+    g_pdliFirst = dli.m_pdliNext;
 }

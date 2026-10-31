@@ -11,7 +11,7 @@ int func_00209098(void *p);
 int func_00172658(struct S *p);
 qword func_00172760(struct S *p);
 qword func_001A62E8(void *p);
-void func_002562A8(struct X *x);
+void __1M(struct X *x);
 void func_0017DD38(void *p, struct X *x);
 int func_0017DCB8(void *p);
 int func_0017DCF8(void *p);
@@ -40,7 +40,7 @@ void func_00172018(struct S *p) {
                 } else {
                     qword v = func_00172760(p);
                     struct X x;
-                    func_002562A8(&x);
+                    __1M(&x);
                     x.v = v;
                     func_0017DD38(p->p18, &x);
                 }

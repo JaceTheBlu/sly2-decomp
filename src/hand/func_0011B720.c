@@ -1,8 +1,8 @@
 typedef int qword __attribute__((mode(TI)));
 typedef struct { qword r[3]; } M3;
 extern qword D_002A2DB0;
-extern qword D_002A2DC0;
-void func_0011B500(M3 *pm, float g, qword axis);
+extern qword g_normalZ;
+void LoadRotateMatrixRad__FfUx(M3 *pm, float g, qword axis);
 void *func_0023320C(void *pvDst, void *pvSrc, int cb);
 static inline M3 MulM3(M3 *pa, M3 *pb)
 {
@@ -20,8 +20,8 @@ M3 *func_0011B720(M3 *pm, float g1, float g2)
     M3 c;
     M3 a;
     M3 b;
-    func_0011B500(&a, g1, D_002A2DC0);
-    func_0011B500(&b, -g2, D_002A2DB0);
+    LoadRotateMatrixRad__FfUx(&a, g1, g_normalZ);
+    LoadRotateMatrixRad__FfUx(&b, -g2, D_002A2DB0);
     c = MulM3(&a, &b);
     func_0023320C(pm, &c, sizeof(M3));
     return pm;

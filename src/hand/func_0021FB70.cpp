@@ -50,7 +50,7 @@ extern CLQ D_002C40F0;                         // the launch elevation over the 
 extern float D_002C40E4;                       // 1.35: tPredict scale with power-up 0x24
 extern float D_002C4100,D_002C4104;            // 3.0 / 2.0: flight time / blend rate limits per second
 extern float D_002A96A0;                       // FLT_MAX
-extern V D_002A2DC0;                           // (0, 0, 1)
+extern V g_normalZ;                           // (0, 0, 1)
 extern "C" {
  qword func_001A6F00(LO *,LO *,qword);         // ConvertLoPos
  qword func_001A62E8(LO *);                    // PosLoWorld
@@ -66,7 +66,7 @@ extern "C" {
  float func_002458F0(float,float);
  float func_00204740(LO *);                    // JtGetFacingAngle
  float RadNormalize__Ff(float);                   // RadNormalize
- void func_001384C0(ASEGBL *);
+ void ReblendAsegbl__FP6ASEGBL(ASEGBL *);
 }
 // A vector in a VU0 register, passed by value
 struct VU_VECTOR {qword q;VU_VECTOR(){}VU_VECTOR(qword qw){q=qw;}};
@@ -170,7 +170,7 @@ extern "C" void func_0021FB70(JTTHROW *pjtthrow,int fUpdateBlends)
     V *pposCur=ppos++;
     qword pos=pposCur->q;
     qword dpos=QwSub(pos,posBefore);
-    func_0011B830(&matRot,dpos,D_002A2DC0.q);
+    func_0011B830(&matRot,dpos,g_normalZ.q);
     M4 *pmat=&mat;
     __as__6VECTORG9VU_VECTOR(&mat.position,pos);
     pmat->basis=matRot;
@@ -210,8 +210,8 @@ extern "C" void func_0021FB70(JTTHROW *pjtthrow,int fUpdateBlends)
  pjtthrow->ablB[1].gWeight=uTurn*uNear;
  pjtthrow->ablB[2].gWeight=uTurnOpp*uFar;
  pjtthrow->ablB[3].gWeight=uTurn*uFar;
- func_001384C0(pjtthrow->pasegblB);
+ ReblendAsegbl__FP6ASEGBL(pjtthrow->pasegblB);
  pjtthrow->ablC[0].gWeight=uNear;
  pjtthrow->ablC[1].gWeight=uFar;
- func_001384C0(pjtthrow->pasegblC);
+ ReblendAsegbl__FP6ASEGBL(pjtthrow->pasegblC);
 }

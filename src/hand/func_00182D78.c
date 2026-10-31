@@ -5,7 +5,7 @@ extern qword func_001A62E8(void *p);
 extern qword func_0011E208(float a, float b, float c);
 extern float GRandInRange__Fff(float a, float b);
 extern float D_002BE8B0;
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 static __inline__ qword VAdd(qword a, qword b) { qword r; __asm__("vadd.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 void func_00182D78(struct O *p, qword *pv, qword *pdv)
 {
@@ -15,5 +15,5 @@ void func_00182D78(struct O *p, qword *pv, qword *pdv)
     float gTilt = __builtin_fabsf(t) * t * 1.5707964f;
     float gR = GRandInRange__Fff(0.0f, D_002BE8B0);
     *pv = VAdd(func_001A62E8(po), func_0011E208(gPan, gTilt, gR));
-    *pdv = D_002A2DC0;
+    *pdv = g_normalZ;
 }

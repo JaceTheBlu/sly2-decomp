@@ -6,7 +6,7 @@ struct G;
 extern struct G g_sw;
 extern char D_002DEB30[];
 extern char g_cm[];
-struct O *func_0015E938(struct G *pg, int k, int id, struct S *p);
+struct O *PloFindSwObject__FP2SWi3OIDP2LO(struct G *pg, int k, int id, struct S *p);
 void func_0020FF70(struct G *pg, int a, void *b, struct S *p, int c);
 void func_00161F48(void *a, int b, void *c, struct S *p);
 int func_0015E9C8(struct G *pg, int a, int b, int c, int n, struct O **apo);
@@ -18,9 +18,9 @@ void func_00228750(struct S *p)
     int i, j;
     for (i = 0; i < p->c; i++) {
         struct PR *ppr = &p->apr[i];
-        struct O *po = func_0015E938(&g_sw, 4, ppr->a, p);
+        struct O *po = PloFindSwObject__FP2SWi3OIDP2LO(&g_sw, 4, ppr->a, p);
         if (po) {
-            struct O *po2 = func_0015E938(&g_sw, 4, ppr->b, p);
+            struct O *po2 = PloFindSwObject__FP2SWi3OIDP2LO(&g_sw, 4, ppr->b, p);
             if (po2) po->vt[38].pfn((char *)po + po->vt[38].d, po2);
         }
     }

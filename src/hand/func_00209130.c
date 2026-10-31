@@ -11,9 +11,9 @@ struct E { int kind; union PAYLOAD value; int n8, nC; };
 extern char g_sw[];
 void func_0020BD88(struct H *, void *);
 void func_0020C7E0(struct DIRECTION_STATE *, void *);
-void *func_0015E938(void *, int, int, void *);
+void *PloFindSwObject__FP2SWi3OIDP2LO(void *, int, int, void *);
 int func_00132EA0(void *);
-struct MARKER *func_0012F938(void *, int);
+struct MARKER *PeaFindAsegLabel__FP4ASEG3OID(void *, int);
 struct H *func_0020C010(int);
 void func_0020BD78(struct H *);
 
@@ -29,14 +29,14 @@ void func_00209130(struct E *e, void *context)
         func_0020BD88(e->value.curvature, context);
         return;
     }
-    resource = func_0015E938(g_sw, 4, e->value.oid, context);
+    resource = PloFindSwObject__FP2SWi3OIDP2LO(g_sw, 4, e->value.oid, context);
     if (!resource) {
         e->kind = -1;
         return;
     }
     switch (func_00132EA0(resource)) {
     case 0x6D:
-        if (func_0012F938(resource, 0x22)) {
+        if (PeaFindAsegLabel__FP4ASEG3OID(resource, 0x22)) {
             e->kind = 2;
             e->value.curvature = func_0020C010(0x40);
             func_0020BD78(e->value.curvature);

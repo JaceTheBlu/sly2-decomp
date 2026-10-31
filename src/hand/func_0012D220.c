@@ -24,7 +24,7 @@ extern float D_002A45A8;
 struct CLOCK { float t; int dt; };
 extern struct CLOCK D_002DDED0;
 extern int D_002DDED4;  /* g_clock.dt */
-void *func_0015E938(void *pg, int k, int n, void *pv);
+void *PloFindSwObject__FP2SWi3OIDP2LO(void *pg, int k, int n, void *pv);
 void *func_001C4AF8(void *pg, qword pos);
 qword func_001A62E8(void *po);
 void func_002301D0(void *a, struct X *b);
@@ -55,7 +55,7 @@ void func_0012D220(struct P *p)
     qword vel;
 
     if (p->x70 == 0 && p->x6C != -1)
-        p->x70 = func_0015E938(g_sw, 0x104, p->x6C, p->x4);
+        p->x70 = PloFindSwObject__FP2SWi3OIDP2LO(g_sw, 0x104, p->x6C, p->x4);
     {
         struct X *x8 = p->x8;
         int z;

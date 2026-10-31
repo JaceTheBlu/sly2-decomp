@@ -1,7 +1,7 @@
 typedef int qword __attribute__((mode(TI)));
 typedef union {qword q;float f[4];int i[4];} V;
 struct P {char pad[0x208];int enabled;};
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 void func_002057E8(struct P*,V*);
 int func_0011EBB0(qword,qword,qword,qword,qword,float*,float*);
 static inline qword Sub(const qword*a,const qword*b){qword av=*a,bv=*b;register qword r __asm__("vf3");__asm__("vsub.xyzw %0,%1,%2":"=&j"(r):"j"(av),"j"(bv));return r;}
@@ -26,7 +26,7 @@ int func_00205670(struct P*p,qword from,qword to,qword*output)
  if(!p->enabled)return 0;
  func_002057E8(p,tri);
  d.q=Sub(&to,&from);
- length=Normal(&d,&D_002A2DC0);
+ length=Normal(&d,&g_normalZ);
  distanceOut=&distance;third=&tri[2];t=tri;end=tri+6;
  do{
    int hit=func_0011EBB0(d.q,from,*(qword*)((char*)third-32),*(qword*)((char*)third-16),third->q,distanceOut,0);

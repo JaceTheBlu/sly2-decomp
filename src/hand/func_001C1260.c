@@ -6,9 +6,9 @@ struct B { int c; int *p; };
 struct S { char pad[0x10]; int c10; int p14[2]; struct B *x1C; int c20; struct Q **a24; };
 int func_001AE478(struct H *p);
 void _$_18CBinaryInputStream(struct H *p, int n);
-int *func_001AE378(struct A *pa);
+int *PvAllocStackClearImpl__FP7SWALLOC(struct A *pa);
 void *PvAllocSwImpl__Fi(struct A *pa);
-static inline int *Alloc1(struct A *pa) { pa->align = 0x10; return func_001AE378(pa); }
+static inline int *Alloc1(struct A *pa) { pa->align = 0x10; return PvAllocStackClearImpl__FP7SWALLOC(pa); }
 static inline void *Alloc2(struct A *pa) { pa->align = 0x10; return PvAllocSwImpl__Fi(pa); }
 void func_001C1260(struct S *p)
 {

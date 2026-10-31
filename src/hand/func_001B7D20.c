@@ -8,7 +8,7 @@ struct P { char pad[0x13F0]; struct O *x13F0; int a13F4[4]; int x1404; int x1408
 void func_0012E460(int *p);
 void func_002303A0(struct X *x, int a, int b);
 void func_001F6860(struct X *x, int a);
-void func_001A58D0(struct X *x, int a, int b);
+void SetLoParent__FP2LOP2SOi(struct X *x, int a, int b);
 void func_00134320(void *g, struct P *p);
 void func_001B7D20(struct P *p)
 {
@@ -33,7 +33,7 @@ void func_001B7D20(struct P *p)
     func_002303A0(x, x->x58, p->x1404);
     func_002303A0(x, x->x5C, p->x1408);
     func_001F6860(x, 0);
-    func_001A58D0(x, 0, 0xF);
+    SetLoParent__FP2LOP2SOi(x, 0, 0xF);
     p->x1430 = x;
     p->f1434 = D_002DDED0.t;
     func_00134320(g_sw, p);

@@ -1,6 +1,6 @@
 struct ALLOCREQ { int cb; int cbAlign; };
 struct A { int f0; int cMax; int c; int *a; };
-void *func_001AE318(struct ALLOCREQ *);
+void *PvAllocStackImpl__FP7SWALLOC(struct ALLOCREQ *);
 void func_001AE5A0(void *, void *, int);
 static inline int Max(int a, int b) { return a < b ? b : a; }
 void func_0013F8A8(struct A *pa, int cAdd, int *aAdd) {
@@ -13,7 +13,7 @@ void func_0013F8A8(struct A *pa, int cAdd, int *aAdd) {
         } while (cMax < pa->c + cAdd);
         req.cb = cMax * 4;
         req.cbAlign = 0x10;
-        a = func_001AE318(&req);
+        a = PvAllocStackImpl__FP7SWALLOC(&req);
         func_001AE5A0(a, pa->a, pa->c * 4);
         pa->cMax = cMax;
         pa->a = a;

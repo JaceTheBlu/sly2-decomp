@@ -21,17 +21,17 @@ struct FRAME { int x[4]; };
 struct WORLD;
 extern CAM g_cm;
 extern int D_002C4490;
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern WORLD g_sw;
 extern "C" {
 qword func_001A62E8(O *);
 void func_00119308(UQ *, qword, qword, qword);
 void func_00119390(UQ *, qword, qword);
 UQ *func_002564C0(UQ *);
-UQ *func_002564B8(UQ *);
+UQ *__3VUF(UQ *);
 FRAME *func_001AE478(FRAME *);
 void _$_18CBinaryInputStream(FRAME *, int);
-void *func_001AE318(REQ *);
+void *PvAllocStackImpl__FP7SWALLOC(REQ *);
 int func_0014F030(void *, O *);
 void func_0020FAA0(WORLD *, qword, qword, int (*)(void *, O *), void *, int *, O ***);
 int func_00118D08(NODE *, NODE *, int, UQ *, int *, FACE ***);
@@ -75,8 +75,8 @@ static inline float LenXY(qword v)
 static inline float PlaneDistA(UQ &r, UQ &one, qword plane, qword pos)
 {
     qword g, o;
-    func_002564B8(&r);
-    func_002564B8(&one);
+    __3VUF(&r);
+    __3VUF(&one);
     __asm__("vmul.xyz %0,%2,%3\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddaz.x ACC,%1,%0z\n\tvmsubw.x %0,%1,%2w"
             : "=j"(g), "=j"(o) : "j"(plane), "j"(pos));
     float f = FG(g);
@@ -88,8 +88,8 @@ static inline float PlaneDistA(UQ &r, UQ &one, qword plane, qword pos)
 static inline float PlaneDistB(UQ &r, UQ &one, qword plane, qword pos)
 {
     qword g, o;
-    func_002564B8(&r);
-    func_002564B8(&one);
+    __3VUF(&r);
+    __3VUF(&one);
     __asm__("vmul.xyz %0,%2,%3\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddaz.x ACC,%1,%0z\n\tvmsubw.x %0,%1,%2w"
             : "=j"(g), "=j"(o) : "j"(plane), "j"(pos));
     float f = FQ(g);
@@ -102,8 +102,8 @@ static inline float PlaneDistB(UQ &r, UQ &one, qword plane, qword pos)
 static inline float PlaneDistS(UQ &r, UQ &one, qword plane, qword pos)
 {
     qword g, o;
-    func_002564B8(&r);
-    func_002564B8(&one);
+    __3VUF(&r);
+    __3VUF(&one);
     __asm__("vmul.xyz %0,%2,%3\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddaz.x ACC,%1,%0z\n\tvmsubw.x %0,%1,%2w"
             : "=j"(g), "=j"(o) : "j"(plane), "j"(pos));
     float f = FQ(g);
@@ -159,7 +159,7 @@ extern "C" void func_0022A220(O *po)
     po->dz = 0.0f;
 
     corner[0].q = posSrc;
-    qword up = D_002A2DC0;
+    qword up = g_normalZ;
     qword k = QI(D_002C4490);
     // both corners first, then the stores: k and c2 die at their stores (sched1 issues them first, k before c2)
     qword v1 = AddUpU(posSrc, up, k);
@@ -190,10 +190,10 @@ extern "C" void func_0022A220(O *po)
     REQ *preq = (REQ *)&tmp;
     preq->cb = 0x10000;
     preq->align = 16;
-    apface = (FACE **)func_001AE318(preq);
+    apface = (FACE **)PvAllocStackImpl__FP7SWALLOC(preq);
     qword k2 = QI(D_002C4490);
     tmp.q = k2;
-    func_0020FAA0(&g_sw, Min(posCam, posSrc), AddUp(Max(posCam, posSrc), D_002A2DC0, k2),
+    func_0020FAA0(&g_sw, Min(posCam, posSrc), AddUp(Max(posCam, posSrc), g_normalZ, k2),
                   func_0014F030, 0, &cpso, &apso);
     qword dpos = Sub(posSrc, posCam);
     int nso = cpso;

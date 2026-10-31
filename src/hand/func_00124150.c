@@ -3,7 +3,7 @@ typedef struct LO { char pad[0xC]; struct LO *pc; char pad2[0x2C]; void *pv; } L
 typedef struct G { char pad[0x3F0C]; void *pv; } G;
 extern G g_sw;
 void *func_0015E958(G *pg, int k, int a, LO *b, void *c);
-void func_00129A10(CRef *pref, void *p);
+void __as__4CRefPv(CRef *pref, void *p);
 CRef *func_001291A8(CRef *pref, CRef *prefSrc);
 void func_00129EC8(CRef *pref);
 CRef *func_00124150(CRef *ret, void *pbasic, CRef *aref)
@@ -23,7 +23,7 @@ CRef *func_00124150(CRef *ret, void *pbasic, CRef *aref)
         G *pg = &g_sw;
         int k = b ? 1 : 5;
         int a = aref[0].m_tag;
-        func_00129A10(&ref, func_0015E958(pg, k, a, b, plo ? plo->pv : pg->pv));
+        __as__4CRefPv(&ref, func_0015E958(pg, k, a, b, plo ? plo->pv : pg->pv));
     }
     func_001291A8(ret, &ref);
     func_00129EC8(&ref);

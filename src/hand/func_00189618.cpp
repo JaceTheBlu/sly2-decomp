@@ -1,6 +1,6 @@
 // func_00189618: ported from Lilly's personal Sly 2 decomp (src/P2/jtlean.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002BF2D0 (D_002BF2D0), D_002BF2D4 (D_002BF2D4), D_002BF2D8 (D_002BF2D8), D_002BF2DC (D_002BF2DC), D_002BF2E0 (D_002BF2E0), D_002BF300 (D_002BF300), D_002BF310 (D_002BF310), D_002BF320 (D_002BF320), D_002BF330 (D_002BF330), D_002DDED0 (g_clock), D_002BBB60 (g_lmZeroOne), D_002A2DC0 (g_normalZ), D_002A2DD0 (g_qwZero)
+// Globals: D_002BF2D0 (D_002BF2D0), D_002BF2D4 (D_002BF2D4), D_002BF2D8 (D_002BF2D8), D_002BF2DC (D_002BF2DC), D_002BF2E0 (D_002BF2E0), D_002BF300 (D_002BF300), D_002BF310 (D_002BF310), D_002BF320 (D_002BF320), D_002BF330 (D_002BF330), D_002DDED0 (g_clock), D_002BBB60 (g_lmZeroOne), g_normalZ (g_normalZ), D_002A2DD0 (g_qwZero)
 // 0x00189618 UpdateJtLean__FP2JT  (our name; was func_00189618)
 // The last step of the hero's per-frame update (JT::VUnk15). The three actuators at JT+0x19E4 / 0x19E8 / 0x19EC hold the lean offset of his body.
 //  - nothing happens before JT::VUnk14 made them, or while they are not in their owner's chain; in the look mode they go back to zero;
@@ -1520,7 +1520,7 @@ static inline qword QwCross(qword a, qword b)
 }
 qword func_0022D348(XF *pxfFrom, XF *pxfTo, qword qwPos);
 extern "C" float SProjectVector(qword qwVec, qword qwOnto, qword *pqwAlong, qword *pqwAcross);
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern float D_002BF2D0;
 extern float D_002BF2D4;
 extern float D_002BF2D8;
@@ -1638,7 +1638,7 @@ void UpdateJtLean(JT *pjt)
                     if (pjt->jtgrab.pasegblC)
                     {
                         VECTOR4 vecAcross;
-                        *(qword *)&vecAcross = QwNormalizeDot(QwCross(D_002A2DC0, *(qword *)&vecDir));
+                        *(qword *)&vecAcross = QwNormalizeDot(QwCross(g_normalZ, *(qword *)&vecDir));
                         float gAcross = SProjectVector(*(qword *)&vecDv, *(qword *)&vecAcross, 0, (qword *)&vecDv);
                         float g = GLimitG(gAcross / D_002BF2D4, -1.0f, 1.0f);
                         if (pjt->jtgrab.fFlip)

@@ -8,7 +8,7 @@ extern Camera g_cm;
 extern "C" {
 qword func_001A62E8(Actor *);
 int func_0014F850(Camera *,qword,qword);
-void func_0011EF08(qword,float *,float *,float *);
+void DecomposeCylind__FUxPfN21(qword,float *,float *,float *);
 float func_0020A690(P *);
 float RadNormalize__Ff(float);
 }
@@ -41,14 +41,14 @@ extern "C" int func_0020A818(P*p,Actor*a)
         PlaneArguments(&threshold,&point,&scalar,0.0f,&camera->position,&position0.q);
         if(!func_0014F850(camera,point,threshold))goto fail;
         qword other;other=func_001A62E8(p->target);
-        func_0011EF08(Sub(position0.q,other),&angle[0],0,0);
+        DecomposeCylind__FUxPfN21(Sub(position0.q,other),&angle[0],0,0);
         if(p->tolerance<__builtin_fabsf(RadNormalize__Ff(angle[0]-func_0020A690(p)))){fail:return 0;}
         return 1;
     }
     case 1:{
         position1.q=func_001A62E8(a);
         qword other;other=func_001A62E8(p->target);
-        func_0011EF08(Sub(position1.q,other),&angle[1],0,0);
+        DecomposeCylind__FUxPfN21(Sub(position1.q,other),&angle[1],0,0);
         if(p->tolerance<__builtin_fabsf(RadNormalize__Ff(angle[1]-func_0020A690(p))))return 0;
         return 1;
     }

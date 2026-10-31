@@ -7,7 +7,7 @@ extern RpcCD D_00450880;
 extern int D_00450900[];
 extern int D_00451E40[];
 extern int D_002C8354;
-extern int D_002C8350;
+extern int _mc_errno;
 void func_00243ED8(void *);
 int func_00234A70(int);
 int func_00234A40(int);
@@ -21,7 +21,7 @@ int sceMcFormat(int port, int slot)
     D_00450900[1] = port;
     D_00450900[2] = slot;
     if (func_00237288(&D_00450880, 0x10, 1, D_00450900, 0x30, D_00451E40, 4, func_00243ED8, 0) == 0) {
-        D_002C8350 = 0x10;
+        _mc_errno = 0x10;
         return 0;
     }
     func_00234A40(D_002C8354);

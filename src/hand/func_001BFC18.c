@@ -3,10 +3,10 @@ struct CTX { int a[4]; };
 struct REQ { int cb; int align; };
 void func_001AE478(struct CTX *c);
 void _$_18CBinaryInputStream(struct CTX *c, int n);
-void *func_001AE318(struct REQ *r);
+void *PvAllocStackImpl__FP7SWALLOC(struct REQ *r);
 void func_001AE5A0(void *dst, void *src, int cb);
 int func_001BF900(void *ctx, qword a, qword b, int n);
-static __inline__ void *PvAllocReq(struct REQ *preq, int cb, int nKind) { preq->cb = cb; preq->align = nKind; return func_001AE318(preq); }
+static __inline__ void *PvAllocReq(struct REQ *preq, int cb, int nKind) { preq->cb = cb; preq->align = nKind; return PvAllocStackImpl__FP7SWALLOC(preq); }
 void func_001BFC18(void *ctx, int *pc, qword **ap)
 {
     struct CTX c;

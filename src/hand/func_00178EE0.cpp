@@ -20,7 +20,7 @@ extern CLQ D_002BE6A0;
 extern LM D_002BBB60;
 extern float D_002BE694, D_002BE6B0;
 extern CLOCK D_002DDED0;
-extern qword D_002A2DC0, D_002A2DD0;
+extern qword g_normalZ, D_002A2DD0;
 void func_001789F8(P *);
 qword func_001A62E8(ACTOR *);
 MATRIX3 *func_001A6318(ACTOR *);
@@ -146,7 +146,7 @@ extern "C" void func_00178EE0(P *p)
     if (p->mode < 2)
     {
         qword pos = func_001A62E8(p->actor);
-        qword dpos = QwProjectOut(QwSub(p->target, pos), D_002A2DC0);
+        qword dpos = QwProjectOut(QwSub(p->target, pos), g_normalZ);
         float g = GEvaluateClqLm(&D_002BE6A0, &D_002BBB60, GXOfQw(QwLengthXY(dpos)));
         CHOICE *pchoice = p->driver->choice;
         switch (pchoice->kind)

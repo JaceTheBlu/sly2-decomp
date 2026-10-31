@@ -19,7 +19,7 @@ void func_001623D0(struct S *p, int n, int c, int a, int b);
 void func_002581C0(CRef *pref, void *a, void *b);
 void func_00129EC8(CRef *pref);
 void *func_001D7E80(void *p, void *q, void *r);
-void *func_0015E938(void *pg, int kind, int oid, void *owner);
+void *PloFindSwObject__FP2SWi3OIDP2LO(void *pg, int kind, int oid, void *owner);
 void func_00162780(struct S *p)
 {
     CRef ref;
@@ -47,6 +47,6 @@ void func_00162780(struct S *p)
     }
     p->fa8 = func_001D7E80(g_sw.m3a18, &p->fe8, D_003D4A60);
     if (p->fac != -1)
-        p->fb8 = func_0015E938(&g_sw, 0x405, p->fac, 0);
-    p->fbc = func_0015E938(&g_sw, 0x405, 0x379, 0);
+        p->fb8 = PloFindSwObject__FP2SWi3OIDP2LO(&g_sw, 0x405, p->fac, 0);
+    p->fbc = PloFindSwObject__FP2SWi3OIDP2LO(&g_sw, 0x405, 0x379, 0);
 }

@@ -7,9 +7,9 @@ struct P { char pad[0x24]; struct G *pg; int n28; int n2C; struct ANIMATION *n30
 int func_001F0638(struct P *);
 struct A *func_001F0CF0(struct G *, int, int, int);
 struct A *func_001F0B80(struct G *, int, int, int, int);
-void func_0012F9B8(struct T *, int, float, float, int, struct ANIMATION **);
+void ApplyAseg__FP4ASEGP3ALOffiPP5ASEGA(struct T *, int, float, float, int, struct ANIMATION **);
 void func_001333C0(struct ANIMATION *, struct P *);
-void func_00130B18(struct ANIMATION *);
+void RetractAsega__FP5ASEGA(struct ANIMATION *);
 void func_001F13A8(struct P *, int, int);
 static inline struct P *Receiver(struct P *p){register struct P *r __asm__("$4");__asm__("daddu %0,%1,$zero":"=r"(r):"r"(p));return r;}
 static inline unsigned EntryOffset(int index){register unsigned bytes __asm__("$3");__asm__("sll %0,%1,3":"=r"(bytes):"r"(index));return bytes;}
@@ -56,7 +56,7 @@ apply:
             } else if (pa->pt->f74 == 0.0f) {
                 fl = 1;
             }
-            func_0012F9B8(pa->pt, p->n28, a, b, f, &p->n30);
+            ApplyAseg__FP4ASEGP3ALOffiPP5ASEGA(pa->pt, p->n28, a, b, f, &p->n30);
         }
         {
             int oldArgument,newArgument;
@@ -76,7 +76,7 @@ apply:
                 old=p->n34;
                 p->n34=fl;
                 p->n38=finished;
-                func_00130B18(p->n30);
+                RetractAsega__FP5ASEGA(p->n30);
                 p->n30=0;
                 oldArgument=old;
                 newArgument=fl;

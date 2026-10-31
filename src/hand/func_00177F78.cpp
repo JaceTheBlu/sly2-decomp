@@ -107,7 +107,7 @@ struct CLOCK
 extern "C" {
 extern char D_003DD020[];
 extern CLOCK D_002DDED0;
-extern qword D_002A2DA0, D_002A2DC0, D_002A2DD0;
+extern qword D_002A2DA0, g_normalZ, D_002A2DD0;
 extern float D_002BE630, D_002BE634, D_002BE658, D_002BE65C, D_002BE660, D_002BE664, D_002BE668, D_002BE66C, D_002BE670, D_002BE674, D_002BE690;
 extern CLQ D_002BE640, D_002BE680;
 extern LM D_002BE650, D_002BBB60;
@@ -344,7 +344,7 @@ extern "C" void func_00177F78(S *p)
         float sCurve = func_001E66C8(p->pcrvExtra, s);
         func_001E7380(p->pcrvExtra, qwActor, sCurve, D_003DD020, &point, &dir, 0, &p->sExtra);
     }
-    dir.qw = NormalizeSafeN(QwProjectOut(dir.qw, D_002A2DC0), D_002A2DA0);
+    dir.qw = NormalizeSafeN(QwProjectOut(dir.qw, g_normalZ), D_002A2DA0);
     p->sSeparation = GXOfQw(QwLengthXY(QwSub(point.qw, posActor)));
     float ds = GEvaluateClqLm(&D_002BE640, &D_002BE650, p->sSeparation);
     if (fReverse)
@@ -434,9 +434,9 @@ extern "C" void func_00177F78(S *p)
                 continue;
             qword vOther = QwVelocity(pobj);
             qword posPredict = VAddScaled(posOther.qw, vOther, VU_FLOAT(&D_002BE664));
-            dpos = VProjectOut(dpos, D_002A2DC0);
+            dpos = VProjectOut(dpos, g_normalZ);
 
-            qword dposLater = VProjectOut(VSub(p->pos, posPredict), D_002A2DC0);
+            qword dposLater = VProjectOut(VSub(p->pos, posPredict), g_normalZ);
 
             VEC normal;
             func_0011EE08(D_002A2DD0, dpos, dposLater, &normal, 0, 0);
@@ -472,16 +472,16 @@ extern "C" void func_00177F78(S *p)
                 if (g == 0.0f)
                     continue;
                 VEC side;
-                side.qw = VCross(D_002A2DC0, nextDir.qw);
+                side.qw = VCross(g_normalZ, nextDir.qw);
                 if (p->pcrv != p->pactor->pcrvPrimary && GXOfQw(VDot(normal.qw, side.qw)) < 0.0f)
                     g = -g;
-                accel = VAddScaled(accel, VCross(normal.qw, D_002A2DC0), VU_FLOAT(gMass * g * D_002BE674));
+                accel = VAddScaled(accel, VCross(normal.qw, g_normalZ), VU_FLOAT(gMass * g * D_002BE674));
             }
         }
     }
     float half = 0.5f;
     float dt = D_002DDED0.dt;
-    accel = QwProjectOut(accel, D_002A2DC0);
+    accel = QwProjectOut(accel, g_normalZ);
     qword posNext = QwIntegrate(p->pos, p->v, VU_FLOAT(dt), accel, VU_FLOAT(dt * (dt * half)));
     qword vNew = QwAddScaled(p->v, accel, VU_FLOAT(dt));
     qword vNext = vNew;
@@ -493,7 +493,7 @@ extern "C" void func_00177F78(S *p)
         {
             VEC normal;
             pqwZero = &D_002A2DA0;
-            normal.qw = QwProjectOut(QwSub(posHit.qw, posNext), D_002A2DC0);
+            normal.qw = QwProjectOut(QwSub(posHit.qw, posNext), g_normalZ);
             qword qwLen = QwLength(normal.qw);
             if (GXOfQw(qwLen) < 0.0001f)
                 normal.qw = *pqwZero;

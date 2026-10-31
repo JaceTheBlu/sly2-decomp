@@ -41,7 +41,7 @@ struct WORLD;
 extern VIFS D_002DEA28;
 extern BLOCK D_002BFC60;
 extern float D_002BFC90, D_002BFC94;
-extern qword D_002A2DA0, D_002A2DB0, D_002A2DC0;
+extern qword D_002A2DA0, D_002A2DB0, g_normalZ;
 extern CAMERA g_cm;
 extern "C" {
 void func_001A3F78(WORLD *world, qword pos, int capacity, RESULT *results);
@@ -166,7 +166,7 @@ extern "C" void func_001A4478(WORLD *world, M4 *transform, P *p)
             float extent;
             if (dist < limit) {
                 if (dist < 1.0f)
-                    dir = D_002A2DC0;
+                    dir = g_normalZ;
                 else
                     dir = Divide(dir, VU_FLOAT(dist));
                 center = AddScaled(point, dir, VU_FLOAT(-limit));

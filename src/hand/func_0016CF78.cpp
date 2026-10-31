@@ -14,8 +14,8 @@ struct REQUEST{int bytes,alignment;REQUEST(int cb,int a):bytes(cb),alignment(a){
 extern "C"{
 void*func_001AE478(void*);
 void _$_18CBinaryInputStream(void*,int);
-void*func_001AE2A0(const REQUEST&);
-void*func_001AE318(const REQUEST&);
+void*PvAllocSwClearImpl__FP7SWALLOC(const REQUEST&);
+void*PvAllocStackImpl__FP7SWALLOC(const REQUEST&);
 void*func_002333B4(void*,int,uint);
 void func_001AE5A0(void*,const void*,uint) __asm__("CopyAb__FPvT0Ui");
 OBJECT*func_001EC8F8(int);
@@ -31,8 +31,8 @@ extern char D_00000000[],D_00001910[],D_00001A68[];
 }
 struct MARK{MARK(){func_001AE478(this);}~MARK(){_$_18CBinaryInputStream(this,2);}};
 struct LEASE{LEASE(){func_001AE478(this);}void Release(){_$_18CBinaryInputStream(this,2);}};
-inline void*REQUEST::Allocate(){return func_001AE318(*this);}
-inline void*REQUEST::AllocateZero(){return func_001AE2A0(*this);}
+inline void*REQUEST::Allocate(){return PvAllocStackImpl__FP7SWALLOC(*this);}
+inline void*REQUEST::AllocateZero(){return PvAllocSwClearImpl__FP7SWALLOC(*this);}
 static inline void*Allocate(int bytes){return REQUEST(bytes,16).Allocate();}
 static inline void*AllocateZero(int bytes){return REQUEST(bytes,16).AllocateZero();}
 typedef char U_Size[sizeof(U)==16?1:-1];
@@ -121,7 +121,7 @@ extern "C" void func_0016CF78(P*p,D*desc,E*entry,PARAM*param,SPHERE*sphere,int g
   OBJECT*object=func_001EC8F8(input->U16Read());
   vertices=input->U8Read();
   int vectorCount=input->U8Read();
-  vectors=(U*)func_001AE318(REQUEST(vectorCount*sizeof(U),16));
+  vectors=(U*)PvAllocStackImpl__FP7SWALLOC(REQUEST(vectorCount*sizeof(U),16));
   if(vectorCount>0){U*cursor=vectors;index=vectorCount;do{input->ReadVector((VECTOR*)cursor);--index;++cursor;}while(index);}
   char*boneWeights;
   int bones=desc->count<4?desc->count:4;

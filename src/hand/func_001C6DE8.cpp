@@ -33,7 +33,7 @@ void func_0020FAA0(void *, qword, qword, int (*)(void *, CANDIDATE *), void *, i
 CANDIDATE *PsoHitTestLineObjects(int, qword, qword, int, CANDIDATE **, LSG *)
     __asm__("PsoHitTestLineObjects__FiP6VECTORT1iPP2SOP3LSG");
 extern char g_sw[];
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 }
 // base + v * g
 static inline qword AddScaled(VV base, VU_FLOAT g, qword v)
@@ -48,8 +48,8 @@ extern "C" int func_001C6DE8(float gMin, float gMax, float gThreshold, qword poi
 {
     LSG lsg;
     FRAME frame;
-    qword posMax = AddScaled(point, VU_FLOAT(gMax), D_002A2DC0);
-    qword posMin = AddScaled(point, VU_FLOAT(gMin), D_002A2DC0);
+    qword posMax = AddScaled(point, VU_FLOAT(gMax), g_normalZ);
+    qword posMin = AddScaled(point, VU_FLOAT(gMin), g_normalZ);
     register qword posMaxArg __asm__("$6") = posMax;   // pin: the game loads this $a2 argument before the test (see top)
     if (!apcand)
         func_0020FAA0(g_sw, point, posMaxArg, func_001C5570, 0, &ccand, &apcand);

@@ -12,12 +12,12 @@ typedef struct {
 } CdReadArg;
 extern volatile int D_002C6778;
 extern int D_002C6750;
-extern volatile int D_002C67A0;
+extern volatile int _sceCd_mode;
 extern volatile int D_002C6774;
 extern volatile int D_002C6768;
 extern CdReadArg D_002C6840;
 extern char D_002C7840[];
-extern int D_002C7900;
+extern int _sceCd_readpos;
 extern char D_002C7910[];
 extern char D_002AB608[];
 extern char D_002AB620[];
@@ -45,7 +45,7 @@ int sceCdRead(unsigned int lbn, unsigned int sectors, void *buf, sceCdRMode *mod
     rd->mode.spindlctrl = mode->spindlctrl;
     rd->mode.datapattern = mode->datapattern;
     rd->eedest = D_002C7840;
-    rd->eeaddr = &D_002C7900;
+    rd->eeaddr = &_sceCd_readpos;
     switch (mode->datapattern) {
     case 1:
         size = sectors * 2328;
@@ -58,18 +58,18 @@ int sceCdRead(unsigned int lbn, unsigned int sectors, void *buf, sceCdRMode *mod
         size = sectors << 11;
         break;
     }
-    D_002C7900 = 0;
+    _sceCd_readpos = 0;
     if (!(D_002C6778 & 2))
         func_0023B170(buf, size);
     func_0023B170(D_002C7840, 0x90);
     func_0023B170(rd, 0x18);
-    func_0023B170(&D_002C7900, 4);
+    func_0023B170(&_sceCd_readpos, 4);
     if (D_002C6750 > 0)
         func_00236960(D_002AB608);
-    D_002C67A0 = 1;
+    _sceCd_mode = 1;
     D_002C6774 = 1;
     if (sceSifCallRpc(D_002C7910, 1, 1, rd, 0x18, 0, 0, func_00241978, D_002C7840) < 0) {
-        D_002C67A0 = 0;
+        _sceCd_mode = 0;
         D_002C6774 = 0;
         func_00234A40(D_002C6768);
         return 0;

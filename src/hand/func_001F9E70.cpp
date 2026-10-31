@@ -14,8 +14,8 @@ extern "C" int func_0011D4D0(float,float,float);
 extern qword D_002A2DD0;
 extern "C" void func_001F4BF8(P *);
 extern "C" qword *__as__6VECTORG9VU_VECTOR(qword *,qword);
-extern "C" M3 *func_0011B570(M3 *,qword);
-static inline M3 BuildRotation(qword vector) return matrix {func_0011B570(&matrix,vector);}
+extern "C" M3 *LoadRotateMatrix__FUx(M3 *,qword);
+static inline M3 BuildRotation(qword vector) return matrix {LoadRotateMatrix__FUx(&matrix,vector);}
 extern "C" void NormalizeRotateMatrix3__FP7MATRIX3(M3 *);
 static inline qword Scalar(float f,U *out){qword q;__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(f));out->q=q;return out->q;}
 static inline qword AddScaled(qword p,qword v,qword k){__asm__("vadda.xyzw $ACC,%1,$vf0\n\tvmaddx.xyzw %0,%0,%2x":"+j"(v):"j"(p),"j"(k));return v;}

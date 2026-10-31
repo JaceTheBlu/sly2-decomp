@@ -2,7 +2,7 @@
 // an endpoint names an object: a path (shape test 10) becomes a moving endpoint with a 1/2/6-segment motion profile
 // (mode 8 / 0 / 16, the last a trapezoidal accelerate-cruise-decelerate profile), shape 3/0x30 objects and missing
 // objects become fixed points. All points (or the whole transformed path) are accumulated into a min/max box that
-// becomes p's single bound (func_00166270 copies it to world space). Fresh rewrite.
+// becomes p's single bound (CloneGeom__FP4GEOMP7MATRIX4T0 copies it to world space). Fresh rewrite.
 // What mattered:
 //  - Min/Max take VU_VECTOR (const qword & conversion) parameters as in func_001DF0A0: the extra RTL copies keep the
 //    endpoint loop large enough that loop.c does not hoist 1.0f and 16 out of it;
@@ -73,15 +73,15 @@ extern qword D_002A2DF0, D_002A2E00;
 extern float D_002C3610;
 extern "C" {
 void func_001F2BA8(P *);
-void *func_0015E938(G *, int, int, P *);
-int func_00132B10(void *, int);
+void *PloFindSwObject__FP2SWi3OIDP2LO(G *, int, int, P *);
+int FIsBasicDerivedFrom__FP5BASIC3CID(void *, int);
 float func_001E6648(PATH *);
 void func_001E6F10(PATH *, qword *, qword *, float);
 void *func_002333B4(void *, int, int);
 qword func_001A62E8(void *);
 qword func_0022FC48(void *, void *, qword);
-void *func_001AE2A0(MSG *);
-void func_00166270(GEO *, const M4 *, GEO *);
+void *PvAllocSwClearImpl__FP7SWALLOC(MSG *);
+void CloneGeom__FP4GEOMP7MATRIX4T0(GEO *, const M4 *, GEO *);
 void func_001F2B20(P *);
 }
 
@@ -113,9 +113,9 @@ extern "C" void func_001DE5D8(P *p)
             ENDPOINT *endpoint = &entry->endpoints[j];
             endpoint->kind = -1;
             if (endpoint->id != -1) {
-                void *object = func_0015E938(&g_sw, 1, endpoint->id, p);
+                void *object = PloFindSwObject__FP2SWi3OIDP2LO(&g_sw, 1, endpoint->id, p);
                 if (object) {
-                    if (func_00132B10(object, 10)) {
+                    if (FIsBasicDerivedFrom__FP5BASIC3CID(object, 10)) {
                         PATH *path = (PATH *)object;
                         PARAMS params = endpoint->track.params;
                         int reverse = 0;
@@ -228,7 +228,7 @@ extern "C" void func_001DE5D8(P *p)
                             }
                             SetDirty(p);
                         }
-                    } else if (func_00132B10(object, 3) || func_00132B10(object, 0x30)) {
+                    } else if (FIsBasicDerivedFrom__FP5BASIC3CID(object, 3) || FIsBasicDerivedFrom__FP5BASIC3CID(object, 0x30)) {
                         endpoint->kind = 0;
                         endpoint->point = func_001A62E8(object);
                     }
@@ -263,7 +263,7 @@ extern "C" void func_001DE5D8(P *p)
         p->boundCount = 1;
         request.bytes = sizeof(BOUND);
         request.alignment = 16;
-        BOUND *bound = (BOUND *)func_001AE2A0(&request);
+        BOUND *bound = (BOUND *)PvAllocSwClearImpl__FP7SWALLOC(&request);
         p->bounds = bound;
         bound->object = p->space;
         bound->owner = p;
@@ -272,8 +272,8 @@ extern "C" void func_001DE5D8(P *p)
         bound->local.count = 2;
         request.alignment = 16;
         request.bytes = 2 * sizeof(qword);
-        bound->local.points = (U *)func_001AE2A0(&request);
-        func_00166270(&bound->local, 0, &bound->world);
+        bound->local.points = (U *)PvAllocSwClearImpl__FP7SWALLOC(&request);
+        CloneGeom__FP4GEOMP7MATRIX4T0(&bound->local, 0, &bound->world);
         bound->world.points[0].q = minimum;
         bound->world.points[1].q = maximum;
         { U *out = bound->local.points; out[0].q = func_0022FC48(0, p->space, minimum); }

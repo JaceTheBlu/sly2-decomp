@@ -7,7 +7,7 @@ void func_00129EC8(void *);
 void func_002550F8(void *);
 void func_00255AB0(void *);
 void func_00257078(void *, int);
-void func_0011CD98(void *, void *);
+void FreeSlotheapPv__FP8SLOTHEAPPv(void *, void *);
 
 static inline void Release0(R0 *r)
 {
@@ -16,7 +16,7 @@ static inline void Release0(R0 *r)
             func_00256D40(r->x10, 2);
             func_00129EC8(r->x8);
             func_002550F8(r);
-            func_0011CD98(D_004520A8, r);
+            FreeSlotheapPv__FP8SLOTHEAPPv(D_004520A8, r);
         }
     }
 }
@@ -34,5 +34,5 @@ void func_00257148(X *p, int flags)
     }
     func_00255AB0(p);
     if (flags & 1)
-        func_0011CD98(D_00452120, p);
+        FreeSlotheapPv__FP8SLOTHEAPPv(D_00452120, p);
 }

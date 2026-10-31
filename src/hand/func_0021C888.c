@@ -16,12 +16,12 @@ int func_00117BD0(void *);
 float func_00117E38(void *);
 void ReadVector__18CBinaryInputStreamP6VECTOR(void *,qword *);
 int func_00117D50(void *);
-void *func_001AE2A0(struct Alloc *);
+void *PvAllocSwClearImpl__FP7SWALLOC(struct Alloc *);
 struct Hook *func_0012E1F0(int);
 void func_00230018(struct S *,struct O *,struct Hook *);
 qword func_0022FC48(struct O *,struct O *,qword);
 qword func_0022FCC8(struct O *,struct O *,qword);
-static inline void *Alloc(int cb) { struct Alloc req; req.cb=cb; req.align=16; return func_001AE2A0(&req); }
+static inline void *Alloc(int cb) { struct Alloc req; req.cb=cb; req.align=16; return PvAllocSwClearImpl__FP7SWALLOC(&req); }
 void func_0021C888(struct S *p,void *stream) {
     int count=func_00117D00(stream);
     int i,j;

@@ -1,6 +1,6 @@
 // func_0018A8C8: ported from Lilly's personal Sly 2 decomp (src/P2/jtground.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002A2DA0 (D_002A2DA0), D_002BF354 (D_002BF354), D_002BF360 (D_002BF360), D_002BF364 (D_002BF364), D_002BF370 (D_002BF370), D_002DDED0 (g_clock), D_002A2DC0 (g_normalZ)
+// Globals: D_002A2DA0 (D_002A2DA0), D_002BF354 (D_002BF354), D_002BF360 (D_002BF360), D_002BF364 (D_002BF364), D_002BF370 (D_002BF370), D_002DDED0 (g_clock), g_normalZ (g_normalZ)
 // 0x0018A8C8 JtChooseGroundState (curated name)
 typedef unsigned char    uint8_t;
 typedef unsigned int     uint32_t;
@@ -1531,7 +1531,7 @@ extern float D_002BF360;
 extern float D_002BF364;
 extern qword D_002BF370;
 extern qword D_002A2DA0;
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 static inline qword QwProjectOut(qword v, qword n)
 {
     qword qwDot = QwDot(v, n);
@@ -1848,7 +1848,7 @@ extern "C" void JtChooseGroundState(JT *pjt)
                         VU_FLOAT gScale = VuFloatFromMemWord(*(int *)&pjt->gUnk1f98);
                         pjt->SetVelocity(QwScaleX(qwVel, gScale));
                         SetJtAirJump(&pjt->jtair, 0xC, 0, 0);
-                        pjt->jtair.qwUnkA0 = QwProjectOut(qwVel, D_002A2DC0);
+                        pjt->jtair.qwUnkA0 = QwProjectOut(qwVel, g_normalZ);
                     }
                     break;
             }

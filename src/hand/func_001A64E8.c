@@ -9,7 +9,7 @@ void*func_001F6030(struct ALO*,int);
 void func_001F2AD0(struct ALO*, void*);
 void*func_001F5FF8(struct ALO*,int);
 void func_001F69F8(struct ALO*,int);
-struct LO*func_0015E938(void*,int,int,struct ALO*);
+struct LO*PloFindSwObject__FP2SWi3OIDP2LO(void*,int,int,struct ALO*);
 void func_001A64E8(struct ALO*palo,
 int c,struct E*ae){
 int i=0;
@@ -35,7 +35,7 @@ done:;
   }else{
    int k;struct LO*p;
    if(grf&2)k=4;else k=(grf&1)?5:1;
-   p=func_0015E938(g_sw,(pe->grf&0x400)?k|0x400:k,pe->id,palo);
+   p=PloFindSwObject__FP2SWi3OIDP2LO(g_sw,(pe->grf&0x400)?k|0x400:k,pe->id,palo);
    if(!p){i++;continue;}
    if(pe->grf&0x200)p->vt[9].pfn((struct LO*)((char*)p+p->vt[9].d));
    i++;

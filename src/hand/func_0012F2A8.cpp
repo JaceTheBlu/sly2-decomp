@@ -12,11 +12,11 @@ int func_00117DB8(BIS *pbis);
 int func_00117D00(BIS *pbis);
 int func_00117BD0(BIS *pbis);
 void *PvAllocSwImpl__Fi(AREQ *preq);
-void *func_001AE2A0(AREQ *preq);
+void *PvAllocSwClearImpl__FP7SWALLOC(AREQ *preq);
 OBJ *func_0012B3B0(int id);
 OBJ *func_0012CB98(int id);
 void func_0012F590(X *px, BIS *pbis, int n, int *pa, int *pb);
-void func_0013F810(X *px, BIS *pbis);
+void LoadOptionsFromBrx__FPvP18CBinaryInputStream(X *px, BIS *pbis);
 void func_0012F2A8(X *px, BIS *pbis);
 }
 void func_0012F2A8(X *px, BIS *pbis) { int i; AREQ req;
@@ -36,7 +36,7 @@ void func_0012F2A8(X *px, BIS *pbis) { int i; AREQ req;
  }
  px->c2 = func_00117BD0(pbis);
  req.cbAlign = 0x10; req.cb = px->c2 * 12;
- px->aent2 = (ENT2 *)func_001AE2A0(&req);
+ px->aent2 = (ENT2 *)PvAllocSwClearImpl__FP7SWALLOC(&req);
  for (i = 0; i < px->c2; i++) {
    ENT2 *pe = &px->aent2[i];
    pe->a = func_00117BD0(pbis);
@@ -47,4 +47,4 @@ void func_0012F2A8(X *px, BIS *pbis) { int i; AREQ req;
  func_0012F590(px, pbis, 0, &px->x98, &px->x9C);
  func_0012F590(px, pbis, 1, &px->xA0, &px->xA4);
  func_0012F590(px, pbis, 0, &px->xA8, &px->xAC);
- func_0013F810(px, pbis); }
+ LoadOptionsFromBrx__FPvP18CBinaryInputStream(px, pbis); }

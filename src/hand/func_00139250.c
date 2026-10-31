@@ -1,6 +1,6 @@
 typedef struct DL { void *head; void *tail; int ibDle; } DL;
 typedef struct DLI { DL *m_pdl; void **m_ppv; int m_ibDle; struct DLI *m_pdliNext; } DLI;
-extern DLI *D_002DD2FC;     /* g_pdliFirst */
+extern DLI *g_pdliFirst;     /* g_pdliFirst */
 extern char D_002DEAF0[];
 struct S { char pad[0x10]; int f10; char pad2[0x448 - 0x14]; DL dl; };
 void func_00139098(void *);
@@ -13,8 +13,8 @@ static inline void InitDli(DLI *pdli, DL *pdl)
     pdli->m_pdl = pdl;
     pdli->m_ppv = (void **)pdl;
     pdli->m_ibDle = pdl->ibDle;
-    pdli->m_pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->m_pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static inline void *PvNextDli(DLI *pdli)
 {
@@ -31,5 +31,5 @@ void func_00139250(struct S *p) {
     func_001A57A8(p);
     if (!p->f10) func_001A53E0(p);
     func_0011A220(D_002DEAF0, p);
-    D_002DD2FC = dli.m_pdliNext;
+    g_pdliFirst = dli.m_pdliNext;
 }

@@ -13,7 +13,7 @@ struct CLOCK{float time,dt;};
 struct G{char pad[0x3D58];int generation;};
 extern CLOCK D_002DDED0;
 extern G g_sw;
-extern qword D_002A2DC0,D_002A2DB0;
+extern qword g_normalZ,D_002A2DB0;
 extern char D_002C21A0[],D_002C21B0[],D_002C21C0[];
 extern float D_002C21CC;
 extern "C" {
@@ -22,13 +22,13 @@ qword func_0022FC48(P*,NODE*,qword);
 CONTACT*func_001D2DD0(P*,ENTRY*);
 float GSmooth__FfffP3SMPPf(float,float,float,void*,float*);
 float RadNormalize__Ff(float);
-M3*func_0011B500(M3*,qword,float);
+M3*LoadRotateMatrixRad__FfUx(M3*,qword,float);
 qword*__as__6VECTORG9VU_VECTOR(qword*,qword);
 void func_0022FAA0(P*);
 void func_001F3C70(P*);
 }
 static inline float Abs(float f){float r;__asm__("abs.s %0,%1":"=f"(r):"f"(f));return r;}
-static inline M3 Rotation(qword axis,float angle) return r{func_0011B500(&r,axis,angle);}
+static inline M3 Rotation(qword axis,float angle) return r{LoadRotateMatrixRad__FfUx(&r,axis,angle);}
 static inline M3 Mul(const M3&a,const M3&b) return r{
  qword x=a.r[0].q,y=a.r[1].q,z=a.r[2].q;
  __asm__("vmulax.xyz $ACC,%1,%4x\n\tvmadday.xyz $ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z":"=j"(r.r[0].q):"j"(x),"j"(y),"j"(z),"j"(b.r[0].q));
@@ -66,7 +66,7 @@ extern "C" void func_001D41F8(P*p){
   }
   float dt=D_002DDED0.dt;
   e->angle=RadNormalize__Ff(e->angle+e->speed*dt);
-  basis=Mul(Rotation(D_002A2DC0,e->tilt),Rotation(D_002A2DB0,e->angle));
+  basis=Mul(Rotation(g_normalZ,e->tilt),Rotation(D_002A2DB0,e->angle));
   NODE*node=e->node;
   __as__6VECTORG9VU_VECTOR(&node->matrix.position.q,point.q);
   node->matrix.basis=basis;

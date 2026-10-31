@@ -1,7 +1,7 @@
 typedef unsigned long ulong;
 typedef struct DL { void *head; void *tail; int ibDle; } DL;
 typedef struct DLI { DL *m_pdl; void **m_ppv; int m_ibDle; struct DLI *m_pdliNext; } DLI;
-extern DLI *D_002DD2FC;
+extern DLI *g_pdliFirst;
 struct VTE { short d; short pad; void (*pfn)(void *); };
 struct O { char pad[0xC]; struct VTE *pvt; char pad2[0x28 - 0x10]; ulong fl; };
 struct E { char pad[0xDC]; int nDC; };
@@ -19,8 +19,8 @@ static inline void InitDli(DLI *pdli, DL *pdl)
     pdli->m_pdl = pdl;
     pdli->m_ppv = (void **)pdl;
     pdli->m_ibDle = pdl->ibDle;
-    pdli->m_pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->m_pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static inline void *PvNextDli(DLI *pdli)
 {
@@ -46,5 +46,5 @@ void func_001F2D48(struct P *p)
     InitDli(&dli, &p->dl);
     while ((po = PvNextDli(&dli)) != 0 && !(po->fl & (1L << 56)))
         po->pvt[12].pfn((char *)po + po->pvt[12].d);
-    D_002DD2FC = dli.m_pdliNext;
+    g_pdliFirst = dli.m_pdliNext;
 }

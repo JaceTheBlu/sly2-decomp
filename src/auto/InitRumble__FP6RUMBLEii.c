@@ -1,9 +1,9 @@
 #include "m2c_prelude.h"
 M2C_UNK func_001291A8(M2C_UNK *, M2C_UNK *, s32, s32); /* extern */
 M2C_UNK func_00129EC8(M2C_UNK *);                   /* extern */
-s32 func_001AE318(s128 *);                          /* extern */
+s32 PvAllocStackImpl__FP7SWALLOC(s128 *);                          /* extern */
 extern s128 D_002A2DB0;
-extern s128 D_002A2DC0;
+extern s128 g_normalZ;
 extern s128 D_002A2DD0;
 extern f32 D_002A7834;
 extern f32 D_002A7838;

@@ -14,7 +14,7 @@ struct CLOCK{float t,dt;};
 extern "C"{
  extern CLOCK D_002DDED0;extern U D_002A2DD0,D_002A2DA0;extern char g_sw[],D_002DE578[];
  void func_002303A0(P*,void*,int);void func_0022C840(P*,void*);void func_0022C818(P*,void*);
- float GRandInRange__Fff(float,float);void func_0011EFB0(qword,float*,float*,float*);
+ float GRandInRange__Fff(float,float);void DecomposeSphere__FUxPfN21(qword,float*,float*,float*);
  void func_001B1818(P*,float);void func_001B17B8(P*,float);
  qword func_001A62E8(P*);void func_001E6F60(PATH*,qword,void*,U*,U*,float*,float*);
  float func_001E77E8(PATH*);float func_001E6648(PATH*);P*func_001C4AF8(void*,qword);
@@ -71,7 +71,7 @@ extern "C" void func_001B1328(P*p,int next){
  case 2:{
   p->phase=-p->phase;float negative=-1.0f;M4*m=GetMatrix(p);
   qword row=m->row[0].q;qword factor=SplatInto(negative,&w.first);qword scaled=ScaleX(row,factor);
-  func_0011EFB0(scaled,&w.angle,0,0);func_001B1818(p,w.angle);SetZeroVelocity(p);func_002303A0(p,p->group,1);func_0022C840(p,p->group);break;
+  DecomposeSphere__FUxPfN21(scaled,&w.angle,0,0);func_001B1818(p,w.angle);SetZeroVelocity(p);func_002303A0(p,p->group,1);func_0022C840(p,p->group);break;
  }
  case 3:
   SetZeroVelocity(p);func_001B17B8(p,p->ratio+p->ratio);

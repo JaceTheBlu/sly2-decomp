@@ -8,7 +8,7 @@ extern RpcCD D_00450880;
 extern McSend D_00450930;
 extern int D_00451E40[];
 extern int D_002C8354;
-extern int D_002C8350;
+extern int _mc_errno;
 void func_00243ED8(void *);
 int func_00234A70(int);
 int func_00234A40(int);
@@ -30,7 +30,7 @@ int sceMcOpen(int port, int slot, const char *name, int mode)
     D_00450930.slot = slot;
     D_00450930.name[0x3FF] = 0;
     if (func_00237288(&D_00450880, 2, 1, &D_00450930, 0x414, D_00451E40, 4, func_00243ED8, 0) == 0) {
-        D_002C8350 = 2;
+        _mc_errno = 2;
         return 0;
     }
     func_00234A40(D_002C8354);

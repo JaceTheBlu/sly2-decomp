@@ -2,7 +2,7 @@ struct CRef;
 extern "C" void func_00129EC8(CRef *);
 extern "C" void func_001291A8(CRef *, const CRef *);
 extern "C" void func_00129658(CRef *, const CRef *);
-extern "C" void func_0012A0B0(CRef *, int);
+extern "C" void SetTag__4CRef4TAGK(CRef *, int);
 struct CRef {
     int tagk; int tag;
     CRef() { tagk = -1; }
@@ -21,7 +21,7 @@ struct E { int a; O *b; };
 struct Q { int pad[2]; E *ae; };
 extern "C" {
 int func_00256DD0(void);
-SP func_00257058(int);
+SP Set__3SPFP5FRAME(int);
 void func_00259A88(O *);
 CRef func_00127838(int, O *);
 }
@@ -30,7 +30,7 @@ extern "C" CRef func_001FFA70(void *p, Q *pq, int i)
     CRef r;
     if (pq->ae[i].a && !pq->ae[i].b) {
         int x = func_00256DD0();
-        SP sp = func_00257058(x);
+        SP sp = Set__3SPFP5FRAME(x);
         func_00259A88(sp.p);
         sp.p->n24 = 1;
         r = func_00127838(pq->ae[i].a, sp.p);
@@ -38,6 +38,6 @@ extern "C" CRef func_001FFA70(void *p, Q *pq, int i)
         pq->ae[i].b = sp.p;
     }
     func_00129EC8(&r);
-    func_0012A0B0(&r, 0x24);
+    SetTag__4CRef4TAGK(&r, 0x24);
     return r;
 }

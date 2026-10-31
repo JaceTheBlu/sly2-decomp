@@ -21,7 +21,7 @@ struct LM { float gMin, gMax; };
 struct GAME { int dummy; };
 extern "C" {
 extern GAME g_sw;
-extern qword D_002A2DC0, D_002A2DA0, D_002C0D60;    // up axis, fallback X axis, launch acceleration
+extern qword g_normalZ, D_002A2DA0, D_002C0D60;    // up axis, fallback X axis, launch acceleration
 extern LM D_002C0CF0, D_002C0CF8, D_002C0CE0;       // random ranges: two offset angles, flight time
 extern float D_002C0CE8, D_002C0CEC, D_002A76E8;
 void *func_001C4840(GAME *);
@@ -30,7 +30,7 @@ float GRandInRange__Fff(float, float);
 qword func_0011E1A0(float, float, float);
 M3 func_0011B830(qword, qword);
 qword func_001D69F0(qword, qword, qword, float);
-int func_00132B10(SO *, int);
+int FIsBasicDerivedFrom__FP5BASIC3CID(SO *, int);
 void func_001C6BD0(SO *, qword, qword, float, float);
 SO *func_001CB250(void *, int);
 void func_001C2DB8(OWNER *);
@@ -89,7 +89,7 @@ extern "C" SO *func_001C2EF0(OWNER *p, int count)
             node = p->first;
         else {
             node = func_001CB250(p->factory, 0);
-            if (node && func_00132B10(node, 0x5A))
+            if (node && FIsBasicDerivedFrom__FP5BASIC3CID(node, 0x5A))
                 SetState(node, 2);
         }
         if (!node)
@@ -101,14 +101,14 @@ extern "C" SO *func_001C2EF0(OWNER *p, int count)
         float pan = Rand(D_002C0CF0);
         qword offset = func_0011E1A0(pan, Rand(D_002C0CF8), -75.0f);
         qword delta = Sub(target, start);
-        qword side = Sub(delta, Scale(Dot(delta, D_002A2DC0), D_002A2DC0));
+        qword side = Sub(delta, Scale(Dot(delta, g_normalZ), g_normalZ));
         M3 mat;
-        mat = func_0011B830(Normalize(side, D_002A2DA0), D_002A2DC0);
+        mat = func_0011B830(Normalize(side, D_002A2DA0), g_normalZ);
         qword dest = Add(target, Transform(mat, offset));
         qword velocity = func_001D69F0(start, dest, D_002C0D60, Rand(D_002C0CE0));
-        if (func_00132B10(node, 0x5A)) {
+        if (FIsBasicDerivedFrom__FP5BASIC3CID(node, 0x5A)) {
             float lifetime;
-            if (func_00132B10(node, 0x5B) || func_00132B10(node, 0x5D))
+            if (FIsBasicDerivedFrom__FP5BASIC3CID(node, 0x5B) || FIsBasicDerivedFrom__FP5BASIC3CID(node, 0x5D))
                 lifetime = (float)i * D_002C0CEC;
             else
                 lifetime = D_002A76E8;

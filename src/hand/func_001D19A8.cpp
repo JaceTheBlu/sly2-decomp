@@ -15,7 +15,7 @@ struct SOUND {char pad0[0x4E];short references;};
 struct P {char pad0[0xC];VENTRY *vt;char pad10[0x50];FRAME *space;char pad64[0x11C];int mode;char pad184[0xC];int count;char pad194[0xC];ENTRY entries[8];float width;int sideCount;SIDE sides[4];int attachCount;ATTACH *attachments[8];char pad51C[0x24];float heading,goalHeading,steering,wheelAngle,drive,turn,acceleration;char pad55C[0x3C];SOUND *sound;int unused59C;float soundRate;P *target;char pad5A8[0x18];float lastCorrection;};
 struct CLOCK {float time,dt;};
 extern CLOCK D_002DDED0;
-extern const qword D_002A2DC0;
+extern const qword g_normalZ;
 extern POLY D_002C2040,D_002C2060,D_002C2080;
 extern LIMITS D_002C2050,D_002C2070,D_002C2090;
 extern float D_002C2030,D_002C20A4;
@@ -139,7 +139,7 @@ extern "C" void func_001D19A8(P *p)
     attachmentCount=loadedCount;}
     if(attachmentCount>0){
         register qword targetVector __asm__("vf2")=targetPosition.q;
-        const qword *up=&D_002A2DC0;
+        const qword *up=&g_normalZ;
         register qword originVector __asm__("vf3")=position.q;
         register qword difference __asm__("vf1");
         asm("vsub.xyzw %0,%1,%2":"=j"(difference):"j"(targetVector),"j"(originVector));

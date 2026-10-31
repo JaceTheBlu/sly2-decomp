@@ -23,7 +23,7 @@ extern float D_002BE5E8;
 extern CLOCK D_002DDED0;
 extern LM D_002BBB60;
 extern CAMERA g_cm;
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 FRAME *func_001AE478(FRAME *);
 void _$_18CBinaryInputStream(FRAME *, int);
 void func_001B44D8(int *, void ***);
@@ -35,7 +35,7 @@ int func_001EA3B0(void *, float);
 void func_001E6F10(LO *, qword *, qword *, float);
 float GRandInRange__Fff(float, float);
 float func_002458F0(float, float);
-M3 func_0011B500(float, qword);
+M3 LoadRotateMatrixRad__FfUx(float, qword);
 }
 
 static inline VU_FLOAT VuFloatFromMemWord(int n)
@@ -193,7 +193,7 @@ extern "C" SEL *func_00173F18(SET *pset, qword pos, qword *pposOut, M3 *pmatOut,
                             VU_FLOAT gNeg = VuFloatFromMemWord(0xBF800000);
                             dirCurve.q = QwScaleX(dirCurve.q, gNeg);
                         }
-                        M3 matCurve = func_0011B500(func_002458F0(dirCurve.v.y, dirCurve.v.x), D_002A2DC0);
+                        M3 matCurve = LoadRotateMatrixRad__FfUx(func_002458F0(dirCurve.v.y, dirCurve.v.x), g_normalZ);
                         int j;
                         for (j = 0; j < pset->cpos; j++)
                         {

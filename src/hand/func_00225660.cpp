@@ -11,7 +11,7 @@ extern struct G g_sw;
 extern qword D_002A2DE0;
 extern float D_002C43F0;
 extern float D_002C43F4;
-extern "C" void func_00229738(struct O *po, struct N *node);
+extern "C" void RemoveSoXa__FP2SOP2XA(struct O *po, struct N *node);
 extern "C" void *func_00205458(struct O *po, int k);
 extern "C" void func_0017A8C8(void *pv, int k);
 extern "C" void func_0012D108(void *pv, qword q);
@@ -54,7 +54,7 @@ extern "C" void func_00225660(struct P *p, int k)
         return;
     if (p->k == 5 && p->po) {
         void *pv;
-        func_00229738(p->po, &p->hook);
+        RemoveSoXa__FP2SOP2XA(p->po, &p->hook);
         pv = func_00205458(p->po, 0xB0);
         if (pv)
             func_0017A8C8(pv, 2);

@@ -21,11 +21,11 @@ struct X;
 struct VT { short d; short pad; void *pfn; };
 struct X { int x0, x4, x8; VT *vt; char pad[0xE4 - 0x10]; int xE4; int c; char pad2[0xF4 - 0xEC]; qword *apos;
            char pad3[0x190 - 0xF8]; int x190; char pad4[0x1C0 - 0x194]; int x1C0; DL dl; char pad5[0x1D8 - 0x1D0]; X*x1D8; };
-extern DLI *D_002DD2FC;
+extern DLI *g_pdliFirst;
 extern qword D_002A2DD0;
 extern DL D_003E1A40;
 extern "C" {
-void *func_001AE318(const AREQ &r);
+void *PvAllocStackImpl__FP7SWALLOC(const AREQ &r);
 X *func_001BDA00(void);
 void func_001BDBF0(X *p, int n, qword *pts);
 void func_001BDE18(X *p, X *pNew);
@@ -34,7 +34,7 @@ void func_0011A220(DL *pdl, void *pv);
 void func_001E6180(X *p);
 int func_001BC2F8(X *p);
 }
-static inline void *Alloc(int cb) { return func_001AE318(AREQ(cb, 0x10)); }
+static inline void *Alloc(int cb) { return PvAllocStackImpl__FP7SWALLOC(AREQ(cb, 0x10)); }
 /* point * 4x4 matrix (xyz only, w from row 3) */
 static inline qword MulPt(M4*m,qword*point){
  qword out;
@@ -45,8 +45,8 @@ static inline void InitDli(DLI *pdli, DL *pdl)
     pdli->pdl = pdl;
     pdli->ppv = (void **)pdl;
     pdli->ibDle = pdl->ibDle;
-    pdli->pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static inline void *PvNextDli(DLI *pdli)
 {
@@ -111,7 +111,7 @@ extern "C" void func_001BDE80(int n, X **ap)
             }
             ((void (*)(X *))px->vt[9].pfn)((X *)((char *)px + px->vt[9].d));
             func_0011A220(&D_003E1A40, px);
-            D_002DD2FC = dli.pdliNext;
+            g_pdliFirst = dli.pdliNext;
         } else {
             func_001BDE18(px, pNew);
         }

@@ -1,7 +1,7 @@
 #include "m2c_prelude.h"
 M2C_UNK Read__18CBinaryInputStreamiPv(s32, void *, s32);            /* extern */
 M2C_UNK func_00129EC8(void *);                      /* extern */
-s32 func_001AE318(s32 *, s32, s32 *, M2C_UNK);      /* extern */
+s32 PvAllocStackImpl__FP7SWALLOC(s32 *, s32, s32 *, M2C_UNK);      /* extern */
 extern s128 D_002A2DD0;
 extern f32 D_002A97A8;
 extern M2C_UNK D_002A97F0;
@@ -24,9 +24,9 @@ extern f32 D_002C43F4;
 extern M2C_UNK D_002C4408;
 extern M2C_UNK D_002C4418;
 extern M2C_UNK D_002C4420;
-extern M2C_UNK D_002C4430;
-extern M2C_UNK D_002CE488;
-extern void **D_002DD2FC;
+extern M2C_UNK s_mpupkcb;
+extern M2C_UNK _vt$4VIFS;
+extern void **g_pdliFirst;
 extern f32 D_002DDED0;
 extern f32 D_002DDED4;
 extern M2C_UNK g_cm;

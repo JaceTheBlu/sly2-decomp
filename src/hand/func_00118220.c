@@ -7,7 +7,7 @@ typedef struct TREE { int cnode; int n4; int n8; NODE *anode; } TREE;
 
 int func_00117C80(CBinaryInputStream *pbis);
 int func_00117C20(CBinaryInputStream *pbis);
-void *func_001AE2A0(MSG *pmsg);
+void *PvAllocSwClearImpl__FP7SWALLOC(MSG *pmsg);
 extern char D_002BBAF0[];
 
 void func_00118220(CBinaryInputStream *pbis, OWNER *powner, TREE *ptree)
@@ -20,7 +20,7 @@ void func_00118220(CBinaryInputStream *pbis, OWNER *powner, TREE *ptree)
     ptree->n8 = func_00117C80(pbis);
     msg.cb = ptree->cnode * sizeof(NODE);
     msg.nKind = 0x10;
-    ptree->anode = (NODE *)func_001AE2A0(&msg);
+    ptree->anode = (NODE *)PvAllocSwClearImpl__FP7SWALLOC(&msg);
 
     for (i = 0; i < ptree->cnode; i++) {
         NODE *pnode = &ptree->anode[i];

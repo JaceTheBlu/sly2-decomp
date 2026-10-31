@@ -8,13 +8,13 @@ public:
 struct E6 { short a; short b; char c; char pad; };
 struct E8 { int c; E6 *a; };
 struct T { int c; E8 *a; int *ai; };
-extern "C" void *func_001AE378(ALLOCREQ *preq);
+extern "C" void *PvAllocStackClearImpl__FP7SWALLOC(ALLOCREQ *preq);
 extern "C" void func_001ED1A8(short *ps);
 static inline void *PvAllocReq(ALLOCREQ *preq, int cb, int nKind)
 {
     preq->cb = cb;
     preq->nKind = nKind;
-    return func_001AE378(preq);
+    return PvAllocStackClearImpl__FP7SWALLOC(preq);
 }
 extern "C" T *func_0016C8E0(void *pv, CBinaryInputStream *pbis)
 {

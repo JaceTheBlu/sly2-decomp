@@ -5,7 +5,7 @@ struct B { qword *p; };
 struct M { struct X *px; char pad[0xC]; struct B *pb; char pad2[0x78 - 0x14]; int c; qword *av; };
 struct S { char pad[0x258]; struct M *pm0; struct M *pm1; };
 MATRIX4 func_0011C318(MATRIX4 *ps);
-void func_0011C168(MATRIX4 *pd, MATRIX4 *pa, MATRIX4 *pb);
+void __ml__FRC7MATRIX4T0(MATRIX4 *pd, MATRIX4 *pa, MATRIX4 *pb);
 void *func_002333B4(void *p, int c, int n);
 void func_001F4BF8(struct S *p);
 void func_00203D00(struct S *p, struct M *pm, int f)
@@ -18,7 +18,7 @@ void func_00203D00(struct S *p, struct M *pm, int f)
         int i;
         qword *ps, *pd;
         mi = func_0011C318(&p->pm0->px->m);
-        func_0011C168(pmm, pmi, &p->pm1->px->m);
+        __ml__FRC7MATRIX4T0(pmm, pmi, &p->pm1->px->m);
         m = mm;
         ps = p->pm1->av;
         pd = p->pm0->av;

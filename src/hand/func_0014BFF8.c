@@ -1,7 +1,7 @@
 typedef struct DLI { void *m_pdl; void **m_ppv; int m_ibDle; struct DLI *m_pdliNext; } DLI;
 struct X { int a; int x4; void (*pfn)(void *); void *pv; int x10; int x14; };
 struct H { struct X *pxFirst; struct X *pxLast; int ibDle; float gC; };
-extern DLI *D_002DD2F8;
+extern DLI *g_psliFirst;
 extern float D_002DDF0C;
 void func_0011A118(struct H *ph, struct X *px);
 void *func_001FBB90(int n);
@@ -12,8 +12,8 @@ static __inline__ void InitDli(DLI *pdli, struct H *pdl)
     pdli->m_pdl = pdl;
     pdli->m_ppv = (void **)pdl;
     pdli->m_ibDle = pdl->ibDle;
-    pdli->m_pdliNext = D_002DD2F8;
-    D_002DD2F8 = pdli;
+    pdli->m_pdliNext = g_psliFirst;
+    g_psliFirst = pdli;
 }
 static __inline__ void *PvNextDli(DLI *pdli)
 {
@@ -47,6 +47,6 @@ void func_0014BFF8(struct H *ph)
         }
         func_0014BF18(ph);
         ph->gC = 0.0f;
-        D_002DD2F8 = dli.m_pdliNext;
+        g_psliFirst = dli.m_pdliNext;
     }
 }

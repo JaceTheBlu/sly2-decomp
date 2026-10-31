@@ -21,8 +21,8 @@ extern "C" {
 extern CLOCK D_002DDED0;
 extern float D_002C2010[3], D_002C2020[2], D_002C2028, D_002C202C;
 extern qword D_002A2DA0;
-M3 func_0011B500(qword, float);
-float func_0011E290(qword, qword, qword *, qword *);
+M3 LoadRotateMatrixRad__FfUx(qword, float);
+float SProjectVector(qword, qword, qword *, qword *);
 void func_001CF0A0(P *);
 }
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } };
@@ -96,13 +96,13 @@ extern "C" void func_001D09A0(P *p)
     qword axis = p->matrix.r[1];
     float g = Dot(p->vel, row0);
     float t = GClamp(D_002C2010[0] + g * (D_002C2010[1] + g * D_002C2010[2]), D_002C2020);
-    M3 rot = func_0011B500(axis, t * D_002DDED0.dt);
+    M3 rot = LoadRotateMatrixRad__FfUx(axis, t * D_002DDED0.dt);
     p->vel = Rotate(rot, p->vel);
     p->matrix = Multiply(rot, p->matrix);
     float drag = p->drag;
     p->drag = 0.0f;
     struct { qword along, across; } w;
-    func_0011E290(p->vel, row0, &w.along, &w.across);
+    SProjectVector(p->vel, row0, &w.along, &w.across);
     qword len = NormalizeSafe(&w.along, &D_002A2DA0);
     float dt = D_002DDED0.dt;
     g = GetX(len);

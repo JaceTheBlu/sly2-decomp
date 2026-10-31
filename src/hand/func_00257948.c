@@ -4,7 +4,7 @@ extern char D_00452120[];
 extern N *D_002DD2B0, *D_002DD2B8;
 extern unsigned int D_002DD598[1];
 void func_00255AB0(N *);
-void func_0011CD98(void *, void *);
+void FreeSlotheapPv__FP8SLOTHEAPPv(void *, void *);
 
 static inline N *Ptr(unsigned idx, unsigned pg)
 {
@@ -35,7 +35,7 @@ void func_00257948(void)
         p = next;
         if (cur->mark != D_002DD598[0]) {
             func_00255AB0(cur);
-            func_0011CD98(D_00452120, cur);
+            FreeSlotheapPv__FP8SLOTHEAPPv(D_00452120, cur);
         }
     }
 }

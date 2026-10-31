@@ -11,9 +11,9 @@ public:
     int S32Read();
 };
 struct S { char pad[0x90]; int *a90; int c94; void *a98; int *a9C; int cA0; void *aA4; int cA8; void *aAC; int cB0; void *aB4; };
-extern "C" void *func_001AE318(ALLOCREQ *preq);
-extern "C" void *func_001AE238(ALLOCREQ *preq, void *pv);
-extern "C" void *func_001AE2A0(ALLOCREQ *preq);
+extern "C" void *PvAllocStackImpl__FP7SWALLOC(ALLOCREQ *preq);
+extern "C" void *PvAllocSwCopyImpl__FP7SWALLOCPv(ALLOCREQ *preq, void *pv);
+extern "C" void *PvAllocSwClearImpl__FP7SWALLOC(ALLOCREQ *preq);
 extern "C" void *PvAllocSwImpl__Fi(ALLOCREQ *preq);
 extern "C" void func_001A5C28(S *p, CBinaryInputStream *pbis);
 extern "C" void func_00118420(CBinaryInputStream *pbis);
@@ -21,19 +21,19 @@ static inline void *PvAllocReq(ALLOCREQ *preq, int cb, int nKind)
 {
     preq->cb = cb;
     preq->nKind = nKind;
-    return func_001AE318(preq);
+    return PvAllocStackImpl__FP7SWALLOC(preq);
 }
 static inline void *PvShrinkReq(ALLOCREQ *preq, int cb, int nKind, void *pv)
 {
     preq->cb = cb;
     preq->nKind = nKind;
-    return func_001AE238(preq, pv);
+    return PvAllocSwCopyImpl__FP7SWALLOCPv(preq, pv);
 }
 static inline void *PvAllocA(ALLOCREQ *preq, int cb, int nKind)
 {
     preq->cb = cb;
     preq->nKind = nKind;
-    return func_001AE2A0(preq);
+    return PvAllocSwClearImpl__FP7SWALLOC(preq);
 }
 static inline void *PvAllocB(ALLOCREQ *preq, int cb, int nKind)
 {

@@ -44,7 +44,7 @@ struct CLOCK { float t; };
 extern SW g_sw;      // g_sw
 extern CM g_cm;      // g_cm
 extern CLOCK D_002DDED0;   // g_clock
-extern qword D_002A2DC0;   // g_normalZ
+extern qword g_normalZ;   // g_normalZ
 extern LM D_002BBB60;      // g_lmZeroOne
 extern float D_002C4494, D_002C4498, D_002C449C, D_002C44D8;
 extern CLQ D_002C44A0, D_002C44B0, D_002C44C0;
@@ -148,11 +148,11 @@ extern "C" void func_0022A908(WAYPT *pwaypt)
     func_0022A220(pwaypt);
     qword posCam = g_cm.pos;
     qword pos = func_001A62E8(pwaypt->ploSource);
-    qword posTop = QwAddScaled(pos, D_002A2DC0, VuFloatFromMemWord(*(int *)&pwaypt->sHeight));
+    qword posTop = QwAddScaled(pos, g_normalZ, VuFloatFromMemWord(*(int *)&pwaypt->sHeight));
     float sDist;
     func_0011EE08(posCam, pos, posTop, 0, 0, &sDist);
     float rScale = GLimitG(GEvaluateClq(&D_002C44C0, sDist), D_002C44D0.gMin, D_002C44D0.gMax);
-    qword posEnd = QwAddScaled(posTop, D_002A2DC0, VuFloat(rScale * D_002C44D8));
+    qword posEnd = QwAddScaled(posTop, g_normalZ, VuFloat(rScale * D_002C44D8));
 
     MATRIX4 mat;
     if (pwaypt->psoMarker)
@@ -185,7 +185,7 @@ extern "C" void func_0022A908(WAYPT *pwaypt)
     if (0.0f < uLabel && pwaypt->pattach && pwaypt->pattach->ptask && pwaypt->pattach->ptask->idLabelName != -1)
     {
         float dz = pwaypt->psoMarker ? rScale * pwaypt->psoMarker->sRadius : 0.0f;
-        qword posLabel = QwAddScaledG(posEnd, D_002A2DC0, VuFloat(dz));
+        qword posLabel = QwAddScaledG(posEnd, g_normalZ, VuFloat(dz));
         RGBA rgbaBack(0x80603030);
         RGBA rgbaText(0xFFC0C0C0);
         rgbaBack.a = (uchar)(int)(uLabel * rgbaBack.a);

@@ -10,13 +10,13 @@ struct VTE {short delta,pad;void*fn;};
 struct P {char pad[0xC];VTE*vt;char pad10[0x17C];int flag;char pad190[0x30];float time;char pad1C4[0xC];P*target;float turnRate;};
 struct CLOCK{float time,dt;};
 extern "C" CLOCK D_002DDED0;
-extern "C" qword D_002A2DC0;
+extern "C" qword g_normalZ;
 extern "C" void func_001F36E0(P*);
 extern "C" qword func_001A62E8(P*);
 extern "C" float func_002458F0(float,float);
 extern "C" float RadNormalize__Ff(float);
 extern "C" float func_0011CFE0(float,float);
-extern "C" M3 func_0011B500(qword,float);
+extern "C" M3 LoadRotateMatrixRad__FfUx(qword,float);
 static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline float X(qword v){float f;__asm__("mtc1 %1,%0":"=f"(f):"r"(v));return f;}
 static inline float Y(qword v){float f;__asm__("prot3w %0,%1":"=r"(f):"r"(v));return f;}
@@ -40,7 +40,7 @@ extern "C" void func_001801B8(P*p){
  qword direction=((qword(*)(void*))p->vt[33].fn)((char*)p+p->vt[33].delta);
  float current=func_002458F0(Y(direction),X(direction));
  float angle=func_0011CFE0(RadNormalize__Ff(desired-current),p->turnRate*D_002DDED0.dt);
- rotation=func_0011B500(D_002A2DC0,angle);
+ rotation=LoadRotateMatrixRad__FfUx(g_normalZ,angle);
  ((void(*)(void*,qword))p->vt[35].fn)((char*)p+p->vt[35].delta,Transform(rotation,direction));
  // The original reads this local matrix before initialization.
  matrix=Mul(rotation,matrix);

@@ -47,11 +47,11 @@ extern CLOCK D_002DDED0;
 extern float D_002C3658[4];
 extern float D_002C3668[4];
 extern qword D_002A2DA0;
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern "C" {
 qword func_0022D348(SPACE *, SPACE *, qword);
 void func_001AE5A0(void *, const void *, unsigned);
-int func_0014C748(qword posCenter, float sRadius, qword pos0, qword pos1, int clsgMax, LSG *alsg);
+int ClsgClipEdgeToSphere__FUxfUxUxiP3LSG(qword posCenter, float sRadius, qword pos0, qword pos1, int clsgMax, LSG *alsg);
 M4 *func_0011C318(M4 *, M4 *);
 void func_001E6330(PATH *);
 void func_001E8378(CHAIN *);
@@ -226,7 +226,7 @@ void func_001E8378(CHAIN *p)
                 LerpP(&mid, &newP[i - 1], &newP[i + 1], r);
                 LerpP(&midV, &newV[i - 1], &newV[i + 1], r);
                 dir.q = SubP(&mid, &newP[i]);
-                float len = Normalize(&dir, D_002A2DC0);
+                float len = Normalize(&dir, g_normalZ);
                 proj.q = Scale(dir.q, Dot(SubP(&midV, &newV[i]), dir.q));
                 F = VecCombo3(F, VU_FLOAT(p->bend * len), dir.q, VU_FLOAT(&p->bendDamping), proj.q);
             }
@@ -236,7 +236,7 @@ void func_001E8378(CHAIN *p)
                 LerpP(&mid, &newP[0], &newP[count - 1], r);
                 LerpP(&midV, &newV[0], &newV[count - 1], r);
                 dir.q = SubP(&mid, &newP[i]);
-                float len = Normalize(&dir, D_002A2DC0);
+                float len = Normalize(&dir, g_normalZ);
                 proj.q = Scale(dir.q, Dot(SubP(&midV, &newV[i]), dir.q));
                 float r4 = r * 4.0f;
                 F = VecCombo3(F, VU_FLOAT(p->shape * (len - amplitude * r4 * (1.0f - r))), dir.q, VU_FLOAT(&p->shapeDamping), proj.q);
@@ -264,7 +264,7 @@ void func_001E8378(CHAIN *p)
                 break;
             for (int j = j0; j < count; j++) {
                 float t;
-                if (!func_0014C748(p->position[i - 1].q, step, Q(&accP[j - 1]), Q(&accP[j]), 1, &lsg)) {
+                if (!ClsgClipEdgeToSphere__FUxfUxUxiP3LSG(p->position[i - 1].q, step, Q(&accP[j - 1]), Q(&accP[j]), 1, &lsg)) {
                     p->position[i] = accP[j - 1];
                     t = 0.0f;
                 } else if (lsg.au[1] < 1.0f) {

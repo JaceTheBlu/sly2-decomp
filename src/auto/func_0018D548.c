@@ -1,7 +1,7 @@
 #include "m2c_prelude.h"
 extern M2C_UNK D_002A2D00;
 extern s128 D_002A2DA0;
-extern s128 D_002A2DC0;
+extern s128 g_normalZ;
 extern s128 D_002A2DD0;
 extern M2C_UNK D_002BBB60;
 extern f32 D_002BF3A0;

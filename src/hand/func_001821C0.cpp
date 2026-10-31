@@ -9,16 +9,16 @@ struct M4 {U r[4];};
 struct N {qword pos,dir;char pad20[0x50-0x20];float lateral,roll;char pad58[8];N*next;};
 struct E {char pad[0x10];N*first;char pad14[0x1C];};
 struct P {char pad[0x1C4];void*model;int count;E entries[1];};
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern "C" void func_001F3C70(P*);
 extern "C" M3 func_0011B830(qword,qword);
-extern "C" M3 func_0011B500(qword,float);
+extern "C" M3 LoadRotateMatrixRad__FfUx(qword,float);
 extern "C" qword*__as__6VECTORG9VU_VECTOR(qword*,qword);
 extern "C" void func_001A5EE8(void*,M4*,float,float);
 extern "C" float fabsf(float);
 static inline qword Load(const qword*p){return *p;}
 static inline qword Cross(qword a,qword b){qword up=a,dir=b;__asm__("vopmula.xyz ACC,%0,%1\n\tvopmsub.xyz %0,%1,%0":"+j"(up):"j"(dir));return up;}
-static inline qword AddLateral(qword a,N*n,float f){qword k;U u;__asm__("qmtc2.ni %1,%0":"=j"(k):"r"(f));u.q=k;qword b=Cross(D_002A2DC0,n->dir);__asm__("vadda.xyzw ACC,%0,$vf0\n\tvmaddx.xyzw %0,%1,%2x":"+j"(a):"j"(b),"j"(k));return a;}
+static inline qword AddLateral(qword a,N*n,float f){qword k;U u;__asm__("qmtc2.ni %1,%0":"=j"(k):"r"(f));u.q=k;qword b=Cross(g_normalZ,n->dir);__asm__("vadda.xyzw ACC,%0,$vf0\n\tvmaddx.xyzw %0,%1,%2x":"+j"(a):"j"(b),"j"(k));return a;}
 static inline M3 Mul(const M3 &a, const M3 &b) return r
 {
     qword a0 = a.r[0], a1 = a.r[1], a2 = a.r[2];
@@ -42,9 +42,9 @@ extern "C" void func_001821C0(P*p){
   N*n=((N**)((int)p+i*0x30))[0x1DC/4];
   while(n){M4*pm=&mm;
    pos=Load(&n->pos);
-   m=func_0011B830(n->dir,D_002A2DC0);
+   m=func_0011B830(n->dir,g_normalZ);
    if(1.0f<fabsf(n->lateral))pos=AddLateral(pos,n,n->lateral);
-   {float roll=n->roll;register float epsilon __asm__("$f1")=0.01f; /* the one pin */if(epsilon<fabsf(roll))m=Mul(m,func_0011B500(D_002A2DC0,roll));}
+   {float roll=n->roll;register float epsilon __asm__("$f1")=0.01f; /* the one pin */if(epsilon<fabsf(roll))m=Mul(m,LoadRotateMatrixRad__FfUx(g_normalZ,roll));}
    __as__6VECTORG9VU_VECTOR(&mm.r[3].q,pos);
    pm->r[0].q=m.r[0];pm->r[1].q=m.r[1];pm->r[2].q=m.r[2];
    mm.r[0].i[3]=mm.r[1].i[3]=mm.r[2].i[3]=0;

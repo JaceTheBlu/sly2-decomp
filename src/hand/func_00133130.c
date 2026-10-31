@@ -6,7 +6,7 @@ void func_0011A118(void *, struct N *);
 void func_00256D40(void *, int);
 void func_00129EC8(void *);
 void func_002550F8(struct R *);
-void func_0011CD98(void *, void *);
+void FreeSlotheapPv__FP8SLOTHEAPPv(void *, void *);
 void func_00133130(struct S *p, int id) {
     struct N *pn;
     if (id == -1) return;
@@ -19,9 +19,9 @@ void func_00133130(struct S *p, int id) {
                 func_00256D40(&pr->f10, 2);
                 func_00129EC8(pr->ref8);
                 func_002550F8(pr);
-                func_0011CD98(D_004520A8, pr);
+                FreeSlotheapPv__FP8SLOTHEAPPv(D_004520A8, pr);
             }
-            func_0011CD98(&p->pool39fc, pn);
+            FreeSlotheapPv__FP8SLOTHEAPPv(&p->pool39fc, pn);
             return;
         }
     }

@@ -8,14 +8,14 @@ struct EMITVX { int c; float dTilt; float dPan; float tiltBase; float panBase; }
 struct EMITTER { char pad[0x1C]; XF *pxf; char pad1[0x84 - 0x20]; int x84; char pad2[0x90 - 0x88]; char x90[1]; };
 struct BUF { qword *apos; qword *av; float *ag; float *an; int f10; };
 extern "C" {
-void *func_001AE318(AL *pal);
+void *PvAllocStackImpl__FP7SWALLOC(AL *pal);
 void func_0015AE38(int n, void *p, int c, EMITVX *pvx);
 void func_0015A808(EMITTER *pemit, int i, int c, qword *ppos, qword *pnormal);
 void func_0015B0C8(void *p, EMITVX *pvx, void *q, int n, qword *ppos, qword *pnormal, qword *pvel, float *ptBirth, float *ptDeath);
 void func_0015AD48(EMITTER *pemit, qword *ppos, qword *pvel);
 void func_0015B7E8(int c, EMITTER *pemit, BUF *pb);
 }
-static inline void *PvAlloc(int cb, int cbAlign) { AL al(cb, cbAlign); return func_001AE318(&al); }
+static inline void *PvAlloc(int cb, int cbAlign) { AL al(cb, cbAlign); return PvAllocStackImpl__FP7SWALLOC(&al); }
 static inline qword MulRow(const MATRIX3 &m, qword v)
 {
     qword r;

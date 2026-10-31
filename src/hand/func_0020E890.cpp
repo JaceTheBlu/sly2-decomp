@@ -21,7 +21,7 @@ FRAME *func_001AE478(FRAME *);
 void _$_18CBinaryInputStream(FRAME *,int);
 void func_001C2A78(int);
 void func_00258248(KEY *);
-STREAM *func_001848A8(STREAM *,int,void *,int);
+STREAM *__3OBJiPvi(STREAM *,int,void *,int);
 int func_00184D60(STREAM *,KEY *);
 void func_00184950(STREAM *,int);
 void SetDecompress__18CBinaryInputStreamiPUc(STREAM *,int,void *);
@@ -44,8 +44,8 @@ void func_00228750(CONTEXT *);
 ACTOR *func_001C4840(SW *);
 ACTOR *func_001C4A48(SW *);
 void func_00129EC8(REF *);
-ACTOR *func_0015E938(SW *,int,int,void *);
-int func_00132B10(ACTOR *,int);
+ACTOR *PloFindSwObject__FP2SWi3OIDP2LO(SW *,int,int,void *);
+int FIsBasicDerivedFrom__FP5BASIC3CID(ACTOR *,int);
 int func_001C4080(ACTOR *);
 int _IppoFindPo__FP2PO(void);
 void func_00212A70(WIDGET *,int);
@@ -94,7 +94,7 @@ extern "C" void func_0020E890(SW *p)
     register STREAM *argument __asm__("$4")=StreamHome(&stream);
     register STREAM *reader __asm__("$21");
     __asm__("daddu %0,%1,$zero":"=r"(reader):"r"(argument));
-    func_001848A8(argument,0xD8000,D_002F7980,0);
+    __3OBJiPvi(argument,0xD8000,D_002F7980,0);
     if(hasFile&&!func_00184D60(reader,&key)){func_00184950(reader,2);_$_18CBinaryInputStream(scope,2);return;}
     SetDecompress__18CBinaryInputStreamiPUc(reader,0x4000,(void *)0x70000000);
     func_00184CA0(reader);
@@ -119,7 +119,7 @@ extern "C" void func_0020E890(SW *p)
         ACTOR *selected=0;
         int actorId;
         {REF value=func_001D8A38(D_002A8A88,0);actorId=value.value;}
-        if(actorId!=-1)selected=func_0015E938(p,5,actorId,0);
+        if(actorId!=-1)selected=PloFindSwObject__FP2SWi3OIDP2LO(p,5,actorId,0);
         if(!selected)selected=D_002E1E40;
         if(!selected)selected=D_002DD5BC;
         if(!selected)selected=D_002F7900;
@@ -133,13 +133,13 @@ extern "C" void func_0020E890(SW *p)
             }
             for(int i=0;i<p->actorCount;i++){
                 ACTOR *actor=p->actors[i];
-                if(actor!=selected&&func_00132B10(actor,0x34)&&!func_001C4080(actor))Hide(actor);
+                if(actor!=selected&&FIsBasicDerivedFrom__FP5BASIC3CID(actor,0x34)&&!func_001C4080(actor))Hide(actor);
             }
         }
     }
     if(!_IppoFindPo__FP2PO()){
         ACTOR *actor=func_001C4840(p);
-        if(actor&&func_00132B10(actor,0x34)&&actor->widget&&!actor->widget->shown)func_00212A70(actor->widget,1);
+        if(actor&&FIsBasicDerivedFrom__FP5BASIC3CID(actor,0x34)&&actor->widget&&!actor->widget->shown)func_00212A70(actor->widget,1);
     }
     func_0014D478(g_cm);
     func_0014D8C0(g_cm);

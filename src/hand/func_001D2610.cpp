@@ -35,7 +35,7 @@ struct P {
     P *target; void *navigator; PATH *path; float cursor, nextAttack; P *selectedObject; ATTACH *selectedAttach;
 };
 extern CLOCK D_002DDED0;
-extern const qword D_002A2DA0, D_002A2DC0;
+extern const qword D_002A2DA0, g_normalZ;
 extern float D_002C20E8, D_002C20EC, D_002C20F0, D_002C20F4, D_002C20F8;
 extern "C" {
 qword func_001A62E8(P *);
@@ -44,7 +44,7 @@ P *func_001D22D0(P *);
 int func_0011D910(LM *, float);
 void func_001D4B28(P *, int);
 float func_002456F0(float);
-M3 func_0011B500(qword, float);
+M3 LoadRotateMatrixRad__FfUx(qword, float);
 int func_001C0960(void *, qword, qword, int, HIT *, int);
 void func_001E6180(PATH *);
 void func_001D2420(P *);
@@ -156,12 +156,12 @@ extern "C" void func_001D2610(P *p)
             goal = target;
             break;
         case 2: {
-            M3 m = func_0011B500(D_002A2DC0, angle);
+            M3 m = LoadRotateMatrixRad__FfUx(g_normalZ, angle);
             goal = Add(target, Rotate(m, offset));
             break;
         }
         case 3: {
-            M3 m = func_0011B500(D_002A2DC0, -angle);
+            M3 m = LoadRotateMatrixRad__FfUx(g_normalZ, -angle);
             goal = Add(target, Rotate(m, offset));
             break;
         }

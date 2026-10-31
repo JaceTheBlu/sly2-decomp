@@ -10,12 +10,12 @@ int func_00117DB8(BIS *pbis);
 int func_00117D00(BIS *pbis);
 int func_00117BD0(BIS *pbis);
 void *PvAllocSwImpl__Fi(AREQ *preq);
-void *func_001AE2A0(AREQ *preq);
-void *func_001AE238(AREQ *preq, void *pv);
+void *PvAllocSwClearImpl__FP7SWALLOC(AREQ *preq);
+void *PvAllocSwCopyImpl__FP7SWALLOCPv(AREQ *preq, void *pv);
 void ReadCb8__18CBinaryInputStreamPv(BIS *pbis, void *pv);
 void func_0012F590(void *px, BIS *pbis, int fTime, int *pc, struct ENT **pa);
 }
-static __inline__ void *PvAlloc(int cb) { AREQ req; req.cb = cb; req.cbAlign = 0x10; return func_001AE2A0(&req); }
+static __inline__ void *PvAlloc(int cb) { AREQ req; req.cb = cb; req.cbAlign = 0x10; return PvAllocSwClearImpl__FP7SWALLOC(&req); }
 void func_0012F590(void *px, BIS *pbis, int fTime, int *pc, ENT **pa) { int i; int c; ENT *aent;
  c = func_00117BD0(pbis);
  *pc = c;
@@ -28,7 +28,7 @@ void func_0012F590(void *px, BIS *pbis, int fTime, int *pc, ENT **pa) { int i; i
    switch (pe->kind) {
    case 0: { AREQ req; L0 l; l.n = func_00117D50(pbis); l.a = func_00117DB8(pbis); l.b = func_00117DB8(pbis); l.c = func_00117DB8(pbis);
        l.z = func_00117E38(pbis); l.x = func_00117E38(pbis); l.y = func_00117E38(pbis);
-       req.cb = 0x1C; req.cbAlign = 0x10; pe->u8.pv = func_001AE238(&req, &l); break; }
+       req.cb = 0x1C; req.cbAlign = 0x10; pe->u8.pv = PvAllocSwCopyImpl__FP7SWALLOCPv(&req, &l); break; }
    case 3: pe->uC.g = func_00117D50(pbis) * (1.0f / 60.0f); pe->u8.n = func_00117D50(pbis); break;
    case 5: pe->u8.g = func_00117D50(pbis) * (1.0f / 60.0f); pe->uC.g = func_00117E38(pbis); break;
    case 7: case 8: pe->u8.n = func_00117DB8(pbis); pe->uC.g = func_00117E38(pbis); break;
@@ -36,7 +36,7 @@ void func_0012F590(void *px, BIS *pbis, int fTime, int *pc, ENT **pa) { int i; i
    case 17: { pe->u8.pv = PvAlloc(0x10);
        pe->u8.pn[0] = func_00117DB8(pbis); pe->u8.pn[1] = func_00117DB8(pbis); pe->u8.pn[2] = func_00117DB8(pbis); ((float *)pe->u8.pn)[3] = func_00117E38(pbis); break; }
    case 20: { L20 t; AREQ req; AREQ *preq; t.a = func_00117DB8(pbis); t.b = func_00117DB8(pbis); t.g = func_00117E38(pbis);
-       preq = &req; req.cb = 0xC; preq->cbAlign = 0x10; pe->u8.pv = func_001AE238(preq, &t); break; }
+       preq = &req; req.cb = 0xC; preq->cbAlign = 0x10; pe->u8.pv = PvAllocSwCopyImpl__FP7SWALLOCPv(preq, &t); break; }
    case 1: case 2: case 21: pe->u8.n = func_00117D50(pbis); break;
    case 4: case 11: case 12: case 22: pe->u8.n = func_00117DB8(pbis); break;
    case 24: { AREQ req; char *p; req.cb = 0x18; req.cbAlign = 0x10; p = (char *)PvAllocSwImpl__Fi(&req);

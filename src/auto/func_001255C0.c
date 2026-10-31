@@ -10,6 +10,6 @@ extern M2C_UNK D_003E0EA8;
 extern M2C_UNK D_004520A8;
 
 s32 func_001255C0(s32 arg0) {
-    func_0012A0B0(arg0, 0x24);
+    SetTag__4CRef4TAGK(arg0, 0x24);
     return arg0;
 }

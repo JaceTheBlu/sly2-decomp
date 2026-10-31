@@ -2,7 +2,7 @@
    so gcc emits the qmfc2 moves itself; the commented barrier sits after ba (not ca). One pin (d). */
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f; } U;
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 static inline qword Sub(qword a, qword b)
 {
     qword r;
@@ -58,7 +58,7 @@ void func_0011E630(qword a, qword b, qword c, qword pos, float *puv, float *pdis
         }
     }
     {
-        qword def = D_002A2DC0;
+        qword def = g_normalZ;
         qword t;
         qword one, dd;
         float l;

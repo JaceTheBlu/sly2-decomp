@@ -13,7 +13,7 @@ struct CRef {
 };
 extern char D_004520A8[];
 extern "C" {
-void func_0011CD98(void *pheap, void *pv);
+void FreeSlotheapPv__FP8SLOTHEAPPv(void *pheap, void *pv);
 void func_002550F8(void *pv);
 NODE *func_00256B48();
 int func_0011D3F8(int nLo, int nHi);
@@ -28,7 +28,7 @@ struct NODE {
     int x4;
     CRef ref;
     SPM pnext;
-    void operator delete(void *pv) { func_002550F8(pv); func_0011CD98(D_004520A8, pv); }
+    void operator delete(void *pv) { func_002550F8(pv); FreeSlotheapPv__FP8SLOTHEAPPv(D_004520A8, pv); }
 };
 struct SPN {
     NODE *p;

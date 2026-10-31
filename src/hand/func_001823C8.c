@@ -13,8 +13,8 @@ typedef struct SEGMENT{qword a,b,plane;char pad30[0x30];}SEGMENT;
 typedef struct WORK{U direction,newEndpoint,oldEndpoint;SEGMENT segments[2];U scale,dot,one;}WORK;
 extern qword D_002A2DA0;extern int g_sw;
 extern void func_001F5990(P*,REQUEST*,int,int,int,CONTACT**);
-extern qword*func_002564B8(qword*);
-extern int func_0014C748(qword,float,qword,qword,int,SEGMENT*);
+extern qword*__3VUF(qword*);
+extern int ClsgClipEdgeToSphere__FUxfUxUxiP3LSG(qword,float,qword,qword,int,SEGMENT*);
 extern void func_001A7C18(void*,CONTACT*,REQUEST*,qword,qword,int,NODE*,int,CONTACT**,float);
 
 static inline qword Sub(qword a,qword b){__asm__("vsub.xyzw %0,%0,%1":"+j"(a):"j"(b));return a;}
@@ -63,12 +63,12 @@ void func_001823C8(P*p,REQUEST*q,int unused2,int unused3,int unused4,CONTACT**po
     for(j=q->start;j<q->count;j++){
      w.newEndpoint.q=Point(&q->matrix,q->vertices[j]);w.oldEndpoint.q=q->world[j];
      w.newEndpoint.f[2]=w.oldEndpoint.f[2]=n->position.f[2];
-     if(func_0014C748(n->position.q,radius,w.newEndpoint.q,w.oldEndpoint.q,2,w.segments)>0){
+     if(ClsgClipEdgeToSphere__FUxfUxUxiP3LSG(n->position.q,radius,w.newEndpoint.q,w.oldEndpoint.q,2,w.segments)>0){
       qword plane,point,result;
       w.scale.q=BroadcastBits(*(int*)&q->radius);
       plane=w.segments[0].plane;point=w.oldEndpoint.q;
       result=MAdd2(point,plane,w.scale.q);
-      func_002564B8(&w.dot.q);func_002564B8(&w.one.q);
+      __3VUF(&w.dot.q);__3VUF(&w.one.q);
       distance=Distance(&w.dot,&w.one,plane,point)-q->radius;
       func_001A7C18(&g_sw,&p->contacts[p->contactCount-1],q,result,plane,10,n,0,out,distance);
       break;

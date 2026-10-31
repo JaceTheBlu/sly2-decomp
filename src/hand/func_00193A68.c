@@ -10,7 +10,7 @@ struct SMP {float g0,g1,g2;};
 struct CLOCK {float t,dt;};
 extern struct CLOCK D_002DDED0;
 extern float D_002BF668;
-extern qword D_002A2DC0,D_002A2DD0;
+extern qword g_normalZ,D_002A2DD0;
 void func_001E67B8(struct CURVE*,float,qword*,qword*);
 qword func_0011E1A0(float,float,float);
 float func_001E63C0(struct CURVE*,float);
@@ -25,7 +25,7 @@ void func_00193A68(struct P*p,struct CURVE*curve,qword*outPos,qword*outVel,float
  U pos,dir,dead;struct SMP smp;float low,high;qword v;float dot,current;
  struct T*shape=p->o->x150;
  func_001E67B8(curve,t,&pos.q,&dir.q);
- dir.q=Normal(Reject(dir.q,D_002A2DC0),D_002A2DD0);
+ dir.q=Normal(Reject(dir.q,g_normalZ),D_002A2DD0);
  {register float width __asm__("$f0")=shape->x1C;register float factor __asm__("$f13")=p->x2A0;v=func_0011E1A0(p->o->x150->x18,factor*width,0.0f);}
  dot=Dot(v,dir.q);dead.q=v;
  current=func_001E63C0(curve,t);

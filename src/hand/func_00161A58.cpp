@@ -35,7 +35,7 @@ extern "C"{
  void func_00165C98(int*,P***);
  void func_00164270(P*);
  void func_001643B0(P*);
- P*func_0015E938(G*,int,int,P*);
+ P*PloFindSwObject__FP2SWi3OIDP2LO(G*,int,int,P*);
  void func_00165DC0(G*,P*);
  void func_00165DE8(G*,P*);
  void func_00165E10(G*,P*);
@@ -117,9 +117,9 @@ extern "C" void func_00161A58(P*p,int action){
   func_00165C98(&count,&objects);
   for(;i<count;i++){P*object=objects[i];OVERRIDE temp(object,1,0);func_00164270(object);}
   G*g=&g_sw;
-  func_00165DC0(g,func_0015E938(g,0x105,p->selections[0],0));
-  func_00165DE8(g,func_0015E938(g,0x105,p->selections[1],0));
-  func_00165E10(g,func_0015E938(g,0x105,p->selections[2],0));
+  func_00165DC0(g,PloFindSwObject__FP2SWi3OIDP2LO(g,0x105,p->selections[0],0));
+  func_00165DE8(g,PloFindSwObject__FP2SWi3OIDP2LO(g,0x105,p->selections[1],0));
+  func_00165E10(g,PloFindSwObject__FP2SWi3OIDP2LO(g,0x105,p->selections[2],0));
   if(g->first)func_001629A0(g->first);
   if(g->second)func_00163D18(g->second);
   if(g->flags&4){if(g->third)func_001657A8(g->third);else if(g->first)func_001657A8(g->first->child);}

@@ -5,11 +5,11 @@ union F {float value;int bits;};
 struct M3 {qword rows[3];};
 struct SHRAPNEL {char pad40[0x40];M3 matrix;qword position;char pad80[0x70];F depth;};
 struct CM;
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern "C" int func_001CF338(SHRAPNEL *,qword,const M3 &);
 static inline qword AddScaled(qword p,qword a,qword k){__asm__("vadda.xyzw ACC,%0,$vf0\n\tvmaddx.xyzw %0,%1,%2x":"+j"(p):"j"(a),"j"(k));return p;}
 static inline SHRAPNEL* Receiver(SHRAPNEL*input){register SHRAPNEL*p __asm__("$3");__asm__("daddu %0,%1,$zero":"=r"(p):"r"(input));return p;}
-static inline const qword* AxisAddress(void){register const qword*p __asm__("$2");__asm__("lui %0,%%hi(%1)\n\taddiu %0,%0,%%lo(%1)":"=r"(p):"i"(&D_002A2DC0));return p;}
+static inline const qword* AxisAddress(void){register const qword*p __asm__("$2");__asm__("lui %0,%%hi(%1)\n\taddiu %0,%0,%%lo(%1)":"=r"(p):"i"(&g_normalZ));return p;}
 static inline qword Axis(const qword*p){register qword v __asm__("vf3");__asm__("lqc2 %0,0(%1)":"=j"(v):"r"(p),"m"(*p));return v;}
 static inline const M3* MatrixAddress(SHRAPNEL*p){register SHRAPNEL*receiver __asm__("$4")=p;register const M3*matrix __asm__("$6");__asm__("addiu %0,%1,64":"=r"(matrix):"r"(receiver));return matrix;}
 static inline qword Depth(SHRAPNEL*p){

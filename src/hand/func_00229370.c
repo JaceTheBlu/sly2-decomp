@@ -5,8 +5,8 @@ struct S { char pad[0x150]; struct N *pn; };
 struct MSG { struct S *p; struct O *po; };
 struct G;
 extern struct G g_sw;
-void func_00229738(struct O *po, struct N *pn);
-void func_002296C0(struct G *pg, struct N *pn);
+void RemoveSoXa__FP2SOP2XA(struct O *po, struct N *pn);
+void FreeSwXaList__FP2SWP2XA(struct G *pg, struct N *pn);
 void func_00133590(struct S *p, int k, struct O *q);
 void func_00229370(struct S *p, int k, struct O *q)
 {
@@ -34,8 +34,8 @@ void func_00229370(struct S *p, int k, struct O *q)
         msg.po = pn->po;
         if (pn) {
             pn->next = 0;
-            func_00229738(pn->po, pn);
-            func_002296C0(&g_sw, pn);
+            RemoveSoXa__FP2SOP2XA(pn->po, pn);
+            FreeSwXaList__FP2SWP2XA(&g_sw, pn);
         }
         msg.po->vt[4].pfn((char *)msg.po + msg.po->vt[4].d, 5, &msg);
     }

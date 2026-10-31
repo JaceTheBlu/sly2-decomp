@@ -12,7 +12,7 @@ struct CRef {
 struct VECTOR { float x, y, z, w; } __attribute__((aligned(16)));
 struct MATRIX3 { VECTOR mat[3]; };
 struct W { char pad[0xC]; qword *pv; };
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern "C" {
 MATRIX3 func_0011B830(qword a, qword b);
 CRef func_00123208(void *pbasic, CRef *aref);
@@ -28,7 +28,7 @@ CRef func_00123208(void *pbasic, CRef *aref)
 {
     qword *pup;
     if (aref[2].m_tagk == 0)
-        pup = &D_002A2DC0;
+        pup = &g_normalZ;
     else
         pup = ((W *)aref[2].u.pv)->pv;
     union { qword q; } v;

@@ -5,7 +5,7 @@ struct F { struct S *p0; int n4; int n8; int nC; int n10; int pad[3]; qword q20;
 void *func_002333B4(void *p, int c, int n);
 qword func_001A62E8(void *p);
 void func_001F7598(struct F *pf);
-void func_0015C150(void *p);
+void ExplodeExpl__FP4EXPL(void *p);
 void func_0017F5F8(struct S *p, int n) {
     if (n && p->n188) {
         struct F f;
@@ -20,6 +20,6 @@ void func_0017F5F8(struct S *p, int n) {
         f.n10 = -p->n188;
         func_001F7598(&f);
     }
-    if (p->p190) func_0015C150(p->p190);
+    if (p->p190) ExplodeExpl__FP4EXPL(p->p190);
     { struct VTE *e = &p->vt[9]; ((void (*)(void *))e->pfn)((char *)p + e->d); }
 }

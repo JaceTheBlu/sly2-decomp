@@ -52,7 +52,7 @@ extern U D_002BF5D0[3], D_002BF600[3];
 qword func_001A62E8(ACTOR *);
 void func_00182CD8(void *, ACTOR *, float *, U *, float *);
 qword func_0011F088(qword, qword, float, SMP *, U *);
-int func_00132B10(void *, int);
+int FIsBasicDerivedFrom__FP5BASIC3CID(void *, int);
 qword func_0011E1A0(float, float, float);
 float func_001E6620(FOCUS *);
 float func_001E6648(FOCUS *);
@@ -74,7 +74,7 @@ void func_001E6F60(FOCUS *, qword, void *, void *, U *, void *, void *);
 void func_001CC2E8(void *);
 void func_001A0450(ACTOR *, ENTRY *, void *);
 void func_00205910(ACTOR *, HEIGHT *, int, U *);
-BINDING *func_0012FF10(void *, ACTOR *, int, int);
+BINDING *PchnFindAseg__FP4ASEGP3ALOii(void *, ACTOR *, int, int);
 void func_002046F0(ACTOR *, FOCUS *);
 void func_00204CA8(ACTOR *);
 void func_00189C40(ACTOR *, void *, void *, void *, float, void *);
@@ -167,7 +167,7 @@ extern "C" void func_00191A10(CONTEXT *ctx)
         func_0011F088(pos.q, goal.q, D_002DDED0.dt, &smp, &vel);
         float lateral;
         qword offset;
-        if (func_00132B10(ctx->focus, 38)) {
+        if (FIsBasicDerivedFrom__FP5BASIC3CID(ctx->focus, 38)) {
             offset = QwZero();
             lateral = 0.0f;
         } else {
@@ -188,7 +188,7 @@ extern "C" void func_00191A10(CONTEXT *ctx)
             lateral = GMin(SqrtF(speedMax * speedMax - GFromVf(QwDot(vel.q, vel.q))), lateral);
             float s;
             FOCUS *focus;
-            if (func_00132B10(ctx->focus, 12) && !(focus = ctx->focus)->cyclic) {
+            if (FIsBasicDerivedFrom__FP5BASIC3CID(ctx->focus, 12) && !(focus = ctx->focus)->cyclic) {
                 float lo, hi;
                 GSmooth__FfffP3SMPPf(ctx->value, func_001E6620(focus) + 30.0f, D_002DDED0.dt, &smp, &lo);
                 GSmooth__FfffP3SMPPf(ctx->value, func_001E6648(focus) - 30.0f, D_002DDED0.dt, &smp, &hi);
@@ -220,7 +220,7 @@ extern "C" void func_00191A10(CONTEXT *ctx)
             }
         } else {
             step = 0;
-            if (func_00132B10(ctx->focus, 12)) {
+            if (FIsBasicDerivedFrom__FP5BASIC3CID(ctx->focus, 12)) {
                 FOCUS *focus = ctx->focus;
                 if (lateral < -25.0f && (focus->flags & 1)) {
                     step = ctx->action == 0 && ctx->actor->role == 0 ? 3 : 2;
@@ -389,7 +389,7 @@ extern "C" void func_00191A10(CONTEXT *ctx)
         ACTOR *actor = ctx->actor;
         ANIM *anim = actor->anim;
         if (anim) {
-            BINDING *b = func_0012FF10(anim->table, actor, 1, 1);
+            BINDING *b = PchnFindAseg__FP4ASEGP3ALOii(anim->table, actor, 1, 1);
             if (b) {
                 ReadBinding(b, anim, &v);
                 v.q = QwScale(v.q, VuFloat(-1.0f));

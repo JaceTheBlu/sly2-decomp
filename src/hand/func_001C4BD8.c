@@ -2,7 +2,7 @@ struct LO { char pad[0x28]; unsigned long x28; char p1[0x15C - 0x30]; char x15C[
 extern struct LO **D_002C0D28[3];
 extern char D_002C0D18[];
 struct LO *func_001C4840(void *p);
-int func_00132B10(struct LO *plo, int n);
+int FIsBasicDerivedFrom__FP5BASIC3CID(struct LO *plo, int n);
 int func_001EEEE0(void *p, int n);
 int func_001C4BD8(void *p, int cMax, void **ap)
 {
@@ -14,7 +14,7 @@ int func_001C4BD8(void *p, int cMax, void **ap)
     plo = func_001C4840(p);
     if (plo) {
     *ap = plo->x15C;
-    if (func_00132B10(plo, 0x34)) {
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(plo, 0x34)) {
         for (j = 0; j < sizeof(D_002C0D28) / sizeof(D_002C0D28[0]) && c < cMax; j++) {
             plo2 = *D_002C0D28[j];
             if (!plo2 || plo2 == plo || !func_001EEEE0(plo2->x26C, 0xC2)) continue;

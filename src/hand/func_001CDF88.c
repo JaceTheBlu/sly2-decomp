@@ -10,7 +10,7 @@ typedef struct S {
     VT *vt; char padF0[0x154 - 0xF0]; float size; int pad158; DL children; char pad168[8];
     union U lo; union U hi; union U center; float radius;
 } S;
-extern DLI *D_002DD2FC;
+extern DLI *g_pdliFirst;
 extern struct { float t; } D_002DDED0;
 extern const float D_002A77D0, D_002A77D4;
 void func_001F4B58(S *);
@@ -19,8 +19,8 @@ static inline void InitDli(DLI *pdli, DL *pdl)
     pdli->pdl = pdl;
     pdli->ppv = (void **)pdl;
     pdli->ibDle = pdl->ibDle;
-    pdli->pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static inline void *PvNextDli(DLI *pdli)
 {
@@ -76,5 +76,5 @@ void func_001CDF88(S *p)
         p->center.q = mid;
         func_001F4B58(p);
     }
-    D_002DD2FC = dli.pdliNext;
+    g_pdliFirst = dli.pdliNext;
 }

@@ -70,6 +70,12 @@ def collect():
 JUNK = re.compile(r'(FUN_|D_|__snD|func_|sub_|\$|_\$tmp|\.|jtbl)|.*\.\d+$|_vt\$\d[A-Z]\w{0,2}$')
 
 
+# Addresses that must keep their func_ name: sources declare local C++ classes whose inline members compile to the
+# candidate names, so renaming would make those members call themselves (objcheck reports it).
+#   func_001AE478: called as __5FRAME, __10STACKSCOPE and FrameInit by different sources (STACKSCOPE constructor)
+NO_RENAME = {'func_001AE478'}
+
+
 def sly1_names(d):
     if not d: return set()
     t = open(os.path.join(d, 'config', 'symbol_addrs.txt')).read()
@@ -102,6 +108,8 @@ def main():
                 if a in by_csv: aliases.append((n, a, by_csv[a]))
             else: data.append((n, a))
     final = []
+    for old in [o for o in renames if o in NO_RENAME]:
+        aliases += [(x, int(old[5:], 16), old) for x in renames.pop(old)]
     for old, names in renames.items():   # one address under several names (overloads): most used wins, rest alias
         names.sort(key=lambda x: (-count[x], x))
         final.append((old, names[0]))

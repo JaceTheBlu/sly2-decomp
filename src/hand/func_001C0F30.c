@@ -7,7 +7,7 @@ int func_00117C20(void *pbis);
 void ReadVector4__18CBinaryInputStreamP7VECTOR4(void *pbis, VECTOR *pv);
 int func_00117DB8(void *pbis);
 void *PvAllocSwImpl__Fi(struct A *pa);
-void *func_001AE2A0(struct A *pa);
+void *PvAllocSwClearImpl__FP7SWALLOC(struct A *pa);
 void func_001C0F30(struct S *p, int c, void *pbis)
 {
     struct A a;
@@ -23,7 +23,7 @@ void func_001C0F30(struct S *p, int c, void *pbis)
     p->av = PvAllocSwImpl__Fi(&a);
     a.cb = p->c10 * 4;
     a.align = 0x10;
-    p->x18 = func_001AE2A0(&a);
+    p->x18 = PvAllocSwClearImpl__FP7SWALLOC(&a);
     a.cb = p->c10 * 4;
     a.align = 0x10;
     p->a14 = PvAllocSwImpl__Fi(&a);

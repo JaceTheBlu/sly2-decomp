@@ -6,7 +6,7 @@ struct S {char pad[0x40];M3 mat;qword pos,prev,vel;PHYS phys;qword omega;float g
 extern struct CLOCK {float time;union{float dt;int dtbits;};} D_002DDED0;
 extern "C" {
 int func_001CF010(qword);int func_001CEFC8(qword);int func_001CF058(qword);
-M3*func_0011B500(M3*,qword,float);M4 *func_0015BFD8(M4*,PHYS*);
+M3*LoadRotateMatrixRad__FfUx(M3*,qword,float);M4 *func_0015BFD8(M4*,PHYS*);
 void func_001CF0A0(S*);
 }
 static inline qword Scale(qword a,qword s){qword r;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(r):"j"(a),"j"(s));return r;}
@@ -45,7 +45,7 @@ void func_001CF0A0(S*p){
   float length=Float(Sqrt(Sq(omega)));
   if(0.0001f<length){
    w.shared.math.first.q=Normalize(omega,length,&w.shared.math.second);
-   func_0011B500((M3*)&w.rotation,w.shared.math.first.q,length*D_002DDED0.dt);
+   LoadRotateMatrixRad__FfUx((M3*)&w.rotation,w.shared.math.first.q,length*D_002DDED0.dt);
    Multiply(&w.shared.math.scratch,&w.product,&w.rotation,p->mat);
    PublishBasisStart(p,w.product.r[0].q,w.product.r[1].q);p->mat.r[2]=w.shared.math.scratch.r[2];
   }

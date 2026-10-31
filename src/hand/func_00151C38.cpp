@@ -12,7 +12,7 @@ struct LM { float gMin, gMax; int pad[2]; };
 extern "C" float D_002BDACC;
 extern "C" CLQ D_002BDAD0, D_002BDAF0, D_002BDB10, D_002BDB30;
 extern "C" LM D_002BDAE0, D_002BDB00, D_002BDB20, D_002BDB40;
-extern "C" qword D_002A2DC0;
+extern "C" qword g_normalZ;
 struct ALO;
 struct X { char pad[0x10]; ALO *p10; ALO *p14; };
 extern "C" {
@@ -81,7 +81,7 @@ void func_00151C38(X *p)
     U pos;
     pos.q = focus.q;
     pos.f[2] += GClampR(GFromClq(D_002BDAD0, dist), D_002BDAE0.gMin, D_002BDAE0.gMax);
-    qword n = Normalize(Cross(d.q, D_002A2DC0));
+    qword n = Normalize(Cross(d.q, g_normalZ));
     float g = GClamp(GFromClq(D_002BDAF0, dist), D_002BDB00.gMin, D_002BDB00.gMax);
     U pos2;
     pos2.q = Add(focus.q, Scale(n, VU_FLOATJ(g)));

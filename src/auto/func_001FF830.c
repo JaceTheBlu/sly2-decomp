@@ -2,7 +2,7 @@
 M2C_UNK Read__18CBinaryInputStreamiPv(s32, s32, s32);               /* extern */
 M2C_UNK func_001291A8(s32, s32 *);                  /* extern */
 M2C_UNK func_00129EC8(s32 *);                       /* extern */
-M2C_UNK func_0012A0B0(s32 *, M2C_UNK);              /* extern */
+M2C_UNK SetTag__4CRef4TAGK(s32 *, M2C_UNK);              /* extern */
 extern M2C_UNK D_00279AD0;
 extern s128 D_002A2DD0;
 extern M2C_UNK D_002A8288;
@@ -39,6 +39,6 @@ extern M2C_UNK D_00452148;
 extern M2C_UNK D_00452170;
 
 void func_001FF830(s32 arg0, s32 arg1) {
-    func_00256EE0(arg0, 0);
+    __as__3SPXP1X(arg0, 0);
     func_0012AE28();
 }

@@ -10,7 +10,7 @@ extern "C" {
 S *func_0011CCC0(void *);
 void *func_002333B4(void *, int, int);
 void func_0011A220(void *, S *);
-void func_00256EE0(S *, int);
+void __as__3SPXP1X(S *, int);
 int func_001F0638(S *);
 int IsmsFindSmRequired__FP2SM3OID(P *, int);
 void func_001F13A8(S *, int, int);
@@ -39,7 +39,7 @@ extern "C" void func_001F01B8(P *p, int a, int b, int c, int d, S **pps)
     func_0011A220(p->dl68, ps);
     ps->pvt->a[1].pfn((char *)ps + ps->pvt->a[1].d);
     Lock l(p);
-    func_00256EE0(ps, p->n0);
+    __as__3SPXP1X(ps, p->n0);
     ps->pvt->a3.pfn((char *)ps + ps->pvt->a3.d, 2, 0, 0, 0, 0);
     if (func_001F0638(ps)) return;
     if (b != -1) {

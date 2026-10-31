@@ -25,9 +25,9 @@ void func_00204660(struct P *p, float g);
 void func_00204CA8(struct P *p);
 void func_001F15B8(void *p);
 void func_001305B8(void *q, struct P *p, float g, float h, int n, struct ANIM **ppanim);
-float *func_0012F938(void *q, int n);
+float *PeaFindAsegLabel__FP4ASEG3OID(void *q, int n);
 void func_00131A90(struct ANIM *pa, float t);
-struct R *func_0012FF10(struct S14 *p, struct P *pp, int a, int b);
+struct R *PchnFindAseg__FP4ASEGP3ALOii(struct S14 *p, struct P *pp, int a, int b);
 void func_001431D0(struct P *p);
 static inline qword MulM3(qword *m, qword v)
 {
@@ -64,14 +64,14 @@ void func_001B86B0(struct P *p, int k)
     func_001F15B8(p->x1034);
     func_001305B8(q, p, g, 1.0f, 1, &p->panim);
     if (q) {
-        float *pg = func_0012F938(q, 0x1AC);
+        float *pg = PeaFindAsegLabel__FP4ASEG3OID(q, 0x1AC);
         if (pg)
             g = *pg;
     }
     if (g != 0.0f)
         func_00131A90(p->panim, D_002DDED0.t + g / p->panim->g40);
     if (p->panim) {
-        struct R *r = func_0012FF10(p->panim->p14, p, 1, 1);
+        struct R *r = PchnFindAseg__FP4ASEGP3ALOii(p->panim->p14, p, 1, 1);
         if (r) {
             qword a, b, pos, t, v;
             ((void (*)(void *, qword *, float, float, int))r->po->vt[3].pfn)((char *)r->po + r->po->vt[3].d, &a, 0.0f, 0.0f, 0);

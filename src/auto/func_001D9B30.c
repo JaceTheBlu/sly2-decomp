@@ -3,7 +3,7 @@ M2C_UNK CopyAb__FPvT0Ui(s32, s32, s32);             /* extern */
 M2C_UNK Read__18CBinaryInputStreamiPv(s32, s32, s32);               /* extern */
 M2C_UNK func_001291A8(s32, s32 *);                  /* extern */
 M2C_UNK func_00129EC8(s32 *);                       /* extern */
-s32 func_001AE318(void *, s32, s32, s32);           /* extern */
+s32 PvAllocStackImpl__FP7SWALLOC(void *, s32, s32, s32);           /* extern */
 s16 func_00233800(s32);                             /* extern */
 s32 func_0023E1C8(f32);                             /* extern */
 extern M2C_UNK D_002A78F0;
@@ -25,9 +25,9 @@ extern f32 D_002C3274;
 extern f32 D_002C3278;
 extern f32 D_002C327C;
 extern M2C_UNK D_002D85E8;
-extern void *D_002DD2FC;
+extern void *g_pdliFirst;
 extern s32 D_002DD318;
-extern M2C_UNK D_002DD590;
+extern M2C_UNK g_heapSw;
 extern M2C_UNK D_002DDEC0;
 extern f32 D_002DDED0;
 extern f32 D_002DDF0C;

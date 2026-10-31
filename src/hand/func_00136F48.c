@@ -11,7 +11,7 @@ void func_0018F2B0(struct PO *, int, void *, int *, QF *, float, float, float);
 qword func_001A6F00(void *, struct PO *, qword);
 void func_002046B0(struct PO *, qword);
 void func_00204CA8(struct PO *);
-void func_001384C0(void *);
+void ReblendAsegbl__FP6ASEGBL(void *);
 void func_001305B8(void *, struct PO *, int, void **, float, float);
 void func_00131B10(void *, struct PO *, int);
 void func_00131A90(void *, float);
@@ -68,7 +68,7 @@ void func_00136F48(struct S *ps, int state)
         pv = pe->p18;
         pe->fC = ps->g1C;
         dt = 0.06666667f;
-        func_001384C0(pv);
+        ReblendAsegbl__FP6ASEGBL(pv);
         break;
     }
     }

@@ -10,14 +10,14 @@ struct P {
 };
 struct CLOCK { float t; };
 extern struct CLOCK D_002DDED0;
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern float D_002BD2E0[3];
 extern float D_002BBB60[2];
 extern float D_002BD2F0;
 void func_001EF0C0(struct P *p, struct Q *q);
 qword func_001A62E8(void *p);
 float func_002458F0(float y, float x);
-int func_00132B10(struct O *p, int k);
+int FIsBasicDerivedFrom__FP5BASIC3CID(struct O *p, int k);
 void func_001C45A8(struct Q *q);
 static __inline__ float GetX(qword q) { float x; __asm__("mtc1 %1,%0" : "=f"(x) : "r"(q)); return x; }
 static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0,%1" : "=r"(y) : "r"(q)); return y; }
@@ -65,7 +65,7 @@ void func_00144BC8(struct P *p, struct Q *q)
         __asm__("lqc2 %0, %1" : "=j"(pos) : "m"(p->q80));
         v = func_001A62E8(p->p10);
         __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(pos), "j"(v));
-        axis = D_002A2DC0;
+        axis = g_normalZ;
         v = Perp(d, axis);
         g = GPoly(D_002BD2E0, LenXY(v));
         s = GClampR(g, D_002BBB60[0], D_002BBB60[1]);
@@ -83,7 +83,7 @@ void func_00144BC8(struct P *p, struct Q *q)
             __asm__("qmtc2.ni %1, %0" : "=j"(b) : "r"(func_001A62E8(po)));
             if (FFar(a, b))
                 q->x30 |= 8;
-            if (func_00132B10(po, 0x34))
+            if (FIsBasicDerivedFrom__FP5BASIC3CID(po, 0x34))
                 f = po->pvt->pfn((struct O *)((char *)po + po->pvt->d)) != 0;
             if (f) {
                 q->x30 |= p->xC0->x30 & p->xC4;

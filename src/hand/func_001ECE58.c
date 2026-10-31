@@ -16,7 +16,7 @@ void __4GIFS(struct DMAS *);
 void __4VIFS(struct X *);
 struct M *func_001AE478(struct M *);
 void _$_18CBinaryInputStream(struct M *, int);
-void func_001572E0(struct X *, int);
+void AllocStack__4DMASi(struct X *, int);
 void func_001574B8(struct X *);
 void func_00226D10(struct X *);
 void func_001572D0(struct DMAS *);
@@ -50,7 +50,7 @@ int func_001ECE58(struct BS *pbs, int k)
     __4VIFS(&x);
     n4 = pbs->n4;
     func_001AE478(&m);
-    func_001572E0(&x, (D_003DCF9C * 3 + D_003DCF98) * 10 + 4);
+    AllocStack__4DMASi(&x, (D_003DCF9C * 3 + D_003DCF98) * 10 + 4);
     func_001574B8(&x);
     func_00226D10(&x);
     for (i = 0; i < D_003DCFF8; i++) {

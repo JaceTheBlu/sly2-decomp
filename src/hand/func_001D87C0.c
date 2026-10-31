@@ -4,7 +4,7 @@ struct MSG { int cb; int nKind; };
 typedef struct { int c; short *ash; } V;
 typedef struct { int a[2]; char ht[1]; } H;
 extern H D_003E0EA8;
-void *func_001AE318(struct MSG *);
+void *PvAllocStackImpl__FP7SWALLOC(struct MSG *);
 int func_001D8720(void *, char *);
 static inline int NFind(H *ph, char *pch) { return func_001D8720(ph->ht, pch); }
 short func_00233800(char *);
@@ -21,7 +21,7 @@ void func_001D87C0(char *pch, va_list ap, V *pv)
         struct MSG msg;
         msg.cb = pv->c * 2;
         msg.nKind = 0x10;
-        pv->ash = func_001AE318(&msg);
+        pv->ash = PvAllocStackImpl__FP7SWALLOC(&msg);
         ap = apSave;
         for (pchT = pch, i = 0; pchT; pchT = va_arg_pch(ap), i++) {
             int n = NFind(&D_003E0EA8, pchT);

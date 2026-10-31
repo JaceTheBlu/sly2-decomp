@@ -1,6 +1,6 @@
 typedef int qword __attribute__((mode(TI)));
 typedef struct { qword r[3]; } M3;
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 struct VTE { short d; short pad; void *pfn; };
 struct P {
     int pad[3]; struct VTE *vt; char pad1[0x170 - 0x10]; int x170; int x174; int pad2[2]; qword x180; M3 mat;
@@ -8,7 +8,7 @@ struct P {
 };
 M3 *func_001A6318(struct P *);
 void func_0011B830(M3 *, qword, qword);
-void func_0011BA08(M3 *, qword, qword);
+void BuildRotateVectorsMatrix__FUxUx(M3 *, qword, qword);
 static __inline__ qword MulV(M3 *pm, qword v)
 {
     qword o;
@@ -42,15 +42,15 @@ void func_0013B428(struct P *p, qword pos, qword q)
     }
     switch (p->x170) {
     case 0:
-        func_0011BA08(&m, func_001A6318(p)->r[2], q);
+        BuildRotateVectorsMatrix__FUxUx(&m, func_001A6318(p)->r[2], q);
         MulStore(p, &m);
         break;
     case 1:
-        func_0011B830(&m, p->x1C0, D_002A2DC0);
+        func_0011B830(&m, p->x1C0, g_normalZ);
         p->mat = m;
         break;
     case 2:
-        func_0011BA08(&m, func_001A6318(p)->r[0], q);
+        BuildRotateVectorsMatrix__FUxUx(&m, func_001A6318(p)->r[0], q);
         MulStore(p, &m);
         break;
     case 3:

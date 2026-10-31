@@ -17,14 +17,14 @@ extern char D_002DFC00[];
 void *func_00131270(struct P *);
 void func_00210740(void *, int, int, int, int, void *, void *, struct Q *, void *, float, float, float);
 void func_002108E8(void *, void *, struct Q *, void *);
-void func_0014F750(void *, void *);
-void func_00187E28(void *, void *, float);
-void *func_0015E938(void *, int, void *, void *);
+void JoltCm__FP2CMi(void *, void *);
+void TriggerJoyRumbleRumk__FP3JOY4RUMKf(void *, void *, float);
+void *PloFindSwObject__FP2SWi3OIDP2LO(void *, int, void *, void *);
 int func_00132EA0(void *);
-void func_0012F9B8(void *, int, int, int, float, float);
+void ApplyAseg__FP4ASEGP3ALOffiPP5ASEGA(void *, int, int, int, float, float);
 void func_001DFD58(void *, int);
-void func_00130D30(struct P *, int, float, float);
-void func_00130B18(struct P *);
+void SeekAsega__FP5ASEGA4SEEKff(struct P *, int, float, float);
+void RetractAsega__FP5ASEGA(struct P *);
 void func_00131990(struct P *, int);
 void func_00210338(void *, int, void *, void *, struct Q *, float);
 void func_00210538(void *, int, int, int, void *, struct Q *, float);
@@ -35,7 +35,7 @@ void func_00161958(void *);
 void func_00210678(void *, int, int, void *, struct Q *, float);
 void func_00230CF0(struct P *, void *);
 void func_001F81E0(void *, int);
-int func_00132B10(void *, int);
+int FIsBasicDerivedFrom__FP5BASIC3CID(void *, int);
 void func_00143090(void *, void *, void *, void *);
 }
 extern "C" void func_00131290(struct P *p, struct EV *pev)
@@ -61,17 +61,17 @@ extern "C" void func_00131290(struct P *p, struct EV *pev)
         func_002108E8(g_sw, pev->pv, pq, p->a5C);
         break;
     case 2:
-        func_0014F750(g_cm, pev->pv);
+        JoltCm__FP2CMi(g_cm, pev->pv);
         break;
     case 3:
-        func_00187E28(D_002DFC00, pev->pv, pev->uC.g);
+        TriggerJoyRumbleRumk__FP3JOY4RUMKf(D_002DFC00, pev->pv, pev->uC.g);
         break;
     case 4: {
-        void *po = func_0015E938(g_sw, 4, pev->pv, func_00131270(p));
+        void *po = PloFindSwObject__FP2SWi3OIDP2LO(g_sw, 4, pev->pv, func_00131270(p));
         if (po) {
             switch (func_00132EA0(po)) {
             case 0x6D:
-                func_0012F9B8(po, 0, 0, 0, 0.0f, 1.0f);
+                ApplyAseg__FP4ASEGP3ALOffiPP5ASEGA(po, 0, 0, 0, 0.0f, 1.0f);
                 break;
             case 0x72:
                 func_001DFD58(po, 0);
@@ -81,10 +81,10 @@ extern "C" void func_00131290(struct P *p, struct EV *pev)
         break;
     }
     case 5:
-        func_00130D30(p, 0, *(float *)&pev->pv, pev->uC.g);
+        SeekAsega__FP5ASEGA4SEEKff(p, 0, *(float *)&pev->pv, pev->uC.g);
         break;
     case 6:
-        func_00130B18(p);
+        RetractAsega__FP5ASEGA(p);
         break;
     case 9:
     case 10:
@@ -152,7 +152,7 @@ extern "C" void func_00131290(struct P *p, struct EV *pev)
         func_001F81E0(p->po, -1);
         break;
     case 24:
-        if (p->po && func_00132B10(p->po, 0x34)) {
+        if (p->po && FIsBasicDerivedFrom__FP5BASIC3CID(p->po, 0x34)) {
             char *pb = (char *)pev->pv;
             func_00143090(p->po, pb, pb + 8, pb + 0x10);
         }

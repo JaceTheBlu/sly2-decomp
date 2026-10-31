@@ -10,7 +10,7 @@ extern McRwSend D_00450900;
 extern int D_00451E40[];
 extern char D_00450D80[];
 extern int D_002C8354;
-extern int D_002C8350;
+extern int _mc_errno;
 void func_00244110(void *);
 int func_00234A70(int);
 int func_00234A40(int);
@@ -29,7 +29,7 @@ int sceMcRead(int fd, void *buf, int size)
     func_0023B170(buf, size);
     func_0023B170(D_00450D80, 0xC0);
     if (func_00237288(&D_00450880, 5, 1, &D_00450900, 0x30, D_00451E40, 4, func_00244110, D_00450D80) == 0) {
-        D_002C8350 = 5;
+        _mc_errno = 5;
         return 0;
     }
     func_00234A40(D_002C8354);

@@ -32,13 +32,13 @@ typedef struct DZG {
 
 void func_001AE478(FRAME *pframe);
 void _$_18CBinaryInputStream(FRAME *pframe, int n);
-void *func_001AE318(MSG *pmsg);
+void *PvAllocStackImpl__FP7SWALLOC(MSG *pmsg);
 void func_001AE5A0(void *pvDst, void *pvSrc, unsigned int cb);
 DZG *func_0011A550(DZG *pdzg, int cdzsMax);
 void func_0011A220(DL *pdl, void *pv);
 void func_0011ABF8(DZG *pdzg);
 
-static inline void *PvAllocMsg(MSG *pmsg, int cb, int nKind) { pmsg->cb = cb; pmsg->nKind = nKind; return func_001AE318(pmsg); }
+static inline void *PvAllocMsg(MSG *pmsg, int cb, int nKind) { pmsg->cb = cb; pmsg->nKind = nKind; return PvAllocStackImpl__FP7SWALLOC(pmsg); }
 void func_0011AD30(int c, float *agA, float *agB, float *agX, float g)
 {
     FRAME frame;

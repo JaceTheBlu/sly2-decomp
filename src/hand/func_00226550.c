@@ -1,6 +1,6 @@
 typedef struct DL { void *head; void *tail; int ibDle; } DL;
 typedef struct DLI { DL *m_pdl; void **m_ppv; int m_ibDle; struct DLI *m_pdliNext; } DLI;
-extern DLI *D_002DD2FC;     /* g_pdliFirst */
+extern DLI *g_pdliFirst;     /* g_pdliFirst */
 struct CLOCK { float t; float dt; char pad[8]; float g10; };
 extern struct CLOCK D_002DDED0;
 extern char D_002E65E0[];
@@ -34,8 +34,8 @@ static inline void InitDli(DLI *pdli, DL *pdl)
     pdli->m_pdl = pdl;
     pdli->m_ppv = (void **)pdl;
     pdli->m_ibDle = pdl->ibDle;
-    pdli->m_pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->m_pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static inline void *PvNextDli(DLI *pdli)
 {
@@ -78,7 +78,7 @@ void func_00226550(struct S *p)
         func_001BE1E8();
         func_001EC968();
         func_00149C80(p);
-        D_002DD2FC = dli.m_pdliNext;
+        g_pdliFirst = dli.m_pdliNext;
     }
     UpdateSave__FP4SAVE(D_002E65E0);
     func_001FD830(g_sndmgr);

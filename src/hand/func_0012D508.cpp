@@ -57,7 +57,7 @@ struct X {
 struct P { int x0; void *x4; X *px8; int xC; int pad10[3]; float g1C; float g20; X *px24; };
 
 extern "C" {
-extern qword D_002A2DD0, D_002A2DC0, D_002BC380;
+extern qword D_002A2DD0, g_normalZ, D_002BC380;
 void func_0022DD00(void *pv, X *px);
 void func_00117120(qword a, qword da, qword b, qword db, float dt, float t, float dtScale, void *pv, void *pdv, int n);
 M3 func_0011B830(qword a, qword b);
@@ -132,7 +132,7 @@ extern "C" void func_0012D508(P *p)
     if (py->pxA0)
         v = MulM3(py->pxA0->m40, v);
     if (GetX(VLen(v)) < 100.0f) {
-        Fin(p, mT, func_0011B830(p->px8->m40.r[0], D_002A2DC0));
+        Fin(p, mT, func_0011B830(p->px8->m40.r[0], g_normalZ));
     } else {
         qword u = D_002BC380;
         if (0.0f < p->g20 && 0.0f < p->g1C && py->po90) {

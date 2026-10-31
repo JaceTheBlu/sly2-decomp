@@ -8,13 +8,13 @@ union U { qword q; float f[4]; };
 struct X { int x0, x4, x8; VT *vt; char pad[0xE8 - 0x10]; int c; char pad2[0xF4 - 0xEC]; qword *apos;
            char pad3[0x1A0 - 0xF8]; U vmin; U vmax; };
 extern "C" {
-void *func_001AE318(const AREQ &r);
+void *PvAllocStackImpl__FP7SWALLOC(const AREQ &r);
 qword func_001A62E8(X *p);
 void *func_001C0D70(qword pos, int n);
 void func_001C1BA0(void *r, X *p);
 }
 extern float D_002A76D0, D_002A76D4;
-static inline void *Alloc(int cb) { return func_001AE318(AREQ(cb, 0x10)); }
+static inline void *Alloc(int cb) { return PvAllocStackImpl__FP7SWALLOC(AREQ(cb, 0x10)); }
 static inline qword MulPt(M4 *m, qword v) { qword r; __asm__("vmulax.xyz $ACC, %1, %2x\n\tvmadday.xyz $ACC, %3, %2y\n\tvmaddaz.xyz $ACC, %4, %2z\n\tvmaddw.xyz %0, %5, $vf0w" : "=j"(r) : "j"(m->r[0]), "j"(v), "j"(m->r[1]), "j"(m->r[2]), "j"(m->r[3])); return r; }
 static inline M4 *GetMat(X *p) { return p->vt[31].pfn((X *)((char *)p + p->vt[31].d)); }
 static inline qword Min(qword a, qword b) { qword r; __asm__("vmini.xyz %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }

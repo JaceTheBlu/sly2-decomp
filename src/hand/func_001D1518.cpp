@@ -11,14 +11,14 @@ union CURRENT {E*entry;SIDE*side;ATTACH*attachment;};
 union SCALE {const qword*axis;int stride;};
 struct P {char pad[0x190];int count;char pad194[0xC];E entries[8];float width;int sideCount;SIDE sides[4];int attachCount;ATTACH*attachments[8];char pad51C[0x50];void *asset;void *binding;char pad574[0x38];void *path;};
 extern "C" {
-extern qword D_002A2DC0,D_002A2DD0;
+extern qword g_normalZ,D_002A2DD0;
 extern char g_sw[];
 void func_001F36A8(P *);
 REF *func_001F4C58(P *,int,int);
 void *func_002332B8(void *,const void *,int);
 qword func_001A6F00(void *,P *,qword);
 void *func_0012DC18(P *,REF *,int,int,int,qword);
-void *func_0015E938(void *,int,int,P *);
+void *PloFindSwObject__FP2SWi3OIDP2LO(void *,int,int,P *);
 void *func_001F0380(void *,P *,int,int);
 void *func_001E94B0(int,int);
 void func_001F1448(void *,P *,int,int,void **);
@@ -34,7 +34,7 @@ extern "C" void func_001D1518(P *p){
  func_001F36A8(p);
  if(p->count>0){
  int stride=0x60;
- scale.axis=&D_002A2DC0;
+ scale.axis=&g_normalZ;
  E *next=p->entries+1,*cursor=p->entries;
  do {
   current.entry=cursor;
@@ -114,11 +114,11 @@ extern "C" void func_001D1518(P *p){
  ATTACH **cursor=p->attachments;int byteOffset=0;
  do {
   current.attachment=*cursor;
-  current.attachment->object=func_0015E938(g_sw,1,current.attachment->id,p);
+  current.attachment->object=PloFindSwObject__FP2SWi3OIDP2LO(g_sw,1,current.attachment->id,p);
   if(current.attachment->object){
    current.attachment->mesh=func_001F4C58(p,current.attachment->meshId,6);
    if(current.attachment->mesh || current.attachment->meshId==invalid){
-    current.attachment->extra=func_0015E938(g_sw,1,current.attachment->extraId,p);
+    current.attachment->extra=PloFindSwObject__FP2SWi3OIDP2LO(g_sw,1,current.attachment->extraId,p);
     if(current.attachment->extra || current.attachment->extraId==invalid){
      current.attachment->binding=func_001F0380(current.attachment->object,p,-1,0);
      if(current.attachment->mesh)current.attachment->meshBinding=func_0012DC18(p,current.attachment->mesh,1,7,3,D_002A2DD0);

@@ -2,8 +2,8 @@ struct MSG { int cb; int nKind; };
 struct I { int a, b; };
 struct E { int id; int n; int c; struct I *a; };
 struct S { char pad[0x15C]; int i; int c; struct E *ae; };
-void *func_001AE318(struct MSG *pmsg);
-static __inline__ void *PvAllocMsg(struct MSG *pmsg, int cb, int nKind) { pmsg->cb = cb; pmsg->nKind = nKind; return func_001AE318(pmsg); }
+void *PvAllocStackImpl__FP7SWALLOC(struct MSG *pmsg);
+static __inline__ void *PvAllocMsg(struct MSG *pmsg, int cb, int nKind) { pmsg->cb = cb; pmsg->nKind = nKind; return PvAllocStackImpl__FP7SWALLOC(pmsg); }
 void func_001BB9B8(struct S *p)
 {
     struct E *pe;

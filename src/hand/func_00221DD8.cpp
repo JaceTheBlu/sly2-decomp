@@ -1,6 +1,6 @@
 // func_00221DD8: ported from Lilly's personal Sly 2 decomp (src/P2/cplcy.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002A2DA0 (D_002A2DA0), D_002C4118 (D_002C4118), D_002C41B0 (D_002C41B0), D_002C41D8 (D_002C41D8), D_002C41DC (D_002C41DC), D_002C41E0 (D_002C41E0), D_002C41F0 (D_002C41F0), D_002C4200 (D_002C4200), D_002C4208 (D_002C4208), D_002C4220 (D_002C4220), D_002C4230 (D_002C4230), D_002C4240 (D_002C4240), D_002C4250 (D_002C4250), D_002C4260 (D_002C4260), D_002C426C (D_002C426C), D_002C4270 (D_002C4270), D_002C4274 (D_002C4274), D_002C4278 (D_002C4278), D_002C427C (D_002C427C), D_002C4280 (D_002C4280), D_002C41EC (g_SheetCameraEngineCameraDamping), D_002C41E4 (g_SheetCameraEngineCameraHorizontalSpeed), D_002C41E8 (g_SheetCameraEngineCameraVerticalSpeed), D_002DDED0 (g_clock), g_cm (g_cm), D_002DEB30 (g_game), D_002BBB60 (g_lmZeroOne), D_002A2DC0 (g_normalZ), D_002A2DD0 (g_qwZero)
+// Globals: D_002A2DA0 (D_002A2DA0), D_002C4118 (D_002C4118), D_002C41B0 (D_002C41B0), D_002C41D8 (D_002C41D8), D_002C41DC (D_002C41DC), D_002C41E0 (D_002C41E0), D_002C41F0 (D_002C41F0), D_002C4200 (D_002C4200), D_002C4208 (D_002C4208), D_002C4220 (D_002C4220), D_002C4230 (D_002C4230), D_002C4240 (D_002C4240), D_002C4250 (D_002C4250), D_002C4260 (D_002C4260), D_002C426C (D_002C426C), D_002C4270 (D_002C4270), D_002C4274 (D_002C4274), D_002C4278 (D_002C4278), D_002C427C (D_002C427C), D_002C4280 (D_002C4280), D_002C41EC (g_SheetCameraEngineCameraDamping), D_002C41E4 (g_SheetCameraEngineCameraHorizontalSpeed), D_002C41E8 (g_SheetCameraEngineCameraVerticalSpeed), D_002DDED0 (g_clock), g_cm (g_cm), D_002DEB30 (g_game), D_002BBB60 (g_lmZeroOne), g_normalZ (g_normalZ), D_002A2DD0 (g_qwZero)
 // 0x00221DD8 Update__7CMPART2P6CPDEFIP3JOY  (MATCHES Sly 2; T1253, 1604 instructions). The frame is the game's 0x230 (0x00 posFocus, 0x10 posHang,
 // 0x20 vecTangent, 0x30 dposCrv / vFocus, 0x40..0x60 the free camera's temporaries, 0x70 smp, 0x80 vecHeading / smpPull, 0x90..0xEF six untouched
 // locals, 0xF0.. the view floats, 0x124 / 0x128 the pull flags; T1203). How the last 16.5% -> MATCH went (re/notes/camera-updatecm.md "T1253"):
@@ -1010,7 +1010,7 @@ float atan2f(float y, float x);
 void DecomposeSphere(qword v, float *prad, float *pradTilt, float *psLen);
 extern "C" qword VuvecSphere(float radPan, float radTilt, float s);
 extern float D_002C41DC;
-extern VECTOR D_002A2DC0;
+extern VECTOR g_normalZ;
 extern qword D_002A2DD0;
 struct RAW8
 {
@@ -1897,7 +1897,7 @@ void CMPART2::Update(CPDEFI *pcpdefi, JOY *pjoy)
         switch (nTurnAxis)
         {
         case 0:
-            *(qword *)&vecAxis = QwCross(*(qword *)&D_002A2DC0, *(qword *)&vecView);
+            *(qword *)&vecAxis = QwCross(*(qword *)&g_normalZ, *(qword *)&vecView);
             break;
         case 1:
             vecAxis = vecView;

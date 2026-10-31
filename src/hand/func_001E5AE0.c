@@ -8,7 +8,7 @@ extern char g_sw[];
 extern struct VTE D_002D8C08[];
 struct S *func_0011CCC0(void *);
 void *func_002333B4(void *, int, int);
-int func_0015E938(void *, int, int, int);
+int PloFindSwObject__FP2SWi3OIDP2LO(void *, int, int, int);
 void func_0011A250(void *, void *);
 struct S *func_001E5AE0(struct A *pa, struct E *pe, struct C *pc)
 {
@@ -26,7 +26,7 @@ struct S *func_001E5AE0(struct A *pa, struct E *pe, struct C *pc)
     else
         p->x18 = (int)pa;
     if (((int *)pe)[4] != -1)
-        p->x1C = func_0015E938(g_sw, 5, ((int *)pe)[4], 0);
+        p->x1C = PloFindSwObject__FP2SWi3OIDP2LO(g_sw, 5, ((int *)pe)[4], 0);
     p->pe28 = pe;
     peLast = &pa->ae[pa->c - 1];
     depth = 1;

@@ -8,9 +8,9 @@ M2C_UNK ReadCb12__18CBinaryInputStreamPv(s32, M2C_UNK *);              /* extern
 M2C_UNK ReadCb8__18CBinaryInputStreamPv(s32, M2C_UNK *);              /* extern */
 M2C_UNK func_001291A8(void **, void **);            /* extern */
 M2C_UNK func_00129EC8(void **);                     /* extern */
-M2C_UNK func_001572E0(M2C_UNK *, M2C_UNK);          /* extern */
+M2C_UNK AllocStack__4DMASi(M2C_UNK *, M2C_UNK);          /* extern */
 M2C_UNK func_001573C0(M2C_UNK *, s32 *, s32 *, s32 *); /* extern */
-s32 *func_001AE318(s32 *, s32, s32 *, M2C_UNK);     /* extern */
+s32 *PvAllocStackImpl__FP7SWALLOC(s32 *, s32, s32 *, M2C_UNK);     /* extern */
 M2C_UNK __4VIFS(M2C_UNK *);                   /* extern */
 M2C_UNK func_00226FD0(M2C_UNK *, s32, s32, s32);    /* extern */
 extern M2C_UNK D_0025E090;
@@ -23,7 +23,7 @@ extern f32 D_002A52A0;
 extern M2C_UNK D_002BE540;
 extern M2C_UNK D_002BE558;
 extern s32 D_002BE580;
-extern M2C_UNK D_002CF508;
+extern M2C_UNK _vt$4GIFS;
 extern M2C_UNK g_cm;
 extern M2C_UNK D_002DEA28;
 extern s32 D_002DEB28;

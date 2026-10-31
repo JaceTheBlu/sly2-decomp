@@ -15,11 +15,11 @@ typedef struct {
 } CMDDATA;
 typedef struct { unsigned int size; void *dest; int cid; unsigned int opt; void *buf; } CAPKT;
 
-extern int D_002C5A60;
+extern int _sif_cmd_inited;
 extern unsigned char D_0044ED00[0x80];
 extern unsigned char D_0044ED80[0x40];
 extern CAPKT D_0044EDC0;
-extern int D_0044EDD4;
+extern int _sif_cmd_handler_id;
 extern CMDDATA D_0044EDD8;
 extern HANDLER D_0044EE00[32];
 extern int D_0044EF80[32];
@@ -42,11 +42,11 @@ void sceSifInitCmd(void)
     int i;
 
     func_00239450();
-    if (D_002C5A60) {
+    if (_sif_cmd_inited) {
         func_002394A0();
         return;
     }
-    D_002C5A60 = 1;
+    _sif_cmd_inited = 1;
     D_0044EDD8.pktbuf = (void *)((unsigned int)D_0044ED00 | 0x20000000);
     D_0044EDD8.unused = (void *)((unsigned int)D_0044ED80 | 0x20000000);
     D_0044EDD8.iopbuf = 0;
@@ -71,7 +71,7 @@ void sceSifInitCmd(void)
         *(volatile unsigned int *)0x1000E010 = 0x20;
     if (!(*(volatile unsigned int *)0x1000C000 & 0x100))
         func_00234E00();
-    D_0044EDD4 = func_00234730(5, (void *)func_0023B028, 0);
+    _sif_cmd_handler_id = func_00234730(5, (void *)func_0023B028, 0);
     func_00235248(5);
     D_0044EDD8.iopbuf = (void *)func_00234E30(0x80000000);
     if (D_0044EDD8.iopbuf) {

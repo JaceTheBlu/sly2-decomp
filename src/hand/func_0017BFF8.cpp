@@ -16,7 +16,7 @@ struct SEGMENT{qword a,b;char data[0x40];};
 extern "C"{
 extern float D_002A5600;
 qword func_001A62E8(ACTOR*);
-void func_0011EF08(qword,float*,float*,float*);
+void DecomposeCylind__FUxPfN21(qword,float*,float*,float*);
 float RadNormalize__Ff(float);float func_0011CFE0(float,float);float func_0011D948(LM*,float);
 qword func_0011E1A0(float,float,float);int func_0011D910(LM*,float);
 int func_001C0B50(void*,qword,qword*);
@@ -41,11 +41,11 @@ extern "C" qword func_0017BFF8(P*p,void*region,qword origin,float heading){
   if(scale){float factor=scale->value;first.low*=factor;first.high*=factor;second.low*=factor;second.high*=factor;}
  }
  tuning=p->actor->tuning;
- func_0011EF08(QwSub(func_001A62E8(p->actor),origin),&flow.polarAngle,&flow.polarLength,0);
+ DecomposeCylind__FUxPfN21(QwSub(func_001A62E8(p->actor),origin),&flow.polarAngle,&flow.polarLength,0);
  float angle=heading+func_0011CFE0(RadNormalize__Ff(flow.polarAngle-heading),tuning->narrow);
  float length=func_0011D948(&first,flow.polarLength);
  if(func_001C0B50(region,QwAdd(origin,func_0011E1A0(angle,length,0.0f)),&closest.q)){
-  func_0011EF08(QwSub(closest.q,origin),&flow.candidateAngle,&flow.candidateLength,0);
+  DecomposeCylind__FUxPfN21(QwSub(closest.q,origin),&flow.candidateAngle,&flow.candidateLength,0);
   if(__builtin_fabsf(RadNormalize__Ff(flow.candidateAngle-heading))<tuning->wide&&func_0011D910(&second,flow.candidateLength))return closest.q;
  }
  qword target,best;

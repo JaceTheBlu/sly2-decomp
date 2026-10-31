@@ -29,15 +29,15 @@ extern float D_002BF3C0,D_002BF3C4,D_002BF3C8,D_002BF3CC,D_002BF35C;
 float func_00204740(struct P*);float RadNormalize__Ff(float);
 void func_00194A40(void*,struct P*,unsigned int);
 void func_0018B2C0(struct P*);void func_0018A8C8(struct P*);void func_0018F0A8(struct P*);
-struct BINDING*func_0012FF10(void*,struct P*,void*,int);
+struct BINDING*PchnFindAseg__FP4ASEGP3ALOii(void*,struct P*,void*,int);
 void func_00190520(struct P*);void func_00197F98(void*);void func_00191A10(void*);void func_00137218(void*);
 void func_001A0720(struct P*,void*,int,float,float);void func_0018B460(struct P*);
 void func_0020BB58(void*,float);void func_002046F0(struct P*,void*);
 qword func_0011E1A0(float,float,float);qword func_001A6FC0(void*,void*,qword);
 int func_001DAEA8(int);void func_0018E1E0(struct P*);qword func_00204E38(struct P*,struct MODEL*,float);
 void func_00131A00(struct MODEL*,float);void func_00204660(struct P*,float);
-void func_001441E8(struct P*,float);void func_0018C250(struct P*,int,int);
-float func_0011CFE0(float,float);void func_001384C0(void*);
+void func_001441E8(struct P*,float);void SetJtJts__FP2JT3JTS4JTBS(struct P*,int,int);
+float func_0011CFE0(float,float);void ReblendAsegbl__FP6ASEGBL(void*);
 void func_001A1358(void*);void func_0019FC30(struct P*);int func_00131968(void*);void func_001306A8(void**);
 static inline void*At(struct P*p,int offset){return(char*)p+offset;}
 static inline void ReadBinding(struct BINDING*b,struct MODEL*m,qword*out){
@@ -75,7 +75,7 @@ void func_0018B7E8(struct P*p){
  switch(p->mode){
  case 4:case 9:{
   struct MODEL*m=p->model;struct BINDING*b;p->velocity=D_002A2DD0;
-  if(m){b=func_0012FF10(m->table,p,(void*)1,1);
+  if(m){b=PchnFindAseg__FP4ASEGP3ALOii(m->table,p,(void*)1,1);
    if(b){ReadBinding(b,m,&phase.direction);p->velocity=FirstNegative(&phase.direction,&scalar,-1.0f);}
   }break;
  }
@@ -93,7 +93,7 @@ void func_0018B7E8(struct P*p){
  }break;
  case 16:
   if(func_001DAEA8(0x1C))func_0018E1E0(p);
-  else if(p->enabled){struct BINDING*b=func_0012FF10(p->table,p,(void*)1,1);if(b){ReadBinding(b,p->model,&phase.direction);p->velocity=SecondNegative(&phase.direction,&scalar,-1.0f);}}
+  else if(p->enabled){struct BINDING*b=PchnFindAseg__FP4ASEGP3ALOii(p->table,p,(void*)1,1);if(b){ReadBinding(b,p->model,&phase.direction);p->velocity=SecondNegative(&phase.direction,&scalar,-1.0f);}}
   break;
  case 19:p->velocity=NegativeModelNative(p,&phase.scalar);break;
  case 20:{struct MODEL*model;struct STATE*state;PrepareAnimation(p,&phase.scalar,&model,&state);func_00131A00(model,state->amount);func_00204660(p,p->state->heading);break;}
@@ -101,12 +101,12 @@ void func_0018B7E8(struct P*p){
  case 24:{
   register float one __asm__("$f20");register float weight __asm__("$f1");qword velocity;struct VTE*entry;
   func_001441E8(p,D_002BF3C4);
-  if(p->submode==12){float angle=RadNormalize__Ff(func_00204740(p)-p->heading);if(__builtin_fabsf(angle)<D_002BF3C8)func_0018C250(p,24,13);}
+  if(p->submode==12){float angle=RadNormalize__Ff(func_00204740(p)-p->heading);if(__builtin_fabsf(angle)<D_002BF3C8)SetJtJts__FP2JT3JTS4JTBS(p,24,13);}
   else func_00204660(p,p->state->heading);
   one=1.0f;entry=&p->vt[34];velocity=((qword(*)(void*))entry->fn)((char*)p+entry->delta);
   weight=D_002BF3CC*func_0011CFE0(Z(velocity)/(p->factor*D_002BF35C),one);
   {register float zero __asm__("$f2")=0.0f;register float magnitude __asm__("$f3");register float left __asm__("$f0");__asm__("abs.s %0,%2\n\tmax.s %1,%3,%2\n\tneg.s %2,%2":"=f"(magnitude),"=f"(left),"+f"(weight):"f"(zero));__asm__("swc1 %4,%0\n\tsub.s %1,%1,%5\n\tmax.s %2,%2,%6\n\tswc1 %2,%3":"=m"(p->left),"+f"(one),"+f"(zero),"=m"(p->right):"f"(left),"f"(magnitude),"f"(weight));p->middle=one;}
-  func_001384C0(p->blend);break;
+  ReblendAsegbl__FP6ASEGBL(p->blend);break;
  }
  case 0:case 1:break;
  }

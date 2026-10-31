@@ -2,10 +2,10 @@ struct CTX { int a[4]; CTX(); ~CTX(); };
 struct AREQ { int cb; int align; AREQ(int c, int a) { cb = c; align = a; } };
 struct S { int x0; int x4; int x8; int xC; int x10; };
 extern "C" {
-char *func_001AE318(const AREQ &r);
+char *PvAllocStackImpl__FP7SWALLOC(const AREQ &r);
 void func_001AE5A0(void *dst, void *src, int cb);
 }
-static inline char *Alloc(int cb, int align) { return func_001AE318(AREQ(cb, align)); }
+static inline char *Alloc(int cb, int align) { return PvAllocStackImpl__FP7SWALLOC(AREQ(cb, align)); }
 
 extern "C" void func_001B2AA0(S *p, int cb, char *pb)
 {

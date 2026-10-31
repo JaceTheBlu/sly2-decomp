@@ -21,7 +21,7 @@ static inline VU_FLOAT VuFloat(float g) { VU_FLOAT v; __asm__("qmtc2.ni %1, %0" 
 struct VENTRY { short delta, pad; void *fn; };
 struct P { char pad0[0xC]; VENTRY *vt; char pad10[0x550]; int remaining; };
 struct EVENT { P *sender; char pad4[8]; int kind, change; };
-extern qword D_002A2DA0, D_002A2DC0;
+extern qword D_002A2DA0, g_normalZ;
 extern float D_002C21D0[2], D_002C21D8[2], D_002C21E0[2], D_002C21E8[2], D_002C21F0[2], D_002C21F8[2], D_002C2200[2];
 extern "C" {
 int func_001F7588(P *, EVENT *);
@@ -100,7 +100,7 @@ int func_001D4568(P *p, EVENT *event)
         float horizontal = Random(D_002C21D0);
         float vertical = Random(D_002C21D8);
         linear.q = func_0011E1A0(angle, horizontal, vertical);
-        angular.q = VuFloat(Random(D_002C21E0)) * NormalizeSafe(Cross(D_002A2DC0, linear.q), D_002A2DA0);
+        angular.q = VuFloat(Random(D_002C21E0)) * NormalizeSafe(Cross(g_normalZ, linear.q), D_002A2DA0);
         break;
     }
     case 0x1000:
@@ -108,13 +108,13 @@ int func_001D4568(P *p, EVENT *event)
         VV position = func_001A62E8(p);
         VV delta = Sub(position, func_001A62E8(event->sender));
         VU_VECTOR4 direction;
-        direction.q = NormalizeSafe(Sub(delta, ScaleV(Dot(delta, D_002A2DC0), D_002A2DC0)), D_002A2DA0);
+        direction.q = NormalizeSafe(Sub(delta, ScaleV(Dot(delta, g_normalZ), g_normalZ)), D_002A2DA0);
         VU_FLOAT first(Random(D_002C21E8));
-        linear.q = VecCombo(first, direction.q, VuFloat(Random(D_002C21F0)), D_002A2DC0);
+        linear.q = VecCombo(first, direction.q, VuFloat(Random(D_002C21F0)), g_normalZ);
         VU_FLOAT second(Random(D_002C21F8));
         VU_VECTOR4 side;
-        side.q = Cross(D_002A2DC0, direction.q);
-        angular.q = VecCombo(second, side.q, VuFloat(Random(D_002C2200)), D_002A2DC0);
+        side.q = Cross(g_normalZ, direction.q);
+        angular.q = VecCombo(second, side.q, VuFloat(Random(D_002C2200)), g_normalZ);
         break;
     }
     }

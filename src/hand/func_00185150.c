@@ -6,7 +6,7 @@ void func_00231768(struct S *p, void *pbis);
 int func_00117D50(void *pbis);
 void ReadVector__18CBinaryInputStreamP6VECTOR(void *pbis, void *pv);
 void *PvAllocSwImpl__Fi(struct MSG *pmsg);
-void func_0013F810(struct S *p, void *pbis);
+void LoadOptionsFromBrx__FPvP18CBinaryInputStream(struct S *p, void *pbis);
 static __inline__ void *PvAllocMsg(struct MSG *pmsg, int cb, int nKind) { pmsg->nKind = nKind; pmsg->cb = cb; return PvAllocSwImpl__Fi(pmsg); }
 void func_00185150(struct S *p, void *pbis)
 {
@@ -32,5 +32,5 @@ void func_00185150(struct S *p, void *pbis)
         p->ax2[j].b = func_00117D50(pbis);
         p->ax2[j].c = func_00117D50(pbis);
     }
-    func_0013F810(p, pbis);
+    LoadOptionsFromBrx__FPvP18CBinaryInputStream(p, pbis);
 }

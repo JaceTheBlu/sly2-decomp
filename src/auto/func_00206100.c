@@ -1,6 +1,6 @@
 #include "m2c_prelude.h"
 M2C_UNK func_00129EC8(M2C_UNK *);                   /* extern */
-extern s128 D_002A2DC0;
+extern s128 g_normalZ;
 extern s128 D_002A2DD0;
 extern f32 D_002A85F8;
 extern f32 D_002A8600;

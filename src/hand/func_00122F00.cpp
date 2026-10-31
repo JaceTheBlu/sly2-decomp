@@ -14,9 +14,9 @@ struct CRef {
     ~CRef() { Decref(); }
 };
 extern "C" {
-M3 func_0011BC00(M3 *pa, M3 *pb);
+M3 CalculateDmat__FP7MATRIX3T0(M3 *pa, M3 *pb);
 void func_0011BCF8(M3 *pmat, float *prad, qword *pvec);
-M3 func_0011B500(float rad, qword axis);
+M3 LoadRotateMatrixRad__FfUx(float rad, qword axis);
 void *func_002333B4(void *pv, int n, int cb);
 }
 static inline M3 MulM3(const M3 &a, M3 *pb) return m
@@ -36,7 +36,7 @@ static inline M3 MulM3(const M3 &a, M3 *pb) return m
 extern "C" CRef func_00122F00(void *pv, CRef *aref);
 CRef func_00122F00(void *pv, CRef *aref)
 {
-    M3 mat = func_0011BC00((M3 *)aref[0].u.pv, (M3 *)aref[1].u.pv);
+    M3 mat = CalculateDmat__FP7MATRIX3T0((M3 *)aref[0].u.pv, (M3 *)aref[1].u.pv);
     UF normal;
     float rad;
     func_0011BCF8(&mat, &rad, &normal.q);
@@ -44,6 +44,6 @@ CRef func_00122F00(void *pv, CRef *aref)
     MATRIX4 *pm = (MATRIX4 *)ref.u.pv;
     func_002333B4(pm, 0, 0x40);
     pm->m[0][0] = pm->m[1][1] = pm->m[2][2] = pm->m[3][3] = 1.0f;
-    *(M3 *)ref.u.pv = MulM3(func_0011B500(rad * aref[2].u.g, normal.q), (M3 *)aref[0].u.pv);
+    *(M3 *)ref.u.pv = MulM3(LoadRotateMatrixRad__FfUx(rad * aref[2].u.g, normal.q), (M3 *)aref[0].u.pv);
     return ref;
 }

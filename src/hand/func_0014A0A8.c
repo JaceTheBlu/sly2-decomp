@@ -5,7 +5,7 @@ struct P { char pad[0x54]; int c; struct E *ae; struct Q *q; };
 extern char g_sw[];
 void func_001A5C48(struct P *p);
 struct Q *func_001E94B0(int k, int c);
-void *func_0015E938(void *p, int k, int oid, void *q);
+void *PloFindSwObject__FP2SWi3OIDP2LO(void *p, int k, int oid, void *q);
 qword func_001A62E8(void *p);
 void func_001E6180(struct Q *q);
 void func_0014A0A8(struct P *p)
@@ -16,7 +16,7 @@ void func_0014A0A8(struct P *p)
     p->q->c = p->c;
     for (i = 0; i < p->c; i++) {
         struct E *e = &p->ae[i];
-        void *o = func_0015E938(g_sw, 4, e->oid, p);
+        void *o = PloFindSwObject__FP2SWi3OIDP2LO(g_sw, 4, e->oid, p);
         e->p = o;
         if (o) {
             qword *pq = (qword *)((i << 4) + (int)p->q->aq);

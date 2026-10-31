@@ -14,7 +14,7 @@ extern struct G *D_002F7900;
 struct CLOCK { float t; float dt; };
 extern struct CLOCK D_002DDED0;
 extern qword D_002A2DD0;
-void func_001A58D0(struct P *, int, int);
+void SetLoParent__FP2LOP2SOi(struct P *, int, int);
 void func_0012E460(void *);
 void func_002303A0(struct P *, struct O *, int);
 float func_00204740(struct P *);
@@ -23,7 +23,7 @@ void func_00204CA8(struct P *);
 void func_002206C8(void *, int);
 M4 func_0022FF40(void *, void *, M4 *);
 void *func_0012DC18(struct P *p, struct O *pso, int a, int b, int c, qword q);
-qword func_0011BFF0(M4 *pm);
+qword DecomposeRotateMatrixEuler__FP7MATRIX3(M4 *pm);
 void func_001F15B8(void *);
 void func_001305B8(void *, struct P *, int, void *, float, float);
 
@@ -35,7 +35,7 @@ void func_00136530(struct P *p, int k)
     switch (p->k1800) {
     case 0: {
         int save = p->x9E4;
-        func_001A58D0(p, 0, 0xF);
+        SetLoParent__FP2LOP2SOi(p, 0, 0xF);
         p->x9E4 = save;
         func_0012E460(&p->pv1810);
         func_0012E460(&p->pv1814);
@@ -76,7 +76,7 @@ void func_00136530(struct P *p, int k)
         ((void (*)(void *, qword))p->vt[35].f)((char *)p + p->vt[35].d, D_002A2DD0);
         ((void (*)(void *, qword))p->vt[36].f)((char *)p + p->vt[36].d, D_002A2DD0);
         p->pv1810 = func_0012DC18(p, p->p58, 1, 7, 2, m.pos);
-        p->pv1814 = func_0012DC18(p, p->p5C, 1, 7, 2, func_0011BFF0(&m));
+        p->pv1814 = func_0012DC18(p, p->p5C, 1, 7, 2, DecomposeRotateMatrixEuler__FP7MATRIX3(&m));
         break;
     }
     case 1:

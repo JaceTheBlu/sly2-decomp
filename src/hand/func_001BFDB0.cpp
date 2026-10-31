@@ -1,6 +1,6 @@
 // func_001BFDB0: closest point of a navigation triangle to p. T holds pointers to the three corners.
 // If p lies outside an edge in the XY plane (z of cross(p - v0, v1 - v0) > 0, tested a-b, b-c, c-a in turn), the result
-// is the closest point on that edge (func_0011EE08); otherwise p is projected along D_002A2DC0 (world up) onto the
+// is the closest point on that edge (func_0011EE08); otherwise p is projected along g_normalZ (world up) onto the
 // triangle's plane.
 // Keys:
 //  * The inside block works on VU_VECTOR copies of the first and third corners made right after the loads. The
@@ -15,7 +15,7 @@ union U { qword q; float f[4]; };
 struct T { qword *a, *b, *c; };
 struct VU_VECTOR { qword q; VU_VECTOR(const qword &v) { q = v; } };
 extern "C" {
-extern qword D_002A2DC0; // (0, 0, 1, 0)
+extern qword g_normalZ; // (0, 0, 1, 0)
 void func_0011EE08(qword pos, qword p0, qword p1, qword *ppos, float *pt, float *pdist);
 qword func_001BFDB0(T *t, qword p);
 }
@@ -54,7 +54,7 @@ qword func_001BFDB0(T *t, qword p)
         float nz = ZOf(n);
         float dot = XOf(dv);
         float g = dot / nz;
-        result.q = AddScaled(p, D_002A2DC0, g);
+        result.q = AddScaled(p, g_normalZ, g);
     }
     return result.q;
 }

@@ -6,7 +6,7 @@ extern float D_002C0900;
 struct P { char pad[0x150]; int x150; char pad1[0x1034 - 0x154]; int x1034; char pad2[0x1524 - 0x1038]; float f1524; float f1528; int x152C; int x1530; int x1534; };
 struct P *func_001C4840(void *g);
 int func_0020F0B0(void *g);
-int func_001F07E8(int a);
+int GetSmaCur__FP3SMA(int a);
 int func_001F07C8(int a);
 int func_001C46C0(int a, int b, float f);
 void func_001F0660(int a, int b);
@@ -15,7 +15,7 @@ void func_001B5820(struct P *p)
     int a;
     if (func_001C4840(g_sw) != p) return;
     if (func_0020F0B0(g_sw)) return;
-    a = func_001F07E8(p->x1034);
+    a = GetSmaCur__FP3SMA(p->x1034);
     if (a != func_001F07C8(p->x1034)) return;
     if (a >= 0x1D0) return;
     if (a < 0x1CB) return;

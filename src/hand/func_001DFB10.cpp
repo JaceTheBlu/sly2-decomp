@@ -13,7 +13,7 @@ struct OBJ {
     char pad5c[0x7C - 0x5C];
     int f7C;
 };
-void *func_001AE318(MSG *);
+void *PvAllocStackImpl__FP7SWALLOC(MSG *);
 void *PvAllocSwImpl__Fi(MSG *);
 void func_001AE5A0(void *, void *, int);
 void func_001E0290(OBJ *, int);
@@ -26,7 +26,7 @@ extern "C" void func_001DFB10(OBJ *p, void *x)
     MSG *pmsg = &msg;
     pmsg->cb = 0xA000;
     pmsg->nKind = 0x10;
-    p->ae = (ENT *)func_001AE318(pmsg);
+    p->ae = (ENT *)PvAllocStackImpl__FP7SWALLOC(pmsg);
     func_001E0290(p, -1);
     p->f7C = 1;
     func_001A5C28(p, x);

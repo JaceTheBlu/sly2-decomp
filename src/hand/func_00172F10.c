@@ -6,7 +6,7 @@ struct Q2 { qword a, b; };
 struct E { qword pos; qword pad; };
 struct S { char pad[0x18]; void *p18; char pad2[0x20]; float g3C; char pad3[0x10]; struct E ae[4]; unsigned int cD0; };
 int func_0017DCB8(void *p);
-void func_002562A8(struct Q2 *pq);
+void __1M(struct Q2 *pq);
 void func_0017DD38(void *p, struct Q2 *pq);
 void func_00172F10(struct S *p) {
     void *p18;
@@ -20,7 +20,7 @@ void func_00172F10(struct S *p) {
     if (D_002DDED0.t < p->g3C) return;
     pe = &p->ae[p->cD0++];
     if (p->cD0 >= 4) p->cD0 = 0;
-    func_002562A8(&q);
+    __1M(&q);
     q.b = pe->pos;
     func_0017DD38(p18, &q);
     p->g3C = D_002A53D4;

@@ -45,7 +45,7 @@ void func_001AE478(FRAME *pf);
 void _$_18CBinaryInputStream(FRAME *pf, int n);
 int func_0011A3B0(void *pdl);
 int func_0011A3C0(void *pdl);
-void *func_001AE318(const AL &al);
+void *PvAllocStackImpl__FP7SWALLOC(const AL &al);
 int func_001A61A0(LO *plo);
 qword func_001A62E8(LO *plo);
 M3 *func_001A6318(LO *plo);
@@ -64,7 +64,7 @@ void func_001576F0(VIFS *p);
 void func_00157620(VIFS *p);
 void func_0013A1E8(P *p);
 }
-static inline void *PvAllocStack(int cb) { return func_001AE318(AL(cb, 0x10)); }
+static inline void *PvAllocStack(int cb) { return PvAllocStackImpl__FP7SWALLOC(AL(cb, 0x10)); }
 static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 /* earlyclobber output (else branch: vsub vf3 distinct from its inputs); the 2nd "j"(b) is allocation-only */
 static inline qword SubE(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=&j"(r) : "j"(a), "j"(b), "j"(b)); return r; }

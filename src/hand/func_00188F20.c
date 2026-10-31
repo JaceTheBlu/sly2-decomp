@@ -16,13 +16,13 @@ extern char D_002BF2B8[];
 
 extern void func_00140F90(void *p, int msg, void *pv);
 extern void func_0018E540(void *p, int n);
-extern void func_0018C250(void *p, int a, int b);
+extern void SetJtJts__FP2JT3JTS4JTBS(void *p, int a, int b);
 extern void func_00131B10(void *a, void *p, int c);
 extern void func_00131B60(void *a, void *p, int c, void *d);
 extern qword func_001A62E8(void *p);
 extern void *func_001F1E20(void *a, qword q);
-extern int func_00132B10(void *p, int n);
-extern int func_0015E938(void *p, int a, int b, void *c);
+extern int FIsBasicDerivedFrom__FP5BASIC3CID(void *p, int n);
+extern int PloFindSwObject__FP2SWi3OIDP2LO(void *p, int a, int b, void *c);
 extern void func_001424E0(void *p, int oid, void *pv, int n);
 extern void *func_00205458(void *p, int n);
 extern void func_0017B1A8(void *p, int n);
@@ -51,7 +51,7 @@ void func_00188F20(char *p, int msg, void *pv)
         switch (F(int, 0x18C8)) {
         case 9:
         case 0xB:
-            func_0018C250(p, 0, -1);
+            SetJtJts__FP2JT3JTS4JTBS(p, 0, -1);
             break;
         case 7:
         case 0x15:
@@ -59,7 +59,7 @@ void func_00188F20(char *p, int msg, void *pv)
             break;
         case 5:
 
-            if (F(int, 0x18D0) < 10) { if (F(int, 0x18D0) >= 8) func_0018C250(p, 5, 4); }
+            if (F(int, 0x18D0) < 10) { if (F(int, 0x18D0) >= 8) SetJtJts__FP2JT3JTS4JTBS(p, 5, 4); }
 
             break;
         }
@@ -89,10 +89,10 @@ void func_00188F20(char *p, int msg, void *pv)
                 if (F(int, 0x18EC)) {
                     switch (F(int, 0x18D8)) {
                     case 0xC: case 0xE: case 0x10: case 0x12: case 0x14:
-                        func_0018C250(p, 5, 6);
+                        SetJtJts__FP2JT3JTS4JTBS(p, 5, 6);
                         break;
                     case 0xD: case 0xF: case 0x11: case 0x13: case 0x15:
-                        func_0018C250(p, 5, 7);
+                        SetJtJts__FP2JT3JTS4JTBS(p, 5, 7);
                         break;
                     }
                 }
@@ -100,8 +100,8 @@ void func_00188F20(char *p, int msg, void *pv)
             case 0x167:
                 if (F(void *, 0x10DC) && F(int, 0x1BD4)) {
                     void *po = func_001F1E20(F(void *, 0x10DC), func_001A62E8(p));
-                    if (po && !func_00132B10(po, 0x5B) && !func_00132B10(po, 0x5D)) {
-                        int oid = func_0015E938(g_sw, 1, 0x282, p);
+                    if (po && !FIsBasicDerivedFrom__FP5BASIC3CID(po, 0x5B) && !FIsBasicDerivedFrom__FP5BASIC3CID(po, 0x5D)) {
+                        int oid = PloFindSwObject__FP2SWi3OIDP2LO(g_sw, 1, 0x282, p);
                         F(void *, 0x1BCC) = po;
                         func_001424E0(p, oid, po, -1);
                     }
@@ -164,16 +164,16 @@ void func_00188F20(char *p, int msg, void *pv)
         if (k & 2) {
             switch (F(int, 0x18D8)) {
             case 4: case 6: case 0xC: case 0xE: case 0x10: case 0x12: case 0x14:
-                func_0018C250(p, 0, -1);
+                SetJtJts__FP2JT3JTS4JTBS(p, 0, -1);
                 func_0018E540(p, 8);
                 break;
             case 5: case 7: case 0xD: case 0xF: case 0x11: case 0x13: case 0x15:
-                func_0018C250(p, 0, -1);
+                SetJtJts__FP2JT3JTS4JTBS(p, 0, -1);
                 func_0018E540(p, 9);
                 break;
             }
         } else if (k & 4) {
-            func_0018C250(p, 0, -1);
+            SetJtJts__FP2JT3JTS4JTBS(p, 0, -1);
             func_0018E540(p, 8);
         }
         break;

@@ -12,7 +12,7 @@ struct TEX { ulong ul0; ulong pad; ulong ul10; };
 struct X { char pad[0x24]; void *x24; char pad2[0x30 - 0x28]; int x30; };
 struct P { char pad[0x60]; void *p60; char pad2[0x150 - 0x64]; int x150; int pad154; char *ap158[2]; int pad160; int x164; int x168; int x16C; };
 extern "C" {
-extern struct X *D_002DEA4C;
+extern struct X *g_pfrmOpen;
 extern void *D_002DEA34;
 extern struct GIFS D_002DEA00;
 extern struct TEX D_002DECD0;
@@ -71,9 +71,9 @@ extern "C" void func_001477D8(struct P *p)
     default:
         return;
     }
-    D_002DEA4C->x30 &= ~1;
-    if (!D_002DEA4C->x24)
-        D_002DEA4C->x24 = D_002DEA34;
+    g_pfrmOpen->x30 &= ~1;
+    if (!g_pfrmOpen->x24)
+        g_pfrmOpen->x24 = D_002DEA34;
     struct TEX *ptex = &D_002DECD0;
     func_001576F0(&D_002DEA00);
     func_00157500(&D_002DEA00, 0x25, D_002DF4B0);

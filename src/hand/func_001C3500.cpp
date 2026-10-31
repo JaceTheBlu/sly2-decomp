@@ -7,7 +7,7 @@ typedef int qword __attribute__((mode(TI)));
 struct M3 { qword r[3]; };
 struct PATH { char pad0[0xE4]; int cyclic; char padE8[0xD8]; qword axis; };
 extern "C" {
-extern qword D_002A2DA0, D_002A2DC0;   // fallback unit vectors
+extern qword D_002A2DA0, g_normalZ;   // fallback unit vectors
 float func_001E6620(PATH *);           // low distance bound
 float func_001E6648(PATH *);           // high distance bound
 float func_001E6610(PATH *);           // start distance
@@ -15,7 +15,7 @@ void func_001E67B8(PATH *, float, qword *, qword *);
 float GModPositive__Fff(float, float);     // wrap into range
 float func_001E6728(PATH *, float);
 void func_001E6F10(PATH *, float, qword *, qword *);
-M3 func_0011BA08(qword, qword);
+M3 BuildRotateVectorsMatrix__FUxUx(qword, qword);
 qword func_001A6FC0(PATH *, PATH *, qword);
 qword func_0011E390(qword);
 }
@@ -95,16 +95,16 @@ extern "C" void func_001C3500(PATH *p, float distance, int forward, M3 *out)
             float r = 50.0f;
             func_001E6F10(p, func_001E6728(p, sample + r), &fwd.q, 0);
             func_001E6F10(p, func_001E6728(p, sample - r), &back.q, 0);
-            w.direction = Normalize(Sub(fwd.q, back.q), D_002A2DC0);
+            w.direction = Normalize(Sub(fwd.q, back.q), g_normalZ);
             if (i == 0)
                 w.first = w.direction;
             if (Dot(w.tangent, w.direction) > -0.9f)
                 break;
         }
-        rot = func_0011BA08(w.tangent, w.direction);
+        rot = BuildRotateVectorsMatrix__FUxUx(w.tangent, w.direction);
         qword ref = func_001A6FC0(p, 0, p->axis);
         fwd.q = Transform(rot, ref);
-        qword up = Normalize(w.first, D_002A2DC0);
+        qword up = Normalize(w.first, g_normalZ);
         w.basis.r[2] = up;
         back.q = Cross(up, fwd.q);
         w.basis.r[1] = back.q;

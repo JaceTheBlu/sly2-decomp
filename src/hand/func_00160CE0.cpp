@@ -1,9 +1,9 @@
 struct DL{void*first;void*last;int linkOffset;};
-extern void*D_002DD2FC;
+extern void*g_pdliFirst;
 struct DLI{
  DL*list;void**next;int linkOffset;void*previous;
- DLI(DL*owner){int offset=owner->linkOffset;previous=D_002DD2FC;D_002DD2FC=this;list=owner;next=(void**)owner;linkOffset=offset;}
- ~DLI(){D_002DD2FC=previous;}
+ DLI(DL*owner){int offset=owner->linkOffset;previous=g_pdliFirst;g_pdliFirst=this;list=owner;next=(void**)owner;linkOffset=offset;}
+ ~DLI(){g_pdliFirst=previous;}
  void*Next(){void*value=*next;next=(void**)((unsigned int)value+linkOffset);return value;}
 };
 struct VTE{short delta,pad;void(*method)(void*);};
@@ -14,7 +14,7 @@ extern char D_003E1530[],D_003E1518[];
 extern "C" int func_0011A3B0(DL*);
 extern "C" void func_0011A2E8(DL*,void*);
 extern "C" void func_0011A200(DL*);
-extern "C" void func_0011CD98(void*,void*);
+extern "C" void FreeSlotheapPv__FP8SLOTHEAPPv(void*,void*);
 extern "C" void func_00160CE0(FR*frame){
  if(!func_0011A3B0(&frame->dl34)){
   DLI iter(&frame->dl34);
@@ -27,9 +27,9 @@ extern "C" void func_00160CE0(FR*frame){
  if(!func_0011A3B0(&frame->dl40)){
   DLI iter(&frame->dl40);
   for(Y*object=(Y*)iter.Next();object;object=(Y*)iter.Next()){
-   if(object->storage)func_0011CD98(D_003E1530,object->storage);
+   if(object->storage)FreeSlotheapPv__FP8SLOTHEAPPv(D_003E1530,object->storage);
    func_0011A2E8(&frame->dl40,object);
-   func_0011CD98(D_003E1518,object);
+   FreeSlotheapPv__FP8SLOTHEAPPv(D_003E1518,object);
   }
   func_0011A200(&frame->dl40);
  }

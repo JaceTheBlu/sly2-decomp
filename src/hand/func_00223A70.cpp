@@ -21,7 +21,7 @@ qword func_0014EB70(int,SO **,qword,float);
 int func_0014EA08(int count,SO **objects,qword origin,qword endpoint,float gap,float *low,float *high);
 float func_00223A10(void *,qword,qword,N *);
 qword func_0014EDA0(CAMERA *,int,SO **,float (*)(void *,qword,qword,N *),qword,qword,float,float);
-void func_0011EF08(qword,float *,float *,float *);
+void DecomposeCylind__FUxPfN21(qword,float *,float *,float *);
 qword func_0011E1A0(float,float,float);
 }
 struct MARK {MARK(){(void)func_001AE478(this);}~MARK(){_$_18CBinaryInputStream(this,2);}};
@@ -52,7 +52,7 @@ extern "C" void func_00223A70(S *p,qword begin,qword end,qword *out){
     if(w.high<one){
         float angle=initialAngle;
         p->state=4;
-        func_0011EF08(Sub(end,begin),&w.phase,&w.radius,&w.height);
+        DecomposeCylind__FUxPfN21(Sub(end,begin),&w.phase,&w.radius,&w.height);
         float bestCost=D_002A9700;
         float minGap=initialAngle;
         do{

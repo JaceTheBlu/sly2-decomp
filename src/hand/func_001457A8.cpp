@@ -19,11 +19,11 @@ struct P {
     qword q40; qword q50; char pad4[0x68 - 0x60]; float g68;
 };
 extern "C" {
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 qword func_001A62E8(void *p);
 M3 *func_001A6318(void *p);
-M3 func_0011B500(qword axis, float g);
-int func_00132B10(void *p, int k);
+M3 LoadRotateMatrixRad__FfUx(qword axis, float g);
+int FIsBasicDerivedFrom__FP5BASIC3CID(void *p, int k);
 E *func_00145AA8(P *p);
 int func_001C02D0(E *pe, qword r, qword v, B *pb);
 void func_001E6180(B *pb);
@@ -67,9 +67,9 @@ void func_001457A8(P *p)
 {
     union { M4 m4; struct { M3 m; qword pos; } s; } u;
     p->q50 = func_001A62E8(p->po);
-    if (func_00132B10(p->po, 0x33)) {
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(p->po, 0x33)) {
         O *po = p->po;
-        u.s.m = func_0011B500(D_002A2DC0, po->g1A8);
+        u.s.m = LoadRotateMatrixRad__FfUx(g_normalZ, po->g1A8);
         u.s.pos = AddScaled(p->q50, VU_FLOAT(-p->g68), MulM3(u.s.m, po->q190));
     } else {
         O *po;

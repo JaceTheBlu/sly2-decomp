@@ -8,7 +8,7 @@ struct FRAME {
 };
 struct V { int c; void *pv; };
 V *PvAllocSwImpl__Fi(MSG *pmsg);
-void *func_001AE238(MSG *pmsg, void *pv);
+void *PvAllocSwCopyImpl__FP7SWALLOCPv(MSG *pmsg, void *pv);
 void func_001D87C0(void *p, va_list ap, V *pv);
 extern "C" V *func_001D88D0(void *p, ...)
 {
@@ -26,7 +26,7 @@ extern "C" V *func_001D88D0(void *p, ...)
         void *pvOld = pv->pv;
         pmsg->cb = pv->c * 2;
         pmsg->nKind = 0x10;
-        pv->pv = func_001AE238(pmsg, pvOld);
+        pv->pv = PvAllocSwCopyImpl__FP7SWALLOCPv(pmsg, pvOld);
     }
     return pv;
 }

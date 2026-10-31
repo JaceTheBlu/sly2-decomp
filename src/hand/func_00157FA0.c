@@ -1,4 +1,4 @@
-// g_pfrmOpen: Sly 1 name of the current-frame pointer (symbol_addrs g_pfrmOpen, set in OpenFrame); D_002DEA4C in config.
+// g_pfrmOpen: Sly 1 name of the current-frame pointer (symbol_addrs g_pfrmOpen, set in OpenFrame); g_pfrmOpen in config.
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned long ulong;
 typedef struct { qword r[4]; } M4;

@@ -4,7 +4,7 @@
 //
 // D_002DE5B0 / D_002DE5F0 are the EMITO / EMITV defaults that func_00159118 (InitEmitb) copies into EMITB+0x10 /
 // +0x50 (Sly 1's InitEmitb builds the same two objects as guarded local statics). Their initializers hold the
-// non-constant vectors D_002A2DD0 (0,0,0), D_002A2DA0 (1,0,0) and D_002A2DC0 (0,0,1), so g++ builds each one in a
+// non-constant vectors D_002A2DD0 (0,0,0), D_002A2DA0 (1,0,0) and g_normalZ (0,0,1), so g++ builds each one in a
 // memset stack temp and block-copies it.
 //
 // The three unions are what matched it: store_constructor emits a (clobber (mem:BLK)) for every union initializer.
@@ -53,13 +53,13 @@ struct EMITV {
 typedef char check_emito[(sizeof(EMITO) == 0x40) ? 1 : -1];
 typedef char check_emitv[(sizeof(EMITV) == 0x70) ? 1 : -1];
 
-extern qword D_002A2DD0, D_002A2DA0, D_002A2DC0;
+extern qword D_002A2DD0, D_002A2DA0, g_normalZ;
 
 EMITO D_002DE5B0 = { {0, 0, 0, 0}, -1, {0, 0, 0}, {D_002A2DD0}, D_002A2DA0 };
-EMITV D_002DE5F0 = { {{750.0f, 750.0f, -1.0f, 1.0f}}, 0, 0, -1500.0f, 0, D_002A2DC0, 0, 200, 1.0f, 1.0f,
+EMITV D_002DE5F0 = { {{750.0f, 750.0f, -1.0f, 1.0f}}, 0, 0, -1500.0f, 0, g_normalZ, 0, 200, 1.0f, 1.0f,
                      {0, 0, 0, 0, 0, 0, 0, 0}, {{1.0f, 0.0f, -1.0f}} };
 
-// func_0011CCA8 returns its first argument: it is the SLOTHEAP constructor (cb, c, align).
+// __8SLOTHEAPiii returns its first argument: it is the SLOTHEAP constructor (cb, c, align).
 struct SLOTHEAP {
     SLOTHEAP(int cb, int c, int align);
     int cb, c, align; void *head; int allocated; void *block;

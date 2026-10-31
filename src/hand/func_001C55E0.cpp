@@ -22,7 +22,7 @@ struct P {
 class FRAME;
 extern "C" {
 extern char g_sw[];
-extern qword D_002A2DA0, D_002A2DC0, D_002A2DD0, D_002A2DE0;
+extern qword D_002A2DA0, g_normalZ, D_002A2DD0, D_002A2DE0;
 extern float D_002C0D74, D_002C0D78;
 void func_001AE478(FRAME *);
 void _$_18CBinaryInputStream(FRAME *, int);
@@ -30,7 +30,7 @@ qword func_001A62E8(P *);
 int func_001C5570(void *, SOPART *);
 void func_0020FAA0(void *, qword, qword, int (*)(void *, SOPART *), void *, int *, SOPART ***);
 int func_001A93C8(qword, float, SOPART *, void *, int, void *, int, CMCONTACT *);
-float func_0011E290(qword, qword, qword *, qword *);
+float SProjectVector(qword, qword, qword *, qword *);
 }
 class FRAME { public: FRAME() { func_001AE478(this); } ~FRAME() { _$_18CBinaryInputStream(this, 2); } };
 
@@ -143,21 +143,21 @@ extern "C" void func_001C55E0(P *p)
         {
             U primary;
             if (normal.g[2] > 0.7f && p->state == 4) {
-                float gNormal = func_0011E290(p->v, D_002A2DC0, 0, &primary.qw);
+                float gNormal = SProjectVector(p->v, g_normalZ, 0, &primary.qw);
                 float gSpeed = GFromVf(QwNormalizeInto(&primary.qw, D_002A2DD0));
                 float gTangent = GMin(p->gTangentResponse.g * gSpeed, D_002C0D74);
                 gNormal = GMin(-p->gNormalResponse * gNormal, D_002C0D78);
-                response.qw = QwCombo(VU_FLOAT(gTangent), primary.qw, VU_FLOAT(gNormal), D_002A2DC0);
+                response.qw = QwCombo(VU_FLOAT(gTangent), primary.qw, VU_FLOAT(gNormal), g_normalZ);
                 if (!p->fRaised) {
                     int fTrigger = GDot(response.qw, normal.qw) < p->gThreshold;
                     if (fTrigger) {
-                        response.qw = QwCombo(VU_FLOAT(gTangent), primary.qw, VU_FLOAT(p->gBoost.bits), D_002A2DC0);
+                        response.qw = QwCombo(VU_FLOAT(gTangent), primary.qw, VU_FLOAT(p->gBoost.bits), g_normalZ);
                         p->fRaised = 1;
                     }
                 }
             } else {
                 U secondary;
-                func_0011E290(p->v, normal.qw, &primary.qw, &secondary.qw);
+                SProjectVector(p->v, normal.qw, &primary.qw, &secondary.qw);
                 response.qw = QwCombo(VU_FLOAT(-p->gNormalResponse), primary.qw, VU_FLOAT(p->gTangentResponse.bits), secondary.qw);
             }
         }

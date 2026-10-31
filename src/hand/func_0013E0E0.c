@@ -4,7 +4,7 @@ struct P { char pad[0x4558]; int c; struct E *ae; int n; void *p4564; };
 int func_00117C20(void *pbs);
 void ReadVector4__18CBinaryInputStreamP7VECTOR4(void *pbs, struct E *pe);
 int func_00117D50(void *pbs);
-void *func_001AE2A0(struct AREQ *preq);
+void *PvAllocSwClearImpl__FP7SWALLOC(struct AREQ *preq);
 void func_0013E0E0(struct P *p, void *pbs)
 {
     struct AREQ req;
@@ -13,7 +13,7 @@ void func_0013E0E0(struct P *p, void *pbs)
     req.cbAlign = 0x10;
     req.cb = c * sizeof(struct E);
     p->c = c;
-    p->ae = (struct E *)func_001AE2A0(&req);
+    p->ae = (struct E *)PvAllocSwClearImpl__FP7SWALLOC(&req);
     p->n = 0;
     for (i = 0; i < p->c; i++) {
         struct E *pe = &p->ae[i];
@@ -32,5 +32,5 @@ void func_0013E0E0(struct P *p, void *pbs)
     }
     req.cbAlign = 0x10;
     req.cb = p->n * sizeof(struct E);
-    p->p4564 = func_001AE2A0(&req);
+    p->p4564 = PvAllocSwClearImpl__FP7SWALLOC(&req);
 }

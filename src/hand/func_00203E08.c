@@ -9,7 +9,7 @@ struct CLK {float time,dt;};
 extern struct CLK D_002DDED0;
 extern float D_002C3C68[];
 M4 *func_0011C318(M4 *,const M4 *);
-M4 *func_0011C168(M4 *,const M4 *,const M4 *);
+M4 *__ml__FRC7MATRIX4T0(M4 *,const M4 *,const M4 *);
 float GSmooth__FfffP3SMPPf(float,float,float,float *,float *);
 static __inline__ void CopyMatrix(M4 *destination,const M4 *source) {
     register qword row0 __asm__("$2");
@@ -62,7 +62,7 @@ void func_00203E08(struct S *input)
      __asm__("daddu %0,%3,$zero\n\tdaddu %1,%4,$zero\n\tlw %2,%5"
        :"=&r"(destination),"=&r"(inverse),"=r"(basis)
        :"r"(pmm),"r"(pmi),"m"(currentSource->px));
-     func_0011C168(destination,inverse,&basis->m);}
+     __ml__FRC7MATRIX4T0(destination,inverse,&basis->m);}
 
     CopyMatrix(&m,&mm);
     i=((struct S*)context)->pm1->count;

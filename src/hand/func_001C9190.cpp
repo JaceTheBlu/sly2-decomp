@@ -15,7 +15,7 @@ struct CLOCK {float t,dt,ratio,realRatio,realDt,realT;char pad18[0x24];float fra
 struct FR {int n0;void *p4;char pad8[0x1C];void *packet;char pad28[8];int flags;};
 extern VIFS D_002DEA28;
 extern GIFS D_002DEA00;
-extern FR *D_002DEA4C;
+extern FR *g_pfrmOpen;
 extern CLOCK D_002DDED0;
 extern float *D_002DD314;
 extern int D_003D3A3C,D_003D3A40,D_003D3A44,D_002DEDBC,D_002DEB18;
@@ -37,7 +37,7 @@ static inline void BeginFrame()
     func_0014D0B8(&D_002DDED0,1);
     OpenFrame();
     uchar *pb=D_002DEA28.m_pb;
-    D_002DEA4C->packet=pb;
+    g_pfrmOpen->packet=pb;
     D_002DEA28.m_fCheckCnt=1;
     D_002DEA28.AddDmaCnt();
     D_002DEA28.AddVifDirect(0x25,D_002DF260,0);
@@ -64,7 +64,7 @@ extern "C" void func_001C9190(void *)
             func_001C93E0(&D_002DEA00,&matrix,alpha);
             func_00160A98();D_002BE538++;
         }
-        do{D_002DEA4C->flags&=-2;}while(0);
+        do{g_pfrmOpen->flags&=-2;}while(0);
         func_00160A98();D_002BE538++;
         do {func_00234A90(D_002DEB18,&status);}while(status.count==0);
         func_00234A60(D_003D3A40);

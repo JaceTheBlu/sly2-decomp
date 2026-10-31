@@ -29,7 +29,7 @@ struct PX : P {
     char pad124[0x170 - 0x124]; char x170[0x43C - 0x170]; int x43C; int pad440; int c444; DL dl;
 };
 extern "C" {
-extern DLI *D_002DD2FC;
+extern DLI *g_pdliFirst;
 extern float D_002DDED0[];
 extern int D_002C3C5C;
 extern SPRBUF D_003DD2C0[2];
@@ -53,8 +53,8 @@ static inline void InitDli(DLI *pdli, DL *pdl)
     pdli->m_pdl = pdl;
     pdli->m_ppv = (void **)pdl;
     pdli->m_ibDle = pdl->ibDle;
-    pdli->m_pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->m_pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static inline void *PvNextDli(DLI *pdli)
 {
@@ -147,6 +147,6 @@ void func_00139AB8(PX *p)
         float g = GFromQw(QwLength(QwSub(c, vMax.q)));
         p->g100 = g + p->g120;
     }
-    D_002DD2FC = dli.m_pdliNext;
+    g_pdliFirst = dli.m_pdliNext;
     }
 }

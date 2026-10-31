@@ -1,4 +1,4 @@
-// func_0014F110: MATCH. Built on laneK4v1 (K3/K4 fresh rewrite in the func_0014C748 style).
+// func_0014F110: MATCH. Built on laneK4v1 (K3/K4 fresh rewrite in the ClsgClipEdgeToSphere__FUxfUxUxiP3LSG style).
 // Keys: the VU_FLOAT(const float *) ctor's word input has a never-chosen "V" alternative ("r,V"), so it stays a MEM until
 // reload: the clock dt load is then an input reload (lw v0 for the vdiv; for the final AddScaled reload reuses the dying
 // pclock register, lw s0,0x10(s0)), which also shortens the clock chain in sched1 so no extra operand is needed on the vdiv;

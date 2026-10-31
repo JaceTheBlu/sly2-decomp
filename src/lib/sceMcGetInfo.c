@@ -12,7 +12,7 @@ extern int *D_004508A8;
 extern int *D_004508AC;
 extern int *D_004508B0;
 extern int D_002C8354;
-extern int D_002C8350;
+extern int _mc_errno;
 void mceGetInfoApdx(void *);
 int func_00234A70(int);
 int func_00234A40(int);
@@ -38,6 +38,6 @@ int sceMcGetInfo(int port, int slot, int *type, int *free, int *format)
         func_00234A40(D_002C8354);
         return -91;
     }
-    D_002C8350 = 1;
+    _mc_errno = 1;
     return 0;
 }

@@ -53,7 +53,7 @@ extern CLOCK D_002DDED0;
 extern ACTOR *D_002E1E40;
 extern SOURCE *D_003E13E4;
 extern OBJECT *D_003E1420;
-extern qword D_002A2DD0, D_002A2DC0, D_002A2DA0, D_002BF890;
+extern qword D_002A2DD0, g_normalZ, D_002A2DA0, D_002BF890;
 extern float D_002BF780[];
 extern float D_002BF730, D_002BF734, D_002BF834, D_002BF838, D_002BF83C, D_002BF840, D_002BF844, D_002BF848;
 extern float D_002BF878, D_002BF87C, D_002BF880, D_002BF8A0;
@@ -72,18 +72,18 @@ float func_00204740(ACTOR *);
 float RadNormalize__Ff(float);
 void CalculateSinCos__FfPfT1(float, float *, float *);
 float GSmooth__FfffP3SMPPf(float, float, float, SMP *, float *);
-void func_001384C0(CLIP *);
+void ReblendAsegbl__FP6ASEGBL(CLIP *);
 void func_001E67B8(void *, float, qword *, qword *);
 void func_001CC2E8(void *);
 void func_002046B0(ACTOR *, qword);
 void func_00204660(ACTOR *, float);
 void func_001441E8(ACTOR *, float);
 qword func_0011E1A0(float, float, float);
-M3 func_0011BA08(qword, qword);
-M3 func_0011B500(qword, float);
+M3 BuildRotateVectorsMatrix__FUxUx(qword, qword);
+M3 LoadRotateMatrixRad__FfUx(qword, float);
 float func_002458F0(float, float);
 float func_00244E10(float);
-float func_0011E290(qword, qword, qword *, qword *);
+float SProjectVector(qword, qword, qword *, qword *);
 qword func_0011E9F8(qword, float);
 void func_00140C88(ACTOR *, void *);
 }
@@ -390,7 +390,7 @@ extern "C" void func_00197F98(CONTEXT *p)
             p->tracks[2].weight = 0.0f;
             p->tracks[3].weight = 0.0f;
         }
-        func_001384C0(p->multi);
+        ReblendAsegbl__FP6ASEGBL(p->multi);
         break;
     }
     case 14: case 15: {
@@ -416,15 +416,15 @@ extern "C" void func_00197F98(CONTEXT *p)
             p->actor->heading = func_002458F0(vel.f[1], vel.f[0]) + offset;
         VU_FLOAT half = VuFloatHomed(0.5f);
         VU_FLOAT halfNeg = VuFloatHomed(-0.5f);
-        qword up = D_002A2DC0;
+        qword up = g_normalZ;
         qword a = vel.q;
         qword b = p->actor->velocity.q;
         a = QwSub(a, QwScaleQ(up, QwDot(a, up)));
         b = QwSub(b, QwScaleQ(up, QwDot(b, up)));
-        basis = func_0011BA08(D_002A2DC0, QwCombine(D_002BF890, a, half, b, halfNeg));
+        basis = BuildRotateVectorsMatrix__FUxUx(g_normalZ, QwCombine(D_002BF890, a, half, b, halfNeg));
 
         ACTOR *actor = p->actor;
-        actor->local = MulM3(basis, func_0011B500(D_002A2DC0, actor->heading));
+        actor->local = MulM3(basis, LoadRotateMatrixRad__FfUx(g_normalZ, actor->heading));
         break;
     }
     case 17: case 19:
@@ -473,7 +473,7 @@ extern "C" void func_00197F98(CONTEXT *p)
             float g = GNormalize(dir, D_002A2DA0);
 
             U perp;
-            float proj = func_0011E290(desired.q, dir.q, 0, &perp.q);
+            float proj = SProjectVector(desired.q, dir.q, 0, &perp.q);
             if (proj < g && g * -0.25f < proj) {
                 desired.q = QwAddScaled(perp.q, dir.q, VuFloat(g));
                 desired.q = func_0011E9F8(desired.q, speed);

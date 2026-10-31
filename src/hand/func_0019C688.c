@@ -5,7 +5,7 @@ struct O { char pad[0xC]; VT *vt; char pad2[0x4C0-0x10]; char x4c0[0xF5C-0x4C0];
 struct P { struct O *x0; int x4; int x8; struct C *xc; int x10; float x14; int x18; int x1c; };
 extern int D_002DD5BC;
 void func_001928F8(void *p, int n, struct C *c, void *b);
-void func_0018C250(struct O *o, int a, int b);
+void SetJtJts__FP2JT3JTS4JTBS(struct O *o, int a, int b);
 void func_00135248(int a, int b);
 void func_00195FB8(struct P *p, int a, int b);
 #define B(c, off) ((c) ? (void *)((char *)(c) + (off)) : (void *)0)
@@ -35,9 +35,9 @@ void func_0019C688(struct P *p)
         struct O *o = p->x0;
         o->x18c4 = p->xc;
         if (o->x18c4->x124 == 3)
-            func_0018C250(o, 0x16, -1);
+            SetJtJts__FP2JT3JTS4JTBS(o, 0x16, -1);
         else
-            func_0018C250(o, 3, 1);
+            SetJtJts__FP2JT3JTS4JTBS(o, 3, 1);
         break;
     }
     case 15:
@@ -49,7 +49,7 @@ void func_0019C688(struct P *p)
     {
         struct O *o = p->x0;
         o->x1f18 = p->xc;
-        func_0018C250(o, 0x15, 0xA);
+        SetJtJts__FP2JT3JTS4JTBS(o, 0x15, 0xA);
         break;
     }
         break;

@@ -1,6 +1,6 @@
 // func_0017D608: ported from Lilly's personal Sly 2 decomp (src/P2/guardbhv_goto.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002BE750 (D_002BE750), D_002BE754 (D_002BE754), D_002A2DC0 (g_normalZ)
+// Globals: D_002BE750 (D_002BE750), D_002BE754 (D_002BE754), g_normalZ (g_normalZ)
 // 0x0017D608 FSnapPosToSurfaceAbove__FPUx  (our name; was FUN_0017D608)
 // A line from the position straight up (5000 long) against the world's objects: when it hits one, the position is moved to the end of the
 // hit piece and 1 is returned. BHV191::Start (0x17E9B0) tries it when GuardSpawnerGroundSnap finds no floor under the target.
@@ -61,7 +61,7 @@ static inline VU_FLOAT VuFloatFromMemWord(int n)
 }
 extern float D_002BE750;
 extern float D_002BE754;
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern "C" {
 void func_001B44D8(int *pcpso, SOPART ***papso);
 }
@@ -81,8 +81,8 @@ int FSnapPosToSurfaceAbove(qword *ppos)
     int cpso;
     SOPART **apso;
     func_001B44D8(&cpso, &apso);
-    qword posBottom = QwAddScaled(*ppos, D_002A2DC0, VuFloatFromMemWord(*(int *)&D_002BE750));
-    qword posTop = QwAddScaled(*ppos, D_002A2DC0, VuFloatFromMemWord(*(int *)&D_002BE754));
+    qword posBottom = QwAddScaled(*ppos, g_normalZ, VuFloatFromMemWord(*(int *)&D_002BE750));
+    qword posTop = QwAddScaled(*ppos, g_normalZ, VuFloatFromMemWord(*(int *)&D_002BE754));
     LSG lsg;
     if (PsoHitTestLineObjects(0, posBottom, posTop, cpso, apso, &lsg))
     {

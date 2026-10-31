@@ -1,7 +1,7 @@
 typedef struct K { short x; short y; union { short s; int i; } u; } K;
 typedef struct N { int a; K k; int d; struct N *pnNext; } N;
 struct P { char pad[0x3C90]; char pool[0x18]; N *pnHead; N *pnTail; };
-void func_0011CD98(void *pool, N *pn);
+void FreeSlotheapPv__FP8SLOTHEAPPv(void *pool, N *pn);
 static __inline__ int FMatchK(K *pa, K *pb)
 {
     if (pa->y != pb->y) return 0;
@@ -22,7 +22,7 @@ void func_00149B58(struct P *p, unsigned int grf, int a, K k, int d)
         }
         if ((grf & 4) && d != pn->d) goto next;
         *ppn = pn->pnNext;
-        func_0011CD98(p->pool, pn);
+        FreeSlotheapPv__FP8SLOTHEAPPv(p->pool, pn);
         continue;
     next:
         ppn = &pn->pnNext;

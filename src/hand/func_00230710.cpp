@@ -6,7 +6,7 @@
 // fresh17: aligned 3 (fresh16 6). (1) VUF ctor: `float f = g; asm("" : "+f"(f)); qmtc2 "r"(f)`:
 // gcc emits the mfc1 itself (with its latency, so a free insn lands between mfc1 and qmtc2 like the target) and g stays in f20.
 // (2) path 2 uses VUF2, the same ctor with a VOLATILE empty asm (keeps the qB0 lqc2 after the mfc1), through
-// BuildRotationS(const VUF2 &f, qword v) { func_0011B570(&m, Scale(v, f)); }. Left: SetM4 row store order (r1,r2,r0) and path-3 *pm = t store order.
+// BuildRotationS(const VUF2 &f, qword v) { LoadRotateMatrix__FUx(&m, Scale(v, f)); }. Left: SetM4 row store order (r1,r2,r0) and path-3 *pm = t store order.
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword r[4]; float m[4][4]; } M4;
 struct M3 { qword r[3]; };
@@ -21,7 +21,7 @@ M4 *func_0022C8C0(M4 *pm, O *po, qword v);
 M4 *func_0022CB90(M4 *pr, O *pa, const M4 *basis, qword c, qword d);
 void func_0022CC00(M4 *pm, O *po, qword v);
 M4 *func_0022CCD0(M4 *pm, O *pa, const M4 *basis, qword v);
-M3 *func_0011B570(M3 *, qword);
+M3 *LoadRotateMatrix__FUx(M3 *, qword);
 qword func_0022CA18(O *pa, const M4 *matrix);
 qword *__as__6VECTORG9VU_VECTOR(qword *, qword);
 void *func_002333B4(void *, int, int);
@@ -29,7 +29,7 @@ void func_00230710(O *po, M4 *pm, M4 *pm2, float g);
 }
 struct VUF { qword q; VUF(float g) { float f = g; __asm__("" : "+f"(f)); __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } };
 struct VUF2 { qword q; VUF2(float g) { float f = g; __asm__ __volatile__("" : "+f"(f)); __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } operator const VUF &() const { return *(const VUF *)this; } };
-static inline M3 BuildRotation(qword v) return m { func_0011B570(&m, v); }
+static inline M3 BuildRotation(qword v) return m { LoadRotateMatrix__FUx(&m, v); }
 static inline M3 MulM3(const M3 &a, const M3 &b) return m
 {
     M3 t;
@@ -63,7 +63,7 @@ static inline qword Scale(qword v, const VUF &f)
     __asm__("vmulx.xyzw %0, %2, %1x" : "=&j"(r) : "j"(f.q), "j"(v));
     return r;
 }
-static inline M3 BuildRotationS(const VUF2 &f, qword v) return m { func_0011B570(&m, Scale(v, *(const VUF *)&f)); }
+static inline M3 BuildRotationS(const VUF2 &f, qword v) return m { LoadRotateMatrix__FUx(&m, Scale(v, *(const VUF *)&f)); }
 static inline qword AddScale(qword a, qword v, const VUF &f)
 {
     qword r;

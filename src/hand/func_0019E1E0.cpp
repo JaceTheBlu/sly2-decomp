@@ -7,12 +7,12 @@ struct PATH{char pad0[0x28];ulong flags;char pad30[0xE4-0x30];int cyclic;};
 struct C{P*actor;int state;float time;PATH*path;float distance,speed;int descending;float reset;int previous;char pad24[12];U offset;char pad40[0x10];float weight0;char pad54[8];float speed0,weight1;char pad64[8];float speed1;ANIMATION*animation;};
 struct CLOCK{float time,dt;};struct SMP{float maximum,minimum,duration;};struct LM{float low,high;};struct WORK{U ahead,behind;union{U input;SMP smooth;}reuse;LM limit;};
 extern "C"{
-extern CLOCK D_002DDED0;extern U D_002A2DD0,D_002A2DC0;extern SMP D_002BF928;
+extern CLOCK D_002DDED0;extern U D_002A2DD0,g_normalZ;extern SMP D_002BF928;
 qword func_0011F088(qword,qword,float,SMP*,U*);
 void func_00195A00(void*,int,void*,void*);int func_001C46C0(INPUT*,int,float);int func_001C4660(INPUT*,int,float);void func_001C4738(INPUT*,int);
 void func_0019CC50(void*,int,void*,void*);int func_00131968(ASEGA*);void func_0019EAB0(C*,int);
 float func_001E6728(PATH*,float);void func_001E6F10(PATH*,float,U*,U*);qword func_001C4768(INPUT*,qword);
-void func_0019E110(C*,LM*);float GSmooth__FfffP3SMPPf(float,float,float,SMP*,float*);void func_001F4BF8(P*);float func_001E6648(PATH*);float GModPositive__Fff(float,float);void func_001384C0(ANIMATION*);
+void func_0019E110(C*,LM*);float GSmooth__FfffP3SMPPf(float,float,float,SMP*,float*);void func_001F4BF8(P*);float func_001E6648(PATH*);float GModPositive__Fff(float,float);void ReblendAsegbl__FP6ASEGBL(ANIMATION*);
 float fabsf(float);
 }
 static inline ulong Eligible(PATH*p){return (p->flags>>60)&1;}
@@ -20,7 +20,7 @@ static inline int CanAct(P*p,int kind){VE&v=p->vt[99];return ((int(*)(void*,int)
 static inline qword Sub(qword a,qword b){qword q;__asm__("vsub.xyzw %0,%1,%2":"=j"(q):"j"(a),"j"(b));return q;}
 static inline qword Direction(U*a,U*b,U*&axis){
  register qword direction __asm__("vf3");register U*address __asm__("$2");
- __asm__("lqc2 $vf2,%2\n\tlui %0,%%hi(%4)\n\tlqc2 $vf1,%3\n\taddiu %0,%0,%%lo(%4)\n\tvsub.xyzw %1,$vf2,$vf1":"=&r"(address),"=j"(direction):"m"(a->q),"m"(b->q),"i"(&D_002A2DC0):"vf1","vf2");
+ __asm__("lqc2 $vf2,%2\n\tlui %0,%%hi(%4)\n\tlqc2 $vf1,%3\n\taddiu %0,%0,%%lo(%4)\n\tvsub.xyzw %1,$vf2,$vf1":"=&r"(address),"=j"(direction):"m"(a->q),"m"(b->q),"i"(&g_normalZ):"vf1","vf2");
  axis=address;return direction;
 }
 static inline qword Normal(qword v,U*axis){
@@ -145,7 +145,7 @@ extern "C" void func_0019E1E0(C*p){
   register ANIMATION*animation __asm__("$4");register float complement __asm__("$f0");
   __asm__(".set noat\n\tlui $1,0x3f80\n\tmtc1 $1,%0\n\t.set at\n\tlw %1,0x70(%3)\n\tsub.s %0,%0,%4\n\tswc1 %4,%2":"=f"(complement),"=r"(animation),"=m"(p->weight1):"r"(p),"f"(weight):"$1","memory");
   p->weight0=complement;
-  func_001384C0(animation);
+  ReblendAsegbl__FP6ASEGBL(animation);
  }
  func_0019EAB0(p,mode);
 }

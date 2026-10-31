@@ -17,7 +17,7 @@ struct S {
 int func_001EF0A8(struct S *p);
 void func_0017D450(struct S *p, int n);
 void func_0017D8A8(struct S *p);
-void func_002562A8(struct X *x);
+void __1M(struct X *x);
 qword func_001A62E8(void *p);
 qword func_001C1EC0(struct X *s, qword v);
 void func_0011EE08(qword p, qword a, qword b, qword *pc, float *pt, int n);
@@ -32,7 +32,7 @@ void func_0017DA28(struct S *p) {
     if (func_001EF0A8(p)) return;
     func_0017D450(p, 0);
     func_0017D8A8(p);
-    func_002562A8(&x);
+    __1M(&x);
     if (p->nB4 == 0) {
         x = p->x60;
         k = 1;

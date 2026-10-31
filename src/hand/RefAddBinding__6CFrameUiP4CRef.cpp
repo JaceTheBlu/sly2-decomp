@@ -12,7 +12,7 @@ struct CRef {
 struct BINDING;
 extern char D_004520D0[];
 extern "C" {
-void func_0011CD98(void *pheap, void *pv);
+void FreeSlotheapPv__FP8SLOTHEAPPv(void *pheap, void *pv);
 void func_00255438(void *pv);
 BINDING *func_00257340();
 }
@@ -27,7 +27,7 @@ struct BINDING {
     int sym;
     CRef ref;
     SPM pnext;
-    void operator delete(void *pv) { func_00255438(pv); func_0011CD98(D_004520D0, pv); }
+    void operator delete(void *pv) { func_00255438(pv); FreeSlotheapPv__FP8SLOTHEAPPv(D_004520D0, pv); }
 };
 struct SPB {
     BINDING *p;

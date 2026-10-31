@@ -10,7 +10,7 @@ extern int D_002DEB28,D_003E0F8C;
 extern char D_002DEB30[],D_002E65E0[],D_003D4A60[];
 extern G g_sw;
 HEAP_SCOPE*func_001AE478(HEAP_SCOPE*);
-void*func_001AE378(const REQUEST&);
+void*PvAllocStackClearImpl__FP7SWALLOC(const REQUEST&);
 void _$_18CBinaryInputStream(HEAP_SCOPE*,int);
 void func_00164CE8(P*,int,int*,P**);
 void func_00165A60(P*,int);
@@ -22,7 +22,7 @@ void func_001ABD98(void*,int);
 CRef*func_001291A8(CRef*,const CRef*);
 void func_00129EC8(CRef*);
 }
-static inline void*Allocate(int n){return func_001AE378(REQUEST(n,16));}
+static inline void*Allocate(int n){return PvAllocStackClearImpl__FP7SWALLOC(REQUEST(n,16));}
 struct HEAP_SCOPE{HEAP_SCOPE(){func_001AE478(this);}~HEAP_SCOPE(){_$_18CBinaryInputStream(this,2);}};
 struct OVERRIDE{CONTEXT*context;P*object;int oldX,oldY;
     OVERRIDE(P*p,int x,int y):context(0),object(p){if(object){oldX=object->x;object->x=x;oldY=object->y;object->y=y;}}

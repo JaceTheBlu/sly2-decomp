@@ -13,7 +13,7 @@ extern Pool D_004520A8;
 extern "C" {
 void func_00256D40(void *, int);
 void func_002550F8(O *);
-void func_0011CD98(Pool *, O *);
+void FreeSlotheapPv__FP8SLOTHEAPPv(Pool *, O *);
 }
 struct SP {
     O *p;
@@ -24,7 +24,7 @@ struct SP {
             func_00256D40(q->sub, 2);
             func_00129EC8(&q->ref);
             func_002550F8(q);
-            func_0011CD98(&D_004520A8, q);
+            FreeSlotheapPv__FP8SLOTHEAPPv(&D_004520A8, q);
         }
     }
 };
@@ -37,7 +37,7 @@ extern int D_003E1C34;
 extern char D_002DD598[];
 extern "C" {
 int func_00117C80(void *);
-T *func_001AE2A0(SZ *);
+T *PvAllocSwClearImpl__FP7SWALLOC(SZ *);
 E *PvAllocSwImpl__Fi(SZ *);
 SP func_0012A3D8(void *);
 void func_00118420(void *);
@@ -52,7 +52,7 @@ extern "C" void func_001FF858(G *pg, int a, void *px)
     if (!c) return;
     {
         SZ sz(0x10, 0x10);
-        pt = func_001AE2A0(&sz);
+        pt = PvAllocSwClearImpl__FP7SWALLOC(&sz);
     }
     pt->a = a;
     CRef r;

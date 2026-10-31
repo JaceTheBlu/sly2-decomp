@@ -1,5 +1,5 @@
 #include "m2c_prelude.h"
-s32 *func_001AE318(s32 *, M2C_UNK);                 /* extern */
+s32 *PvAllocStackImpl__FP7SWALLOC(s32 *, M2C_UNK);                 /* extern */
 extern s128 D_002A2DA0;
 extern s128 D_002A2DD0;
 extern M2C_UNK D_002CAF08;
@@ -20,9 +20,9 @@ void func_001308B8(s32 arg0, s32 arg1) {
     temp_v0 = M2C_FIELD(arg0, s32 *, 0x10) - 1;
     M2C_FIELD(arg0, s32 *, 0x10) = temp_v0;
     if (temp_v0 <= 0) {
-        func_00256EE0(arg0, 0);
+        __as__3SPXP1X(arg0, 0);
         func_002580A8(arg0 + 4, 0);
         func_001334A8(arg0);
-        func_0011CD98((s32) &D_003E1224, arg0);
+        FreeSlotheapPv__FP8SLOTHEAPPv((s32) &D_003E1224, arg0);
     }
 }

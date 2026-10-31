@@ -25,7 +25,7 @@ extern M2C_UNK D_002BD498;
 extern M2C_UNK D_002BD4A0;
 extern M2C_UNK D_002BD4B0;
 extern s32 D_002BD4C0;
-extern void *D_002DD2F8;
+extern void *g_psliFirst;
 extern s32 D_002DD648;
 extern u8 D_002DD680;
 extern s32 D_002DDE80;
@@ -46,6 +46,6 @@ extern s32 D_003E1450;
 extern M2C_UNK D_004520A8;
 
 s32 func_00149848(s32 arg0, s32 arg1) {
-    func_00200F58(arg0, M2C_FIELD(arg1, s32 *, 0x2C0), 0x2002, M2C_FIELD(arg1, s32 *, 0x2C4));
+    __1RiiPPv(arg0, M2C_FIELD(arg1, s32 *, 0x2C0), 0x2002, M2C_FIELD(arg1, s32 *, 0x2C4));
     return arg0;
 }

@@ -12,13 +12,13 @@ struct P {
     E *ae;
 };
 extern "C" {
-void *func_001AE318(const AREQ &r);
-void *func_001AE378(const AREQ &r);
-void *func_001AE238(const AREQ &r, void *pv);
+void *PvAllocStackImpl__FP7SWALLOC(const AREQ &r);
+void *PvAllocStackClearImpl__FP7SWALLOC(const AREQ &r);
+void *PvAllocSwCopyImpl__FP7SWALLOCPv(const AREQ &r, void *pv);
 }
-static inline void *Alloc(int cb) { return func_001AE318(AREQ(cb, 0x10)); }
-static inline void *AllocB(int cb) { return func_001AE378(AREQ(cb, 0x10)); }
-static inline void *Realloc(void *pv, int cb) { return func_001AE238(AREQ(cb, 0x10), pv); }
+static inline void *Alloc(int cb) { return PvAllocStackImpl__FP7SWALLOC(AREQ(cb, 0x10)); }
+static inline void *AllocB(int cb) { return PvAllocStackClearImpl__FP7SWALLOC(AREQ(cb, 0x10)); }
+static inline void *Realloc(void *pv, int cb) { return PvAllocSwCopyImpl__FP7SWALLOCPv(AREQ(cb, 0x10), pv); }
 extern "C" {
 void func_001F31E0(P *p, void *a);
 }

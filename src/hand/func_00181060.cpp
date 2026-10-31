@@ -7,9 +7,9 @@ struct O { char pad[0xC]; struct VT *pvt; char pad1[0x194 - 0x10]; ANIMATION *x1
     int x1C8; int x1CC; char pad3[0x204 - 0x1D0]; float g204; char pad4[0x210 - 0x208]; qword v210; };
 struct MSG { ANIMATION *animation; float time; int kind; };
 extern "C" void func_001C3E20(struct O *p, int msg, struct MSG *pm);
-extern "C" MATRIX3 func_0011B500(qword v, float g);
+extern "C" MATRIX3 LoadRotateMatrixRad__FfUx(qword v, float g);
 extern "C" qword func_00204E38(struct O *p, ANIMATION *animation, float time);
-extern "C" qword D_002A2DC0;
+extern "C" qword g_normalZ;
 extern "C" void func_00181060(struct O *p, int msg, struct MSG *pm);
 void func_00181060(struct O *p, int msg, struct MSG *pm)
 {
@@ -20,7 +20,7 @@ void func_00181060(struct O *p, int msg, struct MSG *pm)
             case 0x15E: {
                 MATRIX3 m;
                 qword v, r;
-                m = func_0011B500(D_002A2DC0, p->g204);
+                m = LoadRotateMatrixRad__FfUx(g_normalZ, p->g204);
                 v = func_00204E38(p, pm->animation, pm->time);
                 __asm__("vmulax.xyz ACC, %1, %4x\n\tvmadday.xyz ACC, %2, %4y\n\tvmaddz.xyz %0, %3, %4z"
                     : "=&j"(r) : "j"(m.r[0]), "j"(m.r[1]), "j"(m.r[2]), "j"(v));

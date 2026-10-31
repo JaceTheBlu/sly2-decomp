@@ -1,7 +1,7 @@
 typedef int qword __attribute__((mode(TI)));
 typedef struct DL { void *head; void *tail; int ibDle; } DL;
 typedef struct DLI { DL *m_pdl; void **m_ppv; int m_ibDle; struct DLI *m_pdliNext; } DLI;
-extern DLI *D_002DD2FC;
+extern DLI *g_pdliFirst;
 struct SO;
 struct VT { char pad[0xB0]; short d16; short p16; void (*pfn22)(struct SO *); short d17; short p17; void (*pfn23)(struct SO *); };
 struct SO { char pad[0xC]; struct VT *pvt; char pad2[0x28 - 0x10]; long grf; float g30; float g34; float g38; };
@@ -38,8 +38,8 @@ static inline void InitDli(DLI *pdli, DL *pdl)
     pdli->m_pdl = pdl;
     pdli->m_ppv = (void **)pdl;
     pdli->m_ibDle = pdl->ibDle;
-    pdli->m_pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->m_pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static inline void *PvNextDli(DLI *pdli)
 {
@@ -120,5 +120,5 @@ void func_00147F40(struct P *p)
             }
         }
     }
-    D_002DD2FC = dli.m_pdliNext;
+    g_pdliFirst = dli.m_pdliNext;
 }

@@ -20,13 +20,13 @@ void func_001CAA60(P *,NODE *);
 int func_001CA930(P *,NODE *);
 int func_001C9940(int,int);
 TREE *func_001C99D8(TREE *,int,int *);
-int func_0015E678(SW *,int,int,P *,void *,int,P **);
+int CploFindSwObjects__FP2SWi3OIDP2LOP3PXRiPP2LO(SW *,int,int,P *,void *,int,P **);
 STREAM *func_00118480(STREAM *);
 void func_00118500(STREAM *,void *,void *,int);
 short func_00117D50(STREAM *);
 void func_0013E818(P *,DESC *,int,STREAM *);
-void func_00127B40(void *,void *);
-void func_00256EE0(void **,void *);
+void AddParent__6CFrameP6CFrame(void *,void *);
+void __as__3SPXP1X(void **,void *);
 void func_001184B8(STREAM *,int);
 }
 static inline P *Adjusted(P *p,const VTE &entry){return (P *)((char *)p+entry.delta);}
@@ -51,15 +51,15 @@ extern "C" NODE *func_001CAEC8(P *p,int minimum){
   BIND *bind=&p->binds[i];
   if(bind->kind==5)continue;
   if(bind->kind==6){work.found=tree->owner;if(!work.found)continue;}
-  else if(func_0015E678(&g_sw,0xA05,bind->kind,0,tree,1,&work.found)!=1)continue;
+  else if(CploFindSwObjects__FP2SWi3OIDP2LOP3PXRiPP2LO(&g_sw,0xA05,bind->kind,0,tree,1,&work.found)!=1)continue;
   bind->object=work.found;
   func_00118480(&stream);
   func_00118500(&stream,bind->begin,bind->end,0);
   int index;
   while((index=func_00117D50(&stream))>=0){DESC *desc=&D_002AC880[index];func_0013E818(work.found,desc,desc->flags&0x2031,&stream);}
   if(bind->resource && !p->disabled){
-   if(work.found->resource)func_00127B40(bind->resource,work.found->resource);
-   func_00256EE0(&work.found->resource,bind->resource);
+   if(work.found->resource)AddParent__6CFrameP6CFrame(bind->resource,work.found->resource);
+   __as__3SPXP1X(&work.found->resource,bind->resource);
   }
   func_001184B8(&stream,2);
  }

@@ -10,7 +10,7 @@ extern M2C_UNK D_0029A7C0;
 extern M2C_UNK D_0029A8C0;
 extern M2C_UNK D_002A28D0;
 extern M2C_UNK D_002A2900;
-extern M2C_UNK D_002CA550;
+extern M2C_UNK _vt$11CLinearHeap;
 extern M2C_UNK D_002CC1C0;
 extern M2C_UNK D_002CC240;
 extern M2C_UNK D_002CC2C0;

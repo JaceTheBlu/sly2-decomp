@@ -5,7 +5,7 @@ struct S {
 };
 int func_001C46C0(struct T *p, int n, float g);
 void func_00195A00(void *p, int a, int b, int c);
-void func_0018C250(struct S *p, int a, int b);
+void SetJtJts__FP2JT3JTS4JTBS(struct S *p, int a, int b);
 void func_0018E540(struct S *p, int n);
 int func_0018F050(struct S *p);
 int func_0018EE38(struct S *p);
@@ -30,8 +30,8 @@ void func_0018F0A8(struct S *p)
         switch (p->x18d0) {
         case 6: case 7:
             if (!(p->pt->fl & 0x80)) {
-                if (p->x18e8) func_0018C250(p, 5, 8);
-                else func_0018C250(p, 5, 4);
+                if (p->x18e8) SetJtJts__FP2JT3JTS4JTBS(p, 5, 8);
+                else SetJtJts__FP2JT3JTS4JTBS(p, 5, 4);
             }
             break;
         case 8: case 9:

@@ -9,7 +9,7 @@ struct WORLD;
 struct CLOCK {float t,dt;};
 extern WORLD g_sw;
 extern CLOCK D_002DDED0;
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern float D_002A97A8;
 extern O *D_002E1E40;
 extern int D_002C4398[];
@@ -18,12 +18,12 @@ void func_0012E460(void **);
 void func_00134320(WORLD *,S *);
 void func_001F5720(S *,int);
 void func_001F57C0(S *,int);
-qword func_0011BFF0(const void *);
+qword DecomposeRotateMatrixEuler__FP7MATRIX3(const void *);
 void *func_0012DC18(S *,NODE *,int,int,int,qword);
 int func_00224688(S *);
 qword func_0022FCC8(NODE *,NODE *,qword);
 M3 *func_0011B830(M3 *,qword,qword);
-void func_001A58D0(S *,int,int);
+void SetLoParent__FP2LOP2SOi(S *,int,int);
 int func_0015E9C8(WORLD *,int,int,int,int,O **);
 qword func_001A62E8(void *);
 void func_001F7BF8(S *,float);
@@ -72,7 +72,7 @@ extern "C" void func_00224EC8(S *p,int state){
   func_001F5720(p,0);func_001F57C0(p,0);
   ZeroVelocity(p->positionNode);ZeroVelocity(p->rotationNode);
   qword position=p->positionNode->orientation;
-  qword rotation=func_0011BFF0(p->rotationNode);
+  qword rotation=DecomposeRotateMatrixEuler__FP7MATRIX3(p->rotationNode);
   p->positionJob=func_0012DC18(p,p->positionNode,0,7,2,position);
   p->rotationJob=func_0012DC18(p,p->rotationNode,0,7,2,rotation);
   func_00134320(&g_sw,p);
@@ -83,14 +83,14 @@ extern "C" void func_00224EC8(S *p,int state){
   ZeroVelocity(p->positionNode);ZeroVelocity(p->rotationNode);
   if(func_00224688(p)&&p->rotationNode){
    qword direction=Normalize(ToVF(func_0022FCC8(0,p->rotationNode->parent,p->direction)));
-   qword rawUp=func_0022FCC8(0,p->rotationNode->parent,D_002A2DC0);
+   qword rawUp=func_0022FCC8(0,p->rotationNode->parent,g_normalZ);
    M3 basis;basis=MakeBasis(direction,rawUp);
-   p->rotationJob=func_0012DC18(p,p->rotationNode,0,7,2,func_0011BFF0(&basis));
+   p->rotationJob=func_0012DC18(p,p->rotationNode,0,7,2,DecomposeRotateMatrixEuler__FP7MATRIX3(&basis));
   }
   break;
  }
  case 1:{
-  func_001A58D0(p,0,15);func_001F5720(p,0);
+  SetLoParent__FP2LOP2SOi(p,0,15);func_001F5720(p,0);
   if(p->kind!=0x29){func_001F57C0(p,0);break;}
   func_001F57C0(p,1);
   O *objects[32];

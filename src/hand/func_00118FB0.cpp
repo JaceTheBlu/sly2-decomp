@@ -2,7 +2,7 @@
 typedef int qword __attribute__((mode(TI)));
 union VUF { qword q; float f[4]; };
 struct NODE { NODE *pnodeLeft; NODE *pnodeRight; qword *pplane; };
-extern "C" void *func_002564B8(void *p);
+extern "C" void *__3VUF(void *p);
 extern "C" NODE *func_00118FB0(NODE *pnode, NODE *pnodeMax, qword pos)
 {
     NODE *p;
@@ -18,8 +18,8 @@ loop:
         qword dq;
         register qword oq __asm__("vf2"); /* pin: the target allocates the one-vector to vf2 (the dot result then gets vf1) */
         float g;
-        func_002564B8(&d);
-        func_002564B8(pone);
+        __3VUF(&d);
+        __3VUF(pone);
         __asm__("vmul.xyz %0, %0, %3\n\tvaddw.x %1, $vf0, $vf0w\n\tvadday.x $ACC, %0, %0y\n\tvmaddaz.x $ACC, %1, %0z\n\tvmsubw.x %0, %1, %0w"
                 : "=j"(dq), "=j"(oq) : "0"(plane), "j"(pos));
         { int t; __asm__("qmfc2.ni %0, %2\n\tmtc1 %0, %1" : "=&r"(t), "=f"(g) : "j"(dq)); }

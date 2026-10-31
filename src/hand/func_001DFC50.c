@@ -1,7 +1,7 @@
 typedef struct DL { void *pvFirst; void *pvLast; int ibDle; } DL;
 typedef struct DLI { DL *pdl; void **ppv; int ibDle; struct DLI *pdliNext; } DLI;
 extern struct CLOCK { float a[20]; } D_002DDED0;
-extern DLI *D_002DD2FC;
+extern DLI *g_pdliFirst;
 typedef struct {
     char pad[0x40];
     unsigned int x40;
@@ -20,8 +20,8 @@ static inline void InitDli(DLI *pdli, DL *pdl)
     pdli->pdl = pdl;
     pdli->ppv = (void **)pdl;
     pdli->ibDle = pdl->ibDle;
-    pdli->pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static inline void *PvNextDli(DLI *pdli)
 {
@@ -49,5 +49,5 @@ void func_001DFC50(OBJ *p)
         func_001E1C40(pv);
     if (func_0011A3B0(&p->dl))
         func_001DFEB8(p);
-    D_002DD2FC = dli.pdliNext;
+    g_pdliFirst = dli.pdliNext;
 }

@@ -37,10 +37,10 @@ qword func_001A6F00(int n, P *p, qword q);
 void func_0011E958(qword v, float *pa, float *pb);
 float func_0011D978(LM *plm, float g);
 M3 func_0011B720(float a, float b);
-M3 func_0011B500(qword v, float g);
+M3 LoadRotateMatrixRad__FfUx(qword v, float g);
 M3 func_0022FD38(void *pvFrom, void *pvTo, M3 *pm);
 M3 func_0011B340(const M3 *pm);
-qword func_0011BFF0(M3 *pm);
+qword DecomposeRotateMatrixEuler__FP7MATRIX3(M3 *pm);
 void func_0012D108(Q *pq, qword q);
 void func_00142AF8(P *p);
 }
@@ -154,7 +154,7 @@ void func_00142AF8(P *p)
         }
     }
     M3 m0, m1;
-    m0 = func_0011B720(pan, tilt) * func_0011B500(D_002A2DA0, g);
+    m0 = func_0011B720(pan, tilt) * LoadRotateMatrixRad__FfUx(D_002A2DA0, g);
     m1 = func_0022FD38(0, p->p60, &p->pq->p8->m40);
     m1 = m1 * func_0011B340(&p->m1150);
     M3 m2;
@@ -163,5 +163,5 @@ void func_00142AF8(P *p)
     else
         m2 = m0 * p->m1150;
     m2 = func_0022FD38(p->p60, p->pq->p8->pA0, &m2);
-    func_0012D108(p->pq, func_0011BFF0(&m2));
+    func_0012D108(p->pq, DecomposeRotateMatrixEuler__FP7MATRIX3(&m2));
 }

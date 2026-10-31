@@ -37,7 +37,7 @@ extern CLOCK D_002DDED0;
 extern CAMERA g_cm;
 extern SW g_sw;
 extern float D_002C0D4C;
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 void func_001F3980(P *);
 qword *__as__6VECTORG9VU_VECTOR(qword *, qword);
 M3 func_0011B830(qword, qword);
@@ -145,7 +145,7 @@ extern "C" void func_001C5148(P *p)
             M3 frame, rot;
             dir.q = Difference(g_cm.position, p->position->position);
             dir.words[2] = 0;
-            frame = func_0011B830(dir.q, D_002A2DC0);
+            frame = func_0011B830(dir.q, g_normalZ);
             if (positionMotion) {
                 Sample(positionMotion, animation, &position.q, &velocity.q);
                 channel = p->position;

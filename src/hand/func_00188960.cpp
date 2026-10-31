@@ -10,15 +10,15 @@ struct ACTOR{char pad[0x80];qword response;};
 struct P{char pad0[0xC];VTE*vt;char pad10[0xD8];ACTOR*actor;char padEC[0xF44];MODEL*model;char pad1034[0x894];int mode,unusedCC,submode;char pad18D4[0x1B0];void*lookup;};
 struct CLOCK{float time,dt;};struct WORK{U a,b;};
 extern "C"{
-extern CLOCK D_002DDED0;extern qword D_002A2DC0;
+extern CLOCK D_002DDED0;extern qword g_normalZ;
 extern float D_002BF288,D_002BF28C,D_002BF290,D_002BF294;
 void func_001F9B20(P*);void func_00204108(P*);
 void func_001903B8(P*);void func_0019DF70(void*);void func_00196DF8(void*);
 void func_001A1148(void*);void func_00194170(void*);void func_00137248(void*);
-qword func_00204E38(P*,MODEL*,float);float func_0012F990(void*,int);
+qword func_00204E38(P*,MODEL*,float);float TFindAsegLabel__FP4ASEG3OID(void*,int);
 void func_001FAC30(P*,qword);qword func_0011E9F8(qword,float);
-M4*func_001A6318(P*);float func_0011E290(qword,qword,qword*,qword*);
-M3 func_0011B500(qword,float);
+M4*func_001A6318(P*);float SProjectVector(qword,qword,qword*,qword*);
+M3 LoadRotateMatrixRad__FfUx(qword,float);
 }
 struct VU_FLOAT{qword qw;};
 static inline VU_FLOAT VuFloat(float g){VU_FLOAT v;__asm__("qmtc2.ni %1,%0":"=j"(v.qw):"r"(g));return v;}
@@ -45,7 +45,7 @@ extern "C" void func_00188960(P*p){
   VTE*e=&p->vt[33];
   w.a.q=((qword(*)(void*))e->fn)((char*)p+e->delta);
   w.b.q=func_00204E38(p,p->model,p->model->base);
-  float cap=func_0012F990(p->lookup,0x16D);
+  float cap=TFindAsegLabel__FP4ASEG3OID(p->lookup,0x16D);
   if(p->model->base<cap){
    qword resp=p->actor->response;
    func_001FAC30(p,QwScaleX(resp,VuFloat(-1.0f)));
@@ -58,7 +58,7 @@ extern "C" void func_00188960(P*p){
    VTE*e=&p->vt[33];qword position=((qword(*)(void*))e->fn)((char*)p+e->delta);
    e=&p->vt[34];qword direction=((qword(*)(void*))e->fn)((char*)p+e->delta);
    M4*m=func_001A6318(p);M3 basis;basis.r[0]=m->r[0];basis.r[1]=m->r[1];basis.r[2]=m->r[2];
-   float projection=func_0011E290(position,basis.r[0].q,&w.a.q,&w.b.q);
+   float projection=SProjectVector(position,basis.r[0].q,&w.a.q,&w.b.q);
    float dt=D_002DDED0.dt;
    float gAlong=projection-D_002BF290*dt;
    float gPerp=1.0f-D_002BF294*dt;
@@ -66,11 +66,11 @@ extern "C" void func_00188960(P*p){
    w.a.q=QwScaleX(basis.r[0].q,VuFloat(gAlong));
    w.b.q=QwScaleX(w.b.q,VuFloat(gPerp));
    M3 rotation;
-   rotation=func_0011B500(D_002A2DC0,angle);
+   rotation=LoadRotateMatrixRad__FfUx(g_normalZ,angle);
    qword sum=QwAdd(w.a.q,w.b.q);
    qword moved=QwSub(QwRotateVecAt(&rotation,&sum),position);
    qword velocity=QwDivide(moved,VuFloatFromMemWord(*(int*)&D_002DDED0.dt));
-   func_001FAC30(p,func_0011E9F8(QwProjectOut(velocity,D_002A2DC0),D_002BF28C));
+   func_001FAC30(p,func_0011E9F8(QwProjectOut(velocity,g_normalZ),D_002BF28C));
   }
   break;
  }

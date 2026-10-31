@@ -2,8 +2,8 @@ struct AREQ { int cb; int cbAlign; };
 struct OBJ { int a[4]; OBJ(); ~OBJ(); };
 struct T { char pad[0xE4]; int c; void *p; int pad2; int c2; void *q; };
 extern "C" {
-void *func_001AE378(AREQ *preq);
-void *func_001AE238(AREQ *preq, void *pv);
+void *PvAllocStackClearImpl__FP7SWALLOC(AREQ *preq);
+void *PvAllocSwCopyImpl__FP7SWALLOCPv(AREQ *preq, void *pv);
 void func_00231170(T *t, void *p);
 void func_0012EB78(T *t, void *p);
 }
@@ -14,15 +14,15 @@ void func_0012EB78(T *t, void *p)
     AREQ *preq = &req;
     req.cb = 0xA0;
     preq->cbAlign = 0x10;
-    t->p = func_001AE378(preq);
+    t->p = PvAllocStackClearImpl__FP7SWALLOC(preq);
     req.cb = 0x80;
     preq->cbAlign = 0x10;
-    t->q = func_001AE378(preq);
+    t->q = PvAllocStackClearImpl__FP7SWALLOC(preq);
     func_00231170(t, p);
     req.cb = t->c * 0x14;
     preq->cbAlign = 0x10;
-    t->p = func_001AE238(preq, t->p);
+    t->p = PvAllocSwCopyImpl__FP7SWALLOCPv(preq, t->p);
     req.cb = t->c2 * 0x10;
     preq->cbAlign = 0x10;
-    t->q = func_001AE238(preq, t->q);
+    t->q = PvAllocSwCopyImpl__FP7SWALLOCPv(preq, t->q);
 }

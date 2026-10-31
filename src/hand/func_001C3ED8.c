@@ -3,7 +3,7 @@ struct LO { char pad[0xC]; struct VTE *vt; char p1[0x150 - 0x10]; void *x150; };
 struct G { char pad[0x3EB8]; int c; struct LO *a[16]; char p1[0x3EFC - 0x3EFC]; struct LO *plo3EFC; };
 extern struct G g_sw;
 int func_001C4080(struct LO *p);
-void *func_001AE4F8(int cb);
+void *__builtin_new(int cb);
 void *func_001C4280(void *pv, struct LO *p);
 void func_001C4940(struct G *pg, struct LO *plo);
 void func_001C4640(void *pv, int n);
@@ -14,7 +14,7 @@ void func_001C3ED8(struct LO *p, int n)
         struct G *pg = &g_sw;
         if ((unsigned int)pg->c >= 16) return;
         pg->a[pg->c++] = p;
-        p->x150 = func_001C4280(func_001AE4F8(0xE0), p);
+        p->x150 = func_001C4280(__builtin_new(0xE0), p);
     }
     switch (n) {
     case 1: {

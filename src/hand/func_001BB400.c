@@ -21,7 +21,7 @@ extern char D_002DEB30[];
 int func_001BBE48(P *p);
 int func_001BBE18(P *p);
 void *func_001C4840(void *g);
-int func_00132B10(void *p, int k);
+int FIsBasicDerivedFrom__FP5BASIC3CID(void *p, int k);
 void func_001BB648(P *p, E *pe);
 qword func_001A62E8(P *p);
 void func_00156B98(void *g, int z, qword q, void *x);
@@ -36,7 +36,7 @@ void func_001BB400(P *p)
         p->x168 = 0xE;
     } else {
         v = p->x170;
-        if (v == 0x100 || v == 0x10000 || v == 0x20000 || (p->x16C && func_00132B10(p->x16C, 0x3B)))
+        if (v == 0x100 || v == 0x10000 || v == 0x20000 || (p->x16C && FIsBasicDerivedFrom__FP5BASIC3CID(p->x16C, 0x3B)))
             p->x168 = 8;
         else
             p->x168 = 0;
@@ -46,7 +46,7 @@ void func_001BB400(P *p)
     pe = &p->ae[p->i];
     func_001BB648(p, p->ae - 1);
     func_001BB648(p, pe);
-    if (!p->x16C || !func_00132B10(p->x16C, 0x38) || func_00132B10(p->x16C, 0x3C)) {
+    if (!p->x16C || !FIsBasicDerivedFrom__FP5BASIC3CID(p->x16C, 0x38) || FIsBasicDerivedFrom__FP5BASIC3CID(p->x16C, 0x3C)) {
         func_00156B98(g_sw, 0, func_001A62E8(p), p->x16C);
     }
     if (pe->n > 0) {

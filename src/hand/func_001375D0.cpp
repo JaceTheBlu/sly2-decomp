@@ -65,7 +65,7 @@ extern "C" {
 extern CLOCK D_002DDED0;
 extern float D_002BC9B8;
 void func_002046F0(P *p, int n);
-R *func_0012FF10(X *px, P *p, int a, int b);
+R *PchnFindAseg__FP4ASEGP3ALOii(X *px, P *p, int a, int b);
 void func_001F15B8(void *pv);
 void func_001305B8(X *px, P *p, int n, void *pv, float g0, float g1);
 }
@@ -93,7 +93,7 @@ extern "C" void func_001375D0(S *s, int k)
         else
             px = s->px1;
         func_002046F0(s->p, PXOF(s->p)->x10DC);
-        func_0012FF10(px, s->p, 1, 1)->pq->Eval(0, &v.q, 0.0f, px->g78);
+        PchnFindAseg__FP4ASEGP3ALOii(px, s->p, 1, 1)->pq->Eval(0, &v.q, 0.0f, px->g78);
         s->p->SetVel(PXOF(s->p)->m1B0 * VU_VECTOR(v.q));
         PXOF(s->p)->v190 = VU_VECTOR(v.q) * VU_FLOAT(-1.0f);
         s->kCur = k;

@@ -41,7 +41,7 @@ struct CLOCK { float t; float dt; };
 #define CA(p) ((VEC *)((int)(p) - 0x560))
 #define CB(p) ((VEC *)((int)(p) - 0x2B0))
 extern struct CLOCK D_002DDED0;
-extern struct DLI *D_002DD2FC;
+extern struct DLI *g_pdliFirst;
 extern int D_002BC9C0;
 extern "C" {
 void func_00139AB8(struct P *p);
@@ -62,8 +62,8 @@ static __inline__ void InitDli(struct DLI *pdli, struct DL *pdl)
     pdli->m_pdl = pdl;
     pdli->m_ppv = (void **)pdl;
     pdli->m_ibDle = pdl->ibDle;
-    pdli->m_pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->m_pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static __inline__ void *PvNextDli(struct DLI *pdli)
 {
@@ -167,6 +167,6 @@ void func_00139DC0(struct P *p)
         __asm__("mtc1 %1, %0" : "=f"(g) : "r"(l));
         p->g100 = g + p->g120;
     }
-    D_002DD2FC = dli.m_pdliNext;
+    g_pdliFirst = dli.m_pdliNext;
     }
 }

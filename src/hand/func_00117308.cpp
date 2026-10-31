@@ -14,13 +14,13 @@ struct VU_FLOAT {
     VU_FLOAT(float f) { __asm__("mfc1 %0, %1" : "=r"(q) : "f"(f)); }
 };
 extern "C" {
-void func_0011B570(M3 *pm, qword v);
-M3 *func_0011BC00(M3 *pr, M3 *pa, M3 *pb);
+void LoadRotateMatrix__FUx(M3 *pm, qword v);
+M3 *CalculateDmat__FP7MATRIX3T0(M3 *pr, M3 *pa, M3 *pb);
 qword func_0011BFB8(M3 *pm);
 }
 static inline M3 Rot(qword v) return m
 {
-    func_0011B570(&m, v);
+    LoadRotateMatrix__FUx(&m, v);
 }
 static inline qword VF(float g)
 {
@@ -74,15 +74,15 @@ void func_00117308(float dt, float t, float gScale, M3 *pmat0, qword w0, M3 *pma
         float u3 = u2 * u;
         M3 a, b, rel, rot;
         qword w;
-        func_0011B570(&rot, Scale(w0, VF(u * v * v * dt)));
+        LoadRotateMatrix__FUx(&rot, Scale(w0, VF(u * v * v * dt)));
         MulP(&rel, rot, pmat0);
         a = rel;
-        func_0011B570(&rot, Scale(w1, VF(-h2 * dt)));
+        LoadRotateMatrix__FUx(&rot, Scale(w1, VF(-h2 * dt)));
         MulP(&rel, rot, pmat1);
         b = rel;
-        func_0011BC00(&rel, &a, &b);
+        CalculateDmat__FP7MATRIX3T0(&rel, &a, &b);
         w = func_0011BFB8(&rel);
-        func_0011B570(&rot, Scale(w, VF(h2 * (3.0f - dt) + u3)));
+        LoadRotateMatrix__FUx(&rot, Scale(w, VF(h2 * (3.0f - dt) + u3)));
         MulP(&rel, rot, &a);
         *pmatOut = rel;
     }
@@ -91,7 +91,7 @@ void func_00117308(float dt, float t, float gScale, M3 *pmat0, qword w0, M3 *pma
         qword w;
         {
             M3 rel;
-            func_0011BC00(&rel, pmat0, pmat1);
+            CalculateDmat__FP7MATRIX3T0(&rel, pmat0, pmat1);
             w = func_0011BFB8(&rel);
         }
         float h = u * 3.0f;

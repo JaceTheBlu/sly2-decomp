@@ -5,10 +5,10 @@ typedef struct { qword r[3]; } M3;
 typedef union { qword q; float g; } UF;
 struct SMP;
 extern "C" {
-M3 func_0011BC00(M3 *pa, M3 *pb);
+M3 CalculateDmat__FP7MATRIX3T0(M3 *pa, M3 *pb);
 void func_0011BCF8(M3 *pmat, float *prad, qword *pvec);
 float GSmooth__FfffP3SMPPf(float g, float gGoal, float dt, struct SMP *psmp, float *pdv);
-M3 func_0011B500(float rad, qword axis);
+M3 LoadRotateMatrixRad__FfUx(float rad, qword axis);
 }
 static inline M3 MulM3(const M3 &a, M3 *pb) return m
 {
@@ -30,7 +30,7 @@ void SmoothMatrix(M3 *pmatPrev, M3 *pmatGoal, struct SMP *psmp, float dt, M3 *pm
     UF normal;
     float rad, dv, radNew;
     {
-        M3 mat = func_0011BC00(pmatPrev, pmatGoal);
+        M3 mat = CalculateDmat__FP7MATRIX3T0(pmatPrev, pmatGoal);
         func_0011BCF8(&mat, &rad, &normal.q);
     }
     radNew = GSmooth__FfffP3SMPPf(0.0f, rad, dt, psmp, &dv);
@@ -38,7 +38,7 @@ void SmoothMatrix(M3 *pmatPrev, M3 *pmatGoal, struct SMP *psmp, float dt, M3 *pm
         if (radNew == rad) {
             *pmatNext = *pmatGoal;
         } else {
-            *pmatNext = MulM3(func_0011B500(radNew, normal.q), pmatPrev);
+            *pmatNext = MulM3(LoadRotateMatrixRad__FfUx(radNew, normal.q), pmatPrev);
         }
     }
     if (pw) {

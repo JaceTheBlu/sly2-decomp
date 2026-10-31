@@ -19,7 +19,7 @@ extern s32 D_002BE320;
 extern u8 D_002BE328;
 extern M2C_UNK D_002BE338;
 extern M2C_UNK D_002C44F0;
-extern void *D_002DD2FC;
+extern void *g_pdliFirst;
 extern M2C_UNK D_002DDED0;
 extern s32 D_002DDF54;
 extern M2C_UNK D_002DE578;
@@ -30,7 +30,7 @@ extern M2C_UNK D_002DE770;
 extern s32 D_002DE9F0;
 extern M2C_UNK D_002DEA00;
 extern M2C_UNK D_002DEA28;
-extern void *D_002DEA4C;
+extern void *g_pfrmOpen;
 extern M2C_UNK D_002DEA50;
 extern M2C_UNK D_002DEAF0;
 extern M2C_UNK D_002DEB00;
@@ -65,9 +65,9 @@ s32 FEnsureLoaded__8CFontBrxP4GIFS(s32 arg0, s32 arg1) {
 
     if (arg1 == &D_002DEA00) {
         temp_v0 = 1 << M2C_FIELD(arg0, s32 *, 0);
-        temp_v1 = M2C_FIELD(D_002DEA4C, s32 *, 0x2C);
+        temp_v1 = M2C_FIELD(g_pfrmOpen, s32 *, 0x2C);
         var_s2 = (temp_v1 & temp_v0) == 0;
-        M2C_FIELD(D_002DEA4C, s32 *, 0x2C) = (s32) (temp_v1 | temp_v0);
+        M2C_FIELD(g_pfrmOpen, s32 *, 0x2C) = (s32) (temp_v1 | temp_v0);
     } else {
         var_s2 = 1;
     }

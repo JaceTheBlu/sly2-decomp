@@ -6,7 +6,7 @@ struct P { char pad[0x13D0]; int x13D0; char pad1[0x13F0 - 0x13D4]; struct O *x1
 extern qword D_002C09E0, D_002A2DD0;
 void func_001F0660(int a, int b);
 void func_001B7D20(struct P *p);
-int func_00132B10(struct X *x, int n);
+int FIsBasicDerivedFrom__FP5BASIC3CID(struct X *x, int n);
 void func_00209EE0(struct X *x);
 void func_001F7A68(struct X *x, int n);
 qword func_001A6FC0(struct P *p, int n, qword q);
@@ -27,7 +27,7 @@ void func_001B7BA8(struct P *p)
     }
     func_001B7D20(p);
     x = p->x13F0->x180;
-    if (func_00132B10(x, 0x38)) func_00209EE0(x);
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(x, 0x38)) func_00209EE0(x);
     else func_001F7A68(x, 1);
     switch (p->x13D0) {
     case 5: {

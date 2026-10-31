@@ -19,8 +19,8 @@ struct AREQ { int cb; int cbAlign; };
 void func_001AE478(void *p);
 void _$_18CBinaryInputStream(void *p, int n);
 void *PvAllocSwImpl__Fi(AREQ *preq);
-void *func_001AE2A0(AREQ *preq);
-void *func_001AE318(AREQ *preq);
+void *PvAllocSwClearImpl__FP7SWALLOC(AREQ *preq);
+void *PvAllocStackImpl__FP7SWALLOC(AREQ *preq);
 void func_001AE5A0(void *pvDst, void *pvSrc, int cb);
 void *func_002333B4(void *pv, int b, int cb);
 void BeginSpliceLoad(void);
@@ -37,7 +37,7 @@ void func_001D7B88(void *p, BIS *pbis);
 void func_0020F318(void *psw, BIS *pbis);
 void func_0013DF80(void *psw, BIS *pbis);
 void func_0013E0E0(void *psw, BIS *pbis);
-void func_0013F810(void *p, BIS *pbis);
+void LoadOptionsFromBrx__FPvP18CBinaryInputStream(void *p, BIS *pbis);
 void func_001FF7E8(void *psw);
 void func_0020E3C0(void *psw);
 void func_0020F1C8(void *psw);
@@ -48,7 +48,7 @@ void func_001ED448(void);
 void func_001EA9F0(void *psw, void *pzpr);
 void func_00258248(void *p);
 void *PchzFidName(void *p);
-void func_001848A8(void *p, int k, void *pv, int n);
+void __3OBJiPvi(void *p, int k, void *pv, int n);
 void func_00184950(void *p, int n);
 void func_0020F5D0(int n, BIS *pbis);
 void func_001FF858(void *psw, int n, BIS *pbis);
@@ -56,8 +56,8 @@ void func_001EB748(void *pa, void *pb, BIS *pbis);
 void func_001C0EC0(void *psw, BIS *pbis);
 struct LO;
 struct LOL { void *pvt; int x4; int c; LO **apo; };
-LOL *func_0013F888(LOL *p);
-void func_0013FB40(int n, BIS *pbis, LOL *p);
+LOL *__19CLoadCollectorArray(LOL *p);
+void LoadSwObjectsFromBrx__FP2SOP18CBinaryInputStreamP14CLoadCollector(int n, BIS *pbis, LOL *p);
 void func_001EC7A0(void);
 LO *PloCloneLo(LO *po, int n);
 extern char D_002A4BD0[];
@@ -83,9 +83,9 @@ struct ZPR { char ab[0x630]; };
 struct ODD { ODD() { ab[2] = 2; } int ab[0x110 / 4]; };
 class OBJ { public: OBJ(int k, void *pv, int n); ~OBJ(); char ab[0x70]; };
 
-static inline void *AllocZ(AREQ *preq, int cb, int cbAlign) { preq->cb = cb; preq->cbAlign = cbAlign; return func_001AE2A0(preq); }
+static inline void *AllocZ(AREQ *preq, int cb, int cbAlign) { preq->cb = cb; preq->cbAlign = cbAlign; return PvAllocSwClearImpl__FP7SWALLOC(preq); }
 static inline void *Alloc(AREQ *preq, int cb, int cbAlign) { preq->cb = cb; preq->cbAlign = cbAlign; return PvAllocSwImpl__Fi(preq); }
-static inline void *AllocS(AREQ *preq, int cb, int cbAlign) { preq->cb = cb; preq->cbAlign = cbAlign; return func_001AE318(preq); }
+static inline void *AllocS(AREQ *preq, int cb, int cbAlign) { preq->cb = cb; preq->cbAlign = cbAlign; return PvAllocStackImpl__FP7SWALLOC(preq); }
 
 extern "C" void LoadSwFromBrx(SW *psw, BIS *pbis)
 {
@@ -130,8 +130,8 @@ extern "C" void LoadSwFromBrx(SW *psw, BIS *pbis)
     func_0020F318(psw, pbis);
     func_0013DF80(psw, pbis);
     func_0013E0E0(psw, pbis);
-    func_0013F810(g_sw, pbis);
-    func_0013F810(g_cm, pbis);
+    LoadOptionsFromBrx__FPvP18CBinaryInputStream(g_sw, pbis);
+    LoadOptionsFromBrx__FPvP18CBinaryInputStream(g_cm, pbis);
     func_00117988(pbis, 0x10);
     func_001FF7E8(psw);
     func_0020E3C0(psw);
@@ -171,8 +171,8 @@ extern "C" void LoadSwFromBrx(SW *psw, BIS *pbis)
             int j, k;
             LO **ppo;
             AREQ req2;
-            func_0013F888((LOL *)&u.lol);
-            func_0013FB40(0, pbis, (LOL *)&u.lol);
+            __19CLoadCollectorArray((LOL *)&u.lol);
+            LoadSwObjectsFromBrx__FP2SOP18CBinaryInputStreamP14CLoadCollector(0, pbis, (LOL *)&u.lol);
             func_00117988(pbis, 0x10);
             PchzFidName(pwe->ab1C);
             func_001EC7A0();

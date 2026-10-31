@@ -46,7 +46,7 @@ void func_00161958(struct GS *pgs);
 void func_001F5720(struct O *p, int n);
 void func_001F57C0(struct O *p, int n);
 void func_001F5880(struct O *p, qword v);
-void func_001A58D0(struct O *p, void *pv, int n);
+void SetLoParent__FP2LOP2SOi(struct O *p, void *pv, int n);
 void func_001A6BE8(struct O *p, void *pv);
 void func_001F7C68(struct O *p, float g);
 struct E *func_001CE888(struct GS *pgs, int n, int m);
@@ -207,13 +207,13 @@ void func_0013C560(struct O *p, int st)
     switch (st) {
     case 0:
         p->pst = 0;
-        func_001A58D0(p, 0, 0);
+        SetLoParent__FP2LOP2SOi(p, 0, 0);
         VCALL(p, 9, PFNV));
         break;
     case 1:
         func_00156C80(&g_sw, -1, D_002A2DD0, 0, (char *)p->pq + 0x198);
         func_001A6BE8(p, VCALL(p->pq, 31, PFNP)));
-        func_001A58D0(p, (void *)p->pq->x10, 3);
+        SetLoParent__FP2LOP2SOi(p, (void *)p->pq->x10, 3);
         p->pq->p194 = p;
         if (stOld != 3) {
             VCALL(p, 9, PFNV));
@@ -237,14 +237,14 @@ void func_0013C560(struct O *p, int st)
                 LINKE(pe, p, p->pot->pr);
         }
         func_001A6BE8(p, VCALL(p->pot->pr, 31, PFNP)));
-        func_001A58D0(p, p->pot->pr, 3);
+        SetLoParent__FP2LOP2SOi(p, p->pot->pr, 3);
         if (!p->pe)
             func_0013C560(p, 4);
         break;
     case 3: {
         struct E *pe;
         func_001A6BE8(p, VCALL(p->pq, 31, PFNP)));
-        func_001A58D0(p, (void *)p->pq->x10, 3);
+        SetLoParent__FP2LOP2SOi(p, (void *)p->pq->x10, 3);
         p->pe = func_001CE888(&g_sw, 6, 0);
         if (p->pe)
             LINKE3(p->pe, pot->pr, p);
@@ -265,7 +265,7 @@ void func_0013C560(struct O *p, int st)
         float a, b, c;
         float lo = -6.2831855f, hi = 6.2831855f;
         (void)&w;
-        func_001A58D0(p, 0, 3);
+        SetLoParent__FP2LOP2SOi(p, 0, 3);
         func_001F5720(p, 0);
         func_001F57C0(p, 0);
         {

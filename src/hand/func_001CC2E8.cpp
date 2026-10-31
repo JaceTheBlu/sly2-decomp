@@ -21,7 +21,7 @@ extern "C" {
 qword func_001A62E8(LO*);
 void func_001E7380(void*,qword,void*,qword*,qword*,float*,float*,float);
 M4 func_0011C318(const M4*);
-M4 *func_0011C168(M4*,const M4*,const M4*);
+M4 *__ml__FRC7MATRIX4T0(M4*,const M4*,const M4*);
 qword func_001A6F00(LO*,LO*,qword);
 void Minimize(float(*)(void*,float),void*,float,float,float,float,float*,float*) __asm__("MinimizeRange__FPFPvf_fPvffffPfT6");
 float func_001CC2B8(void*,float);
@@ -29,10 +29,10 @@ float func_001CC288(void*,float);
 void func_001CC1F8(P*,qword,float*,float*,float);
 void func_001CC168(P*,qword,float*,float*,float);
 M3 *func_0022FD38(M3*,FRAME*,FRAME*,const M3*);
-qword func_0011BFF0(const M3*);
+qword DecomposeRotateMatrixEuler__FP7MATRIX3(const M3*);
 void func_0012D108(void*,qword);
-void func_00130D30(void*,int,float,float);
-void func_001384C0(MOTION*);
+void SeekAsega__FP5ASEGA4SEEKff(void*,int,float,float);
+void ReblendAsegbl__FP6ASEGBL(MOTION*);
 void func_002046B0(LO*,qword);
 void func_00204CA8(LO*);
 void func_001CC2E8(P*);
@@ -56,7 +56,7 @@ void func_001CC2E8(P*p){
   M4*world=p->follow->vt[31].matrix((char*)p->follow+p->follow->vt[31].delta);
   cursor=&w.stage.early.inverse;new(cursor)M4(func_0011C318(&p->matrix));
   const M4*inverseArg=InverseArgument((M4*)cursor);
-  func_0011C168(output,world,inverseArg);
+  __ml__FRC7MATRIX4T0(output,world,inverseArg);
   cursor=PublishProductAndBasis(&w);
   break;
  }
@@ -70,14 +70,14 @@ void func_001CC2E8(P*p){
   func_001CC1F8(p,w.stage.late.context.position,&w.projection,0,w.t);
   func_0022FD38(&w.stage.late.temporary,0,p->space->frame,&w.basis);
   w.stage.late.transformed=w.stage.late.temporary;
-  func_0012D108(p->job,func_0011BFF0(&w.stage.late.transformed));
+  func_0012D108(p->job,DecomposeRotateMatrixEuler__FP7MATRIX3(&w.stage.late.transformed));
  }else{
   Minimize(func_001CC288,cursor,0.5f,0.1f,0.0f,1.0f,&w.t,&w.result);
   func_001CC168(p,w.stage.late.context.position,&w.projection,0,w.t);
  }
- func_00130D30(p->animation->player,0,w.t*p->motion->duration,0.0f);
+ SeekAsega__FP5ASEGA4SEEKff(p->animation->player,0,w.t*p->motion->duration,0.0f);
  p->fraction=w.projection;p->weight=1.0f-w.projection;
- func_001384C0(p->motion);
+ ReblendAsegbl__FP6ASEGBL(p->motion);
  w.saved.q=w.position.q;
  LO*receiver;qword delta=DifferenceFromSaved(&w.saved,func_001A62E8(p->owner),p,receiver);
  func_002046B0(receiver,delta);

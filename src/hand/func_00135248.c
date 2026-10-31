@@ -21,7 +21,7 @@ extern struct CLOCK D_002DDED0;
 extern qword D_002A2DD0;
 void func_002303A0(struct P *, void *, int);
 void func_00142880(struct P *);
-void func_0015C150(struct VO *);
+void ExplodeExpl__FP4EXPL(struct VO *);
 void func_00195FB8(void *, int, int);
 void func_00192BD8(void *, int);
 void func_001A0B40(void *, int);
@@ -91,7 +91,7 @@ void func_00135248(struct P *p, int k)
             }
             if (po) {
                 VCALL0(po, 8);
-                func_0015C150(po);
+                ExplodeExpl__FP4EXPL(po);
                 VCALL0(po, 9);
             }
         }

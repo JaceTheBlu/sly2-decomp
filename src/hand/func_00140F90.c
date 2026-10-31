@@ -7,7 +7,7 @@
 typedef int qword __attribute__((mode(TI)));
 typedef struct DL { void *head; void *tail; int ibDle; } DL;
 typedef struct DLI { DL *m_pdl; void **m_ppv; int m_ibDle; struct DLI *m_pdliNext; } DLI;
-extern DLI *D_002DD2FC;     /* g_pdliFirst */
+extern DLI *g_pdliFirst;     /* g_pdliFirst */
 struct VT { struct { short d; short pad; void (*pfn)(); } a[64]; };
 #define F(T, p, off) (*(T *)((char *)(p) + (off)))
 struct SO { char pad[0x18]; void *p18; };
@@ -27,7 +27,7 @@ void func_002206C8(void *p, int n);
 qword func_00204E38(void *p, struct SO *pso, float g);
 qword func_001A62E8(void *p);
 void func_002205A8(void *p);
-int func_00132B10(void *p, int n);
+int FIsBasicDerivedFrom__FP5BASIC3CID(void *p, int n);
 int func_00224590(void *p);
 void func_002245B8(void *p);
 void func_00130658(void *p);
@@ -36,7 +36,7 @@ void func_001305B8(void *pa, void *p, float g, int n, float h, void *pb);
 void func_0019F170(void *p, int n);
 void func_0019F220(void *p, int n);
 void *func_001CB250(void *p, int n);
-void func_001A58D0(void *p, int a, int b);
+void SetLoParent__FP2LOP2SOi(void *p, int a, int b);
 void func_00156780(void *p);
 void func_001CCC88(void *p, void *q);
 void func_00131A00(void *p, float g);
@@ -50,8 +50,8 @@ static inline void InitDli(DLI *pdli, DL *pdl)
     pdli->m_pdl = pdl;
     pdli->m_ppv = (void **)pdl;
     pdli->m_ibDle = pdl->ibDle;
-    pdli->m_pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->m_pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static inline void *PvNextDli(DLI *pdli)
 {
@@ -131,7 +131,7 @@ void func_00140F90(void *p, int msg, void *pv)
             if (F(int, p, 0x4C8) == 0xB) {
                 void *po;
                 int n;
-                if (F(void *, p, 0x4D4) != 0 && func_00132B10(F(void *, p, 0x4D4), 100)) {
+                if (F(void *, p, 0x4D4) != 0 && FIsBasicDerivedFrom__FP5BASIC3CID(F(void *, p, 0x4D4), 100)) {
                     po = F(void *, p, 0x4D4);
                     if (func_00224590(po))
                         func_002245B8(po);
@@ -161,13 +161,13 @@ void func_00140F90(void *p, int msg, void *pv)
                         void *po2;
                         void *pa = func_001CB250(D_002E1E40->p2010, 0);
                         if (pa)
-                            func_001A58D0(pa, 0, 3);
+                            SetLoParent__FP2LOP2SOi(pa, 0, 3);
                         InitDli(&dli, &D_003E148C);
                         while ((po2 = PvNextDli(&dli)) != 0) {
                             if (F(int, po2, 0x54) == 4 && F(void *, po2, 0x44) == p)
                                 func_00156780(po2);
                         }
-                        D_002DD2FC = dli.m_pdliNext;
+                        g_pdliFirst = dli.m_pdliNext;
                         g_sw.g4758 = D_002DDED0.t + D_002BCC94;
                         break;
                     }

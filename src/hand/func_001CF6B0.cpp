@@ -11,14 +11,14 @@ struct O {char pad18[0x18];float duration;LO*visual;char pad20[8];float spin;cha
 struct CLOCK {float t,dt;};
 extern CLOCK D_002DDED0;
 extern char g_sw[];
-extern qword D_002A2DA0,D_002A2DB0,D_002A2DC0;
+extern qword D_002A2DA0,D_002A2DB0,g_normalZ;
 extern "C" {
 O *func_001CE888(void*,void*,void*);
 qword func_0022FC48(void*,LO*,qword);
 float GRandInRange__Fff(float,float);
 void func_0011E2D8(qword,qword,qword,qword*);
 M3 func_0011B628(qword);
-M3 func_0011BA08(qword,qword);
+M3 BuildRotateVectorsMatrix__FUxUx(qword,qword);
 O *func_001CF6B0(EMIT*,LO*,LO*,qword,qword);
 }
 static inline float Polynomial(POLY*p,float t){return p->a+t*(p->b+t*p->c);}
@@ -49,10 +49,10 @@ O *func_001CF6B0(EMIT*p,LO*visual,LO*space,qword position,qword direction){
    rotation=func_0011B628(angles.q);
    {M3 orient=Mul(frame,rotation);
    object->matrix=orient;}
-   qword *up=&D_002A2DC0;
+   qword *up=&g_normalZ;
    if(__builtin_fabsf(Dot(direction,*up))<0.7f){
     U flat;flat.q=direction;flat.f[2]=zero;
-    M3 tilt;tilt=func_0011BA08(flat.q,direction);
+    M3 tilt;tilt=BuildRotateVectorsMatrix__FUxUx(flat.q,direction);
     U home;
     object->velocity.q=Transform(tilt,Scale(*up,-50.0f,home));
    }

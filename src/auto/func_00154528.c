@@ -3,7 +3,7 @@
 
 s32 func_00116970(s32, s32, s32, M2C_UNK);          /* extern */
 M2C_UNK func_00129EC8(void *);                      /* extern */
-s128 *func_001AE318(s32 *, s32, s32);               /* extern */
+s128 *PvAllocStackImpl__FP7SWALLOC(s32 *, s32, s32);               /* extern */
 void DetachCopySw__4DMASPiPP2QWT2i(M2C_UNK *arg0, s32 arg1, u32 *arg2, s32 *arg3); /* static */
 void Flush__4DMAS(s32, s32 *);                     /* static */
 extern s128 D_002A2DD0;
@@ -34,14 +34,14 @@ extern M2C_UNK D_002BDD8C;
 extern M2C_UNK D_002C1F00;
 extern M2C_UNK D_002C1F10;
 extern M2C_UNK D_002CE2B8;
-extern M2C_UNK D_002DD590;
+extern M2C_UNK g_heapSw;
 extern f32 D_002DDED0;
 extern M2C_UNK g_cm;
 extern M2C_UNK D_002DE578;
 extern s32 D_002DE5A4;
 extern M2C_UNK D_002DEA00;
 extern M2C_UNK D_002DEA28;
-extern void *D_002DEA4C;
+extern void *g_pfrmOpen;
 extern M2C_UNK D_002DEA50;
 extern M2C_UNK D_002DEDC0;
 extern M2C_UNK D_002DF010;

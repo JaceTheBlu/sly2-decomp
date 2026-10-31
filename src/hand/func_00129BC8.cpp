@@ -2,7 +2,7 @@ struct VECTOR; struct MATRIX4; struct V16; struct V8; struct V12; struct OBJ;
 struct NODE; struct O;
 extern char D_004520A8[];
 extern "C" {
-void func_0011CD98(void *pheap, void *pv);
+void FreeSlotheapPv__FP8SLOTHEAPPv(void *pheap, void *pv);
 void func_002550F8(void *pv);
 }
 struct CRef {
@@ -31,7 +31,7 @@ struct NODE {
     int x4;
     CRef ref;
     SPM pnext;
-    void operator delete(void *pv) { func_002550F8(pv); func_0011CD98(D_004520A8, pv); }
+    void operator delete(void *pv) { func_002550F8(pv); FreeSlotheapPv__FP8SLOTHEAPPv(D_004520A8, pv); }
 };
 struct SPN {
     NODE *p;

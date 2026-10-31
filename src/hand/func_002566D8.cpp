@@ -5,7 +5,7 @@ struct MARK { int a[4]; };
 extern "C" {
 void *func_001AE478(MARK *);
 void _$_18CBinaryInputStream(MARK *, int);
-void *func_001AE318(DESC *);
+void *PvAllocStackImpl__FP7SWALLOC(DESC *);
 int func_00117DB8(void *);
 void func_00116D70(void *, int);
 void *func_002333B4(void *, int, int);
@@ -17,7 +17,7 @@ extern "C" void func_002566D8(O *p, void *pv)
     MARK m;
     func_001AE478(&m);
     DESC d(4, 0x10);
-    void *buf = func_001AE318(&d);
+    void *buf = PvAllocStackImpl__FP7SWALLOC(&d);
     int n = func_00117DB8(pv);
     func_00116D70(p->x10, n);
     if (n > 0) do {

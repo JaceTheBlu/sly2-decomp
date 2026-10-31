@@ -2,7 +2,7 @@
 M2C_UNK SetDecompress__18CBinaryInputStreamiPUc(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_00129EC8(void *);                      /* extern */
 M2C_UNK __4GIFS(M2C_UNK *);                   /* extern */
-s32 func_001AE318(s32 *);                           /* extern */
+s32 PvAllocStackImpl__FP7SWALLOC(s32 *);                           /* extern */
 extern M2C_UNK D_0025AFA0;
 extern M2C_UNK D_0025B870;
 extern M2C_UNK D_002A8A78;
@@ -82,7 +82,7 @@ void func_00211148(s32 arg0, s32 arg1) {
     s32 var_v0;
 
     temp_v0 = func_001C4840((s32) &g_sw);
-    if ((temp_v0 != 0) && (func_00132B10(temp_v0, 0x34) != 0)) {
+    if ((temp_v0 != 0) && (FIsBasicDerivedFrom__FP5BASIC3CID(temp_v0, 0x34) != 0)) {
         temp_a0 = M2C_FIELD(temp_v0, s32 *, 0xF38);
         var_a1 = 0;
         if (temp_a0 != 0) {

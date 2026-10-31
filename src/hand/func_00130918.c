@@ -9,7 +9,7 @@ extern struct CLOCK D_002DDED0;
 void func_00130F88(struct P *p);
 int func_00131968(struct P *p);
 int func_001317D8(struct P *p, float *pt, float *pdt);
-void func_00130B18(struct P *p);
+void RetractAsega__FP5ASEGA(struct P *p);
 static __inline__ unsigned int GrfQ(struct Q *pq) { unsigned int x = pq->x40; return ((x ^ 1) & 1) ? *(unsigned int *)x : x; }
 static __inline__ void End(struct G *pg) { struct P *po = pg->p; ((void (*)(void *))po->vt[2].pfn)((char *)po + po->vt[2].d); }
 void func_00130918(struct P *p)
@@ -45,7 +45,7 @@ void func_00130918(struct P *p)
         if (func_00131968(p))
             { End(&g); return; }
         if (f && !(p->grf & 0x38))
-            func_00130B18(p);
+            RetractAsega__FP5ASEGA(p);
         for (pl = p->pl; pl; pl = pl->pnext)
             ((void (*)(void *, int, int, float, float))pl->po->vt[2].pfn)((char *)pl->po + pl->po->vt[2].d, pl->x4, 0, p->g1C, p->g40);
         End(&g);

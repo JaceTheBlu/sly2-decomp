@@ -1,6 +1,6 @@
 extern char D_002C94A0[];
 struct OBJ;struct X;extern "C" void func_001D4D30(X*,OBJ*);
-extern "C" void *func_001AE4F8(int);
+extern "C" void *__builtin_new(int);
 struct A { int x0; int x4; A() {} };
 struct B : A {
     int x8;
@@ -14,7 +14,7 @@ struct X : B {
          : "=&r"(receiver), "=m"(x0) : "r"(this) : "memory");
  x4=0;vt=D_002C94A0;func_001D4D30(receiver,p);
 }
-    void *operator new(unsigned int cb) { return func_001AE4F8(cb); }
+    void *operator new(unsigned int cb) { return __builtin_new(cb); }
 
     char pad[0xB0 - 0x10];
 };

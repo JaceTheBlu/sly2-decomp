@@ -1,5 +1,5 @@
 struct AR { int cb; int cbAlign; };
-void *func_001AE318(struct AR *par);
+void *PvAllocStackImpl__FP7SWALLOC(struct AR *par);
 void *func_002333B4(void *p, int b, int cb);
 extern void *D_003DD010;
 extern void *D_003DD018;
@@ -12,11 +12,11 @@ void func_001ED3A8(void)
     void **pp2 = &D_003DD018;
     ar.cb = 0xFFF4;
     ar.cbAlign = 0x10;
-    *pp1 = func_001AE318(&ar);
+    *pp1 = PvAllocStackImpl__FP7SWALLOC(&ar);
     func_002333B4(*pp1, 0, 0xFFF4);
     ar.cb = 0xFFF4;
     ar.cbAlign = 0x10;
-    *pp2 = func_001AE318(&ar);
+    *pp2 = PvAllocStackImpl__FP7SWALLOC(&ar);
     func_002333B4(*pp2, 0, 0xFFF4);
     D_003DD00C = D_003DD014 = 0;
 }

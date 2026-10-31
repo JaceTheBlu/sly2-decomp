@@ -12,7 +12,7 @@ extern struct G g_cm;
 extern struct G2 D_002DDFA0;
 int func_0011D4D0(float, float, float);
 float RadNormalize__Ff(float);
-qword func_0011BFF0(void *);
+qword DecomposeRotateMatrixEuler__FP7MATRIX3(void *);
 int func_0014FD50(void *);
 void func_0014E4C8(void *, int, int, void *, int, int);
 void func_0014E328(void *, int, void *, int, void *);
@@ -57,7 +57,7 @@ void func_001E57A0(struct P *p, struct A *pa, struct A *pb, float t)
             if (FNear(pt->v0, *zero))
                 pt->v0 = D_002DDFA0.v30;
             if (FNear(pt->v10, *zero))
-                pt->v10 = func_0011BFF0(&D_002DDFA0);
+                pt->v10 = DecomposeRotateMatrixEuler__FP7MATRIX3(&D_002DDFA0);
             if (pt->f20 == 0.0f)
                 pt->f20 = g_cm.f20;
         }

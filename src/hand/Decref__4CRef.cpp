@@ -3,7 +3,7 @@ struct SLOTHEAP { int a[6]; };
 extern SLOTHEAP D_00452170, D_00452188, D_004521A0, D_004521B8, D_004521D0, D_004521E8;
 extern char D_004520A8[];
 extern "C" {
-void func_0011CD98(void *psh, void *pv);
+void FreeSlotheapPv__FP8SLOTHEAPPv(void *psh, void *pv);
 void func_002550F8(void *pv);
 void func_00256120(void *pv);
 }
@@ -26,13 +26,13 @@ struct NODE {
     int x4;
     CRef ref;
     SPM pnext;
-    void operator delete(void *pv) { func_002550F8(pv); func_0011CD98(D_004520A8, pv); }
+    void operator delete(void *pv) { func_002550F8(pv); FreeSlotheapPv__FP8SLOTHEAPPv(D_004520A8, pv); }
 };
 struct O20 { int cref; ~O20(); };
 struct O22 {
     int cref;
     ~O22() { func_00256120(this); }
-    void operator delete(void *pv) { func_0011CD98(&D_00452170, pv); }
+    void operator delete(void *pv) { FreeSlotheapPv__FP8SLOTHEAPPv(&D_00452170, pv); }
 };
 void CRef::Decref()
 {
@@ -40,31 +40,31 @@ void CRef::Decref()
     case 0x1A: {
         NV *p = (NV *)m_pv;
         if (--p->cref == 0)
-            func_0011CD98(&D_00452188, p);
+            FreeSlotheapPv__FP8SLOTHEAPPv(&D_00452188, p);
         break;
     }
     case 0x1B: {
         NM *p = (NM *)m_pv;
         if (--p->cref == 0)
-            func_0011CD98(&D_004521A0, p);
+            FreeSlotheapPv__FP8SLOTHEAPPv(&D_004521A0, p);
         break;
     }
     case 0x1C: {
         NV *p = (NV *)m_pv;
         if (--p->cref == 0)
-            func_0011CD98(&D_004521B8, p);
+            FreeSlotheapPv__FP8SLOTHEAPPv(&D_004521B8, p);
         break;
     }
     case 0x1D: {
         N2 *p = (N2 *)m_pv;
         if (--p->cref == 0)
-            func_0011CD98(&D_004521D0, p);
+            FreeSlotheapPv__FP8SLOTHEAPPv(&D_004521D0, p);
         break;
     }
     case 0x1E: {
         N3 *p = (N3 *)m_pv;
         if (--p->cref == 0)
-            func_0011CD98(&D_004521E8, p);
+            FreeSlotheapPv__FP8SLOTHEAPPv(&D_004521E8, p);
         break;
     }
     case 0x1F: {
@@ -89,7 +89,7 @@ void CRef::Decref()
         O22 *p = (O22 *)m_pv;
         if (--p->cref == 0 && p) {
             func_00256120(p);
-            func_0011CD98(&D_00452170, p);
+            FreeSlotheapPv__FP8SLOTHEAPPv(&D_00452170, p);
         }
         break;
     }

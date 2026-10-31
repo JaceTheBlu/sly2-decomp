@@ -19,9 +19,9 @@ void func_00149A50(void *pg, struct EMITTER *p, struct K k, int n);
 float GRandInRange__Fff(float gMin, float gMax);
 void func_0015A150(struct EMITTER *p);
 void func_0015A138(struct EMITTER *p, float g);
-struct EMITTER *func_0015E938(void *pg, int kind, int oid, int n);
-struct EMITTER *func_0013E3C8(int cid, void *p, int oid, int n);
-void *func_001AE238(struct ALLOCREQ *preq, void *pv);
+struct EMITTER *PloFindSwObject__FP2SWi3OIDP2LO(void *pg, int kind, int oid, int n);
+struct EMITTER *PloNew__F3CIDP2SO3OIDi(int cid, void *p, int oid, int n);
+void *PvAllocSwCopyImpl__FP7SWALLOCPv(struct ALLOCREQ *preq, void *pv);
 void func_001A6CA8(struct EMITTER *p, int n);
 void *func_001A6318(struct EMITTER *p);
 void func_0011A220(void *pv, struct EMITTER *p);
@@ -31,7 +31,7 @@ static __inline__ void *PvAllocCopy(int cb, void *pv)
     struct ALLOCREQ req;
     req.cb = cb;
     req.kind = 0x10;
-    return func_001AE238(&req, pv);
+    return PvAllocSwCopyImpl__FP7SWALLOCPv(&req, pv);
 }
 
 static __inline__ int FPtr(int n) { return !(n & 1); }
@@ -96,11 +96,11 @@ void PostEmitterLoad__FP7EMITTER(struct EMITTER *pemitter)
         }
     }
     if (pemitter->oid118 != -1) {
-        struct EMITTER *pemitterNew = func_0015E938(g_sw, 5, pemitter->oid118, 0);
+        struct EMITTER *pemitterNew = PloFindSwObject__FP2SWi3OIDP2LO(g_sw, 5, pemitter->oid118, 0);
         if (!pemitterNew) {
             struct VTE *pvte;
             void *pthis;
-            pemitterNew = func_0013E3C8(0x1D, 0, pemitter->oid118, -1);
+            pemitterNew = PloNew__F3CIDP2SO3OIDi(0x1D, 0, pemitter->oid118, -1);
             pemitterNew->pemitb = PvAllocCopy(0x100, pemitter->pemitb);
             pemitterNew->pemitb->n0 = 1;
             if (pemitter->pemitb->pemito->palo) {

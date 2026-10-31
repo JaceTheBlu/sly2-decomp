@@ -196,7 +196,7 @@ void func_001681F8(MODEL *pmodel);
 int func_001EDA20(OBJ *pobj);
 void func_001AE5A0(void *pvDst, const void *pvSrc, uint cb);
 void *func_0023320C(void *pvDst, const void *pvSrc, uint cb);
-void func_0011C168(MATRIX4 *pmatDst, const MATRIX4 *pmatA, const MATRIX4 *pmatB);
+void __ml__FRC7MATRIX4T0(MATRIX4 *pmatDst, const MATRIX4 *pmatA, const MATRIX4 *pmatB);
 void func_0011C318(MATRIX4 *pmatDst, const MATRIX4 *pmatSrc);
 float func_0011CAB0(const MATRIX4 *pmat);
 qword func_00167DA0(const MATRIX4 *pmat, qword qwPos, float *psRadius);
@@ -206,7 +206,7 @@ RPL *func_001CD998(void);
 }
 static inline MATRIX4 MulMat(const MATRIX4 &matA, const MATRIX4 &matB) return mat
 {
-    func_0011C168(&mat, &matA, &matB);
+    __ml__FRC7MATRIX4T0(&mat, &matA, &matB);
 }
 static inline void CopyMat(MATRIX4 &matDst, const MATRIX4 &matSrc)
 {

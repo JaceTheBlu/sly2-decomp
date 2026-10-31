@@ -21,12 +21,12 @@ extern CAMERA g_cm;
 extern CLOCK D_002DDED0;
 extern POLY D_002C1FB0,D_002C1FD0,D_002C1FF0;
 extern float D_002C1FC0[2],D_002C1FE0[2],D_002BBB60[2];
-extern const qword D_002A2DA0,D_002A2DC0;
+extern const qword D_002A2DA0,g_normalZ;
 extern "C" {
 void func_001CE980(RIP *);
 int func_0014F850(CAMERA *,qword,qword);
 M3 func_0011B830(qword,qword);
-M3 func_0011B500(qword,float);
+M3 LoadRotateMatrixRad__FfUx(qword,float);
 M4 func_0011C288(qword,const M3 &,float);
 void func_001A5EE8(void *,const M4 &,float,float);
 }
@@ -62,8 +62,8 @@ extern "C" void func_001D0190(RIP *p)
     float v=Evaluate(p->opacity,time);
     if(v<opacity){}else if(hi<v)opacity=hi;else opacity=v;
     opacity*=Clamp(Evaluate(D_002C1FD0,distance),D_002C1FE0[0],D_002C1FE0[1]);
-    basis=func_0011B830(direction,D_002A2DC0);
-    rotation=func_0011B500(D_002A2DA0,Evaluate(D_002C1FF0,time));
+    basis=func_0011B830(direction,g_normalZ);
+    rotation=LoadRotateMatrixRad__FfUx(D_002A2DA0,Evaluate(D_002C1FF0,time));
     product=Multiply(basis,rotation);
     transform=func_0011C288(p->position,product,size);
     func_001A5EE8(p->material,transform,opacity,1.0f);

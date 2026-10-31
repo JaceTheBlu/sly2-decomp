@@ -38,19 +38,19 @@ struct MARK;
 struct WORLD;
 extern "C" {
 extern WORLD g_sw;
-extern qword D_002A2DC0,D_002A2DD0;
+extern qword g_normalZ,D_002A2DD0;
 
 void func_001F36E0(O *);
 MARK *func_001AE478(MARK *);
 void _$_18CBinaryInputStream(MARK *,int);
-void *func_001AE318(const REQ *);
+void *PvAllocStackImpl__FP7SWALLOC(const REQ *);
 int func_00229D60(void *,COLL *);
 int func_001F7E08(O *,int (*)(void *,COLL *),void *,COLL **);
 int func_001F6838(O *);
 int func_00230380(int);
 float func_00229468(O *,O *,qword *,qword *);
 N *func_002296A0(WORLD *);
-int func_00132B10(O *,int);
+int FIsBasicDerivedFrom__FP5BASIC3CID(O *,int);
 int func_0014CDB0(qword,qword,int,COLL **,int,LSG *);
 void *func_001FBB90(int);
 void func_001FB2F8(void *,O *);
@@ -77,7 +77,7 @@ extern "C" void func_00228E50(O *p){
  for(n=*work.head;n;n=n->next)n->object->flags|=0x80000000L;
  func_001AE478(&work.mark);
  {register int size __asm__("$3")=p->count;register int alignment __asm__("$2")=16;register REQ*req __asm__("$4")=work.request;size*=4;work.scratch.request.size=size;Fields(req)->alignment=alignment;
- objects=(COLL **)func_001AE318(req);}
+ objects=(COLL **)PvAllocStackImpl__FP7SWALLOC(req);}
  work.count=func_001F7E08(p,func_00229D60,0,objects);
  for(link=p->state->first;link;link=link->next){
   O *o=link->object;
@@ -96,7 +96,7 @@ extern "C" void func_00228E50(O *p){
    work.origin.q=D_002A2DD0;
    work.start.q=Sub(c->position.q,work.origin.q);
    work.end.q=Sub(c->source->position.q,work.origin.q);
-   if(func_00132B10(o,0x33))dz=o->height;
+   if(FIsBasicDerivedFrom__FP5BASIC3CID(o,0x33))dz=o->height;
    else dz=o->state->minimum.f[2]-c->source->position.f[2];
    work.start.f[2]+=dz;work.end.f[2]+=dz;
    if(func_0014CDB0(work.start.q,work.end.q,work.count,objects,16,work.intervals)>0){
@@ -108,7 +108,7 @@ extern "C" void func_00228E50(O *p){
     func_001FB4F0(effect,100.0f,1000.0f);
     func_001FB1F8(effect,fall);
     func_002333B4(&work.event,0,sizeof(work.event));
-    normal=D_002A2DC0;
+    normal=g_normalZ;
     work.event.position.q=Add(work.intervals[0].first.q,work.origin.q);
     work.event.kind=14;work.event.strength=radius*fall;work.event.normal=normal;
     Impact(p->recipient,&work.event);

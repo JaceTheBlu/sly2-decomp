@@ -62,7 +62,7 @@ extern G g_sw;
 extern char D_002A5238[];
 extern "C" void func_00165C98(int *pc, X ***papx);
 extern "C" void func_00164270(X *p);
-extern "C" X *func_0015E938(G *pg, int kind, int oid, void *owner);
+extern "C" X *PloFindSwObject__FP2SWi3OIDP2LO(G *pg, int kind, int oid, void *owner);
 extern "C" void func_00164DF0(X *p, int n);
 extern "C" void func_001D8B20(CRef *pref, CRef *parg, void *pv, int n);
 extern "C" void func_00129EC8(CRef *pref);
@@ -81,7 +81,7 @@ extern "C" void func_00165280(SS *ps)
         CSave save(pxT, 3, 0);
         func_00164270(pxT);
     }
-    X *px = func_0015E938(&g_sw, 0x105, ps->oid, 0);
+    X *px = PloFindSwObject__FP2SWi3OIDP2LO(&g_sw, 0x105, ps->oid, 0);
     ps->f10 = px->f7c->f18;
     ps->f14 = px->f18;
     CSave save(px, 3, 0);

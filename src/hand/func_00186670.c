@@ -5,7 +5,7 @@ struct S { char pad[0xC]; struct VTE *vt; char p1[0x138]; unsigned long fl; };
 int func_00117BD0(void *pbis);
 int func_00117D50(void *pbis);
 void ReadVector__18CBinaryInputStreamP6VECTOR(void *pbis, void *pv);
-void *func_001AE2A0(struct MSG *pmsg);
+void *PvAllocSwClearImpl__FP7SWALLOC(struct MSG *pmsg);
 void func_00186930(struct Q *q);
 void func_0012DD28(struct S *p, void *pv, int n, struct Q *q);
 static __inline__ void *PvLookup(struct S *p, void *pbis)
@@ -24,7 +24,7 @@ void func_00186670(struct S *p, void *pbis)
         struct Q *q;
         msg.cb = 0xE0;
         msg.nKind = 0x10;
-        q = (struct Q *)func_001AE2A0(&msg);
+        q = (struct Q *)PvAllocSwClearImpl__FP7SWALLOC(&msg);
         q->p4 = PvLookup(p, pbis);
         q->p8 = PvLookup(p, pbis);
         q->pc = PvLookup(p, pbis);

@@ -25,13 +25,13 @@ void func_00117FD0(void *,GEO *);
 void func_00118220(void *,GEO *,TREE *);
 void ReadMatrix__18CBinaryInputStreamP7MATRIX3(void *,STATE *);
 void func_00167320(DATA *,P *,void *);
-void *func_001AE2A0(MSG *);
-void func_00166270(GEO *,const M4 *,GEO *);
+void *PvAllocSwClearImpl__FP7SWALLOC(MSG *);
+void CloneGeom__FP4GEOMP7MATRIX4T0(GEO *,const M4 *,GEO *);
 void func_001F2B20(P *);
 void func_001F35F8(P *,float);
-void func_0013F810(P *,void *);
+void LoadOptionsFromBrx__FPvP18CBinaryInputStream(P *,void *);
 void func_001F2500(P *);
-void func_0013FB40(P *,void *,void *);
+void LoadSwObjectsFromBrx__FP2SOP18CBinaryInputStreamP14CLoadCollector(P *,void *,void *);
 void func_001A6D28(P *,int);
 }
 static inline int Extra(P *p){VE *v=&p->vt[63];return ((int (*)(P *))v->fn)((P *)((char *)p+v->delta));}
@@ -48,7 +48,7 @@ extern "C" void func_001F31E0(P *p,void *stream)
     p->count=func_00117D50(stream);
     MSG request;
     request.bytes=(p->count+extra)*sizeof(E);request.alignment=16;
-    p->entries=(E *)func_001AE2A0(&request);
+    p->entries=(E *)PvAllocSwClearImpl__FP7SWALLOC(&request);
     for(;i<p->count;i++){
         e=&p->entries[i];
         GEO *local=&e->local;
@@ -62,7 +62,7 @@ extern "C" void func_001F31E0(P *p,void *stream)
         e->radius=func_00117E38(stream);
         func_00117FD0(stream,local);
         if(!e->object){e->object=D_002C44F0;e->world=e->local;}
-        else func_00166270(local,0,&e->world);
+        else CloneGeom__FP4GEOMP7MATRIX4T0(local,0,&e->world);
         func_00118220(stream,&e->world,&e->tree);
         e->id=func_00117C80(stream);
         e->flags.fields.state=func_00117D50(stream);
@@ -74,16 +74,16 @@ extern "C" void func_001F31E0(P *p,void *stream)
     func_001F2B20(p);
     if(p->count>0){
         request.bytes=sizeof(STATE);request.alignment=16;
-        STATE *state=(STATE *)func_001AE2A0(&request);
+        STATE *state=(STATE *)PvAllocSwClearImpl__FP7SWALLOC(&request);
         p->state=state;
         state->mass=func_00117E38(stream);
         ReadMatrix__18CBinaryInputStreamP7MATRIX3(stream,state);
         func_001F35F8(p,1.0f);
         Post(p);
     }
-    func_0013F810(p,stream);
+    LoadOptionsFromBrx__FPvP18CBinaryInputStream(p,stream);
     if(p->data.guard)SetActive(p);
     func_001F2500(p);
-    func_0013FB40(p,stream,0);
+    LoadSwObjectsFromBrx__FP2SOP18CBinaryInputStreamP14CLoadCollector(p,stream,0);
     func_001A6D28(p,metadata);
 }

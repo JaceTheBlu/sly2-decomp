@@ -8,9 +8,9 @@ s32 func_00120C00(s32 arg0, s32 arg1, void *arg2) {
 
     temp_a1 = M2C_FIELD(M2C_FIELD(arg2, void **, 4), void **, 0x10);
     if (temp_a1 == NULL) {
-        func_0012A0B0(arg0, 0);
+        SetTag__4CRef4TAGK(arg0, 0);
     } else {
-        func_00129480(arg0, temp_a1);
+        __4CRefP4NODE(arg0, temp_a1);
     }
     return arg0;
 }

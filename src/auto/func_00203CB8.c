@@ -1,11 +1,11 @@
 #include "m2c_prelude.h"
 M2C_UNK func_001291A8(s32, M2C_UNK *);              /* extern */
 M2C_UNK func_00129EC8(M2C_UNK *);                   /* extern */
-M2C_UNK func_0012A0B0(s32, M2C_UNK);                /* extern */
+M2C_UNK SetTag__4CRef4TAGK(s32, M2C_UNK);                /* extern */
 M2C_UNK func_00241728(void *, s32, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_002417A0(void *, M2C_UNK, void *, M2C_UNK); /* extern */
 M2C_UNK func_002417F0(void *, M2C_UNK, M2C_UNK);    /* extern */
-extern s128 D_002A2DC0;
+extern s128 g_normalZ;
 extern s128 D_002A2DD0;
 extern f32 D_002A8550;
 extern f32 D_002A85F0;

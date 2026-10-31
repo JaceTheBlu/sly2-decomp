@@ -4,7 +4,7 @@ struct S { char pad[0xEC]; int c; struct E *ae; };
 struct AL { int cb; int cbAlign; };
 struct SP { struct RC *p; };
 void func_002311B0(struct S *p, struct S *q);
-struct E *func_001AE238(struct AL *pal, struct E *pv);
+struct E *PvAllocSwCopyImpl__FP7SWALLOCPv(struct AL *pal, struct E *pv);
 void func_00127E90(struct SP *pret, struct RC *p, struct S *ps);
 void func_00257078(struct RC *p, int n);
 void func_00259A88(struct RC *p);
@@ -20,7 +20,7 @@ void func_001CA7B8(struct S *p, struct S *q)
         if (p->ae == q->ae) {
             u.al.cb = p->c * sizeof(struct E);
             u.al.cbAlign = 0x10;
-            p->ae = func_001AE238(&u.al, p->ae);
+            p->ae = PvAllocSwCopyImpl__FP7SWALLOCPv(&u.al, p->ae);
             pe = &p->ae[i];
         }
         func_00127E90(&u.sp, pe->x8, p);

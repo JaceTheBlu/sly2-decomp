@@ -17,9 +17,9 @@ struct VECTOR4 { float x, y, z, w; };   /* BLKmode on purpose: all block locals 
 
 struct SCALAR;
 struct VECTOR;
-extern "C" SCALAR *func_002564B8(SCALAR *);
+extern "C" SCALAR *__3VUF(SCALAR *);
 extern "C" VECTOR *func_002564C0(VECTOR *);
-struct SCALAR { qword q; SCALAR() { (void)func_002564B8(this); } };
+struct SCALAR { qword q; SCALAR() { (void)__3VUF(this); } };
 struct VECTOR { qword q; VECTOR() { (void)func_002564C0(this); } };
 /* the edge-loop lerp scalars need a VF-class pseudo: qmtc2 conversion */
 struct VU_FLOATQ { qword q; VU_FLOATQ(float g) { __asm__("qmtc2.ni %1,%0" : "=j"(q) : "r"(g)); } };
@@ -44,7 +44,7 @@ struct WHEEL { char pad0[0x20]; float radius, bottom, top; char pad2C[0x24]; qwo
 struct CONTACT;
 struct GAME;
 extern GAME g_sw;
-extern const qword D_002A2DC0;
+extern const qword g_normalZ;
 extern const qword D_002C2150[5];
 /* -FLT_MAX / FLT_MAX below are constant-pool literals (0x2A7838/0x2A783C), not globals: their REG_EQUAL sets order f24/f26 */
 
@@ -54,15 +54,15 @@ qword *__as__6VECTORG9VU_VECTOR(qword *, qword);
 M4 func_0011C318(const M4 *);
 void func_00119390(VECTOR4 *, qword, qword);
 void *func_002333B4(void *, int, uint);
-void *func_001AE318(SWALLOC *);
-int func_00118A88(BSP *, BSP *, qword, float, int *, BSP **);
-int func_00118668(BSP *, BSP *, qword, qword, int, LSG *);
+void *PvAllocStackImpl__FP7SWALLOC(SWALLOC *);
+int PruneBsp__FP3BSPT0fUxPiPP3BSP(BSP *, BSP *, qword, float, int *, BSP **);
+int ClsgClipEdgeToBsp__FP3BSPT0UxUxiP3LSG(BSP *, BSP *, qword, qword, int, LSG *);
 qword func_001193D8(M4 *, qword);
 void func_001A7C18(GAME *, SHAPE *, SOPART *, qword, qword, int, int, int, CONTACT **, float);
 }
 
 static inline M4 *GetMatrix(OWNER *p) { return p->vt[31].pfn((char *)p + p->vt[31].delta); }
-static inline void *PvAllocStack(int cb) { SWALLOC swalloc; swalloc.cb = cb; swalloc.cbAlign = 0x10; return func_001AE318(&swalloc); }
+static inline void *PvAllocStack(int cb) { SWALLOC swalloc; swalloc.cb = cb; swalloc.cbAlign = 0x10; return PvAllocStackImpl__FP7SWALLOC(&swalloc); }
 static inline void ClearAb(void *pv, int cb) { func_002333B4(pv, 0, cb); }
 static inline float Sqrt(float f) { float r; __asm__ __volatile__("sqrt.s %0,%1" : "=&f"(r) : "f"(f)); return r; }
 
@@ -176,7 +176,7 @@ extern "C" void func_001D3450(OWNER *owner, WHEEL *wheel, SOPART *ppart, int unu
     BSP *absp;
     absp = pbsp = (BSP *)PvAllocStack(0x1555 * sizeof(BSP));
     cbspLeft = 0x1555;
-    if (func_00118A88(pbspRoot, (BSP *)0x7FFFFFFF, frame.r[3].q, Sqrt(radius * radius + height * height), &cbspLeft, &pbsp) != 2)
+    if (PruneBsp__FP3BSPT0fUxPiPP3BSP(pbspRoot, (BSP *)0x7FFFFFFF, frame.r[3].q, Sqrt(radius * radius + height * height), &cbspLeft, &pbsp) != 2)
         return;
     int cbsp = pbsp - absp;
     SURF *asurf = ppart->geomWorld.asurf;
@@ -233,16 +233,16 @@ extern "C" void func_001D3450(OWNER *owner, WHEEL *wheel, SOPART *ppart, int unu
     }
     /* ray pass. VU_VECTOR temporaries keep the loop above loop.c's ~95-insn threshold, so &D_002C2150 is not hoisted;
        posPrev = pos at the END of the body puts the a2 argument move after the row loads (sched2 tie) */
-    VU_VECTOR posPrev = Transform(frame, BlendStart(D_002C2150[0], radius, D_002A2DC0, height));
+    VU_VECTOR posPrev = Transform(frame, BlendStart(D_002C2150[0], radius, g_normalZ, height));
     for (uint j = 0; j < 6; j++) {
         VU_VECTOR dir;
         if (j < 5)
             dir = Scale(D_002C2150[j], radius);
         else
-            dir = Blend(D_002C2150[4], radius, D_002A2DC0, height);
+            dir = Blend(D_002C2150[4], radius, g_normalZ, height);
         VU_VECTOR pos;
         pos = Transform(frame, dir);
-        int clsg = func_00118668(pbsp, (BSP *)0x7FFFFFFF, posPrev.q, pos.q, 16, alsg);
+        int clsg = ClsgClipEdgeToBsp__FP3BSPT0UxUxiP3LSG(pbsp, (BSP *)0x7FFFFFFF, posPrev.q, pos.q, 16, alsg);
         for (int k = 0; k < clsg; k++) {
             LSG *plsg = &alsg[k];
             if (plsg->apsurf[0]) {

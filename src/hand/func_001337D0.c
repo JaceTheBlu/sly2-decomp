@@ -17,7 +17,7 @@ struct P { char pad[0x3CD0]; int c; struct E *aae[3]; char a3CE0[0x3CF8 - 0x3CE0
 struct L *func_00133CB8(struct P *, struct X *, struct X *);
 void func_001A7E10(struct P *, void *);
 void func_001F5078(struct LO *);
-void func_0011CD98(void *, void *);
+void FreeSlotheapPv__FP8SLOTHEAPPv(void *, void *);
 void func_0011A2E8(void *, struct X *);
 int func_0011A380(void *, struct X *);
 void *func_002332B8(void *, void *, int);
@@ -37,8 +37,8 @@ void func_001337D0(struct P *p, struct X *px)
             func_001A7E10(p, pl->pv);
         }
         plNext = pl->pnext;
-        func_0011CD98(p->aCF8, pl);
-        func_0011CD98(p->aCF8, pl2);
+        FreeSlotheapPv__FP8SLOTHEAPPv(p->aCF8, pl);
+        FreeSlotheapPv__FP8SLOTHEAPPv(p->aCF8, pl2);
     }
     /* five empty asms: lengthen p's live range (global-alloc priority), emulating the original insn count here */
     __asm__ __volatile__("");
@@ -77,5 +77,5 @@ void func_001337D0(struct P *p, struct X *px)
     }
     }
     p->c -= 2;
-    func_0011CD98(p->a3CE0, px);
+    FreeSlotheapPv__FP8SLOTHEAPPv(p->a3CE0, px);
 }

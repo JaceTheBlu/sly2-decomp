@@ -24,7 +24,7 @@ extern "C"{
  int func_001A2358(C*,RECORD*);
  int func_00155228(void*,int);
  void func_001305B8(void*,P*,float,float,int,void**);
- int func_00132B10(P*,int);
+ int FIsBasicDerivedFrom__FP5BASIC3CID(P*,int);
  void func_00143380(P*);
  void func_001619A0(void*,int,P*);
  void func_001A15B0(C*,ACTION);
@@ -109,7 +109,7 @@ extern "C" int func_001A19A0(C*p,RECORD*input){
   accepted.flags=0x200;
   __asm__("sw $zero,4(%3)\n\tsw $zero,8(%3)\n\tsw $zero,%2":"=m"(accepted.b),"=m"(accepted.c),"=m"(accepted.a):"r"(&accepted.a));
  }
- if(input->object&&func_00132B10(input->object,0x38)){
+ if(input->object&&FIsBasicDerivedFrom__FP5BASIC3CID(input->object,0x38)){
   if(input->object->state==8||input->object->state==13)delta/=2;
  }
 notify:

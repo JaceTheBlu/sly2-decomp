@@ -11,7 +11,7 @@ int func_0014CC58(int n, qword a, qword b, int n0, int n1, HIT *phit);
 void func_0012DA30(void *p, qword v);
 void func_0020F948();
 extern char g_sw[];
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern qword D_002A2DD0;
 int func_00189EC8(O *p, M *pm, void *px);
 }
@@ -33,7 +33,7 @@ int func_00189EC8(O *p, M *pm, void *px)
         if ((func_0014CC58(0, a, b, n0, n1, &hit) || func_0014CC58(0, b, c, n0, n1, &hit)) &&
             hit.g40 != 0.0f && 0.7f < hit.g28) {
             qword w;
-            hit.v0 = VSub(hit.v0, D_002A2DC0);
+            hit.v0 = VSub(hit.v0, g_normalZ);
             w = func_001A6F00(0, p, hit.v0);
             u.q = w;
             func_0012DA30(px, VSub(w, pm->v10));

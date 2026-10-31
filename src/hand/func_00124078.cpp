@@ -15,7 +15,7 @@ struct O;
 struct NODE { int cref; int pad; CRef ref; NODE *pnext; };
 extern "C" {
 NODE *func_00256B48();
-void func_00256C58(NODE **pp, NODE *p);
+void __as__3SPMP4NODE(NODE **pp, NODE *p);
 CRef func_00124078(int c, O **apo);
 }
 CRef func_00124078(int c, O **apo)
@@ -28,7 +28,7 @@ CRef func_00124078(int c, O **apo)
     for (i = 0; i < c; i++) {
         NODE *p = func_00256B48();
         if (pprev)
-            func_00256C58(&pprev->pnext, p);
+            __as__3SPMP4NODE(&pprev->pnext, p);
         else
             ref = p;
         p->ref = apo[i];

@@ -5,8 +5,8 @@ struct A { char pad[0x10]; qword p0; char pad1[0x20]; qword p1; };
 struct P { char pad[0x40]; char a40[0x20]; float t; char pad1[0xC]; float x, y, z; };
 struct S { char pad[0x120]; int x120; char pad1[0x1C]; float g140; };
 void *func_002333B4(void *p, int c, int n);
-void func_00221408(struct S *ps, qword v, qword *pq, void *pv);
-void func_002215C0(struct S *ps, qword *pq, M3 *pm, void *pv, float g, float h, int f, qword *ppos);
+void CalculateTnCrv__FP2TNUxP7VECTOR4T2(struct S *ps, qword v, qword *pq, void *pv);
+void CalculateTnPos__FP2TNP7VECTOR4ffP3CLQP2LM4FTNDPUx(struct S *ps, qword *pq, M3 *pm, void *pv, float g, float h, int f, qword *ppos);
 void func_00220DD8(struct P *p, struct A *pa, qword *ppos, struct S *ps)
 {
     VU u;
@@ -28,8 +28,8 @@ void func_00220DD8(struct P *p, struct A *pa, qword *ppos, struct S *ps)
         m.r[2].f[1] = p->z;
         n = ps->x120;
         ps->x120 = 0;
-        func_00221408(ps, *ppos, &u.q, ab);
-        func_002215C0(ps, &u.q, &m, p->a40, ps->g140, 0.0f, 1, ppos);
+        CalculateTnCrv__FP2TNUxP7VECTOR4T2(ps, *ppos, &u.q, ab);
+        CalculateTnPos__FP2TNP7VECTOR4ffP3CLQP2LM4FTNDPUx(ps, &u.q, &m, p->a40, ps->g140, 0.0f, 1, ppos);
         ps->x120 = n;
     }
 }

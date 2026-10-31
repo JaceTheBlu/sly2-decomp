@@ -19,24 +19,24 @@ struct WORK {SCRATCH scratch;V delta;float angle,radius;V ownerPosition,speed,ve
 extern O *D_002DD5BC;
 extern CLOCK D_002DDED0;
 extern float D_002C40E0;
-extern V D_002A2DC0,D_002A2DA0,D_002A2DD0;
+extern V g_normalZ,D_002A2DA0,D_002A2DD0;
 extern "C" {
 qword func_001A62E8(O *);
 int func_001DAEA8(int);
 qword func_0011E1A0(float,float,float);
-void func_0011EF08(qword,float *,float *,float *);
+void DecomposeCylind__FUxPfN21(qword,float *,float *,float *);
 float func_0011D948(RANGE *,float);
 void func_0021FB70(S *,int);
 float func_002458F0(float,float);
 float func_00204740(O *);
 float RadNormalize__Ff(float);
 void func_002206C8(S *,int);
-void func_001384C0(ASEG *);
+void ReblendAsegbl__FP6ASEGBL(ASEG *);
 int func_00131968(ASEGA *);
-int func_00132B10(O *,int);
+int FIsBasicDerivedFrom__FP5BASIC3CID(O *,int);
 int func_001C46C0(CONTROL *,int,float);
 void func_00136530(O *,int);
-TRACKREF *func_0012FF10(ASEG *,O *,void *,int);
+TRACKREF *PchnFindAseg__FP4ASEGP3ALOii(ASEG *,O *,void *,int);
 }
 static inline void IntCall(O *o,int slot,int value){VE *v=o->vt;v[slot].f.integer((char *)o+v[slot].delta,value);}
 static inline void EffectCall(EFFECT *o,int slot){VE *v=o->vt;v[slot].f.plain((char *)o+v[slot].delta);}
@@ -69,11 +69,11 @@ static inline qword ActiveDifference(const V &target,const V &owner){register qw
 static inline void ProjectionInputs(qword current,const V &player,qword &currentVF,qword &playerVF,V *&high,V *&savedHigh){
  register V *upper asm("$3"),*saved asm("$4");
  register qword origin asm("vf1"),point asm("vf4");
- asm("lui %0,%%hi(%6)\n\tqmtc2.ni %4,%2\n\tlqc2 %3,%5\n\tdaddu %1,%0,$zero":"=&r"(upper),"=r"(saved),"=j"(origin),"=j"(point):"r"(current),"m"(player),"i"(&D_002A2DC0));
+ asm("lui %0,%%hi(%6)\n\tqmtc2.ni %4,%2\n\tlqc2 %3,%5\n\tdaddu %1,%0,$zero":"=&r"(upper),"=r"(saved),"=j"(origin),"=j"(point):"r"(current),"m"(player),"i"(&g_normalZ));
  currentVF=origin;playerVF=point;high=upper;savedHigh=saved;
 }
 static inline V *InitialUpAddress(V *upper){register V *address asm("$3");
- asm("addiu %0,%1,%%lo(%2)":"=r"(address):"r"(upper),"i"(&D_002A2DC0));return address;
+ asm("addiu %0,%1,%%lo(%2)":"=r"(address):"r"(upper),"i"(&g_normalZ));return address;
 }
 static inline qword PointDifference(qword player,qword current){register qword point asm("vf4")=player,origin asm("vf1")=current;
  asm("vsub.xyzw %0,%0,%1":"+j"(point):"j"(origin));return point;
@@ -106,7 +106,7 @@ static inline qword PlanarUnit(qword input,qword up){
 }
 static inline qword LiftFromUpper(float height,const V &speed,V *upper,qword &speedValue,qword &upValue){
  register V *address asm("$2");register qword normal asm("vf1"),scalar asm("vf2"),velocity asm("vf4");register int bits asm("$5");
- asm("addiu %0,%5,%%lo(%9)\n\tlqc2 %1,0(%0)\n\tmfc1 %2,%6\n\tqmtc2.ni %2,%3\n\tlqc2 %4,%7":"=&r"(address),"=j"(normal),"=&r"(bits),"=j"(scalar),"=j"(velocity):"r"(upper),"f"(height),"m"(speed),"m"(*(const V *)((const char *)upper+0x2DC0)),"i"(&D_002A2DC0));
+ asm("addiu %0,%5,%%lo(%9)\n\tlqc2 %1,0(%0)\n\tmfc1 %2,%6\n\tqmtc2.ni %2,%3\n\tlqc2 %4,%7":"=&r"(address),"=j"(normal),"=&r"(bits),"=j"(scalar),"=j"(velocity):"r"(upper),"f"(height),"m"(speed),"m"(*(const V *)((const char *)upper+0x2DC0)),"i"(&g_normalZ));
  upValue=normal;speedValue=velocity;return scalar;
 }
 static inline qword SavedPlayerAndOwner(qword player,const S *state,O *&owner){
@@ -173,7 +173,7 @@ extern "C" void func_0021F418(S *s){
    float *angleArgument,*radiusArgument;
    qword sum=PolarOperands(w.vector,movement,&w.angle,&w.radius,angleArgument,radiusArgument);
    w.delta.q=sum;
-   func_0011EF08(sum,angleArgument,radiusArgument,0);
+   DecomposeCylind__FUxPfN21(sum,angleArgument,radiusArgument,0);
    w.radius=func_0011D948(&w.scratch.range,w.radius);
    qword polar=func_0011E1A0(w.angle,w.radius,elevation);
    StoreTarget(s->targetWorld,w.delta,w.ownerPosition,polar);
@@ -192,7 +192,7 @@ extern "C" void func_0021F418(S *s){
    float threshold=s->idleThreshold;
    if(threshold<angle)func_002206C8(s,2);
    else if(angle<-threshold)func_002206C8(s,1);
-   else{s->blend1=angle/threshold*0.5f+0.5f;s->blend0=1.0f-s->blend1;func_001384C0(s->animation0);}
+   else{s->blend1=angle/threshold*0.5f+0.5f;s->blend0=1.0f-s->blend1;ReblendAsegbl__FP6ASEGBL(s->animation0);}
    break;
   }
   case 1:case 2:
@@ -202,7 +202,7 @@ extern "C" void func_0021F418(S *s){
    if(!animation||func_00131968(animation)){if(D_002DD5BC->mode==8)func_002206C8(s,4);else func_002206C8(s,0);}
    break;
   case 4:case 5:case 6:{
-   if(func_00132B10(s->selected,0x64)&&s->selected->sentinel!=-1){IntCall(s->owner,88,0);break;}
+   if(FIsBasicDerivedFrom__FP5BASIC3CID(s->selected,0x64)&&s->selected->sentinel!=-1){IntCall(s->owner,88,0);break;}
    float margin=0.1f;
    if(func_001C46C0(control,0xC0,margin)){func_002206C8(s,7);break;}
    if(func_001C46C0(control,0x30,margin)){
@@ -239,7 +239,7 @@ extern "C" void func_0021F418(S *s){
  O *owner=s->owner;
  if(owner->movement!=1)return;
  ASEGA *animation=owner->animation;
- TRACKREF *reference=animation?func_0012FF10(animation->definition,owner,(void *)6,1):0;
+ TRACKREF *reference=animation?PchnFindAseg__FP4ASEGP3ALOii(animation->definition,owner,(void *)6,1):0;
  if(reference){
   Evaluate(reference->track,0,&w.scratch.vector,animation->time,animation->scale);
   V *direction=&s->owner->direction;float height=w.scratch.vector.f[2];direction->f[0]=0.0f;direction->f[2]=height;direction->f[1]=0.0f;

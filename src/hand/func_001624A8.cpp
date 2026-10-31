@@ -7,21 +7,21 @@ public:
 };
 class CBinaryInputStream;
 struct S { char pad[0x54]; int c54; void *a58; int c5C; void *a60; char pad2[0x8C - 0x64]; int c8C; void *a90; int c94; void *a98; };
-extern "C" void *func_001AE318(ALLOCREQ *preq);
-extern "C" void *func_001AE238(ALLOCREQ *preq, void *pv);
+extern "C" void *PvAllocStackImpl__FP7SWALLOC(ALLOCREQ *preq);
+extern "C" void *PvAllocSwCopyImpl__FP7SWALLOCPv(ALLOCREQ *preq, void *pv);
 extern "C" void func_001A5C28(S *p, CBinaryInputStream *pbis);
 extern "C" void func_00118420(CBinaryInputStream *pbis);
 static inline void *PvAllocReq(ALLOCREQ *preq, int cb, int nKind)
 {
     preq->cb = cb;
     preq->nKind = nKind;
-    return func_001AE318(preq);
+    return PvAllocStackImpl__FP7SWALLOC(preq);
 }
 static inline void *PvShrinkReq(ALLOCREQ *preq, int cb, int nKind, void *pv)
 {
     preq->cb = cb;
     preq->nKind = nKind;
-    return func_001AE238(preq, pv);
+    return PvAllocSwCopyImpl__FP7SWALLOCPv(preq, pv);
 }
 extern "C" void func_001624A8(S *p, CBinaryInputStream *pbis)
 {

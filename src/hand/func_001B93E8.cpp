@@ -79,13 +79,13 @@ extern "C" M4 D_002A2D30;
 extern "C" float D_002C0A3C,D_002C0A40;
 extern "C" void func_0012E460(MOTION**);
 extern "C" void func_001F5720(OWNER*,int);
-extern "C" void func_001A58D0(OWNER*,int,int);
+extern "C" void SetLoParent__FP2LOP2SOi(OWNER*,int,int);
 extern "C" void func_001F6860(OWNER*,int);
-extern "C" EVENT*func_0012F938(ASEG*,int);
+extern "C" EVENT*PeaFindAsegLabel__FP4ASEG3OID(ASEG*,int);
 extern "C" void func_002309E8(void*,void*,M4*,M4*,float);
 extern "C" M4 func_001A71B0(void*,void*,M4*);
 extern "C" void func_001B72B0(P*,NODE*,const M4*,qword*,qword*);
-extern "C" int func_00132B10(OWNER*,int);
+extern "C" int FIsBasicDerivedFrom__FP5BASIC3CID(OWNER*,int);
 extern "C" void func_00209E28(OWNER*,int);
 extern "C" void func_00209E88(OWNER*);
 extern "C" void func_001B7700(P*,qword,float*,float*,qword*,qword*);
@@ -113,17 +113,17 @@ extern "C" void func_001B93E8(P*p,int state) {
   func_001F5720(owner,0);
   p->oldLeft=owner->left->state;
   p->oldRight=owner->right->state;
-  func_001A58D0(owner,0,15);
+  SetLoParent__FP2LOP2SOi(owner,0,15);
   func_001F6860(owner,1);
   M4 predicted;
   float duration;
-  EVENT*event=func_0012F938(p->anim->clip,0x1C7);
+  EVENT*event=PeaFindAsegLabel__FP4ASEG3OID(p->anim->clip,0x1C7);
   duration=(event->time-p->anim->time)/p->anim->rate;
   func_002309E8(p->root->node,p->node,&predicted,0,duration);
   M4 work=func_001A71B0(p,0,&predicted);
   predicted=work;
   func_001B72B0(p,0,&predicted,&work.row[0].q,&work.row[1].q);
-  if(func_00132B10(owner,0x38))func_00209E28(owner,(int)p);
+  if(FIsBasicDerivedFrom__FP5BASIC3CID(owner,0x38))func_00209E28(owner,(int)p);
   func_001B7700(p,work.row[1].q,&event->time,&duration,&work.row[2].q,&work.row[3].q);
   p->m13FC=func_0012DE58(owner,owner->left,(void*)5,D_002DDED0.time+duration,work.row[1].q,work.row[3].q);
   VTE*entry=&owner->vt[35];
@@ -144,7 +144,7 @@ extern "C" void func_001B93E8(P*p,int state) {
   break;
  valid:
   ROOT*root=p->root;
-  func_001A58D0(owner,(int)root,15);
+  SetLoParent__FP2LOP2SOi(owner,(int)root,15);
   func_001F6860(owner,1);
   U position,rotation;
   M4 frame;
@@ -171,7 +171,7 @@ extern "C" void func_001B93E8(P*p,int state) {
    p->m1624=func_0012DD28(p,stretch->second,(void*)5,stretch);
    p->m160C=func_0012DDB0(p,p->targetSecond,(void*)5,(void*)5,(int)stretch->frame,&frame);
   }
-  if(func_00132B10(owner,0x38))func_00209E88(owner);
+  if(FIsBasicDerivedFrom__FP5BASIC3CID(owner,0x38))func_00209E88(owner);
   ClearXYZ(&p->velocity);
   break;
  }

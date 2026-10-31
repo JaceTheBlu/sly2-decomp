@@ -40,8 +40,8 @@ struct CNODE { int c; };
 struct ALLOCREQ { int cb, cbAlign; ALLOCREQ(int c, int a) { cb = c; cbAlign = a; } };
 extern NODE D_002BBB20;
 extern "C" {
-void *func_001AE318(const ALLOCREQ &req);
-int func_00118A88(NODE *pnode, int cnodeMax, qword pos, float sRadius, int *pcnode, NODE **ppnode);
+void *PvAllocStackImpl__FP7SWALLOC(const ALLOCREQ &req);
+int PruneBsp__FP3BSPT0fUxPiPP3BSP(NODE *pnode, int cnodeMax, qword pos, float sRadius, int *pcnode, NODE **ppnode);
 int func_001F7530(FILTER *pfilter, int grf);
 void func_001A9D38(WORLD *pworld, SHAPE *pshape, SHAPE *pshapeOther, CONTACT **ppcontact);
 void func_001A9C40(WORLD *pworld, SHAPE *pshape, SHAPE *pshapeOther, CONTACT **ppcontact);
@@ -80,7 +80,7 @@ extern "C" CONTACT *func_001AA1D8(WORLD *pworld, SO *psoSmall, SO *psoLarge)
             cnodeMax = pshape->cnodeMax;
     SCOPE2 stackscope;
     cnodeMax = NMin(cnodeMax, 0x1555);
-    NODE *anode = (NODE *)func_001AE318(ALLOCREQ(cnodeMax * sizeof(NODE), 0x10));
+    NODE *anode = (NODE *)PvAllocStackImpl__FP7SWALLOC(ALLOCREQ(cnodeMax * sizeof(NODE), 0x10));
     for (pshape = psoLarge->pshapeFirst; pshape; pshape = pshape->pshapeNext) {
         int fFilter = pshape->grfFilter != 0;
         if ((pshape->grf & SHAPE_FILTERED) && !fFilter)
@@ -98,7 +98,7 @@ extern "C" CONTACT *func_001AA1D8(WORLD *pworld, SO *psoSmall, SO *psoLarge)
             query.c = cnodeMax;
             pnodeLast = anode;
             pnodeFirst = anode;
-            status = func_00118A88(pshape->pnodeRoot, 0x7FFFFFFF, psoSmall->pos, psoSmall->sRadius, &query.c, &pnodeLast);
+            status = PruneBsp__FP3BSPT0fUxPiPP3BSP(pshape->pnodeRoot, 0x7FFFFFFF, psoSmall->pos, psoSmall->sRadius, &query.c, &pnodeLast);
             if (status == 1)
                 continue;
             if (status == 0) {

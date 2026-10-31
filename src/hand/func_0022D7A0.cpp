@@ -26,7 +26,7 @@ void ReadCb12__18CBinaryInputStreamPv(void *,V *);
 void ReadCb8__18CBinaryInputStreamPv(void *,V2 *);
 void ReadVector__18CBinaryInputStreamP6VECTOR(void *,V *);
 void func_00117F18(void *,M4 *);
-void *func_001AE2A0(REQ *);
+void *PvAllocSwClearImpl__FP7SWALLOC(REQ *);
 void *func_0012E1F0(int);
 void *func_002333B4(void *,int,int);
 qword func_0022CA18(E *,E *);
@@ -49,7 +49,7 @@ extern "C" void func_0022D7A0(S *p,void *stream){
  int i=0;
  p->count=func_00117D50(stream);
  REQ request;request.size=p->count*sizeof(E);request.kind=16;
- p->records=(E *)func_001AE2A0(&request);
+ p->records=(E *)PvAllocSwClearImpl__FP7SWALLOC(&request);
  for(;i<p->count;i++){
   E *e=&p->records[i];
   e->reference=Lookup(p,func_00117D50(stream));

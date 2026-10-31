@@ -32,7 +32,7 @@ struct P {
 struct CLOCK { float time, dt; };
 union PHASE { M3 rotation; struct { U acceleration, world, limited; } impulse; };
 extern CLOCK D_002DDED0;
-extern const qword D_002A2DC0, D_002A2DD0;
+extern const qword g_normalZ, D_002A2DD0;
 extern POLY D_002C2100, D_002C2120, D_002C2130;
 extern float D_002C2110, D_002C2114, D_002C2140, D_002C2144, D_002C2148;
 extern "C" {
@@ -46,7 +46,7 @@ void func_001FAB78(P *, qword, qword);
 qword func_0022FCC8(MOTION *, MOTION *, qword);
 float func_0011CFE0(float, float);
 void func_001FAC98(P *, qword);
-M3 *func_0011B500(M3 *, qword, float);
+M3 *LoadRotateMatrixRad__FfUx(M3 *, qword, float);
 qword func_0011E9F8(float, qword);
 void func_001FAC30(P *, qword);
 }
@@ -146,7 +146,7 @@ extern "C" void func_001D2E18(P *p)
     func_001FAC98(p, worldTorque.q);
     float dt = clock->dt;
     float half = dt * 0.5f;
-    func_0011B500(&phase.rotation, D_002A2DC0, (localVelocity.f[2] + torque.f[2] * half) * dt);
+    LoadRotateMatrixRad__FfUx(&phase.rotation, g_normalZ, (localVelocity.f[2] + torque.f[2] * half) * dt);
     desired.f[0] = p->acceleration * p->drive;
     desired.f[2] = desired.f[1] = 0.0f;
     basis = phase.rotation;

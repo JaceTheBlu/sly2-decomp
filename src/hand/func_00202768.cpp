@@ -13,7 +13,7 @@ void func_002021F8(P *);
 void func_00213928(X *,int);
 void func_00213B00(X *,int);
 void func_00214300(X *,int);
-void func_0014D1D0(void *,int,float);
+void SetClockRate__FP5CLOCK3CRKf(void *,int,float);
 void func_001FE5B8(void *,int,int);
 void func_0014FE28(void *);
 void *func_001FE5F0(void *,int,int);
@@ -77,7 +77,7 @@ extern "C" void func_00202768(P *p,int nextState)
         break;
     case 8:
         Restore(*p->model,p->savedFlags);
-        func_0014D1D0(D_002DDED0,0,1.0f);
+        SetClockRate__FP5CLOCK3CRKf(D_002DDED0,0,1.0f);
         func_001FE5B8(g_sndmgr,1,1);
         func_00213928(p->primary,0x358);
         break;
@@ -150,7 +150,7 @@ extern "C" void func_00202768(P *p,int nextState)
             __asm__("sw %1,%0" : "=m"(updated->flags) : "r"(inlineWord));
         }
         func_001FE5B8(g_sndmgr,1,0);
-        func_0014D1D0(D_002DDED0,0,0.0f);
+        SetClockRate__FP5CLOCK3CRKf(D_002DDED0,0,0.0f);
         break;
     }
     case 9:

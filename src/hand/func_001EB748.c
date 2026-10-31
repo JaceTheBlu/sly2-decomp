@@ -10,9 +10,9 @@ extern char D_003E1590[];
 void func_001EAE40(void *);
 void func_001EB098(void *);
 int func_00117C20(void *);
-void *func_001AE378(struct MSG *);
-void *func_001AE2A0(struct MSG *);
-void *func_001ED7A8(int, void *);
+void *PvAllocStackClearImpl__FP7SWALLOC(struct MSG *);
+void *PvAllocSwClearImpl__FP7SWALLOC(struct MSG *);
+void *PsaaLoadFromBrx(int, void *);
 void func_001EB2F0(void *, struct E *);
 void func_0020F640(void *, void *);
 void *func_001ECE58(int, int);
@@ -29,13 +29,13 @@ void func_001EB748(void *p, int k, void *pbis)
     D_003DD000 = func_00117C20(pbis);
     msg.cb = D_003DD000 * 4;
     msg.nKind = 0x10;
-    D_003DD004 = func_001AE378(&msg);
+    D_003DD004 = PvAllocStackClearImpl__FP7SWALLOC(&msg);
     for (i = 0; i < D_003DD000; i++)
-        D_003DD004[i] = func_001ED7A8(0, pbis);
+        D_003DD004[i] = PsaaLoadFromBrx(0, pbis);
     D_003DCFE8 = func_00117C20(pbis);
     msg.cb = D_003DCFE8 * 0x2C;
     msg.nKind = 0x10;
-    D_003DCFEC = func_001AE378(&msg);
+    D_003DCFEC = PvAllocStackClearImpl__FP7SWALLOC(&msg);
     for (j = 0; j < D_003DCFE8; j++)
         func_001EB2F0(pbis, &D_003DCFEC[j]);
     func_0020F640(p, pbis);
@@ -49,7 +49,7 @@ void func_001EB748(void *p, int k, void *pbis)
             void *q;
             msg.cb = 0x1C;
             msg.nKind = 0x10;
-            q = func_001AE2A0(&msg);
+            q = PvAllocSwClearImpl__FP7SWALLOC(&msg);
             func_001EB678(pe, q);
             func_0011A070(D_003E1590, q);
         }

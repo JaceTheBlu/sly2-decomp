@@ -6,7 +6,7 @@ M2C_UNK func_00117F18(s32, void *);                 /* extern */
 M2C_UNK func_001291A8(s32 *, s32 *);                /* extern */
 M2C_UNK func_00129EC8(s32 *);                       /* extern */
 M2C_UNK __4GIFS(M2C_UNK *);                   /* extern */
-s32 func_001AE318(s32 *, s32 *);                    /* extern */
+s32 PvAllocStackImpl__FP7SWALLOC(s32 *, s32 *);                    /* extern */
 M2C_UNK func_002355E0(s32, M2C_UNK);                /* extern */
 extern M2C_UNK D_002A2D00;
 extern f32 D_002A7758;
@@ -61,7 +61,7 @@ extern f32 D_002DDED4;
 extern f32 D_002DDF0C;
 extern M2C_UNK D_002DEA00;
 extern M2C_UNK D_002DEA28;
-extern void *D_002DEA4C;
+extern void *g_pfrmOpen;
 extern s32 D_002DEDBC;
 extern M2C_UNK D_002DF260;
 extern M2C_UNK D_002E5270;

@@ -47,7 +47,7 @@ struct LO : BASIC {
     virtual void SetState(int state);                  // 76
 };
 extern char g_sw[];
-extern qword D_002A2DA0, D_002A2DC0, D_002A2DE0, D_002C0D60;
+extern qword D_002A2DA0, g_normalZ, D_002A2DE0, D_002C0D60;
 extern float D_002A775C, D_002A7760, D_002C0D70;
 extern float D_002C0E80, D_002C0E84, D_002C0E88, D_002C0E8C, D_002C0E90, D_002C0E94;
 extern CLQ D_002C0EA0;
@@ -60,7 +60,7 @@ REGION *func_001C0D70(qword, int);
 int func_001C0940(REGION *, qword, qword *, int);
 int func_001C0980(REGION *, qword, qword, int);
 qword func_001A62E8(LO *);
-void *func_001AE318(ALLOCREQ *);
+void *PvAllocStackImpl__FP7SWALLOC(ALLOCREQ *);
 int func_001C6CE8(void *, int, int, LO **);
 int func_001C5570(void *, CANDIDATE *);
 void func_0020FAA0(void *, qword, qword, int (*)(void *, CANDIDATE *), void *, int *, CANDIDATE ***);
@@ -74,7 +74,7 @@ struct VU_FLOAT {
     qword q;
     VU_FLOAT(float f) { __asm__("qmtc2.ni %1,%0" : "=j"(q) : "r"(f)); }
 };
-static inline void *PvAllocFrame(int cb, int cbAlign) { ALLOCREQ req(cb, cbAlign); return func_001AE318(&req); }
+static inline void *PvAllocFrame(int cb, int cbAlign) { ALLOCREQ req(cb, cbAlign); return PvAllocStackImpl__FP7SWALLOC(&req); }
 static inline float GetZ(qword q) { float z; __asm__("pextuw %0,$0,%1" : "=r"(z) : "r"(q)); return z; }
 static inline float GFromVf(qword v) { float g; __asm__("mtc1 %1,%0" : "=f"(g) : "r"(v)); return g; }
 static inline qword Add(qword a, qword b) { qword r; __asm__("vadd.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
@@ -181,12 +181,12 @@ extern "C" void func_001C6FD8(void *pworld, int kind, qword posSeed, void *pvUnu
         qword posBase = posSnap.q;
         qword posTrial = Add(posBase, func_0011E1A0(gAngle, gRadius, 0.0f));
         qword dpos = Sub(posTrial, posOrig.q);
-        qword dposPerp = Sub(dpos, Scale(Dot(dpos, D_002A2DC0), D_002A2DC0));
+        qword dposPerp = Sub(dpos, Scale(Dot(dpos, g_normalZ), g_normalZ));
         qword posAdjust = AddScaled(posTrial, VU_FLOAT(g), Normalize(dposPerp));
         int fBlocked = !func_001C0980(pregion, posSnap.q, posTrial, 0) && !func_001C0980(pregion, posTrial, posAdjust, 0);
         VECTOR4 posLand;
         if (fBlocked && func_001C6DE8(-300.0f, 300.0f, 0.7f, posTrial, ccand, apcand, &posLand.q)) {
-            qword posTarget = AddScaled(posLand.q, VU_FLOAT(aplo[cLaunched]->sRadius - 1.0f), D_002A2DC0);
+            qword posTarget = AddScaled(posLand.q, VU_FLOAT(aplo[cLaunched]->sRadius - 1.0f), g_normalZ);
             float t = func_00196928(Sub(posTarget, posOrig.q), D_002C0D60, D_002C0EB8, D_002C0EBC, D_002C0EC0, D_002C0EC0);
             t += cLaunched * D_002C0EC4;
             qword v = Combine(Sub(posTarget, posOrig.q), VU_FLOAT(1.0f / t), D_002C0D60, VU_FLOAT(-0.5f * t));

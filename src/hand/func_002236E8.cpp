@@ -27,7 +27,7 @@ extern int D_002DFBC4;
 extern int D_002C4118;
 extern float D_002C4110;
 extern float D_002C4114;
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern qword D_002A2DA0;
 extern qword D_002C4290[5];
 extern "C" {
@@ -124,7 +124,7 @@ extern "C" void func_002236E8(CMPART2 *pcmpart)
     qword aqw[11]; // box min 0 / max 1, near-plane point 2, samples 3..7, back 8, side 9, up 10
     uint i;
     aqw[0] = aqw[1] = g_cm.pos;
-    qword qwUp = D_002A2DC0;
+    qword qwUp = g_normalZ;
     aqw[10] = qwUp;
     qword qwToHero = QwSub(func_001A62E8(plo), g_cm.pos);
     qword qwCross = QwCross(qwUp, qwToHero);

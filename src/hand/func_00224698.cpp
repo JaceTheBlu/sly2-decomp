@@ -2,7 +2,7 @@
 typedef int qword __attribute__((mode(TI)));
 struct M3 { qword r[3]; };
 struct S { char pad[0x150]; int k; char pad1[8]; int x15C; void *p160; };
-extern qword D_002A2DC0,D_002A2DA0,D_002A2DD0;
+extern qword g_normalZ,D_002A2DA0,D_002A2DD0;
 extern char D_002C4300[],D_002C4310[];
 extern "C" {
 void func_001F9B20(S *);
@@ -36,13 +36,13 @@ extern "C" void func_00224698(S *p) {
     if(p->p160) {
         qword a=ToVF(func_001A62E8(p->p160));
         qword b=func_001A62E8(p);
-        qword d=Flatten(Sub(a,b),Read(D_002A2DC0));
+        qword d=Flatten(Sub(a,b),Read(g_normalZ));
         register qword fallback __asm__("a1")=D_002A2DA0;
         qword len=Sqrt(Dot(d));
         register qword n __asm__("vf1");
         if(X(len)<1.0e-4f)n=fallback;
         else n=Scale(d,len);
-        m=func_0011B830(n,D_002A2DC0);
+        m=func_0011B830(n,g_normalZ);
     } else {
         func_0011B938(func_001A6318(p),0,&m);
     }

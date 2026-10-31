@@ -4,7 +4,7 @@ M2C_UNK Read__18CBinaryInputStreamiPv(s32, s32, M2C_UNK *);         /* extern */
 M2C_UNK Skip__18CBinaryInputStreami(s32, s32);                    /* extern */
 M2C_UNK ReadVector4__18CBinaryInputStreamP7VECTOR4(s32, void *);                 /* extern */
 M2C_UNK func_00129EC8(s32 *);                       /* extern */
-s32 func_001AE318(void *, s32, s32, M2C_UNK, s32, s32); /* extern */
+s32 PvAllocStackImpl__FP7SWALLOC(void *, s32, s32, M2C_UNK, s32, s32); /* extern */
 extern s128 D_002A2DD0;
 extern M2C_UNK D_002A4BE0;
 extern f32 D_002A4D18;
@@ -38,9 +38,9 @@ extern M2C_UNK D_002BCD00;
 extern f32 D_002BD260;
 extern f32 D_002BD264;
 extern s32 D_002C3258;
-extern M2C_UNK D_002CBE20;
+extern M2C_UNK _vt$17CQueueInputMemory;
 extern M2C_UNK D_002CBE38;
-extern M2C_UNK D_002DD590;
+extern M2C_UNK g_heapSw;
 extern s32 D_002DD5BC;
 extern f32 D_002DDED0;
 extern f32 D_002DDED4;

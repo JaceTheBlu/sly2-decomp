@@ -2,8 +2,8 @@
 typedef int qword __attribute__((mode(TI)));
 typedef struct { qword r[3]; } M3;
 extern qword D_002A2DB0;
-extern qword D_002A2DC0;
-M3 func_0011BA08(qword a, qword b);
+extern qword g_normalZ;
+M3 BuildRotateVectorsMatrix__FUxUx(qword a, qword b);
 #define ROW(o, a0, a1, a2) __asm__ __volatile__("vmulax.xyz $ACC, %1, %0x\n\tvmadday.xyz $ACC, %2, %0y\n\tvmaddz.xyz %0, %3, %0z" : "+j"(o) : "j"(a0), "j"(a1), "j"(a2))
 static inline void MulM3q(qword a0, qword a1, qword a2, M3 *pb, M3 *pd)
 {
@@ -27,7 +27,7 @@ void func_0011B938(M3 *pm, M3 *pmA, M3 *pmB)
     M3 t;
     M3 *p = pmA ? pmA : &local;
     qword a0, a1, a2;
-    t = func_0011BA08(pm->r[2], D_002A2DC0);
+    t = BuildRotateVectorsMatrix__FUxUx(pm->r[2], g_normalZ);
     a0 = t.r[0]; p->r[0] = a0;
     a1 = t.r[1]; p->r[1] = a1;
     a2 = t.r[2]; p->r[2] = a2;

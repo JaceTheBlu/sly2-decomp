@@ -11,10 +11,10 @@ struct P{char pad0[12];VE*vt;char pad10[0x150-0x10];PL*input;char pad154[0x1A8-0
 struct CLOCK{float time,dt;};struct LM{float values[3];};
 struct WORK{U reference,direction,local;M3 matrix,returned;float heading;U target;};
 extern "C"{
- void func_00190BE0(P*,float*);float RadNormalize__Ff(float);void func_00204660(P*,float);qword func_001A62E8(P*);M3* func_0011B500(M3*,qword,float);float func_002458F0(float,float);
- void func_0018C250(P*,int,int);void func_0018FC60(P*);void func_001F5078(P*);int func_001C4660(PL*,uint,float);void func_001C4738(PL*,int);void func_0019CC50(void*,int,P*,void*);
- float GSmooth__FfffP3SMPPf(float,float,float,LM*,float*);void func_001384C0(ANIMATION*);float func_0011CFE0(float,float);
- extern CLOCK D_002DDED0;extern qword D_002A2DC0;
+ void func_00190BE0(P*,float*);float RadNormalize__Ff(float);void func_00204660(P*,float);qword func_001A62E8(P*);M3* LoadRotateMatrixRad__FfUx(M3*,qword,float);float func_002458F0(float,float);
+ void SetJtJts__FP2JT3JTS4JTBS(P*,int,int);void CalculateJtHangAccel__FP2JT(P*);void func_001F5078(P*);int func_001C4660(PL*,uint,float);void func_001C4738(PL*,int);void func_0019CC50(void*,int,P*,void*);
+ float GSmooth__FfffP3SMPPf(float,float,float,LM*,float*);void ReblendAsegbl__FP6ASEGBL(ANIMATION*);float func_0011CFE0(float,float);
+ extern CLOCK D_002DDED0;extern qword g_normalZ;
  extern float D_002BF554,D_002BF558,D_002BF55C,D_002BF560,D_002BF564,D_002BF568,D_002BF56C,D_002BF58C,D_002BF590;
  extern LM D_002BF570,D_002BF580;
 }
@@ -88,23 +88,23 @@ extern "C" void func_00190520(P*p){
  : "=j"(position),"=j"(targetVector),"=f"(epsilon) : "r"(positionBits),"i"(epsilonBits>>16),"i"(epsilonBits&0xFFFF),"m"(w.target.q) : "$1");
  register qword difference __asm__("vf3");
  register uint high __asm__("$2"),savedPage __asm__("$3");
- __asm__("lui %0,%%hi(%4)\n\tvsub.xyzw %1,%3,%2" : "=r"(high),"=j"(difference) : "j"(position),"j"(targetVector),"i"(&D_002A2DC0));
+ __asm__("lui %0,%%hi(%4)\n\tvsub.xyzw %1,%3,%2" : "=r"(high),"=j"(difference) : "j"(position),"j"(targetVector),"i"(&g_normalZ));
  register qword normalized __asm__("vf1"),one __asm__("vf2");
  register qword fallbackBits __asm__("$2");register qword*fallbackPointer __asm__("$2");float length;
  __asm__("daddu %0,%3,$zero\n\tvmul.xyz %1,%4,%4\n\tvaddw.x %2,$vf0,$vf0w\n\tvadday.x $ACC,%1,%1y\n\tvmaddz.x %1,%2,%1z"
  : "=r"(savedPage),"=&j"(normalized),"=&j"(one) : "r"(high),"j"(difference));
  __asm__("addiu %0,%2,%%lo(%3)\n\tvsqrt $Q,%1x\n\tvwaitq\n\tvaddq.x %1,$vf0,$Q"
- : "=r"(fallbackPointer),"+j"(normalized) : "r"(high),"i"(&D_002A2DC0));
+ : "=r"(fallbackPointer),"+j"(normalized) : "r"(high),"i"(&g_normalZ));
  __asm__("lq %0,%2\n\tqmfc2.ni %1,%3" : "=r"(fallbackBits),"=r"(length) : "m"(*fallbackPointer),"j"(normalized));
  if(length<epsilon)normalized=fallbackBits;
  else __asm__("vdiv $Q,$vf0w,%1x\n\tvwaitq\n\tvmulq.xyzw %0,%2,$Q" : "=j"(normalized) : "j"(normalized),"j"(difference));
  qword normal=normalized;register qword*axisPointer __asm__("$2");
  register qword axis __asm__("$5");register float yaw __asm__("$f12");
- __asm__("addiu %0,%1,%%lo(%2)" : "=r"(axisPointer) : "r"(savedPage),"i"(&D_002A2DC0));
+ __asm__("addiu %0,%1,%%lo(%2)" : "=r"(axisPointer) : "r"(savedPage),"i"(&g_normalZ));
  register M3*rotationOutput __asm__("$4");
  __asm__("lwc1 %0,%3\n\tlq %1,%4\n\tla %2,%a5" : "=f"(yaw),"=r"(axis),"=r"(rotationOutput) : "m"(p->angle),"m"(*axisPointer),"p"(&w.returned));
  w.direction.q=normal;
- (void)func_0011B500(rotationOutput,axis,yaw);w.matrix=w.returned;w.local.q=Local(w.matrix,w.direction.q);
+ (void)LoadRotateMatrixRad__FfUx(rotationOutput,axis,yaw);w.matrix=w.returned;w.local.q=Local(w.matrix,w.direction.q);
  float angle=RadNormalize__Ff(func_002458F0(w.local.f[2],w.local.f[0])-1.57079637050628662109375f);
  int next=p->state;
  switch(next){
@@ -133,7 +133,7 @@ extern "C" void func_00190520(P*p){
    bool fast=X(magnitude)>limit;if(fast)next=1;}
   break;
  }
- func_0018C250(p,3,next);func_0018FC60(p);
+ SetJtJts__FP2JT3JTS4JTBS(p,3,next);CalculateJtHangAccel__FP2JT(p);
  if(p->link)func_001F5078(p->link->object);
  if(func_001C4660(p->input,0x400,0.15f)&&Can(p,3)){func_001C4738(p->input,0x400);func_0019CC50(p->action,0,0,0);}
  if(p->state==3)return;
@@ -143,7 +143,7 @@ extern "C" void func_00190520(P*p){
  activeTarget=zero;speedTarget=activeTarget;if(p->speedBlend>half)speedTarget=1.0f;break;}}
  p->activeBlend=GSmooth__FfffP3SMPPf(p->activeBlend,activeTarget,D_002DDED0.dt,&D_002BF570,0);
  p->speedBlend=GSmooth__FfffP3SMPPf(p->speedBlend,speedTarget,D_002DDED0.dt,&D_002BF580,0);
- float active=p->activeBlend,speed=p->speedBlend;float idle=1.0f-active;float combined=active*speed;float activeOnly=active*(1.0f-speed);p->combined=combined;p->idle=idle;p->activeOnly=activeOnly;func_001384C0(p->animation);
+ float active=p->activeBlend,speed=p->speedBlend;float idle=1.0f-active;float combined=active*speed;float activeOnly=active*(1.0f-speed);p->combined=combined;p->idle=idle;p->activeOnly=activeOnly;ReblendAsegbl__FP6ASEGBL(p->animation);
  float steering=Clamp(angle/D_002BF58C,-1.0f,1.0f);
  float target=p->animation->gain*(steering+1.0f);target*=0.5f;
  p->curve->slope=func_0011CFE0((target-p->curve->value)/D_002DDED0.dt,D_002BF590);

@@ -17,7 +17,7 @@ struct FR {
     int adl[6];      /* 0x34 */
     int n4C;         /* 0x4c */
 };
-extern FR *D_002DEA4C;
+extern FR *g_pfrmOpen;
 extern FR D_002DEA50[2];
 extern unsigned int D_002DEB10;
 extern VIFS D_002DEA28;
@@ -34,16 +34,16 @@ void OpenFrame()
     if (!D_003D3980)
         func_001C2A78(3);
     func_00234A60(D_002DEB1C);
-    D_002DEA4C = &D_002DEA50[D_002DEB10++];
+    g_pfrmOpen = &D_002DEA50[D_002DEB10++];
     if (D_002DEB10 >= 2)
         D_002DEB10 = 0;
-    func_00160CE0(D_002DEA4C);
-    D_002DEA4C->n4C = D_002DDF54;
-    D_002DEA4C->n30 = 1;
-    D_002DEA4C->n2C = 0;
-    D_002DEA4C->aqw24 = 0;
-    D_002DEA00.AllocStatic(D_002DEA4C->cqwGifsBuf, D_002DEA4C->aqwGifsBuf);
-    D_002DEA28.AllocStatic(D_002DEA4C->cqwVifsBuf, D_002DEA4C->aqwVifsBuf);
+    func_00160CE0(g_pfrmOpen);
+    g_pfrmOpen->n4C = D_002DDF54;
+    g_pfrmOpen->n30 = 1;
+    g_pfrmOpen->n2C = 0;
+    g_pfrmOpen->aqw24 = 0;
+    D_002DEA00.AllocStatic(g_pfrmOpen->cqwGifsBuf, g_pfrmOpen->aqwGifsBuf);
+    D_002DEA28.AllocStatic(g_pfrmOpen->cqwVifsBuf, g_pfrmOpen->aqwVifsBuf);
     D_002DEA00.AddDmaRefs(12, D_002DF740);
     D_002DEA00.AddDmaCnt();
 }

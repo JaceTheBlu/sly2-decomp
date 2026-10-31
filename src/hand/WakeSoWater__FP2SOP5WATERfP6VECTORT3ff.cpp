@@ -65,11 +65,11 @@ struct CLOCK { float t; };
 extern "C" {
 extern CLOCK D_002DDED0;
 extern int D_002BDEB0[];
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern char g_sw[];
 float GRandInRange__Fff(float lo, float hi);
 int func_0011D3F8(int lo, int hi);
-int func_00132B10(SO *p, int n);
+int FIsBasicDerivedFrom__FP5BASIC3CID(SO *p, int n);
 void func_001FB1F8(void *p, float g);
 void func_001FB098(void *p, float g);
 void *func_001FBB90(int id);
@@ -120,7 +120,7 @@ void WakeSoWater(SO *p, WATER *pwater, qword pos, qword v, float dt, float gFrac
     SND *psnd;
     float t, u;
     psnd = 0;
-    if (func_00132B10(p, 0x32))
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(p, 0x32))
         psnd = (SND *)p;
     if (d > 10.0f || fWake) {
         u = (d - 10.0f) * 0.0012658228f;
@@ -161,7 +161,7 @@ void WakeSoWater(SO *p, WATER *pwater, qword pos, qword v, float dt, float gFrac
                     psnd->t = D_002DDED0.t;
                 if (500.0f < d && pwater->px178) {
                     EMITP emitp = { 1, 0, pwater->px178->id, pwater->px17C->id, pwater->x18, 0, {{ 8.0f, 12.0f, 1.0f }} };
-                    EMITV emitv = { {{ d * 0.5f, d * 0.75f, 0.0f, 1.0f }}, p->pxE8->v, D_002A2DC0, 0, 0, 1.0f, 5.0f,
+                    EMITV emitv = { {{ d * 0.5f, d * 0.75f, 0.0f, 1.0f }}, p->pxE8->v, g_normalZ, 0, 0, 1.0f, 5.0f,
                                     {{ 0.39269909f, 1.0471976f }}, { 0 }, {{ 1.0f, 0.0f, -1.0f }} };
                     E e;
                     V4 posSplash;
@@ -171,7 +171,7 @@ void WakeSoWater(SO *p, WATER *pwater, qword pos, qword v, float dt, float gFrac
                     e.p8 = pwater->px178;
                     e.pC = pwater->px17C;
                     e.p10 = pwater;
-                    func_0015BE28(posSplash.q, D_002A2DC0, func_0011D3F8(4, 6), emitp, emitv, &e, 0, 0);
+                    func_0015BE28(posSplash.q, g_normalZ, func_0011D3F8(4, 6), emitp, emitv, &e, 0, 0);
                 }
             }
         }

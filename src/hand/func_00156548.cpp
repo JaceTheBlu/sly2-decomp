@@ -13,7 +13,7 @@ extern "C" {
 S *func_0011CCC0(void *);
 void *func_002333B4(void *, int, int);
 void func_0011A220(void *, S *);
-void func_00256EE0(S *, int);
+void __as__3SPXP1X(S *, int);
 }
 struct Lock {
     S *p;
@@ -37,7 +37,7 @@ extern "C" void func_00156548(P *p, qword q, int b, S **pps)
     func_0011A220(g_sw.dl, ps);
     ps->pvt->a[1].pfn((char *)ps + ps->pvt->a[1].d);
     Lock l(ps);
-    func_00256EE0(ps, p->n0);
+    __as__3SPXP1X(ps, p->n0);
     if (pps) *pps = ps;
     ps->pvt->a3.pfn((char *)ps + ps->pvt->a3.d, 2, 0, 0, 0, 0);
 }

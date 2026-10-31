@@ -10,10 +10,10 @@ struct S {char pad[0x50];int count;void *data;int state;char pad5c[4];int tick;c
 typedef struct {char pad[0xC];int priority;} POOL;
 extern "C" FRAME *func_001AE478(FRAME *);
 extern "C" void _$_18CBinaryInputStream(FRAME *,int);
-extern "C" BIS *func_001848A8(BIS *,int,void *,int);
+extern "C" BIS *__3OBJiPvi(BIS *,int,void *,int);
 extern "C" void func_00184950(BIS *,int);
 extern "C" void func_00258248(KEY *);
-extern "C" void *func_001AE318(MSG *);
+extern "C" void *PvAllocStackImpl__FP7SWALLOC(MSG *);
 extern "C" int func_00184D60(BIS *,KEY *);
 extern "C" void SetDecompress__18CBinaryInputStreamiPUc(BIS *,int,void *);
 extern "C" unsigned char func_00117BD0(BIS *);
@@ -64,7 +64,7 @@ extern "C" void func_002124F0(S *p) {
     MSG *msg=&work.tmp.msg;
 
     msg->cb=0x10000;msg->alignment=0x40;
-    func_001848A8(bs,0x10000,func_001AE318(msg),0);
+    __3OBJiPvi(bs,0x10000,PvAllocStackImpl__FP7SWALLOC(msg),0);
     pk->kind=2;
     func_00258248(pk);
     if(!SetKey(&work.key,p->file)||!func_00184D60(bs,pk))goto fail;

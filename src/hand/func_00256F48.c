@@ -7,7 +7,7 @@ extern unsigned int D_002DD2B4;
 extern int D_002DD598;
 void func_001286E0(void *);
 void *func_0011CCC0(POOL *);
-void func_0011CD98(POOL *, void *);
+void FreeSlotheapPv__FP8SLOTHEAPPv(POOL *, void *);
 N *func_00255A58(N *);
 
 N *func_00256F48(void)
@@ -19,7 +19,7 @@ N *func_00256F48(void)
         if (D_00452120.xC == 0) {
             void *pv = func_0011CCC0(&D_00452120);
             if (D_002DD2B4)
-                func_0011CD98(&D_00452120, pv);
+                FreeSlotheapPv__FP8SLOTHEAPPv(&D_00452120, pv);
             D_00452110[D_002DD2B4++] = pv;
         }
     }

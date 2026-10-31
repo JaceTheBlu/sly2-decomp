@@ -6,9 +6,9 @@ static __inline__ int Min(int a, int b) { return a < b ? a : b; }
 int func_00227C90(struct S *p, qword v, float g);
 MARK *func_001AE478(MARK *pm);
 void _$_18CBinaryInputStream(MARK *pm, int n);
-void *func_001AE318(MSG *pmsg);
+void *PvAllocStackImpl__FP7SWALLOC(MSG *pmsg);
 qword func_001A6F00(int a, struct S *p, qword q);
-int func_00118A88(void *p, int n, qword v, int *pc, void **ppv, float g);
+int PruneBsp__FP3BSPT0fUxPiPP3BSP(void *p, int n, qword v, int *pc, void **ppv, float g);
 int func_00227D20(struct S *p, qword v, float g)
 {
     if (g <= 1.0f) {
@@ -27,10 +27,10 @@ int func_00227D20(struct S *p, qword v, float g)
             c = cT;
             pm->cb = cT * 12;
             pm->nKind = 0x10;
-            pv = func_001AE318(pm);
+            pv = PvAllocStackImpl__FP7SWALLOC(pm);
         }
         {
-            int r = func_00118A88(p->pEC, 0x7FFFFFFF, func_001A6F00(0, p, v), &c, &pv, g);
+            int r = PruneBsp__FP3BSPT0fUxPiPP3BSP(p->pEC, 0x7FFFFFFF, func_001A6F00(0, p, v), &c, &pv, g);
             if (r == 0 || r == 2) f = 1;
         }
         _$_18CBinaryInputStream(&mark, 2);

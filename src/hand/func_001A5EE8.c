@@ -3,7 +3,7 @@ typedef struct { qword q[4]; } M4;
 struct VTE { short d; short pad; void *pfn; };
 struct O { int x0, x4, x8; struct VTE *vt; };
 void func_0011C318(M4 *out, void *in);
-void func_0011C168(M4 *out, void *a, M4 *b);
+void __ml__FRC7MATRIX4T0(M4 *out, void *a, M4 *b);
 void func_001A5EE8(struct O *o, void *m, float a, float b)
 {
     M4 t;
@@ -13,7 +13,7 @@ void func_001A5EE8(struct O *o, void *m, float a, float b)
     M4 *pinv = &inv;
     struct VTE *e = &o->vt[0xF8 / 8];
     func_0011C318(pinv, ((void *(*)(void *))e->pfn)((char *)o + e->d));
-    func_0011C168(pr, m, pinv);
+    __ml__FRC7MATRIX4T0(pr, m, pinv);
     t = r;
     e = &o->vt[0xA0 / 8];
     ((void (*)(void *, M4 *, int, float, float))e->pfn)((char *)o + e->d, &t, 0, a, b);

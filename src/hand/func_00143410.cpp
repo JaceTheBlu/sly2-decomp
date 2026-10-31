@@ -30,14 +30,14 @@ extern char D_002A4DA0[];
 short func_001D8720(void *, char *);
 int func_001D7DA0(TRIE *, KEY *, OUT *);
 CRef func_001D7ED8(TRIE *p, KEY *key, char *pb);
-void *func_001AE318(const AREQ &);
+void *PvAllocStackImpl__FP7SWALLOC(const AREQ &);
 void func_001AE5A0(void *, void *, int);
 }
 static inline CRef Lookup(KEY &k) { return func_001D7ED8(&D_003E0EA8, &k, D_003D4A60); }
 static inline void *Alloc(int cb)
 {
     AREQ req(cb, 0x10);
-    return func_001AE318(req);
+    return PvAllocStackImpl__FP7SWALLOC(req);
 }
 extern "C" KEY *func_00143410(int id)
 {

@@ -9,7 +9,7 @@ void func_001EF0D8(void *p);
 struct O *func_00205438(void *p, int n);
 qword func_001A62E8(void *p);
 qword func_001A6F00(void *p, int n, qword v);
-void func_002562A8(struct X *x);
+void __1M(struct X *x);
 void func_0017DD38(void *p, struct X *x);
 void func_0017C928(struct S *p, int n) {
     struct X x;
@@ -25,7 +25,7 @@ void func_0017C928(struct S *p, int n) {
             struct VTE *e;
             p->v60 = v;
             o->nC0 = 1; o->pA8 = p->p30; o->nAC = 1;
-            func_002562A8(&x);
+            __1M(&x);
             x.v = v;
             func_0017DD38(o, &x);
             o->n38 = 0x1C;
@@ -49,7 +49,7 @@ void func_0017C928(struct S *p, int n) {
             p->v60 = func_001A62E8(p->p30);
             v = func_001A6F00(p->p30, 0, p->v40);
             o->nC0 = 1;
-            func_002562A8(&x);
+            __1M(&x);
             x.v = v;
             func_0017DD38(o, &x);
             o->pA8 = p->p30;

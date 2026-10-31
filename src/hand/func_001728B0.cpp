@@ -9,7 +9,7 @@ typedef struct WORK{QUERY query;NODE*result256[256];NODE*result32[32];NODE*resul
 typedef struct LM{float low,high;}LM;
 extern NODE*D_003E13FC,*D_003E13F0,*D_003E1408,*D_003E13E4,*D_003E13C0,*D_003E13D8,*D_003E13CC,*D_003E13B4,*D_003E1450;
 extern char g_sw;
-extern qword D_002A2DA0,D_002A2DC0;
+extern qword D_002A2DA0,g_normalZ;
 extern const float D_002A53D0;
 extern LM D_002BE5A8,D_002BE5B0;
 
@@ -17,7 +17,7 @@ extern "C" {
 extern qword func_001A62E8(NODE*);extern float func_00204740(NODE*);
 extern int func_00172798(QUERY*);
 extern void func_001E6F60(NODE*,qword,void*,qword*,qword*,float*,float*);
-extern int func_00132B10(NODE*,int);
+extern int FIsBasicDerivedFrom__FP5BASIC3CID(NODE*,int);
 extern int func_0015E9C8(void*,int,int,NODE*,int,NODE**);
 extern int func_00172888(ROW*,ROW*);
 extern void func_002338C0(void*,unsigned,unsigned,int(*)(ROW*,ROW*));
@@ -76,7 +76,7 @@ extern "C" void func_001728B0(P*p){
  for(object=D_003E13D8;object;object=object->next104){w.query.candidate.q=func_001A62E8(object);func_00172798(&w.query);}
  for(object=D_003E13CC;object;object=object->next1B4){func_001E6F60(object,w.query.point.q,0,&w.query.candidate.q,0,0,0);func_00172798(&w.query);}
  for(object=D_003E13B4;object;object=object->nextE0){
-  if((object->flags&1)&&func_00132B10(object,0x13)){w.query.candidate.q=func_001A62E8(object);func_00172798(&w.query);}
+  if((object->flags&1)&&FIsBasicDerivedFrom__FP5BASIC3CID(object,0x13)){w.query.candidate.q=func_001A62E8(object);func_00172798(&w.query);}
  }
  {int count=func_0015E9C8(&g_sw,0x505,0x23,0,0x100,w.result256);
  if(count>0){cursor=w.result256;remaining=count;do{NODE*item=*cursor++;--remaining;w.query.candidate.q=func_001A62E8(item);func_00172798(&w.query);}while(remaining);}}
@@ -92,7 +92,7 @@ extern "C" void func_001728B0(P*p){
   PAIR*previous=0;
   for(i=0;i<(int)w.query.count&&accepted<4;i++){
    ROW*row=&w.query.row[i];qword original=row->point.q;
-   qword up=D_002A2DC0;
+   qword up=g_normalZ;
    qword delta=QwSub(original,w.query.point.q);
    qword qwFallback=D_002A2DA0;
    qword planar=QwSub(delta,QwScaleX(up,QwDot(delta,up)));

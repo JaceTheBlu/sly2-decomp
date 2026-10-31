@@ -10,7 +10,7 @@ struct S {
 extern char g_sw[];
 void func_001F36A8(struct S *p);
 struct LO *func_0015ED78(void *pg, int a, int b, struct S *p);
-void *func_0015E938(void *pg, int a, int b, struct S *p);
+void *PloFindSwObject__FP2SWi3OIDP2LO(void *pg, int a, int b, struct S *p);
 void func_001C4F60(struct S *p)
 {
     struct LO *plo;
@@ -19,11 +19,11 @@ void func_001C4F60(struct S *p)
     p->x16C = plo;
     if (plo)
         ((void (*)(void *))plo->vt[9].pf)((char *)plo + plo->vt[9].d);
-    if (p->x1A4 != -1) p->x1A8 = func_0015E938(g_sw, 4, p->x1A4, p);
-    if (p->x1AC != -1) p->x1B0 = func_0015E938(g_sw, 4, p->x1AC, p);
-    if (p->x1B4 != -1) p->x1B8 = func_0015E938(g_sw, 4, p->x1B4, p);
-    if (p->x204 != -1) p->x208 = func_0015E938(g_sw, 4, p->x204, p);
-    if (p->x20C != -1) p->x210 = func_0015E938(g_sw, 4, p->x20C, p);
-    if (p->x214 != -1) p->x218 = func_0015E938(g_sw, 4, p->x214, p);
+    if (p->x1A4 != -1) p->x1A8 = PloFindSwObject__FP2SWi3OIDP2LO(g_sw, 4, p->x1A4, p);
+    if (p->x1AC != -1) p->x1B0 = PloFindSwObject__FP2SWi3OIDP2LO(g_sw, 4, p->x1AC, p);
+    if (p->x1B4 != -1) p->x1B8 = PloFindSwObject__FP2SWi3OIDP2LO(g_sw, 4, p->x1B4, p);
+    if (p->x204 != -1) p->x208 = PloFindSwObject__FP2SWi3OIDP2LO(g_sw, 4, p->x204, p);
+    if (p->x20C != -1) p->x210 = PloFindSwObject__FP2SWi3OIDP2LO(g_sw, 4, p->x20C, p);
+    if (p->x214 != -1) p->x218 = PloFindSwObject__FP2SWi3OIDP2LO(g_sw, 4, p->x214, p);
     ((void (*)(void *, int))p->vt[76].pf)((char *)p + p->vt[76].d, p->x158);
 }

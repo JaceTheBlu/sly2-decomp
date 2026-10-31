@@ -20,7 +20,7 @@ extern float D_002A8604;
 extern int D_002C3CF0;
 void func_00203948(struct S *p);
 void func_00205E70(void);
-struct F64 *func_0013E3C8(int a, void *b, int c, int d);
+struct F64 *PloNew__F3CIDP2SO3OIDi(int a, void *b, int c, int d);
 void func_001A6CA8(struct F64 *p, int n);
 void func_002081C8(struct S *p);
 void func_00209768(struct BLOCK *p, struct S *s);
@@ -31,7 +31,7 @@ void func_00205EB8(struct S *p)
     float a, b, limit, medium, high, extent;
     func_00203948(p);
     func_00205E70();
-    p->pF64 = func_0013E3C8(0x10, 0, 0x288, -1);
+    p->pF64 = PloNew__F3CIDP2SO3OIDi(0x10, 0, 0x288, -1);
     func_001A6CA8(p->pF64, 2);
     v = p->pF64->u40;
     if ((v ^ 1) & 1)

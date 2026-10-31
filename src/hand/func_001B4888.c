@@ -4,10 +4,10 @@ struct P { char pad[0x15F0]; void *x15F0; void *x15F4; void *x15F8; void *x15FC;
 extern char D_002C0270[];
 void func_002039C0(struct P *p);
 void func_001A64E8(struct P *p, int n, void *q);
-struct T *func_001AE2A0(struct REQ *r);
+struct T *PvAllocSwClearImpl__FP7SWALLOC(struct REQ *r);
 void *func_001F4C58(struct P *p, int a, int b);
 void func_00186930(struct T *t);
-static __inline__ struct T *NewT(void) { struct REQ req; req.cb = 0xE0; req.align = 0x10; return func_001AE2A0(&req); }
+static __inline__ struct T *NewT(void) { struct REQ req; req.cb = 0xE0; req.align = 0x10; return PvAllocSwClearImpl__FP7SWALLOC(&req); }
 void func_001B4888(struct P *p)
 {
     func_002039C0(p);

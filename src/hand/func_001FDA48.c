@@ -7,7 +7,7 @@ extern struct SW g_sw;
 void func_001FCF70(void);
 void func_002330D0(int, int, int, int, int, int, int, void (*)(void), long);
 void *func_001C4840(struct SW *);
-int func_00132B10(void *, int);
+int FIsBasicDerivedFrom__FP5BASIC3CID(void *, int);
 qword func_001A62E8(void *);
 void func_00156BE0(struct O *, qword, void *, void *);
 static inline float Eval(struct V3 *pv, float t)
@@ -27,7 +27,7 @@ void func_001FDA48(struct P *p)
     }
     po = 0;
     pv = func_001C4840(&g_sw);
-    if (pv && func_00132B10(pv, 0x34) && 0.5f < p->f70) {
+    if (pv && FIsBasicDerivedFrom__FP5BASIC3CID(pv, 0x34) && 0.5f < p->f70) {
         float y;
         po = g_sw.p4034;
         q = func_001A62E8(pv);

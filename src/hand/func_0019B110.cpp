@@ -130,7 +130,7 @@ extern float D_002BF90C, D_002BF914, D_002BF918;
 qword func_001A62E8(void *plo);                                         // PosLoWorld
 void *func_002333B4(void *pv, int b, uint cb);                         // memset
 qword func_0019A750(JTAIR *pjtair, int nKind);                         // JtPlanLaunchVz
-int func_00132B10(void *plo, int cid);
+int FIsBasicDerivedFrom__FP5BASIC3CID(void *plo, int cid);
 void func_0019A4A0(JTAIR *pjtair, VU_VECTOR v, void *plo, VU_VECTOR pos, VU_VECTOR dpos, float *pt, float *pg,
                    VECTOR *ppos, VECTOR *pv);
 float FUN_001cf138(JTAIR *pjtair, void *plo, float g, float dg);
@@ -198,7 +198,7 @@ extern "C" void func_0019B110(JTAIR *pjtair, void *ploForce)
     vLaunch.q = func_0019A750(pjtair, 4);
     float tBest = 0.0f;
 
-    if (func_00132B10(pjtair->pstepplayer, 0x35)) {
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(pjtair->pstepplayer, 0x35)) {
         for (SHAPE *pshape = D_003E13D8; pshape; pshape = pshape->pshapeNext) {
             if (!(pshape->grf & grf))
                 continue;
@@ -273,7 +273,7 @@ extern "C" void func_0019B110(JTAIR *pjtair, void *ploForce)
                     continue;
                 if ((phook->grfHook & 1) == 0)
                     continue;
-                if (!func_00132B10(phook, 0x13))
+                if (!FIsBasicDerivedFrom__FP5BASIC3CID(phook, 0x13))
                     continue;
             }
             if (!(phook->grf & grf))
@@ -348,7 +348,7 @@ extern "C" void func_0019B110(JTAIR *pjtair, void *ploForce)
         }
     }
 
-    if (func_00132B10(pjtair->pstepplayer, 0x37) && D_002F7900 && D_002F7900->nPartnerState == 15 &&
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(pjtair->pstepplayer, 0x37) && D_002F7900 && D_002F7900->nPartnerState == 15 &&
         !D_002F7900->fPartnerBusy) {
         posTarget.q = func_001A62E8(D_002F7900->ploPartnerTarget);
         func_0019A4A0(pjtair, vLaunch, D_002F7900->ploPartnerTarget, posTarget, D_002A2DD0, &t, &g, &posHit, &vHit);
