@@ -50,6 +50,21 @@ commit of this branch so far). Do not regenerate it on a dirty tree you have not
 
 Newest first. Each entry: what changed, how it was verified, the metrics after it.
 
+### 2026-10-31 — Phase 2: small shared types
+
+- New headers: `dl.h` (DL, DLE, DLI), `util.h` (LM, RGBA), `cref.h` (CRef with an anonymous union, accepted by
+  ee-gcc 2.95 in C and C++; `splicewrap.h` now includes it). Field names follow Sly 1.
+- migrate_struct.py: typedef'd definitions, `struct X *` fields, field kind check (float/pointer/int), union
+  members as candidates, removal of static asserts on the stand-in's size; renames are no longer held back by
+  same-named fields of other structs (a wrong rename cannot build or keep the code; objcheck reports both).
+- tools/consolidate.py: merges every local definition of a struct by offset, with name votes and conflicts, to
+  draft a canonical layout.
+- Local definitions left: CLOCK 322 → 28, DL 41 → 18, DLI 28 → 15, DLE → 9, LM 43 → 7, RGBA 45 → 28,
+  CRef 349 → 203 (the rest are C++ classes with methods or unusual layouts). objcheck 0; progress.py 6,662/6,662.
+- What does not automate: the big classes. Local `LO` definitions (106) are stand-ins for many different derived
+  classes; `VTE` (386) and `VT` (139) carry function-pointer types that differ per file; `M3`/`M4`/`NODE`/`OBJ`/`VE`
+  are names matchers invented per file. These need per-class work (see next steps).
+
 ### 2026-10-31 — Phase 2 pilot: CLOCK in a shared header
 
 - `include/clock.h`: the Sly 2 `CLOCK` (0x60 bytes, worked out from `MarkClockTick`/`StartupClock`/`TickNow`:
@@ -132,21 +147,21 @@ of 5,908 game files: 3,223 local types, 2,474 pads, 1,929 `M2C_*`, 637 m2c temps
 
 ## Next steps
 
-With the game executable (`disc/SCUS_973.16`; not in git, ask the owner in a new container):
-1. ~~Resolve the by-name callees~~ (done, `tools/resolve_names.py`).
-2. Vtables: the vtable addresses found by resolve_names (`_vt$…` references) and the Sly 1 class layouts name
-   method slots.
-3. Splice registration table: script names of the 373 wrappers and of the engine functions they call.
+Phase 2 (types), in this order:
+1. Remaining users of the small types: the files migrate_struct.py could not convert (CLOCK 28, CRef 203, RGBA 28…)
+   need hand edits (C++ classes with inline methods, `extern … __asm__` aliases, `float a[16]`-style stand-ins).
+2. Vectors/matrices: `vec.h`/`mat.h` exist; local VECTOR/MATRIX3/MATRIX4 stand-ins mostly use `qword` rows for VU
+   code, which migrate_struct.py does not parse yet (add `qword` = 16-byte integer kind).
+3. The class tree: the class table at 0x2BAAE8 gives every class's parent, size and vtable (see the 2026-10-31
+   executable entry). Name classes (start from the 13 identified by their methods, then Sly 1 headers), write one
+   header per class with the inheritance (`struct ALO : LO`), and migrate users class by class, starting with the
+   most used (`tools/consolidate.py NAME` drafts each layout).
+4. VTE/VT: one shared `VTE { short delta; short index; void *pfn; }` needs a cast at every virtual call; do it
+   together with the class headers.
 
-Without it:
-4. Review the ~70 names mentioned in matching notes (comments such as "0x13E510 PloCloneLo").
-5. Sly 1 matching beyond the current 408 pairs: Sly 2 has ~2,000 more functions in Sly 1 source files that are
-   not paired; more evidence is needed (data/string references would help most, again from the executable).
-6. Pilot phase 2 on `CLOCK`, `VECTOR`, `MATRIX3/4` (Sly 1 headers in `sly1/include/` give field names).
-
-Running sly1match.py: `python3 tools/sly1match.py ~/sly1 [--eval]` (clone `https://github.com/TheOnlyZac/sly1`
-first). Re-running it after names were applied reports them as anchors; keep the committed
-`config/sly1_matches.csv`, which records how each name was found, unless new pairs are being added.
+Phase 1 (names), still open:
+5. `docs/NAMING_REVIEW.md`: 280 matcher-chosen names and 40 contradictions to review by hand.
+6. Vtable slot names once classes are named (each class's own slots = its overrides).
 
 ## Open questions / known issues
 

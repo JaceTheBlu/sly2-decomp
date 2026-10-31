@@ -97,6 +97,11 @@ address), the vtables and the Splice table all need the Sly 2 executable.
 5. Suggested order: basic types (vectors, matrices, `CLOCK`, `CRef`) → `LO`/`ALO`/`SO` (used everywhere) →
    player/camera → gameplay subsystems → rendering/VU.
 
+Status (2026-10-31): tooling done (`tools/migrate_struct.py`, `tools/consolidate.py`); small shared types done
+(CLOCK, DL/DLE/DLI, LM, RGBA, CRef: ~650 local definitions removed, no code change anywhere). The class tree is
+known from the executable's class table (parent, size, vtable of all 199 classes) but the classes still need names
+and headers: that per-class work is the remaining bulk of phase 2.
+
 Main risk: a field declared `char` in one file and `int` in another can change register allocation. objcheck catches
 these at once; expect 10–20% of files to need investigation.
 
