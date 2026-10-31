@@ -39,10 +39,18 @@ def symbol_table():
 
 
 def ident(name, tab):
+    """Address of a relocation target when it can be known, else its exact name.
+
+    A .cpp file that declares `float func_0011CF60(float)` outside extern "C" calls `func_0011CF60__Ff`: the address
+    is still the one in the name, and after a rename (RadNormalize__Ff) the call is `RadNormalize__Ff__Ff`, which
+    resolves through its `RadNormalize__Ff` prefix."""
     if name in tab: return '@%06X' % tab[name]
-    m = re.fullmatch(r'(?:D|func|jtbl|jumptable)_([0-9A-Fa-f]{8})', name)
+    m = re.fullmatch(r'(?:D|func|jtbl|jumptable)_([0-9A-Fa-f]{8})(?:__\w*)?', name)
     if m: return '@%06X' % int(m.group(1), 16)
-    return key(name)
+    parts = name.split('__')
+    for k in range(len(parts) - 1, 0, -1):
+        if '__'.join(parts[:k]) in tab: return '@%06X' % tab['__'.join(parts[:k])]
+    return name
 
 
 def key(name):
