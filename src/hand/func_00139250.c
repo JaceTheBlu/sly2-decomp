@@ -3,7 +3,7 @@ extern DLI *g_pdliFirst;     /* g_pdliFirst */
 extern char D_002DEAF0[];
 struct S { char pad[0x10]; int f10; char pad2[0x448 - 0x14]; DL dl; };
 void func_00139098(void *);
-void func_001A5848(struct S *);
+void OnLoRemove__FP2LO(struct S *);
 void func_001A57A8(struct S *);
 void func_001A53E0(struct S *);
 void func_0011A220(void *, struct S *);
@@ -26,7 +26,7 @@ void func_00139250(struct S *p) {
     void *pv;
     InitDli(&dli, &p->dl);
     while ((pv = PvNextDli(&dli)) != 0) func_00139098(pv);
-    func_001A5848(p);
+    OnLoRemove__FP2LO(p);
     func_001A57A8(p);
     if (!p->f10) func_001A53E0(p);
     func_0011A220(D_002DEAF0, p);

@@ -8,7 +8,7 @@ extern float D_002A6A40;
 void func_001A5D98(struct S *s);
 int func_00127DB8(void *p, int a, int b);
 void func_001A6CA8(struct S *s, int n);
-void func_001A5C48(struct S *s)
+void PostLoLoad__FP2LO(struct S *s)
 {
     struct VTE *e;
     func_001A5D98(s);

@@ -5,7 +5,7 @@ struct S {
     int xBC; char padc0[8]; struct S *xC8;
 };
 extern struct G { char pad[0x3BE8]; void *x3BE8; } g_sw;
-void func_001A5C48(struct S *p);
+void PostLoLoad__FP2LO(struct S *p);
 void *PloFindSwObject__FP2SWi3OIDP2LO(struct G *, int, int, struct S *);
 void func_001A6CA8(struct S *p, int);
 void func_002123C8(struct S *p)
@@ -13,7 +13,7 @@ void func_002123C8(struct S *p)
     unsigned int v;
     float w;
     int h;
-    func_001A5C48(p);
+    PostLoLoad__FP2LO(p);
     if (p->xBC) {
         struct G *pg = &g_sw;
         if (!pg->x3BE8)

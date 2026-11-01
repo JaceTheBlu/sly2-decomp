@@ -8,7 +8,7 @@ struct DA { int n0; int cMax; int c; struct O **a; };
 struct S { char pad[0xE0]; int c; struct O **apo; };
 void func_001AE478(struct C *);
 void _$_18CBinaryInputStream(struct C *, int);
-void func_00231170(struct S *p, void *q);
+void LoadAloFromBrx__FP3ALOP18CBinaryInputStream(struct S *p, void *q);
 void __19CLoadCollectorArray(struct DA *pda);
 void func_002317E0(struct S *p, void *q, struct DA *pda);
 int FIsBasicDerivedFrom__FP5BASIC3CID(void *p, int n);
@@ -18,7 +18,7 @@ void func_0015C1E8(struct S *p, void *q)
     struct DA da;
     MSG msg;
     int i;
-    func_00231170(p, q);
+    LoadAloFromBrx__FP3ALOP18CBinaryInputStream(p, q);
     func_001AE478(&ctx);
     __19CLoadCollectorArray(&da);
     func_002317E0(p, q, &da);

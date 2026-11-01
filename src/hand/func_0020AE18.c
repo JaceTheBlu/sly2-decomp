@@ -4,7 +4,7 @@ struct O { char pad[0x10]; struct O *pParent; };
 struct L { char pad[0x30]; qword v; };
 struct S { char pad[0x10]; struct O *pParent; int pad14; int cid; char pad2[0x7C - 0x1C]; int a, b, c; char pad3[0x90 - 0x88]; qword v90;
            struct A *pa; int nA4; int pad4[1]; struct O *pAC; char eB0[4]; int hB4; char pad5[0xC0 - 0xB8]; void *pC0; };
-void func_001A5C48(struct S *p);
+void PostLoLoad__FP2LO(struct S *p);
 int FIsBasicDerivedFrom__FP5BASIC3CID(struct O *o, int n);
 void func_00209130(void *pe, struct O *o);
 void *func_001F4C58(struct O *o, int a, int b);
@@ -13,7 +13,7 @@ void PredictAsegEffect(int h, struct O *o, int a, int b, struct L *pl, int c, fl
 void func_0020AE18(struct S *p)
 {
     struct O *o;
-    func_001A5C48(p);
+    PostLoLoad__FP2LO(p);
     for (o = p->pParent; o && !FIsBasicDerivedFrom__FP5BASIC3CID(o, 0x38); o = o->pParent)
         ;
     p->pAC = o;

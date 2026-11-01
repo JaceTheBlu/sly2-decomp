@@ -1,7 +1,7 @@
 typedef unsigned long ulong;
 struct VTE { short d; short pad; void (*pfn)(void *, int, void *); };
 struct O { char pad[0xC]; struct VTE *vt; char pad2[0x18]; ulong fl; };
-void func_001A5800(struct O *p)
+void OnLoAdd__FP2LO(struct O *p)
 {
     struct VTE *e;
     p->fl |= (ulong)1 << 60;

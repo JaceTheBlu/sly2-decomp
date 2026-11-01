@@ -13,7 +13,7 @@ extern int D_003E139C;
 void func_001A53A0(struct S *s);
 void func_001A5448(struct S *p, void **a, void ***b);
 void func_0011A280(void *a, void *b, struct S *s);
-void func_001A5270(struct S *s)
+void InitLo__FP2LO(struct S *s)
 {
     void *a;
     void **b;

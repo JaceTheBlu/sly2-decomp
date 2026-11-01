@@ -50,6 +50,17 @@ commit of this branch so far). Do not regenerate it on a dirty tree you have not
 
 Newest first. Each entry: what changed, how it was verified, the metrics after it.
 
+### 2026-11-01 — Class tree and virtual slots
+
+- `docs/CLASSES.md`: the 199 classes from the class table (parent, size, vtable, slot count) with name evidence.
+  Named with confidence: LO (2), ALO (3), SPIRE (9), EMITTER (29), SM (111), WR (115), SAA family (138–144).
+  `SO` is not under `ALO` in Sly 2 (the STEP family sits under cid 48, a child of LO).
+- Slot meanings established (LO family: 5 Handle%sMessage, 7 Init%s, 11/12 On%sAdd/Remove, 14 Load%sFromBrx,
+  15 Post%sLoad, 16 Update%s, 41 Clone%s; SAA: 8 Update%s, 9 UComplete%s): every already-named slot function fits,
+  and overrides call the parent's function in the same slot (InitEmitter → InitAlo → InitLo). 13 functions named
+  from them (InitLo, OnLoAdd, LoadAloFromBrx, CloneEmitter…). objcheck 0.
+- Next: name more classes (vtable evidence, Sly 1 order where it is kept), then each new class names its own slots.
+
 ### 2026-10-31 — Phase 2: small shared types
 
 - New headers: `dl.h` (DL, DLE, DLI), `util.h` (LM, RGBA), `cref.h` (CRef with an anonymous union, accepted by

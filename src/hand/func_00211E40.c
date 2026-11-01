@@ -1,7 +1,7 @@
 struct S { char pad[0xB0]; int f; };
-void func_001A5270(struct S *p);
+void InitLo__FP2LO(struct S *p);
 void func_00211E40(struct S *p)
 {
-    func_001A5270(p);
+    InitLo__FP2LO(p);
     p->f = 1;
 }

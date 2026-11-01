@@ -358,3 +358,6 @@ Local stand-in classes (`X`, `Y`, `O`…) reused with different meanings, or two
 Also kept as `func_` on purpose: `func_001A7518` (the game's `main`; gcc compiles a function named `main`
 differently) and `func_001AE478` (STACKSCOPE constructor: sources declare local classes whose inline constructors
 compile to the candidate names `__5FRAME` / `__10STACKSCOPE`, so renaming makes them call themselves).
+
+Also: `OnStepguardAdd__FP9STEPGUARD` (0x185CE0) sits in SPIRE's vtable slot 15, the `Post%sLoad` slot
+(see `docs/CLASSES.md`): probably `PostSpireLoad`.

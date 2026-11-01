@@ -15,7 +15,7 @@ extern "C" void *PvAllocStackImpl__FP7SWALLOC(ALLOCREQ *preq);
 extern "C" void *PvAllocSwCopyImpl__FP7SWALLOCPv(ALLOCREQ *preq, void *pv);
 extern "C" void *PvAllocSwClearImpl__FP7SWALLOC(ALLOCREQ *preq);
 extern "C" void *PvAllocSwImpl__Fi(ALLOCREQ *preq);
-extern "C" void func_001A5C28(S *p, CBinaryInputStream *pbis);
+extern "C" void LoadLoFromBrx__FP2LOP18CBinaryInputStream(S *p, CBinaryInputStream *pbis);
 extern "C" void func_00118420(CBinaryInputStream *pbis);
 static inline void *PvAllocReq(ALLOCREQ *preq, int cb, int nKind)
 {
@@ -48,7 +48,7 @@ extern "C" void func_001635F8(S *p, CBinaryInputStream *pbis)
     ALLOCREQ req;
     p->aAC = PvAllocReq(&req, 0x200, 0x10);
     p->aB4 = PvAllocReq(&req, 0x300, 0x10);
-    func_001A5C28(p, pbis);
+    LoadLoFromBrx__FP2LOP18CBinaryInputStream(p, pbis);
     p->aAC = PvShrinkReq(&req, p->cA8 * 16, 0x10, p->aAC);
     p->aB4 = PvShrinkReq(&req, p->cB0 * 0x18, 0x10, p->aB4);
     p->c94 = pbis->U8Read();

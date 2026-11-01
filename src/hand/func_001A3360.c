@@ -4,12 +4,12 @@ struct S {
     char pad3[0x118 - 0xE8]; int x118;
     char pad4[0x154 - 0x11C]; float x154; int x158; int x15c, x160; float x164; float x168;
 };
-void func_00231100(struct S *s);
+void InitAlo__FP3ALO(struct S *s);
 void func_001A6CA8(struct S *s, int n);
 void func_001A3360(struct S *s)
 {
     int v;
-    func_00231100(s);
+    InitAlo__FP3ALO(s);
     s->xE0 = 0;
     s->xE4 = -1; s->x118 = -1;
     s->x164 = 200.0f;

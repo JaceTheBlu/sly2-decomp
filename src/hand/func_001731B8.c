@@ -9,7 +9,7 @@ void *PvAllocStackClearImpl__FP7SWALLOC(struct AI *pa);
 void *PvAllocStackImpl__FP7SWALLOC(struct AI *pa);
 void *PvAllocSwCopyImpl__FP7SWALLOCPv(struct AI *pa, void *pv);
 void func_001733C8(struct S *p, qword q);
-void func_001A5C28(struct S *p, void *pv);
+void LoadLoFromBrx__FP2LOP18CBinaryInputStream(struct S *p, void *pv);
 static inline struct AI *SetAi(struct AI *pa, int cb, int align) { pa->cb = cb; pa->align = align; return pa; }
 void func_001731B8(struct S *p, void *pv) {
     struct MK mk;
@@ -19,7 +19,7 @@ void func_001731B8(struct S *p, void *pv) {
     p->p9C = PvAllocStackImpl__FP7SWALLOC(SetAi(&ai, 0x100, 0x10));
     p->p94 = PvAllocStackImpl__FP7SWALLOC(SetAi(&ai, 0x20, 0x10));
     func_001733C8(p, D_002A2DD0);
-    func_001A5C28(p, pv);
+    LoadLoFromBrx__FP2LOP18CBinaryInputStream(p, pv);
     p->p54 = PvAllocSwCopyImpl__FP7SWALLOCPv(SetAi(&ai, p->c50 * 0x1C, 0x10), p->p54);
     { void *pv9C = PvAllocSwCopyImpl__FP7SWALLOCPv(SetAi(&ai, p->c98 << 4, 0x10), p->p9C); void *pv94 = p->p94; p->p9C = pv9C; p->p94 = PvAllocSwCopyImpl__FP7SWALLOCPv(SetAi(&ai, 0x20, 0x10), pv94); }
     _$_18CBinaryInputStream(&mk, 2);

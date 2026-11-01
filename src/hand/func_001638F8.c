@@ -13,7 +13,7 @@ struct S {
 };
 extern char D_003D4A60[];
 extern char g_sw[];
-void func_001A5C48(struct S *p);
+void PostLoLoad__FP2LO(struct S *p);
 void func_0011A070(struct SL *psl, struct S *p);
 void *PloFindSwObject__FP2SWi3OIDP2LO(void *pg, int kind, int oid, void *owner);
 int func_00164018(struct S *p);
@@ -30,7 +30,7 @@ void func_001638F8(struct S *p)
     register int j asm("$16"); /* allocation: i/j tie in global alloc */
     int *pnC8;
     int *pnD0;
-    func_001A5C48(p);
+    PostLoLoad__FP2LO(p);
     if (p->f7c)
         func_0011A070(&p->f7c->children, p);
     i = 0;

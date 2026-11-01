@@ -6,7 +6,7 @@ typedef struct {
 typedef struct { char p0[0xE4]; X *px; } SO;
 extern char g_sw[];
 extern char D_002CE4A0[];
-void func_001A5C48(SO *p);
+void PostLoLoad__FP2LO(SO *p);
 void *func_002333B4(void *p, int c, int n);
 int func_00233178(const void *a, const void *b, int n);
 void *PloFindSwObject__FP2SWi3OIDP2LO(void *pg, int kind, int oid, SO *p);
@@ -21,7 +21,7 @@ void func_002586D8(SO *p)
     int o1;
     int o2 = -1;
 
-    func_001A5C48(p);
+    PostLoLoad__FP2LO(p);
     {
         X *x0 = p->px;
         o1 = x0->x20;

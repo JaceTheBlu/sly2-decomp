@@ -2,7 +2,7 @@
 M2C_UNK func_001A6730();                            /* extern */
 M2C_UNK func_002313F0(void *);                      /* extern */
 
-void func_002311B0(void *arg0, void *arg1) {
+void CloneAlo__FP3ALOT0(void *arg0, void *arg1) {
     void *temp_v1;
     void *temp_v1_2;
 

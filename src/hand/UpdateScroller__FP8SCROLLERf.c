@@ -6,7 +6,7 @@ struct SCROLLER { char pad[0x24]; short du; short dv; char pad2[0x34 - 0x28]; st
 int func_0011A1E8(struct SAI *psai);
 float func_00245A18(float x, float y);
 void func_001EDAD8(struct SCROLLER *p, float du, float dv);
-void func_001EE4E0(struct SCROLLER *p)
+void UpdateScroller__FP8SCROLLERf(struct SCROLLER *p)
 {
     float du, dv;
     if (func_0011A1E8(&p->sai)) return;

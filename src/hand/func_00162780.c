@@ -11,7 +11,7 @@ struct S {
 extern char D_003D4A60[];
 struct G { char pad[0x3A18]; char m3a18[0x10]; };
 extern struct G g_sw;
-void func_001A5C48(struct S *p);
+void PostLoLoad__FP2LO(struct S *p);
 int func_001633E8(struct S *p);
 int func_00162670(struct S *p);
 void func_001620B0(struct S *p, int n, int c, int a);
@@ -24,7 +24,7 @@ void func_00162780(struct S *p)
 {
     CRef ref;
     int *pn;
-    func_001A5C48(p);
+    PostLoLoad__FP2LO(p);
     if (!func_001633E8(p) && func_00162670(p)) {
         func_001620B0(p, 5, p->f8c, p->f90);
         func_001623D0(p, 5, p->f94, p->f98, 1);

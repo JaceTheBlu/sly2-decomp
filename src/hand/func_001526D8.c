@@ -5,13 +5,13 @@ struct R { float g; int n; float g8; };
 struct S { char pad[0x40]; unsigned int fl; char pad2[0x14]; float g58; float g5C; char pad3[0x234 - 0x60];
     struct LM lm; char pad4[0x280 - 0x23C]; int n280; char pad5[8]; struct R r; float g298; float g29C; float g2A0; float g2A4; };
 extern struct S *D_002DE570;
-void func_001A5270(struct S *p);
+void InitLo__FP2LO(struct S *p);
 void func_001A6CA8(struct S *p, int n);
 void func_001526D8(struct S *p)
 {
     unsigned int v;
     struct R *pr;
-    func_001A5270(p);
+    InitLo__FP2LO(p);
     D_002DE570 = p;
     {
         struct LM *plm = &p->lm;

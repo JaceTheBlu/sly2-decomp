@@ -4,7 +4,7 @@ struct O { char pad[0x54]; int n54; };
 struct E { int n0; int n4; void *p8; struct O *pC; int n10; int pad[2]; };
 struct S { char pad[0x40]; unsigned int u40; char pad2[0xC]; int n50; struct E *a54; int pad3; int n5C; void *p60; };
 struct AL { int cb; int n; };
-void func_001A5C48(struct S *p);
+void PostLoLoad__FP2LO(struct S *p);
 void *PloFindSwObject__FP2SWi3OIDP2LO(struct G *g, int a, int b, int c);
 struct O *PloNew__F3CIDP2SO3OIDi(int a, int b, int c, int d);
 void func_00170C50(struct O *o, int a, int b, int c);
@@ -14,7 +14,7 @@ void func_001733F8(struct S *p) {
     int i;
     struct AL al;
     unsigned int f;
-    func_001A5C48(p);
+    PostLoLoad__FP2LO(p);
     for (i = 0; i < p->n50; i++) {
         struct E *e = &p->a54[i];
         switch (e->n0) {

@@ -9,7 +9,7 @@ struct K { int a, b; };
 struct G;
 extern struct G g_sw;
 extern struct K D_002A8270;
-void func_001A5848(struct P *);
+void OnLoRemove__FP2LO(struct P *);
 void func_001F2BA8(struct P *);
 void func_00149B58(struct G *, int, struct P *, struct K, int);
 void func_001F37C8(struct P *, int);
@@ -32,7 +32,7 @@ void func_001F2D48(struct P *p)
     DLI dli;
     struct O *po;
     int n;
-    func_001A5848(p);
+    OnLoRemove__FP2LO(p);
     func_001F2BA8(p);
     p->n130 = 0;
     p->f12C = 1.0f;
