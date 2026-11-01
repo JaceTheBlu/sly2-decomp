@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 struct VTE { short d; short pad; int (*pfn)(void *); };
 struct SO { char pad[0xC]; struct VTE *vt; char pad1[0x240 - 0x10]; qword pos; char pad2[0x11AC - 0x250]; int x11AC; };
@@ -19,7 +20,6 @@ int ClsgClipEdgeToBsp__FP3BSPT0UxUxiP3LSG(void *p, int mask, qword a, qword b, i
 int func_00227C90(void *p, qword v);
 int func_00154770(struct T *p, struct SO *pso);
 int func_001545F0(struct T *p, struct SO *pso);
-static inline qword Add(qword a, qword b) { qword d; __asm__("vadd.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 
 int func_001541D8(struct T *p, struct SO *pso, int k)
 {
@@ -36,7 +36,7 @@ int func_001541D8(struct T *p, struct SO *pso, int k)
     if (FIsBasicDerivedFrom__FP5BASIC3CID(pso, 0x34) && pso->x11AC) { k = 0; goto done; }
     if (p->xF0) { k = 1; goto done; }
     if (FIsBasicDerivedFrom__FP5BASIC3CID(pso, 0x33))
-        v = Add(func_001A62E8(pso), pso->pos);
+        v = QwAdd(func_001A62E8(pso), pso->pos);
     else
         v = func_001A62E8(pso);
     for (pw = D_003E1480; pw; pw = pw->pNext) {

@@ -1,7 +1,7 @@
+#include "vu0.h"
 #include "clock.h"
 #include "util.h"
 
-static __inline__ float sqrtf(float g) { float r; __asm__ __volatile__("sqrt.s %0, %1" : "=&f"(r) : "f"(g)); return r; }
 
 
 typedef struct JOY {
@@ -112,8 +112,8 @@ int func_00187998(JOY *p)
                     p->y = -p->gDpad;
                 if (p->x * p->y != 0.0f) {
 
-                    p->x = p->x * sqrtf(0.5f);
-                    p->y = p->y * sqrtf(0.5f);
+                    p->x = p->x * GSqrt(0.5f);
+                    p->y = p->y * GSqrt(0.5f);
 
                 }
                 p->uDeflect = 1.0f;

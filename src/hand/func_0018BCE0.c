@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Update actor movement modes and curve transition checks.
 
 typedef int qword __attribute__((mode(TI)));
@@ -37,7 +38,6 @@ extern qword func_001A62E8(void *p);
 extern void func_0011E7C8(qword a, qword b, qword c, qword d, float *parameters, float *distance, qword *direction);
 extern void func_00189618(void *p);
 
-static __inline__ qword VMulX(qword a, qword s) { qword r; __asm__("vmulx.xyzw %0, %1, %2x" : "=j"(r) : "j"(a), "j"(s)); return r; }
 
 void func_0018BCE0(char *p)
 {
@@ -69,7 +69,7 @@ void func_0018BCE0(char *p)
                     : "i"(&D_002BF3D4) : "memory");
         }
         u.q = s;
-        F(qword, 0x190) = VMulX(motion, s);
+        F(qword, 0x190) = QwScaleX(motion, s);
 
         break;
     }
@@ -84,7 +84,7 @@ void func_0018BCE0(char *p)
                         : "i"(&D_002BF3D8), "m"(F(qword, 0x190)) : "memory");
             }
             u.q = s;
-            F(qword, 0x190) = VMulX(motion, s);
+            F(qword, 0x190) = QwScaleX(motion, s);
 
             F(float, 0x180) = 1.0f;
         }

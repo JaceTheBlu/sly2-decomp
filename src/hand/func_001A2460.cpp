@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];int i[4];};
 struct M4 {U r[4];};
@@ -17,7 +18,6 @@ extern "C" P*func_001F7598(HIT*);
 extern "C" int func_001A2788(P*,L*,qword*);
 extern "C" void func_002309E8(void*,void*,M4*,M4*,float);
 extern "C" M4 __ml__FRC7MATRIX4T0(const M4*,const M4*);
-static inline float Z(qword q){float f;__asm__("pextuw %0,$zero,%1":"=r"(f):"r"(q));return f;}
 static inline qword Direction(P*p){return ((qword(*)(void*))p->vt[33].fn)((char*)p+p->vt[33].delta);}
 extern "C" void func_001A2460(P*p){
  U point;
@@ -32,7 +32,7 @@ extern "C" void func_001A2460(P*p){
  if(!valid)return;
  if(p->link->kind){
   int notify=0;
-  if(Z(Direction(p))<0.0f||(p->state==-1&&p->mode!=7))notify=1;
+  if(GetZ(Direction(p))<0.0f||(p->state==-1&&p->mode!=7))notify=1;
   if(notify){
    HIT hit;
    func_002333B4(&hit,0,sizeof(hit));

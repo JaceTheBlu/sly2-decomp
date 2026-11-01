@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "util.h"
 // func_001453F0: camera/AI state update. Keys: `f = func_001459C0(p) != 0; if (f)` (stops loop.c hoisting constant 1), inline GClamp.
 typedef int qword __attribute__((mode(TI)));
@@ -37,7 +38,6 @@ static __inline__ float LenXY(qword d)
     __asm__("qmfc2.ni %0, %1" : "=r"(g) : "j"(t));
     return g;
 }
-static __inline__ qword Sub(qword a, qword b) { qword d; __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 static __inline__ float Len(qword d)
 {
     qword t;
@@ -48,7 +48,7 @@ static __inline__ float Len(qword d)
     return g;
 }
 static __inline__ void GClamp(float *pg, float lo, float hi) { if (*pg < lo) *pg = lo; else if (hi < *pg) *pg = hi; }
-static __inline__ int FFar(qword a, qword b) { float lim = D_002BD340; return lim < LenXY(Sub(a, b)); }
+static __inline__ int FFar(qword a, qword b) { float lim = D_002BD340; return lim < LenXY(QwSub(a, b)); }
 
 void func_001453F0(struct P *p)
 {
@@ -62,12 +62,12 @@ void func_001453F0(struct P *p)
     pv30 = p->p30;
     a = func_001A62E8(po);
     b = func_001A62E8(pv30);
-    gXY = LenXY(Sub(a, b));
+    gXY = LenXY(QwSub(a, b));
     pso = func_001450E0(p);
     if (pso) {
         qword c = func_001A62E8(pso);
-        float dA = Len(Sub(c, a));
-        float dB = Len(Sub(c, b));
+        float dA = Len(QwSub(c, a));
+        float dB = Len(QwSub(c, b));
         g = dA < dB ? dA : dB;
     } else {
         g = D_002A4E34;

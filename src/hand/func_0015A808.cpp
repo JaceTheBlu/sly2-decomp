@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "util.h"
 // func_0015A808: EMITB choose emit position/direction.
 // Notes: the unused case-1 VU_VECTOR[3] frees the stack slot that case 3's an[] reuses; VLen = one length-squared asm
@@ -36,8 +37,6 @@ float GRandInRange__Fff(float gMin, float gMax);
 void func_001E6F10(MESHO *pmesh, float g, qword *ppos, qword *pnormal);
 MATRIX3 *func_001A6318(void *palo);
 }
-static inline qword Sub(qword a, qword b) { qword d; __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
-static inline qword Add(qword a, qword b) { qword d; __asm__("vadd.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 static inline qword Cross(qword a, qword b)
 {
     qword d;
@@ -176,7 +175,7 @@ extern "C" void func_0015A808(EMITB *p, int i, int c, qword *ppos, qword *pv)
         *pv = pep->v40;
         break;
     case 1:
-        *pv = Sub(*ppos, pep->v40);
+        *pv = QwSub(*ppos, pep->v40);
         break;
     case 4: {
         void *palo = p->pemito->palo;
@@ -200,6 +199,6 @@ normalize:
         VU_VECTOR dir = Normalize(*pv);
         *pv = dir.q;
         qword pos = *ppos;
-        *ppos = Add(pos, Scale(VU_FLOAT(GRandInRange__Fff(pep->lm.gMin, plm->gMax)), dir));
+        *ppos = QwAdd(pos, Scale(VU_FLOAT(GRandInRange__Fff(pep->lm.gMin, plm->gMax)), dir));
     }
 }

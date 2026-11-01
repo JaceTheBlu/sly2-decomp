@@ -18,7 +18,6 @@ static inline float Length(qword v)
  __asm__("vsqrt Q,%1x\n\tvwaitq\n\tvaddq.x %0,$vf0,Q":"=j"(d):"j"(d));
  __asm__("qmfc2.ni %0,%1":"=r"(f):"j"(d));return f;
 }
-static inline qword Broadcast(float f) { qword r;__asm__("qmtc2.ni %1,%0":"=j"(r):"r"(f));return r; }
 static inline qword MAdd(qword p,qword v,qword k) {qword r;__asm__("vadda.xyzw ACC,%1,$vf0\n\tvmaddx.xyzw %0,%2,%3x":"=j"(r):"j"(p),"j"(v),"j"(k));return r; }
 qword func_00167DA0(const struct M4 *m,qword p,float *radius)
 {
@@ -28,7 +27,7 @@ qword func_00167DA0(const struct M4 *m,qword p,float *radius)
  if(*radius<len) {
   float ratio=(len-*radius)*0.5f/len;
   *radius=(len+*radius)*0.5f;
-  u.q=Broadcast(ratio);
+  u.q=QwFromG(ratio);
   p=MAdd(p,d,u.q);
  }
  return p;

@@ -1,3 +1,4 @@
+#include "vu0.h"
 // func_001E6A30: closest point on a path (chain of control points under the path's own matrix) to a query point,
 // searched from a starting time. func_001E7538 turns the starting time into a segment index; the loop projects the point on that
 // segment (segment vector rotated by the matrix, point minus the transformed start) and walks to the next / previous segment (wrapping
@@ -82,7 +83,6 @@ static inline VV Root(VV a)
     __asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q" : "+j"(a));
     return a;
 }
-static inline float ToFloatR(qword v) { float f; __asm__("mtc1 %1,%0" : "=f"(f) : "r"(v)); return f; }
 static inline VV LengthOf(const U &v)
 {
     qword d, one;
@@ -123,9 +123,9 @@ extern "C" void func_001E6A30(PATH *p, qword point, SPACE *space, qword *outPosi
             segment.q = func_001FA970(space, segment.q);
         }
         qword length = LengthOf(segment);
-        float size = ToFloatR(length);
+        float size = GetX(length);
         segment.q = NormalizeTo(segment, length);
-        float distance = ToFloatR(DotInto(segment.q, delta));
+        float distance = GetX(DotInto(segment.q, delta));
         fraction = 0.0f;
         if (distance < 0.0f) {
             if (forward) { fraction = 1.0f; index = previous; break; }

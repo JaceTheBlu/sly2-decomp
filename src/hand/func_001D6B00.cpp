@@ -102,9 +102,7 @@ struct VECTOR {
         __asm__("mfc1 %0,%2\n\tmfc1 %1,%3\n\tpextlw %0,%1,%0\n\tmfc1 %1,%4\n\tpcpyld %0,%1,%0" : "=&r"(q), "=&r"(t) : "f"(x), "f"(y), "f"(z));
     }
 };
-static inline qword QwToVf(qword v) { qword r; __asm__("qmtc2.ni %1,%0" : "=j"(r) : "r"(v)); return r; }
 static inline qword QwFromVf(qword v) { qword r; __asm__("qmfc2.ni %0,%1" : "=r"(r) : "j"(v)); return r; }
-static inline float GFromVf(qword v) { float g; __asm__("mtc1 %1,%0" : "=f"(g) : "r"(v)); return g; }
 static inline float GFromVfBits(qword v)
 {
     int n;
@@ -133,7 +131,7 @@ static inline qword Normalize(qword v)
 {
     qword fallback = D_002A2DA0;
     qword l = Length(v);
-    if (GFromVf(l) < 0.0001f)
+    if (GetX(l) < 0.0001f)
         l = fallback;
     else
         l = Div(v, l);
@@ -156,7 +154,7 @@ static inline qword NormalizeTo(qword v)
 {
     qword fallback = D_002A2DA0;
     qword l = Length(v);
-    if (GFromVf(l) < 0.0001f)
+    if (GetX(l) < 0.0001f)
         goto tiny;
     return Div(v, l);
 tiny:
@@ -195,7 +193,7 @@ extern "C" void func_001D6B00(LAUNCH *plaunch, SO *pso)
         MATRIX4 mat;
         __ml__FRC7MATRIX4T0(&mat, &pxf->matWorld, &matParent);
         dpos = QwSub(Point(mat, plaunch->posTarget), posStart);
-        dist = GFromVf(Length(dpos));
+        dist = GetX(Length(dpos));
         float t = GClamp(GFromClq(plaunch->clqPredict, dist), plaunch->lmPredict.gMin, plaunch->lmPredict.gMax);
         if (t != 0.0f) {
             MATRIX4 matPredict;
@@ -204,7 +202,7 @@ extern "C" void func_001D6B00(LAUNCH *plaunch, SO *pso)
             dpos = QwSub(Point(matPredict, plaunch->posTarget), posStart);
         }
     }
-    dist = GFromVf(Length(dpos));
+    dist = GetX(Length(dpos));
     float offset = GClampR(GFromClq(plaunch->clqOffset, dist), plaunch->lmOffset.gMin, plaunch->lmOffset.gMax);
     qword posAim;
     qword posLaunch = AddScaled(posOrigin, VU_FLOAT(offset), Normalize(dpos));

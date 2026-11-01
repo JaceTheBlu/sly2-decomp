@@ -1,3 +1,4 @@
+#include "vu0.h"
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((t*)0)->m))
 typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];int bits[4];void Clear(){bits[0]=bits[1]=bits[2]=0;}};
@@ -45,7 +46,6 @@ static inline qword Position(){
  __asm__("lq %0,%1":"=r"(value):"m"(manager->position.q));
  return value;
 }
-static inline qword From(qword a){qword r;__asm__("qmtc2.ni %1,%0":"=j"(r):"r"(a));return r;}
 static inline float X(qword a){int word;float f;__asm__("qmfc2.ni %0,%1":"=r"(word):"j"(a));__asm__("mtc1 %1,%0":"=f"(f):"r"(word));return f;}
 static inline qword Difference(U*a,qword b,C*c,P*&actor){
  register qword x __asm__("vf1"),y __asm__("vf2");register P*owner __asm__("$4");
@@ -135,12 +135,12 @@ extern "C" void func_001A0B40(C*p,int next){
   p->actor->frozen=1;p->changed=g_clock.time;break;
  case 8:
   {qword moving=Vector(p->actor);P*actor=p->actor;
-  register qword mv __asm__("vf4")=From(moving),axis __asm__("vf1"),dot __asm__("vf2"),one __asm__("vf3");float threshold;
+  register qword mv __asm__("vf4")=QwToVf(moving),axis __asm__("vf1"),dot __asm__("vf2"),one __asm__("vf3");float threshold;
   __asm__("li.s %0,%F2\n\tlqc2 %1,%3":"=&f"(threshold),"=j"(axis):"F"(-250.0f),"m"(actor->forward.q));
   __asm__("vmul.xyz %0,%2,%3\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=&j"(dot),"=&j"(one):"j"(mv),"j"(axis));
   if(X(dot)>threshold)next=9;
   else{
-   register qword v __asm__("vf2")=From(Vector(actor));
+   register qword v __asm__("vf2")=QwToVf(Vector(actor));
    float fraction,lower;register LIMIT*range __asm__("$2");
    __asm__("lui $3,%%hi(%5)\n\tvmul.xy $vf1,%4,%4\n\tvaddy.x $vf1,$vf1,$vf1y\n\taddiu %2,$3,%%lo(%5)\n\tvsqrt $Q,$vf1x\n\tvwaitq\n\tvaddq.x $vf1,$vf0,$Q\n\tlwc1 $f1,8(%2)\n\tqmfc2.ni $4,$vf1\n\tlwc1 $f2,4(%2)\n\tmtc1 $4,$f0\n\tlwc1 %0,%%lo(%5)($3)\n\tmul.s $f1,$f0,$f1\n\tlui %2,%%hi(%6)\n\tlwc1 %1,%%lo(%6)(%2)\n\tsqc2 %4,%3\n\taddiu %2,%2,%%lo(%6)\n\tadd.s $f2,$f2,$f1\n\tmul.s $f0,$f0,$f2\n\tadd.s %0,%0,$f0":"=&f"(fraction),"=&f"(lower),"=&r"(range),"=m"(velocity.q):"j"(v),"i"(&D_002BFA20),"i"(&D_002BBB60):"$3","$4","$f0","$f1","$f2","vf1","memory");
    float blend=ClampKnownLower(fraction,lower,range);

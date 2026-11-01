@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f; } U;
 typedef struct { int a, b; } S8;
@@ -13,7 +14,6 @@ extern S8 D_002A7840;
 void func_001F4FB0(void *, OBJ *, int);
 int FIsBasicDerivedFrom__FP5BASIC3CID(void *, int);
 void func_00149AB8(void *, void *, S8, void *);
-static inline float GetZ(qword q) { float f; __asm__("pextuw %0, $0, %1" : "=r"(f) : "r"(q)); return f; }
 void func_001D4050(void *a, OBJ *p, int n)
 {
     void *e;

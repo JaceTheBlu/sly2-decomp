@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 /* func_001E9090: one simulation step of a rope-like path chain.
  *
@@ -60,7 +61,6 @@ static inline VV TransformPoint(const M4 &m, VV v)
 }
 static inline VV Sub(VV a, VV b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline float GFromVf(VV v) { float g; __asm__("qmfc2.ni %0, %1" : "=r"(g) : "j"(v)); return g; }
-static inline float GFromQw(qword q) { float g; __asm__("mtc1 %1, %0" : "=f"(g) : "r"(q)); return g; }
 static inline VV Sqrt(VV v) { qword r; __asm__("vsqrt $Q, %1x\n\tvwaitq\n\tvaddq.x %0, $vf0, $Q" : "=j"(r) : "j"(v)); return r; }
 static inline VV Dot(VV a, VV b)
 {
@@ -102,7 +102,6 @@ static inline VV VecCombo3(VV base, VU_FLOAT g1, VV v1, VU_FLOAT g2, VV v2)
             : "=j"(r) : "j"(base), "j"(g1.q), "j"(v1), "j"(g2.q), "j"(v2));
     return r;
 }
-static inline float Abs(float g) { return __builtin_fabsf(g); }
 
 void func_001E9090(CHAIN *p)
 {
@@ -121,8 +120,8 @@ void func_001E9090(CHAIN *p)
         VV pos = VecCombo3(p->position[i].q, VU_FLOAT(dt * 0.5f), p->velocity[i].q, VU_FLOAT(dt * 0.5f), vel);
         VV delta = Sub(pos, prev);
         VV dir = NormalizeSafe(delta, D_002A2DA0);
-        float proj = -GFromQw(DotVf1(Sub(vel, prevVel), dir));
-        float d = Abs(p->distance[i] - p->distance[i - 1]);
+        float proj = -GetX(DotVf1(Sub(vel, prevVel), dir));
+        float d = GAbs(p->distance[i] - p->distance[i - 1]);
         prev = AddScaled(prev, VU_FLOAT(d), dir);
         prevVel = AddScaled(vel, VU_FLOAT(proj), dir);
         p->position[i].q = prev;

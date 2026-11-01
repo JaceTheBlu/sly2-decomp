@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct M3 { qword r[3]; };
@@ -36,7 +37,6 @@ static inline M3 Mul(const M3 &a, const M3 &b) return r
         : "=j"(r.r[2]) : "j"(a0), "j"(a1), "j"(a2), "j"(b.r[2]));
 }
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } };
-static inline qword Sub(qword a, qword b) { qword d; __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 static inline float Length(qword a)
 {
     qword d, one;
@@ -73,7 +73,7 @@ void func_00151950(X *p)
             float g = GSmooth__FfffP3SMPPf(rad, 0.0f, g_clock.dt, D_002BDAB0, 0);
             mNew = Mul(LoadRotateMatrixRad__FfUx(axis.q, g), m.m3);
         }
-        qword d = Sub(g_cm.pos, m.q.r[3]);
+        qword d = QwSub(g_cm.pos, m.q.r[3]);
         float dist = Length(d);
         qword pos;
         if (dist < 0.0001f)

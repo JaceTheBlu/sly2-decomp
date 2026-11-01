@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef struct { qword r[4]; } M4;
 struct CTX { int a[4]; CTX(); ~CTX(); };
@@ -17,8 +18,6 @@ extern float D_002A76D0, D_002A76D4;
 static inline void *Alloc(int cb) { return PvAllocStackImpl__FP7SWALLOC(AREQ(cb, 0x10)); }
 static inline qword MulPt(M4 *m, qword v) { qword r; __asm__("vmulax.xyz $ACC, %1, %2x\n\tvmadday.xyz $ACC, %3, %2y\n\tvmaddaz.xyz $ACC, %4, %2z\n\tvmaddw.xyz %0, %5, $vf0w" : "=j"(r) : "j"(m->r[0]), "j"(v), "j"(m->r[1]), "j"(m->r[2]), "j"(m->r[3])); return r; }
 static inline M4 *GetMat(X *p) { return p->vt[31].pfn((X *)((char *)p + p->vt[31].d)); }
-static inline qword Min(qword a, qword b) { qword r; __asm__("vmini.xyz %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
-static inline qword Max(qword a, qword b) { qword r; __asm__("vmax.xyz %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 
 extern "C" void func_001BD040(X *p)
 {
@@ -36,8 +35,8 @@ extern "C" void func_001BD040(X *p)
     a[p->c - 1] = p->vmin.q;
     for (i = 1; i < p->c - 1; i++) {
         qword v = MulPt(&m, p->apos[i]);
-        p->vmin.q = Min(p->vmin.q, v);
-        p->vmax.q = Max(p->vmax.q, v);
+        p->vmin.q = QwMin(p->vmin.q, v);
+        p->vmax.q = QwMax(p->vmax.q, v);
         a[i] = v;
     }
     p->vmin.f[2] = D_002A76D0;

@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 // Change a selector's input mode and, when the joystick points somewhere, move the selection to the
 // enabled item that lies closest along that direction from the current one.
@@ -49,7 +50,6 @@ static inline qword XYZ(float x, float y, float z, U &home)
     home.q = r;
     return home.q;
 }
-static inline qword ToVF(qword v) { qword r; __asm__("qmtc2.ni %1,%0" : "=j"(r) : "r"(v)); return r; }
 static inline qword Zero() { qword r; __asm__("vsub.xyzw %0,$vf0,$vf0" : "=j"(r)); return r; }
 static inline qword Normalize(qword a)
 {
@@ -68,7 +68,6 @@ static inline qword Splat(const float &f, U &home)
     home.q = s;
     return home.q;
 }
-static inline qword Scale(qword a, qword s) { qword r; __asm__("vmulx.xyzw %0,%1,%2x" : "=j"(r) : "j"(a), "j"(s)); return r; }
 // b by const reference: the ray lives in a stack slot, so the two Adds are not CSEd and each
 // reloads it into the register the result goes to.
 static inline qword Add(qword a, const qword &b) { qword r; __asm__("vadd.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
@@ -88,14 +87,14 @@ void func_001DB0C8(SELECTOR *sel, int mode)
     qword position = XYZ(current->x, current->y * D_002C3280, 0.0f, home);
     qword direction;
     if (sel->input)
-        direction = ToVF(XYZ(sel->input->x, -sel->input->y, 0.0f, home));
+        direction = QwToVf(XYZ(sel->input->x, -sel->input->y, 0.0f, home));
     else
         direction = Zero();
-    qword ray = Scale(Normalize(direction), Splat(D_002C3274, home));
+    qword ray = QwScaleX(Normalize(direction), Splat(D_002C3274, home));
     int bestId = -1;
     float best = D_002A79C8;
     for (int i = 0; i < sel->count; i++) {
-        qword origin = ToVF(position);
+        qword origin = QwToVf(position);
         ITEM *item = &sel->items[i];
         if (item == current)
             continue;

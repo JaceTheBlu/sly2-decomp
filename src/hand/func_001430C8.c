@@ -6,7 +6,7 @@ extern float D_002BD2C4;
 qword func_001A62E8(void *p);
 qword func_001A6F00(void *pm, struct P *p, qword v);
 float func_002458F0(float y, float x);
-static __inline__ float GAbs(float g) { return g < 0.0f ? -g : g; }
+static __inline__ float GAbsCmp(float g) { return g < 0.0f ? -g : g; }
 int func_001430C8(struct P *p)
 {
     int n;

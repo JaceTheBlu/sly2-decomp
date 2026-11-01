@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "util.h"
 // func_00155FB0: matched from v8.
 // g_normalZ: Sly 1 name of the (0,0,1) vector at g_normalZ.
@@ -55,7 +56,6 @@ static inline qword Scale(VU_VECTOR v, VU_FLOAT s) { qword r; __asm__("vmulx.xyz
 static inline qword ScaleR(VU_VECTOR v, const VUV &s) { qword r; __asm__("vmulx.xyzw %0, %1, %2x" : "=j"(r) : "j"(v.q), "j"(s.q), "j"(v.q)); return r; }
 static inline qword Sub2(qword a, qword b) { qword d; __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b) : "vf4"); /* clobber of dead vf4 */ return d; }
 static inline qword Add(qword a, qword b) { qword d; __asm__("vadd.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b), "j"(a)); /* extra operand: allocation only */ return d; }
-static inline qword Sub(qword a, qword b) { qword d; __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 static inline float Len(qword a)
 {
     qword d, t;
@@ -72,7 +72,7 @@ static inline int FFast(qword v) { return D_002BDC98 < Len(v); }
 qword func_00155FB0(void *p, qword pos)
 {
     SO *pso = func_001C4840(g_sw);
-    float dist = Len(Sub(func_001A62E8(pso), pos));
+    float dist = Len(QwSub(func_001A62E8(pso), pos));
     float u = func_00154C90(D_002DE578);
     qword posTarget = AddScaled(func_001A62E8(pso), g_normalZ, VU_FLOAT(50.0f));
     VUV off;
@@ -108,7 +108,7 @@ qword func_00155FB0(void *p, qword pos)
         M3 *pm2 = func_001A6318(pso);
         off.q = func_0011E1A0(func_002458F0(((float *)pm)[1], ((float *)pm2)[0]), D_002BDC98, 0.0f);
     }
-    DecomposeSphere__FUxPfN21(Sub(Add(posTarget, off.q), pos), &pan, &tilt, &s);
+    DecomposeSphere__FUxPfN21(QwSub(Add(posTarget, off.q), pos), &pan, &tilt, &s);
     func_001AE478(&frame);
     func_001B44D8(&c, &av);
     gBest = D_002A513C;

@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "dl.h"
 #include "clock.h"
 // func_00139DC0 (0x139DC0): CPU fallback of func_00139AB8 (taken when p->x160 != 0 or D_002BC9C0 is set). For every particle
@@ -18,8 +19,6 @@ static inline qword AddScaled(qword a, qword b, VU_FLOAT s)
     __asm__("vadda.xyzw $ACC, %1, $vf0\n\tvmaddx.xyzw %0, %2, %3x" : "=j"(r) : "j"(a), "j"(b), "j"(s.q));
     return r;
 }
-static inline qword Min(qword a, qword b) { qword r; __asm__("vmini.xyz %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
-static inline qword Max(qword a, qword b) { qword r; __asm__("vmax.xyz %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword Mid(qword a, qword b, VU_FLOAT h)
 {
     qword c;
@@ -140,8 +139,8 @@ void func_00139DC0(struct P *p)
             *pcd = *pcs;
             if (p->x43C == 2)
                 pcd->v.w = RadNormalize__Ff(pcs->v.w + pcs->v.z * pclock->dt);
-            *(qword *)&vMin = Min(*(qword *)&vMin, CA(pcd)[0].q);
-            *(qword *)&vMax = Max(*(qword *)&vMax, CA(pcd)[0].q);
+            *(qword *)&vMin = QwMin(*(qword *)&vMin, CA(pcd)[0].q);
+            *(qword *)&vMax = QwMax(*(qword *)&vMax, CA(pcd)[0].q);
             }
             j++;
         }

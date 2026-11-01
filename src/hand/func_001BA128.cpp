@@ -1,3 +1,4 @@
+#include "vu0.h"
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((t*)0)->m))
 typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];};
@@ -31,9 +32,6 @@ extern qword D_002C0A80,D_002C0A90,D_002C0AA0;
 extern GAME g_sw;
 }
 struct MARK{MARK(){func_001AE478(this);}~MARK(){_$_18CBinaryInputStream(this,2);}};
-static inline qword Vector(qword r){qword v;__asm__("qmtc2.ni %1,%0":"=j"(v):"r"(r));return v;}
-static inline qword Sub(qword a,qword b){qword q;__asm__("vsub.xyzw %0,%1,%2":"=j"(q):"j"(a),"j"(b));return q;}
-static inline qword Add(qword a,qword b){qword q;__asm__("vadd.xyzw %0,%1,%2":"=j"(q):"j"(a),"j"(b));return q;}
 static inline float Square(qword a){qword one;float f;__asm__("vmul.xyz %0,%0,%0\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"+j"(a),"=&j"(one));__asm__("qmfc2.ni %0,%1":"=r"(f):"j"(a));return f;}
 typedef char U_Size[sizeof(U)==16?1:-1];
 typedef char M3_Size[sizeof(M3)==48?1:-1];
@@ -63,15 +61,15 @@ extern "C" void func_001BA128(P*p){
   float nearest=D_002A7620;
   for(P*node=D_003E1444;node;node=node->next){
    if(node==p||func_00209A68(node,7))continue;
-   qword origin=Vector(func_001A62E8(p));
-   float distance=Square(Sub(origin,func_001A62E8(node)));
+   qword origin=QwToVf(func_001A62E8(p));
+   float distance=Square(QwSub(origin,func_001A62E8(node)));
    if(nearest<distance)continue;
    if(func_00227C90(volume,func_001A62E8(node))){p->target=node;nearest=distance;}
   }
   if(!p->target&&!func_00209A68(p,2)){
-   qword position=Vector(func_001A6F00(p,0,D_002C0A80));
-   qword low=Add(position,D_002C0A90);
-   qword high=Add(position,D_002C0AA0);
+   qword position=QwToVf(func_001A6F00(p,0,D_002C0A80));
+   qword low=QwAdd(position,D_002C0A90);
+   qword high=QwAdd(position,D_002C0AA0);
    MARK arena;
    int count;ROW**rows;
    func_0020FAA0(&g_sw,low,high,func_001BA100,0,&count,&rows);
@@ -88,7 +86,7 @@ extern "C" void func_001BA128(P*p){
   NODE*node=p->node;
   qword position=func_001A62E8(p->target);
   qword local=func_0022FC48(0,node->space,position);
-  qword direction=Sub(local,p->node->position);
+  qword direction=QwSub(local,p->node->position);
   M3 matrix;BuildRotateVectorsMatrix__FUxUx(&matrix,p->axis,direction);
   MOTION*motion=p->motion;
   motion->angles=DecomposeRotateMatrixEuler__FP7MATRIX3(&matrix);

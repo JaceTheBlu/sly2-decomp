@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 struct AL { int cb; int cbAlign; AL(int c, int a) { cb = c; cbAlign = a; } };
 struct CBinaryInputStream;
@@ -13,8 +14,6 @@ void *PvAllocSwClearImpl__FP7SWALLOC(AL *pal);
 extern qword g_normalZ;
 static inline void *PvAlloc(int cb, int cbAlign) { AL al(cb, cbAlign); return PvAllocSwImpl__Fi(&al); }
 static inline void *PvAllocClear(int cb, int cbAlign) { AL al(cb, cbAlign); return PvAllocSwClearImpl__FP7SWALLOC(&al); }
-static inline qword Sub(qword a, qword b) { qword d; __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
-static inline qword Add(qword a, qword b) { qword d; __asm__("vadd.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 static inline qword Cross(qword a, qword b)
 {
     qword d;
@@ -65,10 +64,10 @@ void LoadEmitmeshFromBrx(EMITMESH *pemitmesh, CBinaryInputStream *pbis)
         pemitmesh->sArea += ptri->sArea;
         qword *apos = pemitmesh->apos;
         qword p0 = apos[ptri->aipos[0]];
-        qword normal = Cross(Sub(apos[ptri->aipos[1]], p0), Sub(apos[ptri->aipos[2]], p0));
+        qword normal = Cross(QwSub(apos[ptri->aipos[1]], p0), QwSub(apos[ptri->aipos[2]], p0));
         for (i = 0; i < 3; i++) {
             qword *pn = &pemitmesh->anormal[ptri->aipos[i]];
-            *pn = Add(*pn, normal);
+            *pn = QwAdd(*pn, normal);
         }
     }
     ReadVector__18CBinaryInputStreamP6VECTOR(pbis, &pemitmesh->v20);

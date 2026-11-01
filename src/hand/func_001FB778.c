@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union {qword q;float f[4];int i[4];} V;
 struct RANGE {float low,high;};
@@ -17,7 +18,6 @@ __asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tv
 __asm__("vsqrt $Q,%1x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q":"=j"(d):"j"(d));
 save->q=a;
 __asm__("qmfc2.ni %0,%1":"=r"(g):"j"(d));return g;}
-static inline float X(qword q){float f;__asm__("mtc1 %1,%0":"=f"(f):"r"(q));return f;}
 static inline float Y(qword q){int bits;float f;__asm__("prot3w %0,%1":"=r"(bits):"r"(q));__asm__("mtc1 %1,%0":"=f"(f):"r"(bits));return f;}
 static inline qword Bits(qword v){qword q;__asm__("qmfc2.ni %0,%1":"=r"(q):"j"(v));return q;}
 static inline void Rounded(int*out,float f){float bits;__asm__("cvt.w.s %0,%1":"=&f"(bits):"f"(f));__asm__("swc1 %1,%0":"=m"(*out):"f"(bits));}
@@ -43,7 +43,7 @@ void func_001FB778(void *unused,qword point,const struct RANGE*limits,float*outV
      qword direction;
      float angle;
      direction=func_001A7348(0,&D_002DDFA0,Bits(difference));
-     angle=func_002458F0(-Y(direction),X(direction));
+     angle=func_002458F0(-Y(direction),GetX(direction));
      if(limits->high<limits->low)angle+=3.1415927f;
      Rounded(outAngle,angle*57.295776f);return;
    }else *outAngle=0;

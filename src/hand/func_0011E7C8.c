@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f; } U;
 extern qword D_002A2DA0;
@@ -23,7 +24,6 @@ static inline qword Len(qword v)
     __asm__("vsqrt $Q, %1x\n\tvwaitq\n\tvaddq.x %0, $vf0, $Q" : "=j"(l) : "j"(d));
     return l;
 }
-static __inline__ float F(qword q) { float g; __asm__("mtc1 %1, %0" : "=f"(g) : "r"(q)); return g; }
 void func_0011E7C8(qword a, qword b, qword c, qword pos, float *puv, float *pdist, qword *pnormal)
 {
     float v;
@@ -42,7 +42,7 @@ void func_0011E7C8(qword a, qword b, qword c, qword pos, float *puv, float *pdis
     *pnormal = n;
     pdef = &D_002A2DA0;
     l = Len(n);
-    if (F(l) < 1e-4f) {
+    if (GetX(l) < 1e-4f) {
         *pnormal = *pdef;
     } else {
         qword r;

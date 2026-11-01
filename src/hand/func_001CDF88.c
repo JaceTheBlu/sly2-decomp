@@ -29,8 +29,6 @@ static inline void *PvNextDli(DLI *pdli)
     pdli->ppv = (void **)((char *)pv + pdli->ibDle);
     return pv;
 }
-static inline qword Min(qword a, qword b) { qword r; __asm__("vmini.xyz %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
-static inline qword Max(qword a, qword b) { qword r; __asm__("vmax.xyz %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 // (a + b) * k.x.  The second "j"(k) operand is allocation-only: it gives k the register priority the original had.
 static inline qword Mid(qword a, qword b, qword k) { qword r; __asm__("vmulax.xyzw $ACC,%1,%3x\n\tvmaddx.xyzw %0,%2,%4x" : "=j"(r) : "j"(a), "j"(b), "j"(k), "j"(k)); return r; }
 // Length of a vector in two steps (sum of squares, then sqrt).  The "memory" clobbers keep the stores around the steps in source order.
@@ -51,8 +49,8 @@ void func_001CDF88(S *p)
     while ((q = (S *)PvNextDli(&dli)) != 0) {
         if (g_clock.t >= q->time)
             q->vt->a[4].pfn((char *)q + q->vt->a[4].d);
-        lo.q = Min(lo.q, Min(q->cornerA, q->cornerB));
-        hi.q = Max(hi.q, Max(q->cornerA, q->cornerB));
+        lo.q = QwMin(lo.q, QwMin(q->cornerA, q->cornerB));
+        hi.q = QwMax(hi.q, QwMax(q->cornerA, q->cornerB));
     }
     if (p->size != 0) {
         t.f[0] = t.f[1] = t.f[2] = p->size;

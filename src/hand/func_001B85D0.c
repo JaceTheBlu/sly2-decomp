@@ -6,7 +6,6 @@ void func_001B6078(struct P *p, int n);
 qword func_001A62E8(void *p);
 qword func_001A6FC0(void *a, void *b, qword q);
 void func_001B86B0(struct P *p, int k);
-static __inline__ qword Sub(qword a, qword b) { qword d; __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 void func_001B85D0(struct P *p)
 {
     int k;
@@ -17,7 +16,7 @@ void func_001B85D0(struct P *p)
         if (v == p->x17FC || v == p->x1804) k = 3;
         else k = 2;
     } else if (p->x10DC) {
-        if (GetY(func_001A6FC0(0, p, Sub(func_001A62E8(p->x10DC), func_001A62E8(p)))) > 0.0f) k = 2;
+        if (GetY(func_001A6FC0(0, p, QwSub(func_001A62E8(p->x10DC), func_001A62E8(p)))) > 0.0f) k = 2;
         else k = 3;
     } else
         k = 3;

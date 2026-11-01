@@ -19,9 +19,7 @@ extern int ClsgClipEdgeToSphere__FUxfUxUxiP3LSG(qword,float,qword,qword,int,SEGM
 extern void func_001A7C18(void*,CONTACT*,REQUEST*,qword,qword,int,NODE*,int,CONTACT**,float);
 
 static inline qword Sub(qword a,qword b){__asm__("vsub.xyzw %0,%0,%1":"+j"(a):"j"(b));return a;}
-static inline qword Broadcast(float f){qword r;__asm__("qmtc2.ni %1,%0":"=j"(r):"r"(f));return r;}
 static inline qword BroadcastBits(int b){qword r;__asm__("qmtc2.ni %1,%0":"=j"(r):"r"(b));return r;}
-static inline float Scalar(qword a){float f;__asm__("qmfc2.ni %0,%1":"=r"(f):"j"(a));return f;}
 static inline qword MAdd(qword a,qword b,qword s){__asm__("vadda.xyzw ACC,%0,$vf0\n\tvmaddx.xyzw %0,%1,%2x":"+j"(a):"j"(b),"j"(s));return a;}
 static inline qword MAdd2(qword a,qword b,qword s){qword r;__asm__("vadda.xyzw ACC,%1,$vf0\n\tvmaddx.xyzw %0,%2,%3x":"=j"(r):"j"(a),"j"(b),"j"(s));return r;}
 static inline qword Point(const M4*m,qword p){qword r=m->r[0].q;__asm__("vmulax.xyz ACC,%0,%4x\n\tvmadday.xyz ACC,%1,%4y\n\tvmaddaz.xyz ACC,%2,%4z\n\tvmaddw.xyz %0,%3,$vf0w":"+j"(r):"j"(m->r[1].q),"j"(m->r[2].q),"j"(m->r[3].q),"j"(p));return r;}
@@ -31,9 +29,9 @@ static inline float Planar(U*p){
  qword dv; /* allocation-only "=j"(dv) tied to direction: the asm leaves it unchanged, it gives the vdiv a VF copy so direction's GPR dies here */
  __asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=&j"(d),"=&j"(root),"=j"(dv):"2"(direction),"r"(direction),"r"(direction)); /* allocation-only "r": direction is reloaded through a GPR (lq+qmtc2) */
  __asm__("vsqrt Q,%1x\n\tvwaitq\n\tvaddq.x %0,$vf0,Q":"=j"(root):"j"(d));
- if(Scalar(root)<0.0001f)p->q=D_002A2DA0;
+ if(GFromVf(root)<0.0001f)p->q=D_002A2DA0;
  else{__asm__("vdiv Q,$vf0w,%2x\n\tvwaitq\n\tvmulq.xyzw %0,%1,Q":"=j"(d):"j"(dv),"j"(root));p->q=d;}
- return Scalar(root);
+ return GFromVf(root);
 }
 static inline float Distance(U*dot,U*one,qword plane,qword point){
  qword d=point,o;
@@ -56,7 +54,7 @@ void func_001823C8(P*p,REQUEST*q,int unused2,int unused3,int unused4,CONTACT**po
    w.direction.q=Sub(n->position.q,center);w.direction.i[2]=0;
    distance=Planar(&w.direction);
    if(distance<radius){
-    w.newEndpoint.q=Broadcast(-q->radius);
+    w.newEndpoint.q=QwFromG(-q->radius);
     func_001A7C18(&g_sw,&p->contacts[p->contactCount-1],q,MAdd(center,w.direction.q,w.newEndpoint.q),w.direction.q,10,n,0,out,distance-radius);
    }else{
     int j;

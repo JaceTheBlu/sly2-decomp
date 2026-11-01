@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Project a world label, fit its rectangle, and render it in the supplied color.
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned int uint;
@@ -22,23 +23,20 @@ extern "C" RT *func_00215AC0(RT *,const char *,float);
 extern "C" void func_00216260(RT *,float *,float *);
 extern "C" void func_002163B0(RT *,CONFIG *,int);
 static inline float SavedHeight(float value){register float height __asm__("$f20");__asm__("mov.s %0,%1":"=f"(height):"f"(value));return height;}
-static inline float X(qword q){float f;__asm__("mtc1 %1,%0":"=f"(f):"r"(q));return f;}
-static inline float Y(qword q){float f;__asm__("prot3w %0,%1":"=r"(f):"r"(q));return f;}
-static inline float Z(qword q){float f;__asm__("pextuw %0,$zero,%1":"=r"(f):"r"(q));return f;}
 extern "C" void func_001CD780(qword position,const char *text,const RGBA *unusedColor,const RGBA *color,float inputHeight)
 {
     float height=SavedHeight(inputHeight);
     CM *camera=&g_cm;
     qword screen=func_0014F308(camera,position);
-    float depth=Z(screen);
+    float depth=GetZ(screen);
     if(depth<camera->nearDepth)return;
     float scale=func_0011D948(&D_002C1F28,height*(D_002C1F20/(camera->sx*depth)));
     RT rt;func_00215AC0(&rt,text,scale);
     CONFIG config;
     float w,h;
     func_00216260(&rt,&w,&h);
-    float x=(X(screen)*0.5f+0.5f)*640.0f;
-    float y=(0.5f-Y(screen)*0.5f)*492.8000183f;
+    float x=(GetX(screen)*0.5f+0.5f)*640.0f;
+    float y=(0.5f-GetY(screen)*0.5f)*492.8000183f;
     int marginX=D_002C1F30,marginY=D_002C1F34;
     config.x=x-w*0.5f-marginX;
     config.y=y-h-2*marginY;

@@ -18,8 +18,6 @@ extern "C" float func_002458F0(float,float);
 extern "C" float RadNormalize__Ff(float);
 extern "C" float func_0011CFE0(float,float);
 extern "C" M3 LoadRotateMatrixRad__FfUx(qword,float);
-static inline float X(qword v){float f;__asm__("mtc1 %1,%0":"=f"(f):"r"(v));return f;}
-static inline float Y(qword v){float f;__asm__("prot3w %0,%1":"=r"(f):"r"(v));return f;}
 static inline qword Transform(const M3&m,qword v){qword r;__asm__("vmulax.xyz ACC,%1,%4x\n\tvmadday.xyz ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z":"=j"(r):"j"(m.r[0].q),"j"(m.r[1].q),"j"(m.r[2].q),"j"(v));return r;}
 static inline M3 Mul(const M3&a,const M3&b) return r
 {
@@ -36,9 +34,9 @@ extern "C" void func_001801B8(P*p){
  qword position;
  position=func_001A62E8(p->target);
  qword displacement=QwSub(position,func_001A62E8(p));
- float desired=func_002458F0(Y(displacement),X(displacement));
+ float desired=func_002458F0(GetY(displacement),GetX(displacement));
  qword direction=((qword(*)(void*))p->vt[33].fn)((char*)p+p->vt[33].delta);
- float current=func_002458F0(Y(direction),X(direction));
+ float current=func_002458F0(GetY(direction),GetX(direction));
  float angle=func_0011CFE0(RadNormalize__Ff(desired-current),p->turnRate*g_clock.dt);
  rotation=LoadRotateMatrixRad__FfUx(g_normalZ,angle);
  ((void(*)(void*,qword))p->vt[35].fn)((char*)p+p->vt[35].delta,Transform(rotation,direction));

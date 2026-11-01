@@ -1,3 +1,4 @@
+#include "vu0.h"
 /* func_001A4258: does a sphere (pos, sRadius) touch a chain of spheres? First every sphere of the
  * chain is tested on its own, then the capsule-like hull between each adjacent pair: the common tangent line of the two circles
  * (normal n = u * s + perp * sqrt(1 - s*s) with u the unit axis, s = (r0 - r1) / |axis|) gives the tangent points A and B; the
@@ -11,7 +12,7 @@
  *    broadcasts (VU_FLOAT) come after it, which orders the FPU->VU0 transfers through $v0 like the target.
  *  - Length = Sqrt(Dot(v, v)) (the two-operand dot), the num/den/dist statement order, and ONE function-level sDist shared by both
  *    loops (a global pseudo: the radius sum gets $f0, the distance $f1).
- *  - Floats are taken out of VU0 two ways: GFromVf (qmfc2 asm, float in a GPR) and GFromQw (mtc1 asm, the qmfc2 is a reload
+ *  - Floats are taken out of VU0 two ways: GFromVf (qmfc2 asm, float in a GPR) and GetX (mtc1 asm, the qmfc2 is a reload
  *    on the VU0 unit, which is what delays the last dead VU_FLOAT store in the pair loop).
  */
 typedef int qword __attribute__((mode(TI)));
@@ -22,7 +23,6 @@ struct SPHERE { qword pos; float sRadius; int pad[3]; };
 static inline VV ToVF(qword v) { qword r; __asm__("qmtc2.ni %1, %0" : "=j"(r) : "r"(v)); return r; }
 static inline VV Sub(VV a, VV b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline float GFromVf(VV v) { float g; __asm__("qmfc2.ni %0, %1" : "=r"(g) : "j"(v)); return g; }
-static inline float GFromQw(qword q) { float g; __asm__("mtc1 %1, %0" : "=f"(g) : "r"(q)); return g; }
 static inline VV Sqrt(VV v) { qword r; __asm__("vsqrt $Q, %1x\n\tvwaitq\n\tvaddq.x %0, $vf0, $Q" : "=j"(r) : "j"(v)); return r; }
 static inline VV Dot(VV a, VV b)
 {
@@ -50,7 +50,6 @@ static inline VV AddScaled(VV base, VU_FLOAT g, VV v)
     __asm__("vadda.xyzw $ACC, %1, $vf0\n\tvmaddx.xyzw %0, %3, %2x" : "=j"(r) : "j"(base), "j"(g.q), "j"(v));
     return r;
 }
-static inline float SqrtF(float g) { float r; __asm__ __volatile__("sqrt.s %0, %1" : "=&f"(r) : "f"(g)); return r; }
 
 extern "C" int func_001A4258(qword pos, float sRadius, int csphere, SPHERE *asphere)
 {
@@ -58,7 +57,7 @@ extern "C" int func_001A4258(qword pos, float sRadius, int csphere, SPHERE *asph
     float sDist;
     for (i = 0; i < csphere; i++)
     {
-        sDist = GFromQw(Length(Sub(ToVF(pos), asphere[i].pos)));
+        sDist = GetX(Length(Sub(ToVF(pos), asphere[i].pos)));
         if (sDist < sRadius + asphere[i].sRadius)
             return 1;
     }
@@ -75,7 +74,7 @@ extern "C" int func_001A4258(qword pos, float sRadius, int csphere, SPHERE *asph
         VV u = Divide(axis, VU_FLOAT(sLen));
         float s = (ps0->sRadius - ps1->sRadius) / sLen;
         VV perp = Normalize(Cross(u, c1));
-        float root = SqrtF(1.0f - s * s);
+        float root = GSqrt(1.0f - s * s);
         VV n = VecCombo(VU_FLOAT(s), u, VU_FLOAT(root), perp);
         VV posA = AddScaled(ps0->pos, VU_FLOAT(ps0->sRadius), n);
         VV pa = Sub(p, posA);
@@ -83,8 +82,8 @@ extern "C" int func_001A4258(qword pos, float sRadius, int csphere, SPHERE *asph
         VV ba = Sub(posB, posA);
         VV num = Dot(pa, ba);
         VV den = Dot(ba, ba);
-        sDist = GFromQw(Dot(pa, n));
-        float t = GFromQw(num) / GFromVf(den);
+        sDist = GetX(Dot(pa, n));
+        float t = GetX(num) / GFromVf(den);
         if (sDist < sRadius && t >= 0.0f && t <= 1.0f)
             return 1;
     }

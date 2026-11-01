@@ -1,3 +1,4 @@
+#include "vu0.h"
 /* func_001D4568: hit reaction. After the base handler (func_001F7588) accepts the event, the
  * remaining count is updated (clamped at 0) and, for kind 0x100 (random hit) or 0x1000 (hit from a sender), a random linear
  * and angular impulse is built and added to the object's velocity through its virtual get/set pairs (vtable slots 33/35 and
@@ -45,12 +46,11 @@ static inline VV Dot(VV a, VV b)
     return r;
 }
 static inline VV Length(VV v) { return Sqrt(Dot(v, v)); }
-static inline float GFromQw(qword q) { float g; __asm__("mtc1 %1, %0" : "=f"(g) : "r"(q)); return g; }
 static inline VV DivideQ(VV v, VV l) { qword r; __asm__("vdiv $Q, $vf0w, %1x\n\tvwaitq\n\tvmulq.xyzw %0, %2, $Q" : "=j"(r) : "j"(l), "j"(v)); return r; }
 static inline VV NormalizeSafe(VV v, VV fallback)
 {
     VV len = Length(v);
-    if (GFromQw(len) < 0.0001f)
+    if (GetX(len) < 0.0001f)
         return fallback;
     return DivideQ(v, len);
 }

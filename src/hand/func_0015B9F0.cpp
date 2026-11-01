@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 // func_0015B9F0: emitter particle transform. The clock time is read into a local BEFORE
 // the ptimes->at[i] load, so loop.c sees a 1-insn life for %hi(g_clock) and doesn't hoist it.
@@ -36,7 +37,6 @@ static inline qword MulRot(const M4 &m, qword v)
             : "=j"(r) : "j"(v), "j"(m.r[0]), "j"(m.r[1]), "j"(m.r[2]));
     return r;
 }
-static inline qword Add(qword a, qword b) { qword d; __asm__("vadd.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 static inline qword Scale(qword v, VU_FLOAT s) { qword d; __asm__("vmulx.xyzw %0, %1, %2x" : "=j"(d) : "j"(v), "j"(s.q)); return d; }
 
 void func_0015B9F0(int c, EMITTER *pemit, TIMES *ptimes, BUF *pb)
@@ -88,7 +88,7 @@ void func_0015B9F0(int c, EMITTER *pemit, TIMES *ptimes, BUF *pb)
                     v[0] = pb->apos[i];
                 else
                     v[0] = mA.r[3];
-                pb->av[i] = Add(pb->av[i], MulAffine(mB, v[0]));
+                pb->av[i] = QwAdd(pb->av[i], MulAffine(mB, v[0]));
             }
         }
         qword vv = pb->av[i];

@@ -26,7 +26,6 @@ void func_001FAC30(struct P *p,qword v);
 static inline qword GetVel(struct P *p) { return ((qword (*)(void *))p->vt[33].pfn)((char *)p+p->vt[33].d); }
 static inline qword Mul(struct M3 *m,const qword *v) { qword r; __asm__("vmulax.xyz ACC,%2,%1x\n\tvmadday.xyz ACC,%3,%1y\n\tvmaddz.xyz %0,%4,%1z" : "=j"(r) : "j"(*v),"j"(m->r[0]),"j"(m->r[1]),"j"(m->r[2]));return r; }
 static inline qword Broadcast(int g) { qword r; __asm__("qmtc2.ni %1,%0" : "=j"(r) : "r"(g));return r; }
-static inline qword Scale(qword v,qword k) { qword r; __asm__("vmulx.xyzw %0,%1,%2x" : "=j"(r) : "j"(v),"j"(k));return r; }
 void func_001A28B0(struct P *p,void *o)
 {
  U origin,vel,pos,local,dir,v50,accel,bcast;
@@ -50,7 +49,7 @@ void func_001A28B0(struct P *p,void *o)
   v=QwSub(v,dir.q);
   k=Broadcast(*(int *)&p->alpha10A4);
   bcast.q=k;
-  v=Scale(v,k);
+  v=QwScaleX(v,k);
   accel.q=v;
   origin.q=func_001A62E8(p);
   clock=&g_clock;

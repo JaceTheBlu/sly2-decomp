@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; int i[4]; } U;
@@ -10,11 +11,8 @@ extern "C" float D_002BFA90[];
 extern "C" struct CLOCK g_clock;
 
 extern "C" void func_001F5E10(struct O *p,qword a,int n,qword b,float *c);
-static inline qword Broadcast(float g) { qword q; __asm__("qmtc2.ni %1,%0" : "=j"(q) : "r"(g));return q; }
-static inline qword BroadcastTo(float g,U *u) { qword q=Broadcast(g); u->q=q;return q; }
-static inline qword Scale(qword a,qword b) { qword q; __asm__("vmulx.xyzw %0,%1,%2x" : "=j"(q) : "j"(a),"j"(b));return q; }
-static inline float GetZ(qword v) { float g; __asm__("pextuw %0,$0,%1" : "=r"(g) : "r"(v));return g; }
-inline void O::Negate(U &u) { qword v=xE8->v80; qword k=Broadcast(-1.0f); u.q=k; Set(Scale(v,k)); }
+static inline qword BroadcastTo(float g,U *u) { qword q=QwFromG(g); u->q=q;return q; }
+inline void O::Negate(U &u) { qword v=xE8->v80; qword k=QwFromG(-1.0f); u.q=k; Set(QwScaleX(v,k)); }
 extern "C" void func_001A1148(struct P *p)
 {
  U u,v,u2;

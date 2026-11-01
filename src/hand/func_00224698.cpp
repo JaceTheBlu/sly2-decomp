@@ -25,7 +25,6 @@ static inline qword Dot(qword d) { qword len,one;
     __asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z" : "=&j"(len),"=&j"(one) : "j"(d));return len; }
 static inline qword Sqrt(qword len) {
     __asm__("vsqrt Q,%1x\n\tvwaitq\n\tvaddq.x %0,$vf0,Q" : "=j"(len) : "j"(len));return len; }
-static inline float X(qword v) { float f;__asm__("qmfc2.ni %0,%1" : "=r"(f) : "j"(v));return f; }
 static inline qword Scale(qword d,qword len) { qword r;
     __asm__ __volatile__("vdiv Q,$vf0w,%2x\n\tvwaitq\n\tvmulq.xyzw %0,%1,Q" : "=j"(r) : "j"(d),"0"(len));return r; }
 extern "C" void func_00224698(S *p) {
@@ -40,7 +39,7 @@ extern "C" void func_00224698(S *p) {
         register qword fallback __asm__("a1")=D_002A2DA0;
         qword len=Sqrt(Dot(d));
         register qword n __asm__("vf1");
-        if(X(len)<1.0e-4f)n=fallback;
+        if(GFromVf(len)<1.0e-4f)n=fallback;
         else n=Scale(d,len);
         m=func_0011B830(n,g_normalZ);
     } else {

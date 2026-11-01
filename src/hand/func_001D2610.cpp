@@ -101,7 +101,6 @@ static inline VV Rotate(const M3 &m, VV v)
             : "=j"(r) : "j"(m.rows[0].q), "j"(m.rows[1].q), "j"(m.rows[2].q), "j"(v));
     return r;
 }
-static inline float Abs(float f) { return __builtin_fabsf(f); }
 
 extern "C" void func_001D2610(P *p)
 {
@@ -197,9 +196,9 @@ extern "C" void func_001D2610(P *p)
                     M3 m = *func_001A6318(attach->anchor);
                     float aim = func_002458F0(m.rows[0].f[1], m.rows[0].f[0]);
                     qword packed = func_0022CA18(attach->mesh, attach->mesh);
-                    float error = Abs(RadNormalize__Ff(aim - p->wheelAngle));
+                    float error = GAbs(RadNormalize__Ff(aim - p->wheelAngle));
                     float pitch = GetZ(packed) - attach->meshBinding->pitch;
-                    if (error < D_002C20EC && Abs(pitch) < D_002C20F0)
+                    if (error < D_002C20EC && GAbs(pitch) < D_002C20F0)
                         goto fire;
                     break;
                 }
@@ -241,9 +240,9 @@ extern "C" void func_001D2610(P *p)
                 M3 m = *func_001A6318(attach->anchor);
                 float aim = func_002458F0(m.rows[0].f[1], m.rows[0].f[0]);
                 qword packed = func_0022CA18(attach->mesh, attach->mesh);
-                float error = Abs(RadNormalize__Ff(aim - p->wheelAngle));
+                float error = GAbs(RadNormalize__Ff(aim - p->wheelAngle));
                 float pitch = GetZ(packed) - attach->meshBinding->pitch;
-                if (D_002C20F4 < error || D_002C20F8 < Abs(pitch))
+                if (D_002C20F4 < error || D_002C20F8 < GAbs(pitch))
                     continue;
             }
             func_001F0660(attach->binding, 0x68);

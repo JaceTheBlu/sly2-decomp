@@ -1,3 +1,4 @@
+#include "vu0.h"
 // func_002048C8: breadth-first polygon adjacency search. MATCH.
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned short ushort;
@@ -7,7 +8,6 @@ struct POLY {float normal[3];int unknown;struct E *head0,*head1;int flags,pad;};
 struct GEOM {char pad94[0x94];qword *positions;int unknown;struct POLY *polygons;};
 struct P {char pad210[0x210];float height;char pad214[0x34];float previous;};
 void func_0011EE08(qword,qword,qword,qword *,float *,float *);
-static __inline__ float Z(qword q){float f;__asm__("pextuw %0,$zero,%1":"=r"(f):"r"(q));return f;}
 int func_002048C8(struct P *p,qword position,struct GEOM *g,struct POLY *first)
 {
     struct POLY *queue[32];
@@ -25,7 +25,7 @@ int func_002048C8(struct P *p,qword position,struct GEOM *g,struct POLY *first)
             struct E *edge;
             if(!side)edge=poly->head0;else edge=poly->head1;
             while(edge){
-                float z=Z(position);
+                float z=GetZ(position);
                 func_0011EE08(position,g->positions[edge->vertices[0]],g->positions[edge->vertices[1]],&closest.q,0,&distance);
                 if(limit<distance)goto next;
                 if(z+delta<closest.f[2])goto next;

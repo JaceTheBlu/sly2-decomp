@@ -37,7 +37,6 @@ SO *func_001CB250(void *, int);
 void func_001C2DB8(OWNER *);
 }
 
-static inline float X(qword q) { float f; __asm__("mtc1 %1,%0" : "=f"(f) : "r"(q)); return f; }
 static inline qword Dot(qword a, qword b)
 {
     qword d, one;
@@ -61,7 +60,7 @@ static inline qword Unit(qword v, qword len)
 static inline qword Normalize(qword v, qword fallback)
 {
     qword len = Length(v);
-    if (X(len) < 0.0001f)
+    if (GetX(len) < 0.0001f)
         return fallback;
     return Unit(v, len);
 }

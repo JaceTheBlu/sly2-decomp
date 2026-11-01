@@ -23,7 +23,6 @@ void func_0018E540(P*,int);void func_001F15B8(COMPONENT**);
 void func_001305B8(ASEG*,P*,float,float,int,ASEGA**);
 }
 static inline void PathState(PATH*p,int state){VE&v=p->vt[3];((void(*)(void*,int,void*,void*,void*,void*))v.fn)((char*)p+v.delta,state,0,0,0,0);}
-static inline qword Vector(qword q){qword v;__asm__("qmtc2.ni %1,%0":"=j"(v):"r"(q));return v;}
 static inline qword Direction(U*a,U*b,U*&axis){
  register qword first __asm__("vf2"),second __asm__("vf1"),direction __asm__("vf3");register U*address __asm__("$2");
  __asm__("lqc2 %0,%4\n\tlui %2,%%hi(%6)\n\tlqc2 %1,%5\n\taddiu %2,%2,%%lo(%6)\n\tvsub.xyzw %3,%0,%1":"=j"(first),"=j"(second),"=&r"(address),"=j"(direction):"m"(a->q),"m"(b->q),"i"(&g_normalZ));
@@ -50,7 +49,6 @@ static inline qword WorldInputs(C*p,U*point,U*world,qword offset,P*&owner){
  __asm__("lw %0,%3\n\tlqc2 %1,%4\n\tsqc2 %5,%2":"=&r"(actor),"=&j"(value),"=m"(world->q):"m"(p->actor),"m"(point->q),"j"(offset));
  owner=actor;return value;
 }
-static inline float Z(qword q){float f;__asm__("pextuw %0,$zero,%1":"=r"(f):"r"(q));return f;}
 static inline void Clear(U*v){v->i[0]=v->i[1]=v->i[2]=0;}
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((t*)0)->m))
 typedef char U_Size[sizeof(U)==16?1:-1];
@@ -106,10 +104,10 @@ extern "C" void func_0019EAB0(C*p,int next){
   func_001E6F10(p->path,func_001E6728(p->path,p->distance+50.0f),&w.ahead,0);
   func_001E6F10(p->path,func_001E6728(p->path,p->distance-50.0f),&w.behind,0);
   U*axis; qword direction=Direction(&w.ahead,&w.behind,axis);
-  p->descending=Z(Normal(direction,axis))<-0.5f;
+  p->descending=GetZ(Normal(direction,axis))<-0.5f;
   func_0019E110(p,&w.limit);p->distance=func_0011D948(&w.limit,p->distance);
   func_001E6F10(p->path,p->distance,&w.point,0);
-  qword offset=Vector(func_001A6F00(p->actor,0,p->offset.q));P*owner;
+  qword offset=QwToVf(func_001A6F00(p->actor,0,p->offset.q));P*owner;
   qword point=WorldInputs(p,&w.point,&w.world,offset,owner);
   owner->offset.q=QwSub(point,offset);
   p->actor->motion.q=QwSub(p->actor->goal.q,w.point.q);

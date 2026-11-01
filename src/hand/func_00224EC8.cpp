@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 // Transition actor controller state.
 typedef int qword __attribute__((mode(TI)));
@@ -29,7 +30,6 @@ qword func_001A62E8(void *);
 void func_001F7BF8(S *,float);
 void func_001F0730(void *,int);
 }
-static inline qword ToVF(qword v){qword r;__asm__("qmtc2.ni %1,%0":"=j"(r):"r"(v));return r;}
 static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"0"(a),"j"(b));return r;}
 static inline qword Normalize(qword v){qword len,one,result;
  __asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(len),"=&j"(one):"j"(v));
@@ -43,7 +43,7 @@ static inline void Zero(float *v){v[0]=v[1]=v[2]=0.0f;}static inline void ZeroVe
 static inline O *FindNearest(S *p,int count,O **objects,O *nearest,float best){
   for(int i=0;i<count;i++){
    O *object=objects[i];
-   qword position=ToVF(func_001A62E8(object));
+   qword position=QwToVf(func_001A62E8(object));
    qword origin=func_001A62E8(p);
    V delta;
    delta.q=Sub(position,origin);
@@ -82,7 +82,7 @@ extern "C" void func_00224EC8(S *p,int state){
   func_001F5720(p,1);func_001F57C0(p,1);
   ZeroVelocity(p->positionNode);ZeroVelocity(p->rotationNode);
   if(func_00224688(p)&&p->rotationNode){
-   qword direction=Normalize(ToVF(func_0022FCC8(0,p->rotationNode->parent,p->direction)));
+   qword direction=Normalize(QwToVf(func_0022FCC8(0,p->rotationNode->parent,p->direction)));
    qword rawUp=func_0022FCC8(0,p->rotationNode->parent,g_normalZ);
    M3 basis;basis=MakeBasis(direction,rawUp);
    p->rotationJob=func_0012DC18(p,p->rotationNode,0,7,2,DecomposeRotateMatrixEuler__FP7MATRIX3(&basis));

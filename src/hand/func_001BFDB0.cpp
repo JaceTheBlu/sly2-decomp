@@ -22,7 +22,6 @@ qword func_001BFDB0(T *t, qword p);
 }
 static inline qword Cross(qword a, qword b) { qword r; __asm__("vopmula.xyz ACC,%1,%2\n\tvopmsub.xyz %0,%2,%1" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline float Z(qword a) { float z; __asm__("qmfc2.ni %0,%1\n\tpextuw %0,$zero,%0" : "=r"(z) : "j"(a)); return z; }
-static inline float ZOf(qword q) { float z; __asm__("pextuw %0,$zero,%1" : "=r"(z) : "r"(q)); return z; }
 static inline qword Dot(qword a, qword b)
 {
     qword d = a, one;
@@ -50,7 +49,7 @@ qword func_001BFDB0(T *t, qword p)
     else {
         qword n = Cross(ab, QwSub(vc.q, va.q));
         qword dv = Dot(QwSub(va.q, p), n);
-        float nz = ZOf(n);
+        float nz = GetZ(n);
         float dot = GetX(dv);
         float g = dot / nz;
         result.q = AddScaled(p, g_normalZ, g);

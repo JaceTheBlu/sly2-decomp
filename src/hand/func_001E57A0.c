@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 struct T { qword v0; qword v10; float f20; };
 struct A { int n0; int n4; int pad8[2]; struct T t; float f40; int n44; };
@@ -16,12 +17,9 @@ qword DecomposeRotateMatrixEuler__FP7MATRIX3(void *);
 int func_0014FD50(void *);
 void func_0014E4C8(void *, int, int, void *, int, int);
 void func_0014E328(void *, int, void *, int, void *);
-static inline float X(qword q) { float f; __asm__("mtc1 %1, %0" : "=f"(f) : "r"(q)); return f; }
-static inline float Y(qword q) { float f; __asm__("prot3w %0, %1" : "=r"(f) : "r"(q)); return f; }
-static inline float Z(qword q) { float f; __asm__("pextuw %0, $0, %1" : "=r"(f) : "r"(q)); return f; }
 static inline int FNear(qword a, qword b)
 {
-    return func_0011D4D0(X(b), X(a), 0.0001f) && func_0011D4D0(Y(b), Y(a), 0.0001f) && func_0011D4D0(Z(b), Z(a), 0.0001f);
+    return func_0011D4D0(GetX(b), GetX(a), 0.0001f) && func_0011D4D0(GetY(b), GetY(a), 0.0001f) && func_0011D4D0(GetZ(b), GetZ(a), 0.0001f);
 }
 void func_001E57A0(struct P *p, struct A *pa, struct A *pb, float t)
 {

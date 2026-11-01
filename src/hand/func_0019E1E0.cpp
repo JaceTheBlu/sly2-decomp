@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));typedef unsigned long ulong;
 union U{qword q;float f[4];int i[4];};struct VE{short delta,pad;void*fn;};
 struct INPUT{char pad0[0x10];float x,y;char pad18[4];float amount;};
@@ -17,7 +18,6 @@ float fabsf(float);
 }
 static inline ulong Eligible(PATH*p){return (p->flags>>60)&1;}
 static inline int CanAct(P*p,int kind){VE&v=p->vt[99];return ((int(*)(void*,int))v.fn)((char*)p+v.delta,kind);}
-static inline qword Sub(qword a,qword b){qword q;__asm__("vsub.xyzw %0,%1,%2":"=j"(q):"j"(a),"j"(b));return q;}
 static inline qword Direction(U*a,U*b,U*&axis){
  register qword direction __asm__("vf3");register U*address __asm__("$2");
  __asm__("lqc2 $vf2,%2\n\tlui %0,%%hi(%4)\n\tlqc2 $vf1,%3\n\taddiu %0,%0,%%lo(%4)\n\tvsub.xyzw %1,$vf2,$vf1":"=&r"(address),"=j"(direction):"m"(a->q),"m"(b->q),"i"(&g_normalZ):"vf1","vf2");
@@ -34,7 +34,6 @@ static inline qword Normal(qword v,U*axis){
  else{__asm__("vdiv $Q,$vf0w,%1x\n\tvwaitq\n\tvmulq.xyzw %0,%2,$Q":"=j"(r):"j"(d),"j"(v));}
  qword q;__asm__("qmfc2.ni %0,%1":"=r"(q):"j"(r));return q;
 }
-static inline float Z(qword q){float f;__asm__("pextuw %0,$zero,%1":"=r"(f):"r"(q));return f;}
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((t*)0)->m))
 typedef char U_Size[sizeof(U)==16?1:-1];
 typedef char VE_Size[sizeof(VE)==8?1:-1];
@@ -94,18 +93,18 @@ extern "C" void func_0019E1E0(C*p){
  if(p->state==0||p->state==4)return;
  func_001E6F10(p->path,func_001E6728(p->path,p->distance+50.0f),&w.ahead,0);
  func_001E6F10(p->path,func_001E6728(p->path,p->distance-50.0f),&w.behind,0);
- U*axis;qword direction=Direction(&w.ahead,&w.behind,axis);qword normalized=Normal(direction,axis);float z=Z(normalized);
+ U*axis;qword direction=Direction(&w.ahead,&w.behind,axis);qword normalized=Normal(direction,axis);float z=GetZ(normalized);
  if(fabsf(z)>0.5f){
   if(z>0.0f){if(!p->descending)goto checkMemory;goto turn;}
   if(!p->descending)goto turn;
  }
  checkMemory:
- if(p->reset>0.4f&&p->descending&&Z(normalized)>-0.3f)goto turn;
- if(p->reset<-0.4f&&!p->descending&&Z(normalized)<0.3f)goto turn;
+ if(p->reset>0.4f&&p->descending&&GetZ(normalized)>-0.3f)goto turn;
+ if(p->reset<-0.4f&&!p->descending&&GetZ(normalized)<0.3f)goto turn;
  goto proceed;
  turn:func_0019EAB0(p,4);return;
  proceed:;
- register qword tangent __asm__("$2")=func_001C4768(input,Sub(w.ahead.q,w.behind.q));
+ register qword tangent __asm__("$2")=func_001C4768(input,QwSub(w.ahead.q,w.behind.q));
  __asm__("lwc1 $f1,0x10(%6)\n\tqmtc2.ni %5,$vf4\n\tlwc1 $f0,0x14(%6)\n\tmtc1 $zero,%2\n\tmfc1 $3,$f1\n\tmfc1 $4,$f0\n\tpextlw $3,$4,$3\n\tmfc1 $4,%2\n\tpcpyld $3,$4,$3\n\tlwc1 %0,0x1c(%6)\n\tqmtc2.ni $3,$vf3\n\tlw %1,0x20(%7)\n\tvmul.xyz $vf1,$vf4,$vf3\n\tvaddw.x $vf2,$vf0,$vf0w\n\tvadday.x ACC,$vf1,$vf1y\n\tvmaddz.x $vf1,$vf2,$vf1z\n\tsq $3,%3\n\tqmfc2.ni $2,$vf1\n\tmtc1 $2,%4":"=f"(amount),"=r"(previous),"=f"(zero),"=m"(w.reuse.input.q),"=f"(dot):"r"(tangent),"r"(input),"r"(p):"$2","$3","$4","$f0","$f1","vf1","vf2","vf3","vf4","memory");
  }
  switch(previous){case 0:if(amount<0.25f)p->previous=-1;else if(dot<-0.7f)p->previous=1;break;

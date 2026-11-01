@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
 struct B { qword x,y; };
@@ -20,10 +21,7 @@ static inline qword Factors(const float*cs,float speed,float*first,float*second)
  __asm__("lwc1 %1,%5\n\tmul.s %0,%0,%4\n\tlw %2,%%lo(D_002DDED4)(%6)\n\tqmtc2.ni %2,%3\n\tmul.s %1,%1,%4":"+&f"(a),"=&f"(b),"=r"(word),"=j"(dt):"f"(speed),"m"(cs[1]),"r"(page),"m"(wordView->bits));
  *first=a;*second=b;return dt;
 }
-static inline float X(qword q) {float f; __asm__("mtc1 %1,%0" : "=f"(f) : "r"(q)); return f;}
-static inline float Y(qword q) {float f; __asm__("prot3w %0,%1" : "=r"(f) : "r"(q)); return f;}
-static inline float Z(qword q) {float f; __asm__("pextuw %0,$zero,%1" : "=r"(f) : "r"(q)); return f;}
-static inline void FNear(int *pf,qword a,qword b) { if(func_0011D4D0(X(b),X(a),0.0001f)) if(func_0011D4D0(Y(b),Y(a),0.0001f)) *pf=func_0011D4D0(Z(b),Z(a),0.0001f)!=0; }
+static inline void FNear(int *pf,qword a,qword b) { if(func_0011D4D0(GetX(b),GetX(a),0.0001f)) if(func_0011D4D0(GetY(b),GetY(a),0.0001f)) *pf=func_0011D4D0(GetZ(b),GetZ(a),0.0001f)!=0; }
 static inline qword BcX(float f){register qword value __asm__("vf3");__asm__("qmtc2.ni %1,%0":"=j"(value):"r"(f));return value;}
 static inline qword BcYAndPublishX(float f,qword x,union U*home){
  register qword value __asm__("vf4");

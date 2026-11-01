@@ -24,9 +24,7 @@ void func_00153DE0(struct MANAGER *);
 struct ENTRY *func_00154180(struct MANAGER *,struct P *);
 void func_0020A9A8(struct ANCHOR *,int);
 static __inline__ float LengthXY(qword a){qword r;float f;__asm__("vmul.xy %0,%1,%1\n\tvaddy.x %0,%0,%0y":"=j"(r):"j"(a));__asm__("vsqrt Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,Q":"+j"(r));__asm__("mtc1 %1,%0":"=f"(f):"r"(r));return f;}
-static __inline__ float Z(qword q){float f;__asm__("pextuw %0,$zero,%1":"=r"(f):"r"(q));return f;}
-static __inline__ float Abs(float f){return __builtin_fabsf(f);}
-static __inline__ int Near(qword difference){return LengthXY(difference)<D_002C3D08 && Abs(Z(difference))<D_002C3D0C;}
+static __inline__ int Near(qword difference){return LengthXY(difference)<D_002C3D08 && GAbs(GetZ(difference))<D_002C3D0C;}
 /* Two empty-asm tricks for the nearby-object collection loop (T1592); neither emits an instruction:
    OPAQUE_COUNT: an empty asm that "sets" the candidate count. loop.c then sees no basic induction variable, so
      &candidates[n] stays a real `mult` by 24 instead of a strength-reduced pointer, and the increment is not PRE-copied.

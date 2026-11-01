@@ -1,3 +1,4 @@
+#include "vu0.h"
 // STEP::VUnk81 (0x205008, KB name VUnk81__4STEPiP2LOUxUxUx): add contacts (PxpAdd 0x1A7C18) for a point
 // against the three axes of the frame BuildOrthonormalMatrixZ(direction, g_normalZ) builds. The contacts go
 // to the link list entry that joins this object to the zap target of plo (or of its nearest attached
@@ -30,9 +31,6 @@ static inline qword Rotate(const M3 &m, qword v) {
         : "=&j"(one), "=&j"(a), "=&j"(b), "=&j"(c), "=&j"(r) : "j"(m.r[0]), "j"(v), "r"(&m) : "vf1", "vf2");
     return r;
 }
-static inline float X(qword q) { float f; __asm__("mtc1 %1,%0" : "=f"(f) : "r"(q)); return f; }
-static inline float Y(qword q) { float f; __asm__("prot3w %0,%1" : "=r"(f) : "r"(q)); return f; }
-static inline float Z(qword q) { float f; __asm__("pextuw %0,$zero,%1" : "=r"(f) : "r"(q)); return f; }
 
 extern "C" void func_00205008(SO *pso, int grf, LO *plo, qword posOther, qword direction, qword pos)
 {
@@ -63,11 +61,11 @@ extern "C" void func_00205008(SO *pso, int grf, LO *plo, qword posOther, qword d
     }
     M3 mat = func_0011B830(direction, g_normalZ);
     qword posLocal = Rotate(mat, Sub(pos, posOther));
-    if ((grf & 1) || ((grf & 8) && X(posLocal) < 0.0001f))
-        func_001A7C18(g_sw, pso->psopart, psopartOther, pos, mat.r[0], X(posLocal), (grf & 1) ? 11 : 10, 0, 0, ppxpFirst);
-    if ((grf & 2) || ((grf & 0x10) && Y(posLocal) < 0.0001f))
-        func_001A7C18(g_sw, pso->psopart, psopartOther, pos, mat.r[1], Y(posLocal), (grf & 2) ? 11 : 10, 0, 0, ppxpFirst);
-    if ((grf & 4) || ((grf & 0x20) && Z(posLocal) < 0.0001f))
-        func_001A7C18(g_sw, pso->psopart, psopartOther, pos, mat.r[2], Z(posLocal), (grf & 4) ? 11 : 14, 0, 0, ppxpFirst);
+    if ((grf & 1) || ((grf & 8) && GetX(posLocal) < 0.0001f))
+        func_001A7C18(g_sw, pso->psopart, psopartOther, pos, mat.r[0], GetX(posLocal), (grf & 1) ? 11 : 10, 0, 0, ppxpFirst);
+    if ((grf & 2) || ((grf & 0x10) && GetY(posLocal) < 0.0001f))
+        func_001A7C18(g_sw, pso->psopart, psopartOther, pos, mat.r[1], GetY(posLocal), (grf & 2) ? 11 : 10, 0, 0, ppxpFirst);
+    if ((grf & 4) || ((grf & 0x20) && GetZ(posLocal) < 0.0001f))
+        func_001A7C18(g_sw, pso->psopart, psopartOther, pos, mat.r[2], GetZ(posLocal), (grf & 4) ? 11 : 14, 0, 0, ppxpFirst);
     *ppxpOut = *ppxpFirst;
 }

@@ -1,3 +1,4 @@
+#include "vu0.h"
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((t*)0)->m))
 typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];};
@@ -16,12 +17,10 @@ extern "C"{
  void func_0011ED40(qword,qword,qword,qword*,float*,float*);
 }
 static inline unsigned long Eligible(unsigned long flags){return (flags>>60)&1;}
-static inline qword From(qword a){qword r;__asm__("qmtc2.ni %1,%0":"=j"(r):"r"(a));return r;}
 static inline qword Load(U*u){qword r;__asm__("lqc2 %0,%1":"=j"(r):"m"(u->q));return r;}
-static inline float X(qword q){float f;__asm__("qmfc2.ni %0,%1":"=r"(f):"j"(q));return f;}
 static inline float Length(qword v){register qword one __asm__("vf2"); qword d=v;
  __asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"+j"(d),"=&j"(one):"j"(v));
- __asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q":"+j"(d));return X(d);
+ __asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q":"+j"(d));return GFromVf(d);
 }
 static inline float Distance(U*origin,qword point){register qword a __asm__("vf2")=origin->q;qword b=point,d;__asm__("vsub.xyzw %0,%1,%2":"=j"(d):"j"(a),"j"(b));return Length(d);}
 static inline float DistanceFrom(qword point,U*origin){qword a=point,b=Load(origin),d;__asm__("vsub.xyzw %0,%1,%2":"=&j"(d):"j"(a),"j"(b));return Length(d);}
@@ -81,7 +80,7 @@ extern "C" void func_0017B9C0(C*p){
  if(actor->count>0)do{
   P*choice=actor->Choice(i);
   if(Eligible(choice->flags)){
-  qword candidate=From(func_001A62E8(choice));
+  qword candidate=QwToVf(func_001A62E8(choice));
   float cost=Distance(&work.origin,candidate);
   if(choice==p->preferred)cost=D_002BE720.a+cost*(D_002BE720.b+cost*D_002BE720.c);
   for(int j=0;j<p->actor->nearCount;j++){
@@ -100,7 +99,7 @@ extern "C" void func_0017B9C0(C*p){
  P*nearest=0;float distance=800.0f;
  for(int k=0;k<p->actor->nearCount;k++){
   P*choice=p->actor->near[k];
-  qword position=From(func_001A62E8(choice));
+  qword position=QwToVf(func_001A62E8(choice));
   float f=DistanceFrom(position,&work.origin);
   if(f>distance)continue;
   if(best){

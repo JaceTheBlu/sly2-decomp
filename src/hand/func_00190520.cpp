@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Update target-facing movement modes and animation weights.
 typedef int qword __attribute__((mode(TI)));typedef unsigned int uint;
 union U{qword q;float f[4];int i[4];};
@@ -22,7 +23,6 @@ extern "C" float fabsf(float);
 static inline float Abs(float a){return fabsf(a);}
 static inline qword Local(const M3&m,qword v){qword q,one,a,b,c;__asm__("vmul.xyzw %2,%5,%8\n\tvmaxw.xyzw %1,$vf0,$vf0w\n\tvmul.xyzw %3,%6,%8\n\tvmul.xyzw %4,%7,%8\n\tvadday.x $ACC,%2,%2y\n\tvmaddz.x %0,%1,%2z\n\tvaddax.y $ACC,%3,%3x\n\tvmaddz.y %0,%1,%3z\n\tvaddax.z $ACC,%4,%4x\n\tvmaddy.z %0,%1,%4y":"=j"(q),"=&j"(one),"=&j"(a),"=&j"(b),"=&j"(c):"j"(m.row[0].q),"j"(m.row[1].q),"j"(m.row[2].q),"j"(v));return q;}
 static inline qword LengthSquared(qword value){qword n,one;__asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=&j"(n),"=&j"(one):"j"(value));return n;}
-static inline float X(qword value){float f;__asm__("qmfc2.ni %0,%1":"=r"(f):"j"(value));return f;}
 static inline qword Velocity(P*p){return ((qword(*)(void*))p->vt[33].fn)((char*)p+p->vt[33].delta);}
 static inline int Can(P*p,int mode){return ((int(*)(void*,int))p->vt[99].fn)((char*)p+p->vt[99].delta,mode);}
 static inline float Clamp(float f,float low,float high){if(f<low)return low;else if(f>high)return high;return f;}
@@ -123,14 +123,14 @@ extern "C" void func_00190520(P*p){
   else if(far&&p->previous!=2){next=2;p->previous=-1;}
   else if(Abs(angle)<D_002BF560){qword magnitude=LengthSquared(Velocity(p));register float limit __asm__("$f1");
    __asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q\n\tlwc1 %1,%2" : "+j"(magnitude),"=f"(limit) : "m"(D_002BF568));
-   bool slow=X(magnitude)<limit;if(slow)next=3;}
+   bool slow=GFromVf(magnitude)<limit;if(slow)next=3;}
   break;
  case 3:
   if(near&&p->previous!=0){next=0;p->previous=-1;}
   else if(far&&p->previous!=2){next=2;p->previous=-1;}
   else if(Abs(angle)>D_002BF564){qword magnitude=LengthSquared(Velocity(p));register float limit __asm__("$f1");
    __asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q\n\tlwc1 %1,%2" : "+j"(magnitude),"=f"(limit) : "m"(D_002BF56C));
-   bool fast=X(magnitude)>limit;if(fast)next=1;}
+   bool fast=GFromVf(magnitude)>limit;if(fast)next=1;}
   break;
  }
  SetJtJts__FP2JT3JTS4JTBS(p,3,next);CalculateJtHangAccel__FP2JT(p);

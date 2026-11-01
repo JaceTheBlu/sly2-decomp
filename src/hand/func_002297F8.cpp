@@ -42,16 +42,14 @@ int FIsBasicDerivedFrom__FP5BASIC3CID(O *,int);
 void func_001FB098(EMITTER *,float);
 void func_00258040(EMITTER **,EMITTER *);
 }
-static inline float X(qword q){float f;__asm__("mtc1 %1,%0":"=f"(f):"r"(q));return f;}
 static inline float Y(qword q){qword v;float f;__asm__("prot3w %0,%1":"=r"(v):"r"(q));__asm__("mtc1 %1,%0":"=f"(f):"r"(v));return f;}
 static inline float Z(qword q){qword v;float f;__asm__("pextuw %0,$zero,%1":"=r"(v):"r"(q));__asm__("mtc1 %1,%0":"=f"(f):"r"(v));return f;}
-static inline bool Near(qword a,qword b,float epsilon){return func_0011D4D0(X(a),X(b),epsilon)&&func_0011D4D0(Y(a),Y(b),epsilon)&&func_0011D4D0(Z(a),Z(b),epsilon);}
-static inline qword Scale(qword v,qword k){qword r;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(r):"j"(v),"j"(k));return r;}
+static inline bool Near(qword a,qword b,float epsilon){return func_0011D4D0(GetX(a),GetX(b),epsilon)&&func_0011D4D0(Y(a),Y(b),epsilon)&&func_0011D4D0(Z(a),Z(b),epsilon);}
 static inline qword Get(O *o,int slot){VE *v=o->vt;return v[slot].get((char *)o+v[slot].delta);}
 static inline qword Sub(qword a,qword b){qword r;asm("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"0"(b));return r;}
 static inline qword AddNormal(qword motion,const V &projection){qword r;asm("vadd.xyzw %0,%1,%2":"=j"(r):"0"(motion),"j"(projection.q));return r;}
 static inline qword AddTangent(qword motion,const V &projection){qword r;asm("vadd.xyzw %0,%1,%2":"=j"(r):"0"(motion),"j"(projection.q));return r;}
-static inline qword NegativeAngular(qword angular,float sign,qword &scalar){qword factor;asm("qmtc2.ni %1,%0":"=j"(factor):"r"(sign));scalar=factor;return Scale(angular,factor);}
+static inline qword NegativeAngular(qword angular,float sign,qword &scalar){qword factor;asm("qmtc2.ni %1,%0":"=j"(factor):"r"(sign));scalar=factor;return QwScaleX(angular,factor);}
 // The coefficient tables are indexed directly (not through a pointer) so each loop forms its own address.
 #define GAIN2(G,amount,friction) {for(i=0;i<3;i++)coefficients->f[i]=G.f[i]*amount*friction;}
 #define GAIN1(G,friction) {for(i=0;i<3;i++)coefficients->f[i]=G.f[i]*friction;}
@@ -69,7 +67,7 @@ extern "C" void func_002297F8(O *a,O *b){
  if(spring!=0.0f){
   asm volatile("": : :"memory"); // the original re-reads a->physics here instead of reusing the pointer loaded above
   qword k=QwFromG(-spring*span);w.velocity.q=k;
-  func_001FAC30(a,func_001FA810(&a->physics->constraint,a->motion,Scale(a->physics->direction.q,k)));
+  func_001FAC30(a,func_001FA810(&a->physics->constraint,a->motion,QwScaleX(a->physics->direction.q,k)));
  }
  if(friction!=0.0f){
   func_00228C18(b,func_001A62E8(a),&w.velocity.q,&w.phase.vectors[0].q);
@@ -100,7 +98,7 @@ extern "C" void func_002297F8(O *a,O *b){
   func_0011B938(&func_001A6318(a)->basis,&w.phase.basis,0);
   func_0011BCF8(&w.phase.basis,&w.angle,&w.axis.vector.q);
   float gain=spring*3.0f;qword k=QwFromG(w.angle*gain*span);
-  qword rotation=Scale(w.axis.vector.q,k);w.angularNormal.q=k;
+  qword rotation=QwScaleX(w.axis.vector.q,k);w.angularNormal.q=k;
   func_001FAC98(a,rotation);
  }
  if(0.0f<span&&span<1.0f&&0.9f<w.normal.f[2]){

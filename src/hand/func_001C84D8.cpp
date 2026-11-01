@@ -1,3 +1,4 @@
+#include "vu0.h"
 /* func_001C84D8: VU nearest-of-9 selection state machine. The copy of p->index into a register
    variable (a3) reproduces the target's daddu scheduling; register pins as in other VU files. */
 typedef int qword __attribute__((mode(TI)));
@@ -14,7 +15,6 @@ extern "C" void func_001E0020(SGG*,ALARM*);
 extern "C" void func_001C8918(struct S*,int);
 extern "C" int func_00131968(void*);
 static inline qword Pack(float x,float y,float z){register qword result __asm__("$3");register unsigned word __asm__("$2");__asm__("mfc1 %0,%2\n\tmfc1 %1,%3\n\tpextlw %0,%1,%0\n\tmfc1 %1,%4\n\tpcpyld %0,%1,%0":"=&r"(result),"=&r"(word):"f"(x),"f"(y),"f"(z));return result;}
-static inline qword Sub(qword a,qword b){qword d;__asm__("vsub.xyzw %0,%1,%2":"=j"(d):"j"(a),"j"(b));return d;}
 static inline float Len(qword a){register qword d __asm__("vf1");register qword one __asm__("vf2");float f;__asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(d),"=&j"(one):"j"(a));__asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q":"+j"(d));__asm__("mtc1 %1,%0":"=f"(f):"r"(d));return f;}
 static inline float ClockTime(){float t;__asm__("lwc1 %0,%1":"=f"(t):"m"(g_clock.t));return t;}
 static inline char*MinimumPage(){register char*page __asm__("$6");__asm__("lui %0,%%hi(%1)":"=r"(page):"i"(&D_002A7798));return page;}
@@ -39,7 +39,7 @@ extern "C" void func_001C84D8(struct S*p){
     float bias,smallest;
     qword pt=Pack(p->input->x,p->input->y,0),vp;bias=D_002C0FE8;__asm__("qmtc2.ni %2,%0":"=j"(vp),"=m"(point.q):"r"(pt));point.q=pt;table=TableWithMinimum(minimumPage,tablePage,&smallest);best=-1;
     for(i=0;i<9;i++){
-     float distance=Len(Sub(vp,table[i]));
+     float distance=Len(QwSub(vp,table[i]));
      if(i==comparison)distance*=bias;
      if(distance<smallest){smallest=distance;best=i;}
     }

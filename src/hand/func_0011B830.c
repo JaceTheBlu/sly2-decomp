@@ -1,3 +1,4 @@
+#include "vu0.h"
 /* func_0011B830: matched from build/hand_wip/func_0011B830.v4.c. Separate l/l2 for the two
    lengths, plus allocation-only operands on the first Div and second Len. */
 typedef int qword __attribute__((mode(TI)));
@@ -38,7 +39,6 @@ static inline qword Div(qword v, qword l)
     __asm__("vdiv $Q, $vf0w, %1x\n\tvwaitq\n\tvmulq.xyzw %0, %2, $Q" : "=j"(r) : "j"(l), "j"(v));
     return r;
 }
-static __inline__ float F(qword q) { float g; __asm__("mtc1 %1, %0" : "=f"(g) : "r"(q)); return g; }
 M3 *func_0011B830(M3 *pm, qword x, qword y)
 {
     qword l, l2, z;
@@ -46,7 +46,7 @@ M3 *func_0011B830(M3 *pm, qword x, qword y)
     qword fb;
     l = Len(x);
     fb = D_002A2DA0;
-    if (F(l) < 1.0e-4f)
+    if (GetX(l) < 1.0e-4f)
         xn = fb;
     else
         xn = Div1(x, l);
@@ -56,7 +56,7 @@ M3 *func_0011B830(M3 *pm, qword x, qword y)
     pm->r[0] = xn;
     { qword t[1]; t[0] = z; } /* dead stack copy of z (the target's sqc2 vf1,0(sp)) */
     pm->r[1] = Div(z, l2);
-    if (F(l2) < 1.0e-4f)
+    if (GetX(l2) < 1.0e-4f)
         pm->r[1] = func_0011E390(xn);
     pm->r[2] = Cross(pm->r[0], pm->r[1]);
     return pm;

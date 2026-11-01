@@ -27,12 +27,8 @@ qword func_001A6FC0(void*,ACTOR*,qword);
 void func_001C45A8(OUTPUT*);
 int func_0011D4D0(float,float,float);
 }
-static inline qword ToVU(qword a){qword r;__asm__("qmtc2.ni %1,%0":"=j"(r):"r"(a));return r;}
-static inline float X(qword a){float r;__asm__("mtc1 %1,%0":"=f"(r):"r"(a));return r;}
-static inline float Y(qword a){float r;__asm__("prot3w %0,%1":"=r"(r):"r"(a));return r;}
-static inline float Z(qword a){float r;__asm__("pextuw %0,$zero,%1":"=r"(r):"r"(a));return r;}
 static inline qword Root(qword a){__asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q":"+j"(a));return a;}
-static inline float LengthXY(qword a){qword r;__asm__("vmul.xy %0,%1,%1\n\tvaddy.x %0,%0,%0y":"=j"(r):"j"(a));return X(Root(r));}
+static inline float LengthXY(qword a){qword r;__asm__("vmul.xy %0,%1,%1\n\tvaddy.x %0,%0,%0y":"=j"(r):"j"(a));return GetX(Root(r));}
 static inline void NormalizeTangent(U &output){
  register qword vector __asm__("vf3");
  register qword length __asm__("vf1");
@@ -104,7 +100,7 @@ extern "C" void func_001E46A0(P *p,OUTPUT *out){
   t=func_001E6728(actor->curve,actor->curveTime-50.0f);
   func_001E6F10(actor->curve,&work.to.q,0,t);
   qword direction=func_001C4768(out,QwSub(work.from.q,work.to.q));
-  float x=X(direction),y=Y(direction);
+  float x=GetX(direction),y=GetY(direction);
   out->heading=func_002458F0(y,x);out->x=x;out->y=y;
   if(actor->curve->cyclic){
    float forward,backward;

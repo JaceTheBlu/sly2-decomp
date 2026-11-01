@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};
 struct M3 {U rows[3];};
@@ -41,8 +42,7 @@ void func_001FB2C0(SOUND *,float);
 void func_001FB060(SOUND *);
 void func_001F5078(P *);
 }
-static inline float X(qword q){float f;__asm__("mtc1 %1,%0":"=f"(f):"r"(q));return f;}
-static inline float Y(qword q){qword r;__asm__("prot3w %0,%1":"=r"(r):"r"(q));return X(r);}
+static inline float Y(qword q){qword r;__asm__("prot3w %0,%1":"=r"(r):"r"(q));return GetX(r);}
 static inline qword Pack(float x,float y,float z){qword a,b;__asm__("mfc1 %0,%2\n\tmfc1 %1,%3\n\tpextlw %0,%1,%0\n\tmfc1 %1,%4\n\tpcpyld %0,%1,%0":"=&r"(a),"=&r"(b):"f"(x),"f"(y),"f"(z));return a;}
 static inline qword PackMesh(float x,float y,float z){register qword a __asm__("$2"),b __asm__("$3");__asm__("mfc1 %0,%2\n\tmfc1 %1,%3\n\tpextlw %0,%1,%0\n\tmfc1 %1,%4\n\tpcpyld %0,%1,%0":"=&r"(a),"=&r"(b):"f"(x),"f"(y),"f"(z));return a;}
 static inline qword Dot(qword a,qword b){qword r,one;__asm__("vmul.xyz %0,%2,%3\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(r),"=&j"(one):"j"(a),"j"(b));return r;}
@@ -50,7 +50,6 @@ static inline float ShotLength(qword a){qword r=Dot(a,a);__asm__("vsqrt Q,%0x\n\
 static inline float DistanceAndVelocity(qword a,qword velocity,U&home){qword r=a;asm("vmul.xy %0,%0,%0\n\tvaddy.x %0,%0,%0y\n\tsq %2,%1":"+j"(r),"=m"(home.q):"r"(velocity));asm("vsqrt Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,Q":"+j"(r));register float value __asm__("$2");asm("qmfc2.ni %0,%1":"=r"(value):"j"(r));return value;}
 static inline float Evaluate(const POLY &p,float t){return p.a+t*(p.b+t*p.c);}
 static inline float Clamp(float v,float low,float high){if(v<low)return low;else if(high<v)return high;else return v;}
-static inline float Abs(float f){return __builtin_fabsf(f);}
 static inline void ResetDrive(P *p){
  register float zero __asm__("$f1"),heading __asm__("$f0");
  __asm__("mtc1 $zero,%0\n\t"
@@ -84,7 +83,7 @@ extern "C" void func_001D19A8(P *p)
     }
     register float angle __asm__("$f0")=RadNormalize__Ff(p->goalHeading-p->heading);
     p->steering=Clamp(Evaluate(D_002C2040,angle),D_002C2050.low,D_002C2050.high);
-    angle=Abs(RadNormalize__Ff(p->goalHeading-p->heading));
+    angle=GAbs(RadNormalize__Ff(p->goalHeading-p->heading));
     p->acceleration=Clamp(Evaluate(D_002C2060,angle),D_002C2070.low,D_002C2070.high);
     angle=RadNormalize__Ff(p->goalHeading-p->heading);
     struct LOWER_PAGE {char before[0x2090];LIMITS limits;};
@@ -115,7 +114,7 @@ extern "C" void func_001D19A8(P *p)
             ++i;
             qword direction=func_0011E1A0(p->wheelAngle,1.0f,0.0f);
             direction=func_0022FCC8(0,side->reference->parent,direction);
-            float orientation=func_002458F0(Y(direction),X(direction));
+            float orientation=func_002458F0(Y(direction),GetX(direction));
             scalar.q=Pack(0.0f,0.0f,func_0011D948(limits,orientation));
             limits=(LIMITS*)((char*)limits+sizeof(SIDE));
             func_0012D108(side->binding,scalar.q);

@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Apply queued translation and rotation, then refresh changed objects.
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;int i[4];float f[4];};
@@ -13,10 +14,7 @@ extern "C" qword func_0022FCC8(void *,LO *,qword);
 extern "C" qword *__as__6VECTORG9VU_VECTOR(qword *,qword);
 extern "C" M3 LoadRotateMatrix__FUx(qword);
 extern "C" void func_001F4BF8(P *);
-static inline float X(qword q){float f;__asm__("mtc1 %1,%0":"=f"(f):"r"(q));return f;}
-static inline float Y(qword q){float f;__asm__("prot3w %0,%1":"=r"(f):"r"(q));return f;}
-static inline float Z(qword q){float f;__asm__("pextuw %0,$zero,%1":"=r"(f):"r"(q));return f;}
-static inline void Near(int*out,qword a,qword b){if(func_0011D4D0(X(a),X(b),0.0001f))if(func_0011D4D0(Y(a),Y(b),0.0001f))*out=func_0011D4D0(Z(a),Z(b),0.0001f)!=0;}
+static inline void Near(int*out,qword a,qword b){if(func_0011D4D0(GetX(a),GetX(b),0.0001f))if(func_0011D4D0(GetY(a),GetY(b),0.0001f))*out=func_0011D4D0(GetZ(a),GetZ(b),0.0001f)!=0;}
 static inline qword Add(qword a,qword b){__asm__("vadd.xyzw %0,%1,%0":"+j"(b):"j"(a));return b;}
 static inline M3 Mul(const M3&a,const M3&b) return r {
     qword a0=a.r[0],a1=a.r[1],a2=a.r[2];

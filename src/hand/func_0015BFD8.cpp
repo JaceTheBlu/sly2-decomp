@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct MATRIX4 { qword r[4]; };
@@ -9,11 +10,10 @@ struct X { float x, y, z, w; qword axis; float gRot; float gScale; };
 void LoadRotateMatrixRad__FfUx(MATRIX3 *pm, float g, qword axis);
 MATRIX4 operator*(const MATRIX4 &a, const MATRIX4 &b);
 MATRIX4 operator*(const MATRIX4 &m, VU_FLOAT s);
-static inline qword Add(qword a, qword b) { qword d; __asm__("vadd.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 static inline MATRIX4 operator+(const MATRIX4 &a, const MATRIX4 &b) return r
 {
     for (int i = 0; i < 4; i++)
-        r.r[i] = Add(a.r[i], b.r[i]);
+        r.r[i] = QwAdd(a.r[i], b.r[i]);
 }
 extern "C" MATRIX4 func_0015BFD8(X *p);
 MATRIX4 func_0015BFD8(X *p)

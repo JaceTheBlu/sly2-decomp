@@ -90,7 +90,6 @@ static inline VV Divide(VV v, VV scalar) { qword r; __asm__("vdiv $Q,$vf0w,%1x\n
 static inline float Evaluate(const POLY &p, float t) { return p.a + t * (p.b + t * p.c); }
 static inline float Clamp(float v, float low, float high) { if (v < low) return low; else if (high < v) return high; else return v; }
 static inline float ClampTo(float v, const LIMITS &l) { return Clamp(v, l.low, l.high); }
-static inline float Abs(float f) { return __builtin_fabsf(f); }
 
 extern "C" void func_001D2E18(P *p)
 {
@@ -142,7 +141,7 @@ extern "C" void func_001D2E18(P *p)
     float turnImpulse = func_0011CFE0((p->turn - localVelocity.f[2]) / clock->dt, acceleration * budget);
     torque.f[2] = turnImpulse;
     worldTorque.q = Rotate(p->secondary->world.basis, torque.q);
-    budget -= Abs(D_002C2148 * turnImpulse / acceleration);
+    budget -= GAbs(D_002C2148 * turnImpulse / acceleration);
     func_001FAC98(p, worldTorque.q);
     float dt = clock->dt;
     float half = dt * 0.5f;

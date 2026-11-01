@@ -65,7 +65,6 @@ void func_001A7C18(GAME *, SHAPE *, SOPART *, qword, qword, int, int, int, CONTA
 static inline M4 *GetMatrix(OWNER *p) { return p->vt[31].pfn((char *)p + p->vt[31].delta); }
 static inline void *PvAllocStack(int cb) { SWALLOC swalloc; swalloc.cb = cb; swalloc.cbAlign = 0x10; return PvAllocStackImpl__FP7SWALLOC(&swalloc); }
 static inline void ClearAb(void *pv, int cb) { func_002333B4(pv, 0, cb); }
-static inline float Sqrt(float f) { float r; __asm__ __volatile__("sqrt.s %0,%1" : "=&f"(r) : "f"(f)); return r; }
 
 static inline float PlaneDist(qword plane, qword pos)
 {
@@ -175,7 +174,7 @@ extern "C" void func_001D3450(OWNER *owner, WHEEL *wheel, SOPART *ppart, int unu
     BSP *absp;
     absp = pbsp = (BSP *)PvAllocStack(0x1555 * sizeof(BSP));
     cbspLeft = 0x1555;
-    if (PruneBsp__FP3BSPT0fUxPiPP3BSP(pbspRoot, (BSP *)0x7FFFFFFF, frame.r[3].q, Sqrt(radius * radius + height * height), &cbspLeft, &pbsp) != 2)
+    if (PruneBsp__FP3BSPT0fUxPiPP3BSP(pbspRoot, (BSP *)0x7FFFFFFF, frame.r[3].q, GSqrt(radius * radius + height * height), &cbspLeft, &pbsp) != 2)
         return;
     int cbsp = pbsp - absp;
     SURF *asurf = ppart->geomWorld.asurf;
@@ -303,11 +302,11 @@ extern "C" void func_001D3450(OWNER *owner, WHEEL *wheel, SOPART *ppart, int unu
             if (local.z < 0.0f)
                 continue;
             float slope = -local.x / local.z;
-            float x = Sqrt(radius * radius * slope * slope / (slope * slope + 1.0f));
+            float x = GSqrt(radius * radius * slope * slope / (slope * slope + 1.0f));
             if (slope < 0.0f)
                 x = -x;
             x = Clamp(x, lower, upper);
-            float z = -Sqrt(radius * radius - x * x);
+            float z = -GSqrt(radius * radius - x * x);
             point.x = x;
             point.y = 0.0f;
             point.z = z;

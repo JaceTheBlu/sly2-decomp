@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f;};
 struct M3 {U r[3];M3(){} M3(const M3&m){r[0]=m.r[0];r[1]=m.r[1];r[2]=m.r[2];} M3 &operator=(const M3&m){r[0]=m.r[0];r[1]=m.r[1];r[2]=m.r[2];return *this;}};struct M4 {qword a,b,c,d;};
@@ -9,10 +10,8 @@ int func_001CF010(qword);int func_001CEFC8(qword);int func_001CF058(qword);
 M3*LoadRotateMatrixRad__FfUx(M3*,qword,float);M4 *func_0015BFD8(M4*,PHYS*);
 void func_001CF0A0(S*);
 }
-static inline qword Scale(qword a,qword s){qword r;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(r):"j"(a),"j"(s));return r;}
 static inline qword Sq(qword a){qword r,one;__asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(r),"=&j"(one):"j"(a));return r;}
 static inline qword Sqrt(qword a){__asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q":"+j"(a));return a;}
-static inline float Float(qword a){float f;__asm__("mtc1 %1,%0":"=f"(f):"r"(a));return f;}
 struct R3 {U r[3];};
 struct MATH {U first,second;R3 scratch;};
 union SHARED {MATH math;M4 matrix;};
@@ -40,9 +39,9 @@ static inline void PublishBasisStart(S*p,qword first,qword second){__asm__("sqc2
 void func_001CF0A0(S*p){
  WORK w;
  if(!func_001CF010(p->omega)) {
-  qword omega=Scale(p->omega,Broadcast(&w.shared.math.first,p->gE4*g_clock.dt+1.0f));
+  qword omega=QwScaleX(p->omega,Broadcast(&w.shared.math.first,p->gE4*g_clock.dt+1.0f));
   p->omega=omega;
-  float length=Float(Sqrt(Sq(omega)));
+  float length=GetX(Sqrt(Sq(omega)));
   if(0.0001f<length){
    w.shared.math.first.q=Normalize(omega,length,&w.shared.math.second);
    LoadRotateMatrixRad__FfUx((M3*)&w.rotation,w.shared.math.first.q,length*g_clock.dt);

@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct VTE { short d; short pad; void *pfn; };
@@ -18,7 +19,6 @@ qword func_001A62E8(void *p);
 void func_00155AE0(struct X *p, int k);
 void *func_00155A68(struct X *p);
 
-static inline qword Sub(qword a, qword b) { qword d; __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 void func_00155D90(struct X *p)
 {
     func_001EEF98(p);
@@ -28,7 +28,7 @@ void func_00155D90(struct X *p)
         case 0:
             if (func_00174FB8(p->x18)) {
                 struct SO *pso;
-                qword d = Sub(func_001A62E8(p->x40), p->pso->pos);
+                qword d = QwSub(func_001A62E8(p->x40), p->pso->pos);
                 pso = p->pso;
                 ((void (*)(void *, qword))pso->vt[29].pfn)((char *)pso + pso->vt[29].d, d);
                 pso = p->pso;

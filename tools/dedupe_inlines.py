@@ -16,7 +16,7 @@ HEADER = 'vu0.h'
 DEF = re.compile(r'^[ \t]*static[ \t]+(?:__inline__|inline)[ \t][^\n]*\{[^\n]*\}[ \t]*\n', re.M)
 QW = r'(?:vu0_qword|qword|u128|s128|QWORD|int __attribute__\(\(mode\(TI\)\)\))'
 KEYWORDS = {'static', 'inline', '__inline__', 'float', 'int', 'return', '__asm__', 'asm', 'volatile', 'unsigned',
-            'QW', 'if', 'else', 'f', 'r', 'j', 'x', 'y', 'z'}
+            'QW', 'if', 'else'}
 
 
 def normalize(d):
@@ -30,9 +30,11 @@ def normalize(d):
     ids = [p.split()[-1].lstrip('*') for p in params.split(',') if p.strip() and p.strip() != 'void']
     ids += re.findall(r'\b(?:QW|float|int)\s+\*?(\w+)\s*[;=,]', body)
     t = ret + '(' + params + '){' + body + '}'
+    parts = re.split(r'("[^"]*")', t)          # rename outside string literals only ("=f", "r" are constraints)
     for i, n in enumerate(dict.fromkeys(ids)):
         if n in KEYWORDS: continue
-        t = re.sub(r'(?<!%)\b' + re.escape(n) + r'\b', 'v%d' % i, t)
+        parts = [x if x.startswith('"') else re.sub(r'\b' + re.escape(n) + r'\b', 'v%d' % i, x) for x in parts]
+    t = ''.join(parts).replace('$zero', '$0')
     t = re.sub(r'"([^"]*)"', lambda s: '"' + re.sub(r'\s*,\s*', ',', re.sub(r'\s+', ' ', s.group(1).strip())) + '"', t)
     t = re.sub(r'\s+', ' ', t)
     t = re.sub(r' ?([(){};,:=*<>?]) ?', r'\1', t)
@@ -68,7 +70,7 @@ def main():
             continue
         for old, new in ren.items():
             if old != new: u = re.sub(r'\b' + re.escape(old) + r'\b(?=\s*\()', new, u)
-        u = f'#include "{HEADER}"\n' + u
+        if f'#include "{HEADER}"' not in u: u = f'#include "{HEADER}"\n' + u
         done += 1; removed += len(drop)
         if not dry: open(p, 'w', encoding='utf-8', errors='surrogateescape').write(u)
     print(f'{done} file(s): {removed} local helper definition(s) replaced by include/{HEADER}' + (' (dry run)' if dry else ''))

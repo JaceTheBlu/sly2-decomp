@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];int i[4];};
@@ -27,11 +28,10 @@ static inline M3 Mul(const M3 &a,const M3 &b) return r
     __asm__("vmulax.xyz ACC,%1,%4x\n\tvmadday.xyz ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z":"=j"(r.r[1].q):"j"(a0),"j"(a1),"j"(a2),"j"(b.r[1].q));
     __asm__("vmulax.xyz ACC,%1,%4x\n\tvmadday.xyz ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z":"=j"(r.r[2].q):"j"(a0),"j"(a1),"j"(a2),"j"(b.r[2].q));
 }
-static inline float X(qword q){float f;__asm__("mtc1 %1,%0":"=f"(f):"r"(q));return f;}
 static inline float Y(qword q){register float f __asm__("$2");__asm__("prot3w %0,%1":"=r"(f):"r"(q));return f;}
 static inline float Z(qword q){register float f __asm__("$2");__asm__("pextuw %0,$zero,%1":"=r"(f):"r"(q));return f;}
 static inline int NearFlag(int code){register int r __asm__("$21");__asm__("sltu %0,$zero,%1":"=r"(r):"r"(code));return r;}
-static inline void Near(int *out,qword a,qword b){if(func_0011D4D0(X(a),X(b),0.0001f))if(func_0011D4D0(Y(a),Y(b),0.0001f))*out=NearFlag(func_0011D4D0(Z(a),Z(b),0.0001f));}
+static inline void Near(int *out,qword a,qword b){if(func_0011D4D0(GetX(a),GetX(b),0.0001f))if(func_0011D4D0(Y(a),Y(b),0.0001f))*out=NearFlag(func_0011D4D0(Z(a),Z(b),0.0001f));}
 static inline qword Zero(){register qword r __asm__("vf3");__asm__("vsub.xyzw %0,$vf0,$vf0":"=j"(r));return r;}
 static inline void Consume(P *p,OWNER *object,U &pending,qword*out){func_00230598(p,object);qword world=func_0022FCC8(0,object->parent,pending.q);__asm__("sw $zero,%0\n\tsq %3,%1\n\tsw $zero,%2":"=m"(pending.i[1]),"=m"(*out),"=m"(pending.i[2]):"r"(world));}
 static inline float YFromHome(const qword &q){register qword bits __asm__("$2");register float r __asm__("$f13");__asm__("lq %0,%2\n\tprot3w %0,%0\n\tmtc1 %0,%1":"=r"(bits),"=f"(r):"m"(q));return r;}

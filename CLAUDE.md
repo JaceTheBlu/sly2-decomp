@@ -63,6 +63,10 @@ Newest first. Each entry: what changed, how it was verified, the metrics after i
   are renamed (`Sub` → `QwSub`). Files that keep another definition of the name (C++ overloads) are skipped.
   A first version treated the `VV` wrapper type as `qword`: objcheck showed 3 code changes, now excluded.
 - 149 files, ~240 local helper copies removed. objcheck 0; progress.py 6,662/6,662.
+- Second pass: identifiers renamed outside string literals only (locals named `f`/`r`/`x` now merge), `$zero` =
+  `$0`; added QwScaleX, QwMin/QwMax (vmini/vmax.xyz), QwToVf/GFromVf (qmtc2/qmfc2.ni), GAbs (fabsf), GSqrt
+  (sqrt.s). 110 more files, 181 copies. A file that already defined its own `GAbs` (a comparison, not fabsf)
+  conflicted with the new helper: its local copy is now `GAbsCmp`.
 - Tried and dropped: naming classes by comparing each unknown class's own slot functions with Sly 1 classes' (sizes
   plus code similarity): SPIRE barely beat TARGET and SM/WR/ALO came out wrong.
 

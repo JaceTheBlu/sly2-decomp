@@ -1,3 +1,4 @@
+#include "vu0.h"
 // MATCH from the 4-diff wip: ONE register pin, the pb->apos base in $2 (v0) inside the pxf block.
 // NEAR MISS (round 9): 4/130, only $v0/$v1 for &apos[i] in the first pxf block
 typedef int qword __attribute__((mode(TI)));
@@ -22,8 +23,6 @@ static inline qword MulRow(const MATRIX3 &m, qword v)
     __asm__("vmulax.xyz ACC, %2, %1x\n\tvmadday.xyz ACC, %3, %1y\n\tvmaddz.xyz %0, %4, %1z" : "=j"(r) : "j"(v), "j"(m.r[0]), "j"(m.r[1]), "j"(m.r[2]));
     return r;
 }
-static inline qword Add(qword a, qword b) { qword d; __asm__("vadd.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
-static inline qword Sub(qword a, qword b) { qword d; __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 static inline qword Cross(qword a, qword b)
 {
     qword d;
@@ -47,12 +46,12 @@ void func_0015B7E8(int c, EMITTER *pemit, BUF *pb)
             {
                 register qword *ppos __asm__("$2"); // register pin (target loads pb->apos into v0 and forms &apos[i] there)
                 ppos = pb->apos;
-                ppos[i] = Add(MulRow(pxf->mat, ppos[i]), pxf->pos);
+                ppos[i] = QwAdd(MulRow(pxf->mat, ppos[i]), pxf->pos);
             }
-            qword d = Sub(pb->apos[i], pxf->pos);
+            qword d = QwSub(pb->apos[i], pxf->pos);
             qword x = Cross(pxf->w, d);
-            qword t = Add(MulRow(pxf->mat, pb->av[i]), pxf->v);
-            pb->av[i] = Add(t, x);
+            qword t = QwAdd(MulRow(pxf->mat, pb->av[i]), pxf->v);
+            pb->av[i] = QwAdd(t, x);
         }
         if (pb->f10)
             func_0015AD48(pemit, &pb->apos[i], &pb->av[i]);

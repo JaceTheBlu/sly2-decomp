@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct PL { char pad[0x18]; float g18; float g1C; };
@@ -41,11 +42,10 @@ void func_001A1358(void *p);
 int func_00133D08(struct G *pg,struct BBOX *a,struct BBOX *b);
 void func_00134320(struct G *pg, struct P *p);
 void func_0012D108(void *p, qword v);
-static inline qword Bcast(float g) { qword a; __asm__("qmtc2.ni %1, %0" : "=j"(a) : "r"(g)); return a; }
 static inline void Neg(struct P *p, qword v)
 {
     union { qword q; float f[4]; } u;
-    qword b = Bcast(-1.0f);
+    qword b = QwFromG(-1.0f);
     u.q = b;
     __asm__("vmulx.xyzw %0, %1, %2x" : "=j"(p->v190) : "j"(v), "j"(u.q));
 }
@@ -53,7 +53,7 @@ static inline void Neg2(struct P *p, qword v)
 {
     struct ASEGA *pl = p->p1030;
     volatile qword u; /* scalar stack copy of the -1 broadcast (target stores it to 0(sp) last) */
-    qword b = Bcast(-1.0f); qword r;
+    qword b = QwFromG(-1.0f); qword r;
     __asm__("vmulx.xyzw %0, %1, %2x" : "=j"(r) : "j"(v), "j"(b));
     p->v190 = r;
     u = b;

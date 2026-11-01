@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "util.h"
 // func_00151C38: matched from the v7 draft. Normalize's sqrt and divide are two asms (sqrt into a
 // separate length temp), which lengthens the VU chain so the scheduler orders the block like the target; Cross lists `a`
@@ -35,8 +36,6 @@ static inline qword VecCombo(VU_FLOAT f1, VU_VECTOR v1, VU_FLOAT f2, VU_VECTOR v
     __asm__("vmulax.xyzw $ACC, %2, %1x\n\tvmaddx.xyzw %0, %4, %3x" : "=j"(r) : "j"(f1.q), "j"(v1.q), "j"(f2.q), "j"(v2.q), "j"(f1.q), "j"(f2.q)); /* extra unused operands: allocation only */
     return r;
 }
-static inline qword Sub(qword a, qword b) { qword d; __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
-static inline qword Add(qword a, qword b) { qword d; __asm__("vadd.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 static inline float Length(qword a)
 {
     qword d, one;
@@ -72,7 +71,7 @@ void func_00151C38(X *p)
 {
     U d;
     func_0014FD40(p);
-    d.q = Sub(func_001A62E8(p->p10), func_001A62E8(p->p14));
+    d.q = QwSub(func_001A62E8(p->p10), func_001A62E8(p->p14));
     d.f[2] = 0.0f;
     float dist = Length(d.q);
     U focus;
@@ -84,12 +83,12 @@ void func_00151C38(X *p)
     qword n = Normalize(Cross(d.q, g_normalZ));
     float g = GClamp(GFromClq(D_002BDAF0, dist), D_002BDB00.gMin, D_002BDB00.gMax);
     U pos2;
-    pos2.q = Add(focus.q, Scale(n, VU_FLOATJ(g)));
+    pos2.q = QwAdd(focus.q, Scale(n, VU_FLOATJ(g)));
     pos2.f[2] += GClamp(GFromClq(D_002BDB10, dist), D_002BDB20.gMin, D_002BDB20.gMax);
     {
         M4 m4;
         M3 m3;
-        func_0011B7E0(&m3, Sub(pos.q, pos2.q));
+        func_0011B7E0(&m3, QwSub(pos.q, pos2.q));
         M4 *pm4 = &m4;
         __as__6VECTORG9VU_VECTOR(&pm4->q.r[3], pos2.q);
         pm4->q.r[0] = m3.r[0];

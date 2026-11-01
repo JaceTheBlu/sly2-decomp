@@ -1,3 +1,4 @@
+#include "vu0.h"
 #define FIELD_OFFSET(t,m) ((uint)&(((t*)0)->m))
 typedef unsigned int uint;
 typedef int qword __attribute__((mode(TI)));
@@ -39,7 +40,6 @@ void func_001A0450(P*,ENTRY*,void*);
 }
 static inline qword Load(const U*p){qword q;__asm__("lqc2 %0,%1":"=j"(q):"m"(*p));return q;}
 static inline float LengthXY(qword v){qword q;float f;__asm__("vmul.xy %0,%1,%1\n\tvaddy.x %0,%0,%0y":"=j"(q):"j"(v));__asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q":"+j"(q));__asm__("mtc1 %1,%0":"=f"(f):"r"(q));return f;}
-static inline qword Vector(qword q){qword v;__asm__("qmtc2.ni %1,%0":"=j"(v):"r"(q));return v;}
 static inline qword Rotate(M3*m,qword vector){qword result=Load(&m->rows[0]),row1=m->rows[1].q,row2=m->rows[2].q; qword a,b,c,one;
  __asm__("vmul.xyzw %2,%0,%7\n\tvmaxw.xyzw %1,$vf0,$vf0w\n\tvmul.xyzw %3,%5,%7\n\tvmul.xyzw %4,%6,%7\n\tvadday.x $ACC,%2,%2y\n\tvmaddz.x %0,%1,%2z\n\tvaddax.y $ACC,%3,%3x\n\tvmaddz.y %0,%1,%3z\n\tvaddax.z $ACC,%4,%4x\n\tvmaddy.z %0,%1,%4y":"+j"(result),"=&j"(one),"=&j"(a),"=&j"(b),"=&j"(c):"j"(row1),"j"(row2),"j"(vector));return result;
 }
@@ -103,7 +103,7 @@ extern "C" void func_001B5990(P*p){
   func_002046F0(p,p->target);
   float length=LengthXY(p->axes[1].direction.q);
   PL*input=p->input;
-  qword direction=Vector(func_0011E1A0(input->angle+3.1415927f,(input->strength*length)*p->animation->rate,0.0f));
+  qword direction=QwToVf(func_0011E1A0(input->angle+3.1415927f,(input->strength*length)*p->animation->rate,0.0f));
   p->acceleration.q=direction;
   qword world=Rotate(&p->orientation,direction);
   p->side=-1;p->acceleration.q=world;

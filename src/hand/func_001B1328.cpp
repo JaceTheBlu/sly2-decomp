@@ -27,10 +27,8 @@ static inline void SetVelocity(P*p,qword q){VE&v=p->vt[35];((void(*)(void*,qword
 static inline void SetZeroVelocity(P*p){SetVelocity(p,D_002A2DD0.q);}
 // broadcast a float into a VU register and keep the scratch store the original left in `home`
 static inline qword SplatInto(float f,U*home){qword q;__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(f));home->q=q;return q;}
-static inline qword ScaleX(qword a,qword s){qword r;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(r):"j"(a),"j"(s));return r;}
 // length of a vector, in two steps (sum of squares, then sqrt) so the stores/loads of the callers can sit between them
 static inline qword LengthV(qword v){qword d,one;__asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(d),"=&j"(one):"j"(v));__asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q":"+j"(d));return d;}
-static inline float FloatOf(qword a){float f;__asm__("qmfc2.ni %0,%1":"=r"(f):"j"(a));return f;}
 // v * (1/n.x); the "memory" clobbers (here and on LEN1M/LEN2M) keep the surrounding loads/stores in source order
 static inline qword DivBy(qword v,qword n){qword r;__asm__("vdiv $Q,$vf0w,%1x\n\tvwaitq\n\tvmulq.xyzw %0,%2,$Q":"=j"(r):"j"(n),"j"(v):"memory");return r;}
 static inline qword SplatBits(int bits){qword q;__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(bits));return q;}
@@ -70,7 +68,7 @@ extern "C" void func_001B1328(P*p,int next){
   SetMode(p);{float now=g_clock.t;p->randomDeadline=now+GRandInRange__Fff(p->low1,p->high1);}break;
  case 2:{
   p->phase=-p->phase;float negative=-1.0f;M4*m=GetMatrix(p);
-  qword row=m->row[0].q;qword factor=SplatInto(negative,&w.first);qword scaled=ScaleX(row,factor);
+  qword row=m->row[0].q;qword factor=SplatInto(negative,&w.first);qword scaled=QwScaleX(row,factor);
   DecomposeSphere__FUxPfN21(scaled,&w.angle,0,0);func_001B1818(p,w.angle);SetZeroVelocity(p);func_002303A0(p,p->group,1);func_0022C840(p,p->group);break;
  }
  case 3:
@@ -83,7 +81,7 @@ extern "C" void func_001B1328(P*p,int next){
    float phase=func_001E77E8(p->path);
    qword delta=QwSub(w.first.q,w.second.q);
    float speed=p->speed.value;
-   float travel=FloatOf(LengthV(delta));
+   float travel=GFromVf(LengthV(delta));
    p->phase=phase;
    travel/=speed;
    float end=func_001E6648(p->path);
@@ -96,11 +94,11 @@ extern "C" void func_001B1328(P*p,int next){
   qword point=w.direction.q;
   // register pin: local-alloc would otherwise give vf1 to the unused `one` scratch of LEN1M (the original has the length in vf1)
   register qword norm __asm__("vf1");qword one;LEN1M(norm,one,point);
-  qword fallback=D_002A2DA0.q;LEN2M(norm);float length=FloatOf(norm);qword direction;
+  qword fallback=D_002A2DA0.q;LEN2M(norm);float length=GFromVf(norm);qword direction;
   if(length<0.0001f)direction=fallback;else direction=DivBy(point,norm);
   qword factor=SplatBits(p->speed.bits);
   w.scalar.q=factor;
-  qword velocity=ScaleX(direction,factor);
+  qword velocity=QwScaleX(direction,factor);
   w.velocity.q=velocity;SetVelocity(p,velocity);SetMode(p);break;
  }
  case 5:{

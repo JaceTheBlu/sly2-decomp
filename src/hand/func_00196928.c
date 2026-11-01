@@ -9,7 +9,6 @@ int CSolveQuadratic__FfffPf(float a, float b, float c, float *roots);
 static inline float Sqrt(float x) { float r; __asm__("sqrt.s %0,%1" : "=&f"(r) : "f"(x)); return r; }
 /* v.z as a float; Zin overwrites its (copied) input, Z reads it */
 static inline float Zin(qword v) { float f; __asm__("pextuw %0,$zero,%0" : "=r"(f) : "0"(v)); return f; }
-static inline float Z(qword v) { float f; __asm__("pextuw %0,$zero,%1" : "=r"(f) : "r"(v)); return f; }
 /* length of the xy part through VU0.  The duplicated "j"(v) input is allocation-only: it makes v prefer
    a VU register class, so it is spilled to the stack (sq at entry, lqc2 reload) instead of living in $s1. */
 static inline float LenXY(qword v) {
@@ -23,7 +22,7 @@ static inline float LenXY(qword v) {
 
 float func_00196928(qword v, qword a, float low, float high, float slope0, float slope1) {
     U r0, r1;
-    float az = Z(a) * 0.5f, naz = -az;
+    float az = GetZ(a) * 0.5f, naz = -az;
     float vz, best = 0.0f, l, t;
     int n;
     vz = Zin(v);

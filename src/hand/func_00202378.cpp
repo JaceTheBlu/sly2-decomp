@@ -24,7 +24,6 @@ extern "C" LO *func_0014CC58(int,qword,qword,int,LO **,void *);
 extern char g_sw[];
 extern qword D_002DDFA0[3];
 static inline qword Cross(qword a,qword b){qword r;__asm__("vopmula.xyz $ACC,%1,%2\n\tvopmsub.xyz %0,%2,%1":"=j"(r):"j"(a),"j"(b));return r;}
-static inline qword Scale(qword v,qword k){qword r;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(r):"j"(v),"j"(k));return r;}
 // v / |v|: the dot product names v twice (the side vector's registers only match that way)
 static inline qword Normalize(qword v)
 {
@@ -61,7 +60,7 @@ extern "C" void func_00202378(P *p,LO *other)
         points[0].q=origin;
         points[1].q=QwAdd(origin,up);
         points[2].q=QwSub(origin,up);
-        points[3].q=QwAdd(origin,Scale(side,scale.q));
+        points[3].q=QwAdd(origin,QwScaleX(side,scale.q));
     }
     point=points;
     for(;i<4;++i){

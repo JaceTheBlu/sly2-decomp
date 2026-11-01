@@ -1,3 +1,4 @@
+#include "vu0.h"
 // func_001E6F60: closest point of a path (a chain of control points, transformed by the path's
 // own matrix) to a query point. mode 0 walks every segment, projects the point on it (clamped to the segment), keeps the
 // nearest candidate and reports its position, direction, interpolated time and the path value at that time. mode 1 only
@@ -66,8 +67,7 @@ static inline VV Root(VV a)
     __asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q" : "+j"(a));
     return a;
 }
-static inline float ToFloatR(qword v) { float f; __asm__("mtc1 %1,%0" : "=f"(f) : "r"(v)); return f; }
-static inline float Length(VV a) { return ToFloatR(Root(Dot(a, a))); }
+static inline float Length(VV a) { return GetX(Root(Dot(a, a))); }
 static inline VV Normalize(VV a)
 {
     qword length = Root(Dot(a, a));
