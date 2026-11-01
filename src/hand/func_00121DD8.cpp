@@ -1,15 +1,5 @@
+#include "cref.h"
 #include "vec.h"
-struct CRef {
-    int m_tagk; union { int n; float g; void *pv; } u;
-    CRef() { m_tagk = -1; }
-    CRef(int tagk) { InitTag(tagk); }
-    CRef(const CRef &r);
-    void Decref();
-    void InitTag(int tagk);
-    ~CRef() { Decref(); }
-    CRef &operator=(const CRef &r);
-    CRef &operator=(float g);
-};
 struct NODE { int cref; int x4; CRef ref; NODE *pnext; };
 extern "C" {
 CRef func_00129DA8(CRef *pref);
@@ -18,10 +8,10 @@ CRef func_00121DD8(int c, CRef *pref);
 CRef func_00121DD8(int c, CRef *pref)
 {
     CRef ref(0x1A);
-    VECTOR *pv = (VECTOR *)ref.u.pv;
+    VECTOR *pv = (VECTOR *)ref.m_p;
     NODE *pn;
     if (c > 0)
-        pn = (NODE *)pref->u.pv;
+        pn = (NODE *)pref->m_p;
     switch (c) {
     case 0:
         pv->z = 0.0f;
@@ -30,7 +20,7 @@ CRef func_00121DD8(int c, CRef *pref)
         break;
     case 1: {
         CRef r = func_00129DA8(&pn->ref);
-        float g = r.u.g;
+        float g = r.m_g;
         pv->z = g;
         pv->y = g;
         pv->x = g;
@@ -41,7 +31,7 @@ CRef func_00121DD8(int c, CRef *pref)
         int i;
         for (i = 0; i < 3; i++) {
             CRef r = func_00129DA8(&pn->ref);
-            *pg = r.u.g;
+            *pg = r.m_g;
             pg++;
             pn = pn->pnext;
         }

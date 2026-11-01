@@ -1,12 +1,4 @@
-struct CRef {
-    int m_tagk; union { int n; float g; void *pv; } u;
-    CRef() { m_tagk = -1; }
-    CRef(const CRef &r);
-    void Decref();
-    void InitTag(int tagk);
-    ~CRef() { Decref(); }
-    CRef &operator=(const CRef &r);
-};
+#include "cref.h"
 struct BINDING { int a, b; int sym; CRef ref; BINDING *pnext; };
 class CSidebag {
 public:

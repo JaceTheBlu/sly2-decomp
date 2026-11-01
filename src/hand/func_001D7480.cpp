@@ -1,12 +1,4 @@
-struct CRef {
-    int m_tagk;
-    int m_tag;
-    CRef() { m_tagk = -1; }
-    CRef(const CRef &);
-    ~CRef() { Decref(); }
-    CRef &operator=(const CRef &);
-    void Decref();
-};
+#include "cref.h"
 typedef struct { short d; short pad; void *pfn; } VTE;
 struct SO { char pad0[0xC]; VTE *vt; };
 struct SUB { char pad[0x74]; int x74; };

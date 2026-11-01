@@ -1,14 +1,4 @@
-struct CRef {
-    int m_tagk; union { int n; float g; void *pv; } u;
-    CRef() { m_tagk = -1; }
-    CRef(int tagk) { InitTag(tagk); }
-    CRef(const CRef &r);
-    void Decref();
-    void InitTag(int tagk);
-    ~CRef() { Decref(); }
-    CRef &operator=(const CRef &r);
-    CRef &operator=(float g);
-};
+#include "cref.h"
 struct BINDING;
 extern char D_004520D0[];
 extern "C" {

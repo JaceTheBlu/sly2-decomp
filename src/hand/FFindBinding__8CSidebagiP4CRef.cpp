@@ -1,3 +1,4 @@
+#define CREF_PLAIN   /* this source uses CRef as plain data: no constructor/destructor calls */
 #include "cref.h"
 void func_00129658(CRef *pref, CRef *prefSrc) asm("func_00129658");
 struct BINDING { int pad[2]; int sym; CRef ref; BINDING *pnext; };

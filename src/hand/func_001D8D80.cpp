@@ -1,12 +1,4 @@
-struct CRef {
-    int m_tagk;
-    int m_tag;
-    CRef() { m_tagk = -1; }
-    CRef(const CRef &);
-    ~CRef() { Decref(); }
-    CRef &operator=(const CRef &);
-    void Decref();
-};
+#include "cref.h"
 struct FRAME {
     int a[4];
     FRAME();

@@ -1,14 +1,5 @@
+#include "cref.h"
 typedef int qword __attribute__((mode(TI)));
-struct CRef {
-    int m_tagk; union { int n; float g; void *pv; } u;
-    CRef() { m_tagk = -1; }
-    CRef(int tagk) { InitTag(tagk); }
-    CRef(const CRef &r);
-    void Decref();
-    void InitTag(int tagk);
-    ~CRef() { Decref(); }
-    CRef &operator=(const CRef &r);
-};
 struct VECTOR { float x, y, z, w; } __attribute__((aligned(16)));
 struct MATRIX3 { VECTOR mat[3]; };
 struct W { char pad[0xC]; qword *pv; };
@@ -30,11 +21,11 @@ CRef func_00123208(void *pbasic, CRef *aref)
     if (aref[2].m_tagk == 0)
         pup = &g_normalZ;
     else
-        pup = ((W *)aref[2].u.pv)->pv;
+        pup = ((W *)aref[2].m_p)->pv;
     union { qword q; } v;
-    v.q = VecSub((qword *)aref[1].u.pv, (qword *)aref[0].u.pv);
+    v.q = VecSub((qword *)aref[1].m_p, (qword *)aref[0].m_p);
     CRef ref(0x1B);
-    MATRIX3 *pmat = (MATRIX3 *)ref.u.pv;
+    MATRIX3 *pmat = (MATRIX3 *)ref.m_p;
     *pmat = func_0011B830(v.q, *pup);
     pmat->mat[2].w = 0.0f;
     pmat->mat[1].w = 0.0f;

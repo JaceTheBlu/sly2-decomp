@@ -1,14 +1,6 @@
+#include "cref.h"
 typedef char *va_list;
 #define va_start(ap, last) (ap = ((char *)__builtin_next_arg(last) - (__builtin_args_info(2) >= 8 ? 0 : (8 - __builtin_args_info(2)) * 8)))
-struct CRef {
-    int m_tagk;
-    int m_tag;
-    CRef() { m_tagk = -1; }
-    CRef(const CRef &);
-    ~CRef() { Decref(); }
-    CRef &operator=(const CRef &);
-    void Decref();
-};
 struct FRAME {
     int a[4];
     FRAME();

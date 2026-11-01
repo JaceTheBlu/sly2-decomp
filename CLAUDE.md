@@ -47,11 +47,26 @@ commit of this branch so far). Do not regenerate it on a dirty tree you have not
 | `tools/dedupe_inlines.py [--dry-run] [FILE…]` | replace local copies of the include/vu0.h helpers |
 | `tools/consolidate.py STRUCT` | merge all local definitions of a struct by offset (draft a canonical layout) |
 | `tools/name_vslots.py [--dry-run]` | name virtual methods from their vtable slot and class (`InitCid48` until the class is named) |
+| `tools/migrate_cref.py [--dry-run]` | replace local C++ CRef classes by include/cref.h |
 | `tools/resolve_names.py [--sly1 DIR] [--apply]` | give addresses to names the sources use without one (needs the executable) |
 
 ## Progress log
 
 Newest first. Each entry: what changed, how it was verified, the metrics after it.
+
+### 2026-11-01 — CRef as a shared C++ class
+
+- `include/cref.h` now gives C++ sources the CRef class (anonymous union `m_tag`/`m_p`/`m_g`; inline default and
+  tag constructors, destructor calling Decref; copy constructor, Decref, InitTag and the operator= overloads only
+  declared). C sources, and C++ sources that `#define CREF_PLAIN` first, get the bare layout: 9 sources that had
+  been migrated to the bare struct handle CRef as plain data, and giving them the class changed their code
+  (objcheck: 7 differences), so they define CREF_PLAIN.
+- `tools/migrate_cref.py`: converts local C++ CRef classes whose members/methods are all in cref.h; renames
+  `.u.n/.u.g/.u.pv` to `m_tag/m_g/m_p`. 114 files; objcheck 0.
+- Tried on the unknown slots of the LO vtable: their Sly 1 counterparts are not decompiled, and the Sly 2 code
+  (flag bits, list handling) differs too much from Sly 1's AddLo/RemoveLo to name slots 8–10 and 13 safely.
+- Tried for class names: aliases and typed declarations of the `CidNN` methods give almost nothing (one vote for
+  RIPG on cid 48, one for GOMER on 56).
 
 ### 2026-11-01 — Virtual methods named by role (tools/name_vslots.py)
 

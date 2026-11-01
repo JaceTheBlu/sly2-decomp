@@ -1,13 +1,4 @@
-struct CRef {
-    int m_tagk; union { int n; float g; void *pv; } u;
-    CRef() { m_tagk = -1; }
-    CRef(int tagk) { InitTag(tagk); }
-    CRef(const CRef &r);
-    void Decref();
-    void InitTag(int tagk);
-    ~CRef() { Decref(); }
-    CRef &operator=(const CRef &r);
-};
+#include "cref.h"
 struct NODE { int x0, x4; CRef ref; NODE *pnext; };
 struct P { char pad[0xC]; struct { char pad[0x10]; NODE *pargs; } *pv; };
 struct FRAME {
@@ -38,10 +29,10 @@ CRef func_00126DB8(P *p, FRAME *pframe)
     if (pargs->ref.m_tagk == 0x1F) {
         FRAME *pfNew = func_00256DD0();
         spf = pfNew;
-        for (pn = (NODE *)pargs->ref.u.pv; pn; pn = pn->pnext) {
-            NODE *pb = (NODE *)pn->ref.u.pv;
+        for (pn = (NODE *)pargs->ref.m_p; pn; pn = pn->pnext) {
+            NODE *pb = (NODE *)pn->ref.m_p;
             refVal = func_00127838(pb->pnext, pframe);
-            refT = RefAddBinding__6CFrameUiP4CRef(spf.p, pb->ref.u.n, &refVal);
+            refT = RefAddBinding__6CFrameUiP4CRef(spf.p, pb->ref.m_tag, &refVal);
         }
         func_00127B18(spf.p, pframe);
     } else {

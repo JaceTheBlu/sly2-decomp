@@ -1,3 +1,4 @@
+#define CREF_PLAIN   /* this source uses CRef as plain data: no constructor/destructor calls */
 #include "cref.h"
 extern "C" void func_00129EC8(struct CRef *pref);
 class OBase { public: int a, b, c; virtual void V1(); virtual void V2(); virtual void Msg(int, void *, int, void **, CRef *); };

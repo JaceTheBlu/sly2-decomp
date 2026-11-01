@@ -1,3 +1,4 @@
+#define CREF_PLAIN   /* this source uses CRef as plain data: no constructor/destructor calls */
 #include "cref.h"
 struct OBJ;
 struct PRM { int a; int k; int rest[8]; };

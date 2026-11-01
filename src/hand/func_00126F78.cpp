@@ -1,14 +1,4 @@
-struct CRef {
-    int m_tagk; union { int n; float g; void *pv; } u;
-    CRef() { m_tagk = -1; }
-    CRef(int tagk) { InitTag(tagk); }
-    CRef(const CRef &r);
-    void Decref();
-    void InitTag(int tagk);
-    ~CRef() { Decref(); }
-    CRef &operator=(const CRef &r);
-    CRef &operator=(float g);
-};
+#include "cref.h"
 struct Q { char pad[0x10]; Q *pnext; };
 struct R { char pad[0x10]; Q *pq; };
 struct P { char pad[0xC]; R *pr; };
@@ -23,7 +13,7 @@ CRef func_00126F78(P *p, CRef *aref)
     Q *pqBody = pqCond->pnext;
     for (;;) {
         ref = func_00127838(pqCond, aref);
-        if (ref.m_tagk == 0x17 && ref.u.n == 0)
+        if (ref.m_tagk == 0x17 && ref.m_tag == 0)
             break;
         ref = func_00127838(pqBody, aref);
     }

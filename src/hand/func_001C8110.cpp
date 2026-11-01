@@ -1,3 +1,4 @@
+#define CREF_PLAIN   /* this source uses CRef as plain data: no constructor/destructor calls */
 #include "cref.h"
 extern "C" {
 void func_001AE478(void *p);

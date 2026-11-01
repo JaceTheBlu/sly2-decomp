@@ -1,15 +1,5 @@
+#include "cref.h"
 typedef int qword __attribute__((mode(TI)));
-struct CRef {
-    int m_tagk; union { int n; float g; void *pv; } u;
-    CRef() { m_tagk = -1; }
-    CRef(int tagk) { InitTag(tagk); }
-    CRef(const CRef &r);
-    void Decref();
-    void InitTag(int tagk);
-    ~CRef() { Decref(); }
-    CRef &operator=(const CRef &r);
-    CRef &operator=(float g);
-};
 struct W { char pad[0xC]; qword *pv; };
 extern qword D_002A2DD0;
 extern "C" {
@@ -37,11 +27,11 @@ CRef func_00122810(void *pbasic, CRef *aref)
 {
     CRef ref;
     if (aref[1].m_tagk == 0)
-        ref = SDist((qword *)aref[0].u.pv, &D_002A2DD0);
+        ref = SDist((qword *)aref[0].m_p, &D_002A2DD0);
     else
     {
-        register W *pw __asm__("$5") = (W *)aref[1].u.pv;
-        ref = SDist((qword *)aref[0].u.pv, pw->pv);
+        register W *pw __asm__("$5") = (W *)aref[1].m_p;
+        ref = SDist((qword *)aref[0].m_p, pw->pv);
     }
     return ref;
 }

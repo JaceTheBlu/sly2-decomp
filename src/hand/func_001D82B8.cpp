@@ -1,11 +1,4 @@
-struct CRef {
-    int m_tagk;
-    int m_tag;
-    CRef() { m_tagk = -1; }
-    CRef(const CRef &);
-    ~CRef() { Decref(); }
-    void Decref();
-};
+#include "cref.h"
 struct ENT {
     short ch;
     signed char kind;
