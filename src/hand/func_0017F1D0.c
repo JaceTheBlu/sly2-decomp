@@ -1,13 +1,13 @@
+#include "vtable.h"
 #include "vu0.h"
 /* Apply damage and a projected knockback impulse from the message. */
 typedef int qword __attribute__((mode(TI)));
 typedef union {qword q;float f[4];} U;
 struct P;
-struct VT {short d,pad;void *fn;};
 struct SPS {qword v;int kind;};
 struct O;
 struct Q {char pad[0xB0];struct SPS s;};
-struct P {char pad[0xC];struct VT *vt;char pad10[0x58-0x10];struct O *x58;char pad5C[0xE8-0x5C];struct Q*xE8;char padEC[0x184-0xEC];int n184;char pad188[0x1A0-0x188];float g0,g1,g2,g3,gMin,gMax;};
+struct P {char pad[0xC];struct VTE *vt;char pad10[0x58-0x10];struct O *x58;char pad5C[0xE8-0x5C];struct Q*xE8;char padEC[0x184-0xEC];int n184;char pad188[0x1A0-0x188];float g0,g1,g2,g3,gMin,gMax;};
 struct MSG {char pad[0x10];int delta;char pad14[0x20-0x14];qword pos;char pad30[0x44-0x30];int flags;};
 extern qword g_normalZ,D_002A2DA0;
 qword func_001A62E8(struct P*);
@@ -21,13 +21,13 @@ int func_0017F1D0(struct P*p,struct MSG*m){
  qword dir,v;float g,t;
  if(!(m->flags&8))return 0;
  p->n184+=m->delta;
- if(p->n184<=0){struct VT*vt=p->vt;((void(*)(struct P*,int))vt[82].fn)((struct P*)((char*)p+vt[82].d),0);return 1;}
+ if(p->n184<=0){struct VTE*vt=p->vt;((void(*)(struct P*,int))vt[82].pfn)((struct P*)((char*)p+vt[82].delta),0);return 1;}
  if(!p->xE8 || p->xE8->s.kind==3)return 1;
  dir=Normal(Reject(QwSub(func_001A62E8(p),m->pos),g_normalZ),D_002A2DA0);
  {float *a=&p->g0;t=-m->delta;g=Clamp(p->g0+t*(a[1]+t*a[2]),p->gMin,p->gMax);}
- {struct VT*vt=p->vt;v=((qword(*)(struct P*))vt[33].fn)((struct P*)((char*)p+vt[33].d));}
+ {struct VTE*vt=p->vt;v=((qword(*)(struct P*))vt[33].pfn)((struct P*)((char*)p+vt[33].delta));}
  v=func_0011E9F8(AddScaled(v,dir,g),p->gMax);
  v=func_001FA810(&p->xE8->s,p->x58,v);
- {struct VT*vt=p->vt;((void(*)(struct P*,qword))vt[35].fn)((struct P*)((char*)p+vt[35].d),v);}
+ {struct VTE*vt=p->vt;((void(*)(struct P*,qword))vt[35].pfn)((struct P*)((char*)p+vt[35].delta),v);}
  return 1;
 }

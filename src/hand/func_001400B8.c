@@ -1,10 +1,10 @@
+#include "vtable.h"
 #include "mat.h"
 typedef int qword __attribute__((mode(TI)));
 struct K { int a; int b; };
 extern struct K D_002A4D10;
 struct G { char pad[0x3BF4]; int grf; char pad2[0x3D58 - 0x3BF8]; int cid; };
 extern struct G g_sw;
-struct VTE { short d; short pad; void *pfn; };
 struct AREQ { int cb; int cbAlign; };
 struct SO { float m[0x40 / 4]; char pad[0x94 - 0x40]; int x94; char pad2[0xA4 - 0x98]; int id; };
 struct O { void *pad[3]; struct VTE *vt; };
@@ -62,16 +62,16 @@ void func_001400B8(struct P *p)
             p->apo[i * 2] = apv[i];
             po = p->apo[i * 2];
             e = &po->vt[9];
-            ((void (*)(void *))e->pfn)((char *)po + e->d);
+            ((void (*)(void *))e->pfn)((char *)po + e->delta);
         }
     }
     {
         struct VTE *e = &p->vt[79];
-        ((void (*)(void *, int))e->pfn)((char *)p + e->d, 0);
+        ((void (*)(void *, int))e->pfn)((char *)p + e->delta, 0);
     }
     {
         struct VTE *e = &p->vt[104];
-        ((void (*)(void *))e->pfn)((char *)p + e->d);
+        ((void (*)(void *))e->pfn)((char *)p + e->delta);
     }
     func_00141EF8(p);
     func_001440D0(p, g_sw.grf & 4);
@@ -87,15 +87,15 @@ void func_001400B8(struct P *p)
         p->pso->id = g_sw.cid;
         {
             struct VTE *e = &p->vt[18];
-            ((void (*)(void *))e->pfn)((char *)p + e->d);
+            ((void (*)(void *))e->pfn)((char *)p + e->delta);
         }
         {
             struct VTE *e = &p->vt[29];
-            ((void (*)(void *, qword))e->pfn)((char *)p + e->d, q);
+            ((void (*)(void *, qword))e->pfn)((char *)p + e->delta, q);
         }
         {
             struct VTE *e = &p->vt[30];
-            ((void (*)(void *, struct MATRIX3 *))e->pfn)((char *)p + e->d, &m);
+            ((void (*)(void *, struct MATRIX3 *))e->pfn)((char *)p + e->delta, &m);
         }
     }
     func_00149A50(&g_sw, p, D_002A4D10, 0);

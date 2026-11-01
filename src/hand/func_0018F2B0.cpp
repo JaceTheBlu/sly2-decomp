@@ -1,3 +1,4 @@
+#include "vtable.h"
 #include "vecmat.h"
 #include "vu0.h"
 // func_0018F2B0: MATCH. laneG12v1 (aligned 2, s4/s5 swap of the hoisted D_002BF4B8 / g_sw highs) plus const-ref helpers that add RTL insns which vanish after loop opt: Sub(const qword&,const qword&), AbsF(const float&), IsBonus(P*const&), and a `qword pred` copy. The node loop now has 96 real insns in loop pass 1 (> threshold 95, so only the life-2 bonus high is hoisted) and 91 in pass 2 (the g_sw high is hoisted then), which gives the target's s5/s4 order. One commented register pin (heading in f21).
@@ -6,7 +7,6 @@ typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];int bits[4];};
 struct M3{U r[3];M3(){}M3(const M3&m){r[0]=m.r[0];r[2]=m.r[2];r[1]=m.r[1];}M3&operator=(const M3&m){r[0]=m.r[0];r[2]=m.r[2];r[1]=m.r[1];return *this;}};
 struct M4{U r[4];};
-struct VTE{short delta,pad;void*fn;};
 struct P{char pad[0xC];VTE*vt;char pad10[0xD0];P*next;int padE4;int flags;};
 struct G;
 extern "C" const qword g_normalZ;
@@ -27,8 +27,8 @@ static inline qword AddScaled(qword p,qword v,VU_FLOAT k){qword q;__asm__("vadda
 static inline qword Rotate(const M3&m,qword v){qword q;__asm__("vmulax.xyz ACC,%1,%4x\n\tvmadday.xyz ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z":"=j"(q):"j"(m.r[0].q),"j"(m.r[1].q),"j"(m.r[2].q),"0"(v));return q;}
 static inline qword Transform(const M4&m,qword v){qword q;__asm__("vmulax.xyz ACC,%1,%5x\n\tvmadday.xyz ACC,%2,%5y\n\tvmaddaz.xyz ACC,%3,%5z\n\tvmaddw.xyz %0,%4,$vf0w":"=j"(q):"j"(m.r[0].q),"j"(m.r[1].q),"j"(m.r[2].q),"j"(m.r[3].q),"j"(v));return q;}
 static inline qword Sub(const qword &a,const qword &b){qword q;__asm__("vsub.xyzw %0,%1,%2":"=j"(q):"j"(a),"j"(b));return q;}
-static inline qword GetVelocity(P*p){VTE*e=&p->vt[33];qword(*f)(void*)=(qword(*)(void*))e->fn;return f((char*)p+e->delta);}
-static inline void*GetFrame(P*p,M4*out){return ((void*(*)(void*,M4*))p->vt[32].fn)((char*)p+p->vt[32].delta,out);}
+static inline qword GetVelocity(P*p){VTE*e=&p->vt[33];qword(*f)(void*)=(qword(*)(void*))e->pfn;return f((char*)p+e->delta);}
+static inline void*GetFrame(P*p,M4*out){return ((void*(*)(void*,M4*))p->vt[32].pfn)((char*)p+p->vt[32].delta,out);}
 static inline float AbsF(const float &f){return __builtin_fabsf(f);}
 static inline int IsBonus(P*const &n){return func_0015ED78(&g_sw,3,0x33,n);}
 extern "C" void func_0018F2B0(P*p,float headingInput,int mask,float dtInput,U*offset,P**out,qword*outvector,float cone){

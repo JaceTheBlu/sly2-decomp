@@ -1,7 +1,7 @@
+#include "vtable.h"
 typedef int qword __attribute__((mode(TI)));
 typedef struct { qword r[4]; } M4;
-struct VT { short d; short pad; void *pfn; };
-struct X { char pad[0xC]; struct VT *vt; char pad2[0xF4 - 0x10]; qword *apos; };
+struct X { char pad[0xC]; struct VTE *vt; char pad2[0xF4 - 0x10]; qword *apos; };
 int func_001E7668(struct X *p, float g, int a, int b);
 int func_001BC530(struct X *p, int i);
 void func_001E6F10(struct X *p, qword *pv, float g, int n);
@@ -34,7 +34,7 @@ int func_001BCAC0(struct X *p, void *pv, int fRev, float g0, float g1)
             iEnd = i1;
         }
         i = a;
-        m = *((M4 *(*)(void *))p->vt[31].pfn)((char *)p + p->vt[31].d);
+        m = *((M4 *(*)(void *))p->vt[31].pfn)((char *)p + p->vt[31].delta);
         func_001E6F10(p, &v0, g0, 0);
         q = v0;
         while (i != iEnd) {

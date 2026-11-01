@@ -1,3 +1,4 @@
+#include "vtable.h"
 /* MATCH, from v2 (3). One register pin (k3 in s5) plus commented empty asms:
  * - an empty asm after `pe = ae` keeps the loop-made i+1 (addiu s4) last in its block, so reorg puts it in the b slot;
  * - that asm lengthens ae's live range by one insn, which drops ae's global-alloc priority below p's (s2/s3 swap).
@@ -5,7 +6,6 @@
  *   had there), restoring the target's p/ae priority order;
  * - paae is set (before k3) so the aae address is computed ahead of the k3 constant, as in the target. */
 /* v2: aligned 7 -> 3. The /12 pointer-diff divisions written out as (bytes * k3) >> 2 with k3 = 0xAAAAAAAB in ONE commented register pin ($21 = s5, as in the target): fixes the s4/s5 swap. Left: ori s5 before addiu fp, and i+1 (addiu s4) scheduled right after the sll instead of in the b delay slot (j = i + 1 / i = j step, split init: same 3). */
-struct VTE { short d; short pad; void *pfn; };
 struct LO { int pad[3]; struct VTE *vt; };
 struct X;
 struct L { void *pv; struct L *pnext; struct L *pother; struct LO *po; int f; };
@@ -21,7 +21,7 @@ void FreeSlotheapPv__FP8SLOTHEAPPv(void *, void *);
 void func_0011A2E8(void *, struct X *);
 int func_0011A380(void *, struct X *);
 void *func_002332B8(void *, void *, int);
-#define VCALL(po, n, T) ((T)(po)->vt[n].pfn)((char *)(po) + (po)->vt[n].d
+#define VCALL(po, n, T) ((T)(po)->vt[n].pfn)((char *)(po) + (po)->vt[n].delta
 void func_001337D0(struct P *p, struct X *px)
 {
     struct L *pl, *plNext;

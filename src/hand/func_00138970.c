@@ -1,9 +1,9 @@
+#include "vtable.h"
 /* func_00138970: MATCH from v7 (4). ONE register pin (wb in $16); every other extra asm operand below is allocation-only and emits nothing: the "r"(i) operands stand in for the loop weighting of i, the extra "j" operands on the Madd asms raise the VF priorities of a/v/b, and the earlyclobber "=&j" with an unused "j"(a.q) input keeps s2 out of a's register. */
 /* wip: aligned 28 (was 52). for-loop gives target s-reg numbering and a0 reuse at loop head; E.w read as int (lw->qmtc2); vadda operand order fixed. Left: loop.c hoists 0.0f (f22, frame 0x100) and iSeg*8 (s4) out of the loop; target keeps them inside. */
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } VU;
 extern qword D_002A2DD0;
-struct VTE { short d; short pad; void *pfn; };
 struct O { struct VTE *vt; };
 struct SEG { float g0; float g4; };
 struct CL { char pad[0x74]; float x74; };
@@ -88,7 +88,7 @@ top:
             }
             {
                 struct VTE *e = &po->vt[3];
-                ((void (*)(void *, float, float, VU *, VU *))e->pfn)((char *)po + e->d, g0, g1, &v20, &v30);
+                ((void (*)(void *, float, float, VU *, VU *))e->pfn)((char *)po + e->delta, g0, g1, &v20, &v30);
             }
         }
         {

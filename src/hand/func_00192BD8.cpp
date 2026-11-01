@@ -1,3 +1,4 @@
+#include "vtable.h"
 #include "clock.h"
 // func_00192BD8: set the step of a hero action context (the struct at actor+0x4C0; func_001911A8 calls it).
 // Leaves the old step (cleanup per step / per action), then enters the new one: picks the animation clip, the
@@ -14,7 +15,6 @@
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned int uint;
 
-struct VTE { short delta, pad; void *fn; };
 struct M3 { qword row[3]; };
 struct CLIP { char pad0[0x74]; float duration; };
 struct JOY { char pad0[0x1C]; float amount; };
@@ -104,12 +104,12 @@ void func_0018C120(ACTOR *, int);
 static inline void SourceState(SOURCE *p, int state)
 {
     VTE &v = p->vt[3];
-    ((void (*)(void *, int, void *, void *, void *, void *))v.fn)((char *)p + v.delta, state, 0, 0, 0, 0);
+    ((void (*)(void *, int, void *, void *, void *, void *))v.pfn)((char *)p + v.delta, state, 0, 0, 0, 0);
 }
-static inline void Notify(LO *p, int slot) { VTE &v = p->vt[slot]; ((void (*)(void *))v.fn)((char *)p + v.delta); }
-static inline void Notify(ACTOR *p, int slot) { VTE &v = p->vt[slot]; ((void (*)(void *))v.fn)((char *)p + v.delta); }
-static inline void SetVector(ACTOR *p, int slot, qword q) { VTE &v = p->vt[slot]; ((void (*)(void *, qword))v.fn)((char *)p + v.delta, q); }
-static inline void SetPointer(ACTOR *p, int slot, void *pv) { VTE &v = p->vt[slot]; ((void (*)(void *, void *))v.fn)((char *)p + v.delta, pv); }
+static inline void Notify(LO *p, int slot) { VTE &v = p->vt[slot]; ((void (*)(void *))v.pfn)((char *)p + v.delta); }
+static inline void Notify(ACTOR *p, int slot) { VTE &v = p->vt[slot]; ((void (*)(void *))v.pfn)((char *)p + v.delta); }
+static inline void SetVector(ACTOR *p, int slot, qword q) { VTE &v = p->vt[slot]; ((void (*)(void *, qword))v.pfn)((char *)p + v.delta, q); }
+static inline void SetPointer(ACTOR *p, int slot, void *pv) { VTE &v = p->vt[slot]; ((void (*)(void *, void *))v.pfn)((char *)p + v.delta, pv); }
 // bit 0 set: the word holds the flags itself; otherwise it points to them
 static inline void AddFlags(uint *pflags, uint bits)
 {

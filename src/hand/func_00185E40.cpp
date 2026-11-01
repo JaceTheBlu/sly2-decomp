@@ -1,3 +1,4 @@
+#include "vtable.h"
 #include "clock.h"
 // func_00185E40 laneH20v1: MATCH. laneH19v2 + loop 2 through an inline StoreAddRot(&samples[i],target,&p->basis,&p->points[i].q) that rotates inside its body. A nested inline call argument is expanded before the other arguments, so in H19v2 the points address came first in the loop body; now the samples address does, the giv list (prepended) is reversed, and loop.c emits the points init `addiu v1,s1,0x1F30` before `addiu v0,sp,0x160` like the target. One register pin (direction vf2), allocation-only operands commented.
 // func_00185E40 laneH19v2: v1 + loop 2 stores through an inline StoreAddM(&samples[i],a,b) (operator=-style, the address is an inline param) with an allocation-only "m"(d->q) input. gcse no longer shares the loop base with the 1856C0 arg, so loop.c builds a fresh `addiu v0,sp,0x160` (no lw 0x250), the loop is still reversed, and the "m" ref keeps samples v0 / points v1. Left: the two giv inits come out samples-then-points (target points first), aligned 1 / 2 lines.
@@ -17,7 +18,6 @@ typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];int i[4];};
 struct M3{U r[3];M3(){}M3(const M3&m){r[0]=m.r[0];r[1]=m.r[1];r[2]=m.r[2];}M3&operator=(const M3&m){r[0]=m.r[0];r[1]=m.r[1];r[2]=m.r[2];return*this;}};
 struct M4{U r[4];};
-struct VTE{short delta,pad;void*fn;};
 struct PARAMS{float a,b,duration;};
 struct CONTROL{char pad0[0x10];float y,z;int pad18;float speed;};
 struct REQUEST{char pad0[0x78];float multiplier;};
@@ -73,7 +73,7 @@ static inline qword QwRotateVecR(const M3*m,qword v){qword r;__asm__("vmulax.xyz
 static inline qword QwRotateVecRJ(const M3*m,qword v){qword r;__asm__("vmulax.xyz $ACC,%1,%4x\n\tvmadday.xyz $ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z":"=j"(r):"j"(m->r[0].q),"j"(m->r[1].q),"j"(m->r[2].q),"j"(v),"j"(v),"j"(v),"j"(m->r[1].q));return r;}
 static inline void MulM3(M3*r,const M3*a,const M3*b){qword c0=QwRotateVecR(a,b->r[0].q),c1=QwRotateVecR(a,b->r[1].q),c2=QwRotateVecR(a,b->r[2].q);r->r[0].q=c0;r->r[1].q=c1;r->r[2].q=c2;}
 static inline qword QwRotateVecV(qword v,M3 m){return QwRotateVec(&m,v);}
-static inline void SetVec(P*p,int slot,qword q){VTE*e=&p->vt[slot];((void(*)(void*,qword))e->fn)((char*)p+e->delta,q);}
+static inline void SetVec(P*p,int slot,qword q){VTE*e=&p->vt[slot];((void(*)(void*,qword))e->pfn)((char*)p+e->delta,q);}
 extern "C" void func_00185E40(P*p){
  U closest,normal;
  qword position=func_001A62E8(p);

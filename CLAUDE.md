@@ -61,6 +61,9 @@ Newest first. Each entry: what changed, how it was verified, the metrics after i
   declared). C sources, and C++ sources that `#define CREF_PLAIN` first, get the bare layout: 9 sources that had
   been migrated to the bare struct handle CRef as plain data, and giving them the class changed their code
   (objcheck: 7 differences), so they define CREF_PLAIN.
+- `include/vtable.h`: VTE, one g++ 2.95 vtable entry {delta, index, pfn}. 90 files whose local VTE (or `VT`, the
+  same entry under another name) holds a `void *` migrated. Files whose VTE holds a typed function pointer (322)
+  keep it: a shared `void *pfn` would need a cast at every virtual call, which reads worse.
 - `tools/migrate_cref.py`: converts local C++ CRef classes whose members/methods are all in cref.h; renames
   `.u.n/.u.g/.u.pv` to `m_tag/m_g/m_p`. 114 files; objcheck 0.
 - Tried on the unknown slots of the LO vtable: their Sly 1 counterparts are not decompiled, and the Sly 2 code

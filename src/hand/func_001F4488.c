@@ -1,5 +1,5 @@
+#include "vtable.h"
 typedef int qword __attribute__((mode(TI)));
-struct VTE { short d; short p; void *pfn; };
 struct VT { struct VTE a[34]; };
 struct O { char pad[0x94]; int n94; short k; char pad2[0xA0 - 0x9A]; int nA0; char pad3[0xB0 - 0xA4]; union { qword q; int a[4]; } v; };
 struct P { char pad[0xC]; struct VT *pvt; char pad2[0x58 - 0x10]; struct O *po; };
@@ -17,7 +17,7 @@ void func_001F4488(struct P *p, qword q)
     if (!po || po->n94 != 1) return;
     if (!func_00230310(po->k)) func_002303A0(p, po, 1);
     { float *pv = (float *)&po->v; pv[2] = 0.0f; pv[1] = 0.0f; pv[0] = 0.0f; }
-    cur = ((qword (*)(void *))p->pvt->a[33].pfn)((char *)p + p->pvt->a[33].d);
+    cur = ((qword (*)(void *))p->pvt->a[33].pfn)((char *)p + p->pvt->a[33].delta);
     __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(q), "j"(cur));
     po->v.q = func_0022FCC8(0, po->nA0, d);
     func_00230598(p, po);

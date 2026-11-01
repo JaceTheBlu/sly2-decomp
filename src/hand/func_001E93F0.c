@@ -1,5 +1,5 @@
+#include "vtable.h"
 typedef int qword __attribute__((mode(TI)));
-struct VTE { short d; short pad; void *pfn; };
 struct LO { int pad[3]; struct VTE *pvt; };
 struct M4 { qword r[3]; qword pos; };
 struct P { int pad[4]; struct LO *apo[4]; qword apos[2]; void *ap40[2]; int a48; };
@@ -13,7 +13,7 @@ void func_001E93F0(struct P *p, int i, struct LO *po)
     if (po) {
         struct M4 m;
         struct VTE *pe = &po->pvt[32];
-        p->ap40[i] = ((void *(*)(void *, struct M4 *))pe->pfn)((char *)po + pe->d, &m);
+        p->ap40[i] = ((void *(*)(void *, struct M4 *))pe->pfn)((char *)po + pe->delta, &m);
         *(p->apos + i) = m.pos;
     } else {
         float f;

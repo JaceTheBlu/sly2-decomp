@@ -1,3 +1,4 @@
+#include "vtable.h"
 // func_001C5148: per-frame update of an animated object (state 6 only forwards to func_001F3980).
 // Step 1: damped velocity/position integration of the object's own coordinate (VU: velocity = velocity * damping + acceleration * dt,
 //         coordinate += velocity * dt) which is pushed into the position channel.
@@ -15,7 +16,6 @@
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; int words[4]; };
 union M3 { qword rows[3]; float values[12]; };
-struct VTE { short delta, pad; void *fn; };
 struct CHANNEL { M3 matrix; qword position; char pad40[0x64]; int stamp; char padA8[8]; qword velocity; };
 struct MOTION { VTE *vt; };
 struct ENTRY { unsigned int key; MOTION *motion; };
@@ -101,12 +101,12 @@ static inline M3 operator*(const M3 &matL, const M3 &matR) return mat
 static inline CHANNEL *GetChannel(P *p, int channel)
 {
     VTE &e = p->vt[51];
-    return ((CHANNEL *(*)(P *, int))e.fn)((P *)((char *)p + e.delta), channel);
+    return ((CHANNEL *(*)(P *, int))e.pfn)((P *)((char *)p + e.delta), channel);
 }
 static inline void Sample(MOTION *motion, const ANIM *animation, qword *value, qword *velocity)
 {
     VTE &e = motion->vt[3];
-    ((void (*)(MOTION *, float, float, qword *, qword *))e.fn)((MOTION *)((char *)motion + e.delta), animation->time, animation->duration, value, velocity);
+    ((void (*)(MOTION *, float, float, qword *, qword *))e.pfn)((MOTION *)((char *)motion + e.delta), animation->time, animation->duration, value, velocity);
 }
 
 extern "C" void func_001C5148(P *p)

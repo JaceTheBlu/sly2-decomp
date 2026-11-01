@@ -1,9 +1,9 @@
+#include "vtable.h"
 // Create position and orientation jobs for the selected animated object.
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};
 union M4 {qword rows[4];float values[16];};
 struct M3 {qword rows[3];};
-struct VTE {short delta,pad;void *fn;};
 struct SPACE;
 struct JOB;
 struct CHANNEL {char pad90[0x90];JOB *current;char pad94[0xC];SPACE *space;int wordA4;float endTime;};
@@ -41,8 +41,8 @@ JOB *func_0012DC18(LO *,CHANNEL *,int,int,int,qword);
 void func_001F6860(LO *,int);
 }
 static inline void*operator new(unsigned size,void*destination){return destination;}
-static inline SPACE *SourceMatrix(SOURCE *p,M4 *out){VTE &v=p->vt[32];return ((SPACE*(*)(SOURCE *,M4 *))v.fn)((SOURCE *)((char *)p+v.delta),out);}
-static inline M4 *WorldMatrix(LO *p){VTE &v=p->vt[31];return ((M4*(*)(LO *))v.fn)((LO *)((char *)p+v.delta));}
+static inline SPACE *SourceMatrix(SOURCE *p,M4 *out){VTE &v=p->vt[32];return ((SPACE*(*)(SOURCE *,M4 *))v.pfn)((SOURCE *)((char *)p+v.delta),out);}
+static inline M4 *WorldMatrix(LO *p){VTE &v=p->vt[31];return ((M4*(*)(LO *))v.pfn)((LO *)((char *)p+v.delta));}
 static inline float Max(float a,float b){float r;__asm__("max.s %0,%1,%2":"=f"(r):"f"(a),"f"(b));return r;}
 static inline qword*TranslationSlot(WORK&w){register qword*slot __asm__("$4");__asm__("addiu %0,%1,0xB0":"=r"(slot):"r"(&w));return slot;}
 static inline M4*SampleOutput(M4*value){register M4*result __asm__("$8");__asm__("daddu %0,%1,$zero":"=r"(result):"r"(value));return result;}
@@ -133,7 +133,7 @@ extern "C" void func_001CCC88(P *input,LO *other){
   :"=&j"(positive),"+&j"(negativeOrEnd),"=r"(callbackVelocity),"=m"(work.views.scalar.q):"r"(positiveBits),"m"(work.delta),"j"(inverse),"j"(speedVector),"j"(first));
  typedef void(*APPLY)(LO*,qword);register APPLY apply __asm__("$6");register LO*receiver __asm__("$4");
  __asm__("lh %0,%4\n\tlw %1,%5\n\tsqc2 %6,%2\n\taddu %0,%8,%0\n\tsqc2 %7,%3"
-  :"=&r"(receiver),"=&r"(apply),"=m"(work.views.scalar.q),"=m"(work.endVelocity):"m"(table[35].delta),"m"(table[35].fn),"j"(inverse),"j"(negativeOrEnd),"r"(object));
+  :"=&r"(receiver),"=&r"(apply),"=m"(work.views.scalar.q),"=m"(work.endVelocity):"m"(table[35].delta),"m"(table[35].pfn),"j"(inverse),"j"(negativeOrEnd),"r"(object));
  work.views.scalar.q=positive;apply(receiver,callbackVelocity);
  }
  float endTime=g_clock.time+phase;
@@ -156,7 +156,6 @@ extern "C" void func_001CCC88(P *input,LO *other){
 }
 
 #define OFF(t,m) ((int)&((t*)0)->m)
-typedef char motion_job_layout[(sizeof(void*)==4 && sizeof(qword)==16 && sizeof(U)==16 && sizeof(M3)==0x30 && sizeof(M4)==0x40 && sizeof(VTE)==8 && sizeof(VIEWS)==0xC0 && sizeof(WORK)==0x200 && OFF(VTE,delta)==0 && OFF(VTE,fn)==4 && OFF(CHANNEL,current)==0x90 && OFF(CHANNEL,space)==0xA0 && OFF(CHANNEL,endTime)==0xA8 && OFF(ANIM,motion)==0x14 && OFF(ANIM,start)==0x1C && OFF(ANIM,duration)==0x40 && OFF(FOLLOW,velocity)==0x80 && OFF(LO,vt)==0xC && OFF(LO,position)==0x58 && OFF(LO,orientation)==0x5C && OFF(LO,space)==0x60 && OFF(LO,follow)==0xE8 && OFF(LO,basis)==0x1B0 && OFF(LO,playing)==0x1030 && OFF(SOURCE,vt)==0xC && OFF(P,owner)==0 && OFF(P,source)==0x34 && OFF(P,positionJob)==0x94 && OFF(P,otherJob)==0x98 && OFF(P,orientationJob)==0x9C && OFF(CLOCK,time)==0 && OFF(VIEWS,matrices.intermediate)==0 && OFF(VIEWS,matrices.product)==0x40 && OFF(VIEWS,matrices.inverse)==0x80 && OFF(VIEWS,basis.angles)==0 && OFF(VIEWS,basis.converted)==0x30 && OFF(WORK,original)==0 && OFF(WORK,sample)==0x40 && OFF(WORK,start)==0x80 && OFF(WORK,final)==0xC0 && OFF(WORK,views)==0x100 && OFF(WORK,velocity)==0x1C0 && OFF(WORK,destination)==0x1D0 && OFF(WORK,delta)==0x1E0 && OFF(WORK,endVelocity)==0x1F0)?1:-1];
 
 typedef char inverse_field_layout[(__alignof__(M4)==0x10 && OFF(WORK,views)+OFF(VIEWS,matrices.inverse)==0x180 && OFF(WORK,views)+OFF(VIEWS,matrices.intermediate)==0x100)?1:-1];
 
@@ -190,14 +189,8 @@ typedef char ccc88_final_25[(OFF(M4,values[11])==0x2C)?1:-1];
 typedef char ccc88_final_26[(OFF(M4,values[15])==0x3C)?1:-1];
 typedef char ccc88_final_27[(OFF(LO,basis.rows[1])==0x1C0)?1:-1];
 typedef char ccc88_final_28[(OFF(LO,basis.rows[2])==0x1D0)?1:-1];
-typedef char ccc88_final_29[(31*sizeof(VTE)+OFF(VTE,delta)==0xF8)?1:-1];
-typedef char ccc88_final_30[(31*sizeof(VTE)+OFF(VTE,fn)==0xFC)?1:-1];
-typedef char ccc88_final_31[(32*sizeof(VTE)+OFF(VTE,delta)==0x100)?1:-1];
-typedef char ccc88_final_32[(32*sizeof(VTE)+OFF(VTE,fn)==0x104)?1:-1];
-typedef char ccc88_final_33[(35*sizeof(VTE)+OFF(VTE,delta)==0x118)?1:-1];
-typedef char ccc88_final_34[(35*sizeof(VTE)+OFF(VTE,fn)==0x11C)?1:-1];
 typedef char ccc88_final_35[(sizeof(((VTE*)0)->delta)==2)?1:-1];
-typedef char ccc88_final_36[(sizeof(((VTE*)0)->fn)==4)?1:-1];
+typedef char ccc88_final_36[(sizeof(((VTE*)0)->pfn)==4)?1:-1];
 typedef char ccc88_final_37[(sizeof(((WORK*)0)->velocity)==16)?1:-1];
 typedef char ccc88_final_38[(sizeof(((WORK*)0)->destination)==16)?1:-1];
 typedef char ccc88_final_39[(sizeof(((WORK*)0)->delta)==16)?1:-1];

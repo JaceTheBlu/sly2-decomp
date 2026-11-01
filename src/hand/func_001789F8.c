@@ -1,7 +1,7 @@
+#include "vtable.h"
 typedef int qword __attribute__((mode(TI)));
 struct G;
 extern struct G D_003DD020;
-struct VTE { short d; short pad; void *pfn; };
 struct Y { char pad[0x10]; void *p10; char pad2[0x0C]; char a20[1]; };
 struct X { char pad[0xDC]; struct Y *pDC; };
 struct A { char pad[0xE8]; struct X *pE8; };
@@ -29,7 +29,7 @@ static inline float Dist(qword a, qword b) {
 }
 static inline void Set(struct S *p, int n) {
     struct VTE *e = &p->vt[15];
-    ((void (*)(void *, int))e->pfn)((char *)p + e->d, n);
+    ((void (*)(void *, int))e->pfn)((char *)p + e->delta, n);
 }
 void func_001789F8(struct S *p) {
     float g;

@@ -1,4 +1,4 @@
-struct VTE { short d; short pad; void *pfn; };
+#include "vtable.h"
 struct LO { int pad[3]; struct VTE *vt; };
 struct L { void *pv; struct L *pnext; struct L *pother; struct LO *po; int f; };
 struct X { char pad[0x60]; struct LO *plo; struct L *pl; };
@@ -9,7 +9,7 @@ struct L *func_00133CB8(struct P *, struct X *, struct X *);
 void func_001A7E10(struct P *, void *);
 void func_001F5078(struct LO *);
 void FreeSlotheapPv__FP8SLOTHEAPPv(void *, struct L *);
-#define VCALL(po, n, T) ((T)(po)->vt[n].pfn)((char *)(po) + (po)->vt[n].d
+#define VCALL(po, n, T) ((T)(po)->vt[n].pfn)((char *)(po) + (po)->vt[n].delta
 void func_00133A38(struct P *p, struct X *px1, struct X *px2, int k)
 {
     struct L *pl;

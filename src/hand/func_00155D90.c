@@ -1,7 +1,7 @@
+#include "vtable.h"
 #include "vu0.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct VTE { short d; short pad; void *pfn; };
 struct SO { char pad[0xC]; struct VTE *vt; char pad1[0x240 - 0x10]; qword pos; };
 struct X {
     char pad[0x10]; struct SO *pso; int x14; void *x18; char pad1[0x30 - 0x1C]; int state; float t34;
@@ -30,11 +30,11 @@ void func_00155D90(struct X *p)
                 struct SO *pso;
                 qword d = QwSub(func_001A62E8(p->x40), p->pso->pos);
                 pso = p->pso;
-                ((void (*)(void *, qword))pso->vt[29].pfn)((char *)pso + pso->vt[29].d, d);
+                ((void (*)(void *, qword))pso->vt[29].pfn)((char *)pso + pso->vt[29].delta, d);
                 pso = p->pso;
-                ((void (*)(void *, qword))pso->vt[35].pfn)((char *)pso + pso->vt[35].d, D_002A2DD0);
+                ((void (*)(void *, qword))pso->vt[35].pfn)((char *)pso + pso->vt[35].delta, D_002A2DD0);
                 pso = p->pso;
-                ((void (*)(void *, qword))pso->vt[36].pfn)((char *)pso + pso->vt[36].d, D_002A2DD0);
+                ((void (*)(void *, qword))pso->vt[36].pfn)((char *)pso + pso->vt[36].delta, D_002A2DD0);
                 p->t48 = g_clock.t;
                 func_00155AE0(p, 1);
             }

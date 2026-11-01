@@ -1,11 +1,11 @@
+#include "vtable.h"
 #include "vu0.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 extern struct CLOCK g_clock;
 extern qword D_002A2DD0;
 extern float D_002C09F0;
-struct VT { short d; short pad; void *pfn; };
-struct OBJ { struct VT *vt; };
+struct OBJ { struct VTE *vt; };
 struct R { int x0; struct OBJ *po; };
 struct S14 { char pad[0x74]; float g74; };
 struct ANIM { char pad[0x14]; struct S14 *p14; char pad2[0x40 - 0x18]; float g40; };
@@ -73,8 +73,8 @@ void func_001B86B0(struct P *p, int k)
         struct R *r = PchnFindAseg__FP4ASEGP3ALOii(p->panim->p14, p, 1, 1);
         if (r) {
             qword a, b, pos, t, v;
-            ((void (*)(void *, qword *, float, float, int))r->po->vt[3].pfn)((char *)r->po + r->po->vt[3].d, &a, 0.0f, 0.0f, 0);
-            ((void (*)(void *, qword *, float, float, int))r->po->vt[3].pfn)((char *)r->po + r->po->vt[3].d, &b, p->panim->p14->g74, 0.0f, 0);
+            ((void (*)(void *, qword *, float, float, int))r->po->vt[3].pfn)((char *)r->po + r->po->vt[3].delta, &a, 0.0f, 0.0f, 0);
+            ((void (*)(void *, qword *, float, float, int))r->po->vt[3].pfn)((char *)r->po + r->po->vt[3].delta, &b, p->panim->p14->g74, 0.0f, 0);
             pos = func_001A62E8(p);
             __asm__("vsub.xyzw %0, %1, %2" : "=j"(t) : "j"(b), "j"(a));
             t = MulM3(p->m1B0, t);

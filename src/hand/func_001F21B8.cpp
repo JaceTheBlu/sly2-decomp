@@ -1,13 +1,13 @@
+#include "vtable.h"
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned long ulong;
-struct VT { short d; short pad; void *pfn; };
 struct MAT { float m[4][4]; } __attribute__((aligned(16)));
 struct E { char pad[0xA0]; struct E *pe; char pad2[0x100 - 0xA4]; };
 struct LO;
 struct ALO { char pad[0x40]; struct MAT mat; char pad2[0xA0 - 0x80]; struct ALO *pNext; };
 struct LO10 { char pad[0x50]; int c; struct E *ae; char pad2[0x148 - 0x58]; ulong fl; };
 struct LO {
-    char pad[0xC]; struct VT *pvt; struct LO10 *p10; char pad2[0x28 - 0x14]; ulong pad28 : 60; ulong b60 : 1; ulong pad61 : 3;
+    char pad[0xC]; struct VTE *pvt; struct LO10 *p10; char pad2[0x28 - 0x14]; ulong pad28 : 60; ulong b60 : 1; ulong pad61 : 3;
     char pad3[0x50 - 0x30]; int c; struct E *ae; char pad4[0x60 - 0x58]; struct ALO *palo;
 };
 extern "C" {
@@ -20,7 +20,7 @@ void func_001F26A8(struct LO *);
 void func_001F8668(struct LO *, int);
 }
 
-#define VCALL(po, slot, T) ((T)(po)->pvt[slot].pfn)((void *)((char *)(po) + (po)->pvt[slot].d)
+#define VCALL(po, slot, T) ((T)(po)->pvt[slot].pfn)((void *)((char *)(po) + (po)->pvt[slot].delta)
 
 extern "C" void func_001F21B8(struct LO *plo, struct LO *pa, struct LO *pb, int grf)
 {

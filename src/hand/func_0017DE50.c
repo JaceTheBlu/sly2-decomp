@@ -1,8 +1,8 @@
+#include "vtable.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 extern struct CLOCK g_clock;
 extern float D_002BE760, D_002BE764, D_002BE768;
-struct VTE { short d; short pad; void *pfn; };
 struct X { qword a; qword v; };
 struct T { char pad[0x40]; struct X x40; };
 struct A { char pad[0xC]; struct VTE *vt; };
@@ -41,7 +41,7 @@ void func_0017DE50(struct S *p) {
                 { float dt = g_clock.dt; p->f40 -= dt; }
                 if (p->f40 <= 0.0f) {
                     void *o;
-                    { struct A *a = p->p10; struct VTE *e = &a->vt[0x58]; o = ((void *(*)(void *))e->pfn)((char *)a + e->d); }
+                    { struct A *a = p->p10; struct VTE *e = &a->vt[0x58]; o = ((void *(*)(void *))e->pfn)((char *)a + e->delta); }
                     if (o == p->p38 && func_00208B38(p->p10, o)) {
                         p->f40 = func_00208BB0(p->p10);
                     } else {

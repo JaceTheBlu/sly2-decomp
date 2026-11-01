@@ -1,8 +1,8 @@
+#include "vtable.h"
 #include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];int i[4];};
 struct M4 {U r[4];};
-struct VTE {short delta,pad;void*fn;};
 struct P;
 struct EFFECT {char pad[0xC];VTE*vt;};
 struct L {char pad[0xC];VTE*vt;char pad10[0x164];EFFECT*effect;char pad178[0xC];int kind,tag;};
@@ -18,7 +18,7 @@ extern "C" P*func_001F7598(HIT*);
 extern "C" int func_001A2788(P*,L*,qword*);
 extern "C" void func_002309E8(void*,void*,M4*,M4*,float);
 extern "C" M4 __ml__FRC7MATRIX4T0(const M4*,const M4*);
-static inline qword Direction(P*p){return ((qword(*)(void*))p->vt[33].fn)((char*)p+p->vt[33].delta);}
+static inline qword Direction(P*p){return ((qword(*)(void*))p->vt[33].pfn)((char*)p+p->vt[33].delta);}
 extern "C" void func_001A2460(P*p){
  U point;
  int valid;
@@ -27,7 +27,7 @@ extern "C" void func_001A2460(P*p){
   point.f[2]+=p->height;
   if(p->mode==3||p->mode==10)point.f[2]-=10.0f;
   L*link=p->link;
-  valid=((int(*)(void*,qword))link->vt[73].fn)((char*)link+link->vt[73].delta,point.q);
+  valid=((int(*)(void*,qword))link->vt[73].pfn)((char*)link+link->vt[73].delta,point.q);
  }else valid=0;
  if(!valid)return;
  if(p->link->kind){
@@ -60,7 +60,7 @@ extern "C" void func_001A2460(P*p){
   if(g_clock.time-entry->time<0.05f)continue;
   P*object=entry->object;
   position.q=func_001A62E8(object);
-  void*frame=((void*(*)(void*,M4*))object->vt[32].fn)((char*)object+object->vt[32].delta,pbase);
+  void*frame=((void*(*)(void*,M4*))object->vt[32].pfn)((char*)object+object->vt[32].delta,pbase);
   func_002309E8(frame,0,ppred,0,g_clock.dt);
   predicted=__ml__FRC7MATRIX4T0(ppred,pbase);
   int crossed=0;
@@ -72,7 +72,7 @@ extern "C" void func_001A2460(P*p){
    msg.position.f[2]=point.f[2];
    msg.type=4;
    EFFECT*effect=p->link->effect;
-   ((void(*)(void*,MSG*))effect->vt[51].fn)((char*)effect+effect->vt[51].delta,&msg);
+   ((void(*)(void*,MSG*))effect->vt[51].pfn)((char*)effect+effect->vt[51].delta,&msg);
    entry->time=g_clock.time;
   }
  }

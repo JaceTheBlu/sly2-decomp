@@ -1,10 +1,10 @@
+#include "vtable.h"
 #include "mat.h"
 typedef int qword __attribute__((mode(TI)));
-typedef struct VT { short d; short pad; void *pfn; } VT;
 typedef struct LO LO;
 struct LO {
     char pad[0xC];
-    VT *vt;
+    VTE *vt;
     char pad2[0x18];
     int x28;
     signed char ips;
@@ -26,7 +26,7 @@ void func_002315F0(LO *p, LO *pNew, LO *pParent, int grf)
     MATRIX4 m;
     if (grf & 3) {
         if (p->f) {
-            m = *((MATRIX4 * (*)(void *))p->vt[31].pfn)((char *)p + p->vt[31].d);
+            m = *((MATRIX4 * (*)(void *))p->vt[31].pfn)((char *)p + p->vt[31].delta);
         } else {
             LO *q;
             m = p->m60;
@@ -45,7 +45,7 @@ void func_002315F0(LO *p, LO *pNew, LO *pParent, int grf)
         p->x50 = 0;
     func_001A5900(p, pNew, pParent, grf);
     if (grf & 1)
-        ((void (*)(void *, qword))p->vt[29].pfn)((char *)p + p->vt[29].d, m.r[3]);
+        ((void (*)(void *, qword))p->vt[29].pfn)((char *)p + p->vt[29].delta, m.r[3]);
     if (grf & 2)
-        ((void (*)(void *, MATRIX4 *))p->vt[30].pfn)((char *)p + p->vt[30].d, &m);
+        ((void (*)(void *, MATRIX4 *))p->vt[30].pfn)((char *)p + p->vt[30].delta, &m);
 }

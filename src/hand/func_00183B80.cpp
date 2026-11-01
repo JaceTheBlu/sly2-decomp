@@ -1,7 +1,7 @@
+#include "vtable.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef struct { qword a[3]; } MATRIX3;
-struct VTE { short d; short pad; void *pfn; };
 struct X { char pad[0x9A]; short n9A; char pad1[0xA0 - 0x9C]; void *pA0; char pad2[0xC0 - 0xA4]; qword vC0; };
 struct XV { int x, y; float z; int w; };
 struct T { char pad[0x60]; void *p60; char pad1[0x10BC - 0x64]; void *p10BC; };
@@ -43,12 +43,12 @@ void func_00183B80(struct O *p, int n)
             p->p58->n9A = 0;
             func_002303A0(p, p->p5C, 1);
             p->p5C->n9A = 0;
-            { struct VTE *e = &p->pvt[35]; ((void (*)(void *, qword))e->pfn)((char *)p + e->d, D_002A2DD0); }
+            { struct VTE *e = &p->pvt[35]; ((void (*)(void *, qword))e->pfn)((char *)p + e->delta, D_002A2DD0); }
             func_001F5720(p, 0);
             func_001F57C0(p, 0);
             func_001F68A8(p, 0);
         }
-        { struct VTE *e = &p->pvt[3]; ((void (*)(void *, int, int, int, int, int))e->pfn)((char *)p + e->d, 6, 0, 0, 0, 0); }
+        { struct VTE *e = &p->pvt[3]; ((void (*)(void *, int, int, int, int, int))e->pfn)((char *)p + e->delta, 6, 0, 0, 0, 0); }
         func_00147F40(g_sw);
         p->p190 = 0;
     }
@@ -62,7 +62,7 @@ void func_00183B80(struct O *p, int n)
             ps = (struct S2 *)p->p190->p10BC;
             if (!ps)
                 ps = (struct S2 *)p->p190->p60;
-            { struct VTE *e = &p->pvt[10]; ((void (*)(void *, struct T *, void *, int))e->pfn)((char *)p + e->d, p->p190, ps, 3); }
+            { struct VTE *e = &p->pvt[10]; ((void (*)(void *, struct T *, void *, int))e->pfn)((char *)p + e->delta, p->p190, ps, 3); }
             func_0011B938(func_001A6318(p), 0, &m);
             m = func_0022FD38(0, p->p5C->pA0, &m);
 
@@ -86,7 +86,7 @@ void func_00183B80(struct O *p, int n)
             p->p58->n9A = n;
             func_001F68A8(p, 1);
         }
-        { struct VTE *e = &p->pvt[3]; ((void (*)(void *, int, int, int, int, int))e->pfn)((char *)p + e->d, 5, 0, 0, 0, 0); }
+        { struct VTE *e = &p->pvt[3]; ((void (*)(void *, int, int, int, int, int))e->pfn)((char *)p + e->delta, 5, 0, 0, 0, 0); }
     }
     p->n17C = n;
     p->g180 = g_clock.t;

@@ -1,5 +1,5 @@
+#include "vtable.h"
 typedef int qword __attribute__((mode(TI)));
-struct VTE { short d; short pad; void *pfn; };
 struct S { char pad[0xC]; struct VTE *vt; char pad2[0x178]; int n188; int pad3; void *p190; };
 struct F { struct S *p0; int n4; int n8; int nC; int n10; int pad[3]; qword q20; qword q30; qword pad2[2]; };
 void *func_002333B4(void *p, int c, int n);
@@ -15,11 +15,11 @@ void func_0017F5F8(struct S *p, int n) {
         f.p0 = p;
         f.q20 = func_001A62E8(p);
         e = &p->vt[0x21];
-        f.q30 = ((qword (*)(void *))e->pfn)((char *)p + e->d);
+        f.q30 = ((qword (*)(void *))e->pfn)((char *)p + e->delta);
         f.nC = 0x100;
         f.n10 = -p->n188;
         func_001F7598(&f);
     }
     if (p->p190) ExplodeExpl__FP4EXPL(p->p190);
-    { struct VTE *e = &p->vt[9]; ((void (*)(void *))e->pfn)((char *)p + e->d); }
+    { struct VTE *e = &p->vt[9]; ((void (*)(void *))e->pfn)((char *)p + e->delta); }
 }

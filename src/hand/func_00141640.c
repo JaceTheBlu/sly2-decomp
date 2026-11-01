@@ -1,8 +1,8 @@
+#include "vtable.h"
 #include "clock.h"
 /* VU0 length via asm; qmfc2 into an int then explicit mtc1 (gives the original GPR/FPR allocation). */
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } VU;
-struct VTE { short d; short pad; void *pfn; };
 struct XP { char pad[0x10]; VU pos; char pad2[0x34 - 0x20]; float g34; };
 struct JT {
     char pad[0xC]; struct VTE *vt; char pad1[0x2C0 - 0x10]; char ax2C0[0x2DC - 0x2C0]; int x2DC;
@@ -51,7 +51,7 @@ void func_00141640(struct JT *pjt, struct XP *pxp)
         struct VTE *e;
         { qword q = func_001A62E8(pjt); __asm__("pextuw %0, $0, %1" : "=r"(z) : "r"(q)); }
         e = &pjt->vt[97];
-        ((void (*)(void *, VU *))e->pfn)((char *)pjt + e->d, &v);
+        ((void (*)(void *, VU *))e->pfn)((char *)pjt + e->delta, &v);
         if (pjt->x434) {
             lo = D_002BCCA0;
             hi = D_002BCCA4;
@@ -91,7 +91,7 @@ void func_00141640(struct JT *pjt, struct XP *pxp)
         func_001A2160(pjt->axDF0, pxp);
     {
         struct VTE *e = &pjt->vt[34];
-        register qword w __asm__("vf3") = ((qword (*)(void *))e->pfn)((char *)pjt + e->d);
+        register qword w __asm__("vf3") = ((qword (*)(void *))e->pfn)((char *)pjt + e->delta);
         register qword l1 __asm__("vf1");
         register qword r2 __asm__("vf2");
         float s, k;

@@ -1,3 +1,4 @@
+#include "vtable.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f; } U;
 struct G;
@@ -6,7 +7,6 @@ extern struct G g_sw;
 extern void *D_002F7900;
 extern char D_002DFC00[];
 extern char g_cm[];
-struct VTE { short d; short pad; void *pfn; };
 struct A {
     char pad[0xC]; struct VTE *vt; char pad2[0x190 - 0x10]; qword v190; char pad3[4]; int n1A4; char pad4[8];
     qword m1B0[3]; char pad5[0xFD0 - 0x1E0]; char aFD0[4];
@@ -48,7 +48,7 @@ int func_00174BD0(struct S *p, int msg, struct M *pm) {
                 __asm__("vmulax.xyz $ACC, %1, %4x\n\tvmadday.xyz $ACC, %2, %4y\n\tvmaddz.xyz %0, %3, %4z"
                         : "=j"(r) : "j"(m[0]), "j"(m[1]), "j"(m[2]), "j"(v));
             }
-            { struct VTE *e = &a->vt[0x23]; ((void (*)(void *, qword))e->pfn)((char *)a + e->d, r); }
+            { struct VTE *e = &a->vt[0x23]; ((void (*)(void *, qword))e->pfn)((char *)a + e->delta, r); }
         }
         return 1;
     case 0x25:
@@ -99,9 +99,8 @@ typedef char layout_pointer[(sizeof(void*)==4)?1:-1];
 typedef char layout_qword[(sizeof(qword)==16)?1:-1];
 typedef char layout_U[(sizeof(U)==16)?1:-1];
 typedef char layout_float[(sizeof(float)==4)?1:-1];
-typedef char layout_VTE[(sizeof(struct VTE)==8)?1:-1];
 typedef char layout_M[(sizeof(struct M)==12)?1:-1];
-typedef char layout_VTE_d[((unsigned)&((struct VTE*)0)->d==0x0)?1:-1];
+typedef char layout_VTE_d[((unsigned)&((struct VTE*)0)->delta==0x0)?1:-1];
 typedef char layout_VTE_pfn[((unsigned)&((struct VTE*)0)->pfn==0x4)?1:-1];
 typedef char layout_A_vt[((unsigned)&((struct A*)0)->vt==0xc)?1:-1];
 typedef char layout_A_v190[((unsigned)&((struct A*)0)->v190==0x190)?1:-1];

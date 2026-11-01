@@ -1,3 +1,4 @@
+#include "vtable.h"
 #include "vu0.h"
 // func_001E6F60: closest point of a path (a chain of control points, transformed by the path's
 // own matrix) to a query point. mode 0 walks every segment, projects the point on it (clamped to the segment), keeps the
@@ -17,7 +18,6 @@ typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
 struct VV { qword q; VV() {} VV(const qword &v) { q = v; } operator qword() const { return q; } };
 struct M4 { qword a, b, c, d; };
-struct VTE { short delta, pad; void *fn; };
 struct SPACE;
 struct PATH {
     char padC[0xC]; VTE *vt; char pad10[0xD0];
@@ -87,7 +87,7 @@ extern "C" void func_001E6F60(PATH *p, qword point, SPACE *space, qword *outPosi
     U closest;
     qword start, end;
     VTE &v = p->vt[31];
-    matrix = *((M4 *(*)(void *))v.fn)((char *)p + v.delta);
+    matrix = *((M4 *(*)(void *))v.pfn)((char *)p + v.delta);
     switch (p->mode) {
     case 0: {
         start = TransformPoint(matrix, p->points[0]);

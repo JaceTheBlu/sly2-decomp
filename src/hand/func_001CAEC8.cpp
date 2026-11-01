@@ -1,8 +1,8 @@
+#include "vtable.h"
 #include "mat.h"
 // Attach an object node, bind its resources, and update its children.
 typedef int qword __attribute__((mode(TI)));
 struct P;
-struct VTE {short delta,pad;void *fn;};
 struct NODE {P *owner;NODE *next;char pad8[8];MATRIX4 matrix;};
 struct TREE {int id;TREE *parent;char pad8[8];P *owner;};
 struct BIND {int kind,pad4;void *resource;void *begin,*end;P *object;};
@@ -30,11 +30,11 @@ void __as__3SPXP1X(void **,void *);
 void func_001184B8(STREAM *,int);
 }
 static inline P *Adjusted(P *p,const VTE &entry){return (P *)((char *)p+entry.delta);}
-static inline void Channel(P *p,void *context,void *channel){VTE &v=p->vt[10];((void(*)(P *,void *,void *,int))v.fn)(Adjusted(p,v),context,channel,0);}
-static inline void Matrix(P *p,const MATRIX4 *m){VTE &v=p->vt[37];((void(*)(P *,const MATRIX4 *))v.fn)(Adjusted(p,v),m);}
-static inline void Reset(P *p){VTE &v=p->vt[8];((void(*)(P *))v.fn)(Adjusted(p,v));}
-static inline void Parent(P *p,P *parent){VTE &v=p->vt[26];((void(*)(P *,P *))v.fn)(Adjusted(p,v),parent);}
-static inline void Query(P *p,void **cursor){VTE &v=p->vt[3];((void(*)(P *,int,int,int,void **,int))v.fn)(Adjusted(p,v),14,0,1,cursor,0);}
+static inline void Channel(P *p,void *context,void *channel){VTE &v=p->vt[10];((void(*)(P *,void *,void *,int))v.pfn)(Adjusted(p,v),context,channel,0);}
+static inline void Matrix(P *p,const MATRIX4 *m){VTE &v=p->vt[37];((void(*)(P *,const MATRIX4 *))v.pfn)(Adjusted(p,v),m);}
+static inline void Reset(P *p){VTE &v=p->vt[8];((void(*)(P *))v.pfn)(Adjusted(p,v));}
+static inline void Parent(P *p,P *parent){VTE &v=p->vt[26];((void(*)(P *,P *))v.pfn)(Adjusted(p,v),parent);}
+static inline void Query(P *p,void **cursor){VTE &v=p->vt[3];((void(*)(P *,int,int,int,void **,int))v.pfn)(Adjusted(p,v),14,0,1,cursor,0);}
 extern "C" NODE *func_001CAEC8(P *p,int minimum){
  STREAM stream;
  WORK work;
@@ -68,7 +68,7 @@ extern "C" NODE *func_001CAEC8(P *p,int minimum){
   P *child=p->table->objects[row*p->table->count+i];
   VTE &entry=child->vt[42];
   work.child=child;
-  ((void(*)(P *,float))entry.fn)(Adjusted(child,entry),p->scale);Channel(work.child,p->context,p->channel);Matrix(work.child,&p->matrix);Reset(work.child);Parent(work.child,p);
+  ((void(*)(P *,float))entry.pfn)(Adjusted(child,entry),p->scale);Channel(work.child,p->context,p->channel);Matrix(work.child,&p->matrix);Reset(work.child);Parent(work.child,p);
   work.cursor=&work.child;Query(p,cursor);
   work.cursor=&work.owner;Query(work.child,cursor);
  }
@@ -76,4 +76,3 @@ extern "C" NODE *func_001CAEC8(P *p,int minimum){
 }
 
 #define OFF(t,m) ((int)&((t*)0)->m)
-typedef char attach_layout[(sizeof(void*)==4 && sizeof(qword)==16 && sizeof(VTE)==8 && sizeof(MATRIX4)==0x40 && sizeof(TABLE)==0x6C && sizeof(BIND)==0x18 && sizeof(DESC)==0x28 && sizeof(STREAM)==0x3C && OFF(VTE,delta)==0 && OFF(VTE,fn)==4 && OFF(NODE,owner)==0 && OFF(NODE,next)==4 && OFF(NODE,matrix)==0x10 && OFF(TREE,owner)==0x10 && OFF(BIND,kind)==0 && OFF(BIND,resource)==8 && OFF(BIND,begin)==0xC && OFF(BIND,end)==0x10 && OFF(BIND,object)==0x14 && OFF(TABLE,count)==0 && OFF(TABLE,objects)==4 && OFF(TABLE,states)==0x64 && OFF(TABLE,nodes)==0x68 && OFF(P,resource)==0 && OFF(P,vt)==0xC && OFF(P,context)==0x10 && OFF(P,scale)==0x38 && OFF(P,channel)==0x50 && OFF(P,matrix)==0x60 && OFF(P,table)==0xE0 && OFF(P,disabled)==0xE4 && OFF(P,head)==0xE8 && OFF(P,bindCount)==0xEC && OFF(P,binds)==0xF0 && OFF(SW,tables)==0x3F08 && OFF(SW,root)==0x3F0C && OFF(DESC,flags)==4 && OFF(STREAM,vt)==0x30 && OFF(STREAM,begin)==0x34 && OFF(STREAM,end)==0x38 && OFF(WORK,id)==0 && OFF(WORK,found)==4 && OFF(WORK,child)==8 && OFF(WORK,cursor)==0xC && OFF(WORK,owner)==0x10)?1:-1];

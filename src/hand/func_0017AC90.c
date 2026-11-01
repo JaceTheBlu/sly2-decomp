@@ -1,3 +1,4 @@
+#include "vtable.h"
 #include "vu0.h"
 #include "clock.h"
 // Update the movement-state controller.
@@ -5,7 +6,6 @@ typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } U;
 extern struct CLOCK g_clock;
 extern float D_002BE6C8, D_002BE6CC;
-struct VTE { short d; short pad; void *pfn; };
 struct C { char pad[0x1C]; float g1C; };
 struct B { char pad[0x90]; struct C *p90; };
 struct A { char pad[0xC]; struct VTE *vt; char pad2[0x58 - 0x10]; struct B *p58; char pad3[0x208 - 0x5C]; int n208; };
@@ -26,7 +26,7 @@ void func_0017AC90(struct S *p) {
     {
         struct A *a = p->p10;
         struct VTE *e = &a->vt[33];
-        v = ((qword (*)(void *))e->pfn)((char *)a + e->d);
+        v = ((qword (*)(void *))e->pfn)((char *)a + e->delta);
     }
     do {
         s = p->n50;
@@ -62,7 +62,7 @@ void func_0017AC90(struct S *p) {
             {
                 struct A *pa = p->p10;
                 struct VTE *e = &pa->vt[33];
-                qword velocity = ((qword (*)(void *))e->pfn)((char *)pa + e->d);
+                qword velocity = ((qword (*)(void *))e->pfn)((char *)pa + e->delta);
                 dt=clock->dt;
                 /* Preserve velocity and prepare the prediction inputs. */
                 __asm__("sq %4,%0\n\tdaddu %1,%z5,$zero\n\tdaddu %2,%z5,$zero\n\tlw %3,%6" : "=m"(b.q),"=&r"(nullOutput),"=&r"(nullSource),"=&r"(frameLink) : "r"(velocity),"J"(0),"m"(p->p5C));
@@ -86,7 +86,7 @@ void func_0017AC90(struct S *p) {
             {
                 struct A *pa = p->p10;
                 struct VTE *e = &pa->vt[35];
-                ((void (*)(void *, qword))e->pfn)((char *)pa + e->d, vel.q);
+                ((void (*)(void *, qword))e->pfn)((char *)pa + e->delta, vel.q);
             }
             break;
         }
@@ -100,7 +100,6 @@ void func_0017AC90(struct S *p) {
 typedef char layout_pointer[(sizeof(void*)==4)?1:-1];
 typedef char layout_qword[(sizeof(qword)==16)?1:-1];
 typedef char layout_U[(sizeof(U)==16)?1:-1];
-typedef char layout_VTE[(sizeof(struct VTE)==8)?1:-1];
 typedef char layout_C[(sizeof(struct C)==0x20)?1:-1];
 typedef char layout_B[(sizeof(struct B)==0x94)?1:-1];
 typedef char layout_A[(sizeof(struct A)==0x20C)?1:-1];
@@ -110,7 +109,7 @@ typedef char layout_S[(sizeof(struct S)==0x68)?1:-1];
 typedef char layout_OUT[(sizeof(struct OUT)==0x40)?1:-1];
 typedef char layout_U_q[((unsigned)&((U*)0)->q==0)?1:-1];
 typedef char layout_U_f[((unsigned)&((U*)0)->f==0)?1:-1];
-typedef char layout_VTE_delta[((unsigned)&((struct VTE*)0)->d==0)?1:-1];
+typedef char layout_VTE_delta[((unsigned)&((struct VTE*)0)->delta==0)?1:-1];
 typedef char layout_VTE_fn[((unsigned)&((struct VTE*)0)->pfn==4)?1:-1];
 typedef char layout_CLOCK_time[((unsigned)&((struct CLOCK*)0)->t==0)?1:-1];
 typedef char layout_CLOCK_dt[((unsigned)&((struct CLOCK*)0)->dt==4)?1:-1];

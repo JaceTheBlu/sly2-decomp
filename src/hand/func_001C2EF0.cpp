@@ -1,3 +1,4 @@
+#include "vtable.h"
 #include "mat.h"
 #include "vu0.h"
 #include "util.h"
@@ -16,7 +17,6 @@
 //  * `count`, start, target and offset are plain values; the stack slots at sp+0x60..0x90 are their spill slots, and
 //    `dest` is caller-saved around the duration call.
 typedef int qword __attribute__((mode(TI)));
-struct VTE { short delta, pad; void *fn; };
 struct SO { char pad0[0xC]; VTE *vt; char pad10[0x60]; qword position; };
 struct OWNER { char pad0[0x150]; SO *source; void *factory; SO *first; };
 struct GAME { int dummy; };
@@ -72,10 +72,10 @@ static inline qword Transform(const MATRIX3 &m, qword q)
     return r;
 }
 static inline float Rand(const LM &lm) { return GRandInRange__Fff(lm.gMin, lm.gMax); }
-static inline void SetState(SO *p, int state) { VTE *v = p->vt; ((void (*)(void *, int))v[76].fn)((char *)p + v[76].delta, state); }
-static inline void Reset(SO *p) { VTE *v = p->vt; ((void (*)(void *))v[8].fn)((char *)p + v[8].delta); }
-static inline void SetParent(SO *p, SO *parent) { VTE *v = p->vt; ((void (*)(void *, SO *))v[39].fn)((char *)p + v[39].delta, parent); }
-static inline void SetVelocity(SO *p, qword velocity) { VTE *v = p->vt; ((void (*)(void *, qword))v[35].fn)((char *)p + v[35].delta, velocity); }
+static inline void SetState(SO *p, int state) { VTE *v = p->vt; ((void (*)(void *, int))v[76].pfn)((char *)p + v[76].delta, state); }
+static inline void Reset(SO *p) { VTE *v = p->vt; ((void (*)(void *))v[8].pfn)((char *)p + v[8].delta); }
+static inline void SetParent(SO *p, SO *parent) { VTE *v = p->vt; ((void (*)(void *, SO *))v[39].pfn)((char *)p + v[39].delta, parent); }
+static inline void SetVelocity(SO *p, qword velocity) { VTE *v = p->vt; ((void (*)(void *, qword))v[35].pfn)((char *)p + v[35].delta, velocity); }
 
 extern "C" SO *func_001C2EF0(OWNER *p, int count)
 {

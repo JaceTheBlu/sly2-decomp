@@ -1,13 +1,13 @@
+#include "vtable.h"
 #include "mat.h"
 // g_clock (g_clock) must be a struct: a scalar float global is assumed not to alias the struct-field stores, which lets gcc CSE the clock reloads.
 typedef int qword __attribute__((mode(TI)));
 typedef union {qword q;float f[4];} U;
-struct VT{short delta,pad;void*fn;};
-struct LO{char pad[0xC];struct VT*vt;char pad10[0xF54];void*xF64;};
+struct LO{char pad[0xC];struct VTE*vt;char pad10[0xF54];void*xF64;};
 struct SELECTOR{int kind;char pad4[0x10];int used;float ready;};
 struct ENTRY{struct LO*object;float time,wait;struct SELECTOR*selector;int status;char pad14[12];qword point;};
 struct EVENT{float time;char pad4[8];struct LO*tag;char pad10[0x10];struct EVENT*next;char pad24[4];int kind;struct LO*previous;};
-struct P{char pad[0xC];struct VT*vt;char pad10[0x48];int count,capacity;char pad60[0x10];qword last;char pad80[0x28];float next;int mode;};
+struct P{char pad[0xC];struct VTE*vt;char pad10[0x48];int count,capacity;char pad60[0x10];qword last;char pad80[0x28];float next;int mode;};
 struct LINK{struct LO**pp;};
 struct CRef{int tag;void*value;};
 extern char g_sw[];
@@ -74,13 +74,13 @@ void UpdateCid119(struct P*p){
  selector->used=1;
  link.pp=&object;
  p->next=g_clock.t+D_002BE5D8;
- ((void(*)(void*,int,int,int,void*const*,struct CRef*))p->vt[3].fn)((char*)p+p->vt[3].delta,0x19,0,1,(void*const*)&link,0);
+ ((void(*)(void*,int,int,int,void*const*,struct CRef*))p->vt[3].pfn)((char*)p+p->vt[3].delta,0x19,0,1,(void*const*)&link,0);
 }
 
 typedef char layout_pointer[(sizeof(void*)==4)?1:-1];
 typedef char layout_qword[(sizeof(qword)==16)?1:-1];
 typedef char layout_U[(sizeof(U)==16)?1:-1];
-typedef char layout_VT[(sizeof(struct VT)==8)?1:-1];
+typedef char layout_VT[(sizeof(struct VTE)==8)?1:-1];
 typedef char layout_P[(sizeof(struct P)==0xB0)?1:-1];
 typedef char layout_LO[(sizeof(struct LO)==0xF68)?1:-1];
 typedef char layout_SELECTOR[(sizeof(struct SELECTOR)==0x1C)?1:-1];
@@ -89,8 +89,8 @@ typedef char layout_EVENT[(sizeof(struct EVENT)==0x30)?1:-1];
 typedef char layout_M3[(sizeof(struct MATRIX3)==0x30)?1:-1];
 typedef char layout_LINK[(sizeof(struct LINK)==4)?1:-1];
 typedef char layout_CRef[(sizeof(struct CRef)==8)?1:-1];
-typedef char layout_VT_delta[((unsigned)&((struct VT*)0)->delta==0x0)?1:-1];
-typedef char layout_VT_fn[((unsigned)&((struct VT*)0)->fn==0x4)?1:-1];
+typedef char layout_VT_delta[((unsigned)&((struct VTE*)0)->delta==0x0)?1:-1];
+typedef char layout_VT_fn[((unsigned)&((struct VTE*)0)->pfn==0x4)?1:-1];
 typedef char layout_P_vt[((unsigned)&((struct P*)0)->vt==0xc)?1:-1];
 typedef char layout_P_count[((unsigned)&((struct P*)0)->count==0x58)?1:-1];
 typedef char layout_P_capacity[((unsigned)&((struct P*)0)->capacity==0x5c)?1:-1];

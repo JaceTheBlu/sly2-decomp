@@ -1,7 +1,7 @@
+#include "vtable.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct VT { short d; short pad; void *pfn; };
-struct P { char pad[0xC]; struct VT *pvt; char pad2[0x154 - 0x10]; float t154; float g158; char pad3[0x1F4 - 0x15C]; int f1F4; };
+struct P { char pad[0xC]; struct VTE *pvt; char pad2[0x154 - 0x10]; float t154; float g158; char pad3[0x1F4 - 0x15C]; int f1F4; };
 extern struct CLOCK g_clock;
 void UpdateCid48(struct P *p);
 void func_0013B860(struct P *p);
@@ -26,8 +26,8 @@ void func_0013AB58(struct P *p)
     if (p->t154 <= g_clock.t)
         goto out;
     {
-        struct VT *vt = p->pvt;
-        qword v = ((qword (*)(void *))vt[33].pfn)((char *)p + vt[33].d);
+        struct VTE *vt = p->pvt;
+        qword v = ((qword (*)(void *))vt[33].pfn)((char *)p + vt[33].delta);
         int f = GLength(v) < p->g158;
         if (f) {
         out:

@@ -1,9 +1,9 @@
+#include "vtable.h"
 #include "vu0.h"
 #include "clock.h"
 // func_0014A4D0. From v4: the vsub reads q (the pinned Add result) with `posT = q` after it, and its posMe operand is repeated as an allocation-only operand (reload then puts posMe in vf4 like the target).
 typedef int qword __attribute__((mode(TI)));
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } };
-struct VTE { short d; short pad; void *pfn; };
 struct G;
 struct XEC { char pad[0x20]; qword pos; float g30; };
 struct SO { char pad[0xC]; VTE *vt; char pad1[0xE8 - 0x10]; int grfE8; XEC *pxEC; char pad2[0x174 - 0xF0]; SO *pnext; };
@@ -80,7 +80,7 @@ void func_0014A4D0(P *p)
     qword pos;
     {
         VTE *e = &pso->vt[33];
-        v = ((qword (*)(void *))e->pfn)((char *)pso + e->d);
+        v = ((qword (*)(void *))e->pfn)((char *)pso + e->delta);
     }
     if (FLess(D_002BD460, Len(v)))
         p->t48 = g_clock.t;
@@ -150,7 +150,7 @@ done:
     {
         LO *plo = p->pw->plo;
         VTE *e = &plo->vt[29];
-        ((void (*)(void *, qword))e->pfn)((char *)plo + e->d, pos);
+        ((void (*)(void *, qword))e->pfn)((char *)plo + e->delta, pos);
     }
     func_00208540(p->pw, p->pw->plo);
 }

@@ -1,3 +1,4 @@
+#include "vtable.h"
 // func_001856C0: MATCH, no register pins, VU helper asms only.
 // From laneG16v1 (46). Keys: (1) points loop as `for (n = 0; n < count; n++)` over points[n] (gcc reverses it: bnez),
 // with the edge direction Sub hoisted into the edge body and the edge-plane Cross left inside the loop (loop.c moves it
@@ -10,7 +11,6 @@
 typedef int qword __attribute__((mode(TI)));
 typedef union U { qword q; float f[4]; } U;
 typedef struct M4 { U r[4]; } M4;
-typedef struct VTE { short delta, pad; void *fn; } VTE;
 typedef struct I3 { int index[3]; } I3;
 typedef struct MESH { char pad0[0xC]; VTE *vt; char pad10[0xD4]; qword *vertices; int count; I3 *triangles; I3 *neighbors; } MESH;
 typedef struct LIST { int count; int pad[3]; qword planes[1]; } LIST;
@@ -76,7 +76,7 @@ extern "C" void func_001856C0(MESH *mesh, LIST *out, int count, qword *points, P
     M4 *pm;
     VTE *e = &mesh->vt[31];
     float stop, step;
-    pm = ((M4 *(*)(void *))e->fn)((char *)mesh + e->delta);
+    pm = ((M4 *(*)(void *))e->pfn)((char *)mesh + e->delta);
     mat = *pm;
     float h = (params->a + params->b) * 0.5f;
     step = D_002DDED4 * 0.5f;

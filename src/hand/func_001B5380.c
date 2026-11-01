@@ -1,11 +1,11 @@
+#include "vtable.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } U;
-struct VT { short d; short pad; void *pfn; };
 struct LO { char pad[0x28]; unsigned long x28; };
 struct T { char pad[0x180]; struct LO *po; };
 struct PL { char pad[0x18]; float g18; float g1C; char pad2[0x30 - 0x20]; int x30; };
 struct P {
-    char pad0[0xC]; struct VT *vt; char pad1[0x150 - 0x10]; struct PL *pl;
+    char pad0[0xC]; struct VTE *vt; char pad1[0x150 - 0x10]; struct PL *pl;
     char pad2[0x190 - 0x154]; qword v190; char pad3[0x2C0 - 0x1A0]; char x2C0[0xF00 - 0x2C0]; char xF00[0x1030 - 0xF00];
     struct PL *p1030; char pad4[0x13D0 - 0x1034]; int x13D0; char pad5[0x13F0 - 0x13D4]; struct T *p13F0;
     char pad6[0x1438 - 0x13F4]; int x1438; int x143C; char pad7[0x1458 - 0x1440]; int x1458; char pad8[0x1460 - 0x145C]; char x1460[1];
@@ -53,7 +53,7 @@ void func_001B5380(struct P *p)
             } else if (func_001C46C0(p->pl, 0x10, 0.0f) && p->x1438) {
                 p->x143C = 0;
                 func_001B6078(p, 8);
-            } else if (func_001C4660(p->pl, 0x400, 0.15f) && ((int (*)(void *, int))p->vt[99].pfn)((char *)p + p->vt[99].d, 3)) {
+            } else if (func_001C4660(p->pl, 0x400, 0.15f) && ((int (*)(void *, int))p->vt[99].pfn)((char *)p + p->vt[99].delta, 3)) {
                 func_001C4738(p->pl, 0x400);
                 func_0019CC50(p->xF00, 0, 0, 0);
             } else {

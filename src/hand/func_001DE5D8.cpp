@@ -1,3 +1,4 @@
+#include "vtable.h"
 #include "mat.h"
 // func_001DE5D8: (re)build the endpoint state of every entry of p and its bounding box. Each entry has two endpoints;
 // an endpoint names an object: a path (shape test 10) becomes a moving endpoint with a 1/2/6-segment motion profile
@@ -16,7 +17,6 @@ typedef int qword __attribute__((mode(TI)));
 typedef unsigned long ulong;
 typedef unsigned int uint;
 
-struct VTE { short delta, pad; void *fn; };
 struct PATH {
     char pad0[0xC];
     VTE *vt;
@@ -96,7 +96,7 @@ static inline qword Transform(const MATRIX4 *m, qword p)
     return r;
 }
 static inline float Clamp(float f, float low, float high) { if (f < low) return low; else if (high < f) return high; else return f; }
-static inline MATRIX4 *GetMatrix(PATH *path) { VTE *v = &path->vt[31]; return ((MATRIX4 * (*)(void *))v->fn)((char *)path + v->delta); }
+static inline MATRIX4 *GetMatrix(PATH *path) { VTE *v = &path->vt[31]; return ((MATRIX4 * (*)(void *))v->pfn)((char *)path + v->delta); }
 static inline void SetDirty(P *p) { uint f = p->flags; if ((f ^ 1) & 1) *(uint *)f |= 2; else p->flags = f | 2; }
 
 extern "C" void func_001DE5D8(P *p)

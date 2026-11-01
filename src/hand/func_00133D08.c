@@ -1,10 +1,10 @@
-struct VT { short d; short pad; void *pfn; };
-struct O { char pad[0xC]; struct VT *pvt; };
+#include "vtable.h"
+struct O { char pad[0xC]; struct VTE *pvt; };
 struct B { float min[4]; float max[4]; char pad[0x60 - 0x20]; struct O *po; };
 int func_00134310(int a, int b);
 static __inline__ int Call(struct O *po, struct O *poOther)
 {
-    return ((int (*)(void *, struct O *))po->pvt[61].pfn)((char *)po + po->pvt[61].d, poOther);
+    return ((int (*)(void *, struct O *))po->pvt[61].pfn)((char *)po + po->pvt[61].delta, poOther);
 }
 int func_00133D08(void *unused, struct B *pa, struct B *pb)
 {

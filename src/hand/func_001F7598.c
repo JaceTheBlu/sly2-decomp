@@ -1,10 +1,7 @@
+#include "vtable.h"
 typedef int qword __attribute__((mode(TI)));
 struct O;
-struct VT {
-    short d; short pad;
-    void *pfn;
-};
-struct O { char pad[0xC]; struct VT *pvt; struct O *pNext; };
+struct O { char pad[0xC]; struct VTE *pvt; struct O *pNext; };
 struct K {
     struct O *p0; int n4; void *p8; int nC;
     char pad[0x44 - 0x10];
@@ -23,7 +20,7 @@ struct K *func_0011CCC0(void *);
 void ClearDle__FP3DLE(void *);
 void func_0011A220(void *, void *);
 
-#define VCALL(po, slot, T) ((T)(po)->pvt[slot].pfn)((void *)((char *)(po) + (po)->pvt[slot].d)
+#define VCALL(po, slot, T) ((T)(po)->pvt[slot].pfn)((void *)((char *)(po) + (po)->pvt[slot].delta)
 
 struct O *func_001F7598(struct K *pk)
 {

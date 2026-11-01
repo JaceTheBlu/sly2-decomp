@@ -1,6 +1,6 @@
+#include "vtable.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct VTE { short d; short pad; void *pfn; };
 struct VO { char pad[0xC]; struct VTE *vt; };
 struct ASEG { char pad[0x74]; float g74; };
 struct ASEGP { int x0; struct ASEG *pasega; };
@@ -40,8 +40,8 @@ void func_001F15B8(void *);
 void func_001305B8(struct ASEG *, struct P *, int, void *, float, float);
 void func_001F14F8(void *, struct P *, int, int, int, void *);
 
-#define VCALL0(p, n) ((void (*)(void *))(p)->vt[n].pfn)((char *)(p) + (p)->vt[n].d)
-#define VCALL1(p, n, a) ((void (*)(void *, int))(p)->vt[n].pfn)((char *)(p) + (p)->vt[n].d, a)
+#define VCALL0(p, n) ((void (*)(void *))(p)->vt[n].pfn)((char *)(p) + (p)->vt[n].delta)
+#define VCALL1(p, n, a) ((void (*)(void *, int))(p)->vt[n].pfn)((char *)(p) + (p)->vt[n].delta, a)
 
 void func_00135248(struct P *p, int k)
 {

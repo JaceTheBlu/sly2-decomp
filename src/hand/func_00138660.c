@@ -1,7 +1,7 @@
+#include "vtable.h"
 // MATCH: v10 plus b copied through an empty volatile "+j" asm before the 2nd Madd (the b reload is issued before the d load).
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } VU;
-struct VTE { short d; short pad; void *pfn; };
 struct O { struct VTE *vt; };
 struct SEG { float g0; float g4; };
 struct CL { char pad[0x74]; float x74; };
@@ -59,7 +59,7 @@ void func_00138660(struct P *p, struct Q *pq)
         struct O *po = p->xC[pa->xD4];
         if (po) {
             struct VTE *e = &po->vt[2];
-            ((void (*)(void *, struct Q *))e->pfn)((char *)po + e->d, pq);
+            ((void (*)(void *, struct Q *))e->pfn)((char *)po + e->delta, pq);
         } else {
             qword v = p->x10;
             float *pv = pq->xD0.f;
@@ -124,7 +124,7 @@ void func_00138660(struct P *p, struct Q *pq)
             q.x88 = &t[1];
             {
                 struct VTE *e = &po->vt[2];
-                ((void (*)(void *, struct Q *))e->pfn)((char *)po + e->d, &q);
+                ((void (*)(void *, struct Q *))e->pfn)((char *)po + e->delta, &q);
             }
             func_00117120(q.x84 - q.x80, t[1] - q.x80, ratio, q.xC0.q, q.xD0.q, q.xE0.q, q.xF0.q, &c, &d, 0);
         }

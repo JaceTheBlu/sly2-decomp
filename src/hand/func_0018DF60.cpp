@@ -1,9 +1,9 @@
+#include "vtable.h"
 #include "mat.h"
 #include "clock.h"
 // Smooth movement and update directional animation weights.
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};
-struct VTE{short delta,pad;void*fn;};
 struct O{char pad[0xC];VTE*vt;};
 struct PARAM{char pad[0x10];float y,z;int pad18;float weight;};
 struct ANIM;
@@ -71,7 +71,7 @@ static inline float SmoothInputs(MATRIX4*source,const CLOCK*clock,float factor,u
 }
 
 extern "C" void func_0018DF60(P*p){
- MATRIX4 m=*((MATRIX4*(*)(void*))p->object->vt[31].fn)((char*)p->object+p->object->vt[31].delta);
+ MATRIX4 m=*((MATRIX4*(*)(void*))p->object->vt[31].pfn)((char*)p->object+p->object->vt[31].delta);
  U direction,position,scratch,negative;
  *(MATRIX3*)&p->matrix=*(MATRIX3*)&m;
  MATRIX4*current=func_001A6318(p);
@@ -79,10 +79,10 @@ extern "C" void func_0018DF60(P*p){
  float factor=0.5f;
  unsigned samplePage=SmoothSamplePage();MATRIX3*receiver,*optional;SMP*sample;float smoothDt=SmoothInputs(current,clock,factor,samplePage,receiver,optional,sample);
  func_0011C950(receiver,&p->matrix,sample,optional,&direction.q,smoothDt);
- ((void(*)(void*,qword))p->vt[36].fn)((char*)p+p->vt[36].delta,direction.q);
+ ((void(*)(void*,qword))p->vt[36].pfn)((char*)p+p->vt[36].delta,direction.q);
  U target;P*owner=NegativeTarget(m,p->offset,&negative,&scratch,&target,p);
  (void)func_0011F088(func_001A62E8(owner),target.q,&D_002BF408,&position.q,clock->dt*factor);
- ((void(*)(void*,qword))p->vt[35].fn)((char*)p+p->vt[35].delta,position.q);
+ ((void(*)(void*,qword))p->vt[35].pfn)((char*)p+p->vt[35].delta,position.q);
  qword relative;
  {
   register PARAM*params __asm__("$3");register MATRIX3*camera __asm__("$2");register float zero __asm__("$f2");
@@ -120,7 +120,6 @@ typedef char Pointer_Size[(sizeof(void*)==4)?1:-1];
 typedef char U_Size[(sizeof(U)==16)?1:-1];
 typedef char M3_Size[(sizeof(MATRIX3)==48)?1:-1];
 typedef char M4_Size[(sizeof(MATRIX4)==64)?1:-1];
-typedef char VTE_Size[(sizeof(VTE)==8)?1:-1];
 typedef char O_Size[(sizeof(O)==16)?1:-1];
 typedef char PARAM_Size[(sizeof(PARAM)==32)?1:-1];
 typedef char SMP_Size[(sizeof(SMP)==12)?1:-1];
@@ -135,7 +134,7 @@ typedef char U_f_Offset[((unsigned)&((U*)0)->f==0)?1:-1];
 typedef char M3_r_Offset[((unsigned)&((MATRIX3*)0)->r==0)?1:-1];
 typedef char M4_r_Offset[((unsigned)&((MATRIX4*)0)->r==0)?1:-1];
 typedef char VTE_delta_Offset[((unsigned)&((VTE*)0)->delta==0)?1:-1];
-typedef char VTE_fn_Offset[((unsigned)&((VTE*)0)->fn==4)?1:-1];
+typedef char VTE_fn_Offset[((unsigned)&((VTE*)0)->pfn==4)?1:-1];
 typedef char O_vt_Offset[((unsigned)&((O*)0)->vt==12)?1:-1];
 typedef char PARAM_y_Offset[((unsigned)&((PARAM*)0)->y==16)?1:-1];
 typedef char PARAM_z_Offset[((unsigned)&((PARAM*)0)->z==20)?1:-1];

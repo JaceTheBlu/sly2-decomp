@@ -1,9 +1,9 @@
+#include "vtable.h"
 // Select and blend the movement vector for the active mode.
 typedef int qword __attribute__((mode(TI)));
 typedef union U{qword q;float f[4];int bits[4];}U;
 typedef union F{float value;int bits;}F;
-struct VT{short delta,pad;void*fn;};
-struct O{char pad[0xC];struct VT*vt;};
+struct O{char pad[0xC];struct VTE*vt;};
 struct M3{U row[3];};
 struct P{struct O*self;char pad4[0x30-4];struct O*target;char pad34[8];int mode;char pad40[0x20];U velocity;};
 extern F D_002BFACC,D_002BFAD0,D_002BFAD4,D_002BFB00,D_002BFB04;
@@ -84,8 +84,8 @@ void func_001A16C8(struct P*p){
             struct O*target=p->target;
             qword n,a,b,mixed,z;
             if(FIsBasicDerivedFrom__FP5BASIC3CID(target,0x51)){
-                struct VT*vt=target->vt;
-                struct M3*basis=((struct M3*(*)(void*))vt[31].fn)((char*)target+vt[31].delta);
+                struct VTE*vt=target->vt;
+                struct M3*basis=((struct M3*(*)(void*))vt[31].pfn)((char*)target+vt[31].delta);
                 scratch=basis->row[0];
             }else{
                 qword targetPoint;
@@ -115,8 +115,8 @@ void func_001A16C8(struct P*p){
     }
     {
         struct O*object=p->self;
-        struct VT*vt=object->vt;
-        ((void(*)(void*,qword))vt[35].fn)((char*)object+vt[35].delta,output.q);
+        struct VTE*vt=object->vt;
+        ((void(*)(void*,qword))vt[35].pfn)((char*)object+vt[35].delta,output.q);
     }
     func_001A0B40(p,7);
 }

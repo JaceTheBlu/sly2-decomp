@@ -1,12 +1,12 @@
+#include "vtable.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef struct { qword r[3]; qword pos; } M4;
-struct VT { short d; short pad; void *f; };
 struct O { char pad[0xA0]; void *xA0; };
 struct G { char pad[0x13D0]; int k13D0; char pad2[0x1910 - 0x13D4]; int x1910; int k1914; char pad3[4]; struct Q *pq; };
-struct Q { char pad[0xC]; struct VT *vt; };
+struct Q { char pad[0xC]; struct VTE *vt; };
 struct P {
-    char pad[0xC]; struct VT *vt; char pad1[0x54 - 0x10]; struct O *p54; struct O *p58; struct O *p5C;
+    char pad[0xC]; struct VTE *vt; char pad1[0x54 - 0x10]; struct O *p54; struct O *p58; struct O *p5C;
     char pad2[0x1A4 - 0x60]; int x1A4; char pad3[0x9E4 - 0x1A8]; int x9E4;
     char pad4[0x1030 - 0x9E8]; int x1030; int x1034; char pad5[0x1800 - 0x1038];
     int k1800; float t1804; void *apv[2]; void *pv1810; void *pv1814;
@@ -66,15 +66,15 @@ void func_00136530(struct P *p, int k)
         M4 m;
         int n;
         struct Q *pq = D_002F7900->pq;
-        n = ((int (*)(void *, M4 *))pq->vt[32].f)((char *)pq + pq->vt[32].d, &m);
+        n = ((int (*)(void *, M4 *))pq->vt[32].pfn)((char *)pq + pq->vt[32].delta, &m);
         { M4 t = func_0022FF40(p->p54->xA0, p->p58->xA0, &m); m = t; }
         {
             int save = p->x9E4;
-            ((void (*)(void *, struct G *, int, int))p->vt[10].f)((char *)p + p->vt[10].d, D_002F7900, n, 3);
+            ((void (*)(void *, struct G *, int, int))p->vt[10].pfn)((char *)p + p->vt[10].delta, D_002F7900, n, 3);
             p->x9E4 = save;
         }
-        ((void (*)(void *, qword))p->vt[35].f)((char *)p + p->vt[35].d, D_002A2DD0);
-        ((void (*)(void *, qword))p->vt[36].f)((char *)p + p->vt[36].d, D_002A2DD0);
+        ((void (*)(void *, qword))p->vt[35].pfn)((char *)p + p->vt[35].delta, D_002A2DD0);
+        ((void (*)(void *, qword))p->vt[36].pfn)((char *)p + p->vt[36].delta, D_002A2DD0);
         p->pv1810 = func_0012DC18(p, p->p58, 1, 7, 2, m.pos);
         p->pv1814 = func_0012DC18(p, p->p5C, 1, 7, 2, DecomposeRotateMatrixEuler__FP7MATRIX3(&m));
         break;
@@ -85,5 +85,5 @@ void func_00136530(struct P *p, int k)
     }
     func_001F15B8(&p->x1034);
     func_001305B8(pv, p, 9, &p->x1030, 0.0f, 1.0f);
-    ((void (*)(void *))p->vt[90].f)((char *)p + p->vt[90].d);
+    ((void (*)(void *))p->vt[90].pfn)((char *)p + p->vt[90].delta);
 }

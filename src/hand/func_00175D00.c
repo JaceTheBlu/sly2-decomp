@@ -1,9 +1,9 @@
+#include "vtable.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 extern struct CLOCK g_clock;
 struct G;
 extern struct G g_sw;
-struct VTE { short d; short pad; void *pfn; };
 struct T {
     char pad[0xC]; struct VTE *vt; char pad2[0x18]; unsigned long fl28; char pad3[0x2DC - 0x30]; int n2DC;
     char pad4[0x4C8 - 0x2E0]; int n4C8; int n4CC; char pad5[0xF54 - 0x4D0]; int nF54; char pad6[0x18C8 - 0xF58]; int n18C8;
@@ -44,7 +44,7 @@ int func_00175D00(struct S *p) {
     if (FIsBasicDerivedFrom__FP5BASIC3CID(p->p30, 0x32)) {
         struct T *q = p->p30;
         struct VTE *e = &q->vt[0x4D];
-        if (((int (*)(void *))e->pfn)((char *)q + e->d) == 2) return 0;
+        if (((int (*)(void *))e->pfn)((char *)q + e->delta) == 2) return 0;
     }
     k = 0;
     if (FIsBasicDerivedFrom__FP5BASIC3CID(p->p30, 0x34)) {

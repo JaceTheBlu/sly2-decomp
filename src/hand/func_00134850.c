@@ -1,5 +1,5 @@
+#include "vtable.h"
 #include "clock.h"
-struct VTE { short d; short pad; void *pfn; };
 struct PO { char pad[0x1C]; float g1C; char pad1[0x30 - 0x20]; int x30; };
 struct P {
     char pad[0xC]; struct VTE *vt; char pad0[0x150 - 0x10]; struct PO *p150;
@@ -31,7 +31,7 @@ int func_00131968(void *pv);
 int func_001F0638(void *pv);
 void func_00136338(struct P *p);
 
-#define VCALL99(p, a) ((int (*)(void *, int))(p)->vt[99].pfn)((char *)(p) + (p)->vt[99].d, a)
+#define VCALL99(p, a) ((int (*)(void *, int))(p)->vt[99].pfn)((char *)(p) + (p)->vt[99].delta, a)
 
 void func_00134850(struct P *p)
 {

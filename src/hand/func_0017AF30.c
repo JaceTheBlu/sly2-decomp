@@ -1,9 +1,9 @@
+#include "vtable.h"
 typedef int qword __attribute__((mode(TI)));
 struct G { char pad[0x4028]; void *p4028; };
 extern struct G g_sw;
 extern void *D_002BE6D0[];
 extern int D_002BE6E8[];
-struct VTE { short d; short pad; void *pfn; };
 struct O { char pad[0xC]; struct VTE *vt; };
 struct C { int pad; void *p4; void *p8; int nC; };
 struct A { char pad[0x33C]; int n33C; };
@@ -62,7 +62,7 @@ int func_0017AF30(struct S *p, int msg, struct M *pm) {
                 x.a = 5;
                 x.v = func_001A62E8(p->p10);
                 e = &o->vt[0x33];
-                ((void (*)(void *, struct X *))e->pfn)((char *)o + e->d, &x);
+                ((void (*)(void *, struct X *))e->pfn)((char *)o + e->delta, &x);
             }
             a = p->p10;
             {

@@ -1,3 +1,4 @@
+#include "vtable.h"
 #include "clock.h"
 // func_00191A10: per-frame update of a hero's movement/action context (the struct at actor+0x4C0; called from the
 // actor's mode handler, see func_0018B7E8 / func_00134DA8). Dispatches on the context's action, then commits the
@@ -16,7 +17,6 @@ typedef unsigned int uint;
 
 union U { qword q; float f[4]; int i[4]; };
 struct M3 { U r[3]; };
-struct VTE { short delta, pad; void *fn; };
 struct JOY { char pad0[0x10]; float x, y, heading, amount; };
 struct ANIM { char pad0[0x14]; void *table; char pad18[4]; float phase; char pad20[0x20]; float rate; };
 struct COMPONENT { VTE *vt; };
@@ -81,12 +81,12 @@ void func_00189C40(ACTOR *, void *, void *, void *, float, void *);
 void func_00193C98(ACTOR *, void *, void *);
 }
 
-static inline qword GetVelocity(ACTOR *p) { VTE &v = p->vt[33]; return ((qword (*)(void *))v.fn)((char *)p + v.delta); }
+static inline qword GetVelocity(ACTOR *p) { VTE &v = p->vt[33]; return ((qword (*)(void *))v.pfn)((char *)p + v.delta); }
 static inline void ReadBinding(BINDING *b, ANIM *a, U *out)
 {
     COMPONENT *c = b->component;
     VTE &v = c->vt[3];
-    ((void (*)(void *, int, U *, float, float))v.fn)((char *)c + v.delta, 0, out, a->phase, a->rate);
+    ((void (*)(void *, int, U *, float, float))v.pfn)((char *)c + v.delta, 0, out, a->phase, a->rate);
 }
 
 static inline VU_FLOAT VuFloat(float g) { VU_FLOAT v; __asm__("qmtc2.ni %1,%0" : "=j"(v.q) : "r"(g)); return v; }

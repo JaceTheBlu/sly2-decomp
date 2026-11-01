@@ -1,3 +1,4 @@
+#include "vtable.h"
 #include "clock.h"
 // func_001911A8: per-frame update of a hero's action context (the struct at actor+0x4C0; func_00134850 calls it in
 // its state 3). It dispatches on the context's action and loops while the action changed the step (and not to -1).
@@ -17,7 +18,6 @@ typedef int qword __attribute__((mode(TI)));
 typedef unsigned int uint;
 typedef unsigned long ulong;
 
-struct VTE { short delta, pad; void *fn; };
 struct JOY { char pad0[0x1C]; float amount; char pad20[0x10]; uint grfbtn; };
 struct SURF;
 struct BSP { BSP *pbspNeg, *pbspPos; SURF *psurf; };
@@ -77,9 +77,9 @@ uint func_00141EA8(ACTOR *, int);
 }
 void FreeSwXpList(SW *, XP *);
 
-static inline void SetControl(ACTOR *p, int n) { VTE &v = p->vt[88]; ((void (*)(void *, int))v.fn)((char *)p + v.delta, n); }
-static inline int CanAct(ACTOR *p, int n) { VTE &v = p->vt[99]; return ((int (*)(void *, int))v.fn)((char *)p + v.delta, n); }
-static inline void Notify(ACTOR *p, ACTOR *q) { VTE &v = p->vt[51]; ((void (*)(void *, ACTOR *))v.fn)((char *)p + v.delta, q); }
+static inline void SetControl(ACTOR *p, int n) { VTE &v = p->vt[88]; ((void (*)(void *, int))v.pfn)((char *)p + v.delta, n); }
+static inline int CanAct(ACTOR *p, int n) { VTE &v = p->vt[99]; return ((int (*)(void *, int))v.pfn)((char *)p + v.delta, n); }
+static inline void Notify(ACTOR *p, ACTOR *q) { VTE &v = p->vt[51]; ((void (*)(void *, ACTOR *))v.pfn)((char *)p + v.delta, q); }
 static inline void *PvAllocStack(int cb) { SWALLOC swalloc; swalloc.cb = cb; swalloc.cbAlign = 0x10; return PvAllocStackImpl__FP7SWALLOC(&swalloc); }
 
 static inline VU_FLOAT VuFloat(float g) { VU_FLOAT v; __asm__("qmtc2.ni %1,%0" : "=j"(v.q) : "r"(g)); return v; }

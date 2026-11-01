@@ -1,3 +1,4 @@
+#include "vtable.h"
 #include "util.h"
 #include "clock.h"
 // CalculateJtHangAccel__FP2JT MATCH, from laneH15v4 + a "memory" clobber on the dt empty asm with base assigned after it (orders the point/spin loads after the dt spill store). laneH15v4: laneH14v1 + "0V" on the dt empty asm (input stays a MEM, reload lw goes straight into the output reg), allocation-only 2nd "j" on the radius scale, QwDivideBy(g first) for the final divide, and the 2nd clamp written out in the body (g=g0; g+=...; lo/hi locals; if/else-if in place): aligned 1.
@@ -10,7 +11,6 @@ typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];int i[4];};
 struct M3{U r[3];M3(){}M3(const M3&m){r[0]=m.r[0];r[1]=m.r[1];r[2]=m.r[2];}M3&operator=(const M3&m){r[0]=m.r[0];r[1]=m.r[1];r[2]=m.r[2];return*this;}};
 struct M4{U r[4];};
-struct VTE{short delta,pad;void*fn;};
 struct NODE{char pad0[0xC];VTE*vt;char pad10[0x124];float property;};
 struct ACCEL{char pad0[0x80];U value;};
 struct LINK{int header;NODE*object;};
@@ -59,8 +59,8 @@ static inline float GEvaluateClq(CLQ*p,float x){return p->g0+x*(p->g1+x*p->g2);}
 static inline float GLimitG(float g,float gMin,float gMax){if(g<gMin)return gMin;if(gMax<g)return gMax;return g;}
 static inline float GMinOf(float a,float b){return(b<a)?b:a;}
 static inline float GMaxOf(float a,float b){return(b>a)?b:a;}
-static inline qword Velocity(void*p){VTE*e=&((NODE*)p)->vt[33];return((qword(*)(void*))e->fn)((char*)p+e->delta);}
-static inline void*Space(NODE*p){VTE*e=&p->vt[32];return((void*(*)(void*,void*))e->fn)((char*)p+e->delta,0);}
+static inline qword Velocity(void*p){VTE*e=&((NODE*)p)->vt[33];return((qword(*)(void*))e->pfn)((char*)p+e->delta);}
+static inline void*Space(NODE*p){VTE*e=&p->vt[32];return((void*(*)(void*,void*))e->pfn)((char*)p+e->delta,0);}
 static inline qword QwNormalize(qword v,qword fallback){qword len=QwSqrt(QwDot(v,v));qword r;if(GXOfQw(len)<0.0001f)r=fallback;else r=QwDivide(v,len);return r;}
 static inline CLOCK*Addr(CLOCK*p){return p;}
 static inline qword QwAddScaled2Q(qword base,qword a,qword b,qword k){qword r;__asm__("vadda.xyzw $ACC,%1,$vf0\n\tvmaddax.xyzw $ACC,%2,%4x\n\tvmaddx.xyzw %0,%3,%4x":"=j"(r):"j"(base),"j"(a),"j"(b),"j"(k),"j"(k));return r;} /* second "j"(k) is allocation-only: makes k VF-preferred so it is spilled across the call (target 0x1F0) */

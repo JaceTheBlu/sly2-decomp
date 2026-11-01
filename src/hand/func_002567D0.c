@@ -1,10 +1,10 @@
-typedef struct VT { short d; short pad; void *pfn; } VT;
-typedef struct A { VT *vt; } A;
+#include "vtable.h"
+typedef struct A { VTE *vt; } A;
 typedef struct E { int key; int k; int v; struct E *next; } E;
 typedef struct H { int c; E **ap; int count; A *pa; } H;
 void *func_002333B4(void *, int, int);
 
-#define FREE(pa, p) ((void (*)(void *, void *))(pa)->vt[3].pfn)((char *)(pa) + (pa)->vt[3].d, p)
+#define FREE(pa, p) ((void (*)(void *, void *))(pa)->vt[3].pfn)((char *)(pa) + (pa)->vt[3].delta, p)
 
 void func_002567D0(H *h)
 {

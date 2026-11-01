@@ -1,10 +1,10 @@
+#include "vtable.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 extern qword D_002A2DD0;
 extern char g_sw[];
 extern struct CLOCK g_clock;
 struct V3 { int x; int y; int z; };
-struct VTE { short d; short pad; void *pfn; };
 struct LO { int pad[3]; struct VTE *vt; };
 struct R { char pad[0x60]; float x60; float x64; };
 struct SP { char pad[0xE8]; int xE8; char pad2[0xF4 - 0xEC]; qword *xF4; };
@@ -29,7 +29,7 @@ void *func_0014AE18(struct P *);
 void func_001E6180(struct SP *);
 void func_00178D90(struct OA7 *, struct SP *, int);
 
-#define VCALL0(po, n) { struct VTE *e = &(po)->vt[n]; ((void (*)(void *))e->pfn)((char *)(po) + e->d); }
+#define VCALL0(po, n) { struct VTE *e = &(po)->vt[n]; ((void (*)(void *))e->pfn)((char *)(po) + e->delta); }
 
 void func_0014AE38(struct P *p, int state)
 {
@@ -62,12 +62,12 @@ void func_0014AE38(struct P *p, int state)
         {
             struct X *px = p->p10;
             struct VTE *e = &px->vt[35];
-            ((void (*)(void *, qword))e->pfn)((char *)px + e->d, D_002A2DD0);
+            ((void (*)(void *, qword))e->pfn)((char *)px + e->delta, D_002A2DD0);
         }
         {
             struct X *px = p->p10;
             struct VTE *e = &px->vt[36];
-            ((void (*)(void *, qword))e->pfn)((char *)px + e->d, D_002A2DD0);
+            ((void (*)(void *, qword))e->pfn)((char *)px + e->delta, D_002A2DD0);
         }
         {
             struct V3 *pv = &p->p10->v190;

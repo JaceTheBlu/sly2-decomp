@@ -1,11 +1,11 @@
+#include "vtable.h"
 // Load the pending world and restore actor and view state.
 typedef unsigned int uint;
 struct HEADER {int words[16];};
 struct REQUEST {int flags;HEADER header;int objectId,objectKey;};
 struct KEY {int name,tag,kind;char data[0x104];};
-struct VT {short delta,unused;void *function;};
 struct WIDGET {char pad0[0x58];int shown;};
-struct ACTOR {char pad0[0xC];VT *vtable;char pad10[8];int tag;char pad1C[0xF10];WIDGET *widget;};
+struct ACTOR {char pad0[0xC];VTE *vtable;char pad10[8];int tag;char pad1C[0xF10];WIDGET *widget;};
 struct CONTEXT {char pad0[0x148];int count;struct {int tag,value;} objects[1];};
 struct SW {char pad0[0x3BF0];int pending;REQUEST request;HEADER current;int unused3C80,unused3C84,objectId,objectKey;char pad3C90[0x228];int actorCount;ACTOR *actors[1];char pad3EC0[0x8AC];float resumeTime;char pad4770[0x20];};
 struct FRAME;
@@ -63,10 +63,10 @@ extern "C" REF func_001D8A38(const char *,...);
 static inline float Time(){return *(float *)g_clock;}
 static inline int Same(const HEADER *a,const HEADER *b){if(a==b)return true;if(!b)return false;return (a->words[2]^a->words[14])==(b->words[2]^b->words[14]);}
 static inline int SetKey(KEY *key,const HEADER *header){if(!header)return false;int c=header->words[0],a=header->words[13],d=header->words[15],b=header->words[1];key->kind=2;key->tag=b^d;key->name=(c^a)+0xCA0;return key->tag!=0;}
-static inline void Activate(ACTOR *actor){VT *entry=&actor->vtable[8];((void (*)(void *))entry->function)((char *)actor+entry->delta);}
-static inline void Enable(ACTOR *actor,int mode){VT *entry=&actor->vtable[79];((void (*)(void *,int))entry->function)((char *)actor+entry->delta,mode);}
-static inline void Attach(ACTOR *actor,CONTEXT *context){VT *entry=&actor->vtable[38];((void (*)(void *,CONTEXT *))entry->function)((char *)actor+entry->delta,context);}
-static inline void Hide(ACTOR *actor){VT *entry=&actor->vtable[9];((void (*)(void *))entry->function)((char *)actor+entry->delta);}
+static inline void Activate(ACTOR *actor){VTE *entry=&actor->vtable[8];((void (*)(void *))entry->pfn)((char *)actor+entry->delta);}
+static inline void Enable(ACTOR *actor,int mode){VTE *entry=&actor->vtable[79];((void (*)(void *,int))entry->pfn)((char *)actor+entry->delta,mode);}
+static inline void Attach(ACTOR *actor,CONTEXT *context){VTE *entry=&actor->vtable[38];((void (*)(void *,CONTEXT *))entry->pfn)((char *)actor+entry->delta,context);}
+static inline void Hide(ACTOR *actor){VTE *entry=&actor->vtable[9];((void (*)(void *))entry->pfn)((char *)actor+entry->delta);}
 static inline int NonZero(int v){int r; __asm__("sltu %0,$zero,%1":"=r"(r):"r"(v));return r;}
 static inline STREAM *StreamHome(STREAM *home){register STREAM *result __asm__("$4");__asm__("la %0,%a1":"=r"(result):"p"(home));return result;}
 extern "C" void func_0020E890(SW *p)

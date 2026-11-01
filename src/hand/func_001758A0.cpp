@@ -1,3 +1,4 @@
+#include "vtable.h"
 #include "util.h"
 #include "clock.h"
 // func_001758A0: pick the first enabled response ENTRY of p that accepts target (range, height, angle, optional
@@ -8,7 +9,6 @@
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
 struct M4 { U row[4]; };
-struct VTE { short delta, pad; void *fn; };
 struct NAME { unsigned identity; };
 struct SCALE { char pad[0x20]; float value; };
 struct ENTRY {
@@ -151,7 +151,7 @@ extern "C" ENTRY *func_001758A0(P *p, P *target, void *gate)
         return 0;
     if (FIsBasicDerivedFrom__FP5BASIC3CID(target, 0x32)) {
         VTE *e = &target->vt[77];
-        if (((int (*)(void *))e->fn)((char *)target + e->delta))
+        if (((int (*)(void *))e->pfn)((char *)target + e->delta))
             return 0;
     }
     if (gate && !func_0020A818(gate, p))
@@ -214,7 +214,7 @@ extern "C" ENTRY *func_001758A0(P *p, P *target, void *gate)
             if (entry->response) {
                 M4 frame;
                 VTE *e = &target->vt[32];
-                void *owner = ((void *(*)(void *, M4 *))e->fn)((char *)target + e->delta, &frame);
+                void *owner = ((void *(*)(void *, M4 *))e->pfn)((char *)target + e->delta, &frame);
                 func_0020AB68(p, entry, owner, frame.row[3].q);
                 entry = 0;
                 if (gate)

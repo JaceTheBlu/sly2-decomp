@@ -1,7 +1,7 @@
+#include "vtable.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f; } U;
-struct VT { short d; short pad; void *pfn; };
-struct P { char pad[0xC]; struct VT *pvt; char pad1[0x2C0 - 0x10]; char a2C0[0x200]; char a4C0[0xDF0 - 0x4C0];
+struct P { char pad[0xC]; struct VTE *pvt; char pad1[0x2C0 - 0x10]; char a2C0[0x200]; char a4C0[0xDF0 - 0x4C0];
     char aDF0[0x160]; char aF50[0x13D0 - 0xF50]; int k; char pad3[0x16B0 - 0x13D4]; int x16B0; };
 extern float D_002BC990;
 void func_001F9B20(struct P *p);
@@ -24,11 +24,11 @@ void func_00135940(struct P *p)
     case 13: func_0019DF70(p->aF50); break;
     case 6:
         if (p->x16B0 == 2) {
-            register struct VT *vt __asm__("$3") = p->pvt;
+            register struct VTE *vt __asm__("$3") = p->pvt;
             U a, u;
             qword v, r, q;
             qword (*pfn)(void *) = (qword (*)(void *))vt[33].pfn;
-            short d = vt[33].d;
+            short d = vt[33].delta;
             __asm__("mfc1 %0, %1" : "=r"(q) : "f"(-D_002BC990));
             a.q = q;
             u.q = q;

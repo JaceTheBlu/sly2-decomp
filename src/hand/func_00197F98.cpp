@@ -1,3 +1,4 @@
+#include "vtable.h"
 #include "util.h"
 #include "clock.h"
 // func_00197F98: per-frame movement / jump-target update of a player context (MATCH; T1870, Lilly's agent; = lilly30 + FloatUse + EMPTY).
@@ -18,7 +19,6 @@ union U { qword q; float f[4]; int i[4]; };
 struct EMPTY { ~EMPTY() {} };
 struct M3 { qword r[3]; };
 struct M4 { U r[4]; };
-struct VTE { short delta, pad; void *fn; };
 struct SPACE;
 struct CLIP;
 struct INPUT { char pad0[0x18]; float heading; float amount; };
@@ -88,9 +88,9 @@ qword func_0011E9F8(qword, float);
 void func_00140C88(ACTOR *, void *);
 }
 
-static inline qword GetVelocity(void *p) { VTE &v = ((SOURCE *)p)->vt[33]; return ((qword (*)(void *))v.fn)((char *)p + v.delta); }
-static inline SPACE *GetFrame(void *p) { VTE &v = ((SOURCE *)p)->vt[32]; return ((SPACE * (*)(void *, void *))v.fn)((char *)p + v.delta, 0); }
-static inline int FFacing(ACTOR *p) { VTE &v = p->vt[92]; return ((int (*)(void *))v.fn)((char *)p + v.delta); }
+static inline qword GetVelocity(void *p) { VTE &v = ((SOURCE *)p)->vt[33]; return ((qword (*)(void *))v.pfn)((char *)p + v.delta); }
+static inline SPACE *GetFrame(void *p) { VTE &v = ((SOURCE *)p)->vt[32]; return ((SPACE * (*)(void *, void *))v.pfn)((char *)p + v.delta, 0); }
+static inline int FFacing(ACTOR *p) { VTE &v = p->vt[92]; return ((int (*)(void *))v.pfn)((char *)p + v.delta); }
 
 static inline VU_FLOAT VuFloatHomed(float g) { union { volatile qword home; } u; qword q; __asm__("qmtc2.ni %1,%0" : "=j"(q) : "r"(g)); u.home = q; VU_FLOAT v; v.q = q; return v; }
 static inline VU_FLOAT VuFloat(float g) { VU_FLOAT v; __asm__("qmtc2.ni %1,%0" : "=j"(v.q) : "r"(g)); return v; }

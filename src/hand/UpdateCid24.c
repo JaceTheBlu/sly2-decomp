@@ -1,3 +1,4 @@
+#include "vtable.h"
 #include "clock.h"
 /* UpdateCid24. The compare loop: the first element is tested before a real for(;;) that is entered by a goto at its increment, so loop.c sees a multiple-entry loop and leaves it alone (no strength reduction), like the target. The redundant fChanged = 1 before `goto changed` is removed later by flow, and jump2 then turns that test into the target bne. */
 typedef int qword __attribute__((mode(TI)));
@@ -5,7 +6,6 @@ struct CTX { int a[4]; };
 struct G { char pad[0x3EB8]; int c; void *apo[1]; };
 extern struct G g_sw;
 extern struct CLOCK g_clock;
-struct VTE { short d; short pad; void *pfn; };
 struct P {
     int pad[3]; struct VTE *vt; char pad1[0x1C0 - 0x10]; int x1C0; float x1C4; float x1C8; char pad2[0x1D8 - 0x1CC]; void *x1D8;
     char pad3[0x288 - 0x1DC]; int c288; void *a28C[8]; int c2AC; int a2B0[4]; int c2C0; void **p2C4; int x2C8;
@@ -93,7 +93,7 @@ void UpdateCid24(struct P *p)
                 p->c2C0 = cSel;
                 func_001AE5A0(p->p2C4, apoSel, cSel * 4);
                 e = &p->vt[3];
-                ((void (*)(void *, int, int, int, int, int))e->pfn)((char *)p + e->d, 9, 0, 0, 0, 0);
+                ((void (*)(void *, int, int, int, int, int))e->pfn)((char *)p + e->delta, 9, 0, 0, 0, 0);
             }
         }
         func_00149718(p, fFound);

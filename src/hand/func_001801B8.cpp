@@ -1,3 +1,4 @@
+#include "vtable.h"
 #include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};
@@ -7,7 +8,6 @@ struct M3 {
  M3(const M3&m){r[0]=m.r[0];r[1]=m.r[1];r[2]=m.r[2];}
  M3&operator=(const M3&m){r[0]=m.r[0];r[1]=m.r[1];r[2]=m.r[2];return *this;}
 };
-struct VTE {short delta,pad;void*fn;};
 struct P {char pad[0xC];VTE*vt;char pad10[0x17C];int flag;char pad190[0x30];float time;char pad1C4[0xC];P*target;float turnRate;};
 struct CLOCK{float time,dt;};
 extern "C" CLOCK g_clock;
@@ -28,19 +28,19 @@ static inline M3 Mul(const M3&a,const M3&b) return r
 }
 extern "C" void func_001801B8(P*p){
  UpdateCid48(p);
- if(!p->flag&&p->time<=g_clock.time)((void(*)(void*,P*))p->vt[82].fn)((char*)p+p->vt[82].delta,0);
+ if(!p->flag&&p->time<=g_clock.time)((void(*)(void*,P*))p->vt[82].pfn)((char*)p+p->vt[82].delta,0);
  if(!p->target||p->turnRate==0.0f)return;
  M3 rotation,matrix;
  qword position;
  position=func_001A62E8(p->target);
  qword displacement=QwSub(position,func_001A62E8(p));
  float desired=func_002458F0(GetY(displacement),GetX(displacement));
- qword direction=((qword(*)(void*))p->vt[33].fn)((char*)p+p->vt[33].delta);
+ qword direction=((qword(*)(void*))p->vt[33].pfn)((char*)p+p->vt[33].delta);
  float current=func_002458F0(GetY(direction),GetX(direction));
  float angle=func_0011CFE0(RadNormalize__Ff(desired-current),p->turnRate*g_clock.dt);
  rotation=LoadRotateMatrixRad__FfUx(g_normalZ,angle);
- ((void(*)(void*,qword))p->vt[35].fn)((char*)p+p->vt[35].delta,Transform(rotation,direction));
+ ((void(*)(void*,qword))p->vt[35].pfn)((char*)p+p->vt[35].delta,Transform(rotation,direction));
  // The original reads this local matrix before initialization.
  matrix=Mul(rotation,matrix);
- ((void(*)(void*,M3*))p->vt[30].fn)((char*)p+p->vt[30].delta,&matrix);
+ ((void(*)(void*,M3*))p->vt[30].pfn)((char*)p+p->vt[30].delta,&matrix);
 }
