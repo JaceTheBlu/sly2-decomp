@@ -1,12 +1,12 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
-struct M3 { qword r[3]; };
 struct S;
 struct N;
 struct E;
-struct O { struct M3 mat; char pad[0x70-0x30]; qword pos; char pad1[0xA8-0x80]; struct E *entry; };
+struct O { struct MATRIX3 mat; char pad[0x70-0x30]; qword pos; char pad1[0xA8-0x80]; struct E *entry; };
 struct VE { short d; short pad; struct O *(*get)(void *,int); };
 struct S { char pad[0xC]; struct VE *vt; };
-struct E { struct M3 mat; qword pos; qword world; qword x50; struct N *node; struct O *object; int x68; int x6C; };
+struct E { struct MATRIX3 mat; qword pos; qword world; qword x50; struct N *node; struct O *object; int x68; int x6C; };
 struct N { int count; struct E *entries; int x8; float xC; float x10; float x14; float x18; int x1C; qword q20; qword q30; qword q40; };
 struct Hook { int kind; struct S *owner; struct O *object; int xC; int x10; int flags; void *vt; struct E *entry; };
 struct Alloc { int cb; int align; };

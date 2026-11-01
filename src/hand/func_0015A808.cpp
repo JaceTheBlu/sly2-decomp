@@ -1,3 +1,4 @@
+#include "mat.h"
 #include "vu0.h"
 #include "util.h"
 // func_0015A808: EMITB choose emit position/direction.
@@ -7,7 +8,6 @@ typedef int qword __attribute__((mode(TI)));
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } };
 struct VU_VECTOR { qword q; };
 static inline VU_VECTOR V(qword q) { VU_VECTOR v; v.q = q; return v; }
-struct MATRIX3 { qword r[3]; };
 struct CM { char pad[0x60]; MATRIX3 mat; };
 extern CM g_cm;
 extern qword D_002A2DA0;

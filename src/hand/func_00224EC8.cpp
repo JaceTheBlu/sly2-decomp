@@ -1,10 +1,10 @@
+#include "mat.h"
 #include "vu0.h"
 #include "clock.h"
 // Transition actor controller state.
 typedef int qword __attribute__((mode(TI)));
 union V {qword q;float f[4];};
-struct M3 {qword r[3];};
-struct NODE {M3 basis;qword orientation;char pad40[0x60];NODE *parent;char padA4[0xC];V velocity;};
+struct NODE {MATRIX3 basis;qword orientation;char pad40[0x60];NODE *parent;char padA4[0xC];V velocity;};
 struct O;
 struct S {char pad[0x58];NODE *positionNode,*rotationNode;char pad60[0xF0];int state;float time;int sentinel,kind;O *nearest;char pad164[4];void *animation;char pad16C[0x10];void *rotationJob,*positionJob;char pad184[0xC];qword direction;};
 struct WORLD;
@@ -23,7 +23,7 @@ qword DecomposeRotateMatrixEuler__FP7MATRIX3(const void *);
 void *func_0012DC18(S *,NODE *,int,int,int,qword);
 int func_00224688(S *);
 qword func_0022FCC8(NODE *,NODE *,qword);
-M3 *func_0011B830(M3 *,qword,qword);
+MATRIX3 *func_0011B830(MATRIX3 *,qword,qword);
 void SetLoParent__FP2LOP2SOi(S *,int,int);
 int func_0015E9C8(WORLD *,int,int,int,int,O **);
 qword func_001A62E8(void *);
@@ -52,7 +52,7 @@ static inline O *FindNearest(S *p,int count,O **objects,O *nearest,float best){
    if(distance<best){best=distance;nearest=object;}
   }
 return nearest;}
-static inline M3 MakeBasis(qword direction,qword rawUp) return result;{
+static inline MATRIX3 MakeBasis(qword direction,qword rawUp) return result;{
  qword v=rawUp,len,one,normalized;
  __asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(len),"=&j"(one):"j"(v));
  qword first=direction;
@@ -84,7 +84,7 @@ extern "C" void func_00224EC8(S *p,int state){
   if(func_00224688(p)&&p->rotationNode){
    qword direction=Normalize(QwToVf(func_0022FCC8(0,p->rotationNode->parent,p->direction)));
    qword rawUp=func_0022FCC8(0,p->rotationNode->parent,g_normalZ);
-   M3 basis;basis=MakeBasis(direction,rawUp);
+   MATRIX3 basis;basis=MakeBasis(direction,rawUp);
    p->rotationJob=func_0012DC18(p,p->rotationNode,0,7,2,DecomposeRotateMatrixEuler__FP7MATRIX3(&basis));
   }
   break;

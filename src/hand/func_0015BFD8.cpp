@@ -1,8 +1,7 @@
+#include "mat.h"
 #include "vu0.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct MATRIX4 { qword r[4]; };
-struct MATRIX3 { qword r[3]; };
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("" : "=r"(q) : "0"(*(int *)&f)); } };
 extern CLOCK g_clock;
 extern MATRIX4 D_002A2D30;

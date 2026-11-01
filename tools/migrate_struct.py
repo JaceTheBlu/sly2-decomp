@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Replace local re-declarations of a struct with the shared header.
 
-  migrate_struct.py STRUCT HEADER [--dry-run] [FILE ...]
+  migrate_struct.py STRUCT HEADER [--as LOCALNAME] [--dry-run] [FILE ...]
   e.g. migrate_struct.py CLOCK clock.h
 
 Most sources declare the classes they touch locally (`struct CLOCK { float t; float dt; };`, field names and
@@ -23,11 +23,13 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SIZES = {'char': 1, 'uchar': 1, 'unsigned char': 1, 'signed char': 1, 'u8': 1, 's8': 1, 'byte': 1,
          'short': 2, 'ushort': 2, 'unsigned short': 2, 'u16': 2, 's16': 2,
          'int': 4, 'uint': 4, 'unsigned int': 4, 'unsigned': 4, 'float': 4, 's32': 4, 'u32': 4, 'f32': 4,
-         'long': 8, 'ulong': 8, 'unsigned long': 8, 'TICK': 8, 's64': 8, 'u64': 8, 'double': 8}
+         'long': 8, 'ulong': 8, 'unsigned long': 8, 'TICK': 8, 's64': 8, 'u64': 8, 'double': 8,
+         'qword': 16, 'vu0_qword': 16, 'u128': 16, 's128': 16}
+QWORDS = {'qword', 'vu0_qword', 'u128', 's128'}
 
 
 def kind(ty, ptr):
-    return 'p' if ptr else ('f' if ty in ('float', 'f32', 'double') else 'i')
+    return 'p' if ptr else ('f' if ty in ('float', 'f32', 'double') else 'q' if ty in QWORDS else 'i')
 
 
 def parse_fields(body):
@@ -57,7 +59,7 @@ def parse_fields(body):
 def canonical(struct, header):
     t = re.sub(r'/\*.*?\*/|//[^\n]*', '', open(os.path.join(ROOT, 'include', header)).read(), flags=re.S)
     t = re.sub(r'typedef\s+unsigned long\s+(\w+)\s*;', lambda m: SIZES.setdefault(m.group(1), 8) and '', t)
-    m = re.search(r'struct\s+%s\s*\{((?:[^{}]|\{[^{}]*\})*)\};' % struct, t, re.S)
+    m = re.search(r'struct\s+%s\s*\{((?:[^{}]|\{[^{}]*\})*)\}[^;{}]*;' % struct, t, re.S)
     # anonymous unions: every member is a candidate at the union's offset
     out = []; off = 0
     for part in re.split(r'(union\s*\{[^{}]*\}\s*;)', m.group(1)):
@@ -77,11 +79,13 @@ def main():
     a = [x for x in sys.argv[1:] if not x.startswith('--')]
     dry = '--dry-run' in sys.argv
     struct, header = a[0], a[1]
+    local = sys.argv[sys.argv.index('--as') + 1] if '--as' in sys.argv else struct   # local stand-in's name
+    a = [x for x in a if x != local or local == struct]
     canon = canonical(struct, header)
     by_off = collections.defaultdict(list)   # (offset, size) -> canonical candidates (several for a union)
     for n, o, sz, cnt, k in canon: by_off[o, sz].append((n, cnt, k))
     files = [os.path.abspath(f) for f in a[2:]] or sorted(glob.glob(os.path.join(ROOT, 'src', '**', '*.c*'), recursive=True))
-    defre = re.compile(r'^[ \t]*(?:typedef[ \t]+)?struct[ \t]+%s[ \t]*\{([^{}]*)\}[ \t]*(?:%s[ \t]*)?;[ \t]*\n' % (struct, struct), re.M)
+    defre = re.compile(r'^[ \t]*(?:typedef[ \t]+)?struct[ \t]+%s[ \t]*\{([^{}]*)\}[ \t]*(?:%s[ \t]*)?;[ \t]*\n' % (local, local), re.M)
     done = 0; skipped = {}
     for p in files:
         if os.sep + 'lib' + os.sep in p: continue
@@ -108,10 +112,13 @@ def main():
         if '--careful' in sys.argv and ren and any(re.search(r'\{[^{}]*\b%s\b[^{}]*\}' % re.escape(old), others) for old in ren):
             skipped[rel] = 'a renamed field name is also used by another struct'; continue
         u = others
+        if local != struct:   # the stand-in had its own name (M3 for MATRIX3): the file must not know the real one yet
+            if re.search(r'\b%s\b' % struct, u): skipped[rel] = f'already uses {struct}'; continue
+            u = re.sub(r'\b%s\b' % local, struct, u)
         # static asserts on the size of the local stand-in (typedef char X[sizeof(STRUCT)==8?1:-1];) checked the
         # stand-in, not the real type: they go with it
         u = re.sub(r'^[ \t]*typedef[ \t]+char[ \t]+\w+[ \t]*\[[^\]\n]*(?:sizeof|__alignof__)[ \t]*\([ \t]*(?:struct[ \t]+)?%s[ \t]*\)[^\n]*\n'
-                   % struct, '', u, flags=re.M)
+                   % local, '', u, flags=re.M)
         for old, new in ren.items():
             u = re.sub(r'(\.|->)\s*%s\b' % re.escape(old), r'\g<1>' + new, u)
         if f'#include "{header}"' not in u:

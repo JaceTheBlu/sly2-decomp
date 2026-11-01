@@ -1,11 +1,10 @@
+#include "mat.h"
 // func_001457A8 MATCH, from v6 (14).
 // Branch 1: VU_FLOAT has a user copy ctor (so the temporary lives at 0x40) and its qmtc2 ctor writes a plain qword
 // local first, then copies it into q (an asm output straight into the member goes through a second stack temp).
 // Branch 2: the VU_FLOAT is loaded with an asm lw from "m"(f) (VU_FLOATM, as in func_001375D0), and AddScaled takes
 // its operands in (a, s, b) order.
 typedef int qword __attribute__((mode(TI)));
-struct M3 { qword r[3]; };
-struct M4 { qword r[4]; };
 struct E;
 struct D { char pad[0x10]; E *pe; };
 struct C { char pad[0xDC]; D *pd; };
@@ -21,8 +20,8 @@ struct P {
 extern "C" {
 extern qword g_normalZ;
 qword func_001A62E8(void *p);
-M3 *func_001A6318(void *p);
-M3 LoadRotateMatrixRad__FfUx(qword axis, float g);
+MATRIX3 *func_001A6318(void *p);
+MATRIX3 LoadRotateMatrixRad__FfUx(qword axis, float g);
 int FIsBasicDerivedFrom__FP5BASIC3CID(void *p, int k);
 E *func_00145AA8(P *p);
 int func_001C02D0(E *pe, qword r, qword v, B *pb);
@@ -48,7 +47,7 @@ static inline qword AddScaled(VU_VECTOR a, VU_FLOAT s, VU_VECTOR b)
     return r;
 }
 
-static inline qword MulM3(const M3 &m, qword v)
+static inline qword MulM3(const MATRIX3 &m, qword v)
 {
     qword r;
     __asm__("vmulax.xyz $ACC, %2, %1x\n\tvmadday.xyz $ACC, %3, %1y\n\tvmaddz.xyz %0, %4, %1z"
@@ -65,7 +64,7 @@ static inline qword Add(qword a, qword b)
 
 void func_001457A8(P *p)
 {
-    union { M4 m4; struct { M3 m; qword pos; } s; } u;
+    union { MATRIX4 m4; struct { MATRIX3 m; qword pos; } s; } u;
     p->q50 = func_001A62E8(p->po);
     if (FIsBasicDerivedFrom__FP5BASIC3CID(p->po, 0x33)) {
         O *po = p->po;

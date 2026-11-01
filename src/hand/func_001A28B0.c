@@ -1,8 +1,8 @@
+#include "mat.h"
 #include "vu0.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; int i[4]; } U;
-struct M3 { qword r[3]; };
 struct VE { short d; short pad; void *pfn; };
 struct X { char pad[0x80]; U v80; };
 struct SMP { float a,b,c,d; };
@@ -10,7 +10,7 @@ struct P {
  char pad[0xC]; struct VE *vt;
  char pad1[0xE8-0x10]; struct X *xE8;
  char pad2[0x190-0xEC]; qword v190;
- char pad3[0x1B0-0x1A0]; struct M3 m1B0;
+ char pad3[0x1B0-0x1A0]; struct MATRIX3 m1B0;
  char pad4[0x2DC-0x1E0]; int state2DC;
  char pad5[0xDF4-0x2E0]; int stateDF4;
  char pad6[0x10A0-0xDF8]; float height10A0, alpha10A4;
@@ -24,7 +24,7 @@ qword func_001A62E8(struct P *p);
 float func_0011D1C0(float pos,float vel,float target,float dt,struct SMP *s,float *result);
 void func_001FAC30(struct P *p,qword v);
 static inline qword GetVel(struct P *p) { return ((qword (*)(void *))p->vt[33].pfn)((char *)p+p->vt[33].d); }
-static inline qword Mul(struct M3 *m,const qword *v) { qword r; __asm__("vmulax.xyz ACC,%2,%1x\n\tvmadday.xyz ACC,%3,%1y\n\tvmaddz.xyz %0,%4,%1z" : "=j"(r) : "j"(*v),"j"(m->r[0]),"j"(m->r[1]),"j"(m->r[2]));return r; }
+static inline qword Mul(struct MATRIX3 *m,const qword *v) { qword r; __asm__("vmulax.xyz ACC,%2,%1x\n\tvmadday.xyz ACC,%3,%1y\n\tvmaddz.xyz %0,%4,%1z" : "=j"(r) : "j"(*v),"j"(m->r[0]),"j"(m->r[1]),"j"(m->r[2]));return r; }
 static inline qword Broadcast(int g) { qword r; __asm__("qmtc2.ni %1,%0" : "=j"(r) : "r"(g));return r; }
 void func_001A28B0(struct P *p,void *o)
 {

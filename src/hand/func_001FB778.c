@@ -1,15 +1,15 @@
+#include "mat.h"
 #include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union {qword q;float f[4];int i[4];} V;
 struct RANGE {float low,high;};
-struct M3 {qword r[3];};
 struct CAMERA {char pad[0x90];qword position;};
 extern char g_sw[],D_002BBB60[];
 extern struct CAMERA g_cm;
-extern struct M3 D_002DDFA0;
+extern struct MATRIX3 D_002DDFA0;
 void *func_001C4A48(void*);
 qword func_001A62E8(void*);
-qword func_001A7348(const struct M3*,const struct M3*,qword);
+qword func_001A7348(const struct MATRIX3*,const struct MATRIX3*,qword);
 float func_0011D948(void*,float);
 float func_002458F0(float,float);
 static inline qword Sub(qword a,qword b){register qword r __asm__("vf3");__asm__("vsub.xyzw %0,%1,%2":"=&j"(r):"j"(a),"j"(b));return r;}

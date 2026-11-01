@@ -52,6 +52,15 @@ commit of this branch so far). Do not regenerate it on a dirty tree you have not
 
 Newest first. Each entry: what changed, how it was verified, the metrics after it.
 
+### 2026-11-01 — Matrices: MATRIX3/MATRIX4 shared, M3/M4 stand-ins retired
+
+- `include/mat.h`: MATRIX3/MATRIX4 are unions of the two views the code uses, `float mat[n][4]` (scalar code) and
+  `vu0_qword r[n]` (VU0 code), 16-byte aligned as before.
+- migrate_struct.py: 16-byte quadword fields (kind `q`), alignment attributes after the closing brace, and
+  `--as LOCAL` to migrate a stand-in with another name (`M3` → `MATRIX3`, type name rewritten in the file; files
+  that already use the real name are skipped).
+- MATRIX3/MATRIX4 users and M3/M4 stand-ins: 123 files converted, 22 that no longer built left as they were.
+
 ### 2026-11-01 — Phase 4 started: shared VU0/scalar helpers
 
 - `include/vu0.h`: GetX/GetY/GetZ (lanes of a quadword in a GPR), QwAdd/QwSub (vadd/vsub.xyzw), QwFromG (qmtc2.ni),

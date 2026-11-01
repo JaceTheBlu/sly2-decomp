@@ -1,10 +1,10 @@
+#include "mat.h"
 #include "vu0.h"
 // Resolve one contact between two physics objects: spring push, friction impulses (linear and
 // angular), restoring torque, and the water-splash / emitter-clear effects.
 typedef int qword __attribute__((mode(TI)));
 union V {qword q;float f[4];};
-struct M3 {qword r[3];};
-struct M4 {M3 basis;qword position;};
+struct M4 {MATRIX3 basis;qword position;};
 struct COEF {float f[3];};
 struct O;
 struct VE {short delta,pad;qword (*get)(void *);};
@@ -15,11 +15,11 @@ struct STATE {V minimum,maximum;};
 struct EMITTER;
 struct WATER;
 struct O {char pad[0xC];VE *vt;char pad10[0x48];NODE *body,*rotation,*motion;char pad64[0x84];PHYS *physics;STATE *state;char padF0[0x84];EMITTER *emitter;};
-union PHASE {V vectors[3];M3 basis;};
+union PHASE {V vectors[3];MATRIX3 basis;};
 union AXIS {COEF coefficients;V vector;};
 struct WORK {V point,normal,velocity;PHASE phase;AXIS axis;V angularNormal,angularTangent,scalar;float angle;};
 extern qword D_002A2DD0;
-extern M3 D_002A2D00;
+extern MATRIX3 D_002A2D00;
 extern COEF D_002C4470,D_002C4480;
 extern float D_002DDED4;
 extern "C" {
@@ -32,10 +32,10 @@ void func_00228C18(O *,qword,qword *,qword *);
 float SProjectVector(qword,qword,qword *,qword *);
 int func_00230380(int);
 void func_001F5E10(O *,qword,const COEF *,qword,const COEF *);
-void func_001F5C30(O *,const M3 *,const COEF *,qword,const COEF *);
+void func_001F5C30(O *,const MATRIX3 *,const COEF *,qword,const COEF *);
 M4 *func_001A6318(O *);
-void func_0011B938(const M3 *,M3 *,M3 *);
-void func_0011BCF8(const M3 *,float *,qword *);
+void func_0011B938(const MATRIX3 *,MATRIX3 *,MATRIX3 *);
+void func_0011BCF8(const MATRIX3 *,float *,qword *);
 void func_001FAC98(O *,qword);
 void func_0015A2C0(O *,WATER *,float,qword,qword,float,float);
 int FIsBasicDerivedFrom__FP5BASIC3CID(O *,int);
@@ -109,4 +109,4 @@ extern "C" void func_002297F8(O *a,O *b){
 }
 
 #define OFF(t,m) ((int)&((t*)0)->m)
-typedef char contact_layout_assert[(sizeof(V)==0x10 && sizeof(M3)==0x30 && sizeof(M4)==0x40 && OFF(M4,basis)==0 && OFF(M4,position)==0x30 && sizeof(COEF)==0xC && sizeof(CONSTRAINT)==0x20 && sizeof(PHASE)==0x30 && sizeof(AXIS)==0x10 && sizeof(WORK)==0xB0 && sizeof(VE)==8 && OFF(O,vt)==0xc && OFF(O,body)==0x58 && OFF(O,rotation)==0x5c && OFF(O,motion)==0x60 && OFF(O,physics)==0xe8 && OFF(O,state)==0xec && OFF(O,emitter)==0x174 && OFF(NODE,kind)==0x98 && OFF(PHYS,direction)==0x80 && OFF(PHYS,constraint)==0xb0 && OFF(PHYS,mass)==0xd0 && OFF(PHYS,spring)==0xd4 && OFF(PHYS,friction)==0xd8 && OFF(CONSTRAINT,direction)==0x0 && OFF(CONSTRAINT,kind)==0x10 && OFF(STATE,minimum)==0x0 && OFF(STATE,maximum)==0x10 && OFF(WORK,point)==0x0 && OFF(WORK,normal)==0x10 && OFF(WORK,velocity)==0x20 && OFF(WORK,phase)==0x30 && OFF(WORK,axis)==0x60 && OFF(WORK,angularNormal)==0x70 && OFF(WORK,angularTangent)==0x80 && OFF(WORK,scalar)==0x90 && OFF(WORK,angle)==0xa0)?1:-1];
+typedef char contact_layout_assert[(sizeof(V)==0x10 && sizeof(MATRIX3)==0x30 && sizeof(M4)==0x40 && OFF(M4,basis)==0 && OFF(M4,position)==0x30 && sizeof(COEF)==0xC && sizeof(CONSTRAINT)==0x20 && sizeof(PHASE)==0x30 && sizeof(AXIS)==0x10 && sizeof(WORK)==0xB0 && sizeof(VE)==8 && OFF(O,vt)==0xc && OFF(O,body)==0x58 && OFF(O,rotation)==0x5c && OFF(O,motion)==0x60 && OFF(O,physics)==0xe8 && OFF(O,state)==0xec && OFF(O,emitter)==0x174 && OFF(NODE,kind)==0x98 && OFF(PHYS,direction)==0x80 && OFF(PHYS,constraint)==0xb0 && OFF(PHYS,mass)==0xd0 && OFF(PHYS,spring)==0xd4 && OFF(PHYS,friction)==0xd8 && OFF(CONSTRAINT,direction)==0x0 && OFF(CONSTRAINT,kind)==0x10 && OFF(STATE,minimum)==0x0 && OFF(STATE,maximum)==0x10 && OFF(WORK,point)==0x0 && OFF(WORK,normal)==0x10 && OFF(WORK,velocity)==0x20 && OFF(WORK,phase)==0x30 && OFF(WORK,axis)==0x60 && OFF(WORK,angularNormal)==0x70 && OFF(WORK,angularTangent)==0x80 && OFF(WORK,scalar)==0x90 && OFF(WORK,angle)==0xa0)?1:-1];

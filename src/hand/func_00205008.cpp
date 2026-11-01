@@ -1,10 +1,10 @@
+#include "mat.h"
 #include "vu0.h"
 // STEP::VUnk81 (0x205008, KB name VUnk81__4STEPiP2LOUxUxUx): add contacts (PxpAdd 0x1A7C18) for a point
 // against the three axes of the frame BuildOrthonormalMatrixZ(direction, g_normalZ) builds. The contacts go
 // to the link list entry that joins this object to the zap target of plo (or of its nearest attached
 // ancestor); with no target they go to this object's own list.
 typedef int qword __attribute__((mode(TI)));
-struct M3 { qword r[3]; };
 struct XP;
 struct SOPART;
 struct SO;
@@ -16,7 +16,7 @@ extern char g_sw[];  // g_sw
 extern qword g_normalZ;   // g_normalZ
 extern "C" {
 SO *func_001A5BF0(LO *);                 // PsoZapTarget
-M3 func_0011B830(qword, qword);          // BuildOrthonormalMatrixZ
+MATRIX3 func_0011B830(qword, qword);          // BuildOrthonormalMatrixZ
 void func_001A7C18(void *, SOPART *, SOPART *, qword, qword, float, int, void *, void *, XP **);  // PxpAdd
 }
 static inline qword Sub(const qword &a, const qword &b) {
@@ -25,7 +25,7 @@ static inline qword Sub(const qword &a, const qword &b) {
     return r;
 }
 // Transform v into the frame of m (one dot product per row); rows 1 and 2 are loaded by the asm itself.
-static inline qword Rotate(const M3 &m, qword v) {
+static inline qword Rotate(const MATRIX3 &m, qword v) {
     qword one, a, b, c, r;
     __asm__("lqc2 $vf2,0x20(%7)\n\tlqc2 $vf1,0x10(%7)\n\tvmul.xyzw %1,%5,%6\n\tvmaxw.xyzw %0,$vf0,$vf0w\n\tvmul.xyzw %2,$vf1,%6\n\tvmul.xyzw %3,$vf2,%6\n\tvadday.x ACC,%1,%1y\n\tvmaddz.x %4,%0,%1z\n\tvaddax.y ACC,%2,%2x\n\tvmaddz.y %4,%0,%2z\n\tvaddax.z ACC,%3,%3x\n\tvmaddy.z %4,%0,%3y"
         : "=&j"(one), "=&j"(a), "=&j"(b), "=&j"(c), "=&j"(r) : "j"(m.r[0]), "j"(v), "r"(&m) : "vf1", "vf2");
@@ -59,7 +59,7 @@ extern "C" void func_00205008(SO *pso, int grf, LO *plo, qword posOther, qword d
         psopartOther = 0;
         ppxpFirst = ppxpOut = &pso->patt->pxpFirst;
     }
-    M3 mat = func_0011B830(direction, g_normalZ);
+    MATRIX3 mat = func_0011B830(direction, g_normalZ);
     qword posLocal = Rotate(mat, Sub(pos, posOther));
     if ((grf & 1) || ((grf & 8) && GetX(posLocal) < 0.0001f))
         func_001A7C18(g_sw, pso->psopart, psopartOther, pos, mat.r[0], GetX(posLocal), (grf & 1) ? 11 : 10, 0, 0, ppxpFirst);

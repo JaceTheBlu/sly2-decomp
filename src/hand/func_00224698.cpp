@@ -1,17 +1,17 @@
+#include "mat.h"
 #include "vu0.h"
 // Orient an active linked object toward its target in the horizontal plane.
 typedef int qword __attribute__((mode(TI)));
-struct M3 { qword r[3]; };
 struct S { char pad[0x150]; int k; char pad1[8]; int x15C; void *p160; };
 extern qword g_normalZ,D_002A2DA0,D_002A2DD0;
 extern char D_002C4300[],D_002C4310[];
 extern "C" {
 void func_001F9B20(S *);
 qword func_001A62E8(void *);
-M3 func_0011B830(qword,qword);
-M3 *func_001A6318(S *);
-void func_0011B938(M3 *,M3 *,M3 *);
-void func_001F5C30(S *,M3 *,void *,qword,void *);
+MATRIX3 func_0011B830(qword,qword);
+MATRIX3 *func_001A6318(S *);
+void func_0011B938(MATRIX3 *,MATRIX3 *,MATRIX3 *);
+void func_001F5C30(S *,MATRIX3 *,void *,qword,void *);
 }
 static inline qword ToVF(qword a) { qword r; __asm__ __volatile__("qmtc2.ni %1,%0" : "=j"(r) : "r"(a));return r; }
 static inline qword Read(const qword &a) { qword r;__asm__("lqc2 %0,%1" : "=j"(r) : "m"(a));return r; }
@@ -28,7 +28,7 @@ static inline qword Sqrt(qword len) {
 static inline qword Scale(qword d,qword len) { qword r;
     __asm__ __volatile__("vdiv Q,$vf0w,%2x\n\tvwaitq\n\tvmulq.xyzw %0,%1,Q" : "=j"(r) : "j"(d),"0"(len));return r; }
 extern "C" void func_00224698(S *p) {
-    M3 m;
+    MATRIX3 m;
     if(p->k==0 || p->k==4)return;
     func_001F9B20(p);
     if(p->x15C!=0x1A && p->x15C!=0x29)return;

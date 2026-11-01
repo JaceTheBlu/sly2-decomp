@@ -1,3 +1,4 @@
+#include "mat.h"
 // g_clock (g_clock) must be a struct: a scalar float global is assumed not to alias the struct-field stores, which lets gcc CSE the clock reloads.
 typedef int qword __attribute__((mode(TI)));
 typedef union {qword q;float f[4];} U;
@@ -7,7 +8,6 @@ struct SELECTOR{int kind;char pad4[0x10];int used;float ready;};
 struct ENTRY{struct LO*object;float time,wait;struct SELECTOR*selector;int status;char pad14[12];qword point;};
 struct EVENT{float time;char pad4[8];struct LO*tag;char pad10[0x10];struct EVENT*next;char pad24[4];int kind;struct LO*previous;};
 struct P{char pad[0xC];struct VT*vt;char pad10[0x48];int count,capacity;char pad60[0x10];qword last;char pad80[0x28];float next;int mode;};
-struct M3{qword r[3];};
 struct LINK{struct LO**pp;};
 struct CRef{int tag;void*value;};
 extern char g_sw[];
@@ -18,16 +18,16 @@ void func_00173D18(struct P*,qword);
 struct LO*func_001C4840(void*);
 struct EVENT*func_001F8240(struct LO*);
 struct ENTRY*func_00173E78(struct P*,struct LO*);
-struct SELECTOR*func_00173F18(struct P*,qword,qword*,struct M3*,int*);
+struct SELECTOR*func_00173F18(struct P*,qword,qword*,struct MATRIX3*,int*);
 void func_00173928(struct P*,struct ENTRY*,int,int);
-struct LO*func_00174490(struct P*,struct SELECTOR*,qword*,struct M3*,int);
+struct LO*func_00174490(struct P*,struct SELECTOR*,qword*,struct MATRIX3*,int);
 void func_001F7D10(struct LO*,float);
 void func_001F7C68(struct LO*,float);
 void func_00154038(void*,struct LO*,int);
 static inline float DistanceXY(qword a,qword b){qword d;float f;__asm__("vsub.xyzw %0,%1,%2":"=j"(d):"j"(a),"j"(b));__asm__("vmul.xy %0,%0,%0\n\tvaddy.x %0,%0,%0y":"+j"(d));__asm__("vsqrt Q,%1x\n\tvwaitq\n\tvaddq.x %0,$vf0,Q":"=j"(d):"0"(d));__asm__("qmfc2.ni %0,%1":"=r"(f):"j"(d));return f;}
 void func_00173A68(struct P*p){
  U point;
- struct M3 rotation;
+ struct MATRIX3 rotation;
  int flag;
  struct LO*object;
  struct LINK link;
@@ -86,7 +86,7 @@ typedef char layout_LO[(sizeof(struct LO)==0xF68)?1:-1];
 typedef char layout_SELECTOR[(sizeof(struct SELECTOR)==0x1C)?1:-1];
 typedef char layout_ENTRY[(sizeof(struct ENTRY)==0x30)?1:-1];
 typedef char layout_EVENT[(sizeof(struct EVENT)==0x30)?1:-1];
-typedef char layout_M3[(sizeof(struct M3)==0x30)?1:-1];
+typedef char layout_M3[(sizeof(struct MATRIX3)==0x30)?1:-1];
 typedef char layout_LINK[(sizeof(struct LINK)==4)?1:-1];
 typedef char layout_CRef[(sizeof(struct CRef)==8)?1:-1];
 typedef char layout_VT_delta[((unsigned)&((struct VT*)0)->delta==0x0)?1:-1];

@@ -1,7 +1,7 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];};
-struct M4{qword r[4];};
-struct CM{char pad[0x40];float sx,sy;char pad48[0x18];M4 mat;};
+struct CM{char pad[0x40];float sx,sy;char pad48[0x18];MATRIX4 mat;};
 struct S{char pad[0x80];float planar;int edge,range,occlusion;};
 struct LSG;
 extern "C" CM g_cm;

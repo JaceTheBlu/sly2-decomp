@@ -1,11 +1,11 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
-typedef struct M4 { qword r[4]; } M4;
 typedef struct P { char pad[0xA0]; struct P *xA0; } P;
 void *func_002333B4(void *, int, int);
-void func_00230710(P *, M4 *, M4 *, float);
-M4 __ml__FRC7MATRIX4T0(M4 *, M4 *);
+void func_00230710(P *, MATRIX4 *, MATRIX4 *, float);
+MATRIX4 __ml__FRC7MATRIX4T0(MATRIX4 *, MATRIX4 *);
 
-static inline void AddM4(M4 *d, M4 *a, M4 *b)
+static inline void AddM4(MATRIX4 *d, MATRIX4 *a, MATRIX4 *b)
 {
     int i;
     for (i = 0; i < 4; i++) {
@@ -15,9 +15,9 @@ static inline void AddM4(M4 *d, M4 *a, M4 *b)
     }
 }
 
-void func_00230A98(P *first, P *end, M4 *pA, M4 *pB, float f)
+void func_00230A98(P *first, P *end, MATRIX4 *pA, MATRIX4 *pB, float f)
 {
-    M4 m1, m2, a, b, s, t1, t2;
+    MATRIX4 m1, m2, a, b, s, t1, t2;
     P *p;
 
     if (pB)

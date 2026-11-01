@@ -1,5 +1,5 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
-typedef struct MATRIX3 { qword a[3]; } MATRIX3;
 struct A { char pad[0x30]; qword pos; char pad2[0x60]; int nA0; };
 struct B { char pad[0x90]; qword v; struct A *pa; };
 struct D { char pad[0x20]; qword v; };

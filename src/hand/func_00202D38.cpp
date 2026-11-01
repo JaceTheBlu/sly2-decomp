@@ -1,3 +1,4 @@
+#include "mat.h"
 #include "vu0.h"
 #include "clock.h"
 // func_00202D38 (0x202D38, 524 instructions): per-frame update of the Sly-only interaction prompt (screen projection of the
@@ -5,8 +6,7 @@
 // Case 9 flag is `!link || link->state == 1` (the game's `beqz link` jumps TO the `li a0,1`); the label before that set
 // keeps jump.c from turning it into movn.
 typedef int qword __attribute__((mode(TI)));
-struct M4 {qword r[4];};
-struct CM {char pad0[0x60];M4 mat;};
+struct CM {char pad0[0x60];MATRIX4 mat;};
 struct LINK {char pad0[0x54];int state;};
 struct ACTOR {char pad0[0xE4];float headOffset,threshold;LINK *link;char padF0[0x18];int state,mode,choice;};
 struct DISPLAY {char pad0[0x110];int actorChoice,risingChoice,fallingChoice,nearChoice,emptyChoice;};
@@ -37,7 +37,7 @@ int func_001C46C0(void *,int,float);
 static inline VU_FLOAT VuFloatFromMemWord(int n){VU_FLOAT v;__asm__("qmtc2 %1,%0":"=j"(v.qw):"rV"(n));return v;}
 static inline qword QwLengthXY(qword v){qword r;__asm__("vmul.xy %0,%1,%1\n\tvaddy.x %0,%0,%0y":"=j"(r):"j"(v));__asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q":"=j"(r):"0"(r));return r;}
 // camera up row; the pointer parameter gives the game's &cm+0x60 base register (lqc2 0x10(s1), then s1-0x60 for the calls)
-static inline qword QwUp(const M4 *m){return m->r[1];}
+static inline qword QwUp(const MATRIX4 *m){return m->r[1];}
 // screen position of a projected point: x and y from [-1,1] to pixels, z kept
 static inline VU_FLOAT ScreenFromProjected(qword q)
 {

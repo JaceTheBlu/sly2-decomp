@@ -1,3 +1,4 @@
+#include "mat.h"
 #include "clock.h"
 // MATCH, from fresh3 (2). One commented register pin: vel pinned to vf2 in the VU_FLOATM operator*, and the allocation-only duplicate g operand is "jm" (memory allowed, so it needs no second reload of the spilled g). The VU_FLOATM ctor is asm("lw") from "m"(f).
 typedef int qword __attribute__((mode(TI)));
@@ -26,7 +27,6 @@ static inline qword operator*(VU_VECTOR v, VU_FLOAT f)
     __asm__("vmulx.xyzw %0, %1, %2x" : "=j"(r) : "j"(v.q), "j"(f.q));
     return r;
 }
-struct MATRIX3 { qword r[3]; };
 static inline qword operator*(const MATRIX3 &m, VU_VECTOR v)
 {
     qword r;

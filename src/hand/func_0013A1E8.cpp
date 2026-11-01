@@ -1,3 +1,4 @@
+#include "mat.h"
 #include "vu0.h"
 #include "dl.h"
 // func_0013A1E8: light-list VU upload.
@@ -13,7 +14,6 @@
 //  * The empty "=r"(z) asm only exists for sched2 (see the comment there).
 typedef int qword __attribute__((mode(TI)));
 struct CM;
-struct M3 { qword r[3]; };
 struct M4 { qword r[3]; float x30, y30, z30, w30; };
 struct FRAME { int a[4]; };
 struct AL { int cb; int align; AL(int c, int a) { cb = c; align = a; } };
@@ -35,7 +35,7 @@ struct DMA { int x0; int x4; int x8; int xC; };
 struct VIFS { int pad[3]; int xC; };
 struct CM { char pad[0x90]; qword pos; };
 extern "C" {
-extern M3 D_002A2D00;
+extern MATRIX3 D_002A2D00;
 extern M4 D_002A2D30;
 extern CM g_cm;
 extern VIFS D_002DEA28;
@@ -49,7 +49,7 @@ int func_0011A3C0(void *pdl);
 void *PvAllocStackImpl__FP7SWALLOC(const AL &al);
 int func_001A61A0(LO *plo);
 qword func_001A62E8(LO *plo);
-M3 *func_001A6318(LO *plo);
+MATRIX3 *func_001A6318(LO *plo);
 int func_0014F850(CM *pcm, qword d, VU_FLOAT r);
 int func_0014F898(CM *pcm, qword d, float g, float *pg);
 void __as__6VECTORG9VU_VECTOR(void *pv, qword v);
@@ -70,7 +70,7 @@ static inline void *PvAllocStack(int cb) { return PvAllocStackImpl__FP7SWALLOC(A
 static inline qword SubE(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=&j"(r) : "j"(a), "j"(b), "j"(b)); return r; }
 /* "r"(z) inputs below are allocation-only: they only add scheduler dependences (see the comment in the gather loop) */
 static inline qword AddZ(qword a, qword b, int z) { qword r; __asm__("vadd.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b), "r"(z)); return r; }
-static inline qword RotKZ(const M3 &m, qword v, qword k, int z)
+static inline qword RotKZ(const MATRIX3 &m, qword v, qword k, int z)
 {
     qword r;
     /* "r"(k) (the VU_FLOAT) keeps the lw on the Rot's critical path, like the target's sched2 order */
@@ -89,7 +89,7 @@ void func_0013A1E8(P *p)
         aLight = (M4 *)PvAllocStack(func_0011A3C0(&p->xE0->x11C) << 6);
         M4 *pl = aLight;
         LO *plo = p->xE0->x11C;
-        M3 *pmId;
+        MATRIX3 *pmId;
         if (!plo) goto done;
         pmId = &D_002A2D00;
     top:
@@ -98,7 +98,7 @@ void func_0013A1E8(P *p)
             {
             LO **pplo = plo->xE4->pplo;
             qword pos;
-            M3 mat;
+            MATRIX3 mat;
             if (*pplo) {
                 pos = func_001A62E8(*pplo);
                 mat = *func_001A6318(*pplo);

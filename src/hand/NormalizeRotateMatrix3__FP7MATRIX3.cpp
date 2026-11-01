@@ -1,5 +1,5 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
-struct MATRIX3 { qword r[3]; };
 static inline qword Normalize(qword v)
 {
     qword d, one, l, r;

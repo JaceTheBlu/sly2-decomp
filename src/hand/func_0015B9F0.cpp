@@ -1,14 +1,14 @@
+#include "mat.h"
 #include "vu0.h"
 #include "clock.h"
 // func_0015B9F0: emitter particle transform. The clock time is read into a local BEFORE
 // the ptimes->at[i] load, so loop.c sees a 1-insn life for %hi(g_clock) and doesn't hoist it.
 typedef int qword __attribute__((mode(TI)));
-struct M4 { qword r[4]; };
 struct BUF { qword *apos; qword *av; float *ag; float *an; int f10; };
 struct SAV { int x0; };
 struct EMITB { char pad[8]; SAV *psav; char pad2[0x18 - 0xC]; int k18; int f1C; };
 class ALO;
-struct VT { char pad[0x100]; short d; short pad2; void *(*pfn)(ALO *, M4 *); };
+struct VT { char pad[0x100]; short d; short pad2; void *(*pfn)(ALO *, MATRIX4 *); };
 class ALO { public: char pad[0xC]; VT *pvt; int x10; char pad2[0xE4 - 0x14]; EMITB *pemitb; };
 struct EO { char pad[8]; ALO *palo; };
 struct EMITTER { char pad[8]; EO *peo; };
@@ -18,19 +18,19 @@ extern CLOCK g_clock;
 extern float D_002A5150;
 void func_0015B7E8(int c, EMITB *pemitb, BUF *pb);
 int func_0011D4D0(float g1, float g2, float gEps);
-void func_002309E8(void *p, int n, M4 *pm0, float t, M4 *pm1);
-void __ml__FRC7MATRIX4T0(M4 *pmOut, M4 *pmA, M4 *pmB);
+void func_002309E8(void *p, int n, MATRIX4 *pm0, float t, MATRIX4 *pm1);
+void __ml__FRC7MATRIX4T0(MATRIX4 *pmOut, MATRIX4 *pmA, MATRIX4 *pmB);
 void func_0015B9F0(int c, EMITTER *pemit, TIMES *ptimes, BUF *pb);
 }
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } };
-static inline qword MulAffine(const M4 &m, qword v)
+static inline qword MulAffine(const MATRIX4 &m, qword v)
 {
     qword r;
     __asm__("vmulax.xyz $ACC, %1, %5x\n\tvmadday.xyz $ACC, %2, %5y\n\tvmaddaz.xyz $ACC, %3, %5z\n\tvmaddw.xyz %0, %4, $vf0w"
             : "=j"(r) : "j"(m.r[0]), "j"(m.r[1]), "j"(m.r[2]), "j"(m.r[3]), "j"(v));
     return r;
 }
-static inline qword MulRot(const M4 &m, qword v)
+static inline qword MulRot(const MATRIX4 &m, qword v)
 {
     qword r;
     __asm__("vmulax.xyz $ACC, %2, %1x\n\tvmadday.xyz $ACC, %3, %1y\n\tvmaddz.xyz %0, %4, %1z"
@@ -47,11 +47,11 @@ void func_0015B9F0(int c, EMITTER *pemit, TIMES *ptimes, BUF *pb)
     int i;
     float tPrev;
     void *pv;
-    M4 m;
-    M4 mA;
-    M4 mB;
-    M4 mBase;
-    M4 mWorld;
+    MATRIX4 m;
+    MATRIX4 mA;
+    MATRIX4 mB;
+    MATRIX4 mBase;
+    MATRIX4 mWorld;
     if (!saved)
         psav->x0 = palo->x10;
     pb->f10 = 0;
@@ -65,7 +65,7 @@ void func_0015B9F0(int c, EMITTER *pemit, TIMES *ptimes, BUF *pb)
         float t = ptimes->at[i] - tNow;
         int k = palo->pemitb->k18;
         if (!func_0011D4D0(t, tPrev, 0.0001f)) {
-            M4 mT;
+            MATRIX4 mT;
             tPrev = t;
             func_002309E8(pv, 0, &m, t, 0);
             __ml__FRC7MATRIX4T0(&mT, &m, &mBase);
@@ -80,7 +80,7 @@ void func_0015B9F0(int c, EMITTER *pemit, TIMES *ptimes, BUF *pb)
         }
         pb->apos[i] = MulAffine(m, pb->apos[i]);
         if (k != 3) {
-            M4 *pmA = &mA;
+            MATRIX4 *pmA = &mA;
             pb->av[i] = MulRot(*pmA, pb->av[i]);
             if (k != 2) {
                 qword v[1];

@@ -1,3 +1,4 @@
+#include "mat.h"
 #include "clock.h"
 // Handle movement-state response events.
 typedef int qword __attribute__((mode(TI)));
@@ -26,7 +27,6 @@ struct STATE{int kind,pad4,pad8,padC;MSG msg;};
 struct HELPER{char pad0[0x58];float until;unsigned flags;};
 struct S{char pad0[0x10];OBJECT*actor;int pad14;HELPER*helper;char pad1C[0x14];STATE current;};
 struct SLOT{int kind;char pad4[0xC];};
-struct M4{qword r[4];};
 struct WORK{STATE next;U scalar,own,other,copy,delta;};
 struct OFFSETINPUTS{qword own,other,copy;};
 extern "C"{
@@ -35,7 +35,7 @@ extern void*D_003E14BC;extern void*D_003E14B0;extern void*D_003E14B8;struct GAME
 extern CLOCK g_clock;extern float D_002BE620;
 void*func_002333B4(void*,int,unsigned);
 void func_00176750(S*,STATE*);
-qword func_001A62E8(void*);M4*func_001A6318(void*);
+qword func_001A62E8(void*);MATRIX4*func_001A6318(void*);
 qword func_001A6FC0(void*,void*,qword);
 int FIsBasicDerivedFrom__FP5BASIC3CID(void*,int);
 void func_001B9DB8(OBJECT*,qword);
@@ -161,7 +161,7 @@ extern "C" int func_00176BE8(S*p,int event,MSG*msg){
   if(FIsBasicDerivedFrom__FP5BASIC3CID(selected->data.object,0x34)){
    qword own=func_001A62E8(p->actor);OBJECT*otherObject=selected->data.object;w.own.q=own;w.other.q=func_001A62E8(otherObject);
    qword scalar=Raw(-150.0f);w.copy.q=scalar;OBJECT*frameObject=selected->data.object;w.scalar.q=scalar;
-   M4*frame=func_001A6318(frameObject);
+   MATRIX4*frame=func_001A6318(frameObject);
    int special;
    {
     register qword axis __asm__("vf1"),origin __asm__("vf2"),delta __asm__("vf3");
@@ -203,7 +203,7 @@ typedef char layout_MSG[(sizeof(MSG)==0x60)?1:-1];
 typedef char layout_STATE[(sizeof(STATE)==0x70)?1:-1];
 typedef char layout_HELPER[(sizeof(HELPER)==0x60)?1:-1];
 typedef char layout_SLOT[(sizeof(SLOT)==0x10)?1:-1];
-typedef char layout_M4[(sizeof(M4)==0x40)?1:-1];
+typedef char layout_M4[(sizeof(MATRIX4)==0x40)?1:-1];
 typedef char layout_U_q[((unsigned long)&((U*)0)->q==0x0)?1:-1];
 typedef char layout_U_f[((unsigned long)&((U*)0)->f==0x0)?1:-1];
 typedef char layout_VE_delta[((unsigned long)&((VE*)0)->delta==0x0)?1:-1];

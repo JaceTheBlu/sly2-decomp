@@ -1,9 +1,9 @@
+#include "mat.h"
 // Bounding radius from transformed path vertices and Bezier controls.
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};
-struct M4 {qword r[4];};
 struct BASIS3 {qword r[3];};
-struct P {char padA0[0xA0];struct M4 matrix;int mode;char padE4[4];int count;float *times,*distances;qword *points;char padF8[0x48];qword *incoming,*outgoing;};
+struct P {char padA0[0xA0];struct MATRIX4 matrix;int mode;char padE4[4];int count;float *times,*distances;qword *points;char padF8[0x48];qword *incoming,*outgoing;};
 extern void func_00231368(struct P*);
 static inline qword ReadPoint(const qword*source){register qword value __asm__("vf1");__asm__("lqc2 %0,%1":"=j"(value):"m"(*source));return value;}
 static inline qword DirInPlace(qword m0,qword m1,qword m2,qword a){__asm__("vmulax.xyz ACC,%1,%0x\n\tvmadday.xyz ACC,%2,%0y\n\tvmaddz.xyz %0,%3,%0z":"+j"(a):"j"(m0),"j"(m1),"j"(m2));return a;}
@@ -20,12 +20,12 @@ float func_001E7D90(struct P*p)
         if(remaining>0){
             register qword r0 __asm__("vf3"),r2 __asm__("vf5"),r1 __asm__("vf4");
             register qword *point __asm__("$4");
-            register struct M4 *basis __asm__("$2")=&p->matrix;
+            register struct MATRIX4 *basis __asm__("$2")=&p->matrix;
             __asm__("lqc2 %0,%4\n\tlqc2 %1,0x20(%8)\n\tlqc2 %2,0x10(%8)\n\tlw %3,%7":"=j"(r0),"=j"(r2),"=j"(r1),"=r"(point):"m"(p->matrix.r[0]),"m"(basis->r[2]),"m"(basis->r[1]),"m"(p->points),"r"(basis));
             do {qword v=DirInPlace(r0,r1,r2,*point);Max(&squared,LenSq(v));point++;}while(--remaining);
         }
     }else{
-        register struct M4 *incomingBasis __asm__("$8");
+        register struct MATRIX4 *incomingBasis __asm__("$8");
         register qword r0 __asm__("vf3"),r1 __asm__("vf4"),r2 __asm__("vf5");
         register qword firstPoint __asm__("vf1"),previous __asm__("vf6");
         register qword *first __asm__("$5")=p->points;
@@ -99,8 +99,8 @@ float func_001E7D90(struct P*p)
 typedef char verified_radius_0[(sizeof(qword)==16)?1:-1];
 typedef char verified_radius_1[(__alignof__(qword)==16)?1:-1];
 typedef char verified_radius_2[(sizeof(union U)==16)?1:-1];
-typedef char verified_radius_3[(sizeof(struct M4)==0x40)?1:-1];
-typedef char verified_radius_4[(OFF(struct M4,r)==0)?1:-1];
+typedef char verified_radius_3[(sizeof(struct MATRIX4)==0x40)?1:-1];
+typedef char verified_radius_4[(OFF(struct MATRIX4,r)==0)?1:-1];
 typedef char verified_radius_5[(OFF(struct P,matrix)==0xA0)?1:-1];
 typedef char verified_radius_6[(OFF(struct P,mode)==0xE0)?1:-1];
 typedef char verified_radius_7[(OFF(struct P,count)==0xE8)?1:-1];
@@ -112,10 +112,10 @@ typedef char verified_radius_12[(OFF(struct P,outgoing)==0x144)?1:-1];
 typedef char verified_radius_13[(sizeof(void*)==4)?1:-1];
 typedef char verified_radius_14[(sizeof(int)==4)?1:-1];
 typedef char verified_radius_15[(sizeof(float)==4)?1:-1];
-typedef char verified_radius_16[(__alignof__(struct M4)==16)?1:-1];
+typedef char verified_radius_16[(__alignof__(struct MATRIX4)==16)?1:-1];
 typedef char verified_radius_17[(__alignof__(union U)==16)?1:-1];
-typedef char verified_radius_18[(sizeof(((struct M4*)0)->r)==64)?1:-1];
-typedef char verified_radius_19[(sizeof(((struct M4*)0)->r[0])==16)?1:-1];
+typedef char verified_radius_18[(sizeof(((struct MATRIX4*)0)->r)==64)?1:-1];
+typedef char verified_radius_19[(sizeof(((struct MATRIX4*)0)->r[0])==16)?1:-1];
 typedef char verified_radius_20[(sizeof(((struct P*)0)->count)==4)?1:-1];
 
 typedef char radius_basis_prefix_size[(sizeof(struct BASIS3)==48)?1:-1];

@@ -1,14 +1,14 @@
+#include "mat.h"
 #include "vu0.h"
 // Evaluate a clamped path offset, then rotate and translate it into world space.
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; int i[4]; };
-struct M3 { qword r[3]; };
 struct S { char pad[0x10C]; void *curve; char pad1[0x120-0x110]; int polar; char pad120[0x12C-0x124]; int arc; char pad2[0x140-0x130]; float time; char pad3[0x150-0x144]; qword origin; float radius; };
 extern "C" {
 void func_001E6F10(void *, float, qword *, qword *);
-M3 func_0011B830(qword,qword);
+MATRIX3 func_0011B830(qword,qword);
 qword func_0011E1A0(float,float,float);
-M3 *func_001A6318(struct S *);
+MATRIX3 *func_001A6318(struct S *);
 qword func_001A6F00(void *,void *,qword);
 }
 extern qword g_normalZ;
@@ -26,12 +26,12 @@ __asm__("vsqrt Q,%1x\n\tvwaitq\n\tvaddq.x %0,$vf0,Q" : "=j"(len) : "j"(len));
 __asm__("vdiv Q,$vf0w,%2x\n\tvwaitq\n\tvmulq.xyzw %0,%1,Q" : "=j"(r) : "j"(v),"0"(len));
 return r; }
 
-static inline qword Rotate(const M3 &m,qword v) {
+static inline qword Rotate(const MATRIX3 &m,qword v) {
     __asm__("vmulax.xyz ACC,%1,%0x\n\tvmadday.xyz ACC,%2,%0y\n\tvmaddz.xyz %0,%3,%0z" : "+j"(v) : "j"(m.r[0]),"j"(m.r[1]),"j"(m.r[2])); return v;
 }
 extern "C" void CalculateTnPos__FP2TNP7VECTOR4ffP3CLQP2LM4FTNDPUx(S *p,float *times,COEF *coef,BOUND *bounds,int mode,qword *out,float time,float delta) {
     U pos,normal,center;
-    M3 m;
+    MATRIX3 m;
     U rotated;
     float *f=pos.f;
     int i;

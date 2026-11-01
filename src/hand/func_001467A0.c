@@ -1,6 +1,6 @@
+#include "mat.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct M3 { qword r[3]; };
 struct PO { char pad[0x2DC]; int x2DC; float g2E0; char pad2[0xDF4 - 0x2E4]; int xDF4; char pad3[0x18C8 - 0xDF8]; int x18C8; char pad4[0x18D8 - 0x18CC]; int x18D8; };
 struct T { char pad[0x330]; int x330; };
 struct P { char pad[0x10]; struct PO *p10; char pad2[0x30 - 0x14]; int x30; float x34; struct T *p38; };
@@ -13,7 +13,7 @@ extern float D_002BD370;
 void func_001EEF98(struct P *p);
 int func_001A61A0(struct T *p);
 qword func_001A62E8(void *p);
-struct M3 *func_001A6318(void *p);
+struct MATRIX3 *func_001A6318(void *p);
 void func_00146E18(struct P *p, int n);
 float GRandInRange__Fff(float gMin, float gMax);
 
@@ -72,7 +72,7 @@ void func_001467A0(struct P *p)
         switch (state) {
         case 0:
             if (g < D_002BD360) {
-                struct M3 *pm = func_001A6318(p->p10);
+                struct MATRIX3 *pm = func_001A6318(p->p10);
                 if (0.8f < Dot(pm->r[0], d.q)) {
                     if (GRandInRange__Fff(0.0f, 1.0f) < 0.3f)
                         func_00146E18(p, 3);

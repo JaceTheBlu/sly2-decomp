@@ -1,22 +1,21 @@
+#include "mat.h"
 #include "clock.h"
 // Smooth movement and update directional animation weights.
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};
-struct M3{qword r[3];};
-struct M4{qword r[4];};
 struct VTE{short delta,pad;void*fn;};
 struct O{char pad[0xC];VTE*vt;};
 struct PARAM{char pad[0x10];float y,z;int pad18;float weight;};
 struct ANIM;
-struct P{char pad[0xC];VTE*vt;char pad10[0x140];PARAM*params;char pad154[0x5C];M3 matrix;char pad1E0[0x16E4];O*object;char pad18C8[0x698];float base;char pad1F64[8];float left;char pad1F70[8];float middle;char pad1F7C[8];float right;char pad1F88[8];ANIM*anim;float amount,weight;char pad1F9C[4];qword offset;};
+struct P{char pad[0xC];VTE*vt;char pad10[0x140];PARAM*params;char pad154[0x5C];MATRIX3 matrix;char pad1E0[0x16E4];O*object;char pad18C8[0x698];float base;char pad1F64[8];float left;char pad1F70[8];float middle;char pad1F7C[8];float right;char pad1F88[8];ANIM*anim;float amount,weight;char pad1F9C[4];qword offset;};
 struct SMP{float a,b,c;};
 extern "C" CLOCK g_clock;
-extern "C" M3 D_002DDFA0;
+extern "C" MATRIX3 D_002DDFA0;
 extern "C" qword g_normalZ;
 extern "C" SMP D_002BF3F8,D_002BF408;
-extern "C" M4*func_001A6318(P*);
+extern "C" MATRIX4*func_001A6318(P*);
 extern "C" qword func_001A62E8(P*);
-extern "C" void func_0011C950(M3*,M3*,SMP*,M3*,qword*,float);
+extern "C" void func_0011C950(MATRIX3*,MATRIX3*,SMP*,MATRIX3*,qword*,float);
 extern "C" qword func_0011F088(qword,qword,SMP*,qword*,float);
 extern "C" qword func_001A6FC0(O*,O*,qword);
 extern "C" void ReblendAsegbl__FP6ASEGBL(ANIM*);
@@ -37,7 +36,7 @@ static inline qword Normalize(qword vin,const U*negative,U*u){
  return r;
 }
 
-static inline P*NegativeTarget(const M4&m,const qword&offset,U*negative,U*scratch,U*target,P*p){
+static inline P*NegativeTarget(const MATRIX4&m,const qword&offset,U*negative,U*scratch,U*target,P*p){
  register float minus __asm__("$f0")=-1.0f;register qword raw __asm__("$2");
  register qword axis1 __asm__("vf4"),axis2 __asm__("vf3"),scaled __asm__("vf2");register P*owner __asm__("$4");
  {
@@ -65,20 +64,20 @@ static inline float WeightAmount(qword normalized,float&zero){
 
 
 static inline unsigned SmoothSamplePage(){register unsigned page __asm__("$6");__asm__("lui %0,%%hi(%1)":"=r"(page):"i"(&D_002BF3F8));return page;}
-static inline float SmoothInputs(M4*source,const CLOCK*clock,float factor,unsigned page,M3*&current,M3*&optional,SMP*&sample){
- register M3*receiver __asm__("$4"),*out __asm__("$7");register float dt __asm__("$f12");register unsigned address __asm__("$6")=page;
+static inline float SmoothInputs(MATRIX4*source,const CLOCK*clock,float factor,unsigned page,MATRIX3*&current,MATRIX3*&optional,SMP*&sample){
+ register MATRIX3*receiver __asm__("$4"),*out __asm__("$7");register float dt __asm__("$f12");register unsigned address __asm__("$6")=page;
  __asm__("lwc1 %0,%4\n\tdaddu %1,%5,$zero\n\taddiu %3,%3,%%lo(%7)\n\tdaddu %2,$zero,$zero\n\tmul.s %0,%0,%6":"=&f"(dt),"=r"(receiver),"=r"(out),"+r"(address):"m"(clock->dt),"r"(source),"f"(factor),"i"(&D_002BF3F8));
  current=receiver;optional=out;sample=(SMP*)address;return dt;
 }
 
 extern "C" void func_0018DF60(P*p){
- M4 m=*((M4*(*)(void*))p->object->vt[31].fn)((char*)p->object+p->object->vt[31].delta);
+ MATRIX4 m=*((MATRIX4*(*)(void*))p->object->vt[31].fn)((char*)p->object+p->object->vt[31].delta);
  U direction,position,scratch,negative;
- *(M3*)&p->matrix=*(M3*)&m;
- M4*current=func_001A6318(p);
+ *(MATRIX3*)&p->matrix=*(MATRIX3*)&m;
+ MATRIX4*current=func_001A6318(p);
  CLOCK*clock=&g_clock;
  float factor=0.5f;
- unsigned samplePage=SmoothSamplePage();M3*receiver,*optional;SMP*sample;float smoothDt=SmoothInputs(current,clock,factor,samplePage,receiver,optional,sample);
+ unsigned samplePage=SmoothSamplePage();MATRIX3*receiver,*optional;SMP*sample;float smoothDt=SmoothInputs(current,clock,factor,samplePage,receiver,optional,sample);
  func_0011C950(receiver,&p->matrix,sample,optional,&direction.q,smoothDt);
  ((void(*)(void*,qword))p->vt[36].fn)((char*)p+p->vt[36].delta,direction.q);
  U target;P*owner=NegativeTarget(m,p->offset,&negative,&scratch,&target,p);
@@ -86,7 +85,7 @@ extern "C" void func_0018DF60(P*p){
  ((void(*)(void*,qword))p->vt[35].fn)((char*)p+p->vt[35].delta,position.q);
  qword relative;
  {
-  register PARAM*params __asm__("$3");register M3*camera __asm__("$2");register float zero __asm__("$f2");
+  register PARAM*params __asm__("$3");register MATRIX3*camera __asm__("$2");register float zero __asm__("$f2");
   __asm__("lw %0,%3\n\tlui %1,%%hi(%4)\n\tmtc1 $zero,%2\n\taddiu %1,%1,%%lo(%4)":"=&r"(params),"=r"(camera),"=f"(zero):"m"(p->params),"i"(&D_002DDFA0));
   register float y __asm__("$f0"),z __asm__("$f1");register O*root __asm__("$4");register qword axis2 __asm__("vf3");
   __asm__("lwc1 %0,%4\n\tdaddu %1,$zero,$zero\n\tlwc1 %2,%5\n\tneg.s %0,%0\n\tlqc2 %3,%6":"=f"(y),"=&r"(root),"=f"(z),"=j"(axis2):"m"(params->y),"m"(params->z),"m"(camera->r[2]));
@@ -119,8 +118,8 @@ typedef char UInt_Size[(sizeof(unsigned)==4)?1:-1];
 typedef char Short_Size[(sizeof(short)==2)?1:-1];
 typedef char Pointer_Size[(sizeof(void*)==4)?1:-1];
 typedef char U_Size[(sizeof(U)==16)?1:-1];
-typedef char M3_Size[(sizeof(M3)==48)?1:-1];
-typedef char M4_Size[(sizeof(M4)==64)?1:-1];
+typedef char M3_Size[(sizeof(MATRIX3)==48)?1:-1];
+typedef char M4_Size[(sizeof(MATRIX4)==64)?1:-1];
 typedef char VTE_Size[(sizeof(VTE)==8)?1:-1];
 typedef char O_Size[(sizeof(O)==16)?1:-1];
 typedef char PARAM_Size[(sizeof(PARAM)==32)?1:-1];
@@ -128,13 +127,13 @@ typedef char SMP_Size[(sizeof(SMP)==12)?1:-1];
 typedef char P_Size[(sizeof(P)==8112)?1:-1];
 typedef char qword_Alignment[(__alignof__(qword)==16)?1:-1];
 typedef char U_Alignment[(__alignof__(U)==16)?1:-1];
-typedef char M3_Alignment[(__alignof__(M3)==16)?1:-1];
-typedef char M4_Alignment[(__alignof__(M4)==16)?1:-1];
+typedef char M3_Alignment[(__alignof__(MATRIX3)==16)?1:-1];
+typedef char M4_Alignment[(__alignof__(MATRIX4)==16)?1:-1];
 typedef char P_Alignment[(__alignof__(P)==16)?1:-1];
 typedef char U_q_Offset[((unsigned)&((U*)0)->q==0)?1:-1];
 typedef char U_f_Offset[((unsigned)&((U*)0)->f==0)?1:-1];
-typedef char M3_r_Offset[((unsigned)&((M3*)0)->r==0)?1:-1];
-typedef char M4_r_Offset[((unsigned)&((M4*)0)->r==0)?1:-1];
+typedef char M3_r_Offset[((unsigned)&((MATRIX3*)0)->r==0)?1:-1];
+typedef char M4_r_Offset[((unsigned)&((MATRIX4*)0)->r==0)?1:-1];
 typedef char VTE_delta_Offset[((unsigned)&((VTE*)0)->delta==0)?1:-1];
 typedef char VTE_fn_Offset[((unsigned)&((VTE*)0)->fn==4)?1:-1];
 typedef char O_vt_Offset[((unsigned)&((O*)0)->vt==12)?1:-1];
@@ -158,6 +157,6 @@ typedef char P_anim_Offset[((unsigned)&((P*)0)->anim==8080)?1:-1];
 typedef char P_amount_Offset[((unsigned)&((P*)0)->amount==8084)?1:-1];
 typedef char P_weight_Offset[((unsigned)&((P*)0)->weight==8088)?1:-1];
 typedef char P_offset_Offset[((unsigned)&((P*)0)->offset==8096)?1:-1];
-typedef char M3_Row_Count[(sizeof(((M3*)0)->r)/sizeof(qword)==3)?1:-1];
-typedef char M4_Row_Count[(sizeof(((M4*)0)->r)/sizeof(qword)==4)?1:-1];
-typedef char M4_Basis_Prefix[(sizeof(M3)==(unsigned)&((M4*)0)->r[3])?1:-1];
+typedef char M3_Row_Count[(sizeof(((MATRIX3*)0)->r)/sizeof(qword)==3)?1:-1];
+typedef char M4_Row_Count[(sizeof(((MATRIX4*)0)->r)/sizeof(qword)==4)?1:-1];
+typedef char M4_Basis_Prefix[(sizeof(MATRIX3)==(unsigned)&((MATRIX4*)0)->r[3])?1:-1];

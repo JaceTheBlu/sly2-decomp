@@ -1,3 +1,4 @@
+#include "mat.h"
 #include "vu0.h"
 #include "clock.h"
 /* func_001E9090: one simulation step of a rope-like path chain.
@@ -22,9 +23,8 @@ typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
 struct VV { qword q; VV() {} VV(const qword &v) { q = v; } operator qword() const { return q; } };
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } };
-struct M4 { qword r[4]; };
-struct SPACE { char pad[0x40]; M4 matrix; };
-struct VT { short delta, pad; M4 *(*fn)(void *); };
+struct SPACE { char pad[0x40]; MATRIX4 matrix; };
+struct VT { short delta, pad; MATRIX4 *(*fn)(void *); };
 struct PATH { char pad[0xC]; VT *vt; char pad10[0xE8 - 0x10]; int count; int padEC; float *dist; U *pos; };
 struct CHAIN
 {
@@ -46,13 +46,13 @@ extern CLOCK g_clock;    // g_clock
 extern qword D_002A2DA0;    // fallback direction
 extern "C" {
 qword func_0022D348(SPACE *, SPACE *, qword);
-M4 *func_0011C318(M4 *, M4 *);   // invert
+MATRIX4 *func_0011C318(MATRIX4 *, MATRIX4 *);   // invert
 void func_001E95B0(CHAIN *, float);
 void func_001E6330(PATH *);
 void func_001E9090(CHAIN *);
 }
 
-static inline VV TransformPoint(const M4 &m, VV v)
+static inline VV TransformPoint(const MATRIX4 &m, VV v)
 {
     qword r;
     __asm__("vmulax.xyz $ACC, %1, %5x\n\tvmadday.xyz $ACC, %2, %5y\n\tvmaddaz.xyz $ACC, %3, %5z\n\tvmaddw.xyz %0, %4, $vf0w"
@@ -134,7 +134,7 @@ void func_001E9090(CHAIN *p)
         func_001E95B0(p, p->distance[n - 2] + GFromVf(Length(Sub(p->position[n - 2].q, p->position[n - 1].q))));
         n = p->path->count;
     }
-    M4 inverse;
+    MATRIX4 inverse;
     {
         PATH *path = p->path;
         VT *e = &path->vt[31];

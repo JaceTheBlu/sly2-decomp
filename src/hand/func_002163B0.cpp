@@ -1,3 +1,4 @@
+#include "mat.h"
 // Configure rich-text rendering and queue the standard render payloads.
 typedef unsigned int uint;
 typedef unsigned long ulong;
@@ -7,7 +8,6 @@ struct RT {char pad[0x6C];float offsetX,offsetY,width,height,sx,sy,lineHeight,fo
 struct CONFIG {float offsetX,offsetY,width,height;RGBA color;int hAlign,vAlign;};
 extern "C" void *func_002333B4(void *,int,int);
 struct M23 {float a[8];enum INIT {Uninitialized,Zero};M23(INIT init=Uninitialized){if(init==Zero)func_002333B4(this,0,sizeof(*this));}} __attribute__((aligned(16)));
-struct M4 {qword r[4];};
 struct DATA {RGBA color;int mode;float priority;int limit;qword v10,v20;};
 struct R {char pad[0xC];unsigned char *cur;};
 struct E {int kind;float priority;uint address;int tag;};
@@ -21,8 +21,8 @@ static inline void Bulk(struct R *r,int n,void *source){func_001AE528(r->cur,sou
 static inline void Direct(struct R *r,int n,void *source){Align(r,3);Word(r,0x50000000|n);Bulk(r,n,source);}
 
 extern "C" void func_00215D00(struct RT *,RGBA *);
-extern "C" void func_002162D8(struct RT *,struct M4 *,struct M23 *);
-extern "C" void func_00216750(struct RT *,struct M4 *,struct DATA *);
+extern "C" void func_002162D8(struct RT *,struct MATRIX4 *,struct M23 *);
+extern "C" void func_00216750(struct RT *,struct MATRIX4 *,struct DATA *);
 extern qword D_002A2E10,D_002A2E20;
 extern "C" void func_002163B0(struct RT *p,struct CONFIG *config,int priority){
     RGBA color;
@@ -33,7 +33,7 @@ extern "C" void func_002163B0(struct RT *p,struct CONFIG *config,int priority){
     p->hAlign=config->hAlign;p->vAlign=config->vAlign;p->priority=priority;
     color=config->color;func_00215D00(p,&color);
     struct M23 matrix(M23::Zero);
-    struct M4 world;
+    struct MATRIX4 world;
     struct DATA style;
     matrix.a[0]=p->sx*p->fontScale;
     matrix.a[3]=p->sy*p->fontScale;

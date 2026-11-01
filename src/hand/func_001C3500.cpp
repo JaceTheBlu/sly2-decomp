@@ -1,11 +1,11 @@
+#include "mat.h"
 #include "vu0.h"
-// func_001C3500: builds an orientation basis (M3) for a position `distance` along a path.
+// func_001C3500: builds an orientation basis (MATRIX3) for a position `distance` along a path.
 // It samples the path tangent at the start, then tries sample distances distance, +10, -10, +20, -20 ... (wrapped
 // for cyclic paths, rejected outside [low,high] otherwise) until the direction between the samples at +-50 is within
 // ~25 degrees of the tangent, rotates the path axis by the tangent->direction rotation, and builds the basis
 // (side, up) from that.  Optionally flips side/up (forward == 0) and copies the basis to *out.
 typedef int qword __attribute__((mode(TI)));
-struct M3 { qword r[3]; };
 struct PATH { char pad0[0xE4]; int cyclic; char padE8[0xD8]; qword axis; };
 extern "C" {
 extern qword D_002A2DA0, g_normalZ;   // fallback unit vectors
@@ -16,7 +16,7 @@ void func_001E67B8(PATH *, float, qword *, qword *);
 float GModPositive__Fff(float, float);     // wrap into range
 float func_001E6728(PATH *, float);
 void func_001E6F10(PATH *, float, qword *, qword *);
-M3 BuildRotateVectorsMatrix__FUxUx(qword, qword);
+MATRIX3 BuildRotateVectorsMatrix__FUxUx(qword, qword);
 qword func_001A6FC0(PATH *, PATH *, qword);
 qword func_0011E390(qword);
 }
@@ -55,7 +55,7 @@ static inline float Dot(qword a, qword b)
     return f;
 }
 // earlyclobber output: the result must not share a register with the matrix rows
-static inline qword Transform(const M3 &m, qword q)
+static inline qword Transform(const MATRIX3 &m, qword q)
 {
     qword r;
     __asm__("vmulax.xyz $ACC,%1,%4x\n\tvmadday.xyz $ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z"
@@ -69,9 +69,9 @@ static inline qword Cross(qword a, qword b)
     return r;
 }
 
-struct WORK { M3 basis; qword tangent, first, direction; };
+struct WORK { MATRIX3 basis; qword tangent, first, direction; };
 
-extern "C" void func_001C3500(PATH *p, float distance, int forward, M3 *out)
+extern "C" void func_001C3500(PATH *p, float distance, int forward, MATRIX3 *out)
 {
     WORK w;
     U fwd;   // declared outside the inner block on purpose: the stack slot of `back` (declared inside) is freed at the
@@ -82,7 +82,7 @@ extern "C" void func_001C3500(PATH *p, float distance, int forward, M3 *out)
     w.tangent = Normalize(w.tangent, D_002A2DA0);
     {
         U back;
-        M3 rot;
+        MATRIX3 rot;
         for (int i = 0;; ++i) {
             float offset = (i & 1) ? 10.0f * (float)(i + 1) : (float)i * -10.0f;
             float sample = distance + offset;

@@ -1,3 +1,4 @@
+#include "mat.h"
 // func_001DE5D8: (re)build the endpoint state of every entry of p and its bounding box. Each entry has two endpoints;
 // an endpoint names an object: a path (shape test 10) becomes a moving endpoint with a 1/2/6-segment motion profile
 // (mode 8 / 0 / 16, the last a trapezoidal accelerate-cruise-decelerate profile), shape 3/0x30 objects and missing
@@ -16,7 +17,6 @@ typedef unsigned long ulong;
 typedef unsigned int uint;
 
 struct VTE { short delta, pad; void *fn; };
-struct M4 { qword rows[4]; };
 struct PATH {
     char pad0[0xC];
     VTE *vt;
@@ -42,7 +42,7 @@ struct BOUND {
     int tag;
     ulong flags;
     int id, pinned;
-    M4 matrix;
+    MATRIX4 matrix;
     char pad60[8];
     int tree[4];
     GEO local, world;
@@ -81,22 +81,22 @@ void *func_002333B4(void *, int, int);
 qword func_001A62E8(void *);
 qword func_0022FC48(void *, void *, qword);
 void *PvAllocSwClearImpl__FP7SWALLOC(MSG *);
-void CloneGeom__FP4GEOMP7MATRIX4T0(GEO *, const M4 *, GEO *);
+void CloneGeom__FP4GEOMP7MATRIX4T0(GEO *, const MATRIX4 *, GEO *);
 void func_001F2B20(P *);
 }
 
 struct VU_VECTOR { qword q; VU_VECTOR(const qword &v) { q = v; } };
 static inline qword Min(VU_VECTOR a, VU_VECTOR b) { qword r; __asm__("vmini.xyz %0, %1, %2" : "=j"(r) : "j"(a.q), "j"(b.q)); return r; }
 static inline qword Max(VU_VECTOR a, VU_VECTOR b) { qword r; __asm__("vmax.xyz %0, %1, %2" : "=j"(r) : "j"(a.q), "j"(b.q)); return r; }
-static inline qword Transform(const M4 *m, qword p)
+static inline qword Transform(const MATRIX4 *m, qword p)
 {
     qword r;
     __asm__("vmulax.xyz ACC,%1,%5x\n\tvmadday.xyz ACC,%2,%5y\n\tvmaddaz.xyz ACC,%3,%5z\n\tvmaddw.xyz %0,%4,$vf0w"
-            : "=j"(r) : "j"(m->rows[0]), "j"(m->rows[1]), "j"(m->rows[2]), "j"(m->rows[3]), "j"(p));
+            : "=j"(r) : "j"(m->r[0]), "j"(m->r[1]), "j"(m->r[2]), "j"(m->r[3]), "j"(p));
     return r;
 }
 static inline float Clamp(float f, float low, float high) { if (f < low) return low; else if (high < f) return high; else return f; }
-static inline M4 *GetMatrix(PATH *path) { VTE *v = &path->vt[31]; return ((M4 * (*)(void *))v->fn)((char *)path + v->delta); }
+static inline MATRIX4 *GetMatrix(PATH *path) { VTE *v = &path->vt[31]; return ((MATRIX4 * (*)(void *))v->fn)((char *)path + v->delta); }
 static inline void SetDirty(P *p) { uint f = p->flags; if ((f ^ 1) & 1) *(uint *)f |= 2; else p->flags = f | 2; }
 
 extern "C" void func_001DE5D8(P *p)
@@ -246,7 +246,7 @@ extern "C" void func_001DE5D8(P *p)
                 break;
             case 1: {
                 // the matrix callback may change the endpoint's path, so it is re-read
-                M4 matrix = *GetMatrix(endpoint->track.path);
+                MATRIX4 matrix = *GetMatrix(endpoint->track.path);
                 int k;
                 for (k = 0; k < endpoint->track.path->count; k++) {
                     qword point = Transform(&matrix, endpoint->track.path->points[k]);

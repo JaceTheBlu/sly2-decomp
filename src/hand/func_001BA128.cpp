@@ -1,8 +1,8 @@
+#include "mat.h"
 #include "vu0.h"
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((t*)0)->m))
 typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];};
-struct M3{qword rows[3];};
 struct SPACE;
 struct NODE{char pad[0x30];qword position;char pad40[0x60];SPACE*space;};
 struct MOTION{char pad[0x20];qword angles;};
@@ -20,8 +20,8 @@ int func_00227C90(VOLUME*,qword);
 void func_001BA408(P*,int);
 int func_00131968(POOL*);
 qword func_0022FC48(SPACE*,SPACE*,qword);
-M3*BuildRotateVectorsMatrix__FUxUx(M3*,qword,qword);
-qword DecomposeRotateMatrixEuler__FP7MATRIX3(M3*);
+MATRIX3*BuildRotateVectorsMatrix__FUxUx(MATRIX3*,qword,qword);
+qword DecomposeRotateMatrixEuler__FP7MATRIX3(MATRIX3*);
 void*func_001AE478(void*);
 void _$_18CBinaryInputStream(void*,int);
 int func_001BA100(void*,ROW*);
@@ -34,7 +34,7 @@ extern GAME g_sw;
 struct MARK{MARK(){func_001AE478(this);}~MARK(){_$_18CBinaryInputStream(this,2);}};
 static inline float Square(qword a){qword one;float f;__asm__("vmul.xyz %0,%0,%0\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"+j"(a),"=&j"(one));__asm__("qmfc2.ni %0,%1":"=r"(f):"j"(a));return f;}
 typedef char U_Size[sizeof(U)==16?1:-1];
-typedef char M3_Size[sizeof(M3)==48?1:-1];
+typedef char M3_Size[sizeof(MATRIX3)==48?1:-1];
 typedef char ROW_Size[sizeof(ROW)==8?1:-1];
 typedef char NODE_position_Offset[FIELD_OFFSET(NODE,position)==48?1:-1];
 typedef char NODE_space_Offset[FIELD_OFFSET(NODE,space)==160?1:-1];
@@ -87,7 +87,7 @@ extern "C" void func_001BA128(P*p){
   qword position=func_001A62E8(p->target);
   qword local=func_0022FC48(0,node->space,position);
   qword direction=QwSub(local,p->node->position);
-  M3 matrix;BuildRotateVectorsMatrix__FUxUx(&matrix,p->axis,direction);
+  MATRIX3 matrix;BuildRotateVectorsMatrix__FUxUx(&matrix,p->axis,direction);
   MOTION*motion=p->motion;
   motion->angles=DecomposeRotateMatrixEuler__FP7MATRIX3(&matrix);
   break;

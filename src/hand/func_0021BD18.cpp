@@ -1,8 +1,8 @@
+#include "mat.h"
 #include "vu0.h"
 // Initialize mesh history and samples.
 typedef int qword __attribute__((mode(TI)));
-struct M4 {qword r[4];};
-struct Ring {float t,g;M4 m;};
+struct Ring {float t,g;MATRIX4 m;};
 struct QuadBytes {unsigned char b[4];};
 struct Sample {qword position;float fraction;QuadBytes extra,color;};
 struct Batch {int count;int pad[2];qword *positions;void *uv;QuadBytes *color,*extra;Sample *samples;};

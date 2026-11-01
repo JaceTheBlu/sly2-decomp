@@ -1,10 +1,10 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
 struct K { int a; int b; };
 extern struct K D_002A4D10;
 struct G { char pad[0x3BF4]; int grf; char pad2[0x3D58 - 0x3BF8]; int cid; };
 extern struct G g_sw;
 struct VTE { short d; short pad; void *pfn; };
-struct M3 { qword r[3]; };
 struct AREQ { int cb; int cbAlign; };
 struct SO { float m[0x40 / 4]; char pad[0x94 - 0x40]; int x94; char pad2[0xA4 - 0x98]; int id; };
 struct O { void *pad[3]; struct VTE *vt; };
@@ -29,7 +29,7 @@ void func_001440D0(struct P *, int);
 int func_001F8278(struct P *);
 void func_001F35C8(struct P *, float);
 qword func_001A62E8(struct P *);
-struct M3 *func_001A6318(struct P *);
+struct MATRIX3 *func_001A6318(struct P *);
 void *func_002333B4(void *, int, int);
 void func_00149A50(struct G *, struct P *, struct K, int);
 
@@ -79,7 +79,7 @@ void func_001400B8(struct P *p)
     func_001F35C8(p, 0.25f);
     if (p->pso->x94 == 0) {
         qword q = func_001A62E8(p);
-        struct M3 m = *func_001A6318(p);
+        struct MATRIX3 m = *func_001A6318(p);
         struct SO *pso = p->pso;
         func_002333B4(pso, 0, 0x40);
         pso->m[0] = pso->m[5] = pso->m[10] = pso->m[15] = 1.0f;
@@ -95,7 +95,7 @@ void func_001400B8(struct P *p)
         }
         {
             struct VTE *e = &p->vt[30];
-            ((void (*)(void *, struct M3 *))e->pfn)((char *)p + e->d, &m);
+            ((void (*)(void *, struct MATRIX3 *))e->pfn)((char *)p + e->d, &m);
         }
     }
     func_00149A50(&g_sw, p, D_002A4D10, 0);

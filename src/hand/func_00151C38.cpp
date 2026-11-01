@@ -1,3 +1,4 @@
+#include "mat.h"
 #include "vu0.h"
 #include "util.h"
 // func_00151C38: matched from the v7 draft. Normalize's sqrt and divide are two asms (sqrt into a
@@ -5,8 +6,7 @@
 // twice (allocation-only operand) so the VF numbering matches.
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
-struct M3 { qword r[3]; };
-union M4 { struct { qword r[4]; } q; M3 m3; float af[4][4]; };
+union M4 { struct { qword r[4]; } q; MATRIX3 m3; float af[4][4]; };
 struct CM;
 extern "C" CM g_cm;
 struct CLQ { float g0, g1, g2, pad; };
@@ -19,7 +19,7 @@ struct X { char pad[0x10]; ALO *p10; ALO *p14; };
 extern "C" {
 void func_0014FD40(X *p);
 qword func_001A62E8(ALO *p);
-M3 *func_0011B7E0(M3 *pm, qword v);
+MATRIX3 *func_0011B7E0(MATRIX3 *pm, qword v);
 qword *__as__6VECTORG9VU_VECTOR(qword *p, qword v);
 void func_0014E168(CM *p, M4 *m);
 void func_0014F5A0(CM *p, float g);
@@ -87,7 +87,7 @@ void func_00151C38(X *p)
     pos2.f[2] += GClamp(GFromClq(D_002BDB10, dist), D_002BDB20.gMin, D_002BDB20.gMax);
     {
         M4 m4;
-        M3 m3;
+        MATRIX3 m3;
         func_0011B7E0(&m3, QwSub(pos.q, pos2.q));
         M4 *pm4 = &m4;
         __as__6VECTORG9VU_VECTOR(&pm4->q.r[3], pos2.q);

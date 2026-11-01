@@ -1,3 +1,4 @@
+#include "mat.h"
 #include "vu0.h"
 #include "util.h"
 // func_001C2EF0: launches `count` objects from an owner's source object towards the player.
@@ -15,7 +16,6 @@
 //  * `count`, start, target and offset are plain values; the stack slots at sp+0x60..0x90 are their spill slots, and
 //    `dest` is caller-saved around the duration call.
 typedef int qword __attribute__((mode(TI)));
-struct M3 { qword r[3]; };
 struct VTE { short delta, pad; void *fn; };
 struct SO { char pad0[0xC]; VTE *vt; char pad10[0x60]; qword position; };
 struct OWNER { char pad0[0x150]; SO *source; void *factory; SO *first; };
@@ -29,7 +29,7 @@ void *func_001C4840(GAME *);
 qword func_001A62E8(void *);
 float GRandInRange__Fff(float, float);
 qword func_0011E1A0(float, float, float);
-M3 func_0011B830(qword, qword);
+MATRIX3 func_0011B830(qword, qword);
 qword func_001D69F0(qword, qword, qword, float);
 int FIsBasicDerivedFrom__FP5BASIC3CID(SO *, int);
 void func_001C6BD0(SO *, qword, qword, float, float);
@@ -64,7 +64,7 @@ static inline qword Normalize(qword v, qword fallback)
         return fallback;
     return Unit(v, len);
 }
-static inline qword Transform(const M3 &m, qword q)
+static inline qword Transform(const MATRIX3 &m, qword q)
 {
     qword r;
     __asm__("vmulax.xyz $ACC,%1,%4x\n\tvmadday.xyz $ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z"
@@ -100,7 +100,7 @@ extern "C" SO *func_001C2EF0(OWNER *p, int count)
         qword offset = func_0011E1A0(pan, Rand(D_002C0CF8), -75.0f);
         qword delta = QwSub(target, start);
         qword side = QwSub(delta, Scale(Dot(delta, g_normalZ), g_normalZ));
-        M3 mat;
+        MATRIX3 mat;
         mat = func_0011B830(Normalize(side, D_002A2DA0), g_normalZ);
         qword dest = QwAdd(target, Transform(mat, offset));
         qword velocity = func_001D69F0(start, dest, D_002C0D60, Rand(D_002C0CE0));

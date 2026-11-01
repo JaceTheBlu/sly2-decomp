@@ -1,9 +1,9 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
-typedef struct M4 { qword aq[4]; } M4;
 typedef struct B7 { qword aq[7]; } B7;
-extern M4 D_002DE5B0;
+extern MATRIX4 D_002DE5B0;
 extern B7 D_002DE5F0;
-struct S { int a; int b; int pad[2]; M4 m; B7 b7; char pad2[0x100 - 0xC0]; };
+struct S { int a; int b; int pad[2]; MATRIX4 m; B7 b7; char pad2[0x100 - 0xC0]; };
 void *func_002333B4(void *pv, int b, int cb);
 void func_00159118(struct S *p)
 {

@@ -1,16 +1,16 @@
+#include "mat.h"
 #include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
-struct M4{qword r[4];};
-struct LO{char pad[0x40];M4 m;};
-struct A{LO*lo;int x4;float radius;int xC;unsigned long flags;int x18,first;M4 m;char pad60[0x18];int count;qword*vertices;char pad80[0x10];int probeCount;qword*probes;};
-struct B{LO*lo;char pad4[0xC];unsigned long flags;char pad18[8];M4 m;char pad60[0x48];int oldGeneration,generation;};
+struct LO{char pad[0x40];MATRIX4 m;};
+struct A{LO*lo;int x4;float radius;int xC;unsigned long flags;int x18,first;MATRIX4 m;char pad60[0x18];int count;qword*vertices;char pad80[0x10];int probeCount;qword*probes;};
+struct B{LO*lo;char pad4[0xC];unsigned long flags;char pad18[8];MATRIX4 m;char pad60[0x48];int oldGeneration,generation;};
 struct HIT{qword p;char pad10[0x30];float time;int x44,x48,tag;char pad50[0x10];};
 struct W;struct C;
-extern "C" M4 func_0011C318(const M4*);
+extern "C" MATRIX4 func_0011C318(const MATRIX4*);
 extern "C" int func_0014C6A0(B*,qword,qword,int,HIT*);
 extern "C" void func_001A7C18(W*,A*,B*,qword,qword,int,int,int,C**,float);
-static inline qword TransformNew(const M4*m,qword p){qword r;__asm__("vmulax.xyz ACC,%1,%3x\n\tvmadday.xyz ACC,%2,%3y\n\tvmaddaz.xyz ACC,%4,%3z\n\tvmaddw.xyz %0,%5,$vf0w":"=&j"(r):"j"(m->r[0]),"j"(m->r[1]),"j"(p),"j"(m->r[2]),"j"(m->r[3]));return r;}
-static inline qword Transform(const M4*m,qword p){__asm__("vmulax.xyz ACC,%1,%3x\n\tvmadday.xyz ACC,%2,%3y\n\tvmaddaz.xyz ACC,%4,%3z\n\tvmaddw.xyz %0,%5,$vf0w":"=j"(p):"j"(m->r[0]),"j"(m->r[1]),"0"(p),"j"(m->r[2]),"j"(m->r[3]));return p;}
+static inline qword TransformNew(const MATRIX4*m,qword p){qword r;__asm__("vmulax.xyz ACC,%1,%3x\n\tvmadday.xyz ACC,%2,%3y\n\tvmaddaz.xyz ACC,%4,%3z\n\tvmaddw.xyz %0,%5,$vf0w":"=&j"(r):"j"(m->r[0]),"j"(m->r[1]),"j"(p),"j"(m->r[2]),"j"(m->r[3]));return r;}
+static inline qword Transform(const MATRIX4*m,qword p){__asm__("vmulax.xyz ACC,%1,%3x\n\tvmadday.xyz ACC,%2,%3y\n\tvmaddaz.xyz ACC,%4,%3z\n\tvmaddw.xyz %0,%5,$vf0w":"=j"(p):"j"(m->r[0]),"j"(m->r[1]),"0"(p),"j"(m->r[2]),"j"(m->r[3]));return p;}
 static inline qword SubN(qword a,qword b){register qword r __asm__("vf1");__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline float Dot(qword a,qword b){qword d,one;float f;__asm__("vmul.xyz %0,%2,%3\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(d),"=&j"(one):"j"(a),"j"(b));__asm__("qmfc2.ni %0,%1":"=r"(f):"j"(d));return f;}
 static inline qword Normal(qword v){register qword d __asm__("vf2"),one __asm__("vf3"),r __asm__("vf5");__asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(d),"=&j"(one):"j"(v));__asm__("vsqrt Q,%1x\n\tvwaitq\n\tvaddq.x %0,$vf0,Q":"=j"(d):"0"(d));__asm__("vdiv Q,$vf0w,%1x\n\tvwaitq\n\tvmulq.xyzw %0,%2,Q":"=j"(r):"j"(d),"j"(v));return r;}

@@ -1,10 +1,9 @@
+#include "mat.h"
 #include "vu0.h"
 #include "clock.h"
 // Update zoom from target bounds or controller input.
 typedef int qword __attribute__((mode(TI)));
 union V {qword q;float f[4];};
-struct M3 {qword r[3];};
-struct M4 {qword r[4];};
 struct RANGE {float lo,hi;};
 struct SMP {float a,b,c,d;};
 struct SHAPE {char pad[0x30];float radius;};
@@ -13,8 +12,8 @@ struct CONTROL {char pad[0x24];float zoom;};
 struct S {char pad[0x150];CONTROL *control;char pad154[0x2C];O *target;int aim,follow;char pad18c[0x20];RANGE range;float blend,velocity,strength;};
 extern "C" {
 qword func_001A62E8(void *);
-M3 *func_001A6318(void *);
-void func_002309E8(void *,void *,M4 *,M4 *,float);
+MATRIX3 *func_001A6318(void *);
+void func_002309E8(void *,void *,MATRIX4 *,MATRIX4 *,float);
 float func_00244B68(float);
 float func_0011D948(void *,float);
 float func_0011D1C0(float,float,float,float,SMP *,float *);
@@ -34,7 +33,7 @@ static inline float OffsetLength(qword d){qword r,one;register int bits __asm__(
     __asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(r),"=j"(one):"j"(d));
     __asm__("vsqrt Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,Q":"+j"(r));
     __asm__("qmfc2.ni %0,%1":"=r"(bits):"j"(r));union {int i;float f;} value;value.i=(int)bits;return value.f;}
-static inline qword InverseRotate(const M3 &m,qword v){qword r=m.r[0],one,a,b,c;
+static inline qword InverseRotate(const MATRIX3 &m,qword v){qword r=m.r[0],one,a,b,c;
     __asm__("vmul.xyzw %2,%0,%7\n\tvmaxw.xyzw %1,$vf0,$vf0w\n\tvmul.xyzw %3,%5,%7\n\tvmul.xyzw %4,%6,%7\n\tvadday.x ACC,%2,%2y\n\tvmaddz.x %0,%1,%2z\n\tvaddax.y ACC,%3,%3x\n\tvmaddz.y %0,%1,%3z\n\tvaddax.z ACC,%4,%4x\n\tvmaddy.z %0,%1,%4y":"+j"(r),"=&j"(one),"=&j"(a),"=&j"(b),"=&j"(c):"j"(m.r[1]),"j"(m.r[2]),"j"(v));return r;}
 static inline float Max(float a,float b){return a>b?a:b;}
 static inline float Min(float a,float b){return a<b?a:b;}
@@ -42,7 +41,7 @@ static inline float Fraction(RANGE *range,float f){if(range->lo==range->hi)retur
 static inline float Blend(RANGE *range,float u){return (1.0f-u)*range->lo+u*range->hi;}
 extern "C" void func_00225E98(S *p){
     if(p->target && p->follow){
-        M4 m;
+        MATRIX4 m;
         V future,offset,local,swapped;
         SMP spring;
         V saved;

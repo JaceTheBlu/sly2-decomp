@@ -1,5 +1,5 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
-typedef struct M4 { qword r[4]; } M4;
 typedef struct VT { short d; short pad; void (*pfn)(); } VT;
 typedef struct LO { char pad[0xC]; VT *vt; } LO;
 typedef struct P {
@@ -30,7 +30,7 @@ int func_0012CEE0(C *);
 void func_0022DD00(LO *, P *);
 qword func_0022CA18(P *, P *);
 qword DecomposeRotateMatrixEuler__FP7MATRIX3(qword *);
-M4 func_0022C8C0(P *, qword);
+MATRIX4 func_0022C8C0(P *, qword);
 void func_00117120(float, float, float, qword, qword, qword, qword, qword *, int, int);
 
 void func_00230CF0(A *a, int flag)
@@ -86,8 +86,8 @@ void func_00230CF0(A *a, int flag)
             break;
         }
         {
-            M4 t = func_0022C8C0(p, v);
-            *(M4 *)p->m = t;
+            MATRIX4 t = func_0022C8C0(p, v);
+            *(MATRIX4 *)p->m = t;
         }
         p->xB0 = D_002A2DD0;
         p->xA4 = ++g_sw.x3D58;

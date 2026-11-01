@@ -1,3 +1,4 @@
+#include "mat.h"
 // Transform points and inverse-transpose plane normals.
 typedef int qword __attribute__((mode(TI)));
 struct M3{
@@ -10,10 +11,9 @@ struct M3{
   source.r[2]=c;r[2]=source.r[2];
  }
 };
-struct M4{qword r[4];};
 struct PLANE{qword normal;int unknown10,unknown14,unknown18,vertex;};
 struct GEOMETRY{int pointCount;qword*points;int planeCount;PLANE*planes;};
-extern "C" void func_00166428(const M4*,unsigned int,const qword*,qword*);
+extern "C" void func_00166428(const MATRIX4*,unsigned int,const qword*,qword*);
 extern "C" M3 func_0011B340(const M3*);
 static __inline__ qword ReadCPU(const qword*source){qword value;__asm__("lq %0,%1":"=r"(value):"m"(*source));return value;}
 static __inline__ M3 Transpose(const M3&input,GEOMETRY*source,int&planeCount){
@@ -42,8 +42,8 @@ static inline PLANE *FinalPlane(PLANE *base,int count){
  return last;
 }
 
-extern "C" void func_001664A0(const M4*matrix,GEOMETRY*source,GEOMETRY*dest){
- register const M4 *inverseSource asm("$16")=matrix;
+extern "C" void func_001664A0(const MATRIX4*matrix,GEOMETRY*source,GEOMETRY*dest){
+ register const MATRIX4 *inverseSource asm("$16")=matrix;
  if(source->points!=dest->points){
   func_00166428(matrix,source->pointCount,source->points,dest->points);
   int planeCount;
@@ -77,7 +77,7 @@ typedef char layout_qword[(sizeof(qword)==16)?1:-1];
 typedef char layout_pointer[(sizeof(void*)==4)?1:-1];
 typedef char layout_M3[(sizeof(M3)==0x30)?1:-1];
 typedef char layout_M3_alignment[(__alignof__(M3)==16)?1:-1];
-typedef char layout_M4[(sizeof(M4)==0x40)?1:-1];
+typedef char layout_M4[(sizeof(MATRIX4)==0x40)?1:-1];
 typedef char layout_PLANE[(sizeof(PLANE)==0x20)?1:-1];
 typedef char layout_GEOMETRY[(sizeof(GEOMETRY)==0x10)?1:-1];
 typedef char layout_GEOMETRY_pointCount[((unsigned long)&((GEOMETRY*)0)->pointCount==0x0)?1:-1];

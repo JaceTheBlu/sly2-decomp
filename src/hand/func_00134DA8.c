@@ -1,3 +1,4 @@
+#include "mat.h"
 #include "util.h"
 #include "clock.h"
 /* MATCH: case 5 uses LenXY5, which adds allocation-only "r"(p150) on the vsqrt asm and two "r"(p1030) on the qmfc2 asm (one "r"(p1030): 5). One register pin (MulT vf3). */
@@ -8,13 +9,12 @@
 /* v2: aligned 42 -> 37. MulT asm operand order: outputs (r, one, t0, t1, t2), inputs (v, r[2], r[1]) gives the target's temp VF numbers (t0 vf7, one vf8, t1 vf6, t2 vf5). Left: r = r[0] lands in vf1 (target vf3; "0"(r[0]) tie same), LenXY: target loads p150 before the vmul and p1030 after vaddq (fused LenXY asm worse, 46-54), the mtc1/add.s nop in case 6. */
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } VUF;
-struct M3 { qword r[3]; };
 struct POLY { float a; float b; float c; };
 struct S150 { char pad[0x18]; float g18; float g1C; };
 struct S1030 { char pad[0x1C]; float g1C; char pad20[0x20]; float g40; };
 struct P {
     char pad0[0x28]; unsigned long ul28; char pad30[0x150 - 0x30]; struct S150 *p150; char pad154[0x190 - 0x154];
-    qword v190; char pad1A0[8]; float g1A8; char pad1AC[4]; struct M3 m1B0; char pad1E0[0x2C0 - 0x1E0];
+    qword v190; char pad1A0[8]; float g1A8; char pad1AC[4]; struct MATRIX3 m1B0; char pad1E0[0x2C0 - 0x1E0];
     char x2C0[0x4C0 - 0x2C0]; char x4C0[0xDF0 - 0x4C0]; char xDF0[0x1030 - 0xDF0]; struct S1030 *p1030; int x1034;
     int x1038; char pad103C[0x10DC - 0x103C]; int x10DC; char pad10E0[0x1320 - 0x10E0]; char x1320[0x13D0 - 0x1320];
     int x13D0; char pad13D4[0x13E0 - 0x13D4]; char x13E0[0x1410 - 0x13E0]; qword v1410; char pad1420[0x14E0 - 0x1420];
@@ -76,7 +76,7 @@ static __inline__ float LenXY5(qword v, struct S150 *pa, struct S1030 *pb)
     __asm__("qmfc2.ni %0, %1" : "=r"(g) : "j"(l), "r"(pb), "r"(pb));  /* allocation-only "r"(pb) x2: raises p1030's local-alloc priority above p150 (p1030 $v0, p150 $v1) */
     return g;
 }
-static __inline__ qword MulT(struct M3 *pm, qword v)
+static __inline__ qword MulT(struct MATRIX3 *pm, qword v)
 {
     register qword r __asm__("vf3");  /* register pin: VF allocation tie, target keeps the result in vf3 */
     qword t0, t1, t2, one;

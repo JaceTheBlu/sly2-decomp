@@ -1,14 +1,14 @@
+#include "mat.h"
 typedef unsigned long ulong;
 typedef unsigned int uint;
 typedef int qword __attribute__((mode(TI)));
 struct GEO {int count;qword *points;int planeCount;void *planes;int edgeCount;void *edges;};
 struct TREE {int count,a,b;void *nodes;};
-struct M4 {qword rows[4];};
 struct E;
 struct P;
 struct VE {short delta,pad;void (*fn)();};
 union FLAGS {ulong raw;struct {void *mesh;short state;unsigned short high;} fields;};
-struct E {void *object;P *owner;float radius;int tag;FLAGS flags;int id,pinned;M4 matrix;char pad60[8];TREE tree;GEO local,world;int state,stamp;};
+struct E {void *object;P *owner;float radius;int tag;FLAGS flags;int id,pinned;MATRIX4 matrix;char pad60[8];TREE tree;GEO local,world;int state,stamp;};
 struct STATE {qword rows[3];char pad30[0xA0];float mass;char padD4[0xC];};
 struct DATA {char pad0[0x38];void *guard;char pad3C[0x24];};
 struct P {char pad0[0xC];VE *vt;char pad10[0x30];uint flags;char pad44[0x3C];DATA data;int count;E *entries;STATE *state;};
@@ -26,7 +26,7 @@ void ReadVbsp__18CBinaryInputStreamPiPP4VBSP(void *,GEO *,TREE *);
 void ReadMatrix__18CBinaryInputStreamP7MATRIX3(void *,STATE *);
 void func_00167320(DATA *,P *,void *);
 void *PvAllocSwClearImpl__FP7SWALLOC(MSG *);
-void CloneGeom__FP4GEOMP7MATRIX4T0(GEO *,const M4 *,GEO *);
+void CloneGeom__FP4GEOMP7MATRIX4T0(GEO *,const MATRIX4 *,GEO *);
 void func_001F2B20(P *);
 void func_001F35F8(P *,float);
 void LoadOptionsFromBrx__FPvP18CBinaryInputStream(P *,void *);

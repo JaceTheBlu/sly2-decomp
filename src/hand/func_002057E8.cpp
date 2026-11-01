@@ -1,10 +1,10 @@
+#include "mat.h"
 #include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } };
-struct M3 { qword r[3]; };
 struct S { char pad[0x218]; qword *origin; int pad21C; float radius; };
 extern "C" {
-M3 *func_001A6318(S *p);
+MATRIX3 *func_001A6318(S *p);
 qword func_001A62E8(S *p);
 extern int D_002C3CC8[2][3];
 }

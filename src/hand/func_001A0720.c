@@ -1,7 +1,7 @@
+#include "mat.h"
 // Update directional acceleration and side state.
 typedef int qword __attribute__((mode(TI)));
 typedef union{qword q;float f[4];int i[4];}U;
-struct M4{qword r[4];};
 struct VT{short delta,pad;void*fn;};
 struct O{char pad[0x494];struct O*anchor;};
 struct ANIM{char pad[0x40];int ratebits;};
@@ -11,7 +11,7 @@ extern float D_002BF9F0;
 void func_002046F0(struct P*,struct O*);
 float RadNormalize__Ff(float);
 qword func_0011E1A0(float,float,float);
-struct M4*func_001A6318(struct P*);
+struct MATRIX4*func_001A6318(struct P*);
 static inline qword GetVel(struct P*p){return ((qword(*)(void*))p->vt[33].fn)((char*)p+p->vt[33].delta);}
 static inline void SetVel(struct P*p,qword v){((void(*)(void*,qword))p->vt[35].fn)((char*)p+p->vt[35].delta,v);}
 static inline qword ScaleAndSetSide(struct P*p,qword v,qword k,int side){qword r;__asm__("vmulx.xyzw %0,%2,%3x\n\tsw %4,%1":"=j"(r),"=m"(p->side):"j"(v),"j"(k),"r"(side));return r;}
@@ -25,7 +25,7 @@ static inline qword ProjectOut(qword ni,qword vi){
  return v;
 }
 static inline void RemoveSide(struct P*p,U*result,U*old){
- struct M4*basis;
+ struct MATRIX4*basis;
  qword value;
  old->q=ToVu(GetVel(p));
  basis=func_001A6318(p);
@@ -105,10 +105,10 @@ typedef char layout_U_alignment[(__alignof__(U)==16)?1:-1];
 typedef char layout_U_q[(FIELD_OFFSET(U,q)==0)?1:-1];
 typedef char layout_U_f[(FIELD_OFFSET(U,f)==0)?1:-1];
 typedef char layout_U_i[(FIELD_OFFSET(U,i)==0)?1:-1];
-typedef char layout_M4_size[(sizeof(struct M4)==64)?1:-1];
-typedef char layout_M4_alignment[(__alignof__(struct M4)==16)?1:-1];
-typedef char layout_M4_rows[(FIELD_OFFSET(struct M4,r)==0)?1:-1];
-typedef char layout_M4_row1[(FIELD_OFFSET(struct M4,r[1])==16)?1:-1];
+typedef char layout_M4_size[(sizeof(struct MATRIX4)==64)?1:-1];
+typedef char layout_M4_alignment[(__alignof__(struct MATRIX4)==16)?1:-1];
+typedef char layout_M4_rows[(FIELD_OFFSET(struct MATRIX4,r)==0)?1:-1];
+typedef char layout_M4_row1[(FIELD_OFFSET(struct MATRIX4,r[1])==16)?1:-1];
 typedef char layout_VT_size[(sizeof(struct VT)==8)?1:-1];
 typedef char layout_VT_delta[(FIELD_OFFSET(struct VT,delta)==0)?1:-1];
 typedef char layout_VT_fn[(FIELD_OFFSET(struct VT,fn)==4)?1:-1];

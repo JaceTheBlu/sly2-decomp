@@ -1,9 +1,9 @@
+#include "mat.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 extern "C" struct CLOCK g_clock;
 extern "C" qword D_002A2DD0;
 extern "C" char D_002DEB30[];
-struct M4 { qword r[4]; };
 struct VTE { short d; short pad; void *pfn; };
 struct O { char pad[0xC]; struct VTE *vt; int n10; };
 struct N { char pad[0xA0]; int nA0; };
@@ -29,9 +29,9 @@ void func_001F57C0(struct S *p, int n);
 void func_001F68A8(struct S *p, int n);
 void func_001F0660(void *p, int n);
 void func_001FB098(void *p, float f);
-struct M4 func_0022FF40(int a, int b, struct M4 *pm);
+struct MATRIX4 func_0022FF40(int a, int b, struct MATRIX4 *pm);
 int func_0012DC18(struct S *p, struct N *n, int a, int b, int c, qword v);
-qword DecomposeRotateMatrixEuler__FP7MATRIX3(struct M4 *pm);
+qword DecomposeRotateMatrixEuler__FP7MATRIX3(struct MATRIX4 *pm);
 void func_001619A0(void *a, int n, struct S *p);
 void func_0017F4C0(struct S *p, struct Q *q);
 void func_0017FD08(struct S *p, int n);
@@ -92,10 +92,10 @@ void func_0017FD08(struct S *p, int n) {
         break;
     case 3:
         {
-            struct M4 m;
+            struct MATRIX4 m;
             int r;
 
-            { struct O *q = p->p294; struct VTE *e = &q->vt[0x20]; r = ((int (*)(void *, struct M4 *))e->pfn)((char *)q + e->d, &m); }
+            { struct O *q = p->p294; struct VTE *e = &q->vt[0x20]; r = ((int (*)(void *, struct MATRIX4 *))e->pfn)((char *)q + e->d, &m); }
             m = func_0022FF40(p->p54->nA0, p->p58->nA0, &m);
             { struct VTE *e = &p->vt[0xA]; ((void (*)(void *, int, int, int))e->pfn)((char *)p + e->d, p->p294->n10, r, 3); }
             { struct VTE *e = &p->vt[0x23]; ((void (*)(void *, qword))e->pfn)((char *)p + e->d, D_002A2DD0); }

@@ -1,5 +1,5 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
-struct MATRIX4 { float m[4][4]; };
 struct CRef {
     int m_tagk; union { int n; float g; void *pv; } u;
     CRef() { m_tagk = -1; }
@@ -24,18 +24,18 @@ CRef func_00121F00(int carg, CRef *pref)
     if (carg > 0)
         pn = (NODE *)pref->u.pv;
     func_002333B4(pm, 0, sizeof(*pm));
-    pm->m[0][0] = pm->m[1][1] = pm->m[2][2] = pm->m[3][3] = 1.0f;
+    pm->mat[0][0] = pm->mat[1][1] = pm->mat[2][2] = pm->mat[3][3] = 1.0f;
     switch (carg) {
     case 0:
         break;
     case 1:
-        pm->m[0][0] = pm->m[1][1] = pm->m[2][2] = func_00129DA8(&pn->ref).u.g;
+        pm->mat[0][0] = pm->mat[1][1] = pm->mat[2][2] = func_00129DA8(&pn->ref).u.g;
         break;
     case 3:
     case 4: {
         int i;
         for (i = 0; i < carg; i++) {
-            *(qword *)pm->m[i] = *(qword *)pn->ref.u.pv;
+            *(qword *)pm->mat[i] = *(qword *)pn->ref.u.pv;
             pn = pn->pnext;
         }
         break;
@@ -47,7 +47,7 @@ CRef func_00121F00(int carg, CRef *pref)
         for (i = 0; i < n; i++) {
             for (j = 0; j < n; j++) {
                 CRef r = func_00129DA8(&pn->ref);
-                pm->m[i][j] = r.u.g;
+                pm->mat[i][j] = r.u.g;
                 pn = pn->pnext;
             }
         }

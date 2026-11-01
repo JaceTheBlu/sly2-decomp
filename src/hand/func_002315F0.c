@@ -1,5 +1,5 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
-typedef struct M4 { qword r[4]; } M4;
 typedef struct VT { short d; short pad; void *pfn; } VT;
 typedef struct LO LO;
 struct LO {
@@ -15,24 +15,24 @@ struct LO {
     char pad3[0x20];
     LO *x50;
     char pad4[0xC];
-    M4 m60;
+    MATRIX4 m60;
     LO *xA0;
 };
-M4 __ml__FRC7MATRIX4T0(void *, M4 *);
+MATRIX4 __ml__FRC7MATRIX4T0(void *, MATRIX4 *);
 void func_001A5900(LO *, LO *, LO *, int);
 
 void func_002315F0(LO *p, LO *pNew, LO *pParent, int grf)
 {
-    M4 m;
+    MATRIX4 m;
     if (grf & 3) {
         if (p->f) {
-            m = *((M4 * (*)(void *))p->vt[31].pfn)((char *)p + p->vt[31].d);
+            m = *((MATRIX4 * (*)(void *))p->vt[31].pfn)((char *)p + p->vt[31].d);
         } else {
             LO *q;
             m = p->m60;
             for (q = p->x50; q; q = q->xA0)
             {
-                M4 t = __ml__FRC7MATRIX4T0(q, &m);
+                MATRIX4 t = __ml__FRC7MATRIX4T0(q, &m);
                 m = t;
             }
         }
@@ -47,5 +47,5 @@ void func_002315F0(LO *p, LO *pNew, LO *pParent, int grf)
     if (grf & 1)
         ((void (*)(void *, qword))p->vt[29].pfn)((char *)p + p->vt[29].d, m.r[3]);
     if (grf & 2)
-        ((void (*)(void *, M4 *))p->vt[30].pfn)((char *)p + p->vt[30].d, &m);
+        ((void (*)(void *, MATRIX4 *))p->vt[30].pfn)((char *)p + p->vt[30].d, &m);
 }

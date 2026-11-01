@@ -1,8 +1,8 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
-struct M3 { qword r[3]; };
-extern "C" M3 *func_001A6318(void *p);
-extern "C" M3 func_0011B340(const M3 *b);
-static inline M3 Mul(const M3 &a, const M3 &b) return r
+extern "C" MATRIX3 *func_001A6318(void *p);
+extern "C" MATRIX3 func_0011B340(const MATRIX3 *b);
+static inline MATRIX3 Mul(const MATRIX3 &a, const MATRIX3 &b) return r
 {
     qword a0 = a.r[0], a1 = a.r[1], a2 = a.r[2];
     __asm__("vmulax.xyz ACC,%1,%4x\n\tvmadday.xyz ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z"
@@ -12,9 +12,9 @@ static inline M3 Mul(const M3 &a, const M3 &b) return r
     __asm__("vmulax.xyz ACC,%1,%4x\n\tvmadday.xyz ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z"
         : "=j"(r.r[2]) : "j"(a0), "j"(a1), "j"(a2), "j"(b.r[2]));
 }
-extern "C" M3 func_001A7050(void *a, void *b, const M3 *m)
+extern "C" MATRIX3 func_001A7050(void *a, void *b, const MATRIX3 *m)
 {
-    M3 result;
+    MATRIX3 result;
     if (a) result = Mul(*func_001A6318(a), *m);
     else result = *m;
     if (b) {

@@ -1,3 +1,4 @@
+#include "mat.h"
 #include "vu0.h"
 #include "util.h"
 // State-5 update: fade the actor in, hand it control of the source's basis, then drop a prize and leave state 3.
@@ -14,8 +15,7 @@
 //  - The colour broadcast is one asm for both pextlw (t ties to the mfc1 register, the lw of the colour sits between).
 typedef int qword __attribute__((mode(TI)));
 typedef struct { short d,pad; void (*fn)(void *,...); } VE;
-struct M3 { qword r[3]; };
-struct M4 {M3 basis;qword position;};
+struct M4 {MATRIX3 basis;qword position;};
 struct O { char pad[0xC]; VE *vt; };
 struct CONTROL {int id,state,pad;void *object;};
 struct A { char pad[0xC]; VE *vt; char pad10[0xFB4]; void *color; char padFC8[8]; struct CONTROL basis; };
@@ -32,7 +32,7 @@ void func_002240B0(struct S *);
 struct R *func_00205458(void *,int);
 int func_0017A9C0(struct R *);
 struct M4 *func_001A6318(void *);
-void func_00209840(struct CONTROL *,const struct M3 *);
+void func_00209840(struct CONTROL *,const struct MATRIX3 *);
 qword func_001A62E8(void *);
 void func_0017A8C8(struct R *,int);
 void func_0012D108(void *,qword);
@@ -64,7 +64,7 @@ extern "C" void func_00225300(struct S *p) {
             } else if(!(r=func_00205458(p->actor,0xB0)) || func_0017A9C0(r)) {
                 p->vt[76].fn((char*)p+p->vt[76].d,2);
             } else {
-                M3 m((p->source?func_001A6318(p->source):func_001A6318(p))->basis);
+                MATRIX3 m((p->source?func_001A6318(p->source):func_001A6318(p))->basis);
                 func_00209840(&p->actor->basis,&m);
                 if(r->state!=4) {
                     qword pos=p->source?func_001A62E8(p->source):func_001A62E8(p);

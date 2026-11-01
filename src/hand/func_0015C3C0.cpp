@@ -1,9 +1,8 @@
+#include "mat.h"
 #include "vu0.h"
 // func_0015C3C0: matched with Lilly's MATRIX3 operator* (src/hand/func_0021CB18.cpp: rows of the LEFT
 // matrix into qword locals, VU_VECTOR4 row temps) and her QwRotateVec(MATRIX3 *, qword), with px->mat as the left operand.
 typedef int qword __attribute__((mode(TI)));
-struct MATRIX4 { qword r[4]; };
-struct MATRIX3 { qword r[3]; };
 struct VEC { int x, y, z, w; } __attribute__((aligned(16)));
 struct XF { qword pos; MATRIX3 mat; VEC v; VEC w; };
 struct P { int fl; void *pv; int a8, aC; qword q10, q20; int x30; XF *pxf; int x38, x3C; };

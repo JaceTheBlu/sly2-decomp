@@ -1,3 +1,4 @@
+#include "mat.h"
 #include "vu0.h"
 #include "clock.h"
 /* func_001E8378 (Lilly's range): one RK4-style step of a spring rope (CHAIN, same struct as matched func_001E9090).
@@ -20,9 +21,8 @@ struct VU_FLOAT {
     VU_FLOAT(const float *pf) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "rV"(*(const int *)pf)); }  /* a float word from memory */
 };
 struct VU_VECTOR { qword q; VU_VECTOR(const qword &v) { q = v; } };
-struct M4 { qword r[4]; };
-struct SPACE { char pad[0x40]; M4 matrix; };
-struct VT { short delta, pad; M4 *(*fn)(void *); };
+struct SPACE { char pad[0x40]; MATRIX4 matrix; };
+struct VT { short delta, pad; MATRIX4 *(*fn)(void *); };
 struct PATH { char pad[0xC]; VT *vt; char pad10[0xE8 - 0x10]; int count; int padEC; float *dist; U *pos; };
 struct LSG { qword apos[2]; qword anormal[2]; float au[2]; int lsgk; void *owner[2]; };
 struct CHAIN
@@ -53,12 +53,12 @@ extern "C" {
 qword func_0022D348(SPACE *, SPACE *, qword);
 void func_001AE5A0(void *, const void *, unsigned);
 int ClsgClipEdgeToSphere__FUxfUxUxiP3LSG(qword posCenter, float sRadius, qword pos0, qword pos1, int clsgMax, LSG *alsg);
-M4 *func_0011C318(M4 *, M4 *);
+MATRIX4 *func_0011C318(MATRIX4 *, MATRIX4 *);
 void func_001E6330(PATH *);
 void func_001E8378(CHAIN *);
 }
 
-static inline VV TransformPoint(const M4 &m, VV v)
+static inline VV TransformPoint(const MATRIX4 &m, VV v)
 {
     qword r;
     __asm__("vmulax.xyz $ACC, %1, %5x\n\tvmadday.xyz $ACC, %2, %5y\n\tvmaddaz.xyz $ACC, %3, %5z\n\tvmaddw.xyz %0, %4, $vf0w"
@@ -289,7 +289,7 @@ void func_001E8378(CHAIN *p)
         func_001AE5A0(&p->position[1], &accP[1], (count - 2) * 16);
         func_001AE5A0(&p->velocity[1], &accV[1], (count - 2) * 16);
     }
-    M4 inverse;
+    MATRIX4 inverse;
     {
         PATH *path = p->path;
         VT *e = &path->vt[31];

@@ -1,6 +1,6 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];int i[4];};
-struct M3{qword r[3];};
 struct M4{U r[4];};
 struct V3{float f[3];};
 struct PLANE{V3 normal;float distance;};
@@ -9,7 +9,7 @@ struct QW;
 struct P{int width,height;char pad8[8];int directCount;QW*directData;char pad18[8];O*camera;};
 struct V;
 extern "C" V3 D_002C1F00,D_002C1F10;
-extern "C" M3*func_001A6318(O*);
+extern "C" MATRIX3*func_001A6318(O*);
 extern "C" qword func_001A62E8(O*);
 extern "C" qword*__as__6VECTORG9VU_VECTOR(qword*,qword);
 extern "C" float func_002450F0(float);
@@ -33,7 +33,7 @@ extern "C" void func_001BE6F0(P*p,V*v){
  M4 projection,product;
  PLANE planes[2];
  O*object;
- M3*basis;
+ MATRIX3*basis;
  register float aspect __asm__("$f20");
  float slope;
  if(!p->camera)return;
