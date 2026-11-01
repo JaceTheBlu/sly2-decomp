@@ -1,5 +1,5 @@
+#include "vec.h"
 #include "util.h"
-typedef struct VECTOR { float x, y, z; } VECTOR;
 
 void func_0011DD30(VECTOR *pvec, int a, RGBA *prgba)
 {

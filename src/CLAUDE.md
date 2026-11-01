@@ -30,7 +30,7 @@ inside `extern "C" { … }` so the symbol is the plain name.
 
 ## Shared types (phase 2)
 
-- Headers in `include/`: `clock.h` (CLOCK, g_clock), `dl.h` (DL, DLE, DLI), `util.h` (LM, RGBA), `cref.h` (CRef), `vu0.h` (quadword/float helpers, `vu0_qword`), `mat.h` (MATRIX3/MATRIX4 as rows or floats), plus the older
+- Headers in `include/`: `clock.h` (CLOCK, g_clock), `dl.h` (DL, DLE, DLI), `util.h` (LM, RGBA), `cref.h` (CRef), `vu0.h` (quadword/float helpers, `vu0_qword`), `mat.h` (MATRIX3/MATRIX4 as rows or floats), `vecmat.h` (VU_FLOAT, VU_VECTOR), `vec.h` (VECTOR with w), plus the older
   `bis.h`, `vec.h`, `mat.h`, `dmas.h`, `gifs.h`, `vifs.h`, `heap.h`, `qw.h`.
 - Field names: when Sly 1 names a field (`sly1/include/*.h`), use its name (DL `head`/`tail`, DLI `m_pdl`…, RGBA
   `bRed`…), so the two projects can be read side by side; otherwise use the name that explains the code that

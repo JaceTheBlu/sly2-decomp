@@ -1,3 +1,4 @@
+#include "vecmat.h"
 #include "vu0.h"
 // func_0018F2B0: MATCH. laneG12v1 (aligned 2, s4/s5 swap of the hoisted D_002BF4B8 / g_sw highs) plus const-ref helpers that add RTL insns which vanish after loop opt: Sub(const qword&,const qword&), AbsF(const float&), IsBonus(P*const&), and a `qword pred` copy. The node loop now has 96 real insns in loop pass 1 (> threshold 95, so only the life-2 bonus high is hoisted) and 91 in pass 2 (the g_sw high is hoisted then), which gives the target's s5/s4 order. One commented register pin (heading in f21).
 // history, laneG12v1: laneG11v1 with the abs.s asm replaced by __builtin_fabsf (same aligned 2). Was laneG11v1: laneG10v1 (4) + an early `qword early=QwFromF(dt)` before the 11B500 call. QwFromF's mfc1 has a "memory" clobber so sched1 keeps it ahead of the call (the call depends on it), and it is defined on the SAME source line as VuFloatBits so cse treats the two asm_operands as equal (the line number is part of ASM_OPERANDS) and the later VuFloatBits reuses the early value, leaving only its dead store into the inline's v (0xD0) like the target. g_normalZ is const (keeps its lq ahead of the memory clobber) and M3::operator= copies r[0],r[2],r[1]. aligned 2, ONE pin (heading f21). Left: s4/s5 swap of the hoisted g_sw/D_002BF4B8 high parts (target loop.c hoists the D_002BF4B8 hi first, so it lives one insn longer and is allocated second).
@@ -20,10 +21,9 @@ extern "C" void func_0011EE08(qword,qword,qword,qword*,float*,float*);
 extern "C" int func_0015ED78(G*,int,int,P*);
 extern "C" float func_002458F0(float,float);
 extern "C" float RadNormalize__Ff(float);
-struct VU_FLOAT{qword qw;};
-static inline VU_FLOAT VuFloatBits(float g){VU_FLOAT v;__asm__("mfc1 %0,%1":"=r"(v.qw):"f"(g));return v;} static inline qword QwFromF(float g){qword q;__asm__("mfc1 %0,%1":"=r"(q):"f"(g):"memory");return q;}
+static inline VU_FLOAT VuFloatBits(float g){VU_FLOAT v;__asm__("mfc1 %0,%1":"=r"(v.q):"f"(g));return v;} static inline qword QwFromF(float g){qword q;__asm__("mfc1 %0,%1":"=r"(q):"f"(g):"memory");return q;}
 static inline float AngleOf(U v){return func_002458F0(v.f[1],v.f[0]);}
-static inline qword AddScaled(qword p,qword v,VU_FLOAT k){qword q;__asm__("vadda.xyzw ACC,%1,$vf0\n\tvmaddx.xyzw %0,%3,%2x":"=j"(q):"j"(p),"j"(k.qw),"j"(v),"j"(k.qw)/*allocation-only: VU preference spills k like the target*/);return q;}
+static inline qword AddScaled(qword p,qword v,VU_FLOAT k){qword q;__asm__("vadda.xyzw ACC,%1,$vf0\n\tvmaddx.xyzw %0,%3,%2x":"=j"(q):"j"(p),"j"(k.q),"j"(v),"j"(k.q)/*allocation-only: VU preference spills k like the target*/);return q;}
 static inline qword Rotate(const M3&m,qword v){qword q;__asm__("vmulax.xyz ACC,%1,%4x\n\tvmadday.xyz ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z":"=j"(q):"j"(m.r[0].q),"j"(m.r[1].q),"j"(m.r[2].q),"0"(v));return q;}
 static inline qword Transform(const M4&m,qword v){qword q;__asm__("vmulax.xyz ACC,%1,%5x\n\tvmadday.xyz ACC,%2,%5y\n\tvmaddaz.xyz ACC,%3,%5z\n\tvmaddw.xyz %0,%4,$vf0w":"=j"(q):"j"(m.r[0].q),"j"(m.r[1].q),"j"(m.r[2].q),"j"(m.r[3].q),"j"(v));return q;}
 static inline qword Sub(const qword &a,const qword &b){qword q;__asm__("vsub.xyzw %0,%1,%2":"=j"(q):"j"(a),"j"(b));return q;}

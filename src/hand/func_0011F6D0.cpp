@@ -1,7 +1,7 @@
+#include "vec.h"
 // script `-` builtin (probably), same shape as func_0011F440: the inline accessor in the
 // if/else keeps `pn = 0` after the branch (no jump.c rewrite), so reorg puts it in the beqz delay slot.
 typedef int qword __attribute__((mode(TI)));
-struct VECTOR { float x, y, z, w; };
 struct MATRIX4 { float m[4][4]; };
 struct CRef {
     int m_tagk; union { int n; float g; void *pv; } u;

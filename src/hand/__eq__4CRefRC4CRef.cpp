@@ -1,4 +1,4 @@
-struct VECTOR { float x, y, z; };
+#include "vec.h"
 struct VECTOR2 { float x, y; };
 extern "C" int func_00233178(const void *a, const void *b, int cb);
 struct CRef {

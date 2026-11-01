@@ -1,3 +1,4 @@
+#include "vec.h"
 #include "vu0.h"
 #include "util.h"
 // func_00155FB0: matched from v8.
@@ -8,7 +9,6 @@
 // DRAFT: escape/flee target position search (logic complete, not close: frame 0x130 vs 0x1D0 - target returns func_256CE8/256D08 VECTOR4 results via hidden pointer slots 0xB0..0xE0 and spills more temps; unreachable `b; mov.s f22,f20` block at 0x1561EC not reproduced).
 typedef int qword __attribute__((mode(TI)));
 struct M3 { qword r[3]; };
-struct VECTOR { float x, y, z, w; };
 class SO;
 struct VT { char pad[0x108]; short d; short pad2; qword (*pfn)(SO *); };
 class SO { public: char pad[0xC]; VT *pvt; };

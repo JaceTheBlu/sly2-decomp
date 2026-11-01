@@ -1,8 +1,8 @@
+#include "vec.h"
 // script `+` builtin (probably). The first node is read through an inline accessor in an
 // if/else: the inline blocks jump.c's "x = b; if (c) x = a" rewrite, so `pn = 0` is laid out after the branch and
 // reorg steals it into the beqz delay slot as in the original.
 typedef int qword __attribute__((mode(TI)));
-struct VECTOR { float x, y, z, w; };
 struct MATRIX4 { float m[4][4]; };
 struct CRef {
     int m_tagk; union { int n; float g; void *pv; } u;

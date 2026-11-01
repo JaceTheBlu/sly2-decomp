@@ -1,3 +1,4 @@
+#include "vec.h"
 #include "clock.h"
 // func_002236E8 = UpdateCmLineOfSight__FP7CMPART2 (Sly2Port KB name): the follow camera's line-of-sight test.
 // Every D_002C4110 (0.5) seconds it looks at five points around the hero (PosLoWorld + back * x + side * y + up * z
@@ -18,7 +19,6 @@ struct SOPART;
 struct SW;
 struct TN { char pad0[0x18C]; int fNoCamClip; };
 struct CMPART2 { LO *pvHero; char pad4[0xC]; TN *ptn; char pad14[0x6C]; float tLastSeen; };
-struct VECTOR4 { float x, y, z, w; };
 struct CM { char pad0[0x4C]; float sNearClip; char pad50[0x40]; qword pos; char padA0[0x260]; int nCut; };
 extern CM g_cm;
 extern CLOCK g_clock;

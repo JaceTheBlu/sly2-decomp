@@ -1,3 +1,4 @@
+#include "vecmat.h"
 #include "vu0.h"
 #include "util.h"
 #include "clock.h"
@@ -61,7 +62,6 @@ int func_001D4E08(ATTACH *);
 int func_00227C90(void *, qword);
 }
 struct VV { qword q; VV() {} VV(const qword &v) { q = v; } operator qword() const { return q; } };
-struct VU_FLOAT { qword q; };
 static inline VV Sub(VV a, VV b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline VV Add(VV a, VV b) { qword r; __asm__("vadd.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline float GetX(VV q) { float f; __asm__("mtc1 %1, %0" : "=f"(f) : "r"(q)); return f; }

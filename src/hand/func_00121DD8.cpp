@@ -1,3 +1,4 @@
+#include "vec.h"
 struct CRef {
     int m_tagk; union { int n; float g; void *pv; } u;
     CRef() { m_tagk = -1; }
@@ -9,7 +10,6 @@ struct CRef {
     CRef &operator=(const CRef &r);
     CRef &operator=(float g);
 };
-struct VECTOR { float x, y, z; };
 struct NODE { int cref; int x4; CRef ref; NODE *pnext; };
 extern "C" {
 CRef func_00129DA8(CRef *pref);

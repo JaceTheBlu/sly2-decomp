@@ -1,4 +1,4 @@
-typedef struct VECTOR { float x, y, z; } VECTOR;
+#include "vec.h"
 float func_00244F18(float g);
 
 static __inline__ float GClamp(float g, float lo, float hi)

@@ -1,7 +1,7 @@
+#include "vec.h"
 // `/` script builtin. The int-matrix path builds its VU_FLOAT temp in the caller, before the inline scale
 // helper frame, so the temp reuses the freed CRef slot at sp+0x10 as in the original.
 typedef int qword __attribute__((mode(TI)));
-struct VECTOR { float x, y, z, w; };
 struct MATRIX4 { float af[16]; } __attribute__((aligned(16)));
 struct V8 { float x, y; };
 struct VU_FLOAT {

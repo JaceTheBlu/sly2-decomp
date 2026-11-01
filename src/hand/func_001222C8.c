@@ -1,7 +1,7 @@
+#include "vec.h"
 /* MATCH: v3 + second commented pin, pv in $5 (a1), pf = (i << 4) + pv. */
 /* v3: aligned 10 -> 2. ONE commented register pin: pf in $2 (v0), plus the tail written as `pf += j; f(*pf)` in all three arms (the sum then reuses pf like the target). Left: 1B-else `sll v0,a1,4; lw a1,pv` (target puts i<<4 in pf/v0, pv in a1; ours sll a1 in place, pv in v0). Tried: (i<<4)+char*, int sums, pf = base + i*4, &[i].x, j pin instead, i pin: 2-18. */
 /* v2: aligned 22 -> 10. Shared function-scope i / j / float *pf across cases (pidx = pidx->pnext reused) gives the target t0/a1/a3 registers and the cross-jumped pf[j] tail. Left: pf in v1, j in v0 (target pf v0, j v1) in the pf[j] tail. */
-typedef struct VECTOR { float x, y, z, w; } VECTOR;
 typedef struct CRef { int m_tagk; union { int n; float g; void *pv; } u; } CRef;
 typedef struct IDX { int pad[3]; int i; struct IDX *pnext; } IDX;
 void Decref__4CRef(CRef *pref);

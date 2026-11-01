@@ -1,3 +1,4 @@
+#include "vecmat.h"
 #include "mat.h"
 #include "vu0.h"
 #include "clock.h"
@@ -13,7 +14,6 @@ struct DISPLAY {char pad0[0x110];int actorChoice,risingChoice,fallingChoice,near
 struct MODEL {char pad0[0x20];int state;};
 struct P {int state;char pad4[0xC];qword origin;char pad20[0x10];int count;ACTOR *items[22];ACTOR *actor;float proximity,sizeGain;int rising;float choiceTime;int savedFlags;void *resource;MODEL *model;DISPLAY *primary,*secondary;int refreshPending,visible,selected,pending;};
 struct PLAYER {char pad0[0x150];void *control;};
-struct VU_FLOAT {qword qw;};
 extern CM g_cm;
 extern CLOCK g_clock;
 extern PLAYER *D_002E1E40;
@@ -34,7 +34,7 @@ int func_00203758(ACTOR *);
 int func_0014FD50(void *);
 int func_001C46C0(void *,int,float);
 }
-static inline VU_FLOAT VuFloatFromMemWord(int n){VU_FLOAT v;__asm__("qmtc2 %1,%0":"=j"(v.qw):"rV"(n));return v;}
+static inline VU_FLOAT VuFloatFromMemWord(int n){VU_FLOAT v;__asm__("qmtc2 %1,%0":"=j"(v.q):"rV"(n));return v;}
 static inline qword QwLengthXY(qword v){qword r;__asm__("vmul.xy %0,%1,%1\n\tvaddy.x %0,%0,%0y":"=j"(r):"j"(v));__asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q":"=j"(r):"0"(r));return r;}
 // camera up row; the pointer parameter gives the game's &cm+0x60 base register (lqc2 0x10(s1), then s1-0x60 for the calls)
 static inline qword QwUp(const MATRIX4 *m){return m->r[1];}
@@ -46,7 +46,7 @@ static inline VU_FLOAT ScreenFromProjected(qword q)
     float x=GetX(q)*320.0f+320.0f;
     float y=GetY(q)*-246.40000915527344f+246.40000915527344f;
     float z=GetZ(q);
-    __asm__("mfc1 %0,%2\n\tmfc1 %1,%3\n\tpextlw %0,%1,%0\n\tmfc1 %1,%4\n\tpcpyld %0,%1,%0":"=&r"(v.qw),"=&r"(t):"f"(x),"f"(y),"f"(z));
+    __asm__("mfc1 %0,%2\n\tmfc1 %1,%3\n\tpextlw %0,%1,%0\n\tmfc1 %1,%4\n\tpcpyld %0,%1,%0":"=&r"(v.q),"=&r"(t):"f"(x),"f"(y),"f"(z));
     return v;
 }
 static inline float Min(float a,float b){return a<b?a:b;}
@@ -65,13 +65,13 @@ extern "C" void func_00202D38(P *p)
     if(p->actor){
         qword world=func_001A62E8(p->actor);
         VU_FLOAT offset=VuFloatFromMemWord(*(int *)&p->actor->headOffset);
-        qword head=QwAdd(world,QwScaleX(QwUp(&g_cm.mat),offset.qw));
+        qword head=QwAdd(world,QwScaleX(QwUp(&g_cm.mat),offset.q));
         qword base=func_0014F308(&g_cm,world);
         qword top=func_0014F308(&g_cm,head);
         VU_FLOAT screen=ScreenFromProjected(base);
-        float distance=GetX(QwLengthXY(QwSub(screen.qw,p->origin)));
+        float distance=GetX(QwLengthXY(QwSub(screen.q,p->origin)));
         VU_FLOAT screenTop=ScreenFromProjected(top);
-        float size=GetX(QwLengthXY(QwSub(screen.qw,screenTop.qw)));
+        float size=GetX(QwLengthXY(QwSub(screen.q,screenTop.q)));
         float proximity=1.0f-(distance-128.0f)/128.0f;
         size=size/120.0f;
         p->rising=1;

@@ -60,6 +60,11 @@ Newest first. Each entry: what changed, how it was verified, the metrics after i
   `--as LOCAL` to migrate a stand-in with another name (`M3` → `MATRIX3`, type name rewritten in the file; files
   that already use the real name are skipped).
 - MATRIX3/MATRIX4 users and M3/M4 stand-ins: 123 files converted, 22 that no longer built left as they were.
+- `vec.h` VECTOR gains the 4th lane `w` (many stand-ins use it; size and alignment unchanged); new
+  `include/vecmat.h` with VU_FLOAT/VU_VECTOR (not in vu0.h: 222 includers define their own C++ VU_FLOAT classes).
+  Users migrated (~25 files). objcheck caught 2 files whose 12-byte unaligned VECTOR stand-in is embedded in
+  another struct: the real 16-byte VECTOR shifts the fields after it, so those files keep their stand-in for now
+  (the embedding struct's layout must be fixed first).
 
 ### 2026-11-01 — Phase 4 started: shared VU0/scalar helpers
 

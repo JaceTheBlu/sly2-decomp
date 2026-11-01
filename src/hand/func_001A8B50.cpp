@@ -1,3 +1,4 @@
+#include "vecmat.h"
 // func_001A8B50: edge/edge and vertex/face contacts between two clipped shapes.
 // ClsgClipSoAllEdges + ClsgClipSoBspEdges__FP2SOT0iP3BSPiP3LSG clip each shape's edges against the other, CategorizeAlsg sorts each side's LSGs, func_001A87F0 adds the
 // vertex contacts of both sides; then every free LSG of side 0 either follows the func_001A86B8 edge path of side 1 (closest points of the
@@ -39,28 +40,27 @@ void func_001A7C18(SCENE *, SHAPE *, SHAPE *, VV, float, VV, int, void *, void *
 
 static inline VV Sub(VV a, VV b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 
-struct VU_FLOAT { qword qw; };
 static inline VU_FLOAT VuFloat(float g)
 {
     VU_FLOAT v;
-    __asm__("qmtc2.ni %1,%0" : "=j"(v.qw) : "r"(g));
+    __asm__("qmtc2.ni %1,%0" : "=j"(v.q) : "r"(g));
     return v;
 }
 static inline VV QwMix(VU_FLOAT g1, VV qw1, VU_FLOAT g2, VV qw2)
 {
     qword qw;
-    __asm__("vmulax.xyzw $ACC,%1,%3x\n\tvmaddx.xyzw %0,%2,%4x" : "=j"(qw) : "j"(qw1), "j"(qw2), "j"(g1.qw), "j"(g2.qw));
+    __asm__("vmulax.xyzw $ACC,%1,%3x\n\tvmaddx.xyzw %0,%2,%4x" : "=j"(qw) : "j"(qw1), "j"(qw2), "j"(g1.q), "j"(g2.q));
     return qw;
 }
 /* gcc supplies the qmfc2 for the "r" operand; the repeated "j" operand is allocation-only (keeps the value VU class). */
-static inline float GFromVf(VU_FLOAT v) { float g; __asm__("mtc1 %1,%0" : "=f"(g) : "r"(v.qw), "j"(v.qw)); return g; }
+static inline float GFromVf(VU_FLOAT v) { float g; __asm__("mtc1 %1,%0" : "=f"(g) : "r"(v.q), "j"(v.q)); return g; }
 static inline float Length(VV v)
 {
     VV d, one;
     VU_FLOAT len;
     __asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z" : "=j"(d), "=j"(one) : "j"(v));
     __asm__("vsqrt $Q,%1x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q" : "=j"(d) : "j"(d));
-    len.qw = d;
+    len.q = d;
     return GFromVf(len);
 }
 /* signed distance of point from plane: dot(plane.xyz, point.xyz) - plane.w */
@@ -73,7 +73,7 @@ static inline float PlaneDist(VV point, VV plane)
     dot.q = r;
     one.q = unit;
     VU_FLOAT g;
-    g.qw = dot.q;
+    g.q = dot.q;
     return GFromVf(g);
 }
 static inline void Closest(VV a, VV b, VV c, VV d, float *au, U *normal)

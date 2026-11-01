@@ -1,6 +1,6 @@
+#include "vec.h"
 // func_0011F960 MATCH, from fresh4 (6): 0x1A/0x16 MulVectorR builds the VU float from the int bits with ONE commented pin ($17, pr's register, as the target), and MulMatrix (0x1B/0x16) has a commented volatile empty asm that keeps &mat after the mtc1. The other old pins were removed.
 typedef int qword __attribute__((mode(TI)));
-struct VECTOR { float x, y, z, w; };
 struct MATRIX4 { float af[16]; } __attribute__((aligned(16)));
 struct V8 { float x, y; };
 struct VU_FLOAT {

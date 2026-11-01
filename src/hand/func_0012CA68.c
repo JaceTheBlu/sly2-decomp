@@ -1,5 +1,5 @@
+#include "vec.h"
 typedef int qword __attribute__((mode(TI)));
-typedef struct VECTOR { float x, y, z, w; } VECTOR;
 typedef struct KEY { float g; float dg; } KEY;
 typedef struct T { int pad; int c; float *at; KEY *ak[3]; int pad2; qword v; } T;
 int func_0012C708(T *t, float g);
