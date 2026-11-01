@@ -1,3 +1,4 @@
+#include "clock.h"
 #include "vu0.h"
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((t*)0)->m))
 typedef int qword __attribute__((mode(TI)));
@@ -7,7 +8,6 @@ struct CONTACT{char pad[8];P*owner;char padC[0x74];qword normal;char pad90[0x1C]
 struct LINK{CONTACT*first;LINK*next;};
 struct COLLISION{char pad[0x64];LINK*groups;};
 struct P{char pad[0xEC];COLLISION*collision;char padF0[0x118];int mode;};
-struct CLOCK{float time,delta;};
 struct REQUEST{int bytes,alignment;};
 union WORK{REQUEST request;U scalar;};
 struct MARK;
@@ -29,7 +29,6 @@ static inline float Z(qword q){register qword bits __asm__("$2");register float 
 typedef char U_Size[sizeof(U)==16?1:-1];
 typedef char CONTACT_Size[sizeof(CONTACT)==176?1:-1];
 typedef char LINK_Size[sizeof(LINK)==8?1:-1];
-typedef char CLOCK_Size[sizeof(CLOCK)==8?1:-1];
 typedef char REQUEST_Size[sizeof(REQUEST)==8?1:-1];
 typedef char WORK_Size[sizeof(WORK)==16?1:-1];
 typedef char CONTACT_owner_Offset[FIELD_OFFSET(CONTACT,owner)==8?1:-1];
@@ -40,7 +39,6 @@ typedef char LINK_next_Offset[FIELD_OFFSET(LINK,next)==4?1:-1];
 typedef char COLLISION_groups_Offset[FIELD_OFFSET(COLLISION,groups)==100?1:-1];
 typedef char P_collision_Offset[FIELD_OFFSET(P,collision)==236?1:-1];
 typedef char P_mode_Offset[FIELD_OFFSET(P,mode)==520?1:-1];
-typedef char CLOCK_time_Offset[FIELD_OFFSET(CLOCK,time)==0?1:-1];
 typedef char REQUEST_bytes_Offset[FIELD_OFFSET(REQUEST,bytes)==0?1:-1];
 typedef char REQUEST_alignment_Offset[FIELD_OFFSET(REQUEST,alignment)==4?1:-1];
 typedef char MARK_Size[sizeof(MARK)==1?1:-1];
@@ -57,7 +55,7 @@ typedef char WORK_request_Offset[FIELD_OFFSET(WORK,request)==0?1:-1];
 typedef char WORK_scalar_Offset[FIELD_OFFSET(WORK,scalar)==0?1:-1];
 typedef char U_q_Offset[FIELD_OFFSET(U,q)==0?1:-1];
 extern "C" int func_0019A098(P*p,float previous,float*stamp){
- float now=g_clock.time;
+ float now=g_clock.t;
  if(now-previous<1.0f)return 0;
  if(stamp){if(now-*stamp<1.0f)return 0;*stamp=now;}
  if(p->mode)return 0;

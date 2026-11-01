@@ -1,3 +1,4 @@
+#include "clock.h"
 #include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};
@@ -9,7 +10,6 @@ struct ASEG;
 struct ASEGA {char pad0[0x40];float playbackRate;};
 struct TUNING {int unused0;ASEG *animation;int unused8;float afterStart,afterEnd,flightTime,minimumTime;int unused1C;U acceleration;};
 struct P {char pad0[0x10];int state;float stateTime;char pad18[8];U previousVelocity;TUNING *tuning;ALO *subject;ASEGA *job;int index;U target;float arrival,end;ALO *related;int kind;int ballistic,steep;void *constraint;};
-struct CLOCK {float time,dt;};
 struct GAME;
 extern CLOCK g_clock;
 extern GAME g_sw;
@@ -46,7 +46,7 @@ extern "C" void func_0020C2F8(P *p,int state)
     U scalar,delta,acceleration,velocity,finalVelocity;
     if(state==p->state)return;
     p->state=state;
-    p->stateTime=g_clock.time;
+    p->stateTime=g_clock.t;
     switch(state){
     case 0:
         ApplyAsegCur(p->tuning->animation,p->subject,0.0f,1.0f,p->index,&p->job);
@@ -96,7 +96,7 @@ extern "C" void func_0020C2F8(P *p,int state)
         qword initialVelocity=Combine(delta.q,inverseTime,acceleration.q,scalar.q);
         Store(&velocity,initialVelocity);
         applyVelocity((char *)subject+adjustment,velocity.q);
-        p->arrival=g_clock.time+time;
+        p->arrival=g_clock.t+time;
         p->end=p->arrival-p->tuning->minimumTime/playbackRate;
         if(p->ballistic){
             register qword timeScalar __asm__("vf1"),motionVelocity __asm__("vf2"),force __asm__("vf3");
@@ -179,6 +179,3 @@ typedef char P_kind_Offset[(FIELD_OFFSET(P,kind)==0x5C)?1:-1];
 typedef char P_ballistic_Offset[(FIELD_OFFSET(P,ballistic)==0x60)?1:-1];
 typedef char P_steep_Offset[(FIELD_OFFSET(P,steep)==0x64)?1:-1];
 typedef char P_constraint_Offset[(FIELD_OFFSET(P,constraint)==0x68)?1:-1];
-typedef char CLOCK_Prefix_Size[(sizeof(CLOCK)==0x8)?1:-1];
-typedef char CLOCK_time_Offset[(FIELD_OFFSET(CLOCK,time)==0x0)?1:-1];
-typedef char CLOCK_dt_Offset[(FIELD_OFFSET(CLOCK,dt)==0x4)?1:-1];

@@ -1,3 +1,4 @@
+#include "clock.h"
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((t*)0)->m))
 typedef int qword __attribute__((mode(TI)));
 struct P;
@@ -6,7 +7,6 @@ struct P{char pad0[12];VE*vt;char pad10[0x38C-0x10];P*selected;char pad390[0xE20
 struct H{char pad0[0x30];P*object;char pad34[16];P*target;char pad48[8];int mode;char pad54[8];P*extra;};
 struct STATE{int kind,pad4,pad8,padC;union{qword data[6];struct{P*object;float amount;char pad18[0x60-8];}s;}payload;};
 struct C{char pad0[16];P*actor;int pad14;H*helper;char pad1C[0x30-0x1C];STATE state;float started,expires;};
-struct CLOCK{float time,dt;};
 extern "C"{
  extern CLOCK g_clock;
  extern char g_sw[];
@@ -46,7 +46,6 @@ static inline void Attack(C*p,STATE*s,P*object){
 typedef char qword_Size[sizeof(qword)==16?1:-1];
 typedef char VE_Size[sizeof(VE)==8?1:-1];
 typedef char STATE_Size[sizeof(STATE)==112?1:-1];
-typedef char CLOCK_Size[sizeof(CLOCK)==8?1:-1];
 typedef char VE_delta_Offset[FIELD_OFFSET(VE,delta)==0?1:-1];
 typedef char VE_fn_Offset[FIELD_OFFSET(VE,fn)==4?1:-1];
 typedef char P_vt_Offset[FIELD_OFFSET(P,vt)==12?1:-1];
@@ -65,8 +64,6 @@ typedef char C_helper_Offset[FIELD_OFFSET(C,helper)==24?1:-1];
 typedef char C_state_Offset[FIELD_OFFSET(C,state)==48?1:-1];
 typedef char C_started_Offset[FIELD_OFFSET(C,started)==160?1:-1];
 typedef char C_expires_Offset[FIELD_OFFSET(C,expires)==164?1:-1];
-typedef char CLOCK_time_Offset[FIELD_OFFSET(CLOCK,time)==0?1:-1];
-typedef char CLOCK_dt_Offset[FIELD_OFFSET(CLOCK,dt)==4?1:-1];
 extern "C" void func_00177618(C*p){
  func_001EEF98(p);
  while(!func_001EF0A8(p)){
@@ -81,7 +78,7 @@ extern "C" void func_00177618(C*p){
     else{
      P*selected=func_0020A408(p->actor,0);
      if(selected){next.kind=2;next.payload.s.object=selected;}
-     else if(p->state.kind==17&&g_clock.time<p->expires)next.kind=17;
+     else if(p->state.kind==17&&g_clock.t<p->expires)next.kind=17;
      else{if(func_00177D48(p))next.kind=16;else next.kind=1;}
     }
    }else next.kind=12;

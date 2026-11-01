@@ -1,3 +1,4 @@
+#include "clock.h"
 #include "vtable.h"
 // Create position and orientation jobs for the selected animated object.
 typedef int qword __attribute__((mode(TI)));
@@ -13,7 +14,6 @@ struct FOLLOW {char pad80[0x80];qword velocity;};
 struct LO {char padC[0xC];VTE *vt;char pad10[0x48];CHANNEL *position,*orientation;SPACE *space;char pad64[0x84];FOLLOW *follow;char padEC[0xC4];M3 basis;char pad1E0[0xE50];ANIM *playing;};
 struct SOURCE {char padC[0xC];VTE *vt;};
 struct P {LO *owner;char pad4[0x30];SOURCE *source;char pad38[0x5C];JOB *positionJob,*otherJob,*orientationJob;};
-struct CLOCK {float time,dt;};
 union VIEWS {struct {M4 intermediate,product,inverse;} matrices;struct {M3 angles,converted;} basis;U scalar;};
 struct WORK {M4 original,sample,start,final;VIEWS views;qword velocity,destination,delta,endVelocity;};
 extern "C" {
@@ -136,7 +136,7 @@ extern "C" void func_001CCC88(P *input,LO *other){
   :"=&r"(receiver),"=&r"(apply),"=m"(work.views.scalar.q),"=m"(work.endVelocity):"m"(table[35].delta),"m"(table[35].pfn),"j"(inverse),"j"(negativeOrEnd),"r"(object));
  work.views.scalar.q=positive;apply(receiver,callbackVelocity);
  }
- float endTime=g_clock.time+phase;
+ float endTime=g_clock.t+phase;
  qword position=func_0022FC48(0,object->position->space,work.final.rows[3]);
  qword endVelocity=func_0022FCC8(0,object->position->space,work.endVelocity);
  {
@@ -164,7 +164,6 @@ typedef char ccc88_final_0[(sizeof(int)==4)?1:-1];
 typedef char ccc88_final_1[(sizeof(unsigned)==4)?1:-1];
 typedef char ccc88_final_2[(sizeof(short)==2)?1:-1];
 typedef char ccc88_final_3[(sizeof(float)==4)?1:-1];
-typedef char ccc88_final_4[(sizeof(CLOCK)==8)?1:-1];
 typedef char ccc88_final_5[(__alignof__(qword)==16)?1:-1];
 typedef char ccc88_final_6[(__alignof__(U)==16)?1:-1];
 typedef char ccc88_final_7[(__alignof__(M4)==16)?1:-1];

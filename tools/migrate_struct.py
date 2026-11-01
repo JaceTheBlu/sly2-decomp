@@ -97,10 +97,24 @@ def main():
         fields = parse_fields(re.sub(r'/\*.*?\*/|//[^\n]*', '', ms[0].group(1), flags=re.S))
         if fields is None: skipped[rel] = 'not a simple struct'; continue
         ren = {}
-        ok = True
+        ok = True; elems = {}
         for n, o, sz, cnt, k in fields:
             if re.fullmatch(r'pad\w*|_?unk\w*', n): continue
             cands = [c for c in by_off.get((o, sz), []) if c[1] == cnt]
+            if not cands and cnt > 1:
+                # a stand-in array over several real fields (`float a[16]`): map each element to the canonical
+                # field, or element of a canonical array, at the same offset
+                m = {}
+                for i in range(cnt):
+                    hit = [(cn, co) for cn, co, csz, ccnt, ck in canon if ck == k and csz == sz and co <= o + i * sz < co + csz * ccnt]
+                    if not hit: break
+                    cn, co = hit[0]
+                    cc = next(x[3] for x in canon if x[0] == cn)
+                    m[i] = cn if cc == 1 else f'{cn}[{(o + i * sz - co) // sz}]'
+                if len(m) == cnt: elems[n] = m; continue
+            if not cands and cnt == 1:   # a scalar stand-in for one element of a canonical array
+                hit = [(cn, co) for cn, co, csz, ccnt, ck in canon if ck == k and csz == sz and ccnt > 1 and co <= o < co + csz * ccnt]
+                if hit: ren[n] = f'{hit[0][0]}[{(o - hit[0][1]) // sz}]'; continue
             if not cands: ok = False; skipped[rel] = f'field {n} @0x{o:X} has no canonical counterpart'; break
             same = [c for c in cands if c[2] == k]
             if not same: ok = False; skipped[rel] = f'field {n} @0x{o:X} is {k}, canonical {cands[0][0]} is {cands[0][2]}'; break
@@ -112,13 +126,18 @@ def main():
         if '--careful' in sys.argv and ren and any(re.search(r'\{[^{}]*\b%s\b[^{}]*\}' % re.escape(old), others) for old in ren):
             skipped[rel] = 'a renamed field name is also used by another struct'; continue
         u = others
+        bad = False
+        for n, m in elems.items():   # every use of a stand-in array must have a constant index
+            if re.search(r'(?:\.|->)\s*%s\b(?!\s*\[\s*\d+\s*\])' % re.escape(n), u): bad = True; break
+            u = re.sub(r'(\.|->)\s*%s\s*\[\s*(\d+)\s*\]' % re.escape(n), lambda x: x.group(1) + m[int(x.group(2))], u)
+        if bad: skipped[rel] = 'stand-in array used with a variable index'; continue
         if local != struct:   # the stand-in had its own name (M3 for MATRIX3): the file must not know the real one yet
             if re.search(r'\b%s\b' % struct, u): skipped[rel] = f'already uses {struct}'; continue
             u = re.sub(r'\b%s\b' % local, struct, u)
         # static asserts on the size of the local stand-in (typedef char X[sizeof(STRUCT)==8?1:-1];) checked the
         # stand-in, not the real type: they go with it
-        u = re.sub(r'^[ \t]*typedef[ \t]+char[ \t]+\w+[ \t]*\[[^\]\n]*(?:sizeof|__alignof__)[ \t]*\([ \t]*(?:struct[ \t]+)?%s[ \t]*\)[^\n]*\n'
-                   % local, '', u, flags=re.M)
+        u = re.sub(r'^[ \t]*typedef[ \t]+char[ \t]+\w+[ \t]*\[[^\]\n]*(?:(?:sizeof|__alignof__)[ \t]*\([ \t]*(?:struct[ \t]+)?%s[ \t]*\)|(?:FIELD_OFFSET|offsetof)[ \t]*\([ \t]*(?:struct[ \t]+)?%s[ \t]*,)[^\n]*\n'
+                   % (local, local), '', u, flags=re.M)
         for old, new in ren.items():
             u = re.sub(r'(\.|->)\s*%s\b' % re.escape(old), r'\g<1>' + new, u)
         if f'#include "{header}"' not in u:

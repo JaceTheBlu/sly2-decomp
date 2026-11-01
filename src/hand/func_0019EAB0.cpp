@@ -1,3 +1,4 @@
+#include "clock.h"
 #include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];int i[4];};
@@ -9,7 +10,6 @@ struct PATH{char pad0[12];VE*vt;char pad10[0x190-0x10];void*focus;char pad194[0x
 struct C{P*actor;int state;float time;PATH*path;float distance;int pad14;int descending;float reset;int previous;char pad24[12];U offset;char pad40[0x30];ASEG*clip2;ASEG*clip0;ASEG*clip1;ASEG*fallback;};
 struct LM{float low,high;};
 struct WORK{U ahead,behind;LM limit;U point,world,target;};
-struct CLOCK{float t,dt;};
 extern "C"{
 extern CLOCK g_clock;extern U g_normalZ;extern P*D_002E1E40;
 void func_001333C0(PATH*,P*);void func_00133448(PATH*,P*);
@@ -55,7 +55,6 @@ typedef char U_Size[sizeof(U)==16?1:-1];
 typedef char VE_Size[sizeof(VE)==8?1:-1];
 typedef char WORK_Size[sizeof(WORK)==96?1:-1];
 typedef char LM_Size[sizeof(LM)==8?1:-1];
-typedef char CLOCK_Size[sizeof(CLOCK)==8?1:-1];
 typedef char C_actor_Offset[FIELD_OFFSET(C,actor)==0?1:-1];
 typedef char C_state_Offset[FIELD_OFFSET(C,state)==4?1:-1];
 typedef char C_time_Offset[FIELD_OFFSET(C,time)==8?1:-1];
@@ -92,8 +91,6 @@ typedef char WORK_world_Offset[FIELD_OFFSET(WORK,world)==64?1:-1];
 typedef char WORK_target_Offset[FIELD_OFFSET(WORK,target)==80?1:-1];
 typedef char LM_low_Offset[FIELD_OFFSET(LM,low)==0?1:-1];
 typedef char LM_high_Offset[FIELD_OFFSET(LM,high)==4?1:-1];
-typedef char CLOCK_t_Offset[FIELD_OFFSET(CLOCK,t)==0?1:-1];
-typedef char CLOCK_dt_Offset[FIELD_OFFSET(CLOCK,dt)==4?1:-1];
 extern "C" void func_0019EAB0(C*p,int next){
  int old=p->state;if(next==old)return;
  WORK w;
