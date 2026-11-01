@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 // MATCH: v7 + case 5 `pvt = p->pvt` read after the qmtc2 asm, which gets a "memory" clobber (lw then can't fill the mfc1->qmtc2 slot). No register pins.
 // v7: aligned 12 -> 1 with NO register pins. Dist3 ends with the guide's mtc1-from-qword helper `__asm__("mtc1 %1, %0" : "=f"(g) : "r"(d), "f"(k))` (gcc emits the qmfc2 v1 itself, asm cost 1 so max.s follows the mtc1 like the target); the $3 pin and the qmfc2 asm are gone. Left (1): case 5 lw pvt fills the slot between the reload mfc1 and the qmtc2 asm. A "$3" clobber on the qmtc2 asm fixes the order but pvt then takes a2 (with the vmulx "$2") or v0 (without it); pins on pvt/pfn on top: 3-11. The game's mfc1 VU_FLOAT ctor asm: 16-22.
@@ -87,7 +88,6 @@ static inline float Dist3(qword a, qword b, float k)
     return g;
 }
 
-static inline float GMax(float a, float b) { return a < b ? b : a; }
 
 #define LINKE(PE, PA, PB) { \
     struct VTE *pvte = &(PE)->pvt->a[1]; \

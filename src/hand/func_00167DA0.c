@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } U;
 struct M4 { qword r[4]; };
@@ -9,7 +10,6 @@ static inline qword Transform(const struct M4 *m,qword p)
  :"=j"(r):"j"(m->r[0]),"j"(m->r[1]),"j"(p),"j"(m->r[2]),"j"(m->r[3]));
  return r;
 }
-static inline qword Sub(qword a,qword b) { qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r; }
 static inline float Length(qword v)
 {
  qword d,one;float f;
@@ -23,7 +23,7 @@ static inline qword MAdd(qword p,qword v,qword k) {qword r;__asm__("vadda.xyzw A
 qword func_00167DA0(const struct M4 *m,qword p,float *radius)
 {
  U u;
- qword d=Sub(Transform(m,D_002BE570),p);
+ qword d=QwSub(Transform(m,D_002BE570),p);
  float len=Length(d);
  if(*radius<len) {
   float ratio=(len-*radius)*0.5f/len;

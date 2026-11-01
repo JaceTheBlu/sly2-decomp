@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 // func_00152C58: MATCH. The last diff was the daddu a0/sb order in the key loop: in sched1 the f12 = scale arg move
 // (reg weight 0) took the t=1 alu slot ahead of a0 = &fontBig (weight +1), so a0 got a later luid than the a[0] store. Pinning scale to $f12 removes that move.
@@ -49,7 +50,6 @@ void func_00117120(float dt, float t, float dtScale, qword p0, qword v0, qword p
 void func_00152C58(P *p);
 }
 
-static inline float GMax(float a, float b) { return a < b ? b : a; }
 void func_00152C58(P *p)
 {
     func_001A5ED8(p);

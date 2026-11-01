@@ -44,11 +44,27 @@ commit of this branch so far). Do not regenerate it on a dirty tree you have not
 | `tools/clean_history.py` | strip agent/lane/wave attributions from comments (already applied) |
 | `tools/sly1match.py SLY1_DIR [--eval]` | pair Sly 2 functions with Sly 1 counterparts → `config/sly1_matches.csv` |
 | `tools/migrate_struct.py STRUCT HEADER [--dry-run] [FILE…]` | replace local re-declarations of a struct by the shared header (fields matched by offset) |
+| `tools/dedupe_inlines.py [--dry-run] [FILE…]` | replace local copies of the include/vu0.h helpers |
+| `tools/consolidate.py STRUCT` | merge all local definitions of a struct by offset (draft a canonical layout) |
 | `tools/resolve_names.py [--sly1 DIR] [--apply]` | give addresses to names the sources use without one (needs the executable) |
 
 ## Progress log
 
 Newest first. Each entry: what changed, how it was verified, the metrics after it.
+
+### 2026-11-01 — Phase 4 started: shared VU0/scalar helpers
+
+- `include/vu0.h`: GetX/GetY/GetZ (lanes of a quadword in a GPR), QwAdd/QwSub (vadd/vsub.xyzw), QwFromG (qmtc2.ni),
+  GMax/GMin/NMin/NMax. Its quadword type is `vu0_qword` (a typedef with its own name: C forbids repeating the
+  sources' `typedef … qword`; `#define`-ing the type broke gcc 2.95, which applied the mode attribute to the
+  function).
+- `tools/dedupe_inlines.py`: a one-line local `static inline` helper is replaced only when it is the same text as
+  a vu0.h helper (positional parameter names, whitespace, inline/__inline__ and qword spellings ignored); calls
+  are renamed (`Sub` → `QwSub`). Files that keep another definition of the name (C++ overloads) are skipped.
+  A first version treated the `VV` wrapper type as `qword`: objcheck showed 3 code changes, now excluded.
+- 149 files, ~240 local helper copies removed. objcheck 0; progress.py 6,662/6,662.
+- Tried and dropped: naming classes by comparing each unknown class's own slot functions with Sly 1 classes' (sizes
+  plus code similarity): SPIRE barely beat TARGET and SM/WR/ALO came out wrong.
 
 ### 2026-11-01 — Class tree and virtual slots
 

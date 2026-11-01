@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 struct P;
 typedef struct { short d; short pad; void (*pfn)(void *, ...); } VT;
@@ -25,7 +26,6 @@ int FIsBasicDerivedFrom__FP5BASIC3CID(int a, int b);
 void func_00148300(struct G *g, int a);
 void func_0019B110(void *p, int a);
 void func_0015E1D8(int a);
-static __inline__ qword VSub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 void func_0019F590(struct P *p, E *q)
 {
     E e;
@@ -34,10 +34,10 @@ void func_0019F590(struct P *p, E *q)
         q = &e;
         if (p == func_001C4840(&g_sw)) {
             qword r = func_0019F3F8(p, &e, 0.0f);
-            float g = func_00196928(VSub(r, p->x58->x70), p->xe8->x80, 1000.0f, -1000.0f, 1.0f, -1.0f);
+            float g = func_00196928(QwSub(r, p->x58->x70), p->xe8->x80, 1000.0f, -1000.0f, 1.0f, -1.0f);
             if (D_002BF940 < g) {
                 int save = p->x9e4;
-                ((void (*)(void *, qword))p->vt[29].pfn)((char *)p + p->vt[29].d, VSub(r, p->x240));
+                ((void (*)(void *, qword))p->vt[29].pfn)((char *)p + p->vt[29].d, QwSub(r, p->x240));
                 p->x9e4 = save;
                 func_002046B0(p, g_cm.x60);
                 ((void (*)(void *, void *))p->vt[30].pfn)((char *)p + p->vt[30].d, p->x1b0);

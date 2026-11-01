@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Resolve one contact between two physics objects: spring push, friction impulses (linear and
 // angular), restoring torque, and the water-splash / emitter-clear effects.
 typedef int qword __attribute__((mode(TI)));
@@ -45,7 +46,6 @@ static inline float X(qword q){float f;__asm__("mtc1 %1,%0":"=f"(f):"r"(q));retu
 static inline float Y(qword q){qword v;float f;__asm__("prot3w %0,%1":"=r"(v):"r"(q));__asm__("mtc1 %1,%0":"=f"(f):"r"(v));return f;}
 static inline float Z(qword q){qword v;float f;__asm__("pextuw %0,$zero,%1":"=r"(v):"r"(q));__asm__("mtc1 %1,%0":"=f"(f):"r"(v));return f;}
 static inline bool Near(qword a,qword b,float epsilon){return func_0011D4D0(X(a),X(b),epsilon)&&func_0011D4D0(Y(a),Y(b),epsilon)&&func_0011D4D0(Z(a),Z(b),epsilon);}
-static inline qword Scalar(float f){qword q;__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(f));return q;}
 static inline qword Scale(qword v,qword k){qword r;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(r):"j"(v),"j"(k));return r;}
 static inline qword Get(O *o,int slot){VE *v=o->vt;return v[slot].get((char *)o+v[slot].delta);}
 static inline qword Sub(qword a,qword b){qword r;asm("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"0"(b));return r;}
@@ -68,7 +68,7 @@ extern "C" void func_002297F8(O *a,O *b){
  float factor;
  if(spring!=0.0f){
   asm volatile("": : :"memory"); // the original re-reads a->physics here instead of reusing the pointer loaded above
-  qword k=Scalar(-spring*span);w.velocity.q=k;
+  qword k=QwFromG(-spring*span);w.velocity.q=k;
   func_001FAC30(a,func_001FA810(&a->physics->constraint,a->motion,Scale(a->physics->direction.q,k)));
  }
  if(friction!=0.0f){
@@ -99,7 +99,7 @@ extern "C" void func_002297F8(O *a,O *b){
  if(spring!=0.0f){
   func_0011B938(&func_001A6318(a)->basis,&w.phase.basis,0);
   func_0011BCF8(&w.phase.basis,&w.angle,&w.axis.vector.q);
-  float gain=spring*3.0f;qword k=Scalar(w.angle*gain*span);
+  float gain=spring*3.0f;qword k=QwFromG(w.angle*gain*span);
   qword rotation=Scale(w.axis.vector.q,k);w.angularNormal.q=k;
   func_001FAC98(a,rotation);
  }

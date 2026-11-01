@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct X;
@@ -22,8 +23,6 @@ void func_0017DD38(void *p, struct X *x);
 inline X::X() { __1M(this); }
 extern "C" {
 }
-static __inline__ float GetX(qword q) { float x; __asm__("mtc1 %1,%0" : "=f"(x) : "r"(q)); return x; }
-static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0,%1" : "=r"(y) : "r"(q)); return y; }
 extern "C" void func_0017E0E0(struct S *p) {
     union { qword q; } hit;
     qword a, b, d, r;

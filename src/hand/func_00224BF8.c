@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef struct MARK { int a[4]; } MARK;
 struct X { char pad[0x60]; };
@@ -18,8 +19,6 @@ qword func_0011E9F8(qword v, float r);
 void func_00224820(struct S *p, int a, int b, qword pos, qword posT, int c, struct A **apa, int cMax, int *pcx, struct X *ax);
 void func_001F7598(struct X *px);
 struct R *func_00156698(void *pv, qword pos, struct S *p);
-static __inline__ qword VAdd(qword a, qword b) { qword r; __asm__("vadd.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
-static __inline__ qword VSub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 void func_00224BF8(struct S *p, int a, int b, qword pos, float r)
 {
     MARK mark;
@@ -34,12 +33,12 @@ void func_00224BF8(struct S *p, int a, int b, qword pos, float r)
     for (i = 0; i < sizeof(D_002C4368) / sizeof(D_002C4368[0]); i++) {
         for (j = 0; j < D_002C4368[i]; j++) {
             qword v = func_0011E208((float)j * 2.0f * 3.1415927f / (float)D_002C4368[i], D_002C4338[i], r);
-            func_00224820(p, a, b, pos, VAdd(pos, v), c, apa, 0x20, &cx, ax);
+            func_00224820(p, a, b, pos, QwAdd(pos, v), c, apa, 0x20, &cx, ax);
         }
     }
     for (k = 0; k < c; k++) {
-        qword v = func_0011E9F8(VSub(apa[k]->pb->pos, pos), r);
-        func_00224820(p, a, b, pos, VAdd(pos, v), c, apa, 0x20, &cx, ax);
+        qword v = func_0011E9F8(QwSub(apa[k]->pb->pos, pos), r);
+        func_00224820(p, a, b, pos, QwAdd(pos, v), c, apa, 0x20, &cx, ax);
     }
     for (m = 0; m < cx; m++)
         func_001F7598(&ax[m]);

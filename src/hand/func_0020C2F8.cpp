@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};
 struct ALO;
@@ -31,10 +32,8 @@ void func_0020C760(P *);
 void func_0020D1A0(void *);
 }
 static inline qword Scalar(float f){qword r;__asm__("qmtc2 %1,%0":"=j"(r):"r"(f));return r;}
-static inline qword Subtract(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword Combine(qword a,qword x,qword b,qword y){qword r;__asm__("vmulax.xyzw ACC,%1,%2x\n\tvmaddx.xyzw %0,%3,%4x":"=j"(r):"j"(a),"j"(x),"j"(b),"j"(y));return r;}
 static inline void Store(U *home,qword value){__asm__("sqc2 %1,%0":"=m"(home->q):"j"(value));}
-static inline float Max(float a,float b){return a<b?b:a;}
 static inline qword MotionScalar(U *home,float value){
     register qword vector __asm__("vf3");
     __asm__("qmtc2.ni %1,%0":"=j"(vector):"r"(value));
@@ -86,7 +85,7 @@ extern "C" void func_0020C2F8(P *p,int state)
             }
             time=func_00196928(delta.q,acceleration.q,low,high,slopeLow,slopeHigh);
         }else time=motionTuning->flightTime/playbackRate;
-        time=Max(p->tuning->minimumTime/playbackRate,time);
+        time=GMax(p->tuning->minimumTime/playbackRate,time);
         ALO *subject=p->subject;
         VENTRY &entry=subject->vt[35];
         short adjustment=entry.delta;

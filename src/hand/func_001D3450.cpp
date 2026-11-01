@@ -1,3 +1,4 @@
+#include "vu0.h"
 // func_001D3450 (MATCH, T1816 from w4lane10/w5lane3): wheel/suspension support contacts of a SOPART's pruned BSP.
 // Build the wheel frame (owner matrix rotation + wheel world position), prune the part's BSP to the wheel sphere, then:
 //  1. edge pass: every edge between two pruned surfaces that crosses the wheel plane gives a support point (wheel space)
@@ -100,7 +101,6 @@ static inline float Dot(qword a, qword b)
 }
 /* returning the compare as a value gives the target's li 1 / move 0 setcc in this arm only */
 static inline int FOutsideRadius(qword v, float r) { return r * r < Dot(v, v); }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword Lerp(qword a, const VU_FLOATQ &sa, qword b, const VU_FLOATQ &sb)
 {
     qword r;
@@ -133,7 +133,6 @@ static inline qword Pack(float x, float y, float z)
     return q;
 }
 static inline float Clamp(float v, float low, float high) { if (v < low) return low; else if (high < v) return high; else return v; }
-static inline float Min(float a, float b) { return b < a ? b : a; }
 /* keep VU_FLOAT's mfc1 on this line: gcse hashes asm line numbers, which orders the PRE spill slots (0xFD0..0x1000) */
 struct VU_FLOAT { qword q; VU_FLOAT(float g) { __asm__("mfc1 %0,%1" : "=r"(q) : "f"(g)); } };
 static inline VU_VECTOR Scale(const qword &a, const VU_FLOAT &s) { qword r; __asm__("vmulx.xyzw %0,%1,%2x" : "=j"(r) : "j"(a), "j"(s.q)); return VU_VECTOR(r); }
@@ -217,7 +216,7 @@ extern "C" void func_001D3450(OWNER *owner, WHEEL *wheel, SOPART *ppart, int unu
             psupport = &asupport[csupport++];
             VECTOR normal;
             normal.q = plane;
-            if (Dot(normal.q, Sub(pos0, pos1)) < 0.0f) {
+            if (Dot(normal.q, QwSub(pos0, pos1)) < 0.0f) {
                 psupport->apsurf[1] = psurfOther;
                 psupport->apsurf[0] = psurf;
             } else {
@@ -312,7 +311,7 @@ extern "C" void func_001D3450(OWNER *owner, WHEEL *wheel, SOPART *ppart, int unu
             point.x = x;
             point.y = 0.0f;
             point.z = z;
-            float amount = Min(-PlaneDistTo(*(qword *)&local, *(qword *)&point) / local.z, height);
+            float amount = GMin(-PlaneDistTo(*(qword *)&local, *(qword *)&point) / local.z, height);
             if (best < amount) {
                 best = amount;
                 VECTOR4 packed;

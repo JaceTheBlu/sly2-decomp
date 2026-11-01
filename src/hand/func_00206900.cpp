@@ -1,3 +1,4 @@
+#include "vu0.h"
 extern "C" {
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned long ulong;
@@ -22,7 +23,6 @@ int func_002085D0(struct P *,struct P *,int);
 void func_00153DE0(struct MANAGER *);
 struct ENTRY *func_00154180(struct MANAGER *,struct P *);
 void func_0020A9A8(struct ANCHOR *,int);
-static __inline__ qword Subtract(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static __inline__ float LengthXY(qword a){qword r;float f;__asm__("vmul.xy %0,%1,%1\n\tvaddy.x %0,%0,%0y":"=j"(r):"j"(a));__asm__("vsqrt Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,Q":"+j"(r));__asm__("mtc1 %1,%0":"=f"(f):"r"(r));return f;}
 static __inline__ float Z(qword q){float f;__asm__("pextuw %0,$zero,%1":"=r"(f):"r"(q));return f;}
 static __inline__ float Abs(float f){return __builtin_fabsf(f);}
@@ -71,7 +71,7 @@ void func_00206900(struct P *p)
                         float distance;
                         ownerPosition=func_001A62E8(p);
                         otherPosition=func_001A62E8(object);
-                        distance=LengthXY(Subtract(ownerPosition,otherPosition));
+                        distance=LengthXY(QwSub(ownerPosition,otherPosition));
                         if(distance<D_002C3D04 && (unsigned int)candidateCount<64){
                             struct CANDIDATE *record;
                             int old;
@@ -125,7 +125,7 @@ void func_00206900(struct P *p)
                 qword ownPosition,difference;
                 anchorPosition=func_001A62E8(p->anchor->object);
                 ownPosition=func_001A62E8(p);
-                difference=Subtract(anchorPosition,ownPosition);
+                difference=QwSub(anchorPosition,ownPosition);
                 if(Near(difference))func_0020A9A8(p->anchor,2);
             }break;
             }

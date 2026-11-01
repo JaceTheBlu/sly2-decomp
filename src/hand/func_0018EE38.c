@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 struct VT { struct { short d; short pad; float *(*pfn)(void *); } a[40]; };
 struct P { char pad[0x18]; float g18; };
@@ -13,8 +14,6 @@ extern float RadNormalize__Ff(float g);
 extern int func_0018ED98(struct O *p);
 extern float D_002BF4AC;
 extern char D_002BF4B0[];
-static __inline__ float GetZ(qword q) { float z; __asm__("pextuw %0, $0, %1" : "=r"(z) : "r"(q)); return z; }
-static __inline__ qword VSub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 int func_0018EE38(struct O *p)
 {
     int n;
@@ -22,7 +21,7 @@ int func_0018EE38(struct O *p)
         qword d, l;
         float g;
         int f;
-        d = VSub(func_001A62E8(p->p10DC), func_001A62E8(p));
+        d = QwSub(func_001A62E8(p->p10DC), func_001A62E8(p));
         __asm__("vmul.xy %0, %1, %1\n\tvaddy.x %0, %0, %0y" : "=j"(l) : "j"(d));
         __asm__("vsqrt Q, %1x\n\tvwaitq\n\tvaddq.x %0, $vf0, Q" : "=j"(l) : "j"(l));
         __asm__("qmfc2.ni %0, %1" : "=r"(g) : "j"(l));

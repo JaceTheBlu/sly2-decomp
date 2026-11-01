@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 extern struct CLOCK g_clock;
@@ -23,7 +24,6 @@ qword func_001C1EC0(struct X *s, qword v);
 void func_0011EE08(qword p, qword a, qword b, qword *pc, float *pt, int n);
 void func_001E6180(struct B *b);
 int func_001C02D0(void *q, qword a, qword b, struct B *c);
-static __inline__ float GetZ(qword q) { float z; __asm__("pextuw %0,$0,%1" : "=r"(z) : "r"(q)); return z; }
 void func_0017DA28(struct S *p) {
     struct X x;
     int k;

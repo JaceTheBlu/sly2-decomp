@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct X { char pad[0x1A8]; float g1A8; char pad2[0x1840 - 0x1AC]; int x1840; };
@@ -13,8 +14,6 @@ float RadNormalize__Ff(float g);
 float func_00204740(struct X *px);
 float func_0011CFE0(float g, float dg);
 void func_00204660(struct X *px, float g);
-static __inline__ float GetX(qword q) { float x; __asm__("mtc1 %1,%0" : "=f"(x) : "r"(q)); return x; }
-static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0,%1" : "=r"(y) : "r"(q)); return y; }
 void func_00146F18(struct P *p)
 {
     func_001EEF98(p);

@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Cache eleven Hermite samples of one path segment (control points transformed by the path matrix)
 // and the cumulative lengths between them.
 typedef int qword __attribute__((mode(TI)));
@@ -32,7 +33,6 @@ static inline qword Point(qword m0, qword m1, qword m2, qword m3, qword v)
             : "=j"(r) : "j"(m0), "j"(m1), "j"(m2), "j"(m3), "j"(v));
     return r;
 }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline float Len(qword a)
 {
     qword one;
@@ -69,7 +69,7 @@ void func_001E5FC8(struct PATH *p, int i)
         float frac = (float)j * 0.1f;
         func_00117120(duration, frac * duration, 1.0f, start, a, end, b, &cur.q, 0, 0);
         if (j > 0)
-            p->lengths[j] = p->lengths[j - 1] + Len(Sub(prev.q, cur.q));
+            p->lengths[j] = p->lengths[j - 1] + Len(QwSub(prev.q, cur.q));
         prev.q = cur.q;
     }
     p->segment = i;

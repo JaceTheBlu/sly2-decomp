@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));typedef unsigned int uint;
 union U{qword q;float f[4];int i[4];};struct P;
 struct CONTACT{char pad0[8];P*owner;char padC[0x80-12];U normal;char pad90[0x1C];CONTACT*next;};
@@ -5,7 +6,6 @@ struct GROUP{CONTACT*first;GROUP*next;};struct COLLISION{char pad0[0x64];GROUP*g
 struct FRAME{};struct REQ{int bytes,alignment;};union SCRATCH{U scalar;REQ request;};struct WORK{U normals[64];SCRATCH scratch;FRAME frame;U residual,original;};
 extern "C"{extern U g_normalZ;extern float D_002A63B0;FRAME*func_001AE478(FRAME*);void _$_18CBinaryInputStream(FRAME*,int);void*PvAllocStackImpl__FP7SWALLOC(REQ*);void func_0011AD30(int,float*,float*,float*,float);void func_00195FB8(MOVE*,int,void*);}
 static inline void Publish(U*home,qword q){__asm__ volatile("sqc2 %1,%0":"=m"(home->q):"j"(q));}
-static inline qword Scalar(float f){qword q;__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(f));return q;}
 static inline qword Scale(qword v,qword k){__asm__("vmulx.xyzw %0,%1,%2x":"=j"(v):"j"(v),"j"(k));return v;}
 static inline float Z(qword q){float f;__asm__("qmfc2.ni %0,%1":"=r"(q):"j"(q));__asm__("pextuw %0,$zero,%0":"+r"(q));__asm__("mtc1 %1,%0":"=f"(f):"r"(q));return f;}
 static inline qword Reject(qword value,qword up){qword q,one;__asm__("vmul.xyz %0,%2,%3\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=&j"(q),"=&j"(one):"j"(value),"j"(up));__asm__("vmulx.xyzw %0,%1,%2x":"=j"(q):"j"(up),"j"(q));__asm__("vsub.xyzw %0,%0,%1":"+j"(value):"j"(q));return value;}
@@ -60,7 +60,7 @@ typedef char Normal_Stride[(FIELD_OFFSET(WORK,normals[1])-FIELD_OFFSET(WORK,norm
 extern "C" void func_00196AA8(MOVE*p,U*out){
  WORK w;unsigned base=(unsigned)w.normals-16;int count=0;CONTACT*c;GROUP*group=p->actor->collision->groups;
  for(;;){c=group?group->first:p->actor->collision->single;
-  if(c){unsigned write=base+count*16;do{if((uint)count>=64)goto collected;qword normal=c->normal.q;if(p->actor!=c->owner){qword negative=Scalar(-1.0f);Publish(&w.scratch.scalar,negative);normal=Scale(normal,negative);}if(Z(normal)>0.7f)continue;write+=16;*(qword*)write=Reject(normal,g_normalZ.q);count++;}while((c=c->next)!=0);}
+  if(c){unsigned write=base+count*16;do{if((uint)count>=64)goto collected;qword normal=c->normal.q;if(p->actor!=c->owner){qword negative=QwFromG(-1.0f);Publish(&w.scratch.scalar,negative);normal=Scale(normal,negative);}if(Z(normal)>0.7f)continue;write+=16;*(qword*)write=Reject(normal,g_normalZ.q);count++;}while((c=c->next)!=0);}
   if(!group)break;group=group->next;
  }
  collected:

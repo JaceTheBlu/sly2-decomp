@@ -1,3 +1,4 @@
+#include "vu0.h"
 // func_001823C8: contact generator. From lane H3v1 (no pins); the plane distance's scalar leaves the VU via gcc's qmfc2 plus an mtc1 asm (GX), as in Lilly's GXOfQw.
 
 typedef int qword __attribute__((mode(TI)));
@@ -34,11 +35,10 @@ static inline float Planar(U*p){
  else{__asm__("vdiv Q,$vf0w,%2x\n\tvwaitq\n\tvmulq.xyzw %0,%1,Q":"=j"(d):"j"(dv),"j"(root));p->q=d;}
  return Scalar(root);
 }
-static inline float GX(qword qw){float x;__asm__("mtc1 %1,%0":"=f"(x):"r"(qw));return x;}
 static inline float Distance(U*dot,U*one,qword plane,qword point){
  qword d=point,o;
  __asm__("vmul.xyz %0,%2,%0\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddaz.x ACC,%1,%0z\n\tvmsubw.x %0,%1,%2w":"+j"(d),"=&j"(o):"j"(plane));
- one->q=o;dot->q=d;return GX(d);
+ one->q=o;dot->q=d;return GetX(d);
 }
 void func_001823C8(P*p,REQUEST*q,int unused2,int unused3,int unused4,CONTACT**pout){
  WORK w;int i,count;qword center;CONTACT**out=pout;

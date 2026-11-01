@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 // func_001D2E18: MATCH, no register pins, VU helper asms only.
 // Vehicle contact/traction update: correct the orientation every 3 s, sum the impulses of the wheel contacts
@@ -89,7 +90,6 @@ static inline VV Divide(VV v, VV scalar) { qword r; __asm__("vdiv $Q,$vf0w,%1x\n
 static inline float Evaluate(const POLY &p, float t) { return p.a + t * (p.b + t * p.c); }
 static inline float Clamp(float v, float low, float high) { if (v < low) return low; else if (high < v) return high; else return v; }
 static inline float ClampTo(float v, const LIMITS &l) { return Clamp(v, l.low, l.high); }
-static inline float Min(float a, float b) { return b < a ? b : a; }
 static inline float Abs(float f) { return __builtin_fabsf(f); }
 
 extern "C" void func_001D2E18(P *p)
@@ -130,7 +130,7 @@ extern "C" void func_001D2E18(P *p)
         contactDone:;
         } while (++i < p->count);
     }
-    float budget = Min(D_002C2140, p->contactScale * total / p->physics->mass);
+    float budget = GMin(D_002C2140, p->contactScale * total / p->physics->mass);
     CLOCK *clock = &g_clock;
     qword origin = p->primary->velocity.q;
     velocity.q = ScalarBits(*(const int *)&clock->dt);

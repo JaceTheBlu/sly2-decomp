@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 struct HIT { qword v0; char pad[0x28 - 0x10]; float g28; char pad1[0x40 - 0x2C]; float g40; char pad2[0x60 - 0x44]; };
 struct CLS { CLS(); ~CLS(); char pad[0x10]; };
@@ -17,7 +18,6 @@ int func_00189EC8(O *p, M *pm, void *px);
 }
 static inline qword VMin(qword a, qword b) { qword r; __asm__("vmini.xyz %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword VMax(qword a, qword b) { qword r; __asm__("vmax.xyz %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
-static inline qword VSub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 int func_00189EC8(O *p, M *pm, void *px)
 {
     if (pm->x4) {
@@ -33,10 +33,10 @@ int func_00189EC8(O *p, M *pm, void *px)
         if ((func_0014CC58(0, a, b, n0, n1, &hit) || func_0014CC58(0, b, c, n0, n1, &hit)) &&
             hit.g40 != 0.0f && 0.7f < hit.g28) {
             qword w;
-            hit.v0 = VSub(hit.v0, g_normalZ);
+            hit.v0 = QwSub(hit.v0, g_normalZ);
             w = func_001A6F00(0, p, hit.v0);
             u.q = w;
-            func_0012DA30(px, VSub(w, pm->v10));
+            func_0012DA30(px, QwSub(w, pm->v10));
             return 1;
         } else {
             func_0012DA30(px, D_002A2DD0);

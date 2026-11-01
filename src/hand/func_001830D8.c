@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } VU;
 struct J { char pad[0x240]; qword v240; char pad2[0x103C - 0x250]; float g103C; int n1040; };
@@ -5,8 +6,6 @@ extern void func_001E6F10(void *p, float t, VU *ppos, VU *pdir);
 extern float func_002458F0(float y, float x);
 extern qword g_normalZ;
 extern qword D_002A2DA0;
-static __inline__ float GetX(qword q) { float x; __asm__("mtc1 %1, %0" : "=f"(x) : "r"(q)); return x; }
-static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0, %1" : "=r"(y) : "r"(q)); return y; }
 static __inline__ qword VLen(qword c)
 {
     qword l, one;

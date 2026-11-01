@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};
@@ -11,12 +12,10 @@ extern "C" void NormalizeRotateMatrix3__FP7MATRIX3(M3 *);
 extern "C" M3 CalculateDmat__FP7MATRIX3T0(const M3 *,const M3 *);
 extern "C" void func_0011BCF8(const M3 *,float *,qword *);
 extern "C" qword func_0022FCC8(OWNER *,OWNER *,qword);
-static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline float Length(qword a){qword d,one;float f;
 __asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=&j"(d),"=&j"(one):"j"(a));
 __asm__("vsqrt $Q,%1x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q":"=j"(d):"0"(d));
 __asm__("qmfc2.ni %0,%1":"=r"(f):"j"(d));return f;}
-static inline qword Scalar(float f){qword q;__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(f));return q;}
 static inline qword AddScaled(qword old,qword v,qword s){__asm__("vadda.xyzw $ACC,%0,$vf0\n\tvmaddx.xyzw %0,%1,%2x":"+j"(old):"j"(v),"j"(s));return old;}
 extern "C" void func_001F5C30(P*p,const M3*orientation,const COEF*c,qword velocity,const COEF*d)
 {
@@ -32,13 +31,13 @@ extern "C" void func_001F5C30(P*p,const M3*orientation,const COEF*c,qword veloci
         if(0.0001f<angle){
             float gain=c->c*angle*angle+c->b*angle+c->a;
             U scalar;
-            qword k=Scalar(gain);
+            qword k=QwFromG(gain);
             {qword result=AddScaled(owner->force,axis.q,k);scalar.q=k;owner->force=result;}
         }
     }
     if(d){
         qword transformed=func_0022FCC8(0,owner->parent,velocity);
-        qword direction=Sub(transformed,owner->velocity);
+        qword direction=QwSub(transformed,owner->velocity);
         float length=Length(direction);
         if(0.0001f<length){
             float gain=(d->c*length+d->b)+d->a/length;
@@ -46,7 +45,7 @@ extern "C" void func_001F5C30(P*p,const M3*orientation,const COEF*c,qword veloci
             U scalar;
             qword k;
             if(limit<gain)gain=limit;
-            k=Scalar(gain);
+            k=QwFromG(gain);
             {qword result=AddScaled(owner->force,direction,k);scalar.q=k;owner->force=result;}
         }
     }

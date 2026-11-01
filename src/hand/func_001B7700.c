@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union {qword q;float f[4];} U;
 struct LO{char pad[0x30];qword pos;char pad40[0x60];struct LO*parent;char padA4[0xC];qword velocity;};
@@ -16,7 +17,6 @@ static inline qword Scale(qword v,float f,U*u){qword s,r;__asm__("qmtc2.ni %1,%0
 static inline qword FinalLaunchScale(const qword*up,int bits,U*scalar){register qword factor __asm__("vf2"),source __asm__("vf1"),result __asm__("vf3");__asm__("qmtc2.ni %4,%0\n\tlqc2 %1,%5\n\tvmulx.xyzw %2,%1,%0x\n\tsqc2 %0,%3":"=j"(factor),"=j"(source),"=j"(result),"=m"(scalar->q):"r"(bits),"m"(*up));return result;}
 static inline qword AddScaled(qword a,qword b,qword s,U*u){qword r;u->q=s;__asm__("vadda.xyzw ACC,%1,$vf0\n\tvmaddx.xyzw %0,%2,%3x":"=j"(r):"j"(a),"j"(b),"j"(u->q));return r;}
 static inline qword AddScaledMemory(const U*p,qword b,qword s){qword a,r;__asm__("lqc2 %1,%2\n\tvadda.xyzw ACC,%1,$vf0\n\tvmaddx.xyzw %0,%3,%4x":"=j"(r),"=&j"(a):"m"(p->q),"j"(b),"j"(s));return r;}
-static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword Div(qword v,qword s,U*u){qword r;u->q=s;__asm__("vdiv Q,$vf0w,%1x\n\tvwaitq\n\tvmulq.xyzw %0,%2,Q":"=j"(r):"j"(u->q),"j"(v));return r;}
 static inline void Store(qword*p,qword q){__asm__("sqc2 %1,%0":"=m"(*p):"j"(q));}
 static inline struct P*CaptureActor(struct P*input){register struct P*output __asm__("$16");__asm__("daddu %0,%1,$zero":"=r"(output):"r"(input));return output;}
@@ -103,7 +103,7 @@ void func_001B7700(struct P*p,qword goal,float*animation,float*duration,qword*ou
     __asm__("swc1 %2,%0\n\tqmtc2.ni %3,%1":"=m"(*duration),"=j"(averageScalar):"f"(t),"r"(bits));
     predicted=AddScaled(actualPosition,mean,averageScalar,&u);
   {
-   qword correction=Div(Sub(goal,predicted),qt,&u);
+   qword correction=Div(QwSub(goal,predicted),qt,&u);
    register qword initial __asm__("vf5");register qword final __asm__("vf2");
    __asm__("lqc2 %0,%2\n\tvadd.xyzw %0,%0,%3\n\tvadd.xyzw %1,%4,%3":"=&j"(initial),"=j"(final):"m"(v.q),"j"(correction),"j"(predictedEnd));
    start.q=initial;end=final;

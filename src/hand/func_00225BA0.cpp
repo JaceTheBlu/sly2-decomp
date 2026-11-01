@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 // Update target-facing angles or integrate angular input.
 typedef int qword __attribute__((mode(TI)));
@@ -22,7 +23,6 @@ void func_00129EC8(void *);
 }
 struct CRef {int kind,value;CRef(const CRef &) __asm__("func_001291A8");~CRef(){func_00129EC8(this);}};
 extern "C" CRef func_002581C0(int,void *);
-static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword Make(float x,float y,float z) {
     qword q,t;
     __asm__("mfc1 %0,%2\n\tmfc1 %1,%3\n\tpextlw %0,%1,%0\n\tmfc1 %1,%4\n\tpcpyld %0,%1,%0":"=&r"(q),"=&r"(t):"f"(x),"f"(y),"f"(z));
@@ -33,7 +33,7 @@ extern "C" void func_00225BA0(S *p){
         M3 m;
         float pitch,yaw;
         qword target;
-        m=func_0011B7E0((target=func_001A62E8(p->target),Sub(target,func_001A62E8(p))));
+        m=func_0011B7E0((target=func_001A62E8(p->target),QwSub(target,func_001A62E8(p))));
         func_0011BC88(&m,&pitch,&yaw);
         float dp=pitch-p->pitch;
         float dy=yaw-p->yaw;

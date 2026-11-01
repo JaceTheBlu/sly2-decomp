@@ -1,3 +1,4 @@
+#include "vu0.h"
 // func_001C3500: builds an orientation basis (M3) for a position `distance` along a path.
 // It samples the path tangent at the start, then tries sample distances distance, +10, -10, +20, -20 ... (wrapped
 // for cyclic paths, rejected outside [low,high] otherwise) until the direction between the samples at +-50 is within
@@ -46,7 +47,6 @@ static inline qword Normalize(qword v, qword fallback)
         return fallback;
     return Unit(v, len);
 }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline float Dot(qword a, qword b)
 {
     qword d, one;
@@ -95,7 +95,7 @@ extern "C" void func_001C3500(PATH *p, float distance, int forward, M3 *out)
             float r = 50.0f;
             func_001E6F10(p, func_001E6728(p, sample + r), &fwd.q, 0);
             func_001E6F10(p, func_001E6728(p, sample - r), &back.q, 0);
-            w.direction = Normalize(Sub(fwd.q, back.q), g_normalZ);
+            w.direction = Normalize(QwSub(fwd.q, back.q), g_normalZ);
             if (i == 0)
                 w.first = w.direction;
             if (Dot(w.tangent, w.direction) > -0.9f)

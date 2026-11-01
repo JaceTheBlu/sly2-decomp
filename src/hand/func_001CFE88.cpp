@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Follow an animated target: sample the target's pose (func_002309E8), blend the end velocity of a Hermite step from
 // the position delta, the current velocity and the acceleration, run the step (func_00117120), then spin the
 // orientation about its axis in proportion to the elapsed time.
@@ -21,7 +22,6 @@ void func_001CFE88(S *);
 static inline M3 Rotation(qword axis, float angle) return result { LoadRotateMatrixRad__FfUx(&result, axis, angle); }
 // broadcast a float into a VU register; the union local is the dead scratch store the original left on the stack
 static inline qword Splat(float f) { U u; qword q; __asm__("qmtc2.ni %1,%0" : "=j"(q) : "r"(f)); u.q = q; return q; }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword Scale(qword a, qword s) { __asm__("vmulx.xyzw %0,%0,%1x" : "+j"(a) : "j"(s)); return a; }
 // d*s1.x + v*s2.x + a*s3.x
 static inline qword Blend(qword d, qword v, qword a, qword s1, qword s2, qword s3)
@@ -31,7 +31,6 @@ static inline qword Blend(qword d, qword v, qword a, qword s1, qword s2, qword s
             : "=j"(r) : "j"(d), "j"(v), "j"(a), "j"(s1), "j"(s2), "j"(s3));
     return r;
 }
-static inline float Max(float a, float b) { return a < b ? b : a; }
 // a (3x3 rotation) * b, row by row
 static inline M3 Mul(const M3 &a, const M3 &b) return r {
     __asm__("vmulax.xyz $ACC,%1,%4x\n\tvmadday.xyz $ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z" : "=j"(r.r[0]) : "j"(a.r[0]), "j"(a.r[1]), "j"(a.r[2]), "j"(b.r[0]));
@@ -45,9 +44,9 @@ void func_001CFE88(S *p)
     M4 m;
     M3 spin;
     p->prev = p->pos;
-    float remain = Max(clock->dt, p->start + p->duration - clock->t);
+    float remain = GMax(clock->dt, p->start + p->duration - clock->t);
     func_002309E8(p->x->data, 0, &m, 0, remain);
-    qword delta = Sub(m.r[3], p->pos);
+    qword delta = QwSub(m.r[3], p->pos);
     qword w1 = Splat(1.5f / remain);
     qword w2 = Splat(-0.5f);
     qword w3 = Splat(0.25f);

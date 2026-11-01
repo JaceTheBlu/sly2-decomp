@@ -1,3 +1,4 @@
+#include "vu0.h"
 /* MATCH: the loop's func_0011E1A0 result is a plain qword local; gcc emits the qmtc2 itself and schedules it. */
 // Complete camera segment avoidance WIP. FRAME has no instance members.
 typedef int qword __attribute__((mode(TI)));
@@ -29,7 +30,6 @@ struct WORK {V minimum,maximum,origin,candidate;MARK mark;V offset,rayEnd,best,s
 static inline qword Min(qword a,qword b){qword r;__asm__("vmini.xyz %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword Max(qword a,qword b){qword r;__asm__("vmax.xyz %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword Sub(qword a,qword b){__asm__("vsub.xyzw %0,%0,%1":"+j"(a):"j"(b));return a;}
-static inline qword Add(qword a,qword b){qword r;__asm__("vadd.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword ToVF(qword q){qword r;__asm__("qmtc2.ni %1,%0":"=j"(r):"r"(q));return r;}
 static inline qword Scalar(float f){qword r;__asm__("qmtc2.ni %1,%0":"=j"(r):"r"(f));return r;}
 static inline qword ScalarHome(V &home,float value){home.q=Scalar(value);return home.q;}
@@ -58,7 +58,7 @@ extern "C" void func_00223A70(S *p,qword begin,qword end,qword *out){
         do{
             qword off=func_0011E1A0(w.phase+angle,w.radius,w.height);
             w.offset.q=off;
-            w.rayEnd.q=Add(begin,off);
+            w.rayEnd.q=QwAdd(begin,off);
             func_0014EA08(w.count,w.objects,w.origin.q,w.rayEnd.q,minGap,&w.low,&w.high);
             float cost=(1.25f-w.high)*(Abs(angle)+0.47123894f);
             if(cost<bestCost){

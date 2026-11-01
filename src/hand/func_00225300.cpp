@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "util.h"
 // State-5 update: fade the actor in, hand it control of the source's basis, then drop a prize and leave state 3.
 // No actor -> state 3; actor without a live 0xB0 behaviour -> state 2. Otherwise copy the source's (or own) world basis
@@ -38,7 +39,6 @@ void func_0012D108(void *,qword);
 void func_001C6FD8(void *,int,qword,void *,int);
 void func_001619A0(GAME *,int,void *);
 }
-static inline qword Sub(qword a,qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a),"j"(b)); return r; }
 static inline float Length(qword d) {
     qword one; float f;
     __asm__("vmul.xyz %0,%0,%0\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z" : "+j"(d),"=j"(one));
@@ -70,7 +70,7 @@ extern "C" void func_00225300(struct S *p) {
                     qword pos=p->source?func_001A62E8(p->source):func_001A62E8(p);
                     qword other;
                     other=func_001A62E8(p->actor);
-                    if(Length(Sub(pos,other))<100.0f)func_0017A8C8(r,4);
+                    if(Length(QwSub(pos,other))<100.0f)func_0017A8C8(r,4);
                 }
                 if(p->actor->color) {
                     float t=(g_clock.t-p->time)/D_002C43B0;

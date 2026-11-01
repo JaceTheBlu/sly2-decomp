@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 struct E {unsigned short a,b;int pad;struct E*next;};
 struct Poly {char pad[0x10];struct E*edges;};
@@ -10,12 +11,11 @@ extern "C" struct FRAME *func_001AE478(struct FRAME*);
 extern "C" void _$_18CBinaryInputStream(struct FRAME*,int);
 extern "C" void *PvAllocStackImpl__FP7SWALLOC(struct REQ*);
 extern "C" int PruneBsp__FP3BSPT0fUxPiPP3BSP(void*,int,qword,int*,struct Entry**,float);
-static inline int Min(int a,int b){return a<b?a:b;}
 // Collect unique edges incident to a geometry point.
 extern "C" int func_001665F0(struct P*p,struct G*g,int index,int max,struct E**out){
  struct FRAME frame;int capacity,limit,count,i;struct Entry*first,*end;
  func_001AE478(&frame);
- capacity=Min(g->count,0x1555);limit=capacity;struct REQ req(capacity*12,16);
+ capacity=NMin(g->count,0x1555);limit=capacity;struct REQ req(capacity*12,16);
  end=first=(struct Entry*)PvAllocStackImpl__FP7SWALLOC(&req);
  if(PruneBsp__FP3BSPT0fUxPiPP3BSP(g->tree,0x7FFFFFFF,p->points[index],&limit,&end,1.0f)!=2){_$_18CBinaryInputStream(&frame,2);return 0;}
  int ne=end-first;

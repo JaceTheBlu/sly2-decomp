@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Render generated sprite text, wrapped speech, or the scrolling ticker.
 typedef unsigned int uint;
 typedef int qword __attribute__((mode(TI)));
@@ -31,7 +32,6 @@ extern "C" float func_00215ED8(RT *);
 extern "C" float GModPositive__Fff(float,float);
 extern "C" void func_001DA5C8(SCROLL *,int);
 extern "C" void func_002166B0(RT *,T *,DATA *);
-static inline float Max(float a,float b){return a<b?b:a;}
 
 extern "C" void func_00216BC8(S *p,T *t,DATA *data,int unused){
     char text[0x400];
@@ -90,7 +90,7 @@ extern "C" void func_00216BC8(S *p,T *t,DATA *data,int unused){
             period=textWidth*0.01f;
             position=GModPositive__Fff(elapsed,period);
             if(D_003DA0C0.finish>=0.0f){
-                float finish=Max(D_003DA0C0.finish,(textWidth+Max(0.0f,textWidth-p->width*scale)+paddingWidth)*0.01f);
+                float finish=GMax(D_003DA0C0.finish,(textWidth+GMax(0.0f,textWidth-p->width*scale)+paddingWidth)*0.01f);
                 if(elapsed>=finish)func_001DA5C8(&D_003DA0C0,3);
             }
             t->a[4]-=position/period*textWidth;

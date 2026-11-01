@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 typedef int qw __attribute__((mode(TI)));
 union U {qw q;float f[4];int i[4];};
@@ -17,7 +18,6 @@ void func_001CEAA8(RIP*,float);
 void func_0011EE08(qw,qw,qw,qw*,float*,float*);
 int func_001CEB08(RIP*,SHAPE*,qw,qw);
 }
-static inline float Max(float a,float b){return a<b?b:a;}
 static inline float Evaluate(POLY*p,float t){return p->a+t*(p->b+t*p->c);}
 union SPECIAL_WORD {float value;int bits;};
 struct SPECIAL_PAGE {char before[0x1F60];SPECIAL_WORD duration,blend;};
@@ -175,7 +175,7 @@ int func_001CEB08(RIP*p,SHAPE*incomingShape,qw point,qw normal){
  register qw difference __asm__("vf1");register float zero __asm__("$f1");
  __asm__("vsub.xyzw %0,%2,%3\n\tmtc1 $zero,%1":"=j"(difference),"=f"(zero):"j"(contact),"j"(position));
  __asm__("vmul.xyz %0,%0,%1\n\tvaddw.x $vf3,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,$vf3,%0z":"+j"(difference):"j"(tailNormal):"vf3");
- register float distance __asm__("$f0")=Max(SecondProjection(difference),zero)+unit;
+ register float distance __asm__("$f0")=GMax(SecondProjection(difference),zero)+unit;
  qw scale=DistanceValue(distance);
  __asm__("vadda.xyzw $ACC,%0,$vf0\n\tvmaddx.xyzw %0,%3,%4x\n\tsqc2 %4,%1\n\tsqc2 %0,%2":"+j"(position),"=m"(w.scalar.q),"=m"(p->position.q):"j"(tailNormal),"j"(scale));
  }

@@ -1,3 +1,4 @@
+#include "vu0.h"
 // func_001A4478: per-frame "shader basis" packets for a query point.
 //  1. point = *p->input (optionally transformed by M4 *transform); func_001A3F78 collects the 4 best-ranked objects.
 //  2. If p->strength != 0: four 48-byte VIF packets (tag 0x6C03C000 | (i*3+0x15) + 12 words), from each result
@@ -65,8 +66,6 @@ static inline qword AddScaled(qword base, const qword &v, VU_FLOAT g)
     return r;
 }
 static inline qword Scale(qword v, VU_FLOAT g) { qword r; __asm__("vmulx.xyzw %0,%1,%2x" : "=j"(r) : "j"(v), "j"(g.q)); return r; }
-static inline qword Add(qword a, qword b) { qword r; __asm__("vadd.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword Divide(qword v, VU_FLOAT g) { qword r; __asm__("vdiv $Q,$vf0w,%1x\n\tvwaitq\n\tvmulq.xyzw %0,%2,$Q" : "=j"(r) : "j"(g.q), "j"(v)); return r; }
 static inline float Length(qword v)
 {
@@ -160,7 +159,7 @@ extern "C" void func_001A4478(WORLD *world, M4 *transform, P *p)
             Clear(p);
         } else {
             qword center = Divide(sum, VU_FLOAT(total));
-            qword dir = Sub(point, center);
+            qword dir = QwSub(point, center);
             float dist = Length(dir);
             float limit = D_002BFC94 * p->limit;
             float extent;
@@ -192,7 +191,7 @@ extern "C" void func_001A4478(WORLD *world, M4 *transform, P *p)
             SPHERE spheres[3];
             spheres[0].pos = point;
             spheres[0].radius = p->limit;
-            spheres[1].pos = Add(center, basis.row[2].q);
+            spheres[1].pos = QwAdd(center, basis.row[2].q);
             spheres[1].radius = p->limit * extent / dist;
             spheres[2].pos = AddScaled(center, basis.row[2].q, VU_FLOAT(1.5f));
             *(int *)&spheres[2].radius = 0;

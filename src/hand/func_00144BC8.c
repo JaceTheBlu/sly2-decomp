@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 // NEAR MISS: 4/150. Hard-reg VF vars in Dot fixed the first block; remaining: 2nd block vsub scheduled before the lui of D_002BD2F0 (target lui first).
 typedef int qword __attribute__((mode(TI)));
@@ -19,8 +20,6 @@ qword func_001A62E8(void *p);
 float func_002458F0(float y, float x);
 int FIsBasicDerivedFrom__FP5BASIC3CID(struct O *p, int k);
 void func_001C45A8(struct Q *q);
-static __inline__ float GetX(qword q) { float x; __asm__("mtc1 %1,%0" : "=f"(x) : "r"(q)); return x; }
-static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0,%1" : "=r"(y) : "r"(q)); return y; }
 
 static __inline__ float LenXY(qword d)
 {

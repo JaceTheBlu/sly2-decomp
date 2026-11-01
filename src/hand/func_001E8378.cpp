@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 /* func_001E8378 (Lilly's range): one RK4-style step of a spring rope (CHAIN, same struct as matched func_001E9090).
  * Matching tricks (T1869, see notes/190000-1F0000_lanes.md):
@@ -163,7 +164,6 @@ static inline float NormalizeV(U *pv, const qword &fallback, float prev)
     return GFromQw(len);
 }
 static inline float SqrtF(float g) { float r; __asm__ __volatile__("sqrt.s %0, %1" : "=&f"(r) : "f"(g)); return r; }
-static inline float GMax(float a, float b) { return a < b ? b : a; }
 static inline int FWithin(VV a, VV b, float s) { return GFromQw(Length(Sub(a, b))) < s; }
 
 static inline void Store(U *pd, VV v) { pd->q = v; }

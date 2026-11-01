@@ -1,15 +1,14 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union {qword q;float f;} V;
 struct TRI {int index[3];};
 struct MESH {qword *velocity,*acceleration;struct TRI *triangles;};
 struct P {void *x0;int x4;float maximum;int xC;struct MESH*mesh;char pad14[0x64];int count;qword *positions;int triCount;void *planes;char pad88[0x20];int state;};
 void func_00119308(void*,qword,qword,qword);
-static inline qword Scalar(float f){qword q;__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(f));return q;}
 static inline qword Step(qword a,qword b,qword s){register qword r __asm__("vf5");
 __asm__("vadda.xyzw $ACC,%1,$vf0\n\tvmaddx.xyzw %0,%2,%3x":"=&j"(r):"j"(a),"j"(b),"j"(s));return r;}
 static inline qword Position(qword p,qword old,qword next,qword half,V *scalar){register qword r __asm__("vf3");
 __asm__("sqc2 %5,%1\n\tvadda.xyzw $ACC,%2,$vf0\n\tvmaddax.xyzw $ACC,%3,%5x\n\tvmaddx.xyzw %0,%4,%5x":"=&j"(r),"=m"(scalar->q):"j"(p),"j"(old),"j"(next),"j"(half));return r;}
-static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline float LengthSquared(qword q){qword r,one;float f;
 __asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(r),"=&j"(one):"j"(q));
 __asm__("qmfc2.ni %0,%1":"=r"(f):"j"(r));return f;}
@@ -27,9 +26,9 @@ void func_001F6EF8(struct P*p,float dt)
  float maximum=0.0f;
  positions=p->positions;
  if(initialCount>0){
-   register qword time __asm__("vf7")=Scalar(dt);
+   register qword time __asm__("vf7")=QwFromG(dt);
    register int invalid __asm__("$7")=-1;
-   register qword half __asm__("vf6")=Scalar(dt*0.5f);
+   register qword half __asm__("vf6")=QwFromG(dt*0.5f);
    register qword *position __asm__("$3")=positions;
    register qword *velocityCursor __asm__("$4")=VelocityCursor(velocity);
    register int limit __asm__("$2");
@@ -41,7 +40,7 @@ void func_001F6EF8(struct P*p,float dt)
      __asm__("sqc2 %4,%2\n\tlqc2 %0,%3\n\tlw %1,%5":"=j"(force),"=r"(state),"=m"(scalar.q):"m"(*acceleration),"j"(time),"m"(p->state));
      next=Step(old,force,time);
      newpoint=Position(point,old,next,half,&scalar);
-     if(state!=invalid && 1.0f<LengthSquared(Sub(point,newpoint)))p->state=invalid;
+     if(state!=invalid && 1.0f<LengthSquared(QwSub(point,newpoint)))p->state=invalid;
      square=LengthSquared(newpoint);
      *position=newpoint;
      *velocityCursor=next;

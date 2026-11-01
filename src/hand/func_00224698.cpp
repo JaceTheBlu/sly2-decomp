@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Orient an active linked object toward its target in the horizontal plane.
 typedef int qword __attribute__((mode(TI)));
 struct M3 { qword r[3]; };
@@ -14,12 +15,11 @@ void func_001F5C30(S *,M3 *,void *,qword,void *);
 }
 static inline qword ToVF(qword a) { qword r; __asm__ __volatile__("qmtc2.ni %1,%0" : "=j"(r) : "r"(a));return r; }
 static inline qword Read(const qword &a) { qword r;__asm__("lqc2 %0,%1" : "=j"(r) : "m"(a));return r; }
-static inline qword Sub(qword a,qword b) { qword r;__asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a),"j"(b));return r; }
 static inline qword Flatten(qword d,qword up) {
     qword t,one;
     __asm__("vmul.xyz %0,%2,%3\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z" : "=&j"(t),"=&j"(one) : "j"(d),"j"(up));
     __asm__("vmulx.xyzw %0,%1,%2x" : "=j"(t) : "j"(up),"j"(t));
-    return Sub(d,t);
+    return QwSub(d,t);
 }
 static inline qword Dot(qword d) { qword len,one;
     __asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z" : "=&j"(len),"=&j"(one) : "j"(d));return len; }
@@ -36,7 +36,7 @@ extern "C" void func_00224698(S *p) {
     if(p->p160) {
         qword a=ToVF(func_001A62E8(p->p160));
         qword b=func_001A62E8(p);
-        qword d=Flatten(Sub(a,b),Read(g_normalZ));
+        qword d=Flatten(QwSub(a,b),Read(g_normalZ));
         register qword fallback __asm__("a1")=D_002A2DA0;
         qword len=Sqrt(Dot(d));
         register qword n __asm__("vf1");

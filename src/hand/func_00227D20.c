@@ -1,8 +1,8 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef struct MSG { int cb; int nKind; } MSG;
 typedef struct MARK { int a[4]; } MARK;
 struct S { char pad[0xE4]; int c; int pad1; void *pEC; };
-static __inline__ int Min(int a, int b) { return a < b ? a : b; }
 int func_00227C90(struct S *p, qword v, float g);
 MARK *func_001AE478(MARK *pm);
 void _$_18CBinaryInputStream(MARK *pm, int n);
@@ -23,7 +23,7 @@ int func_00227D20(struct S *p, qword v, float g)
         {
             int cT = p->c;
             MSG *pm = &msg;
-            cT = Min(cT, 0x1555);
+            cT = NMin(cT, 0x1555);
             c = cT;
             pm->cb = cT * 12;
             pm->nKind = 0x10;

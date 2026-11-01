@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];int i[4];};struct M3{U row[3];};struct M4{U row[4];};
 struct VTE{short delta,pad;void*fn;};struct BODY{char pad0[0xB0];U angularVelocity;char padC0[0x30];U angularAcceleration;};struct MOTION{char pad0[0x80];U acceleration;};struct ACTOR{char pad0[12];VTE*vt;char pad10[0x4C];BODY*body;char pad60[0x88];MOTION*motion;char padEC[0x190-0xEC];U velocity;};
@@ -9,7 +10,6 @@ union WORK{struct{U local,scalar;M3 basis,rotation,returned;U original;}turn;str
 extern "C"{extern CLOCK g_clock;extern U D_002A2DA0,g_normalZ,D_002A2DD0;extern SMP D_002BF7A8,D_002BF7B8,D_002BF7C8;extern float D_002BF7D4,D_002BF7F0,D_002BF7F4,D_002BF7F8,D_002BF810,D_002BF814;extern PARAMS D_002BF7E0;extern POLY D_002BF800;extern RANGE D_002BBB60;
 qword func_001A6FC0(ACTOR*,ACTOR*,qword);M3*LoadRotateMatrix__FUx(M3*,qword);M3*func_0011B7E0(M3*,qword);M4*func_001A6318(ACTOR*);float GSmooth__FfffP3SMPPf(float,float,float,SMP*,float*);qword func_0011E9F8(qword,float);void func_001FAC30(ACTOR*,qword);void func_001F5E10(ACTOR*,qword,PARAMS*,qword,PARAMS*);void func_00196AA8(CONTEXT*,U*);}
 static inline qword Velocity(ACTOR*p){VTE&v=p->vt[33];return ((qword(*)(void*))v.fn)((char*)p+v.delta);}
-static inline qword Scalar(float f){qword q;__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(f));return q;}
 static inline qword Scale(qword a,qword k){qword r;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(r):"j"(a),"j"(k));return r;}
 static inline qword Rotate(qword r0,qword r1,qword r2,qword vector,qword seed){__asm__("vmulax.xyz $ACC,%1,%4x\n\tvmadday.xyz $ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z":"+j"(seed):"j"(r0),"j"(r1),"j"(r2),"j"(vector));return seed;}
 static inline qword Rotate(M3*m,qword vector,qword seed){return Rotate(m->row[0].q,m->row[1].q,m->row[2].q,vector,seed);}
@@ -184,7 +184,7 @@ extern "C" void func_00196DF8(CONTEXT*p){WORK w;
    register float high __asm__("$f5")=((RANGE*)address)->high;
    if(gain<low)gain=low;else if(high<gain)gain=high;
   }else gain=p->gain;
-  w.move.phase.vectors.scalar.q=Scalar(gain);w.move.phase.vectors.acceleration.q=Scale(w.move.phase.vectors.acceleration.q,w.move.phase.vectors.scalar.q);
+  w.move.phase.vectors.scalar.q=QwFromG(gain);w.move.phase.vectors.acceleration.q=Scale(w.move.phase.vectors.acceleration.q,w.move.phase.vectors.scalar.q);
   w.move.phase.vectors.corrected.q=Rotate(&w.move.basis,w.move.phase.vectors.acceleration.q,w.move.basis.row[0].q);
   func_00196AA8(p,&w.move.phase.vectors.corrected);
   if(p->mode!=5){

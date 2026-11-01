@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Update attachment correction and decay inactive responses.
 
 typedef int qword __attribute__((mode(TI)));
@@ -16,14 +17,12 @@ void func_002046F0(struct P*,struct AIM*);void func_002309E8(struct SPACE*,struc
 qword func_0022FC48(struct SPACE*,struct SPACE*,qword);qword func_0022FCC8(struct SPACE*,struct SPACE*,qword);
 float func_002458F0(float,float);float func_0011D948(struct LM*,float);
 struct M3*func_0011B628(struct M3*,qword);qword*__as__6VECTORG9VU_VECTOR(qword*,qword);void func_0012DA30(struct DV*,qword);
-static inline qword Add(qword a,qword b){qword r;__asm__("vadd.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword Point(const struct M4*m,const qword*a,struct SPACE**source){
  register qword r __asm__("vf6"),row0 __asm__("vf5")=m->r[0].q;register struct SPACE*sourceValue __asm__("$4");const int nullSource=0;
  __asm__ volatile("lqc2 $vf4,%3\n\tlqc2 $vf2,%4\n\tdaddu %1,%z7,$zero\n\tlqc2 $vf1,%5\n\tlqc2 $vf3,%6\n\tvmulax.xyz $ACC,%2,$vf3x\n\tvmadday.xyz $ACC,$vf4,$vf3y\n\tvmaddaz.xyz $ACC,$vf2,$vf3z\n\tvmaddw.xyz %0,$vf1,$vf0w"
  :"=&j"(r),"=&r"(sourceValue):"j"(row0),"m"(m->r[1].q),"m"(m->r[2].q),"m"(m->r[3].q),"m"(*a),"rJ"(nullSource):"vf1","vf2","vf3","vf4");
  *source=sourceValue;return r;
 }
-static inline float X(qword q){float x;__asm__("mtc1 %1,%0":"=f"(x):"r"(q));return x;}
 static inline qword Pack(float x,float y,float z){qword q,t;__asm__("mfc1 %0,%2\n\tmfc1 %1,%3\n\tpextlw %0,%1,%0\n\tmfc1 %1,%4\n\tpcpyld %0,%1,%0":"=&r"(q),"=&r"(t):"f"(x),"f"(y),"f"(z));return q;}
 static inline float CorrectionDistance(struct P*p,qword correction){
  register qword d __asm__("vf1");register float result __asm__("$3");
@@ -55,7 +54,7 @@ void func_0018B460(struct P*p){
     heading=func_002458F0(-z,coefficient*x);}}
   heading=func_0011D948(&D_002BF3A8,heading);
   tilt=Pack(zero,heading,zero);w.axis.q=tilt;
-  func_0011B628(&w.rotation,Add(p->euler,w.axis.q));
+  func_0011B628(&w.rotation,QwAdd(p->euler,w.axis.q));
   frame=&w.transform;
   __as__6VECTORG9VU_VECTOR(&frame->r[3].q,p->position);
   {
@@ -81,7 +80,7 @@ void func_0018B460(struct P*p){
     }
    }
   }
-  heading=X(func_0022FCC8(p->space,relativeDestination,w.relative.q));heading=func_0011D948(&D_002BF3B0,heading);
+  heading=GetX(func_0022FCC8(p->space,relativeDestination,w.relative.q));heading=func_0011D948(&D_002BF3B0,heading);
   axis=Pack(heading,zero,zero);w.axis.q=axis;
   {
    register qword returned __asm__("vf2")=func_0022FCC8(space,p->space,w.axis.q),relative __asm__("vf1");register unsigned page __asm__("$2");

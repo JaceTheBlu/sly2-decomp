@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 // func_0014A4D0. From v4: the vsub reads q (the pinned Add result) with `posT = q` after it, and its posMe operand is repeated as an allocation-only operand (reload then puts posMe in vf4 like the target).
 typedef int qword __attribute__((mode(TI)));
@@ -34,9 +35,7 @@ qword func_0011E1A0(float a, float b, float c);
 void func_0014A4D0(P *p);
 }
 static inline int FLess(float a, float b) { return a < b; }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword SubX(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b), "j"(b)); /* extra operand: allocation only */ return r; }
-static inline qword Add(qword a, qword b) { qword r; __asm__("vadd.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline float Len(qword a)
 {
     qword d, one; float g;
@@ -60,9 +59,6 @@ static inline float Len2(qword a)
     __asm__("qmfc2.ni %0, %1" : "=r"(g) : "j"(d));
     return g;
 }
-static inline float GetX(qword q) { float x; __asm__("mtc1 %1, %0" : "=f"(x) : "r"(q)); return x; }
-static inline float GetY(qword q) { float y; __asm__("prot3w %0, %1" : "=r"(y) : "r"(q)); return y; }
-static inline float GetZ(qword q) { float z; __asm__("pextuw %0, $0, %1" : "=r"(z) : "r"(q)); return z; }
 static inline qword AddScaledNorm(qword a, qword v, VU_FLOAT s)
 {
     qword d, one, r;
@@ -79,7 +75,7 @@ void func_0014A4D0(P *p)
     PSO *pso = func_001C4840(pg);
     qword posPlayer = func_001A62E8(pso);
     qword posMe = func_001A62E8(p->pw);
-    qword d = Sub(posPlayer, posMe);
+    qword d = QwSub(posPlayer, posMe);
     qword v;
     qword pos;
     {
@@ -123,11 +119,11 @@ void func_0014A4D0(P *p)
                 posT = func_001A62E8(pt);
                 r = *(float *)&pt->pxEC;
             }
-            if (!FLess(D_002BD478 * D_002BD478, LenSq(Sub(posT, posPlayer)))) {
+            if (!FLess(D_002BD478 * D_002BD478, LenSq(QwSub(posT, posPlayer)))) {
                 float pan = GRandInRange__Fff(-3.1415927f, 3.1415927f);
                 float tilt = GRandInRange__Fff(-3.1415927f, 3.1415927f);
                 register qword q asm("vf3"); /* register pin: the target's vadd writes posT's new value to vf3 */
-                q = Add(posT, func_0011E208(pan, tilt, GRandInRange__Fff(0.0f, r)));
+                q = QwAdd(posT, func_0011E208(pan, tilt, GRandInRange__Fff(0.0f, r)));
                 qword e = SubX(q, posMe);
                 posT = q;
                 if (FLess(Len2(e), Len2(d))) {
@@ -143,10 +139,10 @@ void func_0014A4D0(P *p)
         }
     }
     if (FLess(Len2(v), D_002BD460)) {
-        qword e = Sub(posMe, posPlayer);
+        qword e = QwSub(posMe, posPlayer);
         float rad = func_002458F0(GetY(e), GetX(e));
         qword pp = func_001A62E8(pso);
-        pos = Add(pp, func_0011E1A0(GRandInRange__Fff(rad - 1.5707964f, rad + 1.5707964f), D_002BD470, D_002BD474));
+        pos = QwAdd(pp, func_0011E1A0(GRandInRange__Fff(rad - 1.5707964f, rad + 1.5707964f), D_002BD470, D_002BD474));
     } else {
         pos = AddScaledNorm(posPlayer, v, VU_FLOAT(-D_002BD470));
     }

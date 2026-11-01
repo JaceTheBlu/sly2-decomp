@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef struct { qword r[4]; } M4;
 struct X;
@@ -17,7 +18,6 @@ static inline qword Normalize(qword n)
     __asm__("vdiv $Q, $vf0w, %1x\n\tvwaitq\n\tvmulq.xyzw %0, %2, $Q" : "=j"(r) : "j"(l), "j"(n));
     return r;
 }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword Cross(qword a, qword b) { qword r; __asm__("vopmula.xyz $ACC, %1, %2\n\tvopmsub.xyz %0, %2, %1" : "=j"(r) : "j"(a), "j"(b)); return r; }
 void func_001BD400(struct X *p)
 {
@@ -33,7 +33,7 @@ void func_001BD400(struct X *p)
             do {
                 qword v0 = v;
                 v = MulPt(&m, p->apos[i]);
-                func_00119390(&p->aplane[i - 1], Normalize(Cross(Sub(v, v0), g_normalZ)), v0);
+                func_00119390(&p->aplane[i - 1], Normalize(Cross(QwSub(v, v0), g_normalZ)), v0);
             } while (++i < p->c);
         }
         p->k = k;

@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "util.h"
 // func_001C2EF0: launches `count` objects from an owner's source object towards the player.
 // The first object is the owner's existing one (+0x158), the others come from its factory (func_001CB250); new
@@ -37,8 +38,6 @@ void func_001C2DB8(OWNER *);
 }
 
 static inline float X(qword q) { float f; __asm__("mtc1 %1,%0" : "=f"(f) : "r"(q)); return f; }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
-static inline qword Add(qword a, qword b) { qword r; __asm__("vadd.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword Dot(qword a, qword b)
 {
     qword d, one;
@@ -100,11 +99,11 @@ extern "C" SO *func_001C2EF0(OWNER *p, int count)
         qword target = func_001A62E8(func_001C4840(game));
         float pan = Rand(D_002C0CF0);
         qword offset = func_0011E1A0(pan, Rand(D_002C0CF8), -75.0f);
-        qword delta = Sub(target, start);
-        qword side = Sub(delta, Scale(Dot(delta, g_normalZ), g_normalZ));
+        qword delta = QwSub(target, start);
+        qword side = QwSub(delta, Scale(Dot(delta, g_normalZ), g_normalZ));
         M3 mat;
         mat = func_0011B830(Normalize(side, D_002A2DA0), g_normalZ);
-        qword dest = Add(target, Transform(mat, offset));
+        qword dest = QwAdd(target, Transform(mat, offset));
         qword velocity = func_001D69F0(start, dest, D_002C0D60, Rand(D_002C0CE0));
         if (FIsBasicDerivedFrom__FP5BASIC3CID(node, 0x5A)) {
             float lifetime;

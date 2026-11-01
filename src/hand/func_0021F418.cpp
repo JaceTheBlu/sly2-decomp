@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 // Update the controller target and consume state/animation transitions.
 typedef int qword __attribute__((mode(TI)));
@@ -45,7 +46,6 @@ static inline qword CPUFloat(float f){register qword r asm("$2");__asm__("mfc1 %
 static inline qword Scalar(float f){qword r;__asm__("qmtc2.ni %1,%0":"=j"(r):"r"(f));return r;}
 static inline qword ScalarHome(V &home,qword value){home.q=value;return home.q;}
 static inline qword LoadVF(const V &v){qword q;__asm__("lqc2 %0,%1":"=j"(q):"m"(v));return q;}
-static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword Lerp(qword a,qword b,qword wa,qword wb){__asm__("vmulax.xyzw ACC,%0,%2x\n\tvmaddx.xyzw %0,%1,%3x":"+j"(a):"j"(b),"j"(wa),"j"(wb));return a;}
 static inline int SaveOwnerPosition(V &home,qword value,const S *state){
  register int result asm("$3");
@@ -154,7 +154,7 @@ extern "C" void func_0021F418(S *s){
   else{
    CopyRange(w.scratch.range,s->bounds);
    if(func_001DAEA8(0x24))w.scratch.range.hi*=D_002C40E0;
-   float dt=PlanarSnapshot(Sub(s->targetWorld.q,w.ownerPosition.q),w.delta,g_clock.dt);
+   float dt=PlanarSnapshot(QwSub(s->targetWorld.q,w.ownerPosition.q),w.delta,g_clock.dt);
    float elevation;
    float scale;qword delta;
    float speed;

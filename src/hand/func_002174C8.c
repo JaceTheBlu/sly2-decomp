@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Queue transformed sprite parameters with optional fade limiting.
 typedef unsigned int uint;
 typedef unsigned long ulong;
@@ -12,7 +13,6 @@ struct E {int kind;float priority;uint address;int tag;};
 extern struct R D_002DEA28;
 void *func_002333B4(void *,int,int);
 struct E *func_001CD998(void);
-static inline int Min(int a,int b){return a<b?a:b;}
 static inline void Word(struct R *r,uint word){*(uint *)r->cur=word;r->cur+=4;}
 static inline void Align(struct R *r){while((uint)r->cur&15){*(uint *)r->cur=0;r->cur+=4;}}
 static inline void CopyWords(int *d,const int *s,int n){int rem=n&3,cBulk=n-rem,i;for(i=0;i<rem;i++)*d++=*s++;for(i=0;i<cBulk;i+=4){int a=s[0],b=s[1],c=s[2],e=s[3];s+=4;d[0]=a;d[1]=b;d[2]=c;d[3]=e;d+=4;}}
@@ -33,7 +33,7 @@ void func_002174C8(struct S *p,struct T *t,struct D *data,int fade){
         float old=data->fade;
         data->fade=1.0f;
         if(old<1.0f){
-            int n=Min((int)(p->count*old),p->count);
+            int n=NMin((int)(p->count*old),p->count);
             data->limit=n>=3?n:3;
             if(data->limit>0x7FFFU)data->limit=0x7FFF;
         }

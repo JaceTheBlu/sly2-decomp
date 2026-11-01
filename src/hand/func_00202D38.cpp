@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 // func_00202D38 (0x202D38, 524 instructions): per-frame update of the Sly-only interaction prompt (screen projection of the
 // actor's head, proximity/size gain, state machine, input check). MATCH (Lilly/Claude T1613), no register pins.
@@ -35,28 +36,22 @@ int func_001C46C0(void *,int,float);
 }
 static inline VU_FLOAT VuFloatFromMemWord(int n){VU_FLOAT v;__asm__("qmtc2 %1,%0":"=j"(v.qw):"rV"(n));return v;}
 static inline qword QwScaleX(qword a,qword s){qword r;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(r):"j"(a),"j"(s));return r;}
-static inline qword QwAdd(qword a,qword b){qword r;__asm__("vadd.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
-static inline qword QwSub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword QwLengthXY(qword v){qword r;__asm__("vmul.xy %0,%1,%1\n\tvaddy.x %0,%0,%0y":"=j"(r):"j"(v));__asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q":"=j"(r):"0"(r));return r;}
 // camera up row; the pointer parameter gives the game's &cm+0x60 base register (lqc2 0x10(s1), then s1-0x60 for the calls)
 static inline qword QwUp(const M4 *m){return m->r[1];}
-static inline float GXOfQw(qword qw){float x;__asm__("mtc1 %1,%0":"=f"(x):"r"(qw));return x;}
-static inline float GYOfQw(qword qw){float y;__asm__("prot3w %0,%1":"=r"(y):"r"(qw));return y;}
-static inline float GZOfQw(qword qw){float z;__asm__("pextuw %0,$0,%1":"=r"(z):"r"(qw));return z;}
 // screen position of a projected point: x and y from [-1,1] to pixels, z kept
 static inline VU_FLOAT ScreenFromProjected(qword q)
 {
     VU_FLOAT v;
     int t;
-    float x=GXOfQw(q)*320.0f+320.0f;
-    float y=GYOfQw(q)*-246.40000915527344f+246.40000915527344f;
-    float z=GZOfQw(q);
+    float x=GetX(q)*320.0f+320.0f;
+    float y=GetY(q)*-246.40000915527344f+246.40000915527344f;
+    float z=GetZ(q);
     __asm__("mfc1 %0,%2\n\tmfc1 %1,%3\n\tpextlw %0,%1,%0\n\tmfc1 %1,%4\n\tpcpyld %0,%1,%0":"=&r"(v.qw),"=&r"(t):"f"(x),"f"(y),"f"(z));
     return v;
 }
 static inline float Min(float a,float b){return a<b?a:b;}
-static inline float Max(float a,float b){return a<b?b:a;}
-static inline float GClamp(float g,float gMin,float gMax){return Max(gMin,Min(g,gMax));}
+static inline float GClamp(float g,float gMin,float gMax){return GMax(gMin,Min(g,gMax));}
 extern "C" void func_00202D38(P *p)
 {
     if(!p->primary)return;
@@ -75,16 +70,16 @@ extern "C" void func_00202D38(P *p)
         qword base=func_0014F308(&g_cm,world);
         qword top=func_0014F308(&g_cm,head);
         VU_FLOAT screen=ScreenFromProjected(base);
-        float distance=GXOfQw(QwLengthXY(QwSub(screen.qw,p->origin)));
+        float distance=GetX(QwLengthXY(QwSub(screen.qw,p->origin)));
         VU_FLOAT screenTop=ScreenFromProjected(top);
-        float size=GXOfQw(QwLengthXY(QwSub(screen.qw,screenTop.qw)));
+        float size=GetX(QwLengthXY(QwSub(screen.qw,screenTop.qw)));
         float proximity=1.0f-(distance-128.0f)/128.0f;
         size=size/120.0f;
         p->rising=1;
         p->proximity=GClamp(proximity,0.0f,1.0f);
         p->sizeGain=size;
         if(size>1.0f){p->rising=0;p->sizeGain=2.0f-size;}
-        p->sizeGain=Max(p->sizeGain,0.0f);
+        p->sizeGain=GMax(p->sizeGain,0.0f);
     }
     switch(p->state){
     case -1:

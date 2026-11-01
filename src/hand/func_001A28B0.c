@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; int i[4]; } U;
@@ -24,8 +25,6 @@ float func_0011D1C0(float pos,float vel,float target,float dt,struct SMP *s,floa
 void func_001FAC30(struct P *p,qword v);
 static inline qword GetVel(struct P *p) { return ((qword (*)(void *))p->vt[33].pfn)((char *)p+p->vt[33].d); }
 static inline qword Mul(struct M3 *m,const qword *v) { qword r; __asm__("vmulax.xyz ACC,%2,%1x\n\tvmadday.xyz ACC,%3,%1y\n\tvmaddz.xyz %0,%4,%1z" : "=j"(r) : "j"(*v),"j"(m->r[0]),"j"(m->r[1]),"j"(m->r[2]));return r; }
-static inline qword Add(qword a,qword b) { qword r; __asm__("vadd.xyzw %0,%1,%2" : "=j"(r) : "j"(a),"j"(b));return r; }
-static inline qword Sub(qword a,qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a),"j"(b));return r; }
 static inline qword Broadcast(int g) { qword r; __asm__("qmtc2.ni %1,%0" : "=j"(r) : "r"(g));return r; }
 static inline qword Scale(qword v,qword k) { qword r; __asm__("vmulx.xyzw %0,%1,%2x" : "=j"(r) : "j"(v),"j"(k));return r; }
 void func_001A28B0(struct P *p,void *o)
@@ -47,8 +46,8 @@ void func_001A28B0(struct P *p,void *o)
   func_00228C18(o,pos.q,&dir.q,&v50.q);
   v=GetVel(p);
   vel.q=v;
-  v=Add(v,local.q);
-  v=Sub(v,dir.q);
+  v=QwAdd(v,local.q);
+  v=QwSub(v,dir.q);
   k=Broadcast(*(int *)&p->alpha10A4);
   bcast.q=k;
   v=Scale(v,k);

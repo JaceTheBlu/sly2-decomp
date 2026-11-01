@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Evaluate a clamped path offset, then rotate and translate it into world space.
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; int i[4]; };
@@ -14,8 +15,6 @@ extern qword g_normalZ;
 extern "C" float func_00245A18(float,float);
 struct COEF { float a,b,c,d; };
 struct BOUND { float low,high; };
-static inline qword Sub(qword a,qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a),"j"(b));return r; }
-static inline qword Add(qword a,qword b) { qword r; __asm__("vadd.xyzw %0,%1,%2" : "=j"(r) : "j"(a),"j"(b));return r; }
 static inline qword Cross(qword a,qword b) { qword r; __asm__("vopmula.xyz ACC,%1,%2\n\tvopmsub.xyz %0,%2,%1" : "=&j"(r) : "j"(a),"j"(b));return r; }
 // The VU helper receives vf1 and reuses its length temporary for the result.
 static inline qword Normalize(qword arg) { qword d,one,r;
@@ -56,7 +55,7 @@ extern "C" void CalculateTnPos__FP2TNP7VECTOR4ffP3CLQP2LM4FTNDPUx(S *p,float *ti
         float angle=func_00245A18(phase,period);
         center.q=func_0011E1A0(angle/p->radius,p->radius,0.0f);
         qword arc=center.q;
-        center.q=Add(arc,p->origin);
+        center.q=QwAdd(arc,p->origin);
         normal.q=Normalize(Cross(g_normalZ,arc));
         m=func_0011B830(normal.q,g_normalZ);
         rotated.q=Rotate(m,pos.q);
@@ -65,5 +64,5 @@ extern "C" void CalculateTnPos__FP2TNP7VECTOR4ffP3CLQP2LM4FTNDPUx(S *p,float *ti
         pos.f[0]+=delta;
         rotated.q=func_001A6F00(p,0,pos.q);
     }
-    *out=Add(center.q,rotated.q);
+    *out=QwAdd(center.q,rotated.q);
 }

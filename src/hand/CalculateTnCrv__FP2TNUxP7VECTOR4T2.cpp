@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Project a world point into a path basis and return the path direction.
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
@@ -11,8 +12,6 @@ M3 *func_001A6318(struct S *);
 qword func_001A6F00(void *,void *,qword);
 }
 extern qword g_normalZ;
-static inline qword Sub(qword a,qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a),"j"(b));return r; }
-static inline qword Add(qword a,qword b) { qword r; __asm__("vadd.xyzw %0,%1,%2" : "=j"(r) : "j"(a),"j"(b));return r; }
 static inline qword Cross(qword a,qword b) { qword r; __asm__("vopmula.xyz ACC,%1,%2\n\tvopmsub.xyz %0,%2,%1" : "=j"(r) : "0"(a),"j"(b));return r; }
 // The VU helper receives vf1 and reuses its length temporary for the result.
 static inline qword Normalize(qword arg) { qword d,one,r;
@@ -35,14 +34,14 @@ extern "C" void CalculateTnCrv__FP2TNUxP7VECTOR4T2(S *p,qword v,qword *out,qword
     if(p->curve) {
         func_001E6F10(p->curve,p->time,&pos.q,normal);
         m=func_0011B830(*normal,g_normalZ);
-        *out=InverseRotate(m,Sub(v,pos.q));
+        *out=InverseRotate(m,QwSub(v,pos.q));
     } else if(p->arc) {
         U a;
         a.q=func_0011E1A0(p->time/p->radius,p->radius,0.0f);
-        pos.q=Add(p->origin,a.q);
+        pos.q=QwAdd(p->origin,a.q);
         *normal=Normalize(Cross(g_normalZ,a.q));
         m=func_0011B830(*normal,g_normalZ);
-        *out=InverseRotate(m,Sub(v,pos.q));
+        *out=InverseRotate(m,QwSub(v,pos.q));
     } else {
         *normal=Normalize(func_001A6318(p)->r[0]);
         *out=func_001A6F00(0,p,v);

@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 #include "mat.h"
 struct T { char pad[0x30]; qword x30; struct MATRIX4 m40; char pad2[0xA0-0x80]; char *xa0; int xa4; int xa8; };
@@ -14,8 +15,6 @@ qword func_0022FCC8(int n, void *p, qword q);
 void __as__6VECTORG9VU_VECTOR(qword *pq, qword q);
 void __ml__FRC7MATRIX4T0(struct MATRIX4 *pm, void *p, struct T *t);
 void func_00186A50(struct P *p, int n);
-static __inline__ qword VAdd(qword a, qword b) { qword r; __asm__("vadd.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
-static __inline__ qword VSub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 void func_00190D10(struct P *p)
 {
     struct T *t;
@@ -23,12 +22,12 @@ void func_00190D10(struct P *p)
     struct MATRIX4 m;
     int n;
 
-    a = VAdd(func_00190C58(p), p->x1960);
+    a = QwAdd(func_00190C58(p), p->x1960);
     b = func_001A62E8(p->x19a4);
-    d = VSub(a, b);
+    d = QwSub(a, b);
     a = func_0022FCC8(0, p->x19c4->xa0, d);
     t = p->x19c4;
-    __as__6VECTORG9VU_VECTOR(&t->x30, VAdd(t->x30, a));
+    __as__6VECTORG9VU_VECTOR(&t->x30, QwAdd(t->x30, a));
     ((float *)&t->x30)[3] = 1.0f;
     n = ++g_sw.x3d58;
     p->x19c4->xa4 = n;

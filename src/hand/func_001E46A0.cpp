@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned int uint;
 union U {qword q;float f[4];};
@@ -26,7 +27,6 @@ qword func_001A6FC0(void*,ACTOR*,qword);
 void func_001C45A8(OUTPUT*);
 int func_0011D4D0(float,float,float);
 }
-static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword ToVU(qword a){qword r;__asm__("qmtc2.ni %1,%0":"=j"(r):"r"(a));return r;}
 static inline float X(qword a){float r;__asm__("mtc1 %1,%0":"=f"(r):"r"(a));return r;}
 static inline float Y(qword a){float r;__asm__("prot3w %0,%1":"=r"(r):"r"(a));return r;}
@@ -103,7 +103,7 @@ extern "C" void func_001E46A0(P *p,OUTPUT *out){
   func_001E6F10(actor->curve,&work.from.q,0,t);
   t=func_001E6728(actor->curve,actor->curveTime-50.0f);
   func_001E6F10(actor->curve,&work.to.q,0,t);
-  qword direction=func_001C4768(out,Sub(work.from.q,work.to.q));
+  qword direction=func_001C4768(out,QwSub(work.from.q,work.to.q));
   float x=X(direction),y=Y(direction);
   out->heading=func_002458F0(y,x);out->x=x;out->y=y;
   if(actor->curve->cyclic){

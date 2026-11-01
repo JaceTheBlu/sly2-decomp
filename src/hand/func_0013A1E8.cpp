@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "dl.h"
 // func_0013A1E8: light-list VU upload.
 // Collects the lights of p->xE0's list whose position (PosLoWorld 0x1A62E8 + PmatLoWorld 0x1A6318 rotating p->vF0)
@@ -8,7 +9,7 @@
 //    the lw is written inside the VU_FLOAT asm with an allocation-only "r"(pcm) input.
 //  * The vF0 barrier is an operand-less volatile asm: a "+j"(v) one gives v 2 more refs, and local-alloc then
 //    ranks the vF0 chain above mat.r[2] (vF0 vf1 instead of vf2).
-//  * Plain Sub (2 refs on pcm->pos): with SubE's duplicate operand the cm pos qty outranks the vF0 chain (vf2/vf3 swap).
+//  * Plain QwSub (2 refs on pcm->pos): with SubE's duplicate operand the cm pos qty outranks the vF0 chain (vf2/vf3 swap).
 //  * The empty "=r"(z) asm only exists for sched2 (see the comment there).
 typedef int qword __attribute__((mode(TI)));
 struct CM;
@@ -65,7 +66,6 @@ void func_00157620(VIFS *p);
 void func_0013A1E8(P *p);
 }
 static inline void *PvAllocStack(int cb) { return PvAllocStackImpl__FP7SWALLOC(AL(cb, 0x10)); }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 /* earlyclobber output (else branch: vsub vf3 distinct from its inputs); the 2nd "j"(b) is allocation-only */
 static inline qword SubE(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=&j"(r) : "j"(a), "j"(b), "j"(b)); return r; }
 /* "r"(z) inputs below are allocation-only: they only add scheduler dependences (see the comment in the gather loop) */
@@ -116,7 +116,7 @@ void func_0013A1E8(P *p)
             /* empty asm, emits nothing: z depends on pcm and feeds the Rot and the Add, so in sched2 it takes the
                second issue slot next to the lw and the mat.r[1] lqc2 waits a cycle (target order lw, lqc2, por, Rot) */
             int z; __asm__("" : "=r"(z) : "r"(pcm));
-            qword d = Sub(AddZ(RotKZ(mat, v, vf.q, z), pos, z), pcm->pos);
+            qword d = QwSub(AddZ(RotKZ(mat, v, vf.q, z), pos, z), pcm->pos);
             __asm__("" : "+j"(d)); /* empty asm: extra refs so d is caller-saved in vf1 */
             if (!func_0014F850(&g_cm, d, vf))
                 goto next;

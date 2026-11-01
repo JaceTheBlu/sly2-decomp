@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 struct M4 {qword r[4];};
 union V {qword q;float f[4];};
@@ -12,7 +13,6 @@ void func_0022DD00(void *,O *);
 void func_00117120(float,float,float,qword,qword,qword,qword,qword *,qword *,qword *);
 }
 static inline qword Zero() {qword r;__asm__("vsub.xyzw %0,$vf0,$vf0":"=j"(r));return r;}
-static inline qword Add(qword a,qword b) {qword r;__asm__("vadd.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword Transform(const M4 &m,qword v) {qword r=m.r[0];
     __asm__("vmulax.xyz ACC,%0,%4x\n\tvmadday.xyz ACC,%1,%4y\n\tvmaddaz.xyz ACC,%2,%4z\n\tvmaddw.xyz %0,%3,$vf0w":"+j"(r):"j"(m.r[1]),"j"(m.r[2]),"j"(m.r[3]),"j"(v));return r;}
 static inline qword InverseTransform(const M4 &m,qword v) {register qword r __asm__("vf4")=m.r[0];
@@ -53,8 +53,8 @@ extern "C" qword func_0022D348(O *p,O *stop,qword in) {
                     }
                     break;
                 }
-                if(p->parent)sum=Add(sum,RotateRow(p->parent->world,delta));
-                else sum=Add(sum,delta);
+                if(p->parent)sum=QwAdd(sum,RotateRow(p->parent->world,delta));
+                else sum=QwAdd(sum,delta);
                 break;
             }
             default: {
@@ -63,10 +63,10 @@ extern "C" qword func_0022D348(O *p,O *stop,qword in) {
                 O *parent=p->parent;
                 if(parent) {
                     M4 inverse=func_0011C318(&p->world);
-                    sum=Add(sum,ParentRotate(parent->world,Transform(m,InverseTransform(inverse,input))));
+                    sum=QwAdd(sum,ParentRotate(parent->world,Transform(m,InverseTransform(inverse,input))));
                 } else {
                     M4 inverse=func_0011C318(&p->world);
-                    sum=Add(sum,Transform(m,InverseTransform(inverse,input)));
+                    sum=QwAdd(sum,Transform(m,InverseTransform(inverse,input)));
                 }
                 break;
             }

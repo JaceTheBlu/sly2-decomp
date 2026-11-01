@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 /* func_001D0190: per-frame draw of a RIP (decal): fade size/opacity polynomials over its lifetime and by camera
  * distance, cull it (RemoveRip) when the camera test fails, otherwise build facing * spin and submit the transform.
@@ -31,7 +32,6 @@ M4 func_0011C288(qword,const M3 &,float);
 void func_001A5EE8(void *,const M4 &,float,float);
 }
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } };
-static inline qword Subtract(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword Scale(qword a,VU_FLOAT s){qword r;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(r):"j"(a),"j"(s.q));return r;}
 static inline qword BcG(float f){union{qword q;float f;}u;qword r;__asm__("mfc1 %0,%1":"=r"(r):"f"(f));u.q=r;return r;}
 static inline float Length(qword v){qword d,one,l;float f;
@@ -51,7 +51,7 @@ extern "C" void func_001D0190(RIP *p)
 {
     M3 basis,rotation,product;
     M4 transform;
-    qword direction=Subtract(g_cm.position,p->position);
+    qword direction=QwSub(g_cm.position,p->position);
     float time=(g_clock.t-p->start)/p->duration;
     float distance=Length(direction)*0.001f;
     float size=Evaluate(p->size,time)*Clamp(Evaluate(D_002C1FB0,distance),D_002C1FC0[0],D_002C1FC0[1]);

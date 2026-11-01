@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Load prioritized sprite files.
 struct FRAME {};
 typedef struct {int cb,alignment;} MSG;
@@ -26,7 +27,6 @@ extern N *D_003E106C;
 extern POOL D_003E1C70;
 extern int D_002BE538;
 extern char D_002A8AE8[];
-static inline int Max(int a,int b) {return a<b?b:a;}
 static inline int SetKey(KEY *k,N *n) {
     if(!n)return 0;
     {int a=n->c,b=n->a,c=n->d,d=n->b;
@@ -52,7 +52,7 @@ extern "C" void func_002124F0(S *p) {
         owner=n->owner;
         if(owner->state==0)continue;
         if(owner->state==1 && D_002BE538-owner->tick>=2)continue;
-        priority=Max(priority,n->last);
+        priority=NMax(priority,n->last);
     }
     for(n=D_003E106C;n;n=n->next) {
         owner=n->owner;

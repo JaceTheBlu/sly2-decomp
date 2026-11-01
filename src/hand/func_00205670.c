@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union {qword q;float f[4];int i[4];} V;
 struct P {char pad[0x208];int enabled;};
@@ -5,7 +6,6 @@ extern qword g_normalZ;
 void func_002057E8(struct P*,V*);
 int func_0011EBB0(qword,qword,qword,qword,qword,float*,float*);
 static inline qword Sub(const qword*a,const qword*b){qword av=*a,bv=*b;register qword r __asm__("vf3");__asm__("vsub.xyzw %0,%1,%2":"=&j"(r):"j"(av),"j"(bv));return r;}
-static inline qword Add(qword a,qword b){qword r;__asm__("vadd.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword Scale(qword a,float f,V *k){qword q,r;__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(f));k->q=q;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(r):"j"(a),"j"(k->q));return r;}
 static inline float Normal(V*v,const qword*fallback){qword a=v->q;register qword d __asm__("vf1");register qword one __asm__("vf2");float g,r;
 __asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=&j"(d),"=&j"(one):"j"(a));
@@ -31,7 +31,7 @@ int func_00205670(struct P*p,qword from,qword to,qword*output)
  do{
    int hit=func_0011EBB0(d.q,from,*(qword*)((char*)third-32),*(qword*)((char*)third-16),third->q,distanceOut,0);
    if(distance<=length && (hit&1)){
-      *out=Add(from,Scale(d.q,distance,&k));return 1;
+      *out=QwAdd(from,Scale(d.q,distance,&k));return 1;
    }
    t+=3;third+=3;
  }while(t<end);

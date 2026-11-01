@@ -1,3 +1,4 @@
+#include "vu0.h"
 struct MSG { int cb; int nKind; };
 struct FRAME {
     int a[4];
@@ -18,7 +19,6 @@ void *PvAllocSwImpl__Fi(MSG *);
 void func_001AE5A0(void *, void *, int);
 void func_001E0290(OBJ *, int);
 void LoadLoFromBrx__FP2LOP18CBinaryInputStream(OBJ *, void *);
-static inline int Max(int a, int b) { return a < b ? b : a; }
 extern "C" void func_001DFB10(OBJ *p, void *x)
 {
     FRAME frame;
@@ -32,7 +32,7 @@ extern "C" void func_001DFB10(OBJ *p, void *x)
     LoadLoFromBrx__FP2LOP18CBinaryInputStream(p, x);
     {
         ENT *aeOld = p->ae;
-        p->cMax = Max(p->c, p->cMax) + 1;
+        p->cMax = NMax(p->c, p->cMax) + 1;
         pmsg->cb = p->cMax * sizeof(ENT);
         pmsg->nKind = 0x10;
         p->ae = (ENT *)PvAllocSwImpl__Fi(pmsg);

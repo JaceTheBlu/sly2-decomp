@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 // UpdateWrMatrixes (0x22C028). Circle case: the scalar-home sqc2 stores and one combine carry "memory" clobbers to fix their order.
 typedef int qword __attribute__((mode(TI)));
@@ -21,7 +22,6 @@ float func_0022BF70(ONZ *);
 M3 LoadRotateMatrixRad__FfUx(qword,float);
 }
 static inline qword ScalarLoad(const float &f){int bits;qword q;__asm__("lw %0,%1":"=r"(bits):"m"(f));__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(bits));return q;}
-static inline qword Scalar(float f){qword q;__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(f));return q;}
 static inline qword ScalarHome(V &home,qword value){__asm__("sqc2 %1,%0":"=m"(home.q):"j"(value));return value;}
 static inline qword Combine(qword fa,qword a,qword fb,qword b){qword r;__asm__("vmulax.xyzw ACC,%2,%1x\n\tvmaddx.xyzw %0,%4,%3x":"=j"(r):"j"(fa),"j"(a),"j"(fb),"j"(b));return r;}
 static inline qword CombineM(qword fa,qword a,qword fb,qword b){qword r;__asm__("vmulax.xyzw ACC,%2,%1x\n\tvmaddx.xyzw %0,%4,%3x":"=j"(r):"j"(fa),"j"(a),"j"(fb),"j"(b):"memory");return r;}
@@ -47,7 +47,7 @@ void UpdateWrMatrixes(WR *p){
    CalculateSinCos__FfPfT1(RadNormalize__Ff(angle),&sine,&cosine);
    int column=entry->data.circle.column,next=column+1;
    V *pos0=&matrix->r[column],*pos1=&matrix->r[next],*uv0=&coordinates->r[column],*uv1=&coordinates->r[next];
-   qword qn=Scalar(-sine),qc=ScalarLoad(cosine),qs=Scalar(sine);
+   qword qn=QwFromG(-sine),qc=ScalarLoad(cosine),qs=QwFromG(sine);
  {position.q=Combine(qc,entry->vectorA.q,qs,entry->data.circle.vectorB.q);}
    CopyXYZ(*pos0,position);
  ScalarHomeM(temporary,qc);

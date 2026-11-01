@@ -1,3 +1,4 @@
+#include "vu0.h"
 // func_001BFDB0: closest point of a navigation triangle to p. T holds pointers to the three corners.
 // If p lies outside an edge in the XY plane (z of cross(p - v0, v1 - v0) > 0, tested a-b, b-c, c-a in turn), the result
 // is the closest point on that edge (func_0011EE08); otherwise p is projected along g_normalZ (world up) onto the
@@ -19,11 +20,9 @@ extern qword g_normalZ; // (0, 0, 1, 0)
 void func_0011EE08(qword pos, qword p0, qword p1, qword *ppos, float *pt, float *pdist);
 qword func_001BFDB0(T *t, qword p);
 }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword Cross(qword a, qword b) { qword r; __asm__("vopmula.xyz ACC,%1,%2\n\tvopmsub.xyz %0,%2,%1" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline float Z(qword a) { float z; __asm__("qmfc2.ni %0,%1\n\tpextuw %0,$zero,%0" : "=r"(z) : "j"(a)); return z; }
 static inline float ZOf(qword q) { float z; __asm__("pextuw %0,$zero,%1" : "=r"(z) : "r"(q)); return z; }
-static inline float XOf(qword q) { float x; __asm__("mtc1 %1,%0" : "=f"(x) : "r"(q)); return x; }
 static inline qword Dot(qword a, qword b)
 {
     qword d = a, one;
@@ -43,16 +42,16 @@ qword func_001BFDB0(T *t, qword p)
 {
     U result;
     qword a = *t->a, b = *t->b, c = *t->c;
-    qword ab = Sub(b, a);
+    qword ab = QwSub(b, a);
     VU_VECTOR va(a), vc(c);
-    if (0.0f < Z(Cross(Sub(p, a), ab))) func_0011EE08(p, a, b, &result.q, 0, 0);
-    else if (0.0f < Z(Cross(Sub(p, b), Sub(c, b)))) func_0011EE08(p, b, c, &result.q, 0, 0);
-    else if (0.0f < Z(Cross(Sub(p, c), Sub(a, c)))) func_0011EE08(p, c, a, &result.q, 0, 0);
+    if (0.0f < Z(Cross(QwSub(p, a), ab))) func_0011EE08(p, a, b, &result.q, 0, 0);
+    else if (0.0f < Z(Cross(QwSub(p, b), QwSub(c, b)))) func_0011EE08(p, b, c, &result.q, 0, 0);
+    else if (0.0f < Z(Cross(QwSub(p, c), QwSub(a, c)))) func_0011EE08(p, c, a, &result.q, 0, 0);
     else {
-        qword n = Cross(ab, Sub(vc.q, va.q));
-        qword dv = Dot(Sub(va.q, p), n);
+        qword n = Cross(ab, QwSub(vc.q, va.q));
+        qword dv = Dot(QwSub(va.q, p), n);
         float nz = ZOf(n);
-        float dot = XOf(dv);
+        float dot = GetX(dv);
         float g = dot / nz;
         result.q = AddScaled(p, g_normalZ, g);
     }

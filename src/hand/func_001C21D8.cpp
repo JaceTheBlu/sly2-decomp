@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "dl.h"
 // func_001C21D8: A* path search over the navigation polygons (lilly5, T1831; = lilly4 with the minimal probe).
 // BYTE-IDENTICAL (matchtool MATCH), but NOT promotable under AGENT_GUIDE "Not accepted": the target's never-touched
@@ -36,7 +37,6 @@ static inline void *PvAllocClear(int cb) { MSG msg; msg.cb = cb; msg.nKind = 0x1
 static inline void *PvAlloc(int cb) { MSG msg; msg.cb = cb; msg.nKind = 0x10; return PvAllocStackImpl__FP7SWALLOC(&msg); }
 // The current stack-allocation scope (out of line: 0x1AE478 / 0x1AE4A0)
 struct STACKSCOPE { STACKSCOPE(); ~STACKSCOPE(); };
-static inline qword QwSub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword QwLength(qword v)
 {
     qword qw;
@@ -52,8 +52,7 @@ static inline NAV *PnavFind(const qword &pos) { return func_001C0D70(pos, 0); }
 static inline void AppendNode(DL *pdl, NODE *pnode) { func_0011A220(pdl, pnode); }
 static inline void RemoveNode(DL *pdl, NODE *pnode) { func_0011A2E8(pdl, pnode); }
 static inline void InsertNode(DL *pdl, NODE *pnodeNext, NODE *pnode) { func_0011A280(pdl, pnodeNext, pnode); }
-static inline float GXOfQw(qword qw) { float x; __asm__("mtc1 %1, %0" : "=f"(x) : "r"(qw)); return x; }
-static inline float GDistX(const qword &a, const qword &b) { return GXOfQw(QwLength(QwSub(a, b))); }
+static inline float GDistX(const qword &a, const qword &b) { return GetX(QwLength(QwSub(a, b))); }
 
 static inline void StoreX(float *p, qword q) { __asm__("sw %1,%0" : "=m"(*p) : "r"(q)); }
 extern "C" int func_001C21D8(GRAPH *pgraph, void *pvActor, qword posGoal, int fExact, int cpedgeMax, EDGE **apedge)

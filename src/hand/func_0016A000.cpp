@@ -1,8 +1,9 @@
+#include "vu0.h"
 // func_0016A000 = LoadSubglobType0FromBrx (name from Lilly's personal decomp, decomp/src/P2/glob.c T1082 draft). MATCH (T1701).
 // Built on lilly4 (T1697) / lilly3 (T1693); see notes/160000.md for the tricks that matched it, the last ones being:
 //  - the header flags word (BATCHHDR0 +0x8) is a one-member struct, set from an aggregate initializer in the ibatch
 //    switch: the clear-then-set keeps loop.c from hoisting the constant with the other 1s;
-//  - the lit-batch count is Min(0x27, cvtx - iofs) through an inline Min (no REG_EQUAL on n's first set);
+//  - the lit-batch count is NMin(0x27, cvtx - iofs) through an inline NMin (no REG_EQUAL on n's first set);
 //  - ppart->iqwVtx is re-read for iqwEnd/iqwOwn; pg[0] = pg[1] = pg[2] = -1.0f.
 typedef unsigned  size_t;
 typedef unsigned char    uint8_t;
@@ -631,7 +632,6 @@ static inline char *PbReloc(char *pbOld, int cb, char *pbNew, char *pb)
 }
 struct RGBA5551 { ushort r : 5; ushort g : 5; ushort b : 5; ushort a : 1; };
 struct UVLINK { short u, v; ushort link; } __attribute__((packed));
-static inline int Min(int a, int b) { return a < b ? a : b; }
 void LoadSubglobType0FromBrx(GLOBSET *const pglobset, SUBGLOB *psubglob, GLOB *pglob, SUBGLOBLOAD *psgl, SUBGLOBX *psubglobx, int cSubExtra, CBinaryInputStream *pbis)
 {
     psubglob->bUnk02 = pbis->U8Read();
@@ -1153,7 +1153,7 @@ void LoadSubglobType0FromBrx(GLOBSET *const pglobset, SUBGLOB *psubglob, GLOB *p
                     {
                         for (int iofs = 0; iofs < pbatch->cvtx; iofs += 0x27)
                         {
-                            int n = Min(0x27, pbatch->cvtx - iofs);
+                            int n = NMin(0x27, pbatch->cvtx - iofs);
                             uint *pun;
                             vifsLit.UnpackHelper(UPK_V4_32, 3, 0x307, 0, &pun);
                             pun[0] = 0x30a;

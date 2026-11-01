@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct E { int x0; char pad[0x8C]; };
@@ -22,8 +23,6 @@ void func_00221CE8(struct S *p, void *pq);
 void DecomposeSphere__FUxPfN21(qword v, float *pa, float *pb, float *pc);
 qword func_0011E208(float a, float b, float c);
 void func_0014D8C0(struct G *pg);
-static __inline__ qword VAdd(qword a, qword b) { qword r; __asm__("vadd.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
-static __inline__ qword VSub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 void func_00221A18(struct S *p, void *pj, struct T *pt)
 {
     struct { qword a[5]; } q0;
@@ -56,10 +55,10 @@ void func_00221A18(struct S *p, void *pj, struct T *pt)
             func_00221CE8(p, &q0);
         func_00220DD8(p->pe, &q0, &q50, p->pt);
     }
-    { qword *pq = &g_cm.q2E0; a = VAdd(q50, *pq);
-    DecomposeSphere__FUxPfN21(VSub(pq[-0x25], a), &p->g18, &p->g1C, &p->g20); }
+    { qword *pq = &g_cm.q2E0; a = QwAdd(q50, *pq);
+    DecomposeSphere__FUxPfN21(QwSub(pq[-0x25], a), &p->g18, &p->g1C, &p->g20); }
     p->g20 = p->g20 - g_cm.g4C;
-    p->pos = VAdd(a, func_0011E208(p->g18, p->g1C, p->g20));
+    p->pos = QwAdd(a, func_0011E208(p->g18, p->g1C, p->g20));
     p->g24 = ((struct R *)p->pe)->g5C;
     p->x34 = 0;
     if (p->pt && p->pt->x184)

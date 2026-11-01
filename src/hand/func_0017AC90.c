@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 // Update the movement-state controller.
 typedef int qword __attribute__((mode(TI)));
@@ -18,7 +19,6 @@ void func_0017ABC8(struct S *p);
 qword func_001A62E8(struct A *a);
 void func_002309E8(void *a, void *b, struct OUT *pm, struct OUT *other, float g);
 static inline void*Frame(struct X*x){register struct Y*y __asm__("$2")=x->p19A4;return y->p60;}
-static __inline__ float GetZ(qword q) { float z; __asm__("pextuw %0,$0,%1" : "=r"(z) : "r"(q)); return z; }
 void func_0017AC90(struct S *p) {
     qword v;
     int s;

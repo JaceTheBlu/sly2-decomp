@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Query the vertical hit span and optional point and normal outputs.
 typedef int qword __attribute__((mode(TI)));
 typedef struct MSG { int cb; int cbAlign; } MSG;
@@ -19,9 +20,6 @@ int func_001F7E08(struct S *p,int (*pfn)(void *,void *),void *context,void **apv
 int func_0014CDB0(qword a, qword b, int cso, void **apso, int cMax, struct LSG *alsg);
 int func_0011D4D0(float a, float b, float eps);
 }
-static __inline__ float GetX(qword q) { float x; __asm__("mtc1 %1,%0" : "=f"(x) : "r"(q)); return x; }
-static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0,%1" : "=r"(y) : "r"(q)); return y; }
-static __inline__ float GetZ(qword q) { float z; __asm__("pextuw %0,$0,%1" : "=r"(z) : "r"(q)); return z; }
 static inline float Epsilon(){register float f __asm__("$f14");__asm__ __volatile__("li.s %0,%1":"=f"(f):"F"(1e-4f));return f;}
 static inline int WordY(qword q){int r;__asm__("prot3w %0,%1":"=r"(r):"r"(q));return r;}
 static inline int WordZ(qword q){int r;__asm__("pextuw %0,$0,%1":"=r"(r):"r"(q));return r;}

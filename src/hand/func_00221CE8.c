@@ -1,6 +1,5 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
-static __inline__ float GetX(qword q) { float x; __asm__("mtc1 %1,%0" : "=f"(x) : "r"(q)); return x; }
-static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0,%1" : "=r"(y) : "r"(q)); return y; }
 struct S { char pad[0x10C]; void *p10C; char pad1[0x12C - 0x110]; int x12C; char pad2[0x140 - 0x130]; float g140; char pad3[0x150 - 0x144]; qword v150; float g160; };
 struct P { char pad[0x10]; struct S *ps; int x14; };
 void func_00220DD8(int a, int b, qword *pq, int c);

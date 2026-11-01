@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "util.h"
 // func_001D6B00: launch an object (pso) from a launcher (plaunch). The launch point is the target point in
 // the source's frame, optionally advanced by a predicted time (clqPredict over the distance, clamped to lmPredict), then
@@ -112,7 +113,6 @@ static inline float GFromVfBits(qword v)
     __asm__("mtc1 %1,%0" : "=f"(g) : "r"(n));
     return g;
 }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword Point(const MATRIX4 &m, qword v)
 {
     qword r;
@@ -194,14 +194,14 @@ extern "C" void func_001D6B00(LAUNCH *plaunch, SO *pso)
     {
         MATRIX4 mat;
         __ml__FRC7MATRIX4T0(&mat, &pxf->matWorld, &matParent);
-        dpos = Sub(Point(mat, plaunch->posTarget), posStart);
+        dpos = QwSub(Point(mat, plaunch->posTarget), posStart);
         dist = GFromVf(Length(dpos));
         float t = GClamp(GFromClq(plaunch->clqPredict, dist), plaunch->lmPredict.gMin, plaunch->lmPredict.gMax);
         if (t != 0.0f) {
             MATRIX4 matPredict;
             func_002309E8(pxf, 0, &mat, 0, t);
             __ml__FRC7MATRIX4T0(&matPredict, &mat, &matParent);
-            dpos = Sub(Point(matPredict, plaunch->posTarget), posStart);
+            dpos = QwSub(Point(matPredict, plaunch->posTarget), posStart);
         }
     }
     dist = GFromVf(Length(dpos));

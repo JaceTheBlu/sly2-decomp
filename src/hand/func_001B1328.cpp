@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 // Mover/follower state controller: switch from the current state to `next`.
 // Leaving states -1/0/2/3 restores the group's default action; entering a state sets up its velocity, mode, timers or
@@ -27,7 +28,6 @@ static inline void SetZeroVelocity(P*p){SetVelocity(p,D_002A2DD0.q);}
 // broadcast a float into a VU register and keep the scratch store the original left in `home`
 static inline qword SplatInto(float f,U*home){qword q;__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(f));home->q=q;return q;}
 static inline qword ScaleX(qword a,qword s){qword r;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(r):"j"(a),"j"(s));return r;}
-static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 // length of a vector, in two steps (sum of squares, then sqrt) so the stores/loads of the callers can sit between them
 static inline qword LengthV(qword v){qword d,one;__asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(d),"=&j"(one):"j"(v));__asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q":"+j"(d));return d;}
 static inline float FloatOf(qword a){float f;__asm__("qmfc2.ni %0,%1":"=r"(f):"j"(a));return f;}
@@ -81,7 +81,7 @@ extern "C" void func_001B1328(P*p,int next){
   if(p->path){
    func_001E6F60(p->path,w.first.q,0,&w.second,0,&p->parameter,&w.parameter);
    float phase=func_001E77E8(p->path);
-   qword delta=Sub(w.first.q,w.second.q);
+   qword delta=QwSub(w.first.q,w.second.q);
    float speed=p->speed.value;
    float travel=FloatOf(LengthV(delta));
    p->phase=phase;
@@ -91,7 +91,7 @@ extern "C" void func_001B1328(P*p,int next){
   }else{
    P*near=func_001C4AF8(g_sw,w.first.q);w.second=w.first;w.first.q=func_001A62E8(near);p->deadline=g_clock.t+2.0f;
   }
-  qword ff=w.first.q;qword ss=w.second.q;qword gap=Sub(ss,ff);
+  qword ff=w.first.q;qword ss=w.second.q;qword gap=QwSub(ss,ff);
   w.direction.q=gap;w.direction.i[2]=0;
   qword point=w.direction.q;
   // register pin: local-alloc would otherwise give vf1 to the unused `one` scratch of LEN1M (the original has the length in vf1)

@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef struct O O;
 typedef struct PAIR PAIR;
 typedef struct EVENT EVENT;
@@ -65,7 +66,6 @@ struct WORK {MARK mark;SCRATCH scratch;V start,end;LSG intervals[16];V origin;EV
 static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"0"(a),"j"(b));return r;}
 static inline qword Add(qword a,qword b){qword r;__asm__("vadd.xyzw %0,%1,%2":"=j"(r):"0"(a),"j"(b));return r;}
 static inline REQ*Fields(REQ*p){register REQ*copy __asm__("$3");__asm__("daddu %0,%1,$zero":"=r"(copy):"r"(p));return copy;}
-static inline float Min(float a,float b){return b<a?b:a;}
 static inline qword Velocity(O *o){VE *v=o->vt;return v[33].f.velocity((char *)o+v[33].delta);}
 static inline void Impact(O *o,EVENT *e){VE *v=o->vt;v[51].f.event((char *)o+v[51].delta,e);}
 static inline void Signal(O *o,int event,PAIR *pair){VE *v=o->vt;v[4].f.signal((char *)o+v[4].delta,event,pair);}
@@ -101,7 +101,7 @@ extern "C" void func_00228E50(O *p){
    work.start.f[2]+=dz;work.end.f[2]+=dz;
    if(func_0014CDB0(work.start.q,work.end.q,work.count,objects,16,work.intervals)>0){
     qword normal;
-    float fall=Min(-work.scratch.velocity.f[2],600.0f)*(1.0f/600.0f);
+    float fall=GMin(-work.scratch.velocity.f[2],600.0f)*(1.0f/600.0f);
     float radius=((o->state->maximum.f[0]-o->state->minimum.f[0])+(o->state->maximum.f[1]-o->state->minimum.f[1]))*0.5f;
     void *effect=func_001FBB90(0x13);
     func_001FB2F8(effect,o);

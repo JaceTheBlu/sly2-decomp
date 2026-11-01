@@ -1,3 +1,4 @@
+#include "vu0.h"
 struct X;
 class CSave {
 public:
@@ -37,11 +38,10 @@ inline CSave::~CSave()
         m_p4->fF8 = m_nC;
     }
 }
-static inline int Max(int a, int b) { return a < b ? b : a; }
 extern "C" void func_00164100(X *p, int *pc, X **apx, int nDepth, int n)
 {
-    p->f100 = Max(nDepth, p->f100);
-    p->f104 = Max(n, p->f104);
+    p->f100 = NMax(nDepth, p->f100);
+    p->f104 = NMax(n, p->f104);
     p->fFC++;
     if (p->fFC >= p->c94) {
         apx[(*pc)++] = p;

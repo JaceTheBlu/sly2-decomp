@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "clock.h"
 // Update zoom from target bounds or controller input.
 typedef int qword __attribute__((mode(TI)));
@@ -26,7 +27,6 @@ extern SMP D_002A97B0;
 static inline qword LoadVF(const qword &q){qword r;__asm__("lqc2 %0,%1":"=j"(r):"m"(q));return r;}
 static inline qword ToVF(qword v){qword r;__asm__("qmtc2.ni %1,%0":"=j"(r):"r"(v));return r;}
 static inline qword Difference(qword b,qword a){qword r;__asm__("vsub.xyzw %0,%2,%1":"=j"(r):"j"(b),"j"(a));return r;}
-static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline float Length(qword d){qword r,one;float f;
     __asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(r),"=j"(one):"j"(d));
     __asm__("vsqrt Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,Q":"+j"(r));
@@ -51,13 +51,13 @@ extern "C" void func_00225E98(S *p){
         V scratch;
         float radius=p->target->shape?p->target->shape->radius:0.0f;
         scratch.q=ToVF(func_001A62E8(p));
-        float angle=func_00244B68(radius/(Length(Sub(scratch.q,func_001A62E8(p->target)))*0.5f));
+        float angle=func_00244B68(radius/(Length(QwSub(scratch.q,func_001A62E8(p->target)))*0.5f));
         angle=angle+angle;
         CLOCK *clock=&g_clock;
         angle=Max(angle,p->range.lo);
         func_002309E8(p->target->component,0,&m,0,clock->dt);
         scratch.q=LoadVF(m.r[3]);future.q=scratch.q;
-        offset.q=Sub(scratch.q,func_001A62E8(p->target));
+        offset.q=QwSub(scratch.q,func_001A62E8(p->target));
         float extent=radius+OffsetLength(offset.q);
         saved.q=future.q;
         local.q=Difference(func_001A62E8(p),saved.q);

@@ -1,3 +1,4 @@
+#include "vu0.h"
 #include "util.h"
 #include "clock.h"
 // func_001D2610: MATCH. Mode-1 update of a vehicle with attached weapons (called from
@@ -100,7 +101,6 @@ static inline VV Rotate(const M3 &m, VV v)
             : "=j"(r) : "j"(m.rows[0].q), "j"(m.rows[1].q), "j"(m.rows[2].q), "j"(v));
     return r;
 }
-static inline float Max(float a, float b) { return a < b ? b : a; }
 static inline float Abs(float f) { return __builtin_fabsf(f); }
 
 extern "C" void func_001D2610(P *p)
@@ -147,7 +147,7 @@ extern "C" void func_001D2610(P *p)
     case 0: {
         // approach: a point at the attachment's radius from the target, rotated around it by the tactic
         float radius = p->selectedAttach->radius;
-        float angle = func_002456F0(radius / Max(radius * D_002C20E8, distance));
+        float angle = func_002456F0(radius / GMax(radius * D_002C20E8, distance));
         VV goal;
         VV offset = VuFloatFromMemWord(*(int *)&p->selectedAttach->radius) * NormalizeSafe(Sub(position, target), D_002A2DA0);
         switch (p->selectedAttach->tactic) {

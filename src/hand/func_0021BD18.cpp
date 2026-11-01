@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Initialize mesh history and samples.
 typedef int qword __attribute__((mode(TI)));
 struct M4 {qword r[4];};
@@ -27,7 +28,6 @@ static inline float Dot(qword a,qword b){qword one;float f;
 static inline float DotCopy(qword a,qword b){qword r,one;float f;
     __asm__("vmul.xyz %0,%2,%3\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(r),"=&j"(one):"j"(a),"j"(b));
     __asm__("qmfc2.ni %0,%1":"=r"(f):"j"(r));return f;}
-static inline qword Broadcast(float f){qword q;__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(f));return q;}
 static inline qword Offset(qword position,qword axis,qword scalar){__asm__("vadda.xyzw ACC,%0,$vf0\n\tvmaddx.xyzw %0,%1,%2x":"+j"(position):"j"(axis),"j"(scalar));return position;}
 static inline void RecordOperands(S *owner,N *node,int &bytes,unsigned &divisor,int &stride,Meta *&metadata){
  register Record *rb asm("$4")=owner->model.records;register int span asm("$5");register unsigned d asm("$2");register int st asm("$3");register Meta *mt asm("$6");
@@ -88,7 +88,7 @@ extern "C" void func_0021BD18(S *p){
                     qword position=*v,axis=p->axis;
                     float dot=DotCopy(position,axis);
                     float fraction=(dot-minimum)/range;
-                    qword scalar=Broadcast((p->scale-one)*dot);
+                    qword scalar=QwFromG((p->scale-one)*dot);
                     req.q=scalar;
                     out->position=Offset(position,axis,req.q);
                     out->fraction=fraction;

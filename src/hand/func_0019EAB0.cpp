@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];int i[4];};
 struct VE{short delta,pad;void*fn;};
@@ -22,7 +23,6 @@ void func_0018E540(P*,int);void func_001F15B8(COMPONENT**);
 void func_001305B8(ASEG*,P*,float,float,int,ASEGA**);
 }
 static inline void PathState(PATH*p,int state){VE&v=p->vt[3];((void(*)(void*,int,void*,void*,void*,void*))v.fn)((char*)p+v.delta,state,0,0,0,0);}
-static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword Vector(qword q){qword v;__asm__("qmtc2.ni %1,%0":"=j"(v):"r"(q));return v;}
 static inline qword Direction(U*a,U*b,U*&axis){
  register qword first __asm__("vf2"),second __asm__("vf1"),direction __asm__("vf3");register U*address __asm__("$2");
@@ -111,8 +111,8 @@ extern "C" void func_0019EAB0(C*p,int next){
   func_001E6F10(p->path,p->distance,&w.point,0);
   qword offset=Vector(func_001A6F00(p->actor,0,p->offset.q));P*owner;
   qword point=WorldInputs(p,&w.point,&w.world,offset,owner);
-  owner->offset.q=Sub(point,offset);
-  p->actor->motion.q=Sub(p->actor->goal.q,w.point.q);
+  owner->offset.q=QwSub(point,offset);
+  p->actor->motion.q=QwSub(p->actor->goal.q,w.point.q);
   p->actor->motion.i[2]=0;
   func_00140C88(p->actor,p->path->focus);
   if(p->path->attachEffectId){EFFECT*e=func_001FBB90(p->path->attachEffectId);func_001FB2F8(e,0);func_001FB3F0(e,w.point.q);}
