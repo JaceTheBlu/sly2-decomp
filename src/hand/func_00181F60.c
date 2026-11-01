@@ -8,7 +8,7 @@ extern struct CLOCK g_clock;
 extern void *D_002DFB80;
 extern char D_002BE888[];
 extern float D_002BE898, D_002BE89C, D_002BE8A0, D_002BE8A4;
-void func_001F36E0(struct S *p);
+void UpdateCid48(struct S *p);
 float func_001E6648(int oid);
 qword func_001A62E8(void *p);
 void func_001E6F60(int oid, qword q, int a, int b, struct V *pv, int c, float *pg);
@@ -30,7 +30,7 @@ void func_00181F60(struct S *p)
 {
     int i;
     struct V v;
-    func_001F36E0(p);
+    UpdateCid48(p);
     if (!p->x1c0) return;
     for (i = 0; i < p->c; i++) {
         struct E *pe = &p->ae[i];

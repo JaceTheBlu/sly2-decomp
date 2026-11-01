@@ -1,9 +1,9 @@
-void func_001F2108(void *p);
+void InitCid48(void *p);
 void func_00148718(void *p);
 void func_00148BB0(char *p)
 {
     unsigned int v;
-    func_001F2108(p);
+    InitCid48(p);
     func_00148718(p + 0x150);
     v = *(unsigned int *)(p + 0x40);
     if ((v ^ 1) & 1) *(int *)v |= 2;

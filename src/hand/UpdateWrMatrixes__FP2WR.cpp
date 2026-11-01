@@ -14,7 +14,7 @@ struct WRE {int kind,index;char pad8[8];V axis,vectorA;PAYLOAD data;};
 struct WR {char pad[0x50];float time;int count,count58,index5C;WRE entries[8];int count6E0;char pad6E4[0xC];M4 matrices[4],coordinates[4];char pad8F0[0xC];void *source;};
 extern CLOCK g_clock;
 extern "C" {
-void func_001A5E28(WR *);
+void UpdateLo(WR *);
 void func_0022B7D8(WR *);
 float RadNormalize__Ff(float);
 void CalculateSinCos__FfPfT1(float,float *,float *);
@@ -32,7 +32,7 @@ static inline qword Unit(qword v){qword len,one,r;__asm__("vmul.xyz %0,%2,%2\n\t
 static inline qword UnitFresh(qword v){qword len,one,r;__asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(len),"=&j"(one):"j"(v));__asm__("vsqrt Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,Q":"+j"(len));__asm__("vdiv Q,$vf0w,%2x\n\tvwaitq\n\tvmulq.xyzw %0,%1,Q":"=&j"(r):"j"(v),"j"(len));return r;}
 static inline qword Rotate(const M3 &m,qword v){__asm__("vmulax.xyz ACC,%1,%0x\n\tvmadday.xyz ACC,%2,%0y\n\tvmaddz.xyz %0,%3,%0z":"+j"(v):"j"(*(const qword *)m.f[0]),"j"(*(const qword *)m.f[1]),"j"(*(const qword *)m.f[2]));return v;}
 void UpdateWrMatrixes(WR *p){
- func_001A5E28(p);
+ UpdateLo(p);
  if(g_clock.t==p->time)return;
  if(p->source)func_0022B7D8(p);
  for(int i=0;i<p->count;i++){

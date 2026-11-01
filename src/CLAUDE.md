@@ -41,3 +41,6 @@ inside `extern "C" { … }` so the symbol is the plain name.
   (`git checkout`) every file that fails to build or changes code, and fix those by hand later.
 - Helpers: before writing a local `static inline` for a VU0 op or a min/max/clamp, look in `include/vu0.h`;
   `tools/dedupe_inlines.py` replaces exact local copies.
+- `XxxCidNN` names (`InitCid48`, `LoadCid43FromBrx`) are virtual methods whose role is known from the vtable slot
+  but whose class (cid NN in `docs/CLASSES.md`) is not named yet. When a class is identified, rename them all
+  (`tools/rename.py`) and add the class to `CLASSES` in `tools/name_vslots.py`.

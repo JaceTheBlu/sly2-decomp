@@ -20,7 +20,7 @@ static inline void *Alloc(int cb) { return PvAllocStackImpl__FP7SWALLOC(AREQ(cb,
 static inline void *AllocB(int cb) { return PvAllocStackClearImpl__FP7SWALLOC(AREQ(cb, 0x10)); }
 static inline void *Realloc(void *pv, int cb) { return PvAllocSwCopyImpl__FP7SWALLOCPv(AREQ(cb, 0x10), pv); }
 extern "C" {
-void func_001F31E0(P *p, void *a);
+void LoadCid48FromBrx(P *p, void *a);
 }
 
 extern "C" void func_001BABA0(P *p, void *a)
@@ -30,7 +30,7 @@ extern "C" void func_001BABA0(P *p, void *a)
 
     p->x154 = Alloc(0x40);
     p->ae = (E *)AllocB(0x200) + 1;
-    func_001F31E0(p, a);
+    LoadCid48FromBrx(p, a);
     p->i = 0;
     p->x154 = Realloc(p->x154, p->c150 << 3);
     if (p->c) {

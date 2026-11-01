@@ -6,7 +6,7 @@ struct SW { char pad[0x403C]; char pool[0x30]; RIPG *x406C; };
 extern SW g_sw;
 extern "C" {
 void func_001CE980(RIP *prip);
-void func_001F2D48(RIPG *p);
+void OnCid48Remove(RIPG *p);
 void func_001337D0(SW *psw, void *pv);
 void func_001A57A8(RIPG *p);
 void *func_0015E3A8(SW *psw, int n);
@@ -37,7 +37,7 @@ void OnRipgRemove(RIPG *pripg)
     while ((prip = (RIP *)PvNextDli(&dli)) != 0) func_001CE980(prip);
     psw = &g_sw;
     if (pripg == psw->x406C) psw->x406C = 0;
-    func_001F2D48(pripg);
+    OnCid48Remove(pripg);
     if (pripg->xEC) {
         func_001337D0(psw, pripg->xEC);
         pripg->xEC = 0;

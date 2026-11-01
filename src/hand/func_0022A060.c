@@ -4,7 +4,7 @@ struct J { char pad[0xC]; struct VTE *vt; char pad1[0x2DC - 0x10]; int x2DC; };
 struct P { char pad[0xC]; struct VTE *vt; char pad1[0x150 - 0x10]; int x150; int x154; float g158; float g15C; int x160; int x164; };
 struct G { char pad[0x3B0C]; int x3B0C; };
 extern struct G g_sw;
-void func_001F36E0(struct P *p);
+void UpdateCid48(struct P *p);
 struct J *func_001C4840(struct G *pg);
 int FIsBasicDerivedFrom__FP5BASIC3CID(struct J *pj, int k);
 qword func_001A62E8(void *p);
@@ -28,7 +28,7 @@ void func_0022A060(struct P *p)
     struct J *pj;
     int f;
     float r;
-    func_001F36E0(p);
+    UpdateCid48(p);
     pj = func_001C4840(&g_sw);
     if (pj && FIsBasicDerivedFrom__FP5BASIC3CID(pj, p->x154)) {
         r = p->x164 ? p->g15C : p->g158;

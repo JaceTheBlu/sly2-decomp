@@ -22,7 +22,7 @@ extern LIMITS D_002C2050,D_002C2070,D_002C2090;
 extern float D_002C2030,D_002C20A4;
 extern char D_002C2098[],D_002C20A8[];
 extern "C" {
-void func_001F36E0(P *);
+void UpdateCid48(P *);
 float func_002458F0(float,float);
 int func_001D4E08(ATTACH *);
 void func_001F0660(void *,int);
@@ -66,7 +66,7 @@ extern "C" void func_001D19A8(P *p)
 {
     U scalar,position,targetPosition,targetVelocity,shot;
     int i=0;
-    func_001F36E0(p);
+    UpdateCid48(p);
     p->heading=func_002458F0(p->space->world.basis.rows[0].f[1],p->space->world.basis.rows[0].f[0]);
     if(p->attachCount>0){
         ATTACH **current=p->attachments;

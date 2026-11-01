@@ -14,7 +14,7 @@ struct S {
     int n230; struct E a234[1];
     char pad4[0x2A4 - 0x234 - 0x18]; struct M *p2A4; int pad5; float g2AC;
 };
-void func_001F36E0(struct S *p);
+void UpdateCid48(struct S *p);
 int func_0017F550(struct S *p);
 void func_0017FD08(struct S *p, int n);
 qword func_0011E1A0(float a, float b, float c);
@@ -30,7 +30,7 @@ static __inline__ qword Make(float x, float y, float z) { qword q, t;
             : "=&r"(q), "=&r"(t) : "f"(x), "f"(y), "f"(z)); return q; }
 void func_0017F930(struct S *p) {
     int s;
-    func_001F36E0(p);
+    UpdateCid48(p);
     do {
         s = p->n1C0;
         if (s == 2 && func_0017F550(p)) func_0017FD08(p, 1);

@@ -10,14 +10,14 @@ struct VT { struct VE e[32]; };
 extern struct { float t; float dt; } g_clock;
 extern float D_002C3C80[3];
 extern float D_002BBB60[2];
-void func_001F36E0(struct S *p);
+void UpdateCid48(struct S *p);
 void func_00203E08(struct S *p);
 float func_002458F0(float y, float x);
 float RadNormalize__Ff(float a);
 
 void func_00203FC0(struct S *p)
 {
-    func_001F36E0(p);
+    UpdateCid48(p);
     func_00203E08(p);
     switch (p->k1A4) {
     case 0: {

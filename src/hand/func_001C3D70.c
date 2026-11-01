@@ -1,9 +1,9 @@
 struct S { char pad[0x40]; int x40; char pad2[0x118]; int n15c; int a[2]; void *p168; };
-void func_001F2108(struct S *p);
+void InitCid48(struct S *p);
 void func_001C3D70(struct S *p)
 {
     int v;
-    func_001F2108(p);
+    InitCid48(p);
     p->n15c = 1;
     p->p168 = p;
     v = p->x40;

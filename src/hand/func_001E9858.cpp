@@ -33,7 +33,7 @@ struct WORK { PHASE phase; U direction; M3 basis, temporary, inverse; float dist
 extern char D_002C44F0;
 
 extern "C" {
-void func_001F36A8(S *);
+void PostCid48Load(S *);
 M3 *func_001A6318(S *);
 void func_0016EF00(CONFIG *, int);
 void func_001AE5A0(void *, const void *, unsigned);   /* memcpy */
@@ -80,7 +80,7 @@ void func_001E9858(S *p)
 {
     U vertices[128];
     WORK w;
-    func_001F36A8(p);
+    PostCid48Load(p);
     if (!p->path || !p->head) return;
     qword axis = func_001A6318(p)->c.q;
     NODE *head = p->head;

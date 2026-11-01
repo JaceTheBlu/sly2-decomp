@@ -61,7 +61,6 @@ def main():
         if not drop: continue
         u = t
         for m in reversed(drop): u = u[:m.start()] + u[m.end():]
-        # the helper names must not already mean something else in the file
         # the helper names must not already mean something else in the file: no other definition or
         # declaration of that name may remain (C++ would see an overload; C a conflicting definition)
         if any(re.search(r'\b' + h + r'\s*\([^;{()]*(?:\([^()]*\)[^;{()]*)*\)\s*[;{]', u) for h in set(ren.values())):

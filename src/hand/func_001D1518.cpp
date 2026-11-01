@@ -13,7 +13,7 @@ struct P {char pad[0x190];int count;char pad194[0xC];E entries[8];float width;in
 extern "C" {
 extern qword g_normalZ,D_002A2DD0;
 extern char g_sw[];
-void func_001F36A8(P *);
+void PostCid48Load(P *);
 REF *func_001F4C58(P *,int,int);
 void *func_002332B8(void *,const void *,int);
 qword func_001A6F00(void *,P *,qword);
@@ -31,7 +31,7 @@ extern "C" void func_001D1518(P *p){
  register int i __asm__("$18")=0;CURRENT current;SCALE scale;
  register int count __asm__("$2");
  {qword zero=Zero();minimum.q=CPU(zero);maximum.q=zero;}
- func_001F36A8(p);
+ PostCid48Load(p);
  if(p->count>0){
  int stride=0x60;
  scale.axis=&g_normalZ;

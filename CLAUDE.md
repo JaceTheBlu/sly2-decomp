@@ -46,11 +46,23 @@ commit of this branch so far). Do not regenerate it on a dirty tree you have not
 | `tools/migrate_struct.py STRUCT HEADER [--dry-run] [FILE…]` | replace local re-declarations of a struct by the shared header (fields matched by offset) |
 | `tools/dedupe_inlines.py [--dry-run] [FILE…]` | replace local copies of the include/vu0.h helpers |
 | `tools/consolidate.py STRUCT` | merge all local definitions of a struct by offset (draft a canonical layout) |
+| `tools/name_vslots.py [--dry-run]` | name virtual methods from their vtable slot and class (`InitCid48` until the class is named) |
 | `tools/resolve_names.py [--sly1 DIR] [--apply]` | give addresses to names the sources use without one (needs the executable) |
 
 ## Progress log
 
 Newest first. Each entry: what changed, how it was verified, the metrics after it.
+
+### 2026-11-01 — Virtual methods named by role (tools/name_vslots.py)
+
+- `tools/name_vslots.py` (needs the executable) reads the class table and vtables, assigns each function in an
+  established slot to the lowest class whose subtree holds every class that has it there, and names `func_` ones
+  after the role: `Init%s`, `On%sAdd`, `Load%sFromBrx`, `Post%sLoad`, `Update%s`, `Clone%s`… with the class name
+  when known, else `Cid<N>` (the cid in docs/CLASSES.md): `InitCid48`, `OnCid57Add`. `CidNN` is a placeholder to be
+  renamed (`rename.py`) once the class is identified.
+- Validation: the overrides call their parent's function in the same slot in 35/40 Init, 21/26 PostLoad, 6/6 OnAdd,
+  10/10 OnRemove, 18/25 Load, 14/15 Clone, 14/20 Update cases. Slot 5 (Handle%sMessage) only with that parent call.
+- 145 functions named. objcheck 0. sly1match.py re-run with the new anchors found nothing new.
 
 ### 2026-11-01 — Matrices: MATRIX3/MATRIX4 shared, M3/M4 stand-ins retired
 

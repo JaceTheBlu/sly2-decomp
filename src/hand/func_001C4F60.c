@@ -8,13 +8,13 @@ struct S {
     char p3[0x204 - 0x1BC]; int x204; void *x208; int x20C; void *x210; int x214; void *x218;
 };
 extern char g_sw[];
-void func_001F36A8(struct S *p);
+void PostCid48Load(struct S *p);
 struct LO *func_0015ED78(void *pg, int a, int b, struct S *p);
 void *PloFindSwObject__FP2SWi3OIDP2LO(void *pg, int a, int b, struct S *p);
 void func_001C4F60(struct S *p)
 {
     struct LO *plo;
-    func_001F36A8(p);
+    PostCid48Load(p);
     plo = func_0015ED78(g_sw, 1, 0x12, p);
     p->x16C = plo;
     if (plo)

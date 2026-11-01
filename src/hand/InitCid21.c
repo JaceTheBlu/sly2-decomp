@@ -1,0 +1,10 @@
+struct S { char pad[0xE8]; float a, b, c; int f; };
+void InitAlo__FP3ALO(struct S *p);
+void InitCid21(struct S *p)
+{
+    InitAlo__FP3ALO(p);
+    p->a = 2000.0f;
+    p->b = -800.0f;
+    p->c = 800.0f;
+    p->f = 1;
+}
