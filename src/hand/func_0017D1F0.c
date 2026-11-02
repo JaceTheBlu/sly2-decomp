@@ -1,14 +1,14 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
-struct M3 { qword a, b, c; };
 struct VTE { short d; short pad; void (*pfn)(void *); };
 struct O { char pad[0xC]; struct VTE *vt; char pad2[0x2C]; int n3C; };
-struct T { char pad[0x1B0]; struct M3 m1B0; char pad2[0xF84 - 0x1E0]; void *pF84; };
+struct T { char pad[0x1B0]; struct MATRIX3 m1B0; char pad2[0xF84 - 0x1E0]; void *pF84; };
 struct S { char pad[0x10]; struct T *pt; };
 extern qword g_normalZ;
 void func_001EEF70(struct S *p);
 struct O *func_00205438(void *p, int n);
 qword *func_001A6318(void *p);
-struct M3 func_0011B830(qword a, qword b);
+struct MATRIX3 func_0011B830(qword a, qword b);
 void func_0017D1F0(struct S *p) {
     struct O *o; struct VTE *e; struct T *t;
     func_001EEF70(p);

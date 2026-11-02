@@ -1,7 +1,7 @@
+#include "mat.h"
 #include "vtable.h"
 typedef int qword __attribute__((mode(TI)));
 struct LO { int pad[3]; struct VTE *pvt; };
-struct M4 { qword r[3]; qword pos; };
 struct P { int pad[4]; struct LO *apo[4]; qword apos[2]; void *ap40[2]; int a48; };
 extern char D_002C44F0[];
 float func_001E6610(int);
@@ -11,10 +11,10 @@ void func_001E93F0(struct P *p, int i, struct LO *po)
 {
     p->apo[i] = po;
     if (po) {
-        struct M4 m;
+        struct MATRIX4 m;
         struct VTE *pe = &po->pvt[32];
-        p->ap40[i] = ((void *(*)(void *, struct M4 *))pe->pfn)((char *)po + pe->delta, &m);
-        *(p->apos + i) = m.pos;
+        p->ap40[i] = ((void *(*)(void *, struct MATRIX4 *))pe->pfn)((char *)po + pe->delta, &m);
+        *(p->apos + i) = m.r[3];
     } else {
         float f;
         p->ap40[i] = D_002C44F0;

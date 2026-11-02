@@ -1,16 +1,13 @@
+#include "vtable.h"
 #include "clock.h"
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((t*)0)->m))
-struct VTE {short delta,pad;void*fn;};
 struct PL {char pad[0x1C];float amount;char pad20[0x10];unsigned flags;};
 struct CONTROL {int word0,state;char pad8[0x14];int count;};
 struct GATE {int word0,word4,mode;};
 struct P {char pad[0xC];VTE*vt;char pad10[0x140];PL*input;char pad154[0xB8];float changed;char pad210[0xB0];CONTROL control;char pad2E0[0x1E0];GATE gate;char pad4CC[0x924];char action[0x110];char altAction[0x50];char physics[0xE0];void*animation;void*other;char pad1038[0x398];int state;char pad13D4[0x14];int pending;void*root;char pad13F0[0x5C];int flag;char pad1450[0x3F0];int kind;char pad1844[0xCC];char extra[1];};
-typedef char VTE_Size[sizeof(VTE)==8?1:-1];
 typedef char PL_Size[sizeof(PL)==52?1:-1];
 typedef char CONTROL_Size[sizeof(CONTROL)==32?1:-1];
 typedef char GATE_Size[sizeof(GATE)==12?1:-1];
-typedef char VTE_delta_Offset[FIELD_OFFSET(VTE,delta)==0?1:-1];
-typedef char VTE_fn_Offset[FIELD_OFFSET(VTE,fn)==4?1:-1];
 typedef char PL_amount_Offset[FIELD_OFFSET(PL,amount)==28?1:-1];
 typedef char PL_flags_Offset[FIELD_OFFSET(PL,flags)==48?1:-1];
 typedef char CONTROL_state_Offset[FIELD_OFFSET(CONTROL,state)==4?1:-1];
@@ -63,7 +60,7 @@ extern "C" void func_0021F418(void*);
 extern "C" void func_0019E1E0(void*);
 extern "C" int func_00141EA8(P*,int);
 static inline PL*CopyPL(PL*source){PL*result;__asm__("daddu %0,%1,$zero":"=r"(result):"r"(source));return result;}
-static inline int Can(P*p,int kind){return ((int(*)(void*,int))p->vt[99].fn)((char*)p+p->vt[99].delta,kind);}
+static inline int Can(P*p,int kind){return ((int(*)(void*,int))p->vt[99].pfn)((char*)p+p->vt[99].delta,kind);}
 extern "C" void func_001B4AA0(P*p){
  int state;
  do{

@@ -1,3 +1,4 @@
+#include "mat.h"
 #include "vtable.h"
 #include "vu0.h"
 // func_001E6F60: closest point of a path (a chain of control points, transformed by the path's
@@ -17,7 +18,6 @@
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
 struct VV { qword q; VV() {} VV(const qword &v) { q = v; } operator qword() const { return q; } };
-struct M4 { qword a, b, c, d; };
 struct SPACE;
 struct PATH {
     char padC[0xC]; VTE *vt; char pad10[0xD0];
@@ -33,11 +33,11 @@ struct VU_FLOAT {
     qword q;
     VU_FLOAT(float f) { __asm__("qmtc2.ni %1,%0" : "=j"(q) : "r"(f)); }
 };
-static inline VV TransformPoint(const M4 &m, VV v)
+static inline VV TransformPoint(const MATRIX4 &m, VV v)
 {
     qword r;
     __asm__("vmulax.xyz $ACC,%1,%5x\n\tvmadday.xyz $ACC,%2,%5y\n\tvmaddaz.xyz $ACC,%3,%5z\n\tvmaddw.xyz %0,%4,$vf0w"
-            : "=j"(r) : "j"(m.a), "j"(m.b), "j"(m.c), "j"(m.d), "j"(v));
+            : "=j"(r) : "j"(m.r[0]), "j"(m.r[1]), "j"(m.r[2]), "j"(m.r[3]), "j"(v));
     return r;
 }
 static inline VV Sub(VV a, VV b)
@@ -83,11 +83,11 @@ static inline float Clamp(float g, float lo, float hi)
 extern "C" void func_001E6F60(PATH *p, qword point, SPACE *space, qword *outPosition, qword *outDirection,
                               float *outTime, float *outValue)
 {
-    M4 matrix;
+    MATRIX4 matrix;
     U closest;
     qword start, end;
     VTE &v = p->vt[31];
-    matrix = *((M4 *(*)(void *))v.pfn)((char *)p + v.delta);
+    matrix = *((MATRIX4 *(*)(void *))v.pfn)((char *)p + v.delta);
     switch (p->mode) {
     case 0: {
         start = TransformPoint(matrix, p->points[0]);

@@ -1,3 +1,4 @@
+#include "mat.h"
 #include "vec.h"
 #include "vu0.h"
 #include "util.h"
@@ -8,7 +9,6 @@
 // The empty volatile asm in the loop stops jump threading of the two f tests.
 // DRAFT: escape/flee target position search (logic complete, not close: frame 0x130 vs 0x1D0 - target returns func_256CE8/256D08 VECTOR4 results via hidden pointer slots 0xB0..0xE0 and spills more temps; unreachable `b; mov.s f22,f20` block at 0x1561EC not reproduced).
 typedef int qword __attribute__((mode(TI)));
-struct M3 { qword r[3]; };
 class SO;
 struct VT { char pad[0x108]; short d; short pad2; qword (*pfn)(SO *); };
 class SO { public: char pad[0xC]; VT *pvt; };
@@ -27,7 +27,7 @@ extern float D_002A513C;
 SO *func_001C4840(void *p);
 extern char D_002DE578[];
 qword func_001A62E8(void *p);
-M3 *func_001A6318(void *p);
+MATRIX3 *func_001A6318(void *p);
 float func_00154C90(void *p);
 VUV func_00256CE8(float g);
 VUV func_00256D08(VECTOR *pv);
@@ -104,8 +104,8 @@ qword func_00155FB0(void *p, qword pos)
         }
         off.q = ScaleR(vel, sc);
     } else {
-        M3 *pm = func_001A6318(pso);
-        M3 *pm2 = func_001A6318(pso);
+        MATRIX3 *pm = func_001A6318(pso);
+        MATRIX3 *pm2 = func_001A6318(pso);
         off.q = func_0011E1A0(func_002458F0(((float *)pm)[1], ((float *)pm2)[0]), D_002BDC98, 0.0f);
     }
     DecomposeSphere__FUxPfN21(QwSub(Add(posTarget, off.q), pos), &pan, &tilt, &s);

@@ -1,9 +1,9 @@
+#include "vtable.h"
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((t*)0)->m))
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned long ulong;
 union U { qword q; float f[4]; int i[4]; };
 struct M4 { U row[4]; };
-struct VTE { short delta,pad; void *fn; };
 struct NODE { M4 local,world; char pad80[0x18]; short state; char pad9A[6]; NODE*parent; };
 struct OWNER { char pad[0xC]; VTE*vt; char pad10[0x18]; ulong flags; char pad30[0x28]; NODE*left,*right; };
 struct ASEG;
@@ -19,12 +19,9 @@ struct P { char pad[0xC]; VTE*vt; char pad10[0x50]; NODE*node; char pad64[0x12C]
 struct CLOCK { float time,dt; };
 typedef char U_Size[sizeof(U)==16?1:-1];
 typedef char M4_Size[sizeof(M4)==64?1:-1];
-typedef char VTE_Size[sizeof(VTE)==8?1:-1];
 typedef char EVENT_Size[sizeof(EVENT)==16?1:-1];
 typedef char CLOCK_Size[sizeof(CLOCK)==8?1:-1];
 typedef char STRETCH_Size[sizeof(STRETCH)==208?1:-1];
-typedef char VTE_delta_Offset[FIELD_OFFSET(VTE,delta)==0?1:-1];
-typedef char VTE_fn_Offset[FIELD_OFFSET(VTE,fn)==4?1:-1];
 typedef char M4_row_Offset[FIELD_OFFSET(M4,row)==0?1:-1];
 typedef char NODE_state_Offset[FIELD_OFFSET(NODE,state)==152?1:-1];
 typedef char NODE_parent_Offset[FIELD_OFFSET(NODE,parent)==160?1:-1];
@@ -129,7 +126,7 @@ extern "C" void func_001B93E8(P*p,int state) {
   VTE*entry=&owner->vt[35];
   void*receiver=(char*)owner+entry->delta;
   qword velocity=func_0022FCC8(owner->left->parent,0,work.row[2].q);
-  ((void(*)(void*,qword))entry->fn)(receiver,velocity);
+  ((void(*)(void*,qword))entry->pfn)(receiver,velocity);
   p->m1400=func_0012DC18(owner,owner->right,(void*)5,7,2,work.row[0].q);
   break;
  }
@@ -154,7 +151,7 @@ extern "C" void func_001B93E8(P*p,int state) {
   if(p->link->first){
    GOAL*goal=p->link->first;
    STRETCH*stretch=p->first;
-   stretch->frame=((void*(*)(void*,M4*))goal->vt[32].fn)((char*)goal+goal->vt[32].delta,&frame);
+   stretch->frame=((void*(*)(void*,M4*))goal->vt[32].pfn)((char*)goal+goal->vt[32].delta,&frame);
    stretch->position=frame.row[3];
    stretch->tuning=D_002C0A3C;
    p->m1618=func_0012DD28(p,stretch->first,(void*)5,stretch);
@@ -164,7 +161,7 @@ extern "C" void func_001B93E8(P*p,int state) {
   if(p->link->second){
    GOAL*goal=p->link->second;
    STRETCH*stretch=p->second;
-   stretch->frame=((void*(*)(void*,M4*))goal->vt[32].fn)((char*)goal+goal->vt[32].delta,&frame);
+   stretch->frame=((void*(*)(void*,M4*))goal->vt[32].pfn)((char*)goal+goal->vt[32].delta,&frame);
    stretch->position=frame.row[3];
    stretch->tuning=D_002C0A40;
    p->m1620=func_0012DD28(p,stretch->first,(void*)5,stretch);
