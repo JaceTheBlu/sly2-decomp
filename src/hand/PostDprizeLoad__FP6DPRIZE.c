@@ -11,7 +11,7 @@ extern char g_sw[];
 void PostSoLoad(struct S *p);
 struct LO *func_0015ED78(void *pg, int a, int b, struct S *p);
 void *PloFindSwObject__FP2SWi3OIDP2LO(void *pg, int a, int b, struct S *p);
-void PostCid90Load(struct S *p)
+void PostDprizeLoad__FP6DPRIZE(struct S *p)
 {
     struct LO *plo;
     PostSoLoad(p);

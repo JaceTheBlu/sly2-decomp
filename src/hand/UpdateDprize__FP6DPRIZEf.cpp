@@ -39,7 +39,7 @@ void UpdateSo__FP2SOf(P *p);
 void func_001C6308(P *p);
 void func_001C55E0(P *p);
 void func_001C5D18(P *p);
-void UpdateCid90(P *p);
+void UpdateDprize__FP6DPRIZEf(P *p);
 }
 static inline float LenSq(qword v)
 {
@@ -49,7 +49,7 @@ static inline float LenSq(qword v)
     __asm__("qmfc2.ni %0, %1" : "=r"(r) : "j"(t));
     return r;
 }
-void UpdateCid90(P *p)
+void UpdateDprize__FP6DPRIZEf(P *p)
 {
     UpdateSo__FP2SOf(p);
     func_001C6308(p);

@@ -3,7 +3,7 @@ struct S { char pad[0x40]; int f40; char pad2[0x150 - 0x44]; int f150; float f15
 extern float D_002BC9C8;
 extern float D_002A4B08;
 void InitSo__FP2SO(struct S *);
-void InitCid79(struct S *p) {
+void InitBomb__FP4BOMB(struct S *p) {
     int x;
     InitSo__FP2SO(p);
     p->f154 = 3.40282346638528859812e+38f;

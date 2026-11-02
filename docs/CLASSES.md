@@ -33,6 +33,12 @@ class is named. Named this way so far (Sly 1 names): InitLo, OnLoAdd, OnLoRemove
 InitAlo, LoadAloFromBrx, CloneAlo, InitEmitter, LoadEmitterFromBrx, CloneEmitter, InitWr, UpdateScroller.
 Suspect: `OnStepguardAdd__FP9STEPGUARD` sits in SPIRE's slot 15 (`PostSpireLoad` expected).
 
+## Still open
+
+Leads not strong enough yet: 82 (child of MISSILE whose Init calls InitMissile: TARMISS by Sly 1's order), 114
+(Update calls `UpdateJsg__FP3JSG`), 126–131 (call `SetTimerTimers`), 157/172/175 (rumble/joy behaviours), 73/74/76
+(call functions named InitVismap/InitMurray, which do not fit Sly 1's tree: those names are suspect).
+
 ## Order of classes
 
 The Sly 2 order is Sly 1's (`sly1/include/cid.h`) in places: `SM`, 3 classes, `WR` (cid 111–115) mirrors Sly 1's
@@ -123,9 +129,9 @@ the SAA family (cid 138–144) is a direct child of the root, not of `LO`.
 | ·····76 | 71 | 0x2A0 | 0x2D0B30 | 84 |  |  |
 | ····77 | 50 | 0x5D0 | 0x2D7CA8 | 82 |  |  |
 | ····78 | 50 | 0x230 | 0x2D5B30 | 82 |  |  |
-| ···79 | 48 | 0x210 | 0x2CB780 | 78 |  |  |
-| ····80 | 79 | 0x270 | 0x2D3FA0 | 79 |  |  |
-| ·····81 | 80 | 0x280 | 0x2D3D20 | 79 |  |  |
+| ···79 | 48 | 0x210 | 0x2CB780 | 78 | **BOMB** | parent of MISSILE (Sly 1: `MISSILE : BOMB`, `BOMB : SO`); RTTI chain in `func_001B20B8.cpp` |
+| ····80 | 79 | 0x270 | 0x2D3FA0 | 79 | **MISSILE** | RTTI chain `ACCMISS : MISSILE : BOMB : SO` in `func_001B20B8.cpp` |
+| ·····81 | 80 | 0x280 | 0x2D3D20 | 79 | **ACCMISS** | `func_001B20B8` (whose source declares that chain) is in its vtable (slot 70) |
 | ·····82 | 80 | 0x290 | 0x2D3AA0 | 79 |  |  |
 | ···83 | 48 | 0x300 | 0x2CC950 | 76 |  |  |
 | ···84 | 48 | 0x190 |  | 0 |  |  |
@@ -134,7 +140,7 @@ the SAA family (cid 138–144) is a direct child of the root, not of `LO`.
 | ···87 | 48 | 0x1B0 | 0x2D77D8 | 76 | **RIPG** | `OnRipgRemove__FP4RIPG`, `RenderRipgSelf__FP4RIPG…` in its vtable |
 | ···88 | 48 | 0x1A0 | 0x2D9978 | 76 |  |  |
 | ···89 | 48 | 0x190 | 0x2DCA30 | 76 |  |  |
-| ···90 | 48 | 0x230 |  | 0 |  |  |
+| ···90 | 48 | 0x230 |  | 0 | **DPRIZE** | abstract parent of COIN (Sly 1: `COIN : DPRIZE`) |
 | ····91 | 90 | 0x240 | 0x2D6928 | 77 |  |  |
 | ····92 | 90 | 0x240 | 0x2D6448 | 77 |  |  |
 | ····93 | 90 | 0x250 | 0x2D66B8 | 77 |  |  |
@@ -199,7 +205,7 @@ the SAA family (cid 138–144) is a direct child of the root, not of `LO`.
 | ·152 | 0 | 0x250 |  | 0 |  |  |
 | ·153 | 0 | 0xB0 | 0x2C94A0 | 7 |  |  |
 | ·154 | 0 | 0x30 | 0x2CA490 | 7 |  |  |
-| ·155 | 0 | 0x30 | 0x2D9480 | 15 |  |  |
+| ·155 | 0 | 0x30 | 0x2D9480 | 15 | **BHV?** | probably the behaviour base: 43 small subclasses that call `PbhvPushStep`/`PbhvFindStep`; matchers named two of them BHV166/BHV193. Its slots are not the LO ones, so no method is named from it |
 | ··156 | 155 | 0xB0 | 0x2D04A0 | 15 |  |  |
 | ··157 | 155 | 0x50 | 0x2D0AB0 | 15 |  |  |
 | ···158 | 157 | 0x50 | 0x2D0A30 | 15 |  |  |

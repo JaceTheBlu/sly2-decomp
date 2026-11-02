@@ -67,6 +67,9 @@ Newest first. Each entry: what changed, how it was verified, the metrics after i
 - `name_vslots.py --sly1 DIR`: renames the `CidNN` placeholders of newly identified classes (18) and uses Sly 1's
   mangled name when it has one (`InitSo__FP2SO`, `UpdateJt__FP2JTf`…); 130 more virtual methods named.
   objcheck 0.
+- The typeinfo functions (`__tf…`) that matchers' class declarations emitted give inheritance chains: besides the
+  JT chain, `ACCMISS : MISSILE : BOMB : SO` (func_001B20B8.cpp, a method in cid 81's vtable) → BOMB 79,
+  MISSILE 80, ACCMISS 81. DPRIZE 90 (parent of COIN). 12 more placeholders renamed.
 
 ### 2026-11-01 — CRef as a shared C++ class
 

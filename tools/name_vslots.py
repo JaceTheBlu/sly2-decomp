@@ -20,7 +20,8 @@ ROOT = M.ROOT
 TABLE, NCLASS = 0x2BAAE8, 199
 # Identified classes (evidence in docs/CLASSES.md)
 CLASSES = {2: 'Lo', 3: 'Alo', 9: 'Spire', 22: 'Btn', 24: 'Volbtn', 25: 'Jlovol', 29: 'Emitter', 48: 'So', 50: 'Po',
-           51: 'Step', 52: 'Stepplayer', 55: 'Jt', 56: 'Stepguard', 57: 'Gomer', 70: 'Keyhole', 87: 'Ripg', 94: 'Coin',
+           51: 'Step', 52: 'Stepplayer', 55: 'Jt', 56: 'Stepguard', 57: 'Gomer', 70: 'Keyhole', 79: 'Bomb',
+           80: 'Missile', 81: 'Accmiss', 87: 'Ripg', 90: 'Dprize', 94: 'Coin',
            111: 'Sm', 115: 'Wr', 138: 'Saa', 139: 'Loop', 140: 'Pingpong', 141: 'Shuffle', 142: 'Eyes',
            143: 'Scroller', 144: 'Circler'}
 LO_SLOTS = {5: 'Handle%sMessage', 7: 'Init%s', 11: 'On%sAdd', 12: 'On%sRemove', 14: 'Load%sFromBrx',

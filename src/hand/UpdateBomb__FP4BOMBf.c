@@ -20,7 +20,7 @@ static __inline__ float GLength(qword v)
     __asm__("qmfc2.ni %0, %1" : "=r"(g) : "j"(d));
     return g;
 }
-void UpdateCid79(struct P *p)
+void UpdateBomb__FP4BOMBf(struct P *p)
 {
     UpdateSo__FP2SOf(p);
     if (p->t154 <= g_clock.t)

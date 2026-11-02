@@ -1,7 +1,7 @@
 #include "m2c_prelude.h"
-M2C_UNK InitCid80();                            /* extern */
+M2C_UNK InitMissile__FP7MISSILE();                            /* extern */
 
 void InitCid82(void *arg0) {
-    InitCid80();
+    InitMissile__FP7MISSILE();
     M2C_FIELD(arg0, f32 *, 0x274) = 1500.0f;
 }
