@@ -64,6 +64,15 @@ Newest first. Each entry: what changed, how it was verified, the metrics after i
 - `include/vtable.h`: VTE, one g++ 2.95 vtable entry {delta, index, pfn}. 90 files whose local VTE (or `VT`, the
   same entry under another name) holds a `void *` migrated. Files whose VTE holds a typed function pointer (322)
   keep it: a shared `void *pfn` would need a cast at every virtual call, which reads worse.
+- migrate_struct.py: a stand-in array over several fields (`float a[16]`) is mapped element by element when every
+  index is constant; a scalar stand-in can map to an element of a canonical array (`r24` → `art[3]`); asserts on
+  `FIELD_OFFSET`/`offsetof` of the stand-in are removed with it. Second pass over all shared types: 19 more files.
+- Local definitions left (2026-11-02): CLOCK 20, CRef 138, DL 18, DLI 15, DLE 9, LM 6, RGBA 28, VTE 327 (typed
+  function pointers), VT 106, M3 43, M4 49, VU_FLOAT 67 (C++ classes with asm constructors). What is left needs
+  hand edits: wrong-struct field names after a rename, unaligned stand-ins embedded in other structs, classes with
+  methods.
+- `FRAME` (65 local classes) is the matchers' stand-in for STACKSCOPE: a shared `STACKSCOPE` class would give its
+  inline constructor the real function's symbol (`__10STACKSCOPE`) and make it call itself, so it stays.
 - `tools/migrate_cref.py`: converts local C++ CRef classes whose members/methods are all in cref.h; renames
   `.u.n/.u.g/.u.pv` to `m_tag/m_g/m_p`. 114 files; objcheck 0.
 - Tried on the unknown slots of the LO vtable: their Sly 1 counterparts are not decompiled, and the Sly 2 code
