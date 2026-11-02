@@ -12,10 +12,10 @@ typedef struct O {
 } O;
 typedef struct L { int x0; struct L *next; int *px8; O *po; } L;
 typedef struct X { char pad[0x64]; L *pl; } X;
-extern char D_003DD490[];
+extern char g_sw[];
 void func_001F4F10(O *p);
 int func_001BBE48(O *p);
-int func_00132B10(O *p, int k);
+int FIsBasicDerivedFrom__FP5BASIC3CID(O *p, int k);
 void func_001BAED8(O *p, O *q, int z);
 void func_001A7E10(void *g, int k);
 
@@ -30,21 +30,21 @@ void func_001BB250(O *p)
         for (i = 0; i < p->c150; i++) {
             E *pe = &p->a154[i];
             if (!pe->b) continue;
-            if (!func_00132B10(pl->po, pe->a)) continue;
+            if (!FIsBasicDerivedFrom__FP5BASIC3CID(pl->po, pe->a)) continue;
             if (!(p->x148 & 0x3000000)) func_001BAED8(p, pl->po, 0);
-            if (func_00132B10(pl->po, 0x62)) {
+            if (FIsBasicDerivedFrom__FP5BASIC3CID(pl->po, 0x62)) {
                 O *q = pl->po;
                 for (j = 0; j < q->c150; j++) {
                     E *pe2 = &q->a154[j];
                     if (!pe2->b) continue;
-                    if (!func_00132B10(p, pe2->a)) continue;
+                    if (!FIsBasicDerivedFrom__FP5BASIC3CID(p, pe2->a)) continue;
                     func_001BAED8(q, p, 0);
                     break;
                 }
             }
             ((void (*)(void *, O *))p->vt[54].pfn)((char *)p + p->vt[54].d, pl->po);
             ((void (*)(void *, O *))pl->po->vt[54].pfn)((char *)pl->po + pl->po->vt[54].d, p);
-            func_001A7E10(D_003DD490, pl->x0);
+            func_001A7E10(g_sw, pl->x0);
             *pl->px8 = 0;
             pl->x0 = 0;
             break;

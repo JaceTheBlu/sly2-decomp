@@ -1,9 +1,9 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 struct T { char pad[0x70]; qword pos; };
 struct O { char pad[0x19A4]; void *p19A4; char pad2[0x19C0 - 0x19A8]; struct T *p19C0; };
 extern qword func_001A62E8(void *p);
 extern qword func_001A6F00(int n, struct O *p, qword v);
-static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0, %1" : "=r"(y) : "r"(q)); return y; }
 int func_0018ED98(struct O *p)
 {
     union { qword q; float f[4]; } u;

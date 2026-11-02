@@ -1,8 +1,8 @@
-// (Claude agent, lane A9, 2026-10-23) script `-` builtin (probably), same shape as func_0011F440: the inline accessor in the
+#include "mat.h"
+#include "vec.h"
+// script `-` builtin (probably), same shape as func_0011F440: the inline accessor in the
 // if/else keeps `pn = 0` after the branch (no jump.c rewrite), so reorg puts it in the beqz delay slot.
 typedef int qword __attribute__((mode(TI)));
-struct VECTOR { float x, y, z, w; };
-struct MATRIX4 { float m[4][4]; };
 struct CRef {
     int m_tagk; union { int n; float g; void *pv; } u;
     CRef() { m_tagk = -1; }
@@ -69,10 +69,10 @@ CRef func_0011F6D0(void *pv, CRef *aref)
         for (; pn; pn = pn->pnext) {
             MATRIX4 *pm = (MATRIX4 *)ref.u.pv;
             MATRIX4 *pmB = (MATRIX4 *)pn->ref.u.pv;
-            pm->m[0][0] -= pmB->m[0][0]; pm->m[0][1] -= pmB->m[0][1]; pm->m[0][2] -= pmB->m[0][2]; pm->m[0][3] -= pmB->m[0][3];
-            pm->m[1][0] -= pmB->m[1][0]; pm->m[1][1] -= pmB->m[1][1]; pm->m[1][2] -= pmB->m[1][2]; pm->m[1][3] -= pmB->m[1][3];
-            pm->m[2][0] -= pmB->m[2][0]; pm->m[2][1] -= pmB->m[2][1]; pm->m[2][2] -= pmB->m[2][2]; pm->m[2][3] -= pmB->m[2][3];
-            pm->m[3][0] -= pmB->m[3][0]; pm->m[3][1] -= pmB->m[3][1]; pm->m[3][2] -= pmB->m[3][2]; pm->m[3][3] -= pmB->m[3][3];
+            pm->mat[0][0] -= pmB->mat[0][0]; pm->mat[0][1] -= pmB->mat[0][1]; pm->mat[0][2] -= pmB->mat[0][2]; pm->mat[0][3] -= pmB->mat[0][3];
+            pm->mat[1][0] -= pmB->mat[1][0]; pm->mat[1][1] -= pmB->mat[1][1]; pm->mat[1][2] -= pmB->mat[1][2]; pm->mat[1][3] -= pmB->mat[1][3];
+            pm->mat[2][0] -= pmB->mat[2][0]; pm->mat[2][1] -= pmB->mat[2][1]; pm->mat[2][2] -= pmB->mat[2][2]; pm->mat[2][3] -= pmB->mat[2][3];
+            pm->mat[3][0] -= pmB->mat[3][0]; pm->mat[3][1] -= pmB->mat[3][1]; pm->mat[3][2] -= pmB->mat[3][2]; pm->mat[3][3] -= pmB->mat[3][3];
         }
         break;
     }

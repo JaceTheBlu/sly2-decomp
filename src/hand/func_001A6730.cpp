@@ -52,32 +52,32 @@ typedef char META_bytes_Offset[FIELD_OFFSET(META,bytes)==12?1:-1];
 typedef char G_phase_Offset[FIELD_OFFSET(G,phase)==16144?1:-1];
 extern "C"{
 extern char D_002DD598[],D_004520D0[],D_00452148[];
-extern G D_003DD490;
+extern G g_sw;
 void func_00128148(void*);
 void func_00257250(void*,int);
 void func_00129EC8(void*);
 void func_00255438(void*);
 void func_00255DE8(void*);
-void func_0011CD98(void*,void*);
+void FreeSlotheapPv__FP8SLOTHEAPPv(void*,void*);
 void func_00257078(ROOT*,int);
 void func_002580A8(FIELD**,FIELD*);
-void func_00256EE0(ROOT**,ROOT*);
+void __as__3SPXP1X(ROOT**,ROOT*);
 int func_00258178(FIELD*);
 int func_00259A88(ROOT*);
 RF func_0012AB78(FIELD*,P*);
 RR func_00127E90(ROOT*,P*);
-void*func_001AE238(REQUEST*,void*);
+void*PvAllocSwCopyImpl__FP7SWALLOCPv(REQUEST*,void*);
 void func_0011A058(int*);
 void func_0011A060(void*);
 void func_0011A070(void*,NODE*);
 void*func_0015E3C0(G*,int);
 void func_001AE5A0(void*,const void*,uint) __asm__("CopyAb__FPvT0Ui");
 }
-struct RF{FIELD*p;RF(){}RF(const RF&r):p(r.p){if(p)++p->refs;}~RF(){FIELD*f=p;if(f&&!--f->refs){BINDING*b=f->binding;if(b&&!--b->refs){func_00257250(&b->next,2);func_00129EC8(b->cref);func_00255438(b);func_0011CD98(D_004520D0,b);}func_00255DE8(f);func_0011CD98(D_00452148,f);}}};
+struct RF{FIELD*p;RF(){}RF(const RF&r):p(r.p){if(p)++p->refs;}~RF(){FIELD*f=p;if(f&&!--f->refs){BINDING*b=f->binding;if(b&&!--b->refs){func_00257250(&b->next,2);func_00129EC8(b->cref);func_00255438(b);FreeSlotheapPv__FP8SLOTHEAPPv(D_004520D0,b);}func_00255DE8(f);FreeSlotheapPv__FP8SLOTHEAPPv(D_00452148,f);}}};
 struct RR{ROOT*p;RR(){}RR(const RR&r):p(r.p){if(p)++p->refs;}~RR(){ROOT*r=p;if(r&&!--r->refs)func_00257078(r,3);}};
 typedef char FieldRefSize[sizeof(RF)==4?1:-1];
 typedef char RootRefSize[sizeof(RR)==4?1:-1];
-static inline NODE*CopyNode(int bytes,REQUEST*r,NODE*n){r->bytes=bytes;r->alignment=16;return(NODE*)func_001AE238(r,n);}
+static inline NODE*CopyNode(int bytes,REQUEST*r,NODE*n){r->bytes=bytes;r->alignment=16;return(NODE*)PvAllocSwCopyImpl__FP7SWALLOCPv(r,n);}
 static inline META*Type(P*p){VE*v=&p->vt[6];return v->type((P*)((char*)p+v->delta));}
 extern "C" void func_001A6730(P*p,const P*source){
     func_00128148(D_002DD598);
@@ -86,7 +86,7 @@ extern "C" void func_001A6730(P*p,const P*source){
         (void)func_00258178(p->field);
     }
     if(source->root){
-        {RR r=func_00127E90(source->root,p);func_00256EE0(&p->root,r.p);}
+        {RR r=func_00127E90(source->root,p);__as__3SPXP1X(&p->root,r.p);}
         (void)func_00259A88(p->root);
     }
     p->scale=source->scale;
@@ -97,7 +97,7 @@ extern "C" void func_001A6730(P*p,const P*source){
     p->tag.Set(source->tag.Get());
     p->word34=source->word34;
     char*dst;const char*src;
-    if(D_003DD490.phase!=-2){src=(const char*)source+0x50;dst=(char*)p+0x50;p->nodes=source->nodes;}
+    if(g_sw.phase!=-2){src=(const char*)source+0x50;dst=(char*)p+0x50;p->nodes=source->nodes;}
     else{
         src=(const char*)source+0x50;dst=(char*)p+0x50;REQUEST request;
         for(NODE*n=source->nodes;n&&n->owner==source;n=n->next){
@@ -107,7 +107,7 @@ extern "C" void func_001A6730(P*p,const P*source){
             func_0011A058(&copy->link);
             func_0011A060(copy->list);
             func_0011A070(copy->next->list,copy);
-            void*list=func_0015E3C0(&D_003DD490,copy->key);
+            void*list=func_0015E3C0(&g_sw,copy->key);
             func_0011A070(list,copy);
         }
     }

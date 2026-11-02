@@ -2,7 +2,7 @@ enum OID { OID_Nil };
 struct ALO { char pad[0x74]; float t74; };
 struct BL { int x0; ALO *palo; };
 struct MRSG { float t; float dt; };
-extern "C" float func_0012F990(ALO *palo, OID oid);
+extern "C" float TFindAsegLabel__FP4ASEG3OID(ALO *palo, OID oid);
 void FillBlAmrsg(int cbBl, int cbl, void *pbl, int ibAmrsg, int coid, OID *aoid)
 {
     int ibl;
@@ -16,7 +16,7 @@ void FillBlAmrsg(int cbBl, int cbl, void *pbl, int ibAmrsg, int coid, OID *aoid)
             int i;
             pmrsg = amrsg;
             for (i = 0; i < coid; i++, pmrsg++)
-                pmrsg->t = func_0012F990(palo, aoid[i]);
+                pmrsg->t = TFindAsegLabel__FP4ASEG3OID(palo, aoid[i]);
             pmrsg = amrsg;
             pmrsgPrev = &pmrsg[coid - 1];
             for (i = 0; i < coid; i++, pmrsg++) {

@@ -1,3 +1,4 @@
+#include "vu0.h"
 // func_001D3450 (MATCH, T1816 from w4lane10/w5lane3): wheel/suspension support contacts of a SOPART's pruned BSP.
 // Build the wheel frame (owner matrix rotation + wheel world position), prune the part's BSP to the wheel sphere, then:
 //  1. edge pass: every edge between two pruned surfaces that crosses the wheel plane gives a support point (wheel space)
@@ -17,9 +18,9 @@ struct VECTOR4 { float x, y, z, w; };   /* BLKmode on purpose: all block locals 
 
 struct SCALAR;
 struct VECTOR;
-extern "C" SCALAR *func_002564B8(SCALAR *);
+extern "C" SCALAR *__3VUF(SCALAR *);
 extern "C" VECTOR *func_002564C0(VECTOR *);
-struct SCALAR { qword q; SCALAR() { (void)func_002564B8(this); } };
+struct SCALAR { qword q; SCALAR() { (void)__3VUF(this); } };
 struct VECTOR { qword q; VECTOR() { (void)func_002564C0(this); } };
 /* the edge-loop lerp scalars need a VF-class pseudo: qmtc2 conversion */
 struct VU_FLOATQ { qword q; VU_FLOATQ(float g) { __asm__("qmtc2.ni %1,%0" : "=j"(q) : "r"(g)); } };
@@ -35,7 +36,7 @@ struct SUPPORT { qword pos; SURF *apsurf[2]; int fUsed; int pad; };
 struct SWALLOC { int cb; int cbAlign; };
 struct STACKSCOPE;
 extern "C" STACKSCOPE *func_001AE478(STACKSCOPE *);
-extern "C" void func_001AE4A0(STACKSCOPE *, int);
+extern "C" void _$_18CBinaryInputStream(STACKSCOPE *, int);
 struct STACKSCOPE { STACKSCOPE(); ~STACKSCOPE(); };
 struct VTE { short delta, pad; M4 *(*pfn)(void *); };
 struct SHAPE;
@@ -43,28 +44,27 @@ struct OWNER { char pad0[0xC]; VTE *vt; char pad10[0xE4 - 0x10]; SHAPE *shape; }
 struct WHEEL { char pad0[0x20]; float radius, bottom, top; char pad2C[0x24]; qword pos; };
 struct CONTACT;
 struct GAME;
-extern GAME D_003DD490;
-extern const qword D_002A2DC0;
+extern GAME g_sw;
+extern const qword g_normalZ;
 extern const qword D_002C2150[5];
 /* -FLT_MAX / FLT_MAX below are constant-pool literals (0x2A7838/0x2A783C), not globals: their REG_EQUAL sets order f24/f26 */
 
 extern "C" {
 qword func_001A6F00(OWNER *, OWNER *, qword);
-qword *func_00256D18(qword *, qword);
+qword *__as__6VECTORG9VU_VECTOR(qword *, qword);
 M4 func_0011C318(const M4 *);
 void func_00119390(VECTOR4 *, qword, qword);
 void *func_002333B4(void *, int, uint);
-void *func_001AE318(SWALLOC *);
-int func_00118A88(BSP *, BSP *, qword, float, int *, BSP **);
-int func_00118668(BSP *, BSP *, qword, qword, int, LSG *);
+void *PvAllocStackImpl__FP7SWALLOC(SWALLOC *);
+int PruneBsp__FP3BSPT0fUxPiPP3BSP(BSP *, BSP *, qword, float, int *, BSP **);
+int ClsgClipEdgeToBsp__FP3BSPT0UxUxiP3LSG(BSP *, BSP *, qword, qword, int, LSG *);
 qword func_001193D8(M4 *, qword);
 void func_001A7C18(GAME *, SHAPE *, SOPART *, qword, qword, int, int, int, CONTACT **, float);
 }
 
 static inline M4 *GetMatrix(OWNER *p) { return p->vt[31].pfn((char *)p + p->vt[31].delta); }
-static inline void *PvAllocStack(int cb) { SWALLOC swalloc; swalloc.cb = cb; swalloc.cbAlign = 0x10; return func_001AE318(&swalloc); }
+static inline void *PvAllocStack(int cb) { SWALLOC swalloc; swalloc.cb = cb; swalloc.cbAlign = 0x10; return PvAllocStackImpl__FP7SWALLOC(&swalloc); }
 static inline void ClearAb(void *pv, int cb) { func_002333B4(pv, 0, cb); }
-static inline float Sqrt(float f) { float r; __asm__ __volatile__("sqrt.s %0,%1" : "=&f"(r) : "f"(f)); return r; }
 
 static inline float PlaneDist(qword plane, qword pos)
 {
@@ -95,12 +95,11 @@ static inline float Dot(qword a, qword b)
     qword r, one;
     float f;
     __asm__("vmul.xyz %0,%2,%3\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z" : "=j"(r), "=&j"(one) : "j"(a), "j"(b));
-    __asm__("mtc1 %1,%0" : "=f"(f) : "r"(r), "j"(r));   /* allocation-only "j"(r) (w5lane3) */
+    __asm__("mtc1 %1,%0" : "=f"(f) : "r"(r), "j"(r));   /* allocation-only "j"(r) */
     return f;
 }
 /* returning the compare as a value gives the target's li 1 / move 0 setcc in this arm only */
 static inline int FOutsideRadius(qword v, float r) { return r * r < Dot(v, v); }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword Lerp(qword a, const VU_FLOATQ &sa, qword b, const VU_FLOATQ &sb)
 {
     qword r;
@@ -110,7 +109,7 @@ static inline qword Lerp(qword a, const VU_FLOATQ &sa, qword b, const VU_FLOATQ 
 /* through a pointer: sp-based r[0] store, pointer-based for the rest, as in the target */
 static inline void BuildFrame(M4 *pm, const M4 *src, qword pos)
 {
-    func_00256D18(&pm->r[3].q, pos);
+    __as__6VECTORG9VU_VECTOR(&pm->r[3].q, pos);
     pm->r[0].q = src->r[0].q;
     pm->r[1].q = src->r[1].q;
     pm->r[2].q = src->r[2].q;
@@ -133,7 +132,6 @@ static inline qword Pack(float x, float y, float z)
     return q;
 }
 static inline float Clamp(float v, float low, float high) { if (v < low) return low; else if (high < v) return high; else return v; }
-static inline float Min(float a, float b) { return b < a ? b : a; }
 /* keep VU_FLOAT's mfc1 on this line: gcse hashes asm line numbers, which orders the PRE spill slots (0xFD0..0x1000) */
 struct VU_FLOAT { qword q; VU_FLOAT(float g) { __asm__("mfc1 %0,%1" : "=r"(q) : "f"(g)); } };
 static inline VU_VECTOR Scale(const qword &a, const VU_FLOAT &s) { qword r; __asm__("vmulx.xyzw %0,%1,%2x" : "=j"(r) : "j"(a), "j"(s.q)); return VU_VECTOR(r); }
@@ -176,7 +174,7 @@ extern "C" void func_001D3450(OWNER *owner, WHEEL *wheel, SOPART *ppart, int unu
     BSP *absp;
     absp = pbsp = (BSP *)PvAllocStack(0x1555 * sizeof(BSP));
     cbspLeft = 0x1555;
-    if (func_00118A88(pbspRoot, (BSP *)0x7FFFFFFF, frame.r[3].q, Sqrt(radius * radius + height * height), &cbspLeft, &pbsp) != 2)
+    if (PruneBsp__FP3BSPT0fUxPiPP3BSP(pbspRoot, (BSP *)0x7FFFFFFF, frame.r[3].q, GSqrt(radius * radius + height * height), &cbspLeft, &pbsp) != 2)
         return;
     int cbsp = pbsp - absp;
     SURF *asurf = ppart->geomWorld.asurf;
@@ -217,7 +215,7 @@ extern "C" void func_001D3450(OWNER *owner, WHEEL *wheel, SOPART *ppart, int unu
             psupport = &asupport[csupport++];
             VECTOR normal;
             normal.q = plane;
-            if (Dot(normal.q, Sub(pos0, pos1)) < 0.0f) {
+            if (Dot(normal.q, QwSub(pos0, pos1)) < 0.0f) {
                 psupport->apsurf[1] = psurfOther;
                 psupport->apsurf[0] = psurf;
             } else {
@@ -233,16 +231,16 @@ extern "C" void func_001D3450(OWNER *owner, WHEEL *wheel, SOPART *ppart, int unu
     }
     /* ray pass. VU_VECTOR temporaries keep the loop above loop.c's ~95-insn threshold, so &D_002C2150 is not hoisted;
        posPrev = pos at the END of the body puts the a2 argument move after the row loads (sched2 tie) */
-    VU_VECTOR posPrev = Transform(frame, BlendStart(D_002C2150[0], radius, D_002A2DC0, height));
+    VU_VECTOR posPrev = Transform(frame, BlendStart(D_002C2150[0], radius, g_normalZ, height));
     for (uint j = 0; j < 6; j++) {
         VU_VECTOR dir;
         if (j < 5)
             dir = Scale(D_002C2150[j], radius);
         else
-            dir = Blend(D_002C2150[4], radius, D_002A2DC0, height);
+            dir = Blend(D_002C2150[4], radius, g_normalZ, height);
         VU_VECTOR pos;
         pos = Transform(frame, dir);
-        int clsg = func_00118668(pbsp, (BSP *)0x7FFFFFFF, posPrev.q, pos.q, 16, alsg);
+        int clsg = ClsgClipEdgeToBsp__FP3BSPT0UxUxiP3LSG(pbsp, (BSP *)0x7FFFFFFF, posPrev.q, pos.q, 16, alsg);
         for (int k = 0; k < clsg; k++) {
             LSG *plsg = &alsg[k];
             if (plsg->apsurf[0]) {
@@ -304,15 +302,15 @@ extern "C" void func_001D3450(OWNER *owner, WHEEL *wheel, SOPART *ppart, int unu
             if (local.z < 0.0f)
                 continue;
             float slope = -local.x / local.z;
-            float x = Sqrt(radius * radius * slope * slope / (slope * slope + 1.0f));
+            float x = GSqrt(radius * radius * slope * slope / (slope * slope + 1.0f));
             if (slope < 0.0f)
                 x = -x;
             x = Clamp(x, lower, upper);
-            float z = -Sqrt(radius * radius - x * x);
+            float z = -GSqrt(radius * radius - x * x);
             point.x = x;
             point.y = 0.0f;
             point.z = z;
-            float amount = Min(-PlaneDistTo(*(qword *)&local, *(qword *)&point) / local.z, height);
+            float amount = GMin(-PlaneDistTo(*(qword *)&local, *(qword *)&point) / local.z, height);
             if (best < amount) {
                 best = amount;
                 VECTOR4 packed;
@@ -325,6 +323,6 @@ extern "C" void func_001D3450(OWNER *owner, WHEEL *wheel, SOPART *ppart, int unu
         qword world = Transform(frame, bestPoint).q;
         VECTOR normal;
         normal.q = plane;
-        func_001A7C18(&D_003DD490, owner->shape, ppart, world, normal.q, 10, 0, 0, ppcontact, best);
+        func_001A7C18(&g_sw, owner->shape, ppart, world, normal.q, 10, 0, 0, ppcontact, best);
     }
 }

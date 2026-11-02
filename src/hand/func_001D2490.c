@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef struct { float x, y, z; } __attribute__((aligned(16))) VECTOR;
 typedef union { qword q; float f; } U;
@@ -17,8 +18,6 @@ extern float D_002C20E0[2];
 qword func_001A62E8(void *);
 void func_001E7380(void *,qword,void *,qword *,qword *,float *,float *,float);
 float func_002458F0(float, float);
-static inline float GetX(qword q) { float f; __asm__("mtc1 %1, %0" : "=f"(f) : "r"(q)); return f; }
-static inline float GetY(qword q) { float f; __asm__("prot3w %0, %1" : "=r"(f) : "r"(q)); return f; }
 static inline float Dist2D(qword a, qword b)
 {
     qword d;

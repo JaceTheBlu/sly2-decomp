@@ -2,10 +2,10 @@
 // dprize-style collision response (next to matched FCheckDprizeCollect): query the radius box with func_0020FAA0, find the deepest
 // sphere / CplaneFromSphere contact that the velocity approaches, then push the position out and rebuild the velocity (floor case:
 // tangent + clamped normal parts, one-shot boost; otherwise normal/tangent split with the two response factors).
-// Keys (wave 4, from w3lane8.v3 at aligned 52): call results passed raw so gcc emits the qmtc2; QwNormalizeInto reads the vector
+// Keys: call results passed raw so gcc emits the qmtc2; QwNormalizeInto reads the vector
 // like matched func_001D09A0's NormalizeSafe; GDot's 1.0 temp is not early-clobber; "rV" on every qmtc2 of a float word read from
 // memory (the lw becomes a reload: frees local-alloc and resets reload's round-robin); gSpeed read with the mtc1 form.
-// Last fix (wave 5): the length test also reads its float with the mtc1 asm. A reload mtc1 has latency 2, which gave the
+// Last fix: the length test also reads its float with the mtc1 asm. A reload mtc1 has latency 2, which gave the
 // gNormal copy (anti dependence on that $f0 write) sched2 priority 7 > 6 for the li.s 1e-4; the asm mtc1 costs 1, so the
 // two tie and the li.s goes first as in the target.
 typedef int qword __attribute__((mode(TI)));
@@ -21,18 +21,18 @@ struct P {
 };
 class FRAME;
 extern "C" {
-extern char D_003DD490[];
-extern qword D_002A2DA0, D_002A2DC0, D_002A2DD0, D_002A2DE0;
+extern char g_sw[];
+extern qword D_002A2DA0, g_normalZ, D_002A2DD0, D_002A2DE0;
 extern float D_002C0D74, D_002C0D78;
 void func_001AE478(FRAME *);
-void func_001AE4A0(FRAME *, int);
+void _$_18CBinaryInputStream(FRAME *, int);
 qword func_001A62E8(P *);
 int func_001C5570(void *, SOPART *);
 void func_0020FAA0(void *, qword, qword, int (*)(void *, SOPART *), void *, int *, SOPART ***);
 int func_001A93C8(qword, float, SOPART *, void *, int, void *, int, CMCONTACT *);
-float func_0011E290(qword, qword, qword *, qword *);
+float SProjectVector(qword, qword, qword *, qword *);
 }
-class FRAME { public: FRAME() { func_001AE478(this); } ~FRAME() { func_001AE4A0(this, 2); } };
+class FRAME { public: FRAME() { func_001AE478(this); } ~FRAME() { _$_18CBinaryInputStream(this, 2); } };
 
 struct VU_FLOAT {
     qword qw;
@@ -110,7 +110,7 @@ extern "C" void func_001C55E0(P *p)
     posMax = QwAddScaled(posMax, D_002A2DE0, vec.qw);
     int cpart;
     SOPART **appart;
-    func_0020FAA0(D_003DD490, posMin, posMax, func_001C5570, 0, &cpart, &appart);
+    func_0020FAA0(g_sw, posMin, posMax, func_001C5570, 0, &cpart, &appart);
     U normal;
     CMCONTACT acontact[8];
     for (int i = 0; i < cpart; i++) {
@@ -143,21 +143,21 @@ extern "C" void func_001C55E0(P *p)
         {
             U primary;
             if (normal.g[2] > 0.7f && p->state == 4) {
-                float gNormal = func_0011E290(p->v, D_002A2DC0, 0, &primary.qw);
+                float gNormal = SProjectVector(p->v, g_normalZ, 0, &primary.qw);
                 float gSpeed = GFromVf(QwNormalizeInto(&primary.qw, D_002A2DD0));
                 float gTangent = GMin(p->gTangentResponse.g * gSpeed, D_002C0D74);
                 gNormal = GMin(-p->gNormalResponse * gNormal, D_002C0D78);
-                response.qw = QwCombo(VU_FLOAT(gTangent), primary.qw, VU_FLOAT(gNormal), D_002A2DC0);
+                response.qw = QwCombo(VU_FLOAT(gTangent), primary.qw, VU_FLOAT(gNormal), g_normalZ);
                 if (!p->fRaised) {
                     int fTrigger = GDot(response.qw, normal.qw) < p->gThreshold;
                     if (fTrigger) {
-                        response.qw = QwCombo(VU_FLOAT(gTangent), primary.qw, VU_FLOAT(p->gBoost.bits), D_002A2DC0);
+                        response.qw = QwCombo(VU_FLOAT(gTangent), primary.qw, VU_FLOAT(p->gBoost.bits), g_normalZ);
                         p->fRaised = 1;
                     }
                 }
             } else {
                 U secondary;
-                func_0011E290(p->v, normal.qw, &primary.qw, &secondary.qw);
+                SProjectVector(p->v, normal.qw, &primary.qw, &secondary.qw);
                 response.qw = QwCombo(VU_FLOAT(-p->gNormalResponse), primary.qw, VU_FLOAT(p->gTangentResponse.bits), secondary.qw);
             }
         }

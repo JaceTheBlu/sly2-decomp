@@ -1,11 +1,11 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float a[4]; };
-extern qword D_002A2DC0, D_002A2DD0;
+extern qword g_normalZ, D_002A2DD0;
 float func_00245000(float);
 float func_002458F0(float,float);
 float func_002450F0(float);
 float func_00244E10(float);
-static inline float Sqrt(float x) { float r; __asm__ __volatile__("sqrt.s %0, %1" : "=&f"(r) : "f"(x)); return r; }
 static inline void Bc(union U *out,float f) {
     __asm__("qmtc2.ni %1, %0" : "=j"(out->q) : "r"(f));
 }
@@ -46,11 +46,11 @@ qword func_001D6848(float g, qword start, qword end, qword acc)
     len = Len(delta.q);
     angle=func_002458F0(z,len);
     if (angle<0.0f) angle=0.0f;
-    q=Dot(&acc,D_002A2DC0);
+    q=Dot(&acc,g_normalZ);
     k = angle + (1.57079637051f-angle)*k;
     q=q/((z-len*func_002450F0(k))*2.0f);
     if (q<=0.0f) return D_002A2DD0;
-    q=Sqrt(q);
+    q=GSqrt(q);
     numerator=len*q;
     q=numerator/func_00244E10(k);
     vel.q=delta.q;

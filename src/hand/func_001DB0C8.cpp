@@ -1,3 +1,5 @@
+#include "vu0.h"
+#include "clock.h"
 // Change a selector's input mode and, when the joystick points somewhere, move the selection to the
 // enabled item that lies closest along that direction from the current one.
 typedef int qword __attribute__((mode(TI)));
@@ -26,13 +28,12 @@ struct HIT { qword position, other, normal; char pad30[0x10]; float fraction; ch
 
 // D_002DDF0C is read as a field of the clock struct: a struct field at a fixed address may alias
 // sel->mode (a scalar global may not), which keeps the clock load after the mode store.
-struct CLOCK { char pad[0x3C]; float t3C; };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern float D_002C3280, D_002C3274, D_002C3278, D_002C327C, D_002A79C8;
 
 extern "C" {
 ITEM *func_001DAE20(SELECTOR *sel, int id);
-int func_0014C748(qword point, qword start, qword end, int flags, HIT *hit, float radius);
+int ClsgClipEdgeToSphere__FUxfUxUxiP3LSG(qword point, qword start, qword end, int flags, HIT *hit, float radius);
 void func_0011EE08(qword point, qword start, qword end, qword *unused, float *along, float *distance);
 void func_001DB390(SELECTOR *sel, int id);
 void func_001DA9E8(SELECTOR *sel);
@@ -49,7 +50,6 @@ static inline qword XYZ(float x, float y, float z, U &home)
     home.q = r;
     return home.q;
 }
-static inline qword ToVF(qword v) { qword r; __asm__("qmtc2.ni %1,%0" : "=j"(r) : "r"(v)); return r; }
 static inline qword Zero() { qword r; __asm__("vsub.xyzw %0,$vf0,$vf0" : "=j"(r)); return r; }
 static inline qword Normalize(qword a)
 {
@@ -68,7 +68,6 @@ static inline qword Splat(const float &f, U &home)
     home.q = s;
     return home.q;
 }
-static inline qword Scale(qword a, qword s) { qword r; __asm__("vmulx.xyzw %0,%1,%2x" : "=j"(r) : "j"(a), "j"(s)); return r; }
 // b by const reference: the ray lives in a stack slot, so the two Adds are not CSEd and each
 // reloads it into the register the result goes to.
 static inline qword Add(qword a, const qword &b) { qword r; __asm__("vadd.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
@@ -81,21 +80,21 @@ void func_001DB0C8(SELECTOR *sel, int mode)
     if (mode == sel->mode)
         return;
     sel->mode = mode;
-    sel->tChanged = D_002DDED0.t3C;
+    sel->tChanged = g_clock.tFrame;
     if (mode == -1 || sel->selected == -1)
         return;
     ITEM *current = func_001DAE20(sel, sel->selected);
     qword position = XYZ(current->x, current->y * D_002C3280, 0.0f, home);
     qword direction;
     if (sel->input)
-        direction = ToVF(XYZ(sel->input->x, -sel->input->y, 0.0f, home));
+        direction = QwToVf(XYZ(sel->input->x, -sel->input->y, 0.0f, home));
     else
         direction = Zero();
-    qword ray = Scale(Normalize(direction), Splat(D_002C3274, home));
+    qword ray = QwScaleX(Normalize(direction), Splat(D_002C3274, home));
     int bestId = -1;
     float best = D_002A79C8;
     for (int i = 0; i < sel->count; i++) {
-        qword origin = ToVF(position);
+        qword origin = QwToVf(position);
         ITEM *item = &sel->items[i];
         if (item == current)
             continue;
@@ -104,7 +103,7 @@ void func_001DB0C8(SELECTOR *sel, int mode)
         float zero = 0.0f;
         qword point = XYZ(item->x, item->y * D_002C3280, zero, home);
         float score;
-        if (func_0014C748(point, origin, Add(origin, ray), 1, &hit, D_002C3278) > 0) {
+        if (ClsgClipEdgeToSphere__FUxfUxUxiP3LSG(point, origin, Add(origin, ray), 1, &hit, D_002C3278) > 0) {
             score = hit.fraction * D_002C3274;
         } else {
             func_0011EE08(point, origin, Add(origin, ray), 0, &proximity.along, &proximity.distance);

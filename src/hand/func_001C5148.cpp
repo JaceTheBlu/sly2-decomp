@@ -1,4 +1,5 @@
-// func_001C5148 (w2lane4, wave 2): per-frame update of an animated object (state 6 only forwards to func_001F3980).
+#include "vtable.h"
+// func_001C5148: per-frame update of an animated object (state 6 only forwards to func_001F3980).
 // Step 1: damped velocity/position integration of the object's own coordinate (VU: velocity = velocity * damping + acceleration * dt,
 //         coordinate += velocity * dt) which is pushed into the position channel.
 // Step 2: if the object's holder has an animation, find the position/orientation motions of this object in the animation's action
@@ -15,7 +16,6 @@
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; int words[4]; };
 union M3 { qword rows[3]; float values[12]; };
-struct VTE { short delta, pad; void *fn; };
 struct CHANNEL { M3 matrix; qword position; char pad40[0x64]; int stamp; char padA8[8]; qword velocity; };
 struct MOTION { VTE *vt; };
 struct ENTRY { unsigned int key; MOTION *motion; };
@@ -33,13 +33,13 @@ struct CLOCK { float time; FLOATWORD dt; };
 struct CAMERA { char pad90[0x90]; qword position; };
 struct SW { char pad3D58[0x3D58]; int stamp; };
 extern "C" {
-extern CLOCK D_002DDED0;
-extern CAMERA D_002DDF40;
-extern SW D_003DD490;
+extern CLOCK g_clock;
+extern CAMERA g_cm;
+extern SW g_sw;
 extern float D_002C0D4C;
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 void func_001F3980(P *);
-qword *func_00256D18(qword *, qword);
+qword *__as__6VECTORG9VU_VECTOR(qword *, qword);
 M3 func_0011B830(qword, qword);
 M3 func_0011B628(qword);
 }
@@ -101,28 +101,28 @@ static inline M3 operator*(const M3 &matL, const M3 &matR) return mat
 static inline CHANNEL *GetChannel(P *p, int channel)
 {
     VTE &e = p->vt[51];
-    return ((CHANNEL *(*)(P *, int))e.fn)((P *)((char *)p + e.delta), channel);
+    return ((CHANNEL *(*)(P *, int))e.pfn)((P *)((char *)p + e.delta), channel);
 }
 static inline void Sample(MOTION *motion, const ANIM *animation, qword *value, qword *velocity)
 {
     VTE &e = motion->vt[3];
-    ((void (*)(MOTION *, float, float, qword *, qword *))e.fn)((MOTION *)((char *)motion + e.delta), animation->time, animation->duration, value, velocity);
+    ((void (*)(MOTION *, float, float, qword *, qword *))e.pfn)((MOTION *)((char *)motion + e.delta), animation->time, animation->duration, value, velocity);
 }
 
 extern "C" void func_001C5148(P *p)
 {
     if (p->state == 6) { func_001F3980(p); return; }
     float factor;
-    if (p->state == 0 || p->state == 5) factor = 1.0f + D_002C0D4C * D_002DDED0.dt.value;
+    if (p->state == 0 || p->state == 5) factor = 1.0f + D_002C0D4C * g_clock.dt.value;
     else factor = 1.0f;
-    p->velocity = VecCombo(VU_FLOAT(factor), VU_VECTOR(p->velocity), VU_FLOAT(D_002DDED0.dt.bits), VU_VECTOR(p->acceleration));
-    qword newPosition = Advance(p->coordinate, p->velocity, VU_FLOAT(D_002DDED0.dt.bits));
+    p->velocity = VecCombo(VU_FLOAT(factor), VU_VECTOR(p->velocity), VU_FLOAT(g_clock.dt.bits), VU_VECTOR(p->acceleration));
+    qword newPosition = Advance(p->coordinate, p->velocity, VU_FLOAT(g_clock.dt.bits));
     CHANNEL *channel = p->position;
     p->coordinate = newPosition;
-    func_00256D18(&channel->position, newPosition);
+    __as__6VECTORG9VU_VECTOR(&channel->position, newPosition);
     *(float *)((char *)channel + 0x3C) = 1.0f;
     p->position->velocity = p->velocity;
-    { int stamp = ++D_003DD490.stamp; p->position->stamp = stamp; }
+    { int stamp = ++g_sw.stamp; p->position->stamp = stamp; }
     if (p->holder && p->holder->animation) {
         ANIM *animation = p->holder->animation;
         ACTION *action = animation->action;
@@ -143,17 +143,17 @@ extern "C" void func_001C5148(P *p)
         if (positionMotion || orientationMotion) {
             U dir, position, velocity, angles, angularVelocity;
             M3 frame, rot;
-            dir.q = Difference(D_002DDF40.position, p->position->position);
+            dir.q = Difference(g_cm.position, p->position->position);
             dir.words[2] = 0;
-            frame = func_0011B830(dir.q, D_002A2DC0);
+            frame = func_0011B830(dir.q, g_normalZ);
             if (positionMotion) {
                 Sample(positionMotion, animation, &position.q, &velocity.q);
                 channel = p->position;
-                func_00256D18(&channel->position, Add(channel->position, RotateVec(frame, position.q)));
+                __as__6VECTORG9VU_VECTOR(&channel->position, Add(channel->position, RotateVec(frame, position.q)));
                 *(float *)((char *)channel + 0x3C) = 1.0f;
                 CHANNEL *current = p->position;
                 current->velocity = Add(current->velocity, RotateVec(frame, velocity.q));
-                { int stamp = ++D_003DD490.stamp; p->position->stamp = stamp; }
+                { int stamp = ++g_sw.stamp; p->position->stamp = stamp; }
             }
             if (orientationMotion) {
                 Sample(orientationMotion, animation, &angles.q, &angularVelocity.q);
@@ -163,7 +163,7 @@ extern "C" void func_001C5148(P *p)
                 current->matrix.values[3] = 0.0f; current->matrix.values[7] = 0.0f; current->matrix.values[11] = 0.0f;
                 CHANNEL *spin = p->orientation;
                 spin->velocity = RotateVec(frame, angularVelocity.q);
-                { int stamp = ++D_003DD490.stamp; p->orientation->stamp = stamp; }
+                { int stamp = ++g_sw.stamp; p->orientation->stamp = stamp; }
             }
         }
     }

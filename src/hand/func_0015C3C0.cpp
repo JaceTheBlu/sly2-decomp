@@ -1,8 +1,8 @@
-// func_0015C3C0 (Claude agent, lane D40): matched with Lilly's MATRIX3 operator* (src/hand/func_0021CB18.cpp: rows of the LEFT
+#include "mat.h"
+#include "vu0.h"
+// func_0015C3C0: matched with Lilly's MATRIX3 operator* (src/hand/func_0021CB18.cpp: rows of the LEFT
 // matrix into qword locals, VU_VECTOR4 row temps) and her QwRotateVec(MATRIX3 *, qword), with px->mat as the left operand.
 typedef int qword __attribute__((mode(TI)));
-struct MATRIX4 { qword r[4]; };
-struct MATRIX3 { qword r[3]; };
 struct VEC { int x, y, z, w; } __attribute__((aligned(16)));
 struct XF { qword pos; MATRIX3 mat; VEC v; VEC w; };
 struct P { int fl; void *pv; int a8, aC; qword q10, q20; int x30; XF *pxf; int x38, x3C; };
@@ -11,7 +11,6 @@ struct O { int pad[3]; VTE *vt; char pad1[0x60 - 0x10]; MATRIX4 mat; };
 struct S { char pad[0x60]; MATRIX4 mat; char pad1[0xE0 - 0xA0]; int c; O **apo; };
 MATRIX4 func_0011C318(MATRIX4 *pm);
 MATRIX4 operator*(const MATRIX4 &a, const MATRIX4 &b);
-static inline qword Add(qword a, qword b) { qword d; __asm__("vadd.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 struct VU_VECTOR4 { qword qw; };
 inline MATRIX3 operator*(const MATRIX3 &matL, const MATRIX3 &matR) return mat
 {
@@ -59,7 +58,7 @@ void func_0015C3C0(S *p, P *pp)
         if (pp->fl & 0x40) {
             XF *px = pp->pxf;
             xf.mat = px->mat * m3;
-            xf.pos = Add(px->pos, QwRotateVec(&px->mat, mRel.r[3]));
+            xf.pos = QwAdd(px->pos, QwRotateVec(&px->mat, mRel.r[3]));
             xf.v = px->v;
             xf.w = px->w;
         } else {

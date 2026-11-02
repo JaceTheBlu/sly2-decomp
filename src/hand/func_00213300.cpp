@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Flush the sprite render queue and pair begin/end VU microprogram packets.
 typedef unsigned int uint;
 typedef unsigned char uchar;
@@ -21,11 +22,9 @@ void func_002159E0(void *,void *,PARAM *,int);
 void func_0011A060(LIST *);
 }
 static inline void Align(R *r){while((uint)r->cur&63){*(uint *)r->cur=0;r->cur+=4;}}
-static inline float Min(float x,float y){return y<x?y:x;}
-static inline float Max(float x,float y){return x<y?y:x;}
 static inline void Offset(V4 &v,float x,float y,float z,float w){v.x=x-127.0f;v.y=y-127.0f;v.z=z-127.0f;v.w=w-127.0f;}
 static inline void SetOffset(V4 &v,const uchar *c){Offset(v,c[0],c[1],c[2],c[3]);}
-static inline float ColorScale(int c,float upper){return Max(Min((c-127)*0.007874016f,upper),-1.0f);}
+static inline float ColorScale(int c,float upper){return GMax(GMin((c-127)*0.007874016f,upper),-1.0f);}
 static inline void Scale(V4 &v,int a,int b,int d,int e,float upper){float x=ColorScale(a,upper),y=ColorScale(b,upper),z=ColorScale(d,upper),w=ColorScale(e,upper);v.x=x;v.y=y;v.z=z;v.w=w;}
 static inline void SetScale(V4 &v,const Q *q,float upper){Scale(v,q->color1[0],q->color1[1],q->color1[2],q->color1[3],upper);}
 static inline Q *Begin(S *p,R *r){Align(r);uint c=(uint)r->cur,b=(uint)r->base;c|=0x30000000;b|=0x30000000;r->cur=(unsigned char *)c;r->base=(unsigned char *)b;Q *pending=0;func_002130C0(p);return pending;}

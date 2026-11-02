@@ -5,7 +5,7 @@ struct O { int pad[3]; struct VTE *vt; char pad2[0xe4 - 0x10]; struct E *pe; };
 struct Q { char pad[0x50]; ti128 v50; int f60; };
 struct S { char pad[0x16d8]; int f16d8; void *f16dc; void *f16e0; struct Q *pq; ti128 v16f0; float f1700; };
 extern ti128 D_002A2DD0;
-extern float D_002DDED0;
+extern float g_clock;
 void func_001356E8(struct S *);
 struct O *func_001CB250(void *, int);
 void func_001D6B00(struct Q *, struct O *);
@@ -32,5 +32,5 @@ void func_001357C0(struct S *p, int a) {
     ((void (*)(void *, ti128))po->vt[36].pfn)((char *)po + po->vt[36].d, D_002A2DD0);
     func_0013B5C8(po, 4.0f);
     func_001362F8(p, 1);
-    p->f1700 = D_002DDED0;
+    p->f1700 = g_clock;
 }

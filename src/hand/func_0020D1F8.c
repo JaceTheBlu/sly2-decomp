@@ -3,7 +3,7 @@ struct VE { short d; short pad; void *pf; };
 struct LO { char pad[0xC]; struct VE *vt; };
 struct X { char pad[0xC]; struct VE *vt; char pad2[0x188 - 0x10]; void *p188; };
 struct S { struct LO *po; int k; float t; struct X *x; int n; };
-extern struct { float t; float dt; } D_002DDED0;
+extern struct { float t; float dt; } g_clock;
 extern float D_002C3E58;
 qword func_001A62E8(void *p);
 void func_0020D3C0(struct S *p, int k);
@@ -40,7 +40,7 @@ void func_0020D1F8(struct S *p)
         case 1:
             if (!p->x)
                 func_0020D3C0(p, 0);
-            else if (D_002DDED0.t - p->t > D_002C3E58 &&
+            else if (g_clock.t - p->t > D_002C3E58 &&
                      !((int (*)(void *, void *))p->po->vt[76].pf)((char *)p->po + p->po->vt[76].d, p->x->p188))
                 func_0020D3C0(p, 2);
             break;

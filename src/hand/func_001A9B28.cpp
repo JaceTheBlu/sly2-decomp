@@ -6,9 +6,9 @@ struct S { struct S0 *x0; struct LO *x4; float x8; };
 union DETAIL {void*pointer;int word;};
 struct E {qword x0,x10;int x20;DETAIL detail;};
 extern "C" int func_001A93C8(qword pos, struct S*b,int c,int d,struct NODE*e,int n, struct E *buf, float f);
-extern "C" U*func_002564B8(U*p);
+extern "C" U*__3VUF(U*p);
 extern "C" void func_001A7C18(void *a, struct S*s,struct S*b,qword p, qword q, int x20, void*z, void*x24,struct CONTACT**g,float f);
-inline U::U() { (void)func_002564B8(this); }
+inline U::U() { (void)__3VUF(this); }
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((t*)0x10000)->m)-0x10000)
 typedef char Offset_0[FIELD_OFFSET(U,q)==0?1:-1];
 typedef char Offset_1[FIELD_OFFSET(U,f)==0?1:-1];

@@ -1,4 +1,4 @@
-// (Claude agent) matched: the CRef copy ctor (func_001291A8) must be declared returning this, not void.
+// matched: the CRef copy ctor (func_001291A8) must be declared returning this, not void.
 extern "C" {
 void func_00129EC8(void *p);
 void *func_001291A8(void *p, const void *q); /* CRef copy ctor: returns this */

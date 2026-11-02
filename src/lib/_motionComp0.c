@@ -1,4 +1,4 @@
-// (Claude agent) libmpeg _motionComp0: intra-path pointer setup in do{}while(0) (loop-depth ref weighting fixes s-reg priority),
+// libmpeg _motionComp0: intra-path pointer setup in do{}while(0) (loop-depth ref weighting fixes s-reg priority),
 // non-intra pointers set before _getAllRefs; first IPU wait is a goto loop (unpadded, address rematerialised).
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0

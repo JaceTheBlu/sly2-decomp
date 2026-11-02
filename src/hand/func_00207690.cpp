@@ -1,3 +1,5 @@
+#include "vu0.h"
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};
 struct M4 {U rows[4];M4(){}M4(const M4 &m){rows[0]=m.rows[0];rows[1]=m.rows[1];rows[2]=m.rows[2];rows[3]=m.rows[3];}M4 &operator=(const M4 &m){rows[0]=m.rows[0];rows[1]=m.rows[1];rows[2]=m.rows[2];rows[3]=m.rows[3];return *this;}};
@@ -6,11 +8,10 @@ union FLAGS {unsigned long value;unsigned char bytes[8];};
 struct P {char pad0[0x28];FLAGS flags;char pad30[0x30];SPACE *space;char pad64[0xC8];float opacity;int unused130;void *material;char pad138[0x108];float pivot[3];char pad24C[0x114];float start;};
 struct CAMERA {char pad0[0x14];int mask;char pad18[0x78];U position;};
 struct PROFILE {float a,b,c,unused,min,max;};
-struct CLOCK {float time,dt;};
 struct EFFECT;
-extern CAMERA D_002DDF40;
+extern CAMERA g_cm;
 extern PROFILE D_003E1A60;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern float D_002C3D4C;
 extern float D_002C3D50[3],D_002C3D60[2],D_002BBB60[2];
 extern "C" {
@@ -20,18 +21,17 @@ void func_00168638(EFFECT *,const M4 *,void *,float,float);
 void *func_002333B4(void *,int,unsigned int);
 qword func_001A62E8(P *);
 float func_00245000(float);
-qword *func_00256D18(qword *,qword);
-M4 *func_0011C168(M4 *,const M4 *,const M4 *);
+qword *__as__6VECTORG9VU_VECTOR(qword *,qword);
+M4 *__ml__FRC7MATRIX4T0(M4 *,const M4 *,const M4 *);
 M4 *func_0011C318(M4 *,const M4 *);
 }
-static inline qword Subtract(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline float Length(qword a){qword one;float f;__asm__("vmul.xyz %0,%0,%0\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"+j"(a),"=&j"(one));__asm__("vsqrt Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,Q":"+j"(a));__asm__("mtc1 %1,%0":"=f"(f):"r"(a));return f;}
 extern "C" void func_00207690(P *p)
 {
     M4 local;
     U offset;
     M4 basis,matrix,product,inverse;
-    CAMERA *camera=&D_002DDF40;
+    CAMERA *camera=&g_cm;
     if(p->flags.bytes[5]&camera->mask){
         func_001F3C10(p);
         if(!func_0014FD50((char *)camera+0x3B0)){
@@ -42,12 +42,12 @@ extern "C" void func_00207690(P *p)
             local.rows[2].f[2]=1.0f;
             local.rows[1].f[1]=1.0f;
             local.rows[0].f[0]=1.0f;
-            float distance=Length(Subtract(func_001A62E8(p),camera->position.q));
+            float distance=Length(QwSub(func_001A62E8(p),camera->position.q));
             PROFILE *profile=&D_003E1A60;
             float gain=profile->a+distance*(profile->b+distance*profile->c);
             float min=profile->min,max=profile->max;
             if(gain<min)gain=min;else if(max<gain)gain=max;
-            float elapsed=D_002DDED0.time-p->start;
+            float elapsed=g_clock.t-p->start;
             float along=gain,across=gain;
             if(elapsed<0.85f){
                 float wave=func_00245000(elapsed*D_002C3D4C);
@@ -67,7 +67,7 @@ extern "C" void func_00207690(P *p)
             offset.f[0]=(1.0f-across)*p->pivot[0];
             offset.f[2]=(1.0f-along)*p->pivot[2];
             offset.f[1]=(1.0f-across)*p->pivot[1];
-            func_00256D18(&local.rows[3].q,offset.q);
+            __as__6VECTORG9VU_VECTOR(&local.rows[3].q,offset.q);
             local.rows[3].f[3]=1.0f;
             M4 *productPointer=&product;
             M4 *basisPointer=&basis;
@@ -76,10 +76,10 @@ extern "C" void func_00207690(P *p)
             basis.rows[1]=p->space->matrix.rows[1];
             basis.rows[2]=p->space->matrix.rows[2];
             basis.rows[3]=p->space->matrix.rows[3];
-            func_0011C168(productPointer,basisPointer,&local);
+            __ml__FRC7MATRIX4T0(productPointer,basisPointer,&local);
             M4 *inversePointer=&inverse;
             func_0011C318(inversePointer,basisPointer);
-            func_0011C168(matrixPointer,productPointer,inversePointer);
+            __ml__FRC7MATRIX4T0(matrixPointer,productPointer,inversePointer);
             func_00168638((EFFECT *)((char *)p+0x80),matrixPointer,p->material,p->opacity,p->opacity);
         }
     }

@@ -1,7 +1,7 @@
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db
-/* (Claude agent) The first printf call is made through a non-varargs prototype: the call RTL then differs from the
+/* The first printf call is made through a non-varargs prototype: the call RTL then differs from the
    abort printf, so jump.c does not cross-jump the two "printf; return -1" tails (the target keeps them separate). */
 typedef struct {
     int x0; char p4[0xA8 - 0x4]; int xA8; int xAC; int xB0; int xB4; int xB8; int xBC;

@@ -1,4 +1,4 @@
-struct LM { float gMin; float gMax; };
+#include "util.h"
 
 float GLimitLm(LM *plm, float g)
 {

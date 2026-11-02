@@ -1,15 +1,15 @@
+#include "util.h"
+#include "clock.h"
 // func_00151340 (Lilly's agent, T1649): joystick / random-target camera spring. MATCH.
 // Keys: the sibling helper style of func_00151700 / func_0014EB70 (by-value VU_FLOAT temps -> the sqc2 0(sp) after each qmtc2,
 // VU_VECTOR(const qword &) wrappers, VecCombo(f1, v1, f2, v2)); Sub taking VU_VECTORs makes both p14->pos reads plain MEMs,
 // so cse2 keeps the target's two lqc2 0x20(v0); k is read through a VU_FLOAT(const float *) ctor whose word input has a
 // never-chosen "V" alternative (the func_0014F110 trick: lw instead of lwc1+mfc1).
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t; float dt; };
-extern "C" CLOCK D_002DDED0;
+extern "C" CLOCK g_clock;
 struct CM;
-extern "C" CM D_002DDF40;
+extern "C" CM g_cm;
 struct CLQ { float g0, g1, g2, pad; };
-struct LM { float gMin, gMax; };
 extern "C" CLQ D_002BDA10;
 extern "C" LM D_002BDA20;
 extern "C" CLQ D_002BDA30;
@@ -26,7 +26,7 @@ struct X {
 };
 extern "C" {
 void func_0014FD40(X *p, void *pv, JOY *pjoy);
-float func_0011D448(float gMin, float gMax);
+float GRandInRange__Fff(float gMin, float gMax);
 void func_0012D108(TGT *p, qword pos);
 void func_0014E168(CM *p, int *pm);
 void func_00151340(X *p, void *pv, JOY *pjoy);
@@ -34,7 +34,7 @@ void func_00151340(X *p, void *pv, JOY *pjoy);
 static inline float GFromClq(const CLQ &c, float g) { return c.g0 + g * (c.g1 + g * c.g2); }
 static inline float GClampR(float g, float lo, float hi) { if (g < lo) return lo; if (hi < g) return hi; return g; }
 static inline float GClamp(float g, float lo, float hi) { if (g < lo) g = lo; else if (g > hi) g = hi; return g; }
-static inline float GRand(const LM &lm) { return func_0011D448(lm.gMin, lm.gMax); }
+static inline float GRand(const LM &lm) { return GRandInRange__Fff(lm.gMin, lm.gMax); }
 static inline qword Make(float x, float y, float z)
 {
     qword q, t;
@@ -89,22 +89,22 @@ void func_00151340(X *p, void *pv, JOY *pjoy)
         pos = zero;
         v = pos;
     } else {
-        if (p->g18 < D_002DDED0.t) {
+        if (p->g18 < g_clock.t) {
             float y = GRand(D_002BDA48);
             float z = GRand(D_002BDA50);
             float *pf = p->pos.f;
             pf[0] = 0.0f;
             pf[1] = y;
             pf[2] = z;
-            float t = D_002DDED0.t;
+            float t = g_clock.t;
             p->g18 = t + GRand(D_002BDA58);
         }
-        float dt = D_002DDED0.dt;
+        float dt = g_clock.dt;
         qword accel = VecCombo(VU_FLOAT(&D_002BDA60), Sub(p->pos.q, p->p14->pos), VU_FLOAT(-D_002BDA64), p->v);
         v = AddScaled(p->v, accel, VU_FLOAT(dt));
         pos = AddScaled2(p->p14->pos, p->v, v, VU_FLOAT(dt * 0.5f));
     }
     func_0012D108(p->p14, pos);
     p->v = v;
-    func_0014E168(&D_002DDF40, &p->p10->m40);
+    func_0014E168(&g_cm, &p->p10->m40);
 }

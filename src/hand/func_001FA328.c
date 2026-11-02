@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 union V {qword q;float f[4];};
 struct LO;
@@ -8,15 +9,12 @@ int func_0011D4D0(float,float,float);
 void func_00230598(struct P *,struct B *);
 qword func_0022FCC8(struct LO *,struct LO *,qword);
 void func_001F4BF8(struct P *);
-static __inline__ float X(qword q){float f;__asm__("mtc1 %1,%0":"=f"(f):"r"(q));return f;}
-static __inline__ float Y(qword q){float f;__asm__("prot3w %0,%1":"=r"(f):"r"(q));return f;}
-static __inline__ float Z(qword q){float f;__asm__("pextuw %0,$zero,%1":"=r"(f):"r"(q));return f;}
 static __inline__ int Near(qword value,qword reference)
 {
     int same=0;
-    if(func_0011D4D0(X(reference),X(value),0.0001f) &&
-       func_0011D4D0(Y(reference),Y(value),0.0001f) &&
-       func_0011D4D0(Z(reference),Z(value),0.0001f))same=1;
+    if(func_0011D4D0(GetX(reference),GetX(value),0.0001f) &&
+       func_0011D4D0(GetY(reference),GetY(value),0.0001f) &&
+       func_0011D4D0(GetZ(reference),GetZ(value),0.0001f))same=1;
     return same;
 }
 static __inline__ void AddTo(union V *out,qword q)

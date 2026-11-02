@@ -1,5 +1,5 @@
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+#include "clock.h"
+extern struct CLOCK g_clock;
 struct D { char pad[0x10]; int n10; };
 struct C { char pad[0xDC]; struct D *pDC; };
 struct O { char pad[0xE8]; struct C *pE8; };
@@ -30,7 +30,7 @@ void func_0017E458(struct S *p) {
             }
             break;
         case 0:
-            if (p->g40 < D_002DDED0.t) {
+            if (p->g40 < g_clock.t) {
                 func_0017E6B0(p, 1);
             } else {
                 struct C *c = p->p10->pE8;

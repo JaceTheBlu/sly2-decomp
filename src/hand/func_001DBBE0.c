@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef struct { int n; int a; } ENT;
 typedef struct {
     char pad[0x48];
@@ -12,7 +13,6 @@ extern int D_003DA570;
 extern int D_002C35B4;
 int func_001DBBA0(OBJ *);
 void func_001DA9E8(OBJ *);
-static inline int Max(int a, int b) { return a < b ? b : a; }
 static inline int Clamp(int n, int lo, int hi)
 {
     if (n < lo)
@@ -41,7 +41,7 @@ void func_001DBBE0(OBJ *p, int i)
             if (p->first == 1)
                 p->first = 0;
         } else {
-            int n = Clamp(p->first, Max(i - D_002C35B4 + 1, 0), i);
+            int n = Clamp(p->first, NMax(i - D_002C35B4 + 1, 0), i);
             p->first = n;
         }
         p->x254 = p->ae[p->i].n;

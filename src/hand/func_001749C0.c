@@ -1,5 +1,5 @@
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+#include "clock.h"
+extern struct CLOCK g_clock;
 struct A { char pad[0x74]; float g74; };
 struct B { char pad[0x1C]; float g1C; };
 struct E { int n0; struct A *pa; struct B *pb; int nC; };
@@ -14,12 +14,12 @@ void func_001EF038(struct S *p);
 void func_001749C0(struct S *p, int n) {
     if (p->n30 == n) return;
     p->n30 = n;
-    p->g34 = D_002DDED0.t;
+    p->g34 = g_clock.t;
     switch (n) {
     case 0: {
         float f;
         func_00209788(p->p10->aFD0, p);
-        if (p->pe->n0 == 0 && func_00209A68(p->p10, 9) && D_002DDED0.t == p->p10->gFF4)
+        if (p->pe->n0 == 0 && func_00209A68(p->p10, 9) && g_clock.t == p->p10->gFF4)
             f = p->pe->pa->g74 * p->p10->gFF0;
         else
             f = 0.0f;
@@ -31,7 +31,7 @@ void func_001749C0(struct S *p, int n) {
         if (p->pe) {
             if (p->pe->n0 == 0 && func_00209A68(p->p10, 9)) {
                 p->p10->gFF0 = p->pe->pb->g1C / p->pe->pa->g74;
-                p->p10->gFF4 = D_002DDED0.t;
+                p->p10->gFF4 = g_clock.t;
             }
             func_00209360(p->pe);
             p->pe = 0;

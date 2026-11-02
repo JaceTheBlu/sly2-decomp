@@ -1,17 +1,17 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float a[4]; } QF;
 struct PO { char pad[0x1A8]; float g1A8; char pad1[0x10B8 - 0x1AC]; int x10B8; };
 struct E { float f0; int pad[2]; float fC; int pad2[2]; void *p18; };
 struct S { struct PO *po; int state; int x8; int xC; int x10; int x14; float g18; float g1C; char a20[0x10]; float g30; float g34;
     struct E ae[6]; char pad[0xE0 - 0x38 - 6 * 28]; void *pvE0; void *pvE4; };
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern qword D_002A2DD0;
 void func_0018F2B0(struct PO *, int, void *, int *, QF *, float, float, float);
 qword func_001A6F00(void *, struct PO *, qword);
 void func_002046B0(struct PO *, qword);
 void func_00204CA8(struct PO *);
-void func_001384C0(void *);
+void ReblendAsegbl__FP6ASEGBL(void *);
 void func_001305B8(void *, struct PO *, int, void **, float, float);
 void func_00131B10(void *, struct PO *, int);
 void func_00131A90(void *, float);
@@ -34,7 +34,7 @@ void func_00136F48(struct S *ps, int state)
         QF v;
         QF r;
         float g;
-        ps->g18 = D_002DDED0.t;
+        ps->g18 = g_clock.t;
         ps->xC = 0;
         ps->x10 = 0;
         ps->x14 = 0;
@@ -68,15 +68,15 @@ void func_00136F48(struct S *ps, int state)
         pv = pe->p18;
         pe->fC = ps->g1C;
         dt = 0.06666667f;
-        func_001384C0(pv);
+        ReblendAsegbl__FP6ASEGBL(pv);
         break;
     }
     }
-    func_001305B8(pv, ps->po, 1, &ps->pvE0, D_002DDED0.t - ps->g18, 1.0f);
+    func_001305B8(pv, ps->po, 1, &ps->pvE0, g_clock.t - ps->g18, 1.0f);
     if (!ps->pvE0)
         return;
     if (ps->x10)
         func_00131B10(ps->pvE0, ps->po, ps->po->x10B8);
     if (ps->pvE0 && dt != 0.0f)
-        func_00131A90(ps->pvE0, D_002DDED0.t + dt);
+        func_00131A90(ps->pvE0, g_clock.t + dt);
 }

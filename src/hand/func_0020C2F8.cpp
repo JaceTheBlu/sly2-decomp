@@ -1,3 +1,5 @@
+#include "clock.h"
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};
 struct ALO;
@@ -8,15 +10,14 @@ struct ASEG;
 struct ASEGA {char pad0[0x40];float playbackRate;};
 struct TUNING {int unused0;ASEG *animation;int unused8;float afterStart,afterEnd,flightTime,minimumTime;int unused1C;U acceleration;};
 struct P {char pad0[0x10];int state;float stateTime;char pad18[8];U previousVelocity;TUNING *tuning;ALO *subject;ASEGA *job;int index;U target;float arrival,end;ALO *related;int kind;int ballistic,steep;void *constraint;};
-struct CLOCK {float time,dt;};
 struct GAME;
-extern CLOCK D_002DDED0;
-extern GAME D_003DD490;
+extern CLOCK g_clock;
+extern GAME g_sw;
 void ApplyAsegCur(ASEG *,ALO *,float,float,int,ASEGA **);
 extern "C" {
 void func_001333C0(ASEGA *,int);
 qword func_001F5860(ALO *);
-int func_00132B10(ALO *,int);
+int FIsBasicDerivedFrom__FP5BASIC3CID(ALO *,int);
 void func_0020B210(ALO *);
 void func_0020D178(void *);
 float func_00196928(qword,qword,float,float,float,float);
@@ -25,16 +26,14 @@ qword func_0022FCC8(SPACE *,SPACE *,qword);
 void *func_0012DE58(ALO *,SPACE *,int,qword,qword,float);
 void func_00134320(GAME *,ALO *);
 void func_001F5880(ALO *,qword);
-void func_00130D30(ASEGA *,int,float,float);
+void SeekAsega__FP5ASEGA4SEEKff(ASEGA *,int,float,float);
 void func_0020B2A8(ALO *,ALO *,int);
 void func_0020C760(P *);
 void func_0020D1A0(void *);
 }
 static inline qword Scalar(float f){qword r;__asm__("qmtc2 %1,%0":"=j"(r):"r"(f));return r;}
-static inline qword Subtract(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword Combine(qword a,qword x,qword b,qword y){qword r;__asm__("vmulax.xyzw ACC,%1,%2x\n\tvmaddx.xyzw %0,%3,%4x":"=j"(r):"j"(a),"j"(x),"j"(b),"j"(y));return r;}
 static inline void Store(U *home,qword value){__asm__("sqc2 %1,%0":"=m"(home->q):"j"(value));}
-static inline float Max(float a,float b){return a<b?b:a;}
 static inline qword MotionScalar(U *home,float value){
     register qword vector __asm__("vf3");
     __asm__("qmtc2.ni %1,%0":"=j"(vector):"r"(value));
@@ -47,7 +46,7 @@ extern "C" void func_0020C2F8(P *p,int state)
     U scalar,delta,acceleration,velocity,finalVelocity;
     if(state==p->state)return;
     p->state=state;
-    p->stateTime=D_002DDED0.time;
+    p->stateTime=g_clock.t;
     switch(state){
     case 0:
         ApplyAsegCur(p->tuning->animation,p->subject,0.0f,1.0f,p->index,&p->job);
@@ -55,7 +54,7 @@ extern "C" void func_0020C2F8(P *p,int state)
         p->previousVelocity.q=func_001F5860(p->subject);
         break;
     case 1:{
-        if(func_00132B10(p->subject,0x38)){
+        if(FIsBasicDerivedFrom__FP5BASIC3CID(p->subject,0x38)){
             ALO *subject=p->subject;
             func_0020B210(subject);
             func_0020D178(subject->control);
@@ -77,7 +76,7 @@ extern "C" void func_0020C2F8(P *p,int state)
         float time;
         if(ballistic){
             float low,high,slopeLow,slopeHigh;
-            if(p->related&&(func_00132B10(p->related,0x13)||func_00132B10(p->related,0xB))){
+            if(p->related&&(FIsBasicDerivedFrom__FP5BASIC3CID(p->related,0x13)||FIsBasicDerivedFrom__FP5BASIC3CID(p->related,0xB))){
                 low=1250.0f;slopeLow=1.1f;high=0.0f;slopeHigh=50.0f;
             }else if(p->steep){
                 low=1500.0f;slopeLow=1.33f;high=-1500.0f;slopeHigh=-1.33f;
@@ -86,7 +85,7 @@ extern "C" void func_0020C2F8(P *p,int state)
             }
             time=func_00196928(delta.q,acceleration.q,low,high,slopeLow,slopeHigh);
         }else time=motionTuning->flightTime/playbackRate;
-        time=Max(p->tuning->minimumTime/playbackRate,time);
+        time=GMax(p->tuning->minimumTime/playbackRate,time);
         ALO *subject=p->subject;
         VENTRY &entry=subject->vt[35];
         short adjustment=entry.delta;
@@ -97,7 +96,7 @@ extern "C" void func_0020C2F8(P *p,int state)
         qword initialVelocity=Combine(delta.q,inverseTime,acceleration.q,scalar.q);
         Store(&velocity,initialVelocity);
         applyVelocity((char *)subject+adjustment,velocity.q);
-        p->arrival=D_002DDED0.time+time;
+        p->arrival=g_clock.t+time;
         p->end=p->arrival-p->tuning->minimumTime/playbackRate;
         if(p->ballistic){
             register qword timeScalar __asm__("vf1"),motionVelocity __asm__("vf2"),force __asm__("vf3");
@@ -116,20 +115,20 @@ extern "C" void func_0020C2F8(P *p,int state)
             qword speed=func_0022FCC8(0,p->subject->space->parent,finalVelocity.q);
             p->constraint=func_0012DE58(p->subject,p->subject->space,5,position,speed,p->arrival);
             p->subject->flags|=0x04000000ul;
-            func_00134320(&D_003DD490,p->subject);
+            func_00134320(&g_sw,p->subject);
         }
         func_001F5880(p->subject,acceleration.q);
         break;
     }
-    case 2:func_00130D30(p->job,0,p->tuning->afterStart,1.0f);break;
+    case 2:SeekAsega__FP5ASEGA4SEEKff(p->job,0,p->tuning->afterStart,1.0f);break;
     case 3:
-        func_00130D30(p->job,0,p->tuning->afterEnd,1.0f);
+        SeekAsega__FP5ASEGA4SEEKff(p->job,0,p->tuning->afterEnd,1.0f);
         if(p->related)func_0020B2A8(p->subject,p->related,p->kind);
         break;
     case 4:
         if(p->ballistic)func_0020C760(p);
         func_001F5880(p->subject,p->previousVelocity.q);
-        if(func_00132B10(p->subject,0x38))func_0020D1A0(p->subject->control);
+        if(FIsBasicDerivedFrom__FP5BASIC3CID(p->subject,0x38))func_0020D1A0(p->subject->control);
         break;
     }
 }
@@ -180,6 +179,3 @@ typedef char P_kind_Offset[(FIELD_OFFSET(P,kind)==0x5C)?1:-1];
 typedef char P_ballistic_Offset[(FIELD_OFFSET(P,ballistic)==0x60)?1:-1];
 typedef char P_steep_Offset[(FIELD_OFFSET(P,steep)==0x64)?1:-1];
 typedef char P_constraint_Offset[(FIELD_OFFSET(P,constraint)==0x68)?1:-1];
-typedef char CLOCK_Prefix_Size[(sizeof(CLOCK)==0x8)?1:-1];
-typedef char CLOCK_time_Offset[(FIELD_OFFSET(CLOCK,time)==0x0)?1:-1];
-typedef char CLOCK_dt_Offset[(FIELD_OFFSET(CLOCK,dt)==0x4)?1:-1];

@@ -1,4 +1,6 @@
-// func_001E6A30 (w2lane4, wave 2): closest point on a path (chain of control points under the path's own matrix) to a query point,
+#include "vtable.h"
+#include "vu0.h"
+// func_001E6A30: closest point on a path (chain of control points under the path's own matrix) to a query point,
 // searched from a starting time. func_001E7538 turns the starting time into a segment index; the loop projects the point on that
 // segment (segment vector rotated by the matrix, point minus the transformed start) and walks to the next / previous segment (wrapping
 // when the path is cyclic) until the projection falls inside a segment. Afterwards the position, direction, time and value outputs
@@ -22,7 +24,6 @@ typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
 struct VV { qword q; VV() {} VV(const qword &v) { q = v; } operator qword() const { return q; } };
 struct M4 { U rows[4]; };
-struct VTE { short delta, pad; void *fn; };
 struct SPACE;
 struct PATH {
     char padC[0xC]; VTE *vt; char pad10[0xD4];
@@ -82,7 +83,6 @@ static inline VV Root(VV a)
     __asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q" : "+j"(a));
     return a;
 }
-static inline float ToFloatR(qword v) { float f; __asm__("mtc1 %1,%0" : "=f"(f) : "r"(v)); return f; }
 static inline VV LengthOf(const U &v)
 {
     qword d, one;
@@ -111,7 +111,7 @@ extern "C" void func_001E6A30(PATH *p, qword point, SPACE *space, qword *outPosi
     float elapsed, duration;
     int backward = 0, forward = 0, previous;
     int index = func_001E7538(p, initial, &elapsed, &duration);
-    matrix = *((M4 *(*)(void *))p->vt[31].fn)((char *)p + p->vt[31].delta);
+    matrix = *((M4 *(*)(void *))p->vt[31].pfn)((char *)p + p->vt[31].delta);
     float fraction;
     for (;;) {
         const M4 *basis = &matrix;
@@ -123,9 +123,9 @@ extern "C" void func_001E6A30(PATH *p, qword point, SPACE *space, qword *outPosi
             segment.q = func_001FA970(space, segment.q);
         }
         qword length = LengthOf(segment);
-        float size = ToFloatR(length);
+        float size = GetX(length);
         segment.q = NormalizeTo(segment, length);
-        float distance = ToFloatR(DotInto(segment.q, delta));
+        float distance = GetX(DotInto(segment.q, delta));
         fraction = 0.0f;
         if (distance < 0.0f) {
             if (forward) { fraction = 1.0f; index = previous; break; }

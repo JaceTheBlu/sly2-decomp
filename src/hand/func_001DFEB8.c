@@ -1,6 +1,6 @@
 typedef struct DL { void *pvFirst; void *pvLast; int ibDle; } DL;
 typedef struct DLI { DL *pdl; void **ppv; int ibDle; struct DLI *pdliNext; } DLI;
-extern DLI *D_002DD2FC;
+extern DLI *g_pdliFirst;
 typedef struct OBJ OBJ;
 typedef struct VT { struct { short d; short pad; void (*pfn)(void *, int, int, int, int, int); } a[8]; } VT;
 struct OBJ {
@@ -24,8 +24,8 @@ static inline void InitDli(DLI *pdli, DL *pdl)
     pdli->pdl = pdl;
     pdli->ppv = (void **)pdl;
     pdli->ibDle = pdl->ibDle;
-    pdli->pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static inline void *PvNextDli(DLI *pdli)
 {
@@ -54,5 +54,5 @@ void func_001DFEB8(OBJ *p)
             p->x40 &= ~2;
     }
     p->vt->a[3].pfn((char *)p + p->vt->a[3].d, 6, 0, 0, 0, 0);
-    D_002DD2FC = dli.pdliNext;
+    g_pdliFirst = dli.pdliNext;
 }

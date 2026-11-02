@@ -6,8 +6,8 @@ typedef unsigned int uword;
 typedef int sword;
 typedef struct dwarf_fde { uword length; sword CIE_delta; void *pc_begin; uword pc_range; } fde;
 struct object { void *pc_begin; void *pc_end; fde *fde_begin; fde **fde_array; size_t count; struct object *next; };
-extern struct object *D_00450278;
-#define objects D_00450278
+extern struct object *objects;
+#define objects objects
 void func_0023F710(struct object *ob);
 #define frame_init func_0023F710
 typedef int __gthread_mutex_t;

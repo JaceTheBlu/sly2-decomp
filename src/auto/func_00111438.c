@@ -65,5 +65,5 @@ static inline void *m2c_ctor_0(void *p)
 void *func_00111438(s32 arg0) {
     void *temp_v0;
 
-    return m2c_ctor_0(func_001AE4F8(0x180));
+    return m2c_ctor_0(__builtin_new(0x180));
 }

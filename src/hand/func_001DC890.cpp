@@ -1,12 +1,4 @@
-struct CRef {
-    int m_tagk;
-    int m_tag;
-    CRef() { m_tagk = -1; }
-    CRef(const CRef &);
-    ~CRef() { Decref(); }
-    CRef &operator=(const CRef &);
-    void Decref();
-};
+#include "cref.h"
 struct ENT { int n; int a; };
 struct TBL {
     char pad[0x4C];
@@ -16,7 +8,7 @@ struct TBL {
 };
 struct REC { char *name; int ids; int pad; };
 struct G;
-extern G D_003DD490;
+extern G g_sw;
 extern TBL D_003DA150;
 extern REC D_002C3288[];
 extern char D_002A79A0[];
@@ -41,7 +33,7 @@ extern "C" void func_001DC890(char *pch, int k)
         ids = D_002C3288[i].ids;
     }
     if (ids != -1) {
-        func_0021ED58(pch, func_0013E368(&D_003DD490, ids));
+        func_0021ED58(pch, func_0013E368(&g_sw, ids));
         if (c >= 2)
             func_0021ECD8(pch, D_002A7A30, pch, c);
     } else {

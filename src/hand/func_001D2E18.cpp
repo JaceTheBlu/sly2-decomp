@@ -1,4 +1,6 @@
-// func_001D2E18 (Claude agent, wave-3 lane 7): MATCH, no register pins, VU helper asms only.
+#include "vu0.h"
+#include "clock.h"
+// func_001D2E18: MATCH, no register pins, VU helper asms only.
 // Vehicle contact/traction update: correct the orientation every 3 s, sum the impulses of the wheel contacts
 // (entries 0x1A0, stride 0x60), then turn and drive the body within the remaining impulse budget.
 // How it matches (on top of w2lane4's v13 draft, which had the right instruction stream):
@@ -29,10 +31,9 @@ struct P {
     int unused52C; LIMITS limits; float reverseLimit, contactScale; char pad540[0x10]; float drive, turn, acceleration;
     char pad55C[0x64]; float lastCorrection;
 };
-struct CLOCK { float time, dt; };
 union PHASE { M3 rotation; struct { U acceleration, world, limited; } impulse; };
-extern CLOCK D_002DDED0;
-extern const qword D_002A2DC0, D_002A2DD0;
+extern CLOCK g_clock;
+extern const qword g_normalZ, D_002A2DD0;
 extern POLY D_002C2100, D_002C2120, D_002C2130;
 extern float D_002C2110, D_002C2114, D_002C2140, D_002C2144, D_002C2148;
 extern "C" {
@@ -46,7 +47,7 @@ void func_001FAB78(P *, qword, qword);
 qword func_0022FCC8(MOTION *, MOTION *, qword);
 float func_0011CFE0(float, float);
 void func_001FAC98(P *, qword);
-M3 *func_0011B500(M3 *, qword, float);
+M3 *LoadRotateMatrixRad__FfUx(M3 *, qword, float);
 qword func_0011E9F8(float, qword);
 void func_001FAC30(P *, qword);
 }
@@ -89,13 +90,11 @@ static inline VV Divide(VV v, VV scalar) { qword r; __asm__("vdiv $Q,$vf0w,%1x\n
 static inline float Evaluate(const POLY &p, float t) { return p.a + t * (p.b + t * p.c); }
 static inline float Clamp(float v, float low, float high) { if (v < low) return low; else if (high < v) return high; else return v; }
 static inline float ClampTo(float v, const LIMITS &l) { return Clamp(v, l.low, l.high); }
-static inline float Min(float a, float b) { return b < a ? b : a; }
-static inline float Abs(float f) { return __builtin_fabsf(f); }
 
 extern "C" void func_001D2E18(P *p)
 {
     func_001F9B20(p);
-    if (D_002DDED0.time - p->lastCorrection > 3.0f) {
+    if (g_clock.t - p->lastCorrection > 3.0f) {
         M3 reset;
         func_0011B938(func_001A6318(p), 0, &reset);
         func_001F5C30(p, &reset, &D_002C2100, D_002A2DD0, 0);
@@ -130,8 +129,8 @@ extern "C" void func_001D2E18(P *p)
         contactDone:;
         } while (++i < p->count);
     }
-    float budget = Min(D_002C2140, p->contactScale * total / p->physics->mass);
-    CLOCK *clock = &D_002DDED0;
+    float budget = GMin(D_002C2140, p->contactScale * total / p->physics->mass);
+    CLOCK *clock = &g_clock;
     qword origin = p->primary->velocity.q;
     velocity.q = ScalarBits(*(const int *)&clock->dt);
     scalar.q = AddScaled(origin, p->primary->acceleration.q, velocity.q);
@@ -142,11 +141,11 @@ extern "C" void func_001D2E18(P *p)
     float turnImpulse = func_0011CFE0((p->turn - localVelocity.f[2]) / clock->dt, acceleration * budget);
     torque.f[2] = turnImpulse;
     worldTorque.q = Rotate(p->secondary->world.basis, torque.q);
-    budget -= Abs(D_002C2148 * turnImpulse / acceleration);
+    budget -= GAbs(D_002C2148 * turnImpulse / acceleration);
     func_001FAC98(p, worldTorque.q);
     float dt = clock->dt;
     float half = dt * 0.5f;
-    func_0011B500(&phase.rotation, D_002A2DC0, (localVelocity.f[2] + torque.f[2] * half) * dt);
+    LoadRotateMatrixRad__FfUx(&phase.rotation, g_normalZ, (localVelocity.f[2] + torque.f[2] * half) * dt);
     desired.f[0] = p->acceleration * p->drive;
     desired.f[2] = desired.f[1] = 0.0f;
     basis = phase.rotation;
@@ -160,7 +159,7 @@ extern "C" void func_001D2E18(P *p)
         minimum = -ClampTo(Evaluate(p->traction, Clamp(-fraction, 0.0f, 1.0f)), p->limits);
         maximum = p->reverseLimit;
     }
-    dtv.q = TimeStep(D_002DDED0);
+    dtv.q = TimeStep(g_clock);
     phase.impulse.acceleration.q = Divide(Subtract(desired.q, velocity.q), dtv.q);
     phase.impulse.acceleration.bits[2] = 0;
     phase.impulse.acceleration.f[0] = Clamp(phase.impulse.acceleration.f[0], minimum, maximum);

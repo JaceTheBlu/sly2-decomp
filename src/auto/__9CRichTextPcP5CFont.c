@@ -7,7 +7,7 @@
 
 M2C_UNK func_001291A8(s32 *, s32 *, s32);           /* extern */
 M2C_UNK func_00129EC8(s32 *);                       /* extern */
-M2C_UNK func_00166920(M2C_UNK *);                   /* extern */
+M2C_UNK __4GIFS(M2C_UNK *);                   /* extern */
 M2C_UNK func_002271C8(s32, M2C_UNK *);              /* extern */
 s32 func_002355E0(s32, M2C_UNK);                    /* extern */
 M2C_UNK func_002417F0(s32, M2C_UNK, M2C_UNK);       /* extern */
@@ -19,8 +19,8 @@ extern s32 D_002BE320;
 extern u8 D_002BE328;
 extern M2C_UNK D_002BE338;
 extern M2C_UNK D_002C44F0;
-extern void *D_002DD2FC;
-extern M2C_UNK D_002DDED0;
+extern void *g_pdliFirst;
+extern M2C_UNK g_clock;
 extern s32 D_002DDF54;
 extern M2C_UNK D_002DE578;
 extern s32 D_002DE594;
@@ -30,7 +30,7 @@ extern M2C_UNK D_002DE770;
 extern s32 D_002DE9F0;
 extern M2C_UNK D_002DEA00;
 extern M2C_UNK D_002DEA28;
-extern void *D_002DEA4C;
+extern void *g_pfrmOpen;
 extern M2C_UNK D_002DEA50;
 extern M2C_UNK D_002DEAF0;
 extern M2C_UNK D_002DEB00;
@@ -51,7 +51,7 @@ extern s32 D_002E0C20;
 extern s32 D_002E1E00;
 extern s32 D_003D3980;
 extern M2C_UNK D_003D4A60;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 extern s32 D_003E12C8;
 extern M2C_UNK D_003E1518;
 extern M2C_UNK D_003E1530;

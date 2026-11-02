@@ -1,5 +1,9 @@
-// func_001D2610 (Claude agent, wave-4 lane 7): MATCH. Mode-1 update of a vehicle with attached weapons (called from
-// func_001D19A8): pick a ready attachment (func_001D2240) or a target object (func_001D22D0), run the state machine
+#include "vecmat.h"
+#include "vu0.h"
+#include "util.h"
+#include "clock.h"
+// func_001D2610: MATCH. Mode-1 update of a vehicle with attached weapons (called from
+// UpdateCid77): pick a ready attachment (func_001D2240) or a target object (func_001D22D0), run the state machine
 // (0 approach/orbit the target, 1 attack in place, 2 pursue the object, 3 back away) until the state is stable, steer
 // for the current state, then let every ready attachment fire once its aim error is small enough.
 // Callees: 0x2456F0 acosf, 0x2458F0 atan2f, 0x11D910 FCheckLm, 0x11CF60 RadNormalize, 0x11D448 GRandInRange,
@@ -19,8 +23,6 @@
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
 struct M3 { U rows[3]; };
-struct LM { float min, max; };
-struct CLOCK { float t, dt; };
 struct BINDING { char pad0[0x28]; float pitch; };
 struct P;
 struct ATTACH {
@@ -34,8 +36,8 @@ struct P {
     char pad520[0x20]; float heading, goalHeading, steering, wheelAngle, drive; char pad554[0x50];
     P *target; void *navigator; PATH *path; float cursor, nextAttack; P *selectedObject; ATTACH *selectedAttach;
 };
-extern CLOCK D_002DDED0;
-extern const qword D_002A2DA0, D_002A2DC0;
+extern CLOCK g_clock;
+extern const qword D_002A2DA0, g_normalZ;
 extern float D_002C20E8, D_002C20EC, D_002C20F0, D_002C20F4, D_002C20F8;
 extern "C" {
 qword func_001A62E8(P *);
@@ -44,7 +46,7 @@ P *func_001D22D0(P *);
 int func_0011D910(LM *, float);
 void func_001D4B28(P *, int);
 float func_002456F0(float);
-M3 func_0011B500(qword, float);
+M3 LoadRotateMatrixRad__FfUx(qword, float);
 int func_001C0960(void *, qword, qword, int, HIT *, int);
 void func_001E6180(PATH *);
 void func_001D2420(P *);
@@ -52,15 +54,14 @@ void func_001C02D0(void *, qword, qword, PATH *);
 float func_002458F0(float, float);
 M3 *func_001A6318(P *);
 qword func_0022CA18(void *, void *);
-float func_0011CF60(float);
+float RadNormalize__Ff(float);
 void func_001F0660(void *, int);
-float func_0011D448(float, float);
+float GRandInRange__Fff(float, float);
 void func_001D2490(P *);
 int func_001D4E08(ATTACH *);
 int func_00227C90(void *, qword);
 }
 struct VV { qword q; VV() {} VV(const qword &v) { q = v; } operator qword() const { return q; } };
-struct VU_FLOAT { qword q; };
 static inline VV Sub(VV a, VV b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline VV Add(VV a, VV b) { qword r; __asm__("vadd.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline float GetX(VV q) { float f; __asm__("mtc1 %1, %0" : "=f"(f) : "r"(q)); return f; }
@@ -100,8 +101,6 @@ static inline VV Rotate(const M3 &m, VV v)
             : "=j"(r) : "j"(m.rows[0].q), "j"(m.rows[1].q), "j"(m.rows[2].q), "j"(v));
     return r;
 }
-static inline float Max(float a, float b) { return a < b ? b : a; }
-static inline float Abs(float f) { return __builtin_fabsf(f); }
 
 extern "C" void func_001D2610(P *p)
 {
@@ -147,7 +146,7 @@ extern "C" void func_001D2610(P *p)
     case 0: {
         // approach: a point at the attachment's radius from the target, rotated around it by the tactic
         float radius = p->selectedAttach->radius;
-        float angle = func_002456F0(radius / Max(radius * D_002C20E8, distance));
+        float angle = func_002456F0(radius / GMax(radius * D_002C20E8, distance));
         VV goal;
         VV offset = VuFloatFromMemWord(*(int *)&p->selectedAttach->radius) * NormalizeSafe(Sub(position, target), D_002A2DA0);
         switch (p->selectedAttach->tactic) {
@@ -156,12 +155,12 @@ extern "C" void func_001D2610(P *p)
             goal = target;
             break;
         case 2: {
-            M3 m = func_0011B500(D_002A2DC0, angle);
+            M3 m = LoadRotateMatrixRad__FfUx(g_normalZ, angle);
             goal = Add(target, Rotate(m, offset));
             break;
         }
         case 3: {
-            M3 m = func_0011B500(D_002A2DC0, -angle);
+            M3 m = LoadRotateMatrixRad__FfUx(g_normalZ, -angle);
             goal = Add(target, Rotate(m, offset));
             break;
         }
@@ -190,23 +189,23 @@ extern "C" void func_001D2610(P *p)
         p->drive = 0.0f;
         p->goalHeading = p->heading;
         p->wheelAngle = func_002458F0(GetY(delta), GetX(delta));
-        if (p->nextAttack < D_002DDED0.t) {
+        if (p->nextAttack < g_clock.t) {
             ATTACH *attach = func_001D2240(p);
             if (attach) {
                 if (attach->mesh) {
                     M3 m = *func_001A6318(attach->anchor);
                     float aim = func_002458F0(m.rows[0].f[1], m.rows[0].f[0]);
                     qword packed = func_0022CA18(attach->mesh, attach->mesh);
-                    float error = Abs(func_0011CF60(aim - p->wheelAngle));
+                    float error = GAbs(RadNormalize__Ff(aim - p->wheelAngle));
                     float pitch = GetZ(packed) - attach->meshBinding->pitch;
-                    if (error < D_002C20EC && Abs(pitch) < D_002C20F0)
+                    if (error < D_002C20EC && GAbs(pitch) < D_002C20F0)
                         goto fire;
                     break;
                 }
             fire:
                 func_001F0660(attach->binding, 0x68);
-                float t = D_002DDED0.t;
-                p->nextAttack = t + func_0011D448(1.0f, 1.5f);
+                float t = g_clock.t;
+                p->nextAttack = t + GRandInRange__Fff(1.0f, 1.5f);
             }
         }
         break;
@@ -228,27 +227,27 @@ extern "C" void func_001D2610(P *p)
         break;
     }
 
-    if (D_002DDED0.t > p->nextAttack) {
+    if (g_clock.t > p->nextAttack) {
         for (int i = 0; i < p->attachCount; i++) {
             ATTACH *attach = p->attachments[i];
             if (!func_001D4E08(attach))
                 continue;
             if (attach->constraint && !func_00227C90(attach->constraint, target))
                 continue;
-            if (0.0f < attach->enterRange.max && p->state != 1)
+            if (0.0f < attach->enterRange.gMax && p->state != 1)
                 continue;
             if (attach->mesh) {
                 M3 m = *func_001A6318(attach->anchor);
                 float aim = func_002458F0(m.rows[0].f[1], m.rows[0].f[0]);
                 qword packed = func_0022CA18(attach->mesh, attach->mesh);
-                float error = Abs(func_0011CF60(aim - p->wheelAngle));
+                float error = GAbs(RadNormalize__Ff(aim - p->wheelAngle));
                 float pitch = GetZ(packed) - attach->meshBinding->pitch;
-                if (D_002C20F4 < error || D_002C20F8 < Abs(pitch))
+                if (D_002C20F4 < error || D_002C20F8 < GAbs(pitch))
                     continue;
             }
             func_001F0660(attach->binding, 0x68);
-            float t = D_002DDED0.t;
-            p->nextAttack = t + func_0011D448(attach->fireInterval.min, attach->fireInterval.max);
+            float t = g_clock.t;
+            p->nextAttack = t + GRandInRange__Fff(attach->fireInterval.gMin, attach->fireInterval.gMax);
         }
     }
 }

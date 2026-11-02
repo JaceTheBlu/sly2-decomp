@@ -1,4 +1,5 @@
-// MATCH (w3lane3, 2026-10-25): func_00194F70 = UpdateJtGrabCandidates(SW *psw, STEPPLAYER *pstepplayer, int ccand, JTGRABCAND *ajtgrabcand)
+#include "clock.h"
+// MATCH: func_00194F70 = UpdateJtGrabCandidates(SW *psw, STEPPLAYER *pstepplayer, int ccand, JTGRABCAND *ajtgrabcand)
 // (name and structures from src/hand/func_00194A40.cpp, the GatherJtGrabCandidates port that calls it).
 // Merges this frame's sorted grab candidates into the four the world keeps (SW::ajtgrabcand): an old candidate
 // whose object is found again takes the new distance and smooths its parameter towards the new one (wrapping
@@ -36,10 +37,9 @@ struct JTGRABCAND {
 };
 struct SW { char pad0[0x4678]; int cjtgrabcand; JTGRABCAND ajtgrabcand[4]; };
 struct STEPPLAYER { char pad0[0x9C4]; int idUnk9C4; };
-struct CLOCK { float t; float dt; };
 
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern int D_002E1E50;
 extern float D_002BF710, D_002BF714;
 extern SMP D_002BF718;
@@ -47,7 +47,7 @@ extern char D_002DEB30[];
 int func_00194F48(const void *, const void *);   // JTGRABCAND compare for qsort
 void func_002338C0(void *base, uint c, uint cb, int (*pfnCmp)(const void *, const void *));   // qsort
 void *func_002332B8(void *dst, const void *src, uint cb);   // memmove
-float func_0011D018(float gCur, float gTarget, float dt, SMP *psmp, float *pdgNext);   // GSmooth
+float GSmooth__FfffP3SMPPf(float gCur, float gTarget, float dt, SMP *psmp, float *pdgNext);   // GSmooth
 void func_001F7BF8(LO *plo, float g);
 void func_001619A0(void *pv, int msg, LO *plo);
 LO *func_001956D0(SW *psw, int id, JTGRABCAND *pcand);
@@ -107,7 +107,7 @@ void func_00194F70(SW *psw, STEPPLAYER *pstepplayer, int ccand, JTGRABCAND *ajtg
                         }
                     }
                     if (D_002E1E50) {
-                        float dt = D_002DDED0.dt;
+                        float dt = g_clock.dt;
                         float dsPrev = pcandOld->dsParam;
                         float dsNew = dsPrev + dt * ((pcand->sParam - pcandOld->sParam) * D_002BF710 + (pcand->dsParam - dsPrev) * D_002BF714);
                         float dsAvg;
@@ -115,7 +115,7 @@ void func_00194F70(SW *psw, STEPPLAYER *pstepplayer, int ccand, JTGRABCAND *ajtg
                         dsAvg = (dsPrev + dsNew) * 0.5f;
                         pcandOld->sParam = pcandOld->sParam + dt * dsAvg;
                     } else {
-                        pcandOld->sParam = func_0011D018(pcandOld->sParam, pcand->sParam, D_002DDED0.dt, &D_002BF718, &pcandOld->dsParam);
+                        pcandOld->sParam = GSmooth__FfffP3SMPPf(pcandOld->sParam, pcand->sParam, g_clock.dt, &D_002BF718, &pcandOld->dsParam);
                     }
                     if (fWrap) {
                         if (asRange[1] < pcandOld->sParam)

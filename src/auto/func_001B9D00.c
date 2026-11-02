@@ -1,5 +1,5 @@
 #include "m2c_prelude.h"
-s32 func_001AE318(s32 *);                           /* extern */
+s32 PvAllocStackImpl__FP7SWALLOC(s32 *);                           /* extern */
 extern M2C_UNK D_002A2D30;
 extern s128 D_002A2DD0;
 extern f32 D_002A7620;
@@ -16,10 +16,10 @@ extern f32 D_002C0A40;
 extern M2C_UNK D_002C0A50;
 extern s128 D_002C0A80;
 extern M2C_UNK D_002C3C60;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern M2C_UNK D_002DEB30;
 extern s32 D_002E1E40;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 extern s32 D_003E1444;
 
 void func_001B9D00(s32 arg0, s32 arg1, s32 arg2) {

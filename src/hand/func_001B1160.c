@@ -7,7 +7,7 @@ struct P { char pad0[0xC]; struct VT *vt; char pad1[0x16C - 0x10]; struct CURVE 
 extern qword D_002A2DA0;
 qword func_001A62E8(void *p);
 struct SPACE;
-void func_001E6ED8(struct CURVE*,qword,struct SPACE*,qword*,qword*,float*,float*,float);
+void UpdateUbgSgs__FP3UBG(struct CURVE*,qword,struct SPACE*,qword*,qword*,float*,float*,float);
 float func_001E6660(struct CURVE *p, float g);
 float func_001E6610(struct CURVE *p);
 float func_001E6630(struct CURVE *p);
@@ -61,7 +61,7 @@ void func_001B1160(struct P *p)
     if (!q)
         return;
     upos.q = func_001A62E8(p);
-    func_001E6ED8(q,upos.q,0,0,0,&p->g174,0,p->g174);
+    UpdateUbgSgs__FP3UBG(q,upos.q,0,0,0,&p->g174,0,p->g174);
     t = func_001E6660(q, p->g174 + p->g178);
     if (t < func_001E6610(q) || func_001E6630(q) < t) {
         if (p->x220 == 1)

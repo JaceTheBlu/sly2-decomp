@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct VTE { short d; short pad; void (*pf)(); };
 struct LO { char pad[0xC]; struct VTE *vt; };
@@ -9,25 +10,24 @@ struct S {
     qword q170; qword q180; qword q190;
     char p2[0x1CC - 0x1A0]; float x1CC;
 };
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern qword D_002A2DD0;
 extern qword D_002C0D60;
 extern float D_002A773C;
-void func_001A58D0(struct S *p, int a, int b);
+void SetLoParent__FP2LOP2SOi(struct S *p, int a, int b);
 struct LO *func_001CB658(struct S *p);
 void func_001CB4B8(struct LO *q, struct S *p);
 struct LO *func_001F0380(void *a, struct S *p, int anim, int z);
 void func_001F10F0(struct LO *q, float g);
 void func_001F0660(struct LO *q, int anim);
-void func_001F0598(struct LO *q);
+void RetractSma__FP3SMA(struct LO *q);
 void func_001C60B8(struct S *p, int n)
 {
     int anim = -1;
     struct LO *q;
     if (p->x150 == n) return;
     if (n != 0 && n != 5)
-        func_001A58D0(p, 0, 0);
+        SetLoParent__FP2LOP2SOi(p, 0, 0);
     if (p->x150 == -1 || p->x150 == 2) {
         struct O *o = p->x58;
         p->q170 = o->q30;
@@ -66,7 +66,7 @@ void func_001C60B8(struct S *p, int n)
         break;
     }
     p->x150 = n;
-    p->x154 = D_002DDED0.t;
+    p->x154 = g_clock.t;
     if (anim != -1) {
         if (!p->x168) {
             p->x168 = func_001F0380(p->x164, p, anim, 0);
@@ -77,7 +77,7 @@ void func_001C60B8(struct S *p, int n)
             func_001F0660(p->x168, anim);
         }
     } else if (p->x168) {
-        func_001F0598(p->x168);
+        RetractSma__FP3SMA(p->x168);
         ((void (*)(void *))p->x168->vt[2].pf)((char *)p->x168 + p->x168->vt[2].d);
         p->x168 = 0;
     }

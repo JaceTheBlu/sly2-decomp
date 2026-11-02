@@ -1,11 +1,11 @@
-/* (Claude agent, lane E13) Matched. c is reused as the insertion index (for (c--; ...)), and the sorted insert is
+#include "vtable.h"
+/* Matched. c is reused as the insertion index (for (c--; ...)), and the sorted insert is
    an if + do-while instead of a for loop. */
-typedef struct VT { short d; short pad; void *pfn; } VT;
-typedef struct N { char pad[0xC]; int k; struct N *next; int x14; VT *vt; } N;
+typedef struct N { char pad[0xC]; int k; struct N *next; int x14; VTE *vt; } N;
 typedef struct S { char pad[0x90]; N *first; } S;
 void func_0022C840(void *, S *);
 
-#define VCALL(o, k) ((void (*)(void *))(o)->vt[k].pfn)((char *)(o) + (o)->vt[k].d)
+#define VCALL(o, k) ((void (*)(void *))(o)->vt[k].pfn)((char *)(o) + (o)->vt[k].delta)
 
 void func_002301D0(void *ctx, S *s)
 {

@@ -1,3 +1,5 @@
+#include "vu0.h"
+#include "dl.h"
 // func_001C21D8: A* path search over the navigation polygons (lilly5, T1831; = lilly4 with the minimal probe).
 // BYTE-IDENTICAL (matchtool MATCH), but NOT promotable under AGENT_GUIDE "Not accepted": the target's never-touched
 // object at sp+0x30 is still an invented `EMPTY e` (without it every SImode home is 4 bytes low: 18/321, aligned 0).
@@ -7,7 +9,6 @@
 // never-touched RAII-style object (inline empty dtor) or a volatile. Rest of the code is lilly4 (StoreX estimate).
 typedef int qword __attribute__((mode(TI)));
 struct MSG { int cb; int nKind; };
-struct DL { void *pvFirst; void *pvLast; int ibDle; };
 struct NAV { char pad[0x124]; int index; };
 struct EDGE { char pad[0x128]; NAV *pnavDest; int pad12C; qword posBegin; qword posEnd; };
 struct ADJ { int cedge; int *aiedge; };
@@ -16,27 +17,26 @@ struct NODE { NAV *pnav; EDGE *pedge; NODE *pnodeParent; float gCost; float gEst
 
 extern "C" {
 void *func_001AE478(void *pframe);
-void func_001AE4A0(void *pframe, int n);
-void *func_001AE378(MSG *pmsg);
-void *func_001AE318(MSG *pmsg);
+void _$_18CBinaryInputStream(void *pframe, int n);
+void *PvAllocStackClearImpl__FP7SWALLOC(MSG *pmsg);
+void *PvAllocStackImpl__FP7SWALLOC(MSG *pmsg);
 void *func_002333B4(void *pv, int b, unsigned int cb);
 qword func_001A62E8(void *pv);
 NAV *func_001C0D70(qword pos, int f);
-void func_0011A200(DL *pdl);
-void func_0011A1F8(DL *pdl, int ibDle);
+void ClearDl__FP2DL(DL *pdl);
+void InitDl__FP2DLi(DL *pdl, int ibDle);
 void func_0011A220(DL *pdl, void *pv);
 void func_0011A2E8(DL *pdl, void *pv);
 void func_0011A280(DL *pdl, void *pvNext, void *pv);
-int func_0011A3B0(DL *pdl);
+int FIsDlEmpty__FP2DL(DL *pdl);
 int func_001C26E0(GRAPH *pgraph, EDGE *pedge, void *pvActor);
 int func_001C0920(NAV *pnav, qword pos, int f);
 }
 
-static inline void *PvAllocClear(int cb) { MSG msg; msg.cb = cb; msg.nKind = 0x10; return func_001AE378(&msg); }
-static inline void *PvAlloc(int cb) { MSG msg; msg.cb = cb; msg.nKind = 0x10; return func_001AE318(&msg); }
+static inline void *PvAllocClear(int cb) { MSG msg; msg.cb = cb; msg.nKind = 0x10; return PvAllocStackClearImpl__FP7SWALLOC(&msg); }
+static inline void *PvAlloc(int cb) { MSG msg; msg.cb = cb; msg.nKind = 0x10; return PvAllocStackImpl__FP7SWALLOC(&msg); }
 // The current stack-allocation scope (out of line: 0x1AE478 / 0x1AE4A0)
 struct STACKSCOPE { STACKSCOPE(); ~STACKSCOPE(); };
-static inline qword QwSub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword QwLength(qword v)
 {
     qword qw;
@@ -52,8 +52,7 @@ static inline NAV *PnavFind(const qword &pos) { return func_001C0D70(pos, 0); }
 static inline void AppendNode(DL *pdl, NODE *pnode) { func_0011A220(pdl, pnode); }
 static inline void RemoveNode(DL *pdl, NODE *pnode) { func_0011A2E8(pdl, pnode); }
 static inline void InsertNode(DL *pdl, NODE *pnodeNext, NODE *pnode) { func_0011A280(pdl, pnodeNext, pnode); }
-static inline float GXOfQw(qword qw) { float x; __asm__("mtc1 %1, %0" : "=f"(x) : "r"(qw)); return x; }
-static inline float GDistX(const qword &a, const qword &b) { return GXOfQw(QwLength(QwSub(a, b))); }
+static inline float GDistX(const qword &a, const qword &b) { return GetX(QwLength(QwSub(a, b))); }
 
 static inline void StoreX(float *p, qword q) { __asm__("sw %1,%0" : "=m"(*p) : "r"(q)); }
 extern "C" int func_001C21D8(GRAPH *pgraph, void *pvActor, qword posGoal, int fExact, int cpedgeMax, EDGE **apedge)
@@ -73,10 +72,10 @@ extern "C" int func_001C21D8(GRAPH *pgraph, void *pvActor, qword posGoal, int fE
     }
     DL dlOpen;
     DL dlClosed;
-    func_0011A200(&dlOpen);
-    func_0011A1F8(&dlOpen, 0x18);
-    func_0011A200(&dlClosed);
-    func_0011A1F8(&dlClosed, 0x18);
+    ClearDl__FP2DL(&dlOpen);
+    InitDl__FP2DLi(&dlOpen, 0x18);
+    ClearDl__FP2DL(&dlClosed);
+    InitDl__FP2DLi(&dlClosed, 0x18);
     EMPTY e;
     NODE *pnode = &anode[pnavStart->index];
     pnode->pnav = pnavStart;
@@ -85,8 +84,8 @@ extern "C" int func_001C21D8(GRAPH *pgraph, void *pvActor, qword posGoal, int fE
 
     pnode->state = 2;
     AppendNode(&dlOpen, pnode);
-    while (!func_0011A3B0(&dlOpen)) {
-        pnode = (NODE *)dlOpen.pvFirst;
+    while (!FIsDlEmpty__FP2DL(&dlOpen)) {
+        pnode = (NODE *)dlOpen.head;
         if (fExact) {
             if (pnode->pnav == pnavGoal)
                 break;
@@ -134,7 +133,7 @@ extern "C" int func_001C21D8(GRAPH *pgraph, void *pvActor, qword posGoal, int fE
             pnodeDest->gEstimate = gEstimate;
             pnodeDest->state = 2;
             NODE *pnodeNext;
-            for (pnodeNext = (NODE *)dlOpen.pvFirst; pnodeNext; pnodeNext = pnodeNext->pnodeNext) {
+            for (pnodeNext = (NODE *)dlOpen.head; pnodeNext; pnodeNext = pnodeNext->pnodeNext) {
                 if (pnodeNext->gEstimate > pnodeDest->gEstimate)
                     break;
             }
@@ -142,7 +141,7 @@ extern "C" int func_001C21D8(GRAPH *pgraph, void *pvActor, qword posGoal, int fE
         }
     }
     int c = 0;
-    if (!func_0011A3B0(&dlOpen)) {
+    if (!FIsDlEmpty__FP2DL(&dlOpen)) {
         if (!fExact && !pnode->pnodeParent) {
             apedge[0] = 0;
             c = 1;

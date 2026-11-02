@@ -1,7 +1,7 @@
+#include "vtable.h"
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
-struct VTE { short d; short pad; void *pfn; };
+extern struct CLOCK g_clock;
 struct O { char pad[0xC]; struct VTE *vt; };
 struct R { int n0; int a[11]; };
 struct U { char pad[0x1C]; float g1C; };
@@ -18,7 +18,7 @@ void func_0017ABC8(struct S *p) {
     struct W *w;
     qword a;
     if (!p->n60) return;
-    { struct O *o = p->p5C; struct VTE *e = &o->vt[0x60]; ((void (*)(void *, struct R *, float))e->pfn)((char *)o + e->d, &r, p->p64->g1C - D_002DDED0.t); }
+    { struct O *o = p->p5C; struct VTE *e = &o->vt[0x60]; ((void (*)(void *, struct R *, float))e->pfn)((char *)o + e->delta, &r, p->p64->g1C - g_clock.t); }
     if (!r.n0) { p->n60 = 0; return; }
     w = p->pt->p58;
     func_0017AA78(p, &r, &q30, &q40);

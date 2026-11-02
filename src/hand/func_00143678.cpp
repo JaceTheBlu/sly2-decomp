@@ -1,4 +1,4 @@
-// MATCH (Claude agent, laneC20 2026-10-23): v4 + func_001291A8 (CRef copy ctor) declared returning void * instead of void.
+// MATCH: v4 + func_001291A8 (CRef copy ctor) declared returning void * instead of void.
 struct CRef;
 extern "C" void func_00129EC8(CRef *);
 extern "C" void *func_001291A8(CRef *, const CRef *); // CRef copy ctor returns this (void *); declaring it void scheduled the pv copy early
@@ -25,7 +25,7 @@ struct BL { int c; void *pv; };
 struct G;
 extern "C" {
 extern G D_003D4A60;
-extern char D_003DD490[];
+extern char g_sw[];
 extern char D_002A4DB0[], D_002A4D50[], D_002A4DC0[], D_002A4DC8[];
 void *func_00143410(void *p);
 int func_0013C478(void *p);
@@ -99,7 +99,7 @@ extern "C" void func_00143678(LO *p, int n, Q *q)
             if (pb->c >= 4 && func_00233178(ps->pk, pb->pv, 8) == 0) f = 1;
             if (f) {
                 SO *apso[15];
-                int c = func_0015E9C8(D_003DD490, 5, 0x25, 0, 0xF, apso);
+                int c = func_0015E9C8(g_sw, 5, 0x25, 0, 0xF, apso);
                 for (int j = 0; j < c; j++) {
                     if (apso[j]->x180 == ps->pk->xC) {
                         p->p11A8->p15C = apso[j];

@@ -4,10 +4,10 @@
 #include "gifs.h"
 struct COMMAND {short kind,index;};
 struct GAME {char pad[0x3E38];int ready;};
-extern GAME D_003DD490;
+extern GAME g_sw;
 extern int D_002DEB70[2];
 extern ulong D_003E1330;
-extern QW*D_002DEA4C;
+extern QW*g_pfrmOpen;
 extern QW D_002DEA50[],D_002DF940[],D_002DFA80[];
 extern "C" void func_0016D698(int,GIFS*,COMMAND**);
 extern "C" void func_0016D6C8(GIFS*,uint,COMMAND**);
@@ -92,9 +92,9 @@ extern "C" void func_0016DD58(VIFS*input,int first,int mode){
  __asm__("addiu %0,%1,%2":"=r"(program):"r"(programHigh),"i"(entryAddress&0xFFFF));
  vifs->AddVifMscal(program);}
  vifs->AddVifFlusha();
- GAME*game=&D_003DD490;
+ GAME*game=&g_sw;
  if(game->ready){
-  if(D_002DEA4C==D_002DEA50)vifs->AddDmaCall(D_002DF940);
+  if(g_pfrmOpen==D_002DEA50)vifs->AddDmaCall(D_002DF940);
   else vifs->AddDmaCall(D_002DFA80);
   vifs->AddVifBaseOffset(0x32,0x1E7);
  }

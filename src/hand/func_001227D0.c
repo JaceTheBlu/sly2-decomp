@@ -1,5 +1,5 @@
+#include "cref.h"
 typedef int qword __attribute__((mode(TI)));
-typedef struct CRef { int m_tagk; int m_tag; } CRef;
 static __inline__ int GLength(qword *pa)
 {
     register qword a __asm__("vf1") = *pa;

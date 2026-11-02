@@ -1,13 +1,13 @@
-struct CRef { int m_tagk; int m_tag; };
+#include "cref.h"
 struct G { char pad[0x3B54]; int x3B54; };
 struct H { char pad[0x4C]; int x4C; };
 struct S { char pad[0xFD50]; void *xFD50; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern struct H D_002E6550;
 extern int D_002DEB4C;
 extern char D_003D4A60[], D_002E65A0[];
 int func_0020E040(struct G *g);
-int func_00210AE0(void);
+int _IppoFindPo__FP2PO(void);
 void func_002581C0(struct CRef *ret, int a, void *b);
 void func_00129EC8(struct CRef *);
 void func_001ACB58(struct H *h, int n);
@@ -20,12 +20,12 @@ void func_001ABD98(struct S *s, int force)
     int t;
     if (!s->xFD50)
         return;
-    g = &D_003DD490;
+    g = &g_sw;
     if (func_0020E040(g))
         return;
     if (D_002DEB4C)
         return;
-    if (!func_00210AE0() && !force)
+    if (!_IppoFindPo__FP2PO() && !force)
         return;
     func_002581C0(&ref, g->x3B54, D_003D4A60);
     t = ref.m_tag;

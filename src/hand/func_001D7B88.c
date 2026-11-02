@@ -1,14 +1,14 @@
 struct MSG { int cb; int nKind; };
 typedef struct BIS BIS;
 typedef struct { int c; void *pv; char ht[1]; } OBJ;
-extern char D_002DD590[];
+extern char g_heapSw[];
 extern struct G D_003D4A60;
 int func_00117C20(BIS *);
-void func_00117968(BIS *, int, void *);
+void Read__18CBinaryInputStreamiPv(BIS *, int, void *);
 void func_00118380(BIS *, char **, void *, int);
 void func_001D8600(void *, int);
 void func_001D8690(void *, char *, int);
-void *func_001AE1D0(struct MSG *);
+void *PvAllocSwImpl__Fi(struct MSG *);
 void func_001D7C80(OBJ *, struct G *);
 void func_001D7B88(OBJ *p, BIS *pbis)
 {
@@ -21,14 +21,14 @@ void func_001D7B88(OBJ *p, BIS *pbis)
     func_001D8600(p->ht, n);
     for (i = 0; i < n; i++) {
         int v = func_00117C20(pbis);
-        func_00118380(pbis, &pchz, D_002DD590, 0x2D);
+        func_00118380(pbis, &pchz, g_heapSw, 0x2D);
         func_001D8690(p->ht, pchz, v);
     }
     c = func_00117C20(pbis);
     p->c = c;
     msg.cb = c * 10;
     msg.nKind = 0x10;
-    p->pv = func_001AE1D0(&msg);
-    func_00117968(pbis, c * 10, p->pv);
+    p->pv = PvAllocSwImpl__Fi(&msg);
+    Read__18CBinaryInputStreamiPv(pbis, c * 10, p->pv);
     func_001D7C80(p, &D_003D4A60);
 }

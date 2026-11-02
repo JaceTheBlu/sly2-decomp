@@ -1,7 +1,9 @@
-// func_0014A4D0 (Claude agent, lane D16). From v4: the vsub reads q (the pinned Add result) with `posT = q` after it, and its posMe operand is repeated as an allocation-only operand (reload then puts posMe in vf4 like the target).
+#include "vtable.h"
+#include "vu0.h"
+#include "clock.h"
+// func_0014A4D0. From v4: the vsub reads q (the pinned Add result) with `posT = q` after it, and its posMe operand is repeated as an allocation-only operand (reload then puts posMe in vf4 like the target).
 typedef int qword __attribute__((mode(TI)));
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } };
-struct VTE { short d; short pad; void *pfn; };
 struct G;
 struct XEC { char pad[0x20]; qword pos; float g30; };
 struct SO { char pad[0xC]; VTE *vt; char pad1[0xE8 - 0x10]; int grfE8; XEC *pxEC; char pad2[0x174 - 0xF0]; SO *pnext; };
@@ -10,19 +12,18 @@ struct PSO { char pad[0xC]; VTE *vt; char pad1[0x258 - 0x10]; PATH *ppath; char 
 struct LO { char pad[0xC]; VTE *vt; };
 struct W { char pad[0x1010]; LO *plo; };
 struct P { char pad[0x10]; W *pw; char pad1[0x48 - 0x14]; float t48; };
-struct CLOCK { float t; float dt; };
 extern "C" {
-extern G D_003DD490;
+extern G g_sw;
 extern SO *D_003E1450;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern float D_002BD460;
 extern float D_002BD468[2];
 extern float D_002BD470, D_002BD474, D_002BD478, D_002BD47C;
 PSO *func_001C4840(G *pg);
 qword func_001A62E8(void *p);
-float func_0011D448(float a, float b);
+float GRandInRange__Fff(float a, float b);
 int func_0020F0B0(G *pg);
-int func_00132B10(PSO *p, int n);
+int FIsBasicDerivedFrom__FP5BASIC3CID(PSO *p, int n);
 void func_00208540(W *pw, void *p);
 int func_001BBE48(SO *p);
 int func_0015E9C8(G *pg, int a, int b, void *c, int d, SO **apso);
@@ -34,9 +35,7 @@ qword func_0011E1A0(float a, float b, float c);
 void func_0014A4D0(P *p);
 }
 static inline int FLess(float a, float b) { return a < b; }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword SubX(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b), "j"(b)); /* extra operand: allocation only */ return r; }
-static inline qword Add(qword a, qword b) { qword r; __asm__("vadd.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline float Len(qword a)
 {
     qword d, one; float g;
@@ -60,9 +59,6 @@ static inline float Len2(qword a)
     __asm__("qmfc2.ni %0, %1" : "=r"(g) : "j"(d));
     return g;
 }
-static inline float GetX(qword q) { float x; __asm__("mtc1 %1, %0" : "=f"(x) : "r"(q)); return x; }
-static inline float GetY(qword q) { float y; __asm__("prot3w %0, %1" : "=r"(y) : "r"(q)); return y; }
-static inline float GetZ(qword q) { float z; __asm__("pextuw %0, $0, %1" : "=r"(z) : "r"(q)); return z; }
 static inline qword AddScaledNorm(qword a, qword v, VU_FLOAT s)
 {
     qword d, one, r;
@@ -75,22 +71,22 @@ static inline qword AddScaledNorm(qword a, qword v, VU_FLOAT s)
 
 void func_0014A4D0(P *p)
 {
-    G *pg = &D_003DD490;
+    G *pg = &g_sw;
     PSO *pso = func_001C4840(pg);
     qword posPlayer = func_001A62E8(pso);
     qword posMe = func_001A62E8(p->pw);
-    qword d = Sub(posPlayer, posMe);
+    qword d = QwSub(posPlayer, posMe);
     qword v;
     qword pos;
     {
         VTE *e = &pso->vt[33];
-        v = ((qword (*)(void *))e->pfn)((char *)pso + e->d);
+        v = ((qword (*)(void *))e->pfn)((char *)pso + e->delta);
     }
     if (FLess(D_002BD460, Len(v)))
-        p->t48 = D_002DDED0.t;
-    float dt = D_002DDED0.t - p->t48;
-    if (func_0011D448(D_002BD468[0], D_002BD468[1]) < dt && !func_0020F0B0(pg)) {
-        if (func_00132B10(pso, 0x34) && pso->x2DC == 0x11) {
+        p->t48 = g_clock.t;
+    float dt = g_clock.t - p->t48;
+    if (GRandInRange__Fff(D_002BD468[0], D_002BD468[1]) < dt && !func_0020F0B0(pg)) {
+        if (FIsBasicDerivedFrom__FP5BASIC3CID(pso, 0x34) && pso->x2DC == 0x11) {
             PATH *ppath = pso->ppath;
             pos = func_001A62E8(pso);
             int c = ppath->c;
@@ -112,7 +108,7 @@ void func_0014A4D0(P *p)
                 posT = ps->pxEC->pos;
                 r = ps->pxEC->g30;
             }
-            int c = func_0015E9C8(&D_003DD490, 1, 0x12, ps, 8, apso);
+            int c = func_0015E9C8(&g_sw, 1, 0x12, ps, 8, apso);
             int k = 0;
             for (int i = 0; i < c; i++) {
                 if (apso[i]->grfE8 & 0x17E)
@@ -123,11 +119,11 @@ void func_0014A4D0(P *p)
                 posT = func_001A62E8(pt);
                 r = *(float *)&pt->pxEC;
             }
-            if (!FLess(D_002BD478 * D_002BD478, LenSq(Sub(posT, posPlayer)))) {
-                float pan = func_0011D448(-3.1415927f, 3.1415927f);
-                float tilt = func_0011D448(-3.1415927f, 3.1415927f);
+            if (!FLess(D_002BD478 * D_002BD478, LenSq(QwSub(posT, posPlayer)))) {
+                float pan = GRandInRange__Fff(-3.1415927f, 3.1415927f);
+                float tilt = GRandInRange__Fff(-3.1415927f, 3.1415927f);
                 register qword q asm("vf3"); /* register pin: the target's vadd writes posT's new value to vf3 */
-                q = Add(posT, func_0011E208(pan, tilt, func_0011D448(0.0f, r)));
+                q = QwAdd(posT, func_0011E208(pan, tilt, GRandInRange__Fff(0.0f, r)));
                 qword e = SubX(q, posMe);
                 posT = q;
                 if (FLess(Len2(e), Len2(d))) {
@@ -143,10 +139,10 @@ void func_0014A4D0(P *p)
         }
     }
     if (FLess(Len2(v), D_002BD460)) {
-        qword e = Sub(posMe, posPlayer);
+        qword e = QwSub(posMe, posPlayer);
         float rad = func_002458F0(GetY(e), GetX(e));
         qword pp = func_001A62E8(pso);
-        pos = Add(pp, func_0011E1A0(func_0011D448(rad - 1.5707964f, rad + 1.5707964f), D_002BD470, D_002BD474));
+        pos = QwAdd(pp, func_0011E1A0(GRandInRange__Fff(rad - 1.5707964f, rad + 1.5707964f), D_002BD470, D_002BD474));
     } else {
         pos = AddScaledNorm(posPlayer, v, VU_FLOAT(-D_002BD470));
     }
@@ -154,7 +150,7 @@ done:
     {
         LO *plo = p->pw->plo;
         VTE *e = &plo->vt[29];
-        ((void (*)(void *, qword))e->pfn)((char *)plo + e->d, pos);
+        ((void (*)(void *, qword))e->pfn)((char *)plo + e->delta, pos);
     }
     func_00208540(p->pw, p->pw->plo);
 }

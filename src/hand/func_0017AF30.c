@@ -1,9 +1,9 @@
+#include "vtable.h"
 typedef int qword __attribute__((mode(TI)));
 struct G { char pad[0x4028]; void *p4028; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern void *D_002BE6D0[];
 extern int D_002BE6E8[];
-struct VTE { short d; short pad; void *pfn; };
 struct O { char pad[0xC]; struct VTE *vt; };
 struct C { int pad; void *p4; void *p8; int nC; };
 struct A { char pad[0x33C]; int n33C; };
@@ -15,10 +15,10 @@ int func_00209518(struct C *c);
 int func_00209430(struct C *c);
 void func_00209360(struct C *c);
 void func_00209278(struct C *c, struct A *a, int fl, float g);
-float *func_0012F938(void *p, void *q);
-void func_00130D30(void *p, float a, float b, int n);
+float *PeaFindAsegLabel__FP4ASEG3OID(void *p, void *q);
+void SeekAsega__FP5ASEGA4SEEKff(void *p, float a, float b, int n);
 void func_0017B1A8(struct S *p, int n);
-struct O *func_0015E938(struct G *g, int a, int b, int c);
+struct O *PloFindSwObject__FP2SWi3OIDP2LO(struct G *g, int a, int b, int c);
 void *func_002333B4(void *p, int c, int n);
 qword func_001A62E8(struct A *a);
 void func_00156698(void *p, qword v, struct A *a);
@@ -48,13 +48,13 @@ int func_0017AF30(struct S *p, int msg, struct M *pm) {
             g = 0.0f;
             i = 4; if (p->n58 <= 3) i = p->n58;
             while (i > 0) {
-                float *r = func_0012F938(p->p40->p4, D_002BE6D0[i]);
+                float *r = PeaFindAsegLabel__FP4ASEG3OID(p->p40->p4, D_002BE6D0[i]);
                 if (r) { g = *r; break; }
                 i--;
             }
-            func_00130D30(p->p40->p8, g, 1.0f, 0);
+            SeekAsega__FP5ASEGA4SEEKff(p->p40->p8, g, 1.0f, 0);
             func_0017B1A8(p, 0);
-            o = func_0015E938(&D_003DD490, 5, D_002BE6E8[i], 0);
+            o = PloFindSwObject__FP2SWi3OIDP2LO(&g_sw, 5, D_002BE6E8[i], 0);
             if (o) {
                 struct X x;
                 struct VTE *e;
@@ -62,14 +62,14 @@ int func_0017AF30(struct S *p, int msg, struct M *pm) {
                 x.a = 5;
                 x.v = func_001A62E8(p->p10);
                 e = &o->vt[0x33];
-                ((void (*)(void *, struct X *))e->pfn)((char *)o + e->d, &x);
+                ((void (*)(void *, struct X *))e->pfn)((char *)o + e->delta, &x);
             }
             a = p->p10;
             {
                 int m = a->n33C + pm->n10;
                 a->n33C = m < 5 ? 5 : m;
             }
-            func_00156698(D_003DD490.p4028, func_001A62E8(p->p10), p->p10);
+            func_00156698(g_sw.p4028, func_001A62E8(p->p10), p->p10);
             return 1;
         }
     }

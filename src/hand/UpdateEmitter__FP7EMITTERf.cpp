@@ -1,9 +1,9 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct ALO;
-struct CLOCK { float t; float dt; };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 struct CM { char pad[0x1C]; float g1C; char pad2[0x90 - 0x20]; qword pos; };
-extern CM D_002DDF40;
+extern CM g_cm;
 struct EMITO { void *palo; int f4; };
 struct EMITB { int pad0; int f4; EMITO *pemito; };
 struct RIPG { char pad[0x15C]; int dl; };
@@ -18,11 +18,11 @@ struct EMITTER {
 };
 struct EMITX { PRG **ppprg; RIPG **ppripg; EMITTER *pemitter; };
 extern "C" {
-void func_001A5E28(EMITTER *p);
-int func_0011A3B0(int *pdl);
+void UpdateLo(EMITTER *p);
+int FIsDlEmpty__FP2DL(int *pdl);
 int func_001A61A0(EMITTER *p);
 qword func_001A62E8(void *p);
-float func_0011D448(float gMin, float gMax);
+float GRandInRange__Fff(float gMin, float gMax);
 int func_0011A3C0(int *pdl);
 void *func_002333B4(void *pv, int b, int cb);
 void func_0015BD20(int c, EMITB *pemitb, EMITX *px);
@@ -48,28 +48,28 @@ void UpdateEmitter(EMITTER *p, float dt)
 {
     if (p->fChanged)
         OnEmitterValuesChanged(p);
-    func_001A5E28(p);
+    UpdateLo(p);
     if (p->x118 != -1)
         return;
-    if (!func_0011A3B0(&p->dl11C)) {
+    if (!FIsDlEmpty__FP2DL(&p->dl11C)) {
         EMITTER *pe;
         for (pe = (EMITTER *)p->dl11C; pe; pe = pe->pNext) {
             if (!func_001A61A0(pe))
                 continue;
             if (!pe->x10)
                 goto LActive;
-            float r = pe->g38 * D_002DDF40.g1C;
+            float r = pe->g38 * g_cm.g1C;
             qword pos = func_001A62E8(pe);
             r = r * r;
-            if (FLess(Dist2(pos, D_002DDF40.pos), r))
+            if (FLess(Dist2(pos, g_cm.pos), r))
                 goto LActive;
         }
         return;
     } else if (p->x10) {
-        float r = p->g38 * D_002DDF40.g1C;
+        float r = p->g38 * g_cm.g1C;
         qword pos = func_001A62E8(p);
         r = r * r;
-        if (FLess(r, Dist2(pos, D_002DDF40.pos)))
+        if (FLess(r, Dist2(pos, g_cm.pos)))
             return;
     }
 LActive:
@@ -79,7 +79,7 @@ LActive:
     int c = 0;
     switch (p->k) {
     case 3: {
-        float g = p->g144 + p->g130 * p->g13C * D_002DDED0.dt;
+        float g = p->g144 + p->g130 * p->g13C * g_clock.dt;
         c = (int)g;
         p->g144 = g - (float)c;
         if (1.0f < (float)c) {
@@ -91,10 +91,10 @@ LActive:
             }
             if (p->f114) {
                 PauseEmitterIndefinite(p);
-                p->g130 = func_0011D448(p->gF8, p->gFC) * 60.0f;
-            } else if (func_0011D448(0.0f, 1.0f) <= p->g104) {
-                PauseEmitter(p, func_0011D448(p->g108, p->g10C));
-                p->g130 = func_0011D448(p->gF8, p->gFC) * 60.0f;
+                p->g130 = GRandInRange__Fff(p->gF8, p->gFC) * 60.0f;
+            } else if (GRandInRange__Fff(0.0f, 1.0f) <= p->g104) {
+                PauseEmitter(p, GRandInRange__Fff(p->g108, p->g10C));
+                p->g130 = GRandInRange__Fff(p->gF8, p->gFC) * 60.0f;
             }
         }
         break;
@@ -109,13 +109,13 @@ LActive:
         }
         if (p->f114)
             PauseEmitterIndefinite(p);
-        else if (func_0011D448(0.0f, 1.0f) <= p->g104)
-            PauseEmitter(p, func_0011D448(p->g108, p->g10C));
-        p->g130 = func_0011D448(p->gF8, p->gFC);
+        else if (GRandInRange__Fff(0.0f, 1.0f) <= p->g104)
+            PauseEmitter(p, GRandInRange__Fff(p->g108, p->g10C));
+        p->g130 = GRandInRange__Fff(p->gF8, p->gFC);
         break;
     }
     case 0: {
-        float g = p->g144 + p->g130 * p->g13C * D_002DDED0.dt;
+        float g = p->g144 + p->g130 * p->g13C * g_clock.dt;
         c = (int)g;
         p->g144 = g - (float)c;
         if (c != 0) {
@@ -159,9 +159,9 @@ LActive:
         p->pemitb->pemito->palo = palo;
     }
 
-    if (D_002DDED0.t >= p->g138) {
-        p->g130 = func_0011D448(p->gF8, p->gFC);
-        p->g138 = D_002DDED0.t + p->g134;
+    if (g_clock.t >= p->g138) {
+        p->g130 = GRandInRange__Fff(p->gF8, p->gFC);
+        p->g138 = g_clock.t + p->g134;
     }
     ModifyEmitterParticles(p);
 }

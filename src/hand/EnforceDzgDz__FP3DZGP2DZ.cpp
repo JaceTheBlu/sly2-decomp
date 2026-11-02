@@ -1,6 +1,5 @@
+#include "dl.h"
 // EnforceDzgDz: Sly 1's dzg solver step (A/B/C/D constraint lists, Crout decomposition).
-struct DL { void *pvFirst; void *pvLast; int ibDle; };
-struct DLE { void *pvNext; void *pvPrev; };
 struct DZ {
     int nKind;
     float gMin;
@@ -51,18 +50,18 @@ void EnforceDzgDz(DZG *pdzg, DZ *pdz)
         float gMin;
 
         float *pgMat = pdzg->agMat;
-        for (pdzI = (DZ *)pdzg->dlA.pvFirst; pdzI; pdzI = (DZ *)pdzI->dle.pvNext)
-            for (pdzJ = (DZ *)pdzg->dlA.pvFirst; pdzJ; pdzJ = (DZ *)pdzJ->dle.pvNext)
+        for (pdzI = (DZ *)pdzg->dlA.head; pdzI; pdzI = (DZ *)pdzI->dle.next)
+            for (pdzJ = (DZ *)pdzg->dlA.head; pdzJ; pdzJ = (DZ *)pdzJ->dle.next)
                 *pgMat++ = pdzI->ag[pdzJ - pdzg->adz];
         CroutDecomp(pdzg->cdzA, pdzg->agMat, pdzg->agLu);
         float *pgB = pdzg->agB;
-        for (pdzI = (DZ *)pdzg->dlA.pvFirst; pdzI; pdzI = (DZ *)pdzI->dle.pvNext)
+        for (pdzI = (DZ *)pdzg->dlA.head; pdzI; pdzI = (DZ *)pdzI->dle.next)
             *pgB++ = -pdzI->g10;
         CroutSolve(pdzg->cdzA, pdzg->agLu, pdzg->agB, pdzg->agX);
         for (i = 0; i < pdzg->cdz; i++) {
             float g = 0.0f;
             float *pgX = pdzg->agX;
-            for (pdzI = (DZ *)pdzg->dlA.pvFirst; pdzI; pdzI = (DZ *)pdzI->dle.pvNext)
+            for (pdzI = (DZ *)pdzg->dlA.head; pdzI; pdzI = (DZ *)pdzI->dle.next)
                 g += *pgX++ * pdzI->ag[i];
             pdzg->adz[i].g14 = g;
         }
@@ -71,7 +70,7 @@ void EnforceDzgDz(DZG *pdzg, DZ *pdz)
         gMin = 1.0f;
         k = 0;
         pg = pdzg->agX;
-        for (pdzI = (DZ *)pdzg->dlA.pvFirst; pdzI; pdzI = (DZ *)pdzI->dle.pvNext) {
+        for (pdzI = (DZ *)pdzg->dlA.head; pdzI; pdzI = (DZ *)pdzI->dle.next) {
             float x = *pg++;
             if (x > 1e-4f) {
                 // Empty asm, allocation-only operands (emits nothing): two extra uses of the +-1e-4 constants
@@ -98,7 +97,7 @@ void EnforceDzgDz(DZG *pdzg, DZ *pdz)
                 }
             }
         }
-        for (pdzK = (DZ *)pdzg->dlB.pvFirst; pdzK; pdzK = (DZ *)pdzK->dle.pvNext) {
+        for (pdzK = (DZ *)pdzg->dlB.head; pdzK; pdzK = (DZ *)pdzK->dle.next) {
             if (pdzK->g14 > -1e-4f) {} else {
                 float t = -pdzK->g10 / pdzK->g14;
                 if (t < gMin) {
@@ -108,7 +107,7 @@ void EnforceDzgDz(DZG *pdzg, DZ *pdz)
                 }
             }
         }
-        for (pdzK = (DZ *)pdzg->dlC.pvFirst; pdzK; pdzK = (DZ *)pdzK->dle.pvNext) {
+        for (pdzK = (DZ *)pdzg->dlC.head; pdzK; pdzK = (DZ *)pdzK->dle.next) {
             if (pdzK->g14 < 1e-4f) {} else {
                 float t = -pdzK->g10 / pdzK->g14;
                 if (t < gMin) {
@@ -123,7 +122,7 @@ void EnforceDzgDz(DZG *pdzg, DZ *pdz)
             pdzT->g10 += gMin * pdzT->g14;
         }
         pg = pdzg->agX;
-        for (pdzI = (DZ *)pdzg->dlA.pvFirst; pdzI; pdzI = (DZ *)pdzI->dle.pvNext)
+        for (pdzI = (DZ *)pdzg->dlA.head; pdzI; pdzI = (DZ *)pdzI->dle.next)
             pdzI->gC += gMin * *pg++;
 
         switch (k) {

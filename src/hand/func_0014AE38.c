@@ -1,10 +1,10 @@
+#include "vtable.h"
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 extern qword D_002A2DD0;
-extern char D_003DD490[];
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+extern char g_sw[];
+extern struct CLOCK g_clock;
 struct V3 { int x; int y; int z; };
-struct VTE { short d; short pad; void *pfn; };
 struct LO { int pad[3]; struct VTE *vt; };
 struct R { char pad[0x60]; float x60; float x64; };
 struct SP { char pad[0xE8]; int xE8; char pad2[0xF4 - 0xEC]; qword *xF4; };
@@ -20,7 +20,7 @@ struct OA4 { int pad[3]; struct VTE *vt; char pad1[0x30 - 0x10]; int x30; char p
 void func_0020AC28(struct X *, int, int, qword);
 void func_001F5720(struct X *, int);
 void func_001F57C0(struct X *, int);
-float func_0011D448(float, float);
+float GRandInRange__Fff(float, float);
 void func_001EF0D8(void *);
 void *func_00205438(struct X *, int);
 void *func_001C4840(void *);
@@ -29,7 +29,7 @@ void *func_0014AE18(struct P *);
 void func_001E6180(struct SP *);
 void func_00178D90(struct OA7 *, struct SP *, int);
 
-#define VCALL0(po, n) { struct VTE *e = &(po)->vt[n]; ((void (*)(void *))e->pfn)((char *)(po) + e->d); }
+#define VCALL0(po, n) { struct VTE *e = &(po)->vt[n]; ((void (*)(void *))e->pfn)((char *)(po) + e->delta); }
 
 void func_0014AE38(struct P *p, int state)
 {
@@ -45,29 +45,29 @@ void func_0014AE38(struct P *p, int state)
         func_001F57C0(p->p10, 1);
         break;
     case 3: {
-        float t = D_002DDED0.t;
-        p->p10->xF04 = t + func_0011D448(p->p44->x60, p->p44->x64);
+        float t = g_clock.t;
+        p->p10->xF04 = t + GRandInRange__Fff(p->p44->x60, p->p44->x64);
         p->p44 = 0;
         break;
     }
     }
     func_001EF0D8(p->x18);
     p->x30 = state;
-    p->x34 = D_002DDED0.t;
+    p->x34 = g_clock.t;
     switch (state) {
     case 0: {
         struct O9E *po = func_00205438(p->p10, 0x9E);
-        po->x38 = func_001C4840(D_003DD490);
+        po->x38 = func_001C4840(g_sw);
         VCALL0(po, 8);
         {
             struct X *px = p->p10;
             struct VTE *e = &px->vt[35];
-            ((void (*)(void *, qword))e->pfn)((char *)px + e->d, D_002A2DD0);
+            ((void (*)(void *, qword))e->pfn)((char *)px + e->delta, D_002A2DD0);
         }
         {
             struct X *px = p->p10;
             struct VTE *e = &px->vt[36];
-            ((void (*)(void *, qword))e->pfn)((char *)px + e->d, D_002A2DD0);
+            ((void (*)(void *, qword))e->pfn)((char *)px + e->delta, D_002A2DD0);
         }
         {
             struct V3 *pv = &p->p10->v190;
@@ -91,9 +91,9 @@ void func_0014AE38(struct P *p, int state)
         po->xC0 = 8;
         po->x40 = 1;
         po->x64 = 25.0f;
-        po->xC8 = func_001C4840(D_003DD490);
+        po->xC8 = func_001C4840(g_sw);
         VCALL0(po, 8);
-        p->p10->xF04 = D_002DDED0.t;
+        p->p10->xF04 = g_clock.t;
         func_001F5720(p->p10, 0);
         func_001F57C0(p->p10, 0);
         break;
@@ -115,7 +115,7 @@ void func_0014AE38(struct P *p, int state)
     }
     case 4: {
         struct O9E *po = func_00205438(p->p10, 0x9E);
-        po->x38 = func_001C4840(D_003DD490);
+        po->x38 = func_001C4840(g_sw);
         po->x3C = 1;
         VCALL0(po, 8);
         break;

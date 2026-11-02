@@ -1,13 +1,4 @@
-struct CRef {
-    int m_tagk; union { int n; float g; void *pv; } u;
-    CRef() { m_tagk = -1; }
-    CRef(int tagk) { InitTag(tagk); }
-    CRef(const CRef &r);
-    void Decref();
-    void InitTag(int tagk);
-    ~CRef() { Decref(); }
-    CRef &operator=(const CRef &r);
-};
+#include "cref.h"
 struct NODE { int x0, x4; CRef ref; NODE *px10; };
 extern "C" {
 CRef func_00126438(NODE *p, CRef *aref);
@@ -35,7 +26,7 @@ CRef func_00127838(NODE *p, CRef *aref)
     case 0x18:
         return func_00126438(p, aref);
     case 0x1F: {
-        NODE *pn = (NODE *)p->ref.u.pv;
+        NODE *pn = (NODE *)p->ref.m_p;
         switch (pn->ref.m_tagk) {
         case 1: return func_00126490(p, aref);
         case 2: return func_00126540(p, aref);

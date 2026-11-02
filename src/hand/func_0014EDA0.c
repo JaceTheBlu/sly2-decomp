@@ -1,4 +1,4 @@
-/* MATCH (Claude agent, lane D4): v2 inline Dot(qword *pa, qword *pb) (keeps &ax[i].normal hoisted in a reg), returning int from a qmfc2 into `register int d asm("$7")`, stored through `*(int *)pg++` (sw $a3 like the target). */
+/* MATCH: v2 inline Dot(qword *pa, qword *pb) (keeps &ax[i].normal hoisted in a reg), returning int from a qmfc2 into `register int d asm("$7")`, stored through `*(int *)pg++` (sw $a3 like the target). */
 typedef int qword __attribute__((mode(TI)));
 struct X { qword pos; qword normal; qword x20; };
 struct E { int a, b, c; };
@@ -6,8 +6,8 @@ struct LO { char pad[0x70]; int c70; struct E *ae74; };
 struct AL { int cb; int cbAlign; };
 extern float D_002BD8D4;
 void func_001AE478(void *p);
-void func_001AE4A0(void *p, int n);
-void *func_001AE318(struct AL *pal);
+void _$_18CBinaryInputStream(void *p, int n);
+void *PvAllocStackImpl__FP7SWALLOC(struct AL *pal);
 int func_001A93C8(qword pos, struct LO *po, struct E *pe, float g, int a, int b, int cMax, struct X *ax);
 void func_0011AD30(int c, float *aDot, float *aW, float *aZ, float g);
 qword func_0011E9F8(qword v, float g);
@@ -29,7 +29,7 @@ static inline void *PvAlloc(int cb, int cbAlign)
     struct AL al;
     al.cb = cb;
     al.cbAlign = cbAlign;
-    return func_001AE318(&al);
+    return PvAllocStackImpl__FP7SWALLOC(&al);
 }
 
 qword func_0014EDA0(void *p, int c, struct LO **apo, float (*pfn)(void *, qword, qword, struct X *),
@@ -80,7 +80,7 @@ qword func_0014EDA0(void *p, int c, struct LO **apo, float (*pfn)(void *, qword,
             r = func_0011E9F8(q, h);
         }
         __asm__("vadd.xyzw %0, %1, %2" : "=j"(r) : "j"(v), "j"(r));
-        func_001AE4A0(&frame, 2);
+        _$_18CBinaryInputStream(&frame, 2);
         return r;
     }
 }

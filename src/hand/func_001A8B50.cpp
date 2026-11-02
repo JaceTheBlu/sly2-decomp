@@ -1,10 +1,11 @@
+#include "vecmat.h"
 // func_001A8B50: edge/edge and vertex/face contacts between two clipped shapes.
-// ClsgClipSoAllEdges + func_001A81F8 clip each shape's edges against the other, CategorizeAlsg sorts each side's LSGs, func_001A87F0 adds the
+// ClsgClipSoAllEdges + ClsgClipSoBspEdges__FP2SOT0iP3BSPiP3LSG clip each shape's edges against the other, CategorizeAlsg sorts each side's LSGs, func_001A87F0 adds the
 // vertex contacts of both sides; then every free LSG of side 0 either follows the func_001A86B8 edge path of side 1 (closest points of the
 // two edges via func_0011EA60, kind 3) or, when no side-1 LSG shares a surface with its edge, contacts the nearer endpoint against the
 // farther plane (kind 1). With no new contact and one side empty, a kind-13 contact at the shape position is added.
-// LSG / EDGE / SURF layouts and names as in Lilly's matched ClsgClipEdgeToBsp port (src/hand/func_00118668.cpp).
-// How it matched (w4lane4 -> w5lane2):
+// LSG / EDGE / SURF layouts and names as in Lilly's matched ClsgClipEdgeToBsp port (src/hand/ClsgClipEdgeToBsp__FP3BSPT0UxUxiP3LSG.cpp).
+// How it matched:
 //  - Separate Sly-1-style local arrays (one frame base each, shared by gcse with the call arguments); the side-1 loop indexes &aalsg[1][i].
 //  - Lilly's QwMix(VuFloat(1 - t), a, VuFloat(t), b) lerps reproduce the dead VU_FLOAT stores at 0x6900.
 //  - The four arrays aaipos[0/1] and aaplsg[0/1] are gcse PRE reaching registers that get spill slots in pseudo order = gcse hash-bucket
@@ -15,8 +16,8 @@ typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
 struct VV { qword q; VV() {} VV(const qword &v) { q = v; } operator qword() const { return q; } };
 struct SCALAR;
-extern "C" SCALAR *func_002564B8(SCALAR *);
-struct SCALAR { qword q; SCALAR() { (void)func_002564B8(this); } };
+extern "C" SCALAR *__3VUF(SCALAR *);
+struct SCALAR { qword q; SCALAR() { (void)__3VUF(this); } };
 struct SCENE;
 struct CONTACT;
 struct SPACE { char pad0[0x70]; U position; };
@@ -27,9 +28,9 @@ struct NODE { unsigned int left, right; SURF *psurf; };
 struct LSG { U apos[2], anormal[2]; float au[2]; int lsgk; SURF *apsurf[2]; EDGE *pedge; int iiposSwap; LSG *plsgNext; };
 struct XP { char pad0[0x9C]; int kind; void *first, *second; int padA8; XP *next; };
 extern "C" {
-extern U D_002A2DC0;
+extern U g_normalZ;
 int ClsgClipSoAllEdges(SCENE *, SHAPE *, SHAPE *, NODE *, int, LSG *) __asm__("ClsgClipSoAllEdges__FP2SOT0P3BSPiP3LSG");
-int func_001A81F8(SCENE *, SHAPE *, SHAPE *, int, NODE *, int, LSG *);
+int ClsgClipSoBspEdges__FP2SOT0iP3BSPiP3LSG(SCENE *, SHAPE *, SHAPE *, int, NODE *, int, LSG *);
 void CategorizeAlsg(int, LSG *, int *, int *, LSG **, LSG **) __asm__("CategorizeAlsg__FiP3LSGPiT2PP3LSGT4");
 void func_001A87F0(SCENE *, SHAPE *, SHAPE *, int, int *, LSG **, CONTACT **);
 int func_001A86B8(SURF *, int, int, LSG *, LSG **);
@@ -39,28 +40,27 @@ void func_001A7C18(SCENE *, SHAPE *, SHAPE *, VV, float, VV, int, void *, void *
 
 static inline VV Sub(VV a, VV b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 
-struct VU_FLOAT { qword qw; };
 static inline VU_FLOAT VuFloat(float g)
 {
     VU_FLOAT v;
-    __asm__("qmtc2.ni %1,%0" : "=j"(v.qw) : "r"(g));
+    __asm__("qmtc2.ni %1,%0" : "=j"(v.q) : "r"(g));
     return v;
 }
 static inline VV QwMix(VU_FLOAT g1, VV qw1, VU_FLOAT g2, VV qw2)
 {
     qword qw;
-    __asm__("vmulax.xyzw $ACC,%1,%3x\n\tvmaddx.xyzw %0,%2,%4x" : "=j"(qw) : "j"(qw1), "j"(qw2), "j"(g1.qw), "j"(g2.qw));
+    __asm__("vmulax.xyzw $ACC,%1,%3x\n\tvmaddx.xyzw %0,%2,%4x" : "=j"(qw) : "j"(qw1), "j"(qw2), "j"(g1.q), "j"(g2.q));
     return qw;
 }
 /* gcc supplies the qmfc2 for the "r" operand; the repeated "j" operand is allocation-only (keeps the value VU class). */
-static inline float GFromVf(VU_FLOAT v) { float g; __asm__("mtc1 %1,%0" : "=f"(g) : "r"(v.qw), "j"(v.qw)); return g; }
+static inline float GFromVf(VU_FLOAT v) { float g; __asm__("mtc1 %1,%0" : "=f"(g) : "r"(v.q), "j"(v.q)); return g; }
 static inline float Length(VV v)
 {
     VV d, one;
     VU_FLOAT len;
     __asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z" : "=j"(d), "=j"(one) : "j"(v));
     __asm__("vsqrt $Q,%1x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q" : "=j"(d) : "j"(d));
-    len.qw = d;
+    len.q = d;
     return GFromVf(len);
 }
 /* signed distance of point from plane: dot(plane.xyz, point.xyz) - plane.w */
@@ -73,7 +73,7 @@ static inline float PlaneDist(VV point, VV plane)
     dot.q = r;
     one.q = unit;
     VU_FLOAT g;
-    g.qw = dot.q;
+    g.q = dot.q;
     return GFromVf(g);
 }
 static inline void Closest(VV a, VV b, VV c, VV d, float *au, U *normal)
@@ -95,7 +95,7 @@ extern "C" void func_001A8B50(SCENE *scene, SHAPE *a, SHAPE *b, int nodeCount, N
     U apos[2];
     CONTACT *old = *out;
     aclsg[0] = ClsgClipSoAllEdges(scene, b, a, last, 128, aalsg[0]);
-    int clsg1 = func_001A81F8(scene, a, b, nodeCount, nodes, 128, aalsg[1]);
+    int clsg1 = ClsgClipSoBspEdges__FP2SOT0iP3BSPiP3LSG(scene, a, b, nodeCount, nodes, 128, aalsg[1]);
     aclsg[1] = clsg1;
     if (!aclsg[0] && !clsg1)
         return;
@@ -159,5 +159,5 @@ extern "C" void func_001A8B50(SCENE *scene, SHAPE *a, SHAPE *b, int nodeCount, N
     next:;
     }
     if (old == *out && (!aclsg[0] || !aclsg[1]))
-        func_001A7C18(scene, a, b, a->space->position.q, 0.0f, D_002A2DC0.q, 13, 0, 0, out);
+        func_001A7C18(scene, a, b, a->space->position.q, 0.0f, g_normalZ.q, 13, 0, 0, out);
 }

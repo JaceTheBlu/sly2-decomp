@@ -11,8 +11,8 @@ extern M2C_UNK D_0029A7C0;
 extern M2C_UNK D_0029A8C0;
 extern M2C_UNK D_002A28D0;
 extern M2C_UNK D_002A2900;
-extern M2C_UNK D_002CA550;
-extern M2C_UNK D_002CA5C0;
+extern M2C_UNK _vt$11CLinearHeap;
+extern M2C_UNK _vt$18CBinaryInputStream;
 extern M2C_UNK D_002CC1C0;
 extern M2C_UNK D_002CC240;
 extern M2C_UNK D_002CC2C0;
@@ -69,5 +69,5 @@ static inline void *m2c_ctor_0(void *p)
 void *func_001139D8(s32 arg0) {
     void *temp_v0;
 
-    return m2c_ctor_0(func_001AE4F8(0x40));
+    return m2c_ctor_0(__builtin_new(0x40));
 }

@@ -2,7 +2,7 @@ struct BINDING;
 extern char D_004520D0[];
 extern char D_00452148[];
 extern "C" {
-void func_0011CD98(void *pheap, void *pv);
+void FreeSlotheapPv__FP8SLOTHEAPPv(void *pheap, void *pv);
 void func_00255438(void *pv);
 void func_00255DE8(void *pv);
 }
@@ -17,7 +17,7 @@ struct BINDING {
     int sym;
     CRef ref;
     SPM pnext;
-    void operator delete(void *pv) { func_00255438(pv); func_0011CD98(D_004520D0, pv); }
+    void operator delete(void *pv) { func_00255438(pv); FreeSlotheapPv__FP8SLOTHEAPPv(D_004520D0, pv); }
 };
 struct SPB {
     BINDING *p;
@@ -31,7 +31,7 @@ struct SB {
     int x4;
     SPB pbinding;
     void SetBinding(BINDING *pb) { pbinding = pb; }
-    void operator delete(void *pv) { func_00255DE8(pv); func_0011CD98(D_00452148, pv); }
+    void operator delete(void *pv) { func_00255DE8(pv); FreeSlotheapPv__FP8SLOTHEAPPv(D_00452148, pv); }
 };
 struct SPS {
     SB *p;

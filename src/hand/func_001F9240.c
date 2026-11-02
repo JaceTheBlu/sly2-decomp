@@ -1,9 +1,9 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 struct C {char pad[0x80];qword normal;float distance;int pad94[2];int kind;char padA0[0x10];qword velocity;};
 struct P;
 int func_001F90D0(struct P*,int,int,void**,int,struct C**);
 void func_001F9410(struct P*,int,int,void**,int,struct C**);
-static inline float Abs(float f){return __builtin_fabsf(f);}
 static inline float Dot(qword a,qword b){qword r,one;float f;
 __asm__("vmul.xyz %0,%2,%3\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(r),"=&j"(one):"0"(a),"j"(b));
 __asm__("qmfc2.ni %0,%1":"=r"(f):"j"(r));return f;}
@@ -18,7 +18,7 @@ void func_001F9240(struct P*p,int flags,int count,void**objects)
      i=0;
      for(;i<n;i++){
        struct C*c=contacts[i];
-       if(c->kind==11){if(0.1f<Abs(c->distance))break;}
+       if(c->kind==11){if(0.1f<GAbs(c->distance))break;}
        else {if(c->distance<-2.0f)break;}
      }
      if(i>=n)flags&=~4;
@@ -29,7 +29,7 @@ void func_001F9240(struct P*p,int flags,int count,void**objects)
      do{
        struct C*c=contacts[i];
        qword normal=c->normal;
-       if(c->kind==11){if(5.0f<Abs(Dot(c->velocity,normal)))break;}
+       if(c->kind==11){if(5.0f<GAbs(Dot(c->velocity,normal)))break;}
        else {if(Dot(c->velocity,normal)<-5.0f)break;}
      }while(++i<n);
      if(i<n)goto applyFlags;

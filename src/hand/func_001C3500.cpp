@@ -1,21 +1,22 @@
-// func_001C3500 (lane 6, 2026-10-24): builds an orientation basis (M3) for a position `distance` along a path.
+#include "mat.h"
+#include "vu0.h"
+// func_001C3500: builds an orientation basis (MATRIX3) for a position `distance` along a path.
 // It samples the path tangent at the start, then tries sample distances distance, +10, -10, +20, -20 ... (wrapped
 // for cyclic paths, rejected outside [low,high] otherwise) until the direction between the samples at +-50 is within
 // ~25 degrees of the tangent, rotates the path axis by the tangent->direction rotation, and builds the basis
 // (side, up) from that.  Optionally flips side/up (forward == 0) and copies the basis to *out.
 typedef int qword __attribute__((mode(TI)));
-struct M3 { qword r[3]; };
 struct PATH { char pad0[0xE4]; int cyclic; char padE8[0xD8]; qword axis; };
 extern "C" {
-extern qword D_002A2DA0, D_002A2DC0;   // fallback unit vectors
+extern qword D_002A2DA0, g_normalZ;   // fallback unit vectors
 float func_001E6620(PATH *);           // low distance bound
 float func_001E6648(PATH *);           // high distance bound
 float func_001E6610(PATH *);           // start distance
 void func_001E67B8(PATH *, float, qword *, qword *);
-float func_0011D898(float, float);     // wrap into range
+float GModPositive__Fff(float, float);     // wrap into range
 float func_001E6728(PATH *, float);
 void func_001E6F10(PATH *, float, qword *, qword *);
-M3 func_0011BA08(qword, qword);
+MATRIX3 BuildRotateVectorsMatrix__FUxUx(qword, qword);
 qword func_001A6FC0(PATH *, PATH *, qword);
 qword func_0011E390(qword);
 }
@@ -25,7 +26,6 @@ struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(
 struct VU_VECTOR { qword q; VU_VECTOR(const qword &v) { q = v; } };
 static inline qword operator*(VU_FLOAT f, VU_VECTOR v) { qword r; __asm__("vmulx.xyzw %0, %2, %1x" : "=j"(r) : "j"(f.q), "j"(v.q)); return r; }
 
-static inline float X(qword q) { float f; __asm__("mtc1 %1,%0" : "=f"(f) : "r"(q)); return f; }
 static inline qword Length(qword v)
 {
     qword d, one, len;
@@ -42,11 +42,10 @@ static inline qword Unit(qword v, qword len)
 static inline qword Normalize(qword v, qword fallback)
 {
     qword len = Length(v);
-    if (X(len) < 0.0001f)
+    if (GetX(len) < 0.0001f)
         return fallback;
     return Unit(v, len);
 }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline float Dot(qword a, qword b)
 {
     qword d, one;
@@ -56,7 +55,7 @@ static inline float Dot(qword a, qword b)
     return f;
 }
 // earlyclobber output: the result must not share a register with the matrix rows
-static inline qword Transform(const M3 &m, qword q)
+static inline qword Transform(const MATRIX3 &m, qword q)
 {
     qword r;
     __asm__("vmulax.xyz $ACC,%1,%4x\n\tvmadday.xyz $ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z"
@@ -70,9 +69,9 @@ static inline qword Cross(qword a, qword b)
     return r;
 }
 
-struct WORK { M3 basis; qword tangent, first, direction; };
+struct WORK { MATRIX3 basis; qword tangent, first, direction; };
 
-extern "C" void func_001C3500(PATH *p, float distance, int forward, M3 *out)
+extern "C" void func_001C3500(PATH *p, float distance, int forward, MATRIX3 *out)
 {
     WORK w;
     U fwd;   // declared outside the inner block on purpose: the stack slot of `back` (declared inside) is freed at the
@@ -83,7 +82,7 @@ extern "C" void func_001C3500(PATH *p, float distance, int forward, M3 *out)
     w.tangent = Normalize(w.tangent, D_002A2DA0);
     {
         U back;
-        M3 rot;
+        MATRIX3 rot;
         for (int i = 0;; ++i) {
             float offset = (i & 1) ? 10.0f * (float)(i + 1) : (float)i * -10.0f;
             float sample = distance + offset;
@@ -91,26 +90,26 @@ extern "C" void func_001C3500(PATH *p, float distance, int forward, M3 *out)
                 if (sample < low || high < distance)
                     continue;
             } else
-                sample = low + func_0011D898(sample - low, high - low);
+                sample = low + GModPositive__Fff(sample - low, high - low);
             float r = 50.0f;
             func_001E6F10(p, func_001E6728(p, sample + r), &fwd.q, 0);
             func_001E6F10(p, func_001E6728(p, sample - r), &back.q, 0);
-            w.direction = Normalize(Sub(fwd.q, back.q), D_002A2DC0);
+            w.direction = Normalize(QwSub(fwd.q, back.q), g_normalZ);
             if (i == 0)
                 w.first = w.direction;
             if (Dot(w.tangent, w.direction) > -0.9f)
                 break;
         }
-        rot = func_0011BA08(w.tangent, w.direction);
+        rot = BuildRotateVectorsMatrix__FUxUx(w.tangent, w.direction);
         qword ref = func_001A6FC0(p, 0, p->axis);
         fwd.q = Transform(rot, ref);
-        qword up = Normalize(w.first, D_002A2DC0);
+        qword up = Normalize(w.first, g_normalZ);
         w.basis.r[2] = up;
         back.q = Cross(up, fwd.q);
         w.basis.r[1] = back.q;
         qword len = Length(back.q);
         w.basis.r[1] = Unit(back.q, len);
-        if (X(len) < 0.0001f)
+        if (GetX(len) < 0.0001f)
             w.basis.r[1] = func_0011E390(up);
         w.basis.r[0] = Cross(w.basis.r[1], w.basis.r[2]);
     }

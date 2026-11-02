@@ -1,9 +1,9 @@
+#include "vtable.h"
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 struct G;
-extern struct G D_003DD490;
-struct VTE { short d; short pad; void *pfn; };
+extern struct G g_sw;
 struct T {
     char pad[0xC]; struct VTE *vt; char pad2[0x18]; unsigned long fl28; char pad3[0x2DC - 0x30]; int n2DC;
     char pad4[0x4C8 - 0x2E0]; int n4C8; int n4CC; char pad5[0xF54 - 0x4D0]; int nF54; char pad6[0x18C8 - 0xF58]; int n18C8;
@@ -16,16 +16,16 @@ struct R2 { struct T *p0; };
 struct R1 { char pad[0x14]; struct R2 *p14; };
 struct R { int pad; struct R1 *p4; };
 union V { qword q; };
-int func_00132B10(struct T *t, int n);
+int FIsBasicDerivedFrom__FP5BASIC3CID(struct T *t, int n);
 qword func_001A62E8(void *p);
 float func_00204740(struct A *a);
-void func_0011EFB0(qword v, float *a, float *b, float *c);
+void DecomposeSphere__FUxPfN21(qword v, float *a, float *b, float *c);
 int func_0011D910(void *p, float f);
-float func_0011CF60(float f);
+float RadNormalize__Ff(float f);
 qword *func_001A6318(struct A *a);
 void func_0011E958(qword v, int n, float *pf);
 void func_001AE478(struct X *x);
-void func_001AE4A0(struct X *x, int n);
+void _$_18CBinaryInputStream(struct X *x, int n);
 int func_0020FA10(void);
 void func_0020FAA0(struct G *g, qword a, qword b, int (*fn)(void), int z, int *pa, int *pb);
 struct R *func_0014CC58(int n, qword a, qword b, int c, int d, struct Y *y);
@@ -41,13 +41,13 @@ int func_00175D00(struct S *p) {
     struct T *t;
     struct A *a = p->p10;
     if (!(a->nFE8 & 8) || a->nF00 || p->n3C || !p->p30 || !((int)(p->p30->fl28 >> 60) & 1)) return 0;
-    if (func_00132B10(p->p30, 0x32)) {
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(p->p30, 0x32)) {
         struct T *q = p->p30;
         struct VTE *e = &q->vt[0x4D];
-        if (((int (*)(void *))e->pfn)((char *)q + e->d) == 2) return 0;
+        if (((int (*)(void *))e->pfn)((char *)q + e->delta) == 2) return 0;
     }
     k = 0;
-    if (func_00132B10(p->p30, 0x34)) {
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(p->p30, 0x34)) {
         t = p->p30;
         if (t->n4CC != -1) {
             if (t->n4C8 < 5) k = t->n4C8 >= 3;
@@ -56,7 +56,7 @@ int func_00175D00(struct S *p) {
             if (t->n2DC == 0x11) k = 1;
         }
         if (t->nF54 != -1) k = 1;
-        if (func_00132B10(t, 0x35)) {
+        if (FIsBasicDerivedFrom__FP5BASIC3CID(t, 0x35)) {
             switch (t->n18C8) {
             case 3: case 0x15: case 0x16:
                 k = 1;
@@ -68,20 +68,20 @@ int func_00175D00(struct S *p) {
     pb = func_001A62E8(p->p30);
     __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(pb), "j"(pa));
     g = func_00204740(p->p10);
-    func_0011EFB0(d, &f[0], &f[1], &f[2]);
+    DecomposeSphere__FUxPfN21(d, &f[0], &f[1], &f[2]);
     if (!func_0011D910(p->p10->aF48, f[2])) return 0;
     {
-        float h = func_0011CF60(f[0] - g);
+        float h = RadNormalize__Ff(f[0] - g);
         if (!func_0011D910(p->p10->aF50, h)) return 0;
     }
     func_0011E958(*func_001A6318(p->p10), 0, &f[3]);
     {
-        float h = func_0011CF60(f[1] - f[3]);
+        float h = RadNormalize__Ff(f[1] - f[3]);
         if (!func_0011D910(p->p10->aF58, h)) return 0;
     }
     if (!k) {
         if (p->n34 == 0) {
-            if (D_002DDED0.t - p->f38 < 3.0f) return 0;
+            if (g_clock.t - p->f38 < 3.0f) return 0;
         } else if (p->n34 != 2) {
             return 0;
         }
@@ -89,13 +89,13 @@ int func_00175D00(struct S *p) {
     {
         struct R *r;
         func_001AE478(&x);
-        func_0020FAA0(&D_003DD490, pa, pb, func_0020FA10, p->p10->nEC, &na, &nb);
+        func_0020FAA0(&g_sw, pa, pb, func_0020FA10, p->p10->nEC, &na, &nb);
         r = func_0014CC58(0, pa, pb, na, nb, &y);
         if (r && r->p4->p14->p0 != p->p30) {
-            func_001AE4A0(&x, 2);
+            _$_18CBinaryInputStream(&x, 2);
             return 0;
         }
-        func_001AE4A0(&x, 2);
+        _$_18CBinaryInputStream(&x, 2);
         return 1;
     }
 }

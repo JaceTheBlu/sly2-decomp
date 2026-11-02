@@ -22,7 +22,7 @@ typedef struct ST {
     int f;
 } ST;
 typedef struct CE { LO *plo; int a, b; } CE;
-extern int func_00132B10(LO *plo, int cid);
+extern int FIsBasicDerivedFrom__FP5BASIC3CID(LO *plo, int cid);
 extern CE *func_0015E3A8(void *psw, int k);
 extern int func_0015E988(int k, int cid);
 extern void func_0015E3E8(void *pv, LO *plo, void *pch, unsigned int grf, LO *ctx, void *pchList, int cMax, int *pc, LO **aplo, int *pips);
@@ -42,7 +42,7 @@ int func_0015E9C8(void *psw, int grf, int cid, LO *ploCtx, int cMax, LO **aplo)
     case 3:
         f = grf & 0x200;
         for (p = ploCtx->pParent; p; p = p->pParent) {
-            if (!func_00132B10(p, cid))
+            if (!FIsBasicDerivedFrom__FP5BASIC3CID(p, cid))
                 continue;
             if ((grf & 0x100) && p->f == 0)
                 continue;
@@ -57,7 +57,7 @@ int func_0015E9C8(void *psw, int grf, int cid, LO *ploCtx, int cMax, LO **aplo)
             pEnd = ploCtx->pChildEnd;
         f = grf & 0x200;
         for (p = ploCtx->pChild; p != pEnd; p = p->pSibling) {
-            if (!func_00132B10(p, cid))
+            if (!FIsBasicDerivedFrom__FP5BASIC3CID(p, cid))
                 continue;
             if (cplo < cMax)
                 aplo[cplo] = p;

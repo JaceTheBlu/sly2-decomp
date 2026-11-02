@@ -1,18 +1,18 @@
+#include "vtable.h"
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned long ulong;
-struct VT { short d; short pad; void *pfn; };
 struct MAT { float m[4][4]; } __attribute__((aligned(16)));
 struct E { char pad[0xA0]; struct E *pe; char pad2[0x100 - 0xA4]; };
 struct LO;
 struct ALO { char pad[0x40]; struct MAT mat; char pad2[0xA0 - 0x80]; struct ALO *pNext; };
 struct LO10 { char pad[0x50]; int c; struct E *ae; char pad2[0x148 - 0x58]; ulong fl; };
 struct LO {
-    char pad[0xC]; struct VT *pvt; struct LO10 *p10; char pad2[0x28 - 0x14]; ulong pad28 : 60; ulong b60 : 1; ulong pad61 : 3;
+    char pad[0xC]; struct VTE *pvt; struct LO10 *p10; char pad2[0x28 - 0x14]; ulong pad28 : 60; ulong b60 : 1; ulong pad61 : 3;
     char pad3[0x50 - 0x30]; int c; struct E *ae; char pad4[0x60 - 0x58]; struct ALO *palo;
 };
 extern "C" {
 void func_002333B4(void *, int, int);
-void func_0011C168(struct MAT *, struct ALO *, struct MAT *);
+void __ml__FRC7MATRIX4T0(struct MAT *, struct ALO *, struct MAT *);
 void func_001A5900(struct LO *, struct LO *, struct LO *, int);
 void func_0022FAA0(struct LO *);
 void func_001F2468(struct LO *);
@@ -20,7 +20,7 @@ void func_001F26A8(struct LO *);
 void func_001F8668(struct LO *, int);
 }
 
-#define VCALL(po, slot, T) ((T)(po)->pvt[slot].pfn)((void *)((char *)(po) + (po)->pvt[slot].d)
+#define VCALL(po, slot, T) ((T)(po)->pvt[slot].pfn)((void *)((char *)(po) + (po)->pvt[slot].delta)
 
 extern "C" void func_001F21B8(struct LO *plo, struct LO *pa, struct LO *pb, int grf)
 {
@@ -38,7 +38,7 @@ extern "C" void func_001F21B8(struct LO *plo, struct LO *pa, struct LO *pb, int 
             mat.m[0][0] = mat.m[1][1] = mat.m[2][2] = mat.m[3][3] = 1.0f;
             for (palo = plo->palo; palo; palo = palo->pNext) {
                 struct MAT t;
-                func_0011C168(&t, palo, &mat);
+                __ml__FRC7MATRIX4T0(&t, palo, &mat);
                 mat = t;
             }
         }

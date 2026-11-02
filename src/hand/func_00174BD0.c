@@ -1,12 +1,12 @@
+#include "vtable.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f; } U;
 struct G;
 struct ANIMATION;
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern void *D_002F7900;
 extern char D_002DFC00[];
-extern char D_002DDF40[];
-struct VTE { short d; short pad; void *pfn; };
+extern char g_cm[];
 struct A {
     char pad[0xC]; struct VTE *vt; char pad2[0x190 - 0x10]; qword v190; char pad3[4]; int n1A4; char pad4[8];
     qword m1B0[3]; char pad5[0xFD0 - 0x1E0]; char aFD0[4];
@@ -22,9 +22,9 @@ void func_001EEFC0(struct S *p);
 void func_001EF038(struct S *p);
 struct O *func_00205458(struct A *a, int n);
 void *func_001C4840(struct G *g);
-void func_00187E28(void *p, int n, float f);
+void TriggerJoyRumbleRumk__FP3JOY4RUMKf(void *p, int n, float f);
 int func_001A6AF8(void *n, void *o);
-void func_0014F750(void *p, int n);
+void JoltCm__FP2CMi(void *p, int n);
 void func_001F7A68(struct A *a, int n);
 int func_00174BD0(struct S *p, int msg, struct M *pm) {
     struct ANIMATION *animation;
@@ -48,7 +48,7 @@ int func_00174BD0(struct S *p, int msg, struct M *pm) {
                 __asm__("vmulax.xyz $ACC, %1, %4x\n\tvmadday.xyz $ACC, %2, %4y\n\tvmaddz.xyz %0, %3, %4z"
                         : "=j"(r) : "j"(m[0]), "j"(m[1]), "j"(m[2]), "j"(v));
             }
-            { struct VTE *e = &a->vt[0x23]; ((void (*)(void *, qword))e->pfn)((char *)a + e->d, r); }
+            { struct VTE *e = &a->vt[0x23]; ((void (*)(void *, qword))e->pfn)((char *)a + e->delta, r); }
         }
         return 1;
     case 0x25:
@@ -72,18 +72,18 @@ int func_00174BD0(struct S *p, int msg, struct M *pm) {
     case 0x2F:
         {
             struct O *o = func_00205458(p->p10, 0xA5);
-            if (o && o->p30 == func_001C4840(&D_003DD490)) func_00187E28(D_002DFC00, 8, 1.0f);
+            if (o && o->p30 == func_001C4840(&g_sw)) TriggerJoyRumbleRumk__FP3JOY4RUMKf(D_002DFC00, 8, 1.0f);
         }
         return 0;
     case 0x34:
     case 0x35:
         {
-            void *g = func_001C4840(&D_003DD490);
+            void *g = func_001C4840(&g_sw);
             struct O *o = func_00205458(p->p10, 0xA0);
             if (o && func_001A6AF8(o->parent, g) && g == D_002F7900) {
                 switch (pm->n8) {
-                case 0x35: func_0014F750(D_002DDF40, 0); break;
-                case 0x34: func_00187E28(D_002DFC00, 3, 1.50000005960464477539e-01f); break;
+                case 0x35: JoltCm__FP2CMi(g_cm, 0); break;
+                case 0x34: TriggerJoyRumbleRumk__FP3JOY4RUMKf(D_002DFC00, 3, 1.50000005960464477539e-01f); break;
                 }
             }
         }
@@ -99,9 +99,8 @@ typedef char layout_pointer[(sizeof(void*)==4)?1:-1];
 typedef char layout_qword[(sizeof(qword)==16)?1:-1];
 typedef char layout_U[(sizeof(U)==16)?1:-1];
 typedef char layout_float[(sizeof(float)==4)?1:-1];
-typedef char layout_VTE[(sizeof(struct VTE)==8)?1:-1];
 typedef char layout_M[(sizeof(struct M)==12)?1:-1];
-typedef char layout_VTE_d[((unsigned)&((struct VTE*)0)->d==0x0)?1:-1];
+typedef char layout_VTE_d[((unsigned)&((struct VTE*)0)->delta==0x0)?1:-1];
 typedef char layout_VTE_pfn[((unsigned)&((struct VTE*)0)->pfn==0x4)?1:-1];
 typedef char layout_A_vt[((unsigned)&((struct A*)0)->vt==0xc)?1:-1];
 typedef char layout_A_v190[((unsigned)&((struct A*)0)->v190==0x190)?1:-1];

@@ -1,7 +1,5 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
-static __inline__ float GetX(qword q) { float x; __asm__("mtc1 %1,%0" : "=f"(x) : "r"(q)); return x; }
-static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0,%1" : "=r"(y) : "r"(q)); return y; }
-static __inline__ float GetZ(qword q) { float z; __asm__("pextuw %0,$0,%1" : "=r"(z) : "r"(q)); return z; }
 int func_0011D4D0(float a, float b, float eps);
 void func_00230598(void *pv, void *px);
 struct X { char pad[0x90]; void *p90; char pad2[0xC0 - 0x94]; qword vC0; };

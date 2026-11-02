@@ -1,10 +1,10 @@
 #include "m2c_prelude.h"
 M2C_UNK CopyAb__FPvT0Ui(void *, void *, s32);       /* extern */
 M2C_UNK ListXYZF__4GIFSiiii(s32, s32, M2C_UNK, M2C_UNK); /* extern */
-M2C_UNK func_001572E0(M2C_UNK *, s32);              /* extern */
+M2C_UNK AllocStack__4DMASi(M2C_UNK *, s32);              /* extern */
 M2C_UNK func_001573C0(M2C_UNK *, s32, M2C_UNK *, s32); /* extern */
-M2C_UNK func_00166920(M2C_UNK *);                   /* extern */
-M2C_UNK func_00226C10(M2C_UNK *, s64, s64, s64);    /* extern */
+M2C_UNK __4GIFS(M2C_UNK *);                   /* extern */
+M2C_UNK __4VIFS(M2C_UNK *, s64, s64, s64);    /* extern */
 M2C_UNK func_00226FD0(M2C_UNK *, s32, s32, s32);    /* extern */
 M2C_UNK func_00240460(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_00240600(void *, s32 *, s32 *, s32 *); /* extern */
@@ -22,9 +22,9 @@ extern M2C_UNK D_002BE540;
 extern M2C_UNK D_002BE558;
 extern s32 D_002BE590;
 extern s32 D_002BE594;
-extern M2C_UNK D_002DDF40;
+extern M2C_UNK g_cm;
 extern s32 D_002DE598;
-extern s32 D_002DEA4C;
+extern s32 g_pfrmOpen;
 extern M2C_UNK D_002DEA50;
 extern s32 D_002DEB50;
 extern M2C_UNK D_002DEB60;
@@ -66,7 +66,7 @@ extern s32 D_003DCF98;
 extern s32 D_003DCF9C;
 extern s32 D_003DCFA0;
 extern s32 D_003DCFA8;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 extern s32 D_003E12C8;
 extern s64 D_003E1330;
 extern M2C_UNK D_1AA0;

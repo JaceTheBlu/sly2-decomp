@@ -1,4 +1,4 @@
-// (Claude agent) func_001A93C8 takes its float before the HIT* (see AGENT_GUIDE "Float vs. int parameter order").
+// func_001A93C8 takes its float before the HIT* (see AGENT_GUIDE "Float vs. int parameter order").
 // Radius: fold turns `b >= a ? b : a` into MAX(b, a) only with both values in locals (a loaded first).
 typedef int qword __attribute__((mode(TI)));
 struct AREQ { int cb; int cbAlign; };
@@ -7,11 +7,11 @@ struct O { char pad[0xEC]; struct X *px; };
 struct S { int x0; struct O *po; int x8; int xC; char pad[0x74 - 0x10]; int x74; };
 struct P { char pad[0xEC]; struct X *px; char pad1[0x15C - 0xF0]; float g15C; float g160; char pad2[0x180 - 0x164]; qword q180; };
 struct HIT { int a[12]; };
-extern char D_003DD490[];
+extern char g_sw[];
 void func_0020FA10();
 void func_0020FC60(void *pg, qword q, void (*pfn)(), struct X *px, float g, int *pc, struct S ***paps);
-void *func_001AE318(struct AREQ *preq);
-int func_00132B10(int n, int k);
+void *PvAllocStackImpl__FP7SWALLOC(struct AREQ *preq);
+int FIsBasicDerivedFrom__FP5BASIC3CID(int n, int k);
 int func_001A93C8(qword q, struct S *ps, int n, int a, int b, int c, float g, struct HIT *phit);
 void func_0013B7B8(struct P *p, int *pn, struct O **apo);
 void func_0013B5E8(struct P *p, int *pc, struct O ***papo)
@@ -22,7 +22,7 @@ void func_0013B5E8(struct P *p, int *pc, struct O ***papo)
     int n;
     struct O **apo;
     int i;
-    { float a = p->g15C; float b = p->g160; func_0020FC60(D_003DD490, p->q180, func_0020FA10, p->px, b >= a ? b : a, &c, &aps); }
+    { float a = p->g15C; float b = p->g160; func_0020FC60(g_sw, p->q180, func_0020FA10, p->px, b >= a ? b : a, &c, &aps); }
     if (c == 0) {
         *pc = 0;
         *papo = 0;
@@ -30,7 +30,7 @@ void func_0013B5E8(struct P *p, int *pc, struct O ***papo)
     }
     req.cb = c * 4;
     req.cbAlign = 0x10;
-    apo = (struct O **)func_001AE318(&req);
+    apo = (struct O **)PvAllocStackImpl__FP7SWALLOC(&req);
     n = 0;
     for (i = 0; i < c; i++) {
         struct S *ps = aps[i];
@@ -40,7 +40,7 @@ void func_0013B5E8(struct P *p, int *pc, struct O ***papo)
             continue;
         if (x60 == p->px->x60)
             continue;
-        if (ps->x74 && !func_001A93C8(p->q180, ps, 0x7FFFFFFF, 0, 0, 1, func_00132B10(x60, 0x34) ? p->g160 : p->g15C, &hit))
+        if (ps->x74 && !func_001A93C8(p->q180, ps, 0x7FFFFFFF, 0, 0, 1, FIsBasicDerivedFrom__FP5BASIC3CID(x60, 0x34) ? p->g160 : p->g15C, &hit))
             continue;
         apo[n] = ps->po;
         n++;

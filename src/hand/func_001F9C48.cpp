@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];int i[4];};
 struct M3 {U r[3];M3(){} M3(const M3&m){r[0]=m.r[0];r[1]=m.r[1];r[2]=m.r[2];} M3&operator=(const M3&m){r[0]=m.r[0];r[1]=m.r[1];r[2]=m.r[2];return *this;}};
@@ -7,13 +8,12 @@ struct E {char pad34[0x34];NODE *first;};
 struct VT {short delta,pad;void (*fn)(void *);};
 struct P {char padC[0xC];VT *vt;char pad10[0x48];OWNER *position,*rotation;char pad60[0x8C];E *e;};
 struct G {char pad3D58[0x3D58];int stamp;};
-struct CLOCK {float time,dt;};
-extern CLOCK D_002DDED0;
-extern G D_003DD490;
+extern CLOCK g_clock;
+extern G g_sw;
 extern "C" void func_00230630(P *,OWNER *);
-extern "C" qword *func_00256D18(qword *,qword);
-extern "C" M3 *func_0011B570(M3 *,qword);
-static inline M3 BuildRotation(qword vector) return matrix {func_0011B570(&matrix,vector);}
+extern "C" qword *__as__6VECTORG9VU_VECTOR(qword *,qword);
+extern "C" M3 *LoadRotateMatrix__FUx(M3 *,qword);
+static inline M3 BuildRotation(qword vector) return matrix {LoadRotateMatrix__FUx(&matrix,vector);}
 extern "C" void NormalizeRotateMatrix3__FP7MATRIX3(M3 *);
 extern "C" void func_001F3900(P *);
 extern "C" void func_001F38A8(NODE *);
@@ -41,12 +41,12 @@ extern "C" void func_001F9C48(P *p)
     NODE *node;
     func_00230630(p,position);
     func_00230630(p,rotation);
-    clock=&D_002DDED0;
+    clock=&g_clock;
     {qword point=position->position.q;
     qword k=Scalar(clock->dt*coefficient,&scalar);
-    func_00256D18(&position->position.q,AddScaled(point,position->velocity.q,k));}
+    __as__6VECTORG9VU_VECTOR(&position->position.q,AddScaled(point,position->velocity.q,k));}
     position->position.f[3]=1.0f;
-    global=&D_003DD490;
+    global=&g_sw;
     position->stamp=++global->stamp;
     Clear(positionVelocity);
     frame=Mul(BuildRotation(Scale(rotation->velocity.q,Scalar(clock->dt*coefficient,&scalar))),rotation->matrix);

@@ -5,7 +5,7 @@ struct LO { M3 matrix; U position; M3 rotation; char pad[0x30]; LO *parent; int 
 struct VTE { short delta,pad; void (*fn)(void *); };
 struct P { char pad[0xC]; VTE *vt; char pad10[0x4C]; LO *object; };
 struct G { char pad[0x3D58]; int stamp; };
-extern G D_003DD490;
+extern G g_sw;
 extern "C" M3 func_0011B340(const M3 *);
 extern "C" void NormalizeRotateMatrix3__FP7MATRIX3(M3 *);
 extern "C" void *func_002333B4(void *,int,int);
@@ -40,7 +40,7 @@ extern "C" void func_001F42E0(P *p,const M3 *basis)
         dest->r[0].i[3]=0;
         dest->r[1].i[3]=0;
         dest->r[2].i[3]=0;
-        int stamp=++D_003DD490.stamp;
+        int stamp=++g_sw.stamp;
         p->object->stamp=stamp;
         p->vt[18].fn((char *)p+p->vt[18].delta);
         func_001F4E28(p);

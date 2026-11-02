@@ -1,8 +1,9 @@
+#include "vu0.h"
 // func_0016A000 = LoadSubglobType0FromBrx (name from Lilly's personal decomp, decomp/src/P2/glob.c T1082 draft). MATCH (T1701).
 // Built on lilly4 (T1697) / lilly3 (T1693); see notes/160000.md for the tricks that matched it, the last ones being:
 //  - the header flags word (BATCHHDR0 +0x8) is a one-member struct, set from an aggregate initializer in the ibatch
 //    switch: the clear-then-set keeps loop.c from hoisting the constant with the other 1s;
-//  - the lit-batch count is Min(0x27, cvtx - iofs) through an inline Min (no REG_EQUAL on n's first set);
+//  - the lit-batch count is NMin(0x27, cvtx - iofs) through an inline NMin (no REG_EQUAL on n's first set);
 //  - ppart->iqwVtx is re-read for iqwEnd/iqwOwn; pg[0] = pg[1] = pg[2] = -1.0f.
 typedef unsigned  size_t;
 typedef unsigned char    uint8_t;
@@ -463,7 +464,7 @@ struct XF
       qword qwRestUnkE0;
       qword qwUnkF0;
 };
-extern CM D_002DDF40;
+extern CM g_cm;
 void *PvAllocSwCopyImpl(struct SWALLOC *pswalloc, void *pvBase);
 struct SWALLOC
 {
@@ -547,8 +548,8 @@ void CopyDmaRefsChainSw(SUBGLOB *psubglob, GLOB *pglob, int cqw, void *pvBase, i
 extern "C" {
 void qsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *));
 }
-extern "C" void func_00117F90(CBinaryInputStream *pbis, void *pv);
-extern "C" void func_00117FB0(CBinaryInputStream *pbis, void *pv);
+extern "C" void ReadCb12__18CBinaryInputStreamPv(CBinaryInputStream *pbis, void *pv);
+extern "C" void ReadCb8__18CBinaryInputStreamPv(CBinaryInputStream *pbis, void *pv);
 void FixupRgba(RGBA *prgba);
 extern int D_003E11EC;
 static inline void *PvAllocStackP(int cb)
@@ -631,7 +632,6 @@ static inline char *PbReloc(char *pbOld, int cb, char *pbNew, char *pb)
 }
 struct RGBA5551 { ushort r : 5; ushort g : 5; ushort b : 5; ushort a : 1; };
 struct UVLINK { short u, v; ushort link; } __attribute__((packed));
-static inline int Min(int a, int b) { return a < b ? a : b; }
 void LoadSubglobType0FromBrx(GLOBSET *const pglobset, SUBGLOB *psubglob, GLOB *pglob, SUBGLOBLOAD *psgl, SUBGLOBX *psubglobx, int cSubExtra, CBinaryInputStream *pbis)
 {
     psubglob->bUnk02 = pbis->U8Read();
@@ -674,7 +674,7 @@ void LoadSubglobType0FromBrx(GLOBSET *const pglobset, SUBGLOB *psubglob, GLOB *p
     }
     float *pgFit;
     vifs.UnpackHelper(UPK_V4_32, 1, 9, 0, (uint **)&pgFit);
-    CalcRecipFitParams(psgl->gUnk00, &D_002DDF40, pgFit);
+    CalcRecipFitParams(psgl->gUnk00, &g_cm, pgFit);
 
     psubglob->cbnd = pbis->U8Read();
     pglob->abnd = (BND *)PvAllocSwClearP(psubglob->cbnd * sizeof(BND));
@@ -694,8 +694,8 @@ void LoadSubglobType0FromBrx(GLOBSET *const pglobset, SUBGLOB *psubglob, GLOB *p
     spec.iSpec = pbis->S8Read();
     if (spec.iSpec != -1)
     {
-        func_00117F90(pbis, &spec.agUnk00);
-        func_00117FB0(pbis, &spec.agUnk10);
+        ReadCb12__18CBinaryInputStreamPv(pbis, &spec.agUnk00);
+        ReadCb8__18CBinaryInputStreamPv(pbis, &spec.agUnk10);
         pbis->ReadVector(&spec.vec);
         spec.agUnk00[1] *= 0.007874016f;
         spec.agUnk00[2] *= 6.200012e-05f;
@@ -1153,7 +1153,7 @@ void LoadSubglobType0FromBrx(GLOBSET *const pglobset, SUBGLOB *psubglob, GLOB *p
                     {
                         for (int iofs = 0; iofs < pbatch->cvtx; iofs += 0x27)
                         {
-                            int n = Min(0x27, pbatch->cvtx - iofs);
+                            int n = NMin(0x27, pbatch->cvtx - iofs);
                             uint *pun;
                             vifsLit.UnpackHelper(UPK_V4_32, 3, 0x307, 0, &pun);
                             pun[0] = 0x30a;

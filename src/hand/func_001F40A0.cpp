@@ -10,10 +10,10 @@ struct E { char pad[0xDC]; struct REGION_LINK *regionLink; };
 struct VTE { short d; short p; void (*pfn)(void *); };
 struct P { char pad[0xC]; struct VTE *pvt; char pad2[0x58 - 0x10]; struct LO *p58; char pad3[0x60 - 0x5C]; struct LO *p60; char pad4[0xE8 - 0x64]; struct E *pe; };
 struct SW { char pad[0x3D58]; int n3D58; };
-extern struct SW D_003DD490;
-qword *func_00256D18(qword *, qword);
+extern struct SW g_sw;
+qword *__as__6VECTORG9VU_VECTOR(qword *, qword);
 M4 *func_0011C318(M4 *,const M4 *);
-M4 *func_0011C168(M4 *, const M4 *, const M4 *);
+M4 *__ml__FRC7MATRIX4T0(M4 *, const M4 *, const M4 *);
 void *func_002333B4(void *, int, int);
 void func_001F4E28(struct P *);
 void func_00230598(struct P *, struct LO *);
@@ -29,7 +29,7 @@ void func_001F40A0(struct P *p, qword v)
     register M4 *presult __asm__("$18");
     if (!p->p58) return;
     basis = &p->p60->m40.s.m3;
-    func_00256D18(&m0.s.r3, v);
+    __as__6VECTORG9VU_VECTOR(&m0.s.r3, v);
     m0.s.m3 = *basis;
     m0.f[1][3] = 0.0f;
     m0.f[2][3] = 0.0f;
@@ -37,7 +37,7 @@ void func_001F40A0(struct P *p, qword v)
     m0.f[3][3] = 1.0f;
     presult=&mC0;
     func_0011C318(&m100,&p->p58->m40);
-    func_0011C168(presult, &m100, &p->p60->m40);
+    __ml__FRC7MATRIX4T0(presult, &m100, &p->p60->m40);
     m40.r[1] = mC0.r[1];
     m40.r[0] = mC0.r[0];
     m40.r[2] = mC0.r[2];
@@ -54,14 +54,14 @@ void func_001F40A0(struct P *p, qword v)
     }
     M4 *world=&m140;
     func_0011C318(&m180,&m80);
-    func_0011C168(world, &m180, &m0);
+    __ml__FRC7MATRIX4T0(world, &m180, &m0);
     func_0011C318(&m1C0,&m40);
-    func_0011C168(&m100, world, &m1C0);
+    __ml__FRC7MATRIX4T0(&m100, world, &m1C0);
     plo = p->p58;
     mC0 = m100;
-    func_00256D18(&plo->v30.q, mC0.r[3]);
+    __as__6VECTORG9VU_VECTOR(&plo->v30.q, mC0.r[3]);
     plo->v30.f[3] = 1.0f;
-    { int stamp=++D_003DD490.n3D58;p->p58->nA4=stamp; }
+    { int stamp=++g_sw.n3D58;p->p58->nA4=stamp; }
     p->pvt[18].pfn((char *)p + p->pvt[18].d);
     func_001F4E28(p);
     func_00230598(p, p->p58);

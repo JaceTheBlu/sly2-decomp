@@ -22,7 +22,7 @@ typedef struct OBJ {
     int x140;
     struct E *x144;
 } OBJ;
-extern char D_003DD490[];
+extern char g_sw[];
 float func_0011CAB0(MATRIX4 *);
 struct E *func_001D6508(void *, qword, float, float, int);
 void func_001D6378(OBJ *p)
@@ -34,7 +34,7 @@ void func_001D6378(OBJ *p)
             : "=j"(v) : "j"(m.r[0]), "j"(m.r[1]), "j"(m.r[2]), "j"(m.r[3]), "j"(p->x90));
     {
         float r = func_0011CAB0(&m) * p->xA0;
-        e = func_001D6508(D_003DD490, v, r, p->x38, p->x2D);
+        e = func_001D6508(g_sw, v, r, p->x38, p->x2D);
     }
     p->x144 = e;
     if (e) {

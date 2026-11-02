@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4];};
 struct V { float x,y,z,w; } __attribute__((aligned(16)));
@@ -8,22 +9,21 @@ struct P {char pad0[0xC];VT *vt;char pad1[0x5C-0x10];CONTROLLER *controller;
  ASEG *aseg;ASEGA *asega[12];int enabled;ACTION *action;float parameter;
  float g270,g274,g278;};
 struct HIT { qword q[4];float t0,t1;int count;void *owner0,*owner1;};
-struct CLOCK {float t,dt;};
-extern "C" CLOCK D_002DDED0;
+extern "C" CLOCK g_clock;
 extern "C" qword D_002A2DD0;
 struct LO;
 extern "C" void func_001B1E88(P*,LO*,V*);
 extern "C" V*func_001B2398(V*,P*,float);
 extern "C" qword func_0011E9F8(qword,float);
 extern "C" qword func_001A62E8(P*);
-extern "C" int func_0014C748(qword,qword,qword,int,HIT*,float);
+extern "C" int ClsgClipEdgeToSphere__FUxfUxUxiP3LSG(qword,qword,qword,int,HIT*,float);
 inline qword Scale(qword a,qword k){__asm__("vmulx.xyzw %0,%1,%2x":"=j"(k):"j"(a),"0"(k));return k;}
 struct WORK{U pos;V dir;U velocity,tmp;V factor;HIT hit;V scalar;U direction,spill;};
 extern "C" void func_001B2228(P*p,LO*source,V*point){
  WORK w;
  w.pos.q=*(qword*)point;
  func_001B1E88(p,source,(V*)&w.pos);
- if(p->g270>0.0f)p->g278=D_002DDED0.t+p->g270;
+ if(p->g270>0.0f)p->g278=g_clock.t+p->g270;
  else{
   func_001B2398((V*)&w.velocity,p,0.5f);
   register qword copied __asm__("$2");register VT*table __asm__("$3");register float negative __asm__("$f0");
@@ -50,13 +50,13 @@ extern "C" void func_001B2228(P*p,LO*source,V*point){
   register float radius __asm__("$f12");register HIT*output __asm__("$8");
   __asm__("lq %0,%5\n\tlwc1 %1,%6\n\tqmfc2.ni %2,%7\n\tlq %3,%8\n\tla %4,%a9":"=&r"(originArgument),"=f"(radius),"=&r"(endpointArgument),"=&r"(velocityArgument),"=r"(output):"m"(*zero),"m"(p->g274),"j"(acc),"m"(w.velocity.q),"p"(&w.hit));
   w.tmp.q=acc;
-  func_0014C748(originArgument,velocityArgument,endpointArgument,count,output,radius);
+  ClsgClipEdgeToSphere__FUxfUxUxiP3LSG(originArgument,velocityArgument,endpointArgument,count,output,radius);
   register float max __asm__("$f1");
   register float lo __asm__("$f1")=0.25f;
   register float hi __asm__("$f3")=w.hit.t1;
   __asm__("max.s %0,%1,%2":"=f"(max):"f"(lo),"f"(hi));
   register float duration __asm__("$f2")=1.0f/max;
-  p->g278=D_002DDED0.t+duration;
+  p->g278=g_clock.t+duration;
  }
 }
 
@@ -108,8 +108,6 @@ typedef char P_PrefixSize[sizeof(P)==640?1:-1];
 typedef char P_Alignment[__alignof__(P)==16?1:-1];
 typedef char HIT_PrefixSize[sizeof(HIT)==96?1:-1];
 typedef char HIT_Alignment[__alignof__(HIT)==16?1:-1];
-typedef char CLOCK_PrefixSize[sizeof(CLOCK)==8?1:-1];
-typedef char CLOCK_Alignment[__alignof__(CLOCK)==4?1:-1];
 typedef char WORK_PrefixSize[sizeof(WORK)==224?1:-1];
 typedef char WORK_Alignment[__alignof__(WORK)==16?1:-1];
 typedef char qword_Width[sizeof(qword)==16?1:-1];

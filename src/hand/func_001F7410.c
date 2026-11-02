@@ -6,7 +6,7 @@ struct E { char pad[0x6C]; struct N *pn; };
 struct P { char pad[0xEC]; struct E *pe; };
 struct M { void *p0; void *p4; void *p8; int nC; int n10; int pad[3]; qword q20; qword q30; char pad2[0x60 - 0x40]; };
 struct G;
-extern struct G D_003DD490;
+extern struct G g_sw;
 void *func_001F7530(void *, int);
 void func_002333B4(void *, int, int);
 int func_001F7598(struct M *);
@@ -36,7 +36,7 @@ void func_001F7410(struct P *p)
         }
     }
     if (p->pe) {
-        func_001A7E10(&D_003DD490, p->pe->pn);
+        func_001A7E10(&g_sw, p->pe->pn);
         p->pe->pn = 0;
     }
 }

@@ -9,8 +9,8 @@ typedef struct P {
     int eventCount;
     E *events;
 } P;
-extern char D_003DD490[];
-SO *func_0015E938(void *g, int k, int v, P *p);
+extern char g_sw[];
+SO *PloFindSwObject__FP2SWi3OIDP2LO(void *g, int k, int v, P *p);
 void func_001F6978(P *p, int v);
 void func_001F69F8(P *p, int v);
 void func_001F6AC8(P *p, int v);
@@ -45,7 +45,7 @@ void func_001BAF18(P *p, int id)
                 I *pi = &pe->actions[k];
                 SO *ps = 0;
                 if ((0xC3 >> pi->kind) & 1) {
-                    ps = func_0015E938(D_003DD490, 1, pi->value, p);
+                    ps = PloFindSwObject__FP2SWi3OIDP2LO(g_sw, 1, pi->value, p);
                     if (!ps) continue;
                 }
                 switch ((unsigned int)pi->kind) {
@@ -87,7 +87,7 @@ void func_001BAF18(P *p, int id)
                 I *pi = &pe->actions[k];
                 SO *ps = 0;
                 if ((0xC3 >> pi->kind) & 1) {
-                    ps = func_0015E938(D_003DD490, 1, pi->value, p);
+                    ps = PloFindSwObject__FP2SWi3OIDP2LO(g_sw, 1, pi->value, p);
                     if (!ps) continue;
                 }
                 switch ((unsigned int)pi->kind) {

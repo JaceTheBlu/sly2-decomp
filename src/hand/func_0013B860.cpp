@@ -1,4 +1,4 @@
-// (Claude agent) frame declared at function scope with explicit init/free calls (free = dtor with in-charge 2) so msg2 reuses msg's slot.
+// frame declared at function scope with explicit init/free calls (free = dtor with in-charge 2) so msg2 reuses msg's slot.
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } U;
 struct VTE { short d; short pad; void (*pfn)(); };
@@ -12,16 +12,16 @@ struct MSG { P *p; int x4; PO *po; int xC; int x10; int pad14[3]; qword v20; qwo
 struct MSG2 { int k; P *p; float g8; float gC; };
 struct G { char pad[0x402C]; int x402C; };
 extern "C" {
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern int D_002BC9E0;
 extern float D_002A4B1C;
-extern G D_003DD490;
+extern G g_sw;
 qword func_001A62E8(void *p);
 void func_0013B428(P *p, qword a, qword b);
 void func_0013B5E8(P *p, int *pc, PO ***papo);
 void *func_002333B4(void *pv, int b, int cb);
 int func_001F7598(MSG *pmsg);
-int func_00132B10(PO *po, int k);
+int FIsBasicDerivedFrom__FP5BASIC3CID(PO *po, int k);
 int *func_00156698(int n, qword pos, void *pv);
 }
 struct FRAME { int a[2]; }; // FrameInit = ctor, FrameFree = dtor(this, 2)
@@ -31,7 +31,7 @@ extern "C" void func_0013B860(P *p)
 {
     if (((p->ul28 >> 60) & 1) == 0)
         return;
-    func_0013B428(p, func_001A62E8(p), D_002A2DC0);
+    func_0013B428(p, func_001A62E8(p), g_normalZ);
     FRAME frame;
     if (p->x164 == 0) {
         FrameInit(&frame);
@@ -52,7 +52,7 @@ extern "C" void func_0013B860(P *p)
             msg.p = p;
             msg.po = po;
             qword pos = func_001A62E8(po);
-            qword def = D_002A2DC0;
+            qword def = g_normalZ;
             __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(pos), "j"(p->v180));
             {
                 register qword t __asm__("vf2");
@@ -93,11 +93,11 @@ extern "C" void func_0013B860(P *p)
     if (p->x1E0) {
         PO *po = p->p200;
         void *pv = p;
-        if (po != (PO *)p && func_00132B10(po, 0x70) && po->pp14) {
+        if (po != (PO *)p && FIsBasicDerivedFrom__FP5BASIC3CID(po, 0x70) && po->pp14) {
             PO *pT = *po->pp14;
             if (pT != po) pv = pT;
         }
-        func_00156698(D_003DD490.x402C, func_001A62E8(p), pv)[0x54 / 4] = 1;
+        func_00156698(g_sw.x402C, func_001A62E8(p), pv)[0x54 / 4] = 1;
     }
     ((void (*)(P *))p->pvt[9].pfn)((P *)((char *)p + p->pvt[9].d));
     p->x174 = 0;

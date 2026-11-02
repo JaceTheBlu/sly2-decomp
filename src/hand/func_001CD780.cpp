@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Project a world label, fit its rectangle, and render it in the supplied color.
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned int uint;
@@ -12,7 +13,7 @@ extern "C" void func_00258458(CONFIG *,const RGBA *);
 extern "C" void func_00258470(CONFIG *,int);
 extern "C" void func_00258478(CONFIG *,int);
 struct CONFIG {float x,y,width,height;RGBA color;int hAlign,vAlign;CONFIG(uint bits=0xFF808080){func_00258438(this,0.0f,0.0f);func_00258448(this,640.0f,492.8000183f);RGBA gray(bits);func_00258458(this,&gray);func_00258470(this,0);func_00258478(this,0);}};
-extern CM D_002DDF40;
+extern CM g_cm;
 extern float D_002C1F20;
 extern LM D_002C1F28;
 extern int D_002C1F30,D_002C1F34;
@@ -22,23 +23,20 @@ extern "C" RT *func_00215AC0(RT *,const char *,float);
 extern "C" void func_00216260(RT *,float *,float *);
 extern "C" void func_002163B0(RT *,CONFIG *,int);
 static inline float SavedHeight(float value){register float height __asm__("$f20");__asm__("mov.s %0,%1":"=f"(height):"f"(value));return height;}
-static inline float X(qword q){float f;__asm__("mtc1 %1,%0":"=f"(f):"r"(q));return f;}
-static inline float Y(qword q){float f;__asm__("prot3w %0,%1":"=r"(f):"r"(q));return f;}
-static inline float Z(qword q){float f;__asm__("pextuw %0,$zero,%1":"=r"(f):"r"(q));return f;}
 extern "C" void func_001CD780(qword position,const char *text,const RGBA *unusedColor,const RGBA *color,float inputHeight)
 {
     float height=SavedHeight(inputHeight);
-    CM *camera=&D_002DDF40;
+    CM *camera=&g_cm;
     qword screen=func_0014F308(camera,position);
-    float depth=Z(screen);
+    float depth=GetZ(screen);
     if(depth<camera->nearDepth)return;
     float scale=func_0011D948(&D_002C1F28,height*(D_002C1F20/(camera->sx*depth)));
     RT rt;func_00215AC0(&rt,text,scale);
     CONFIG config;
     float w,h;
     func_00216260(&rt,&w,&h);
-    float x=(X(screen)*0.5f+0.5f)*640.0f;
-    float y=(0.5f-Y(screen)*0.5f)*492.8000183f;
+    float x=(GetX(screen)*0.5f+0.5f)*640.0f;
+    float y=(0.5f-GetY(screen)*0.5f)*492.8000183f;
     int marginX=D_002C1F30,marginY=D_002C1F34;
     config.x=x-w*0.5f-marginX;
     config.y=y-h-2*marginY;

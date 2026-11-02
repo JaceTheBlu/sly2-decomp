@@ -1,6 +1,6 @@
-// func_0011F960 MATCH (Claude agent, lane A12, 2026-10-23), from fresh4 (6): 0x1A/0x16 MulVectorR builds the VU float from the int bits with ONE commented pin ($17, pr's register, as the target), and MulMatrix (0x1B/0x16) has a commented volatile empty asm that keeps &mat after the mtc1. The other old pins were removed.
+#include "vec.h"
+// func_0011F960 MATCH, from fresh4 (6): 0x1A/0x16 MulVectorR builds the VU float from the int bits with ONE commented pin ($17, pr's register, as the target), and MulMatrix (0x1B/0x16) has a commented volatile empty asm that keeps &mat after the mtc1. The other old pins were removed.
 typedef int qword __attribute__((mode(TI)));
-struct VECTOR { float x, y, z, w; };
 struct MATRIX4 { float af[16]; } __attribute__((aligned(16)));
 struct V8 { float x, y; };
 struct VU_FLOAT {
@@ -29,8 +29,8 @@ struct VU_FLOAT_F {
 struct VU_FLOAT_X { qword q; VU_FLOAT_X(float f); };
 struct VU_VECTOR { qword q; VU_VECTOR(const VECTOR &v); };
 qword operator*(VU_FLOAT_X f, VU_VECTOR v);
-extern "C" qword *func_00256D18(VECTOR *p, qword v);
-MATRIX4 func_0011C168(const MATRIX4 &a, const MATRIX4 &b);
+extern "C" qword *__as__6VECTORG9VU_VECTOR(VECTOR *p, qword v);
+MATRIX4 __ml__FRC7MATRIX4T0(const MATRIX4 &a, const MATRIX4 &b);
 struct CRef {
     int m_tagk; union { int n; float g; void *pv; } u;
     CRef() { m_tagk = -1; }
@@ -165,7 +165,7 @@ CRef func_0011F960(void *pv, CRef *aref)
                 ref.InitTag(0x1C);
                 VECTOR *pvec = (VECTOR *)ref.u.pv;
                 VECTOR *pvSrc = (VECTOR *)pr->u.pv;
-                func_00256D18(pvec, VU_FLOAT_X(g) * VU_VECTOR(*pvSrc));
+                __as__6VECTORG9VU_VECTOR(pvec, VU_FLOAT_X(g) * VU_VECTOR(*pvSrc));
                 break;
             }
             case 0x1D: {
@@ -193,7 +193,7 @@ CRef func_0011F960(void *pv, CRef *aref)
             case 0x1A: ref = MulMatVec((MATRIX4 *)ref.u.pv, (qword *)pr->u.pv); break;
             case 0x1B: {
                 MATRIX4 *pm = (MATRIX4 *)ref.u.pv;
-                *pm = func_0011C168(*pm, *(MATRIX4 *)pr->u.pv);
+                *pm = __ml__FRC7MATRIX4T0(*pm, *(MATRIX4 *)pr->u.pv);
                 break;
             }
             }
@@ -202,12 +202,12 @@ CRef func_0011F960(void *pv, CRef *aref)
             switch (pr->m_tagk) {
             case 0x15: {
                 VECTOR *pvec = (VECTOR *)ref.u.pv;
-                func_00256D18(pvec, VU_FLOAT_X((float)pr->u.n) * VU_VECTOR(*pvec));
+                __as__6VECTORG9VU_VECTOR(pvec, VU_FLOAT_X((float)pr->u.n) * VU_VECTOR(*pvec));
                 break;
             }
             case 0x16: {
                 VECTOR *pvec = (VECTOR *)ref.u.pv;
-                func_00256D18(pvec, VU_FLOAT_X(pr->u.g) * VU_VECTOR(*pvec));
+                __as__6VECTORG9VU_VECTOR(pvec, VU_FLOAT_X(pr->u.g) * VU_VECTOR(*pvec));
                 break;
             }
             }

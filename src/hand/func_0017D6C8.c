@@ -1,10 +1,10 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002BE758, D_002BE75C;
 struct W { int pad[0x28 / 4]; int n28; };
 struct G { char pad[0x45CC]; struct W *p45CC; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 struct T { char pad[0x30]; void *p30; float f34; };
 struct V { int pad[2]; float f8; };
 struct A { char pad[0x218]; struct V *p218; char pad2[0xFE8 - 0x21C]; int nFE8; };
@@ -35,7 +35,7 @@ void func_0017D6C8(struct S *p) {
                 struct T *t = p->p18;
                 if (s == 2 && func_00178D00(t)) {
                     func_0017D450(p, 3);
-                } else if (D_002DDED0.t - p->fA0 > D_002BE758 || p->nA4 != D_003DD490.p45CC->n28) {
+                } else if (g_clock.t - p->fA0 > D_002BE758 || p->nA4 != g_sw.p45CC->n28) {
                     func_0017DA28(p);
                 } else if (func_001792E8(t)) {
                     float f = t->f34 + D_002BE75C;

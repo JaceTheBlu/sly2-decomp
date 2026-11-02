@@ -1,7 +1,7 @@
 struct P {int tag,value,word8;void *vtable;};
 struct REF {int tag,value;};
 void *func_002333B4(void*,int,unsigned int);
-void func_002562A8(struct REF*);
+void __1M(struct REF*);
 extern char D_002D04A0[];
 extern char D_002D0AB0[];
 extern char D_002D0A30[];
@@ -189,9 +189,9 @@ struct P *func_001EF138(int kind,void *memory){
  case 0xBA:
   func_002333B4(memory,0,0xD0);
   ((struct P*)memory)->tag=0;((struct P*)memory)->value=0;((struct P*)memory)->vtable=D_002CFE20;
-  func_002562A8((struct REF*)((char*)memory+0x40));
-  func_002562A8((struct REF*)((char*)memory+0x60));
-  func_002562A8((struct REF*)((char*)memory+0x80));
+  __1M((struct REF*)((char*)memory+0x40));
+  __1M((struct REF*)((char*)memory+0x60));
+  __1M((struct REF*)((char*)memory+0x80));
   result=(struct P*)memory;break;
  case 0xBD:
   func_002333B4(memory,0,0x50);
@@ -204,7 +204,7 @@ struct P *func_001EF138(int kind,void *memory){
  case 0xBF:
   func_002333B4(memory,0,0x50);
   ((struct P*)memory)->tag=0;((struct P*)memory)->value=0;((struct P*)memory)->vtable=D_002CFC20;
-  func_002562A8((struct REF*)((char*)memory+0x30));
+  __1M((struct REF*)((char*)memory+0x30));
   result=(struct P*)memory;break;
  case 0xC0:
   func_002333B4(memory,0,0x60);

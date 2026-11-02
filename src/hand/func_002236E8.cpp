@@ -1,3 +1,5 @@
+#include "vec.h"
+#include "clock.h"
 // func_002236E8 = UpdateCmLineOfSight__FP7CMPART2 (Sly2Port KB name): the follow camera's line-of-sight test.
 // Every D_002C4110 (0.5) seconds it looks at five points around the hero (PosLoWorld + back * x + side * y + up * z
 // for the five offsets in D_002C4290; side = normalize(up x (hero - eye)) or (1, 0, 0) when the hero is straight
@@ -17,17 +19,15 @@ struct SOPART;
 struct SW;
 struct TN { char pad0[0x18C]; int fNoCamClip; };
 struct CMPART2 { LO *pvHero; char pad4[0xC]; TN *ptn; char pad14[0x6C]; float tLastSeen; };
-struct VECTOR4 { float x, y, z, w; };
 struct CM { char pad0[0x4C]; float sNearClip; char pad50[0x40]; qword pos; char padA0[0x260]; int nCut; };
-struct CLOCK { float t; float dt; };
-extern CM D_002DDF40;
-extern CLOCK D_002DDED0;
-extern SW D_003DD490;
+extern CM g_cm;
+extern CLOCK g_clock;
+extern SW g_sw;
 extern int D_002DFBC4;
 extern int D_002C4118;
 extern float D_002C4110;
 extern float D_002C4114;
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern qword D_002A2DA0;
 extern qword D_002C4290[5];
 extern "C" {
@@ -110,23 +110,23 @@ extern "C" void func_002236E8(CMPART2 *pcmpart)
     LO *plo = pcmpart->pvHero;
     if (D_002DFBC4 & 2)
     {
-        pcmpart->tLastSeen = D_002DDED0.t;
+        pcmpart->tLastSeen = g_clock.t;
         return;
     }
     if (pcmpart->ptn != 0 && pcmpart->ptn->fNoCamClip != 0)
         return;
     if (D_002C4118 != 0)
         return;
-    if (D_002DDED0.t - pcmpart->tLastSeen < D_002C4110)
+    if (g_clock.t - pcmpart->tLastSeen < D_002C4110)
         return;
-    if (D_002DDF40.nCut != 0)
+    if (g_cm.nCut != 0)
         return;
     qword aqw[11]; // box min 0 / max 1, near-plane point 2, samples 3..7, back 8, side 9, up 10
     uint i;
-    aqw[0] = aqw[1] = D_002DDF40.pos;
-    qword qwUp = D_002A2DC0;
+    aqw[0] = aqw[1] = g_cm.pos;
+    qword qwUp = g_normalZ;
     aqw[10] = qwUp;
-    qword qwToHero = QwSub(func_001A62E8(plo), D_002DDF40.pos);
+    qword qwToHero = QwSub(func_001A62E8(plo), g_cm.pos);
     qword qwCross = QwCross(qwUp, qwToHero);
     qword qwFallback = D_002A2DA0;
     qword qwLen = QwLengthUntied(qwCross);
@@ -154,19 +154,19 @@ extern "C" void func_002236E8(CMPART2 *pcmpart)
     STACKSCOPE scope;
     int cpso;
     SOPART **apso;
-    func_0020FAA0(&D_003DD490, aqw[0], aqw[1], func_0014F030, 0, &cpso, &apso);
+    func_0020FAA0(&g_sw, aqw[0], aqw[1], func_0014F030, 0, &cpso, &apso);
     for (i = 0; i < 5; i++, pqw++)
     {
-        aqw[2] = func_0014F308(&D_002DDF40, *pqw);
-        ((VECTOR4 *)&aqw[2])->z = D_002DDF40.sNearClip;
-        aqw[2] = func_0014F268(&D_002DDF40, aqw[2]);
+        aqw[2] = func_0014F308(&g_cm, *pqw);
+        ((VECTOR4 *)&aqw[2])->z = g_cm.sNearClip;
+        aqw[2] = func_0014F268(&g_cm, aqw[2]);
         float uExit;
         if (func_0014EA08(cpso, apso, *pqw, aqw[2], 0.0f, 0, &uExit) && 1.0f <= uExit)
         {
-            pcmpart->tLastSeen = D_002DDED0.t;
+            pcmpart->tLastSeen = g_clock.t;
             break;
         }
     }
-    if (D_002DDED0.t - pcmpart->tLastSeen > D_002C4114)
-        func_0014D8C0(&D_002DDF40);
+    if (g_clock.t - pcmpart->tLastSeen > D_002C4114)
+        func_0014D8C0(&g_cm);
 }

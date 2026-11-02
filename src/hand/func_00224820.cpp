@@ -1,3 +1,4 @@
+#include "vu0.h"
 // func_00224820: trace a probe segment, record the contact in the caller's HIT list, and push the touched body.
 // - Segment start..end goes through func_0014CC58; the hit object's eligible actor comes from func_001F7530.
 // - A new HIT record (deduplicated by object, up to capacity) gets owner/object/filter/channel/point and
@@ -38,8 +39,6 @@ qword func_0022D348(NODE *,NODE *,qword);
 qword func_001FAA00(O *,qword);
 qword func_001FAA48(O *,qword,qword);
 }
-static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
-static inline qword Add(qword a,qword b){qword r;__asm__("vadd.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword CrossXYZ(qword a,qword b){__asm__("vopmula.xyz ACC,%1,%0\n\tvopmsub.xyz %0,%0,%1":"+j"(b):"j"(a));return b;}
 static inline qword QwDot(qword a, qword b){qword qw;qword vfOne;
  __asm__("vmul.xyz %0, %2, %3\n\tvaddw.x %1, $vf0, $vf0w\n\tvadday.x $ACC, %0, %0y\n\tvmaddz.x %0, %1, %0z" : "=j"(qw), "=j"(vfOne) : "j"(a), "j"(b));return qw;}
@@ -63,7 +62,7 @@ extern "C" void func_00224820(O *ownerIn,int filter,int channel,qword start,qwor
  if(!collider)return;
  qword normal;
  O *chain=collider->object;
- {qword len,one;qword d=Sub(end,start);
+ {qword len,one;qword d=QwSub(end,start);
  __asm__("vmul.xyz %2,%3,%3\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%2,%2y\n\tvmaddz.x %2,%1,%2z\n\tvsqrt Q,%2x\n\tvwaitq\n\tvaddq.x %2,$vf0,Q\n\tvdiv Q,$vf0w,%2x\n\tvwaitq\n\tvmulq.xyzw %0,%3,Q":"=&j"(normal),"=&j"(one),"=&j"(len):"j"(d));}
  O *object=func_001F7530(chain,filter);
  if(!object)return;
@@ -91,8 +90,8 @@ extern "C" void func_00224820(O *ownerIn,int filter,int channel,qword start,qwor
  qword impulse=ScaleK(normal,MkVukBits(bits));
  qword linear=func_001FAA00(body,impulse);
  qword angular=func_001FAA48(body,hit.point,impulse);
- qword delta=Sub(hit.point,body->rotation->position.q);
- float change=Dot(Add(linear,CrossXYZ(angular,delta)),normal);
+ qword delta=QwSub(hit.point,body->rotation->position.q);
+ float change=Dot(QwAdd(linear,CrossXYZ(angular,delta)),normal);
  if(fz<change){
  qword velocity,spin;
   float x=(D_002C4334-along)/change;

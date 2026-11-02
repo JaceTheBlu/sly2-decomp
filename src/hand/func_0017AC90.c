@@ -1,10 +1,11 @@
+#include "vtable.h"
+#include "vu0.h"
+#include "clock.h"
 // Update the movement-state controller.
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } U;
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002BE6C8, D_002BE6CC;
-struct VTE { short d; short pad; void *pfn; };
 struct C { char pad[0x1C]; float g1C; };
 struct B { char pad[0x90]; struct C *p90; };
 struct A { char pad[0xC]; struct VTE *vt; char pad2[0x58 - 0x10]; struct B *p58; char pad3[0x208 - 0x5C]; int n208; };
@@ -18,7 +19,6 @@ void func_0017ABC8(struct S *p);
 qword func_001A62E8(struct A *a);
 void func_002309E8(void *a, void *b, struct OUT *pm, struct OUT *other, float g);
 static inline void*Frame(struct X*x){register struct Y*y __asm__("$2")=x->p19A4;return y->p60;}
-static __inline__ float GetZ(qword q) { float z; __asm__("pextuw %0,$0,%1" : "=r"(z) : "r"(q)); return z; }
 void func_0017AC90(struct S *p) {
     qword v;
     int s;
@@ -26,7 +26,7 @@ void func_0017AC90(struct S *p) {
     {
         struct A *a = p->p10;
         struct VTE *e = &a->vt[33];
-        v = ((qword (*)(void *))e->pfn)((char *)a + e->d);
+        v = ((qword (*)(void *))e->pfn)((char *)a + e->delta);
     }
     do {
         s = p->n50;
@@ -35,7 +35,7 @@ void func_0017AC90(struct S *p) {
         case 1:
             if (p->n50 == 1 && p->p10->n208) {
                 func_0017B1A8(p, 3);
-            } else if (p->p10->p58->p90 != p->p64 || p->p10->p58->p90->g1C < D_002DDED0.t) {
+            } else if (p->p10->p58->p90 != p->p64 || p->p10->p58->p90->g1C < g_clock.t) {
                 func_0017B1A8(p, 2);
             } else if (GetZ(v) < 0.0f && p->n50 == 0) {
                 func_0017B1A8(p, 1);
@@ -57,12 +57,12 @@ void func_0017AC90(struct S *p) {
             register void*nullSource __asm__("$5");
             register void*nullOutput __asm__("$7");
             register struct X*frameLink __asm__("$3");
-            struct CLOCK *clock=&D_002DDED0;
+            struct CLOCK *clock=&g_clock;
             a.q = func_001A62E8(p->p10);
             {
                 struct A *pa = p->p10;
                 struct VTE *e = &pa->vt[33];
-                qword velocity = ((qword (*)(void *))e->pfn)((char *)pa + e->d);
+                qword velocity = ((qword (*)(void *))e->pfn)((char *)pa + e->delta);
                 dt=clock->dt;
                 /* Preserve velocity and prepare the prediction inputs. */
                 __asm__("sq %4,%0\n\tdaddu %1,%z5,$zero\n\tdaddu %2,%z5,$zero\n\tlw %3,%6" : "=m"(b.q),"=&r"(nullOutput),"=&r"(nullSource),"=&r"(frameLink) : "r"(velocity),"J"(0),"m"(p->p5C));
@@ -77,7 +77,7 @@ void func_0017AC90(struct S *p) {
             __asm__("qmtc2.ni %1, %0" : "=j"(ud.q) : "r"(clock));
             __asm__("vdiv $Q, $vf0w, %1x\n\tvwaitq\n\tvmulq.xyzw %0, %2, $Q" : "=j"(vel.q) : "j"(ud.q), "j"(c));
             if (p->n50 == 4) {
-                if (a.f[2] < t.f[2] || D_002BE6CC < D_002DDED0.t - p->g54) {
+                if (a.f[2] < t.f[2] || D_002BE6CC < g_clock.t - p->g54) {
                     func_0017B1A8(p, 5);
                     break;
                 }
@@ -86,7 +86,7 @@ void func_0017AC90(struct S *p) {
             {
                 struct A *pa = p->p10;
                 struct VTE *e = &pa->vt[35];
-                ((void (*)(void *, qword))e->pfn)((char *)pa + e->d, vel.q);
+                ((void (*)(void *, qword))e->pfn)((char *)pa + e->delta, vel.q);
             }
             break;
         }
@@ -100,8 +100,6 @@ void func_0017AC90(struct S *p) {
 typedef char layout_pointer[(sizeof(void*)==4)?1:-1];
 typedef char layout_qword[(sizeof(qword)==16)?1:-1];
 typedef char layout_U[(sizeof(U)==16)?1:-1];
-typedef char layout_VTE[(sizeof(struct VTE)==8)?1:-1];
-typedef char layout_CLOCK[(sizeof(struct CLOCK)==8)?1:-1];
 typedef char layout_C[(sizeof(struct C)==0x20)?1:-1];
 typedef char layout_B[(sizeof(struct B)==0x94)?1:-1];
 typedef char layout_A[(sizeof(struct A)==0x20C)?1:-1];
@@ -111,7 +109,7 @@ typedef char layout_S[(sizeof(struct S)==0x68)?1:-1];
 typedef char layout_OUT[(sizeof(struct OUT)==0x40)?1:-1];
 typedef char layout_U_q[((unsigned)&((U*)0)->q==0)?1:-1];
 typedef char layout_U_f[((unsigned)&((U*)0)->f==0)?1:-1];
-typedef char layout_VTE_delta[((unsigned)&((struct VTE*)0)->d==0)?1:-1];
+typedef char layout_VTE_delta[((unsigned)&((struct VTE*)0)->delta==0)?1:-1];
 typedef char layout_VTE_fn[((unsigned)&((struct VTE*)0)->pfn==4)?1:-1];
 typedef char layout_CLOCK_time[((unsigned)&((struct CLOCK*)0)->t==0)?1:-1];
 typedef char layout_CLOCK_dt[((unsigned)&((struct CLOCK*)0)->dt==4)?1:-1];

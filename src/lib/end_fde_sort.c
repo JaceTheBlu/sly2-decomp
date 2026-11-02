@@ -1,4 +1,4 @@
-// libgcc frame.c (gcc 2.95) end_fde_sort with the original inline frame_heapsort (Claude agent)
+// libgcc frame.c (gcc 2.95) end_fde_sort with the original inline frame_heapsort
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db

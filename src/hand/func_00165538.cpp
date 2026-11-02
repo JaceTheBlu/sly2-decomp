@@ -1,3 +1,5 @@
+#define CREF_PLAIN   /* this source uses CRef as plain data: no constructor/destructor calls */
+#include "cref.h"
 struct X;
 class CSave {
 public:
@@ -48,9 +50,8 @@ inline CSave::~CSave()
         m_p4->fF8 = m_nC;
     }
 }
-struct CRef { int m_tagk; int m_tag; };
 struct G { char pad[0x3B0C]; X *f3b0c; char pad2[0x3E38 - 0x3B10]; int f3e38; };
-extern G D_003DD490;
+extern G g_sw;
 extern char D_002A5238[];
 extern "C" void func_00162EA0(X *p);
 extern "C" void func_001628B8(X *p);
@@ -65,10 +66,10 @@ extern "C" void func_00165538(X *p)
 {
     CSave save(p, 2, 0);
     CSave saveOwner(p->f7c, 2, 0, 1);
-    if (p->f7c != D_003DD490.f3b0c) {
-        if (D_003DD490.f3b0c) {
-            CSave saveCur(D_003DD490.f3b0c, 2, 0, 1);
-            func_00162EA0(D_003DD490.f3b0c);
+    if (p->f7c != g_sw.f3b0c) {
+        if (g_sw.f3b0c) {
+            CSave saveCur(g_sw.f3b0c, 2, 0, 1);
+            func_00162EA0(g_sw.f3b0c);
         }
         if (p->f7c)
             func_001628B8(p->f7c);
@@ -86,7 +87,7 @@ extern "C" void func_00165538(X *p)
     }
     int id = p->fB8 == -1 ? 0x189 : p->fB8;
     int k = 4;
-    if (D_003DD490.f3e38 && (p->fBC == -1 || p->fBC == func_00210A88()))
+    if (g_sw.f3e38 && (p->fBC == -1 || p->fBC == func_00210A88()))
         k = 0x24;
-    func_0022B490(&D_003DD490, func_00210990(p->fBC), id, -1, k, 0x30A);
+    func_0022B490(&g_sw, func_00210990(p->fBC), id, -1, k, 0x30A);
 }

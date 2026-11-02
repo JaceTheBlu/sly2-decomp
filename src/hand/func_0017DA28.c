@@ -1,9 +1,10 @@
+#include "vu0.h"
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 struct W { int pad[0x28 / 4]; int n28; };
 struct G { char pad[0x45CC]; struct W *p45CC; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 struct X { qword a; qword v; };
 struct Q { char pad[0x60]; struct X x60; struct X x80; char pad2[0x120 - 0xA0]; int n120; };
 struct B { char pad[0xE8]; int nE8; char pad2[8]; qword *pF4; };
@@ -17,13 +18,12 @@ struct S {
 int func_001EF0A8(struct S *p);
 void func_0017D450(struct S *p, int n);
 void func_0017D8A8(struct S *p);
-void func_002562A8(struct X *x);
+void __1M(struct X *x);
 qword func_001A62E8(void *p);
 qword func_001C1EC0(struct X *s, qword v);
 void func_0011EE08(qword p, qword a, qword b, qword *pc, float *pt, int n);
 void func_001E6180(struct B *b);
 int func_001C02D0(void *q, qword a, qword b, struct B *c);
-static __inline__ float GetZ(qword q) { float z; __asm__("pextuw %0,$0,%1" : "=r"(z) : "r"(q)); return z; }
 void func_0017DA28(struct S *p) {
     struct X x;
     int k;
@@ -32,7 +32,7 @@ void func_0017DA28(struct S *p) {
     if (func_001EF0A8(p)) return;
     func_0017D450(p, 0);
     func_0017D8A8(p);
-    func_002562A8(&x);
+    __1M(&x);
     if (p->nB4 == 0) {
         x = p->x60;
         k = 1;
@@ -83,6 +83,6 @@ void func_0017DA28(struct S *p) {
         }
     }
     func_0017D450(p, k);
-    p->fA0 = D_002DDED0.t;
-    p->nA4 = D_003DD490.p45CC->n28;
+    p->fA0 = g_clock.t;
+    p->nA4 = g_sw.p45CC->n28;
 }

@@ -1,3 +1,4 @@
+#include "vu0.h"
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((t*)0)->m))
 typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];int bits[4];void Clear(){bits[0]=bits[1]=bits[2]=0;}};
@@ -16,15 +17,15 @@ struct CM{char pad[0x90];U position;};
 struct POLY{float a,b,c;};
 struct LIMIT{float lo,hi;};
 extern "C"{
- extern CLOCK D_002DDED0;
- extern CM D_002DDF40;
+ extern CLOCK g_clock;
+ extern CM g_cm;
  extern U D_002BFA00,D_002BFA10,D_002A2DD0;
  extern POLY D_002BFA20;
  extern LIMIT D_002BBB60;
  extern float D_002A6720;
- int func_00132B10(P*,int);
+ int FIsBasicDerivedFrom__FP5BASIC3CID(P*,int);
  float func_002458F0(float,float);
- float func_0011CF60(float);
+ float RadNormalize__Ff(float);
  void func_00204660(P*,float);
  void func_00204CA8(P*);
  void func_002046B0(P*,qword);
@@ -40,12 +41,11 @@ static inline qword Vector(P*p){VE*v=&p->vt[33];return ((qword(*)(P*))v->fn)((P*
 static inline void SetVector(P*p,qword q){VE*v=&p->vt[36];((void(*)(P*,qword))v->fn)((P*)((char*)p+v->delta),q);}
 static inline void Invoke(P*p,int slot){VE*v=&p->vt[slot];((void(*)(P*))v->fn)((P*)((char*)p+v->delta));}
 static inline qword Position(){
- register CM*manager __asm__("$2")=&D_002DDF40;
+ register CM*manager __asm__("$2")=&g_cm;
  register qword value __asm__("$2");
  __asm__("lq %0,%1":"=r"(value):"m"(manager->position.q));
  return value;
 }
-static inline qword From(qword a){qword r;__asm__("qmtc2.ni %1,%0":"=j"(r):"r"(a));return r;}
 static inline float X(qword a){int word;float f;__asm__("qmfc2.ni %0,%1":"=r"(word):"j"(a));__asm__("mtc1 %1,%0":"=f"(f):"r"(word));return f;}
 static inline qword Difference(U*a,qword b,C*c,P*&actor){
  register qword x __asm__("vf1"),y __asm__("vf2");register P*owner __asm__("$4");
@@ -115,7 +115,7 @@ extern "C" void func_001A0B40(C*p,int next){
  if(next==p->mode)return;
  switch(p->mode){
  case -1:
-  if(func_00132B10(p->actor,0x35)){
+  if(FIsBasicDerivedFrom__FP5BASIC3CID(p->actor,0x35)){
    P*actor=p->actor;actor->first->inner->value->value=D_002BFA00;
    actor->second->inner->value->value=D_002BFA00;
   }
@@ -123,29 +123,29 @@ extern "C" void func_001A0B40(C*p,int next){
   p->actor->zero.Clear();p->actor->frozen=0;p->changed=D_002A6720;
   break;
  case 3:case 10:
-  if(func_00132B10(p->actor,0x35))p->actor->first->inner->value->value.Clear();
+  if(FIsBasicDerivedFrom__FP5BASIC3CID(p->actor,0x35))p->actor->first->inner->value->value.Clear();
   break;
  }
  ASEG*clip=0;int flags=1;
  switch(next){
  case -1:
-  if(func_00132B10(p->actor,0x35)){
+  if(FIsBasicDerivedFrom__FP5BASIC3CID(p->actor,0x35)){
    P*actor=p->actor;actor->first->inner->value->value.Clear();actor->second->inner->value->value.Clear();
   }
-  p->actor->frozen=1;p->changed=D_002DDED0.time;break;
+  p->actor->frozen=1;p->changed=g_clock.time;break;
  case 8:
   {qword moving=Vector(p->actor);P*actor=p->actor;
-  register qword mv __asm__("vf4")=From(moving),axis __asm__("vf1"),dot __asm__("vf2"),one __asm__("vf3");float threshold;
+  register qword mv __asm__("vf4")=QwToVf(moving),axis __asm__("vf1"),dot __asm__("vf2"),one __asm__("vf3");float threshold;
   __asm__("li.s %0,%F2\n\tlqc2 %1,%3":"=&f"(threshold),"=j"(axis):"F"(-250.0f),"m"(actor->forward.q));
   __asm__("vmul.xyz %0,%2,%3\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=&j"(dot),"=&j"(one):"j"(mv),"j"(axis));
   if(X(dot)>threshold)next=9;
   else{
-   register qword v __asm__("vf2")=From(Vector(actor));
+   register qword v __asm__("vf2")=QwToVf(Vector(actor));
    float fraction,lower;register LIMIT*range __asm__("$2");
    __asm__("lui $3,%%hi(%5)\n\tvmul.xy $vf1,%4,%4\n\tvaddy.x $vf1,$vf1,$vf1y\n\taddiu %2,$3,%%lo(%5)\n\tvsqrt $Q,$vf1x\n\tvwaitq\n\tvaddq.x $vf1,$vf0,$Q\n\tlwc1 $f1,8(%2)\n\tqmfc2.ni $4,$vf1\n\tlwc1 $f2,4(%2)\n\tmtc1 $4,$f0\n\tlwc1 %0,%%lo(%5)($3)\n\tmul.s $f1,$f0,$f1\n\tlui %2,%%hi(%6)\n\tlwc1 %1,%%lo(%6)(%2)\n\tsqc2 %4,%3\n\taddiu %2,%2,%%lo(%6)\n\tadd.s $f2,$f2,$f1\n\tmul.s $f0,$f0,$f2\n\tadd.s %0,%0,$f0":"=&f"(fraction),"=&f"(lower),"=&r"(range),"=m"(velocity.q):"j"(v),"i"(&D_002BFA20),"i"(&D_002BBB60):"$3","$4","$f0","$f1","$f2","vf1","memory");
    float blend=ClampKnownLower(fraction,lower,range);
    float angle=func_002458F0(velocity.f[1],velocity.f[0])+3.1415927f;
-   angle=func_0011CF60(angle-p->actor->yaw);
+   angle=RadNormalize__Ff(angle-p->actor->yaw);
    func_00204660(p->actor,p->actor->yaw+angle*blend);
    func_00204CA8(p->actor);
   }}
@@ -156,7 +156,7 @@ extern "C" void func_001A0B40(C*p,int next){
   flags=0x21;
  case 3:
   clip=p->clips[next];
-  if(func_00132B10(p->actor,0x35))p->actor->first->inner->value->value=D_002BFA10;
+  if(FIsBasicDerivedFrom__FP5BASIC3CID(p->actor,0x35))p->actor->first->inner->value->value=D_002BFA10;
   break;
  case 5:case 11:
   camera1.q=Position();
@@ -176,7 +176,7 @@ extern "C" void func_001A0B40(C*p,int next){
   p->actor->control->yaw=p->actor->yaw;clip=p->clips[next];break;
  }
  func_001F4BF8(p->actor);
- p->mode=next;p->time=D_002DDED0.time;
+ p->mode=next;p->time=g_clock.time;
  if(next!=-1){
   if(!clip)clip=p->Default(next);
   func_00130658(&p->actor->asega);func_001F15B8(&p->actor->component);

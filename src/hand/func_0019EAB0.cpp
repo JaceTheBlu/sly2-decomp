@@ -1,3 +1,6 @@
+#include "util.h"
+#include "clock.h"
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];int i[4];};
 struct VE{short delta,pad;void*fn;};
@@ -6,11 +9,9 @@ struct ASEGA;struct COMPONENT;struct EFFECT;
 struct P{char pad0[12];VE*vt;char pad10[0x190-0x10];U velocity;char pad1a0[0x1010-0x1A0];U offset;char pad1020[0x10];ASEGA*asega;COMPONENT*component;char pad1038[0x1060-0x1038];U goal,motion;char pad1080[0x14D4-0x1080];int alternate;};
 struct PATH{char pad0[12];VE*vt;char pad10[0x190-0x10];void*focus;char pad194[0x1D0-0x194];int attachEffectId;int releaseEffectId;};
 struct C{P*actor;int state;float time;PATH*path;float distance;int pad14;int descending;float reset;int previous;char pad24[12];U offset;char pad40[0x30];ASEG*clip2;ASEG*clip0;ASEG*clip1;ASEG*fallback;};
-struct LM{float low,high;};
 struct WORK{U ahead,behind;LM limit;U point,world,target;};
-struct CLOCK{float t,dt;};
 extern "C"{
-extern CLOCK D_002DDED0;extern U D_002A2DC0;extern P*D_002E1E40;
+extern CLOCK g_clock;extern U g_normalZ;extern P*D_002E1E40;
 void func_001333C0(PATH*,P*);void func_00133448(PATH*,P*);
 void func_00204F78(P*,PATH*,int);
 float func_001E6728(PATH*,float);void func_001E6F10(PATH*,float,U*,U*);
@@ -22,11 +23,9 @@ void func_0018E540(P*,int);void func_001F15B8(COMPONENT**);
 void func_001305B8(ASEG*,P*,float,float,int,ASEGA**);
 }
 static inline void PathState(PATH*p,int state){VE&v=p->vt[3];((void(*)(void*,int,void*,void*,void*,void*))v.fn)((char*)p+v.delta,state,0,0,0,0);}
-static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
-static inline qword Vector(qword q){qword v;__asm__("qmtc2.ni %1,%0":"=j"(v):"r"(q));return v;}
 static inline qword Direction(U*a,U*b,U*&axis){
  register qword first __asm__("vf2"),second __asm__("vf1"),direction __asm__("vf3");register U*address __asm__("$2");
- __asm__("lqc2 %0,%4\n\tlui %2,%%hi(%6)\n\tlqc2 %1,%5\n\taddiu %2,%2,%%lo(%6)\n\tvsub.xyzw %3,%0,%1":"=j"(first),"=j"(second),"=&r"(address),"=j"(direction):"m"(a->q),"m"(b->q),"i"(&D_002A2DC0));
+ __asm__("lqc2 %0,%4\n\tlui %2,%%hi(%6)\n\tlqc2 %1,%5\n\taddiu %2,%2,%%lo(%6)\n\tvsub.xyzw %3,%0,%1":"=j"(first),"=j"(second),"=&r"(address),"=j"(direction):"m"(a->q),"m"(b->q),"i"(&g_normalZ));
  axis=address;return direction;
 }
 static inline qword Normal(qword v,U*axis){
@@ -50,14 +49,11 @@ static inline qword WorldInputs(C*p,U*point,U*world,qword offset,P*&owner){
  __asm__("lw %0,%3\n\tlqc2 %1,%4\n\tsqc2 %5,%2":"=&r"(actor),"=&j"(value),"=m"(world->q):"m"(p->actor),"m"(point->q),"j"(offset));
  owner=actor;return value;
 }
-static inline float Z(qword q){float f;__asm__("pextuw %0,$zero,%1":"=r"(f):"r"(q));return f;}
 static inline void Clear(U*v){v->i[0]=v->i[1]=v->i[2]=0;}
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((t*)0)->m))
 typedef char U_Size[sizeof(U)==16?1:-1];
 typedef char VE_Size[sizeof(VE)==8?1:-1];
 typedef char WORK_Size[sizeof(WORK)==96?1:-1];
-typedef char LM_Size[sizeof(LM)==8?1:-1];
-typedef char CLOCK_Size[sizeof(CLOCK)==8?1:-1];
 typedef char C_actor_Offset[FIELD_OFFSET(C,actor)==0?1:-1];
 typedef char C_state_Offset[FIELD_OFFSET(C,state)==4?1:-1];
 typedef char C_time_Offset[FIELD_OFFSET(C,time)==8?1:-1];
@@ -92,10 +88,6 @@ typedef char WORK_limit_Offset[FIELD_OFFSET(WORK,limit)==32?1:-1];
 typedef char WORK_point_Offset[FIELD_OFFSET(WORK,point)==48?1:-1];
 typedef char WORK_world_Offset[FIELD_OFFSET(WORK,world)==64?1:-1];
 typedef char WORK_target_Offset[FIELD_OFFSET(WORK,target)==80?1:-1];
-typedef char LM_low_Offset[FIELD_OFFSET(LM,low)==0?1:-1];
-typedef char LM_high_Offset[FIELD_OFFSET(LM,high)==4?1:-1];
-typedef char CLOCK_t_Offset[FIELD_OFFSET(CLOCK,t)==0?1:-1];
-typedef char CLOCK_dt_Offset[FIELD_OFFSET(CLOCK,dt)==4?1:-1];
 extern "C" void func_0019EAB0(C*p,int next){
  int old=p->state;if(next==old)return;
  WORK w;
@@ -106,13 +98,13 @@ extern "C" void func_0019EAB0(C*p,int next){
   func_001E6F10(p->path,func_001E6728(p->path,p->distance+50.0f),&w.ahead,0);
   func_001E6F10(p->path,func_001E6728(p->path,p->distance-50.0f),&w.behind,0);
   U*axis; qword direction=Direction(&w.ahead,&w.behind,axis);
-  p->descending=Z(Normal(direction,axis))<-0.5f;
+  p->descending=GetZ(Normal(direction,axis))<-0.5f;
   func_0019E110(p,&w.limit);p->distance=func_0011D948(&w.limit,p->distance);
   func_001E6F10(p->path,p->distance,&w.point,0);
-  qword offset=Vector(func_001A6F00(p->actor,0,p->offset.q));P*owner;
+  qword offset=QwToVf(func_001A6F00(p->actor,0,p->offset.q));P*owner;
   qword point=WorldInputs(p,&w.point,&w.world,offset,owner);
-  owner->offset.q=Sub(point,offset);
-  p->actor->motion.q=Sub(p->actor->goal.q,w.point.q);
+  owner->offset.q=QwSub(point,offset);
+  p->actor->motion.q=QwSub(p->actor->goal.q,w.point.q);
   p->actor->motion.i[2]=0;
   func_00140C88(p->actor,p->path->focus);
   if(p->path->attachEffectId){EFFECT*e=func_001FBB90(p->path->attachEffectId);func_001FB2F8(e,0);func_001FB3F0(e,w.point.q);}
@@ -120,7 +112,7 @@ extern "C" void func_0019EAB0(C*p,int next){
  }
  case 0:if(p->actor==D_002E1E40)func_0018E540(p->actor,p->actor->alternate?10:2);break;
  }
- p->state=next;p->time=D_002DDED0.t;
+ p->state=next;p->time=g_clock.t;
  ASEG*clip=0;float position=0.0f,speed=1.0f;int flags=1;
  switch(next){
  case -1:{

@@ -1,4 +1,4 @@
-// func_0012D508 (Claude agent, 2026-10-23): MATCH. From hand_wip v5; the virtual at vtable slot 5 takes a float 4th
+// func_0012D508: MATCH. From hand_wip v5; the virtual at vtable slot 5 takes a float 4th
 // argument, and the caller passes p->g20 (that is why the target loads g20 into $f12 for the 0 < g20 test).
 typedef int qword __attribute__((mode(TI)));
 struct M3 { qword r[3]; };
@@ -57,7 +57,7 @@ struct X {
 struct P { int x0; void *x4; X *px8; int xC; int pad10[3]; float g1C; float g20; X *px24; };
 
 extern "C" {
-extern qword D_002A2DD0, D_002A2DC0, D_002BC380;
+extern qword D_002A2DD0, g_normalZ, D_002BC380;
 void func_0022DD00(void *pv, X *px);
 void func_00117120(qword a, qword da, qword b, qword db, float dt, float t, float dtScale, void *pv, void *pdv, int n);
 M3 func_0011B830(qword a, qword b);
@@ -132,7 +132,7 @@ extern "C" void func_0012D508(P *p)
     if (py->pxA0)
         v = MulM3(py->pxA0->m40, v);
     if (GetX(VLen(v)) < 100.0f) {
-        Fin(p, mT, func_0011B830(p->px8->m40.r[0], D_002A2DC0));
+        Fin(p, mT, func_0011B830(p->px8->m40.r[0], g_normalZ));
     } else {
         qword u = D_002BC380;
         if (0.0f < p->g20 && 0.0f < p->g1C && py->po90) {

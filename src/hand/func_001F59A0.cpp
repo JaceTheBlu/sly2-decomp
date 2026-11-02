@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_001F59A0: angular braking and bounded angular-velocity correction.
 // coef a = top angular speed, (a-b)/c = angular acceleration, a*a/(2*acceleration) = stopping angle.
 // Caps an overspeed, turns the owner toward `orientation` (expressed in its parent space) with a desired
@@ -10,12 +11,11 @@ struct SPACE;
 struct OWNER {M3 matrix;char pad30[0x70];SPACE *parent;char padA4[0xC];qword velocity;char padC0[0x30];qword force;};
 struct P {char pad5C[0x5C];OWNER *owner;};
 struct COEF {float a,b,c;};
-struct CLOCK {float time,dt;};
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern "C" M3 *func_0022FD38(M3 *,SPACE *,SPACE *,const M3 *);
 static inline M3 BuildFrame(SPACE*parent,const M3*orientation) return result {func_0022FD38(&result,0,parent,orientation);}
 extern "C" void NormalizeRotateMatrix3__FP7MATRIX3(M3 *);
-extern "C" void func_0011BC00(M3 *,const M3 *,const M3 *);
+extern "C" void CalculateDmat__FP7MATRIX3T0(M3 *,const M3 *,const M3 *);
 extern "C" void func_0011BCF8(const M3 *,float *,qword *);
 extern "C" float func_0011CFE0(float,float);
 static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
@@ -54,11 +54,11 @@ extern "C" void func_001F59A0(P *p,const M3 *orientation,const COEF *c)
     }
     frame=BuildFrame(owner->parent,orientation);
     NormalizeRotateMatrix3__FP7MATRIX3(&frame);
-    {M3 out;func_0011BC00(&out,&owner->matrix,&frame);relative=out;}
+    {M3 out;CalculateDmat__FP7MATRIX3T0(&out,&owner->matrix,&frame);relative=out;}
     func_0011BCF8(&relative,&angle,&axis.q);
     desired=func_0011CFE0((angle/stopAngle)*maximum,maximum);
     speed=GetX(DotQ(owner->velocity,axis.q));
-    clock=&D_002DDED0;
+    clock=&g_clock;
     float half=clock->dt*0.5f;
     remaining=angle-(speed+desired)*half;
     if(remaining<stopAngle)desired=func_0011CFE0((remaining/stopAngle)*maximum,maximum);

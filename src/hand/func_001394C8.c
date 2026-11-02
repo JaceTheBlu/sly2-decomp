@@ -1,8 +1,6 @@
-// MATCH (Claude agent, laneC10 2026-10-23): from v4; p->g120 stored in each branch of the if/else (gcc cross-jumps the two stores into one join block), which lets the g8C load schedule first. One commented register pin (r in InitS).
+#include "vu0.h"
+// MATCH: from v4; p->g120 stored in each branch of the if/else (gcc cross-jumps the two stores into one join block), which lets the g8C load schedule first. One commented register pin (r in InitS).
 typedef int qword __attribute__((mode(TI)));
-static __inline__ float GetX(qword q) { float x; __asm__("mtc1 %1,%0" : "=f"(x) : "r"(q)); return x; }
-static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0,%1" : "=r"(y) : "r"(q)); return y; }
-static __inline__ float GetZ(qword q) { float z; __asm__("pextuw %0,$0,%1" : "=r"(z) : "r"(q)); return z; }
 int func_0011D4D0(float a, float b, float eps);
 static __inline__ int FVecsNear(qword a, qword b)
 {
@@ -33,7 +31,7 @@ struct P3 { char pad[0x434]; int x434; int x438; int x43C; float g440; };
 void func_00139370(void *p, void *pv);
 void *func_002333B4(void *pv, int b, int cb);
 static __inline__ float GEval(struct POLY *pp, float t) { return pp->a + t * (pp->b + t * pp->c); }
-static __inline__ void InitS(float g, struct S150 *ps) { register float r asm("$f1") = 1.0f; /* register pin (Claude agent): f0/f1 tie */ ps->x0 = 0; ps->x8 = 0; ps->g4 = r / g; }
+static __inline__ void InitS(float g, struct S150 *ps) { register float r asm("$f1") = 1.0f; /* register pin: f0/f1 tie */ ps->x0 = 0; ps->x8 = 0; ps->g4 = r / g; }
 static __inline__ float GMax3(float a, float b, float c) { if (b < a && c < a) return a; if (c < b) return b; return c; }
 void func_0011D5B0(float g, float h, void *pa, void *pb);
 void func_0015BF40(void *p, struct Q *q);

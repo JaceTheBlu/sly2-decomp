@@ -1,6 +1,6 @@
 // func_00189C40: ported from Lilly's personal Sly 2 decomp (src/P2/jt.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002BF340 (D_002BF340), D_002BF344 (D_002BF344), D_002A2DC0 (g_normalZ)
+// Globals: D_002BF340 (D_002BF340), D_002BF344 (D_002BF344), g_normalZ (g_normalZ)
 // 0x00189C40 RebuildJtXmg__FP2JTP3ALOfT1P4ACT5P3XMG  (T1460 MATCH; T0983 had it at 77 %)  Sly 1's RebuildJtXmg (JT.c): Sly's foot placement for one foot. When the clip his feet follow
 // changes (pxmg->paseg) the foot's XMG is rebuilt. The clip's label 0x16A (a time) is asked three times where the XFs stand then (PredictAsegEffect 0x1300B8, relative to his root XF):
 // paloExtrem = the foot's ball XF, paloHip = the leg's root XF (its slot +0xA8 holds the leg's IK record, IKREC: the limb's goal XF with the IK handle's point, the two bone lengths) and
@@ -1370,7 +1370,7 @@ static inline qword QwAddScaled(qword qwBase, qword qwVec, VU_FLOAT gScale)
     __asm__("vadda.xyzw $ACC, %1, $vf0\n\tvmaddx.xyzw %0, %2, %3x" : "=j"(qw) : "j"(qwBase), "j"(qwVec), "j"(gScale.qw));
     return qw;
 }
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern int D_002BF340;
 extern int D_002BF344;
 extern "C" void PredictAsegEffect(ASEG *paseg, SO *psoRoot, float tLocal, float svt, XF *pxfEffect, XF *pxfRef, MATRIX4 *pmatOut, int f);
@@ -1408,7 +1408,7 @@ void RebuildJtXmg(JT *pjt, ALO *paloExtrem, float sRadius, ALO *paloHip, ACT5 *p
         }
         MATRIX4 matExtrem;
         PredictAsegEffect(pasega->paseg, pjt, tLocal, 0.0f, (XF *)paloExtrem, pjt->pxfRoot, &matExtrem, 0);
-        qword posExtrem = QwAddScaled(*(qword *)matExtrem.mat[3], D_002A2DC0, VuFloat(-sRadius));
+        qword posExtrem = QwAddScaled(*(qword *)matExtrem.mat[3], g_normalZ, VuFloat(-sRadius));
         MATRIX4 matHip;
         PredictAsegEffect(pasega->paseg, pjt, tLocal, 0.0f, (XF *)paloHip, pjt->pxfRoot, &matHip, 0);
         MATRIX4 matIkh;
@@ -1420,12 +1420,12 @@ void RebuildJtXmg(JT *pjt, ALO *paloExtrem, float sRadius, ALO *paloHip, ACT5 *p
         VU_FLOAT vfUp = VuFloatFromMemWord(D_002BF340);
         VU_FLOAT vfDown = VuFloatFromMemWord(D_002BF344);
         LSG lsgClip;
-        qword posLineUp = QwAddScaled(posExtrem, D_002A2DC0, vfUp);
-        qword posLineDown = QwAddScaled(posExtrem, D_002A2DC0, vfDown);
+        qword posLineUp = QwAddScaled(posExtrem, g_normalZ, vfUp);
+        qword posLineDown = QwAddScaled(posExtrem, g_normalZ, vfDown);
         pxmg->fValid = ClsgClipEdgeToSphere(posSphereCenter, pxmg->sSphere, posLineUp, posLineDown, 1, &lsgClip) > 0;
         pxmg->posExtrem = posExtrem;
         pxmg->posUp = lsgClip.apos[0];
         pxmg->posDown = lsgClip.apos[1];
-        pxmg->posSphereLow = QwAddScaled(pxmg->posSphere, D_002A2DC0, VuFloat(-pxmg->sSphere));
+        pxmg->posSphereLow = QwAddScaled(pxmg->posSphere, g_normalZ, VuFloat(-pxmg->sSphere));
     }
 }

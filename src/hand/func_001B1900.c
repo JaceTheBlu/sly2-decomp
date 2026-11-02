@@ -1,9 +1,9 @@
+#include "vtable.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } U;
-struct VT { short d; short pad; void *pfn; };
-struct LO { char pad[0xC]; struct VT *vt; };
+struct LO { char pad[0xC]; struct VTE *vt; };
 struct P { char pad[0x150]; float g150; float g154; char pad2[0x220 - 0x158]; int n220; };
-extern char D_003DD490[];
+extern char g_sw[];
 qword func_001A62E8(void *p);
 struct LO *func_001C4AF8(void *pg, qword pos);
 float func_002458F0(float y, float x);
@@ -21,7 +21,7 @@ int func_001B1900(struct P *p)
 {
     int r = p->n220;
     qword pos = func_001A62E8(p);
-    struct LO *po = func_001C4AF8(D_003DD490, pos);
+    struct LO *po = func_001C4AF8(g_sw, pos);
     U d;
     float len;
     if (!po)
@@ -31,7 +31,7 @@ int func_001B1900(struct P *p)
     if (p->g154 < len)
         return r;
     if (p->g150 < len) {
-        qword v = ((qword (*)(void *))po->vt[33].pfn)((char *)po + po->vt[33].d);
+        qword v = ((qword (*)(void *))po->vt[33].pfn)((char *)po + po->vt[33].delta);
         if (Length(v) < 150.0f)
             return r;
     }

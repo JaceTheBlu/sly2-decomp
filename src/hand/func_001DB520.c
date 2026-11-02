@@ -23,17 +23,17 @@ typedef struct OBJ {
     int n;
     E *ae;
 } OBJ;
-extern struct CLOCK { float a[16]; } D_002DDED0;
-extern char D_003DD490[];
+extern struct CLOCK { float a[16]; } g_clock;
+extern char g_sw[];
 extern E D_002C2DE8[], D_002C3028[], D_002C3148[];
 extern float D_002A79CC;
-void func_0014D1D0(struct CLOCK *, float, int);
+void SetClockRate__FP5CLOCK3CRKf(struct CLOCK *, float, int);
 void func_0020EFC0(void *, int);
 void func_0020F030(void *, int);
 void func_001DB390(OBJ *, int);
 void func_001DA950(OBJ *, int, int);
 void func_001DB010(OBJ *);
-SUB *func_0015E938(void *, int, int, int);
+SUB *PloFindSwObject__FP2SWi3OIDP2LO(void *, int, int, int);
 void func_001DB520(OBJ *p, int s);
 #define VCALL(o, n) ((void (*)(void *))(o)->vt[n].pfn)((char *)(o) + (o)->vt[n].d)
 void func_001DB520(OBJ *p, int s)
@@ -41,13 +41,13 @@ void func_001DB520(OBJ *p, int s)
     if (s == p->x40)
         return;
     if (p->x40 == -1) {
-        func_0014D1D0(&D_002DDED0, 0.0f, 0);
-        func_0020EFC0(D_003DD490, 0);
+        SetClockRate__FP5CLOCK3CRKf(&g_clock, 0.0f, 0);
+        func_0020EFC0(g_sw, 0);
         VCALL(p, 10);
     }
     func_001DB390(p, -1);
     p->x40 = s;
-    p->x44 = D_002DDED0.a[15];
+    p->x44 = g_clock.a[15];
     switch (s) {
     case -1: {
         int i;
@@ -57,8 +57,8 @@ void func_001DB520(OBJ *p, int s)
             p->ae[i].cur = -1;
         p->n = 0;
         p->ae = 0;
-        func_0014D1D0(&D_002DDED0, 1.0f, 0);
-        func_0020F030(D_003DD490, 0);
+        SetClockRate__FP5CLOCK3CRKf(&g_clock, 1.0f, 0);
+        func_0020F030(g_sw, 0);
         VCALL(p, 11);
         func_001DA950(p, -1, -1);
         p->x24 = 0;
@@ -84,7 +84,7 @@ void func_001DB520(OBJ *p, int s)
     if (p->x40 != -1) {
         SUB *e;
         func_001DB010(p);
-        e = func_0015E938(D_003DD490, 5, p->x20, 0);
+        e = PloFindSwObject__FP2SWi3OIDP2LO(g_sw, 5, p->x20, 0);
         p->x24 = e;
         if (!e) {
             func_001DB520(p, -1);

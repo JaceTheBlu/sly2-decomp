@@ -1,5 +1,5 @@
-struct CLOCK { float t; };
-extern CLOCK g_clock __asm__("D_002DDED0");
+#include "clock.h"
+extern CLOCK g_clock __asm__("g_clock");
 struct CIRCLER { char pad[0x50]; float radsSpeed; };
 float GModPositive(float, float);
 float UCompleteCircler(CIRCLER *pcircler)

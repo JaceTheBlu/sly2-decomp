@@ -3,7 +3,7 @@ struct S { char pad[0xFC]; int xFC; int x100; struct E *x104; struct E *x108; vo
 struct A { int cb; int align; };
 extern const float D_002A76E0;
 extern const float D_002A76E4;
-void *func_001AE1D0(struct A *pa);
+void *PvAllocSwImpl__Fi(struct A *pa);
 void func_001AE5A0(void *dst, void *src, int cb);
 void *func_002333B4(void *p, int c, int cb);
 void func_001C1D20(struct S *p)
@@ -21,13 +21,13 @@ void func_001C1D20(struct S *p)
     cb = n * 16 + 16;
     a.cb = cb;
     a.align = 0x10;
-    ae1 = func_001AE1D0(&a);
+    ae1 = PvAllocSwImpl__Fi(&a);
     a.cb = cb;
     a.align = 0x10;
-    ae2 = func_001AE1D0(&a);
+    ae2 = PvAllocSwImpl__Fi(&a);
     a.cb = n * 4;
     a.align = 0x10;
-    apv = func_001AE1D0(&a);
+    apv = PvAllocSwImpl__Fi(&a);
     func_001AE5A0(ae1, p->x104, p->x100 * 8);
     func_001AE5A0(ae2, p->x108, p->x100 * 8);
     func_001AE5A0(apv, p->x10C, p->xFC * 4);

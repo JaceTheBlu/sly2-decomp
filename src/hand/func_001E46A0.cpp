@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned int uint;
 union U {qword q;float f[4];};
@@ -16,9 +17,9 @@ void func_001E6F10(PATH*,qword*,qword*,float);
 qword func_001C4768(OUTPUT*,qword);
 float func_002458F0(float,float);
 float func_001E6648(PATH*),func_001E6630(PATH*);
-float func_0011CF60(float);
+float RadNormalize__Ff(float);
 ACTOR *func_001E1DB8(P*,int);
-void func_001E4D40(P*,ACTOR*,qword*,float*);
+void GetJsgLocation__FP3JSGP2LOPUxPf(P*,ACTOR*,qword*,float*);
 void func_00204660(ACTOR*,float);
 void func_001E67B8(PATH*,float,qword*,qword*);
 qword func_001A62E8(ACTOR*);
@@ -26,13 +27,8 @@ qword func_001A6FC0(void*,ACTOR*,qword);
 void func_001C45A8(OUTPUT*);
 int func_0011D4D0(float,float,float);
 }
-static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
-static inline qword ToVU(qword a){qword r;__asm__("qmtc2.ni %1,%0":"=j"(r):"r"(a));return r;}
-static inline float X(qword a){float r;__asm__("mtc1 %1,%0":"=f"(r):"r"(a));return r;}
-static inline float Y(qword a){float r;__asm__("prot3w %0,%1":"=r"(r):"r"(a));return r;}
-static inline float Z(qword a){float r;__asm__("pextuw %0,$zero,%1":"=r"(r):"r"(a));return r;}
 static inline qword Root(qword a){__asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q":"+j"(a));return a;}
-static inline float LengthXY(qword a){qword r;__asm__("vmul.xy %0,%1,%1\n\tvaddy.x %0,%0,%0y":"=j"(r):"j"(a));return X(Root(r));}
+static inline float LengthXY(qword a){qword r;__asm__("vmul.xy %0,%1,%1\n\tvaddy.x %0,%0,%0y":"=j"(r):"j"(a));return GetX(Root(r));}
 static inline void NormalizeTangent(U &output){
  register qword vector __asm__("vf3");
  register qword length __asm__("vf1");
@@ -103,8 +99,8 @@ extern "C" void func_001E46A0(P *p,OUTPUT *out){
   func_001E6F10(actor->curve,&work.from.q,0,t);
   t=func_001E6728(actor->curve,actor->curveTime-50.0f);
   func_001E6F10(actor->curve,&work.to.q,0,t);
-  qword direction=func_001C4768(out,Sub(work.from.q,work.to.q));
-  float x=X(direction),y=Y(direction);
+  qword direction=func_001C4768(out,QwSub(work.from.q,work.to.q));
+  float x=GetX(direction),y=GetY(direction);
   out->heading=func_002458F0(y,x);out->x=x;out->y=y;
   if(actor->curve->cyclic){
    float forward,backward;
@@ -112,7 +108,7 @@ extern "C" void func_001E46A0(P *p,OUTPUT *out){
    else {backward=p->previousCurve-actor->curveTime;forward=func_001E6648(actor->curve)+actor->curveTime-p->previousCurve;}
    if(forward<backward)reverse=1;
   }else if(p->previousCurve<actor->curveTime)reverse=1;
-  if(reverse){out->heading=func_0011CF60(out->heading+3.1415927f);out->x=-out->x;out->y=-out->y;}
+  if(reverse){out->heading=RadNormalize__Ff(out->heading+3.1415927f);out->x=-out->x;out->y=-out->y;}
   out->speed=1.0f;break;
  }
  case 0x1D:case 0x1E:case 0x1F:case 0x20:case 0x21:case 0x22:
@@ -121,7 +117,7 @@ extern "C" void func_001E46A0(P *p,OUTPUT *out){
  case 0x23:{
   ACTOR *target=func_001E1DB8(p,param->value.id);
   if(!target)goto stopped;
-  func_001E4D40(p,target,0,&work.heading);
+  GetJsgLocation__FP3JSGP2LOPUxPf(p,target,0,&work.heading);
   func_00204660(actor,work.heading);out->heading=work.heading;
   goto stopped;
  }
@@ -142,9 +138,9 @@ extern "C" void func_001E46A0(P *p,OUTPUT *out){
     else {backward=p->previousMotion-actor->motionTime;forward=func_001E6630(motion)+actor->motionTime-p->previousMotion;}
     if(forward<backward)reverse=1;
    }else if(p->previousMotion<actor->motionTime)reverse=1;
-   if(reverse)out->heading=func_0011CF60(out->heading+3.1415927f);
+   if(reverse)out->heading=RadNormalize__Ff(out->heading+3.1415927f);
   }else{
-   func_001E4D40(p,target,&work.from.q,0);
+   GetJsgLocation__FP3JSGP2LOPUxPf(p,target,&work.from.q,0);
    work.first=work.from.q;
    TargetDisplacement(work.to,work.first,func_001A62E8(actor));
    out->heading=func_002458F0(work.to.f[1],work.to.f[0]);
@@ -162,7 +158,7 @@ extern "C" void func_001E46A0(P *p,OUTPUT *out){
   out->speed=__builtin_fabsf(param->value.gain);
   ACTOR *target=func_001E1DB8(p,param->target);
   if(!target||actor->active==-1||actor->mode!=8)break;
-  func_001E4D40(p,target,&work.from.q,0);
+  GetJsgLocation__FP3JSGP2LOPUxPf(p,target,&work.from.q,0);
   {register qword captured __asm__("$3")=work.from.q;work.second=captured;}
   {
    qword actorPosition=func_001A62E8(actor);

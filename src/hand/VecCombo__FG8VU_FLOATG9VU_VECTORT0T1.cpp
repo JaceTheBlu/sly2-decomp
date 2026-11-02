@@ -1,6 +1,5 @@
+#include "vecmat.h"
 typedef int qword __attribute__((mode(TI)));
-struct VU_FLOAT { qword q; };
-struct VU_VECTOR { qword q; };
 qword VecCombo(VU_FLOAT f1, VU_VECTOR v1, VU_FLOAT f2, VU_VECTOR v2)
 {
     qword r;

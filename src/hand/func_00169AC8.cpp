@@ -1,11 +1,11 @@
+#include "mat.h"
 #define FIELD_OFFSET(t,m) ((uint)&(((t*)0)->m))
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned int uint;
-struct M4{qword rows[4];};
 struct D{char channel,segments;unsigned char flags;char kind;char pad4[4];void*chain;char padC[4];int words;};
-struct TRANSFORM{char pad[0x40];M4 matrix;};
+struct TRANSFORM{char pad[0x40];MATRIX4 matrix;};
 union FLAGS{uint word;struct{uint pad:11,feature:1,other:20;} bits;};
-struct E{int value;TRANSFORM*transform;M4*parent;FLAGS flags;char*data;uint base;char pad18[12];void*sphere;};
+struct E{int value;TRANSFORM*transform;MATRIX4*parent;FLAGS flags;char*data;uint base;char pad18[12];void*sphere;};
 struct SPHERE{float center[3],radius,limit;uint metadata;};
 struct SO;
 struct VE{short delta,pad;TRANSFORM*(*fn)(SO*,int);};
@@ -18,7 +18,7 @@ struct LINK{short first,second;unsigned char kind,pad;};
 struct LINKS{int count;LINK*links;};
 struct BINDING{int count;LINKS*sets;int*indices;};
 struct FACE{int count,pad4;uint flags;char padC[8];int*indices;char pad18[12];int first,second,pad2C,kind;char pad34[12];};
-typedef char MatrixSize[sizeof(M4)==64?1:-1];
+typedef char MatrixSize[sizeof(MATRIX4)==64?1:-1];
 typedef char DescriptorSize[sizeof(D)==20?1:-1];
 typedef char EntrySize[sizeof(E)==40?1:-1];
 typedef char SphereSize[sizeof(SPHERE)==24?1:-1];
@@ -59,20 +59,20 @@ char func_00117D00(STREAM*) __asm__("S8Read__18CBinaryInputStream");
 uint func_00117C80(STREAM*) __asm__("U32Read__18CBinaryInputStream");
 short func_00117D50(STREAM*) __asm__("S16Read__18CBinaryInputStream");
 int func_00117DB8(STREAM*) __asm__("S32Read__18CBinaryInputStream");
-void func_00117F18(STREAM*,M4*);
-void*func_001AE1D0(const REQUEST&);
-void*func_001AE238(const REQUEST&,void*);
+void func_00117F18(STREAM*,MATRIX4*);
+void*PvAllocSwImpl__Fi(const REQUEST&);
+void*PvAllocSwCopyImpl__FP7SWALLOCPv(const REQUEST&,void*);
 MARK*func_001AE478(MARK*);
-void func_001AE4A0(MARK*,int);
+void _$_18CBinaryInputStream(MARK*,int);
 BINDING*func_0016C8E0(P*,STREAM*);
-M4*func_0011C168(M4*,const M4*,const M4*);
+MATRIX4*__ml__FRC7MATRIX4T0(MATRIX4*,const MATRIX4*,const MATRIX4*);
 void func_001AE5A0(void*,const void*,uint) __asm__("CopyAb__FPvT0Ui");
 }
-struct MARK{MARK(){func_001AE478(this);}~MARK(){func_001AE4A0(this,2);}};
-static inline void*Allocate(int bytes){return func_001AE1D0(REQUEST(bytes,16));}
-static inline void*Reallocate(int bytes,void*old){return func_001AE238(REQUEST(bytes,16),old);}
+struct MARK{MARK(){func_001AE478(this);}~MARK(){_$_18CBinaryInputStream(this,2);}};
+static inline void*Allocate(int bytes){return PvAllocSwImpl__Fi(REQUEST(bytes,16));}
+static inline void*Reallocate(int bytes,void*old){return PvAllocSwCopyImpl__FP7SWALLOCPv(REQUEST(bytes,16),old);}
 extern "C" void func_00169AC8(P*p,const D*sourceD,const E*sourceE,const SPHERE*sourceSphere,D*desc,E*entry,SPHERE*sphere,int groups,const int*counts,FACE**faces,STREAM*stream){
-    M4 matrix;
+    MATRIX4 matrix;
     (void)func_00117D00(stream);
     *desc=*sourceD;*entry=*sourceE;
     if(sphere){*sphere=*sourceSphere;sphere->metadata=func_00117C80(stream);}
@@ -84,7 +84,7 @@ extern "C" void func_00169AC8(P*p,const D*sourceD,const E*sourceE,const SPHERE*s
         entry->transform=method->fn(receiver,index);
     }
     if(entry->flags.word&0x1000)func_00117F18(stream,&matrix);
-    else{entry->parent=(M4*)Allocate(sizeof(M4));func_00117F18(stream,entry->parent);}
+    else{entry->parent=(MATRIX4*)Allocate(sizeof(MATRIX4));func_00117F18(stream,entry->parent);}
     entry->value=func_00117DB8(stream);
     entry->flags.bits.feature=func_00117D00(stream);
     MARK scope;
@@ -95,8 +95,8 @@ extern "C" void func_00169AC8(P*p,const D*sourceD,const E*sourceE,const SPHERE*s
         uint delta=(uint)data-(uint)old;
         entry->data=data;entry->base+=delta;
         if(entry->flags.word&0x1000){
-            M4 product,temp;
-            func_0011C168(&temp,&entry->transform->matrix,&matrix);
+            MATRIX4 product,temp;
+            __ml__FRC7MATRIX4T0(&temp,&entry->transform->matrix,&matrix);
             product=temp;
             func_001AE5A0(entry->data+0x14,&product,0x40);
         }

@@ -9,8 +9,8 @@ struct S {
 };
 struct ZPR { char ab[0x630]; };
 extern char D_002DEB30[];
-void *func_001AE1D0(struct MSG *pmsg);
-void *func_001AE2A0(struct MSG *pmsg);
+void *PvAllocSwImpl__Fi(struct MSG *pmsg);
+void *PvAllocSwClearImpl__FP7SWALLOC(struct MSG *pmsg);
 void func_0011A050(void *p, int n);
 void func_001703F8(struct ZPR *pz, int a, int b);
 void func_001BE398(void *p, struct ZPR *pz);
@@ -25,14 +25,14 @@ void func_0020E180(struct S *p)
     for (i = 0; i < 3; i++) {
         msg.cb = 0x4800;
         msg.nKind = 0x10;
-        p->a3CD4[i] = func_001AE1D0(&msg);
+        p->a3CD4[i] = PvAllocSwImpl__Fi(&msg);
     }
     msg.cb = 0x8000;
     msg.nKind = 0x10;
-    p->p3F20 = func_001AE2A0(&msg);
+    p->p3F20 = PvAllocSwClearImpl__FP7SWALLOC(&msg);
     msg.cb = 0x28;
     msg.nKind = 0x10;
-    p->ph = func_001AE2A0(&msg);
+    p->ph = PvAllocSwClearImpl__FP7SWALLOC(&msg);
     p->ph->a = -1;
     p->ph->c = -1;
     func_0011A050(p->ph->dl, 0x14);

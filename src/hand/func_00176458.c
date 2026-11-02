@@ -1,6 +1,6 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002A5408;
 struct VTE { short d; short pad; void (*pfn)(void *); };
 struct X { qword a; qword v; };
@@ -9,11 +9,11 @@ struct A { char pad[0x3CC]; void *p3CC; char pad2[0xF04 - 0x3D0]; float fF04; ch
 struct P { char pad[0x60]; float f60; float f64; };
 struct S { char pad[0x10]; struct A *p10; int pad2; char a18[0x18]; int n30; int n34; float f38; struct P *p3C; int pad4; int n44; char pad5[8]; qword v50; };
 void func_001EF0D8(void *p);
-float func_0011D448(float a, float b);
+float GRandInRange__Fff(float a, float b);
 struct O *func_00205438(void *p, int n);
 void func_0020A9A8(void *p, int n);
 qword func_001A62E8(int p);
-void func_002562A8(struct X *x);
+void __1M(struct X *x);
 void func_0017DD38(void *p, struct X *x);
 int func_001C0D70(qword v, int n);
 void func_00154038(void *p, int a, int b);
@@ -22,13 +22,13 @@ void func_00176458(struct S *p, int n) {
     if (n == p->n34) return;
     func_001EF0D8(p->a18);
     if (p->n34 == 1) {
-        float t = D_002DDED0.t;
-        t += func_0011D448(p->p3C->f60, p->p3C->f64);
+        float t = g_clock.t;
+        t += GRandInRange__Fff(p->p3C->f60, p->p3C->f64);
         p->p10->fF04 = t;
         p->p3C = 0;
     }
     p->n34 = n;
-    p->f38 = D_002DDED0.t;
+    p->f38 = g_clock.t;
     switch (n) {
     case 0:
         { struct O *o = func_00205438(p->p10, 0xB3); struct VTE *e = &o->vt[8]; e->pfn((char *)o + e->d); }
@@ -58,7 +58,7 @@ void func_00176458(struct S *p, int n) {
             o->n38 = 0x1C;
             v1 = func_001A62E8(p->n30);
             v2 = func_001A62E8(p->n30);
-            func_002562A8(&x);
+            __1M(&x);
             x.v = v2;
             func_0017DD38(o, &x);
             o->nA8 = p->n30;

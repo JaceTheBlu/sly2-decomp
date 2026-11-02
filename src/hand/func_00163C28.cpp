@@ -27,16 +27,16 @@ public:
     }
 };
 struct G { char pad[0x3B10]; X *f3b10; };
-extern G D_003DD490;
+extern G g_sw;
 extern "C" int func_00164018(X *px);
 extern "C" void func_00163CE0(X *px);
 extern "C" void func_00163D18(X *px);
 extern "C" void func_00163C28(X *px)
 {
     if (func_00164018(px)) return;
-    if (D_003DD490.f3b10) {
-        CSave save(D_003DD490.f3b10, px->fF4, px->fF8);
-        func_00163CE0(D_003DD490.f3b10);
+    if (g_sw.f3b10) {
+        CSave save(g_sw.f3b10, px->fF4, px->fF8);
+        func_00163CE0(g_sw.f3b10);
     }
     func_00163D18(px);
 }

@@ -1,9 +1,9 @@
-struct VTE { short d; short pad; void *pfn; };
+#include "vtable.h"
 struct S {
     int x0, x4, x8; struct VTE *vt; struct S *x10; int x14; char pad[0xC]; struct S *x24;
     union { unsigned long u; struct { unsigned long f0 : 52; long st : 4; unsigned long f56 : 4; unsigned long f60 : 1; unsigned long f61 : 3; } b; } x28;
 };
-extern char D_003DD490[];
+extern char g_sw[];
 void func_001A5448(struct S *p, void **a, struct S ***b);
 void func_0011A2E8(void *a, struct S *s);
 void func_0011A280(void *a, struct S *b, struct S *s);
@@ -33,21 +33,21 @@ void func_001A5478(struct S *s)
             goto skip;
     }
     e = &s->vt[0x58 / 8];
-    ((void (*)(void *))e->pfn)((char *)s + e->d);
+    ((void (*)(void *))e->pfn)((char *)s + e->delta);
 skip:
     if (!s->x10 && s->x28.b.st != 2)
-        func_00147E88(D_003DD490, s->x14);
+        func_00147E88(g_sw, s->x14);
     e = &s->vt[0xE0 / 8];
-    n = ((int (*)(void *, struct S ***))e->pfn)((char *)s + e->d, &list);
+    n = ((int (*)(void *, struct S ***))e->pfn)((char *)s + e->delta, &list);
     for (i = 0; i < n; i++) {
         struct S *p = list[i];
         struct VTE *g = &p->vt[0x40 / 8];
-        ((void (*)(void *))g->pfn)((char *)p + g->d);
+        ((void (*)(void *))g->pfn)((char *)p + g->delta);
     }
     if (func_001A61A0(s)) {
         e = &s->vt[0xB8 / 8];
-        ((void (*)(void *))e->pfn)((char *)s + e->d);
+        ((void (*)(void *))e->pfn)((char *)s + e->delta);
     } else if (!s->x10) {
-        func_00148300(D_003DD490, s);
+        func_00148300(g_sw, s);
     }
 }

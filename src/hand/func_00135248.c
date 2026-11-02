@@ -1,5 +1,6 @@
+#include "vtable.h"
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct VTE { short d; short pad; void *pfn; };
 struct VO { char pad[0xC]; struct VTE *vt; };
 struct ASEG { char pad[0x74]; float g74; };
 struct ASEGP { int x0; struct ASEG *pasega; };
@@ -16,12 +17,11 @@ struct P {
     char pad11[0x181C - 0x16D8]; int x181C; struct ASEG *p1820; char pad12[0x186C - 0x1824]; struct VO *p186C;
     char pad13[0x1878 - 0x1870]; struct ASEG *p1878;
 };
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern qword D_002A2DD0;
 void func_002303A0(struct P *, void *, int);
 void func_00142880(struct P *);
-void func_0015C150(struct VO *);
+void ExplodeExpl__FP4EXPL(struct VO *);
 void func_00195FB8(void *, int, int);
 void func_00192BD8(void *, int);
 void func_001A0B40(void *, int);
@@ -40,8 +40,8 @@ void func_001F15B8(void *);
 void func_001305B8(struct ASEG *, struct P *, int, void *, float, float);
 void func_001F14F8(void *, struct P *, int, int, int, void *);
 
-#define VCALL0(p, n) ((void (*)(void *))(p)->vt[n].pfn)((char *)(p) + (p)->vt[n].d)
-#define VCALL1(p, n, a) ((void (*)(void *, int))(p)->vt[n].pfn)((char *)(p) + (p)->vt[n].d, a)
+#define VCALL0(p, n) ((void (*)(void *))(p)->vt[n].pfn)((char *)(p) + (p)->vt[n].delta)
+#define VCALL1(p, n, a) ((void (*)(void *, int))(p)->vt[n].pfn)((char *)(p) + (p)->vt[n].delta, a)
 
 void func_00135248(struct P *p, int k)
 {
@@ -91,7 +91,7 @@ void func_00135248(struct P *p, int k)
             }
             if (po) {
                 VCALL0(po, 8);
-                func_0015C150(po);
+                ExplodeExpl__FP4EXPL(po);
                 VCALL0(po, 9);
             }
         }
@@ -134,7 +134,7 @@ void func_00135248(struct P *p, int k)
     c = 4;
     g = 0.0f;
     rate = 1.0f;
-    p->t13D4 = D_002DDED0.t;
+    p->t13D4 = g_clock.t;
     switch (k) {
     case 0:
         func_002303A0(p, p->p58, 1);

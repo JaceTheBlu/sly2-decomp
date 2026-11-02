@@ -1,15 +1,14 @@
+#include "vu0.h"
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } U;
 struct Q { char pad[0x18]; float x18; float x1C; char pad2[0x30 - 0x20]; int x30; };
 struct P { char pad[0x10]; void *p10; char pad2[0x30 - 0x14]; int x30; float x34; void *p38; };
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 void func_001EF0C0(struct P *p, struct Q *q);
 qword func_001A62E8(void *p);
 float func_002458F0(float y, float x);
 void func_001C45A8(struct Q *q);
-static __inline__ float GetX(qword q) { float x; __asm__("mtc1 %1,%0" : "=f"(x) : "r"(q)); return x; }
-static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0,%1" : "=r"(y) : "r"(q)); return y; }
 void func_00146068(struct P *p, struct Q *q)
 {
     func_001EF0C0(p, q);
@@ -23,7 +22,7 @@ void func_00146068(struct P *p, struct Q *q)
         if (p->x30 == 0) g = 0.1f;
         q->x1C = g;
         q->x18 = func_002458F0(GetY(d), GetX(d));
-        if (p->x30 == 2 && D_002DDED0.t - p->x34 < 0.1f) {
+        if (p->x30 == 2 && g_clock.t - p->x34 < 0.1f) {
             q->x30 |= 0x80;
             func_001C45A8(q);
         }

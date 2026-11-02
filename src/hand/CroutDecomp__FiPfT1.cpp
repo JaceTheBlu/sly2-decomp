@@ -1,4 +1,4 @@
-static inline float GAbs(float g) { return __builtin_fabsf(g); }
+#include "vu0.h"
 void CroutDecomp(int n, float *a, float *lu)
 {
     int i, j, k;

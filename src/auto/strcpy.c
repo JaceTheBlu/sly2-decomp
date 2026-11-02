@@ -1,9 +1,9 @@
 #include "m2c_prelude.h"
 void CopyAb__FPvT0Ui(s32, s32, s32);             /* extern */
 M2C_UNK _$_5OSTRM(void *, M2C_UNK);                 /* extern */
-s32 func_001AE318(s32 *);                           /* extern */
+s32 PvAllocStackImpl__FP7SWALLOC(s32 *);                           /* extern */
 extern s128 D_002A2DA0;
-extern s128 D_002A2DC0;
+extern s128 g_normalZ;
 extern s128 D_002A2DD0;
 extern f32 D_002A96A0;
 extern f32 D_002A96E0;
@@ -45,14 +45,14 @@ extern f32 D_002C4278;
 extern f32 D_002C427C;
 extern f32 D_002C4280;
 extern s32 D_002DD5BC;
-extern f32 D_002DDED0;
-extern M2C_UNK D_002DDF40;
+extern f32 g_clock;
+extern M2C_UNK g_cm;
 extern M2C_UNK D_002DE220;
 extern s32 D_002DE240;
 extern M2C_UNK D_002DEB30;
 extern s32 D_002DFBC4;
 extern M2C_UNK D_002E5270;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 extern M2C_UNK D_004425D0;
 extern M2C_UNK D_004425F0;
 

@@ -1,3 +1,4 @@
+#include "vu0.h"
 extern "C" {
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned long ulong;
@@ -8,7 +9,7 @@ struct ANCHOR {int unused0;float stamp;int mode;struct P *object;};
 struct P {char pad0[0x2C0];ulong flags;char pad2C8[0xCC];int kindCount;int kinds[3];int generated;char pad3A8[0x24];struct ANCHOR *anchor;char pad3D0[0xB94];struct MANAGER *manager;};
 struct CANDIDATE {float distance;int *source;struct P *object;int mode;float stamp;int unused14;};
 struct GAME;
-extern struct GAME D_003DD490;
+extern struct GAME g_sw;
 extern int D_003DD488;
 extern ulong D_003DD480;
 extern float D_002A8614;
@@ -22,11 +23,8 @@ int func_002085D0(struct P *,struct P *,int);
 void func_00153DE0(struct MANAGER *);
 struct ENTRY *func_00154180(struct MANAGER *,struct P *);
 void func_0020A9A8(struct ANCHOR *,int);
-static __inline__ qword Subtract(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static __inline__ float LengthXY(qword a){qword r;float f;__asm__("vmul.xy %0,%1,%1\n\tvaddy.x %0,%0,%0y":"=j"(r):"j"(a));__asm__("vsqrt Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,Q":"+j"(r));__asm__("mtc1 %1,%0":"=f"(f):"r"(r));return f;}
-static __inline__ float Z(qword q){float f;__asm__("pextuw %0,$zero,%1":"=r"(f):"r"(q));return f;}
-static __inline__ float Abs(float f){return __builtin_fabsf(f);}
-static __inline__ int Near(qword difference){return LengthXY(difference)<D_002C3D08 && Abs(Z(difference))<D_002C3D0C;}
+static __inline__ int Near(qword difference){return LengthXY(difference)<D_002C3D08 && GAbs(GetZ(difference))<D_002C3D0C;}
 /* Two empty-asm tricks for the nearby-object collection loop (T1592); neither emits an instruction:
    OPAQUE_COUNT: an empty asm that "sets" the candidate count. loop.c then sees no basic induction variable, so
      &candidates[n] stays a real `mult` by 24 instead of a strength-reduced pointer, and the increment is not PRE-copied.
@@ -60,7 +58,7 @@ void func_00206900(struct P *p)
         int kind;
         for(kind=0;kind<p->kindCount;kind++){
             int *source=&p->kinds[kind];
-            int objectCount=func_0015E9C8(&D_003DD490,0x505,*source,0,256,objects);
+            int objectCount=func_0015E9C8(&g_sw,0x505,*source,0,256,objects);
             int i=0;
             if(objectCount>0){
                 float initialStamp=D_002A8614;
@@ -71,7 +69,7 @@ void func_00206900(struct P *p)
                         float distance;
                         ownerPosition=func_001A62E8(p);
                         otherPosition=func_001A62E8(object);
-                        distance=LengthXY(Subtract(ownerPosition,otherPosition));
+                        distance=LengthXY(QwSub(ownerPosition,otherPosition));
                         if(distance<D_002C3D04 && (unsigned int)candidateCount<64){
                             struct CANDIDATE *record;
                             int old;
@@ -125,7 +123,7 @@ void func_00206900(struct P *p)
                 qword ownPosition,difference;
                 anchorPosition=func_001A62E8(p->anchor->object);
                 ownPosition=func_001A62E8(p);
-                difference=Subtract(anchorPosition,ownPosition);
+                difference=QwSub(anchorPosition,ownPosition);
                 if(Near(difference))func_0020A9A8(p->anchor,2);
             }break;
             }

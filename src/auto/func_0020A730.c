@@ -11,9 +11,9 @@ extern f32 D_002C3DE0;
 extern f32 D_002C3DE4;
 extern M2C_UNK D_002DA9D0;
 extern M2C_UNK D_002DAA10;
-extern f32 D_002DDED0;
-extern M2C_UNK D_002DDF40;
-extern M2C_UNK D_003DD490;
+extern f32 g_clock;
+extern M2C_UNK g_cm;
+extern M2C_UNK g_sw;
 extern s32 D_003E148C;
 
 s32 func_0020A730(s32 arg0, s32 arg1) {
@@ -21,7 +21,7 @@ s32 func_0020A730(s32 arg0, s32 arg1) {
     void *temp_v0;
 
     if (M2C_FIELD(arg0, s32 *, 0x28) == 0) {
-        M2C_FIELD(arg0, f32 *, 0) = (f32) D_002DDED0;
+        M2C_FIELD(arg0, f32 *, 0) = (f32) g_clock;
         func_0020A9A8(arg0, 0);
     }
     temp_v1 = M2C_FIELD(arg0, s32 *, 0x28);

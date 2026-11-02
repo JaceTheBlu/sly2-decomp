@@ -1,4 +1,6 @@
-// NEAR MISS (Claude agent): 4/150. Hard-reg VF vars in Dot fixed the first block; remaining: 2nd block vsub scheduled before the lui of D_002BD2F0 (target lui first).
+#include "vu0.h"
+#include "clock.h"
+// NEAR MISS: 4/150. Hard-reg VF vars in Dot fixed the first block; remaining: 2nd block vsub scheduled before the lui of D_002BD2F0 (target lui first).
 typedef int qword __attribute__((mode(TI)));
 struct Q { char pad[0x18]; float x18; float x1C; char pad2[0x30 - 0x20]; int x30; };
 struct O;
@@ -8,19 +10,16 @@ struct P {
     char pad[0x10]; void *p10; char pad1[0x4C - 0x14]; int x4C; float x50; char pad2[0x80 - 0x54];
     qword q80; char pad3[0xC0 - 0x90]; struct O *xC0; int xC4; float xC8; int xCC; float xD0;
 };
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
-extern qword D_002A2DC0;
+extern struct CLOCK g_clock;
+extern qword g_normalZ;
 extern float D_002BD2E0[3];
 extern float D_002BBB60[2];
 extern float D_002BD2F0;
 void func_001EF0C0(struct P *p, struct Q *q);
 qword func_001A62E8(void *p);
 float func_002458F0(float y, float x);
-int func_00132B10(struct O *p, int k);
+int FIsBasicDerivedFrom__FP5BASIC3CID(struct O *p, int k);
 void func_001C45A8(struct Q *q);
-static __inline__ float GetX(qword q) { float x; __asm__("mtc1 %1,%0" : "=f"(x) : "r"(q)); return x; }
-static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0,%1" : "=r"(y) : "r"(q)); return y; }
 
 static __inline__ float LenXY(qword d)
 {
@@ -36,7 +35,7 @@ static __inline__ float LenXY2(qword d)
 {
     float g;
     qword t;
-    /* volatile: raises the priority of the preceding limit load so lui/lwc1 interleave with vsub (Claude agent) */
+    /* volatile: raises the priority of the preceding limit load so lui/lwc1 interleave with vsub */
     __asm__ __volatile__("vmul.xy %0, %1, %1" : "=j"(t) : "j"(d));
     __asm__("vaddy.x %0, %0, %0y" : "+j"(t));
     d = t;
@@ -65,7 +64,7 @@ void func_00144BC8(struct P *p, struct Q *q)
         __asm__("lqc2 %0, %1" : "=j"(pos) : "m"(p->q80));
         v = func_001A62E8(p->p10);
         __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(pos), "j"(v));
-        axis = D_002A2DC0;
+        axis = g_normalZ;
         v = Perp(d, axis);
         g = GPoly(D_002BD2E0, LenXY(v));
         s = GClampR(g, D_002BBB60[0], D_002BBB60[1]);
@@ -75,7 +74,7 @@ void func_00144BC8(struct P *p, struct Q *q)
         }
         if (p->xCC)
             q->x30 |= 8;
-        if (p->xC0 && p->xC8 < D_002DDED0.t - p->x50) {
+        if (p->xC0 && p->xC8 < g_clock.t - p->x50) {
             int f = 1;
             struct O *po = p->xC0->x7C;
             qword a, b;
@@ -83,7 +82,7 @@ void func_00144BC8(struct P *p, struct Q *q)
             __asm__("qmtc2.ni %1, %0" : "=j"(b) : "r"(func_001A62E8(po)));
             if (FFar(a, b))
                 q->x30 |= 8;
-            if (func_00132B10(po, 0x34))
+            if (FIsBasicDerivedFrom__FP5BASIC3CID(po, 0x34))
                 f = po->pvt->pfn((struct O *)((char *)po + po->pvt->d)) != 0;
             if (f) {
                 q->x30 |= p->xC0->x30 & p->xC4;

@@ -1,4 +1,4 @@
-// WIP (Claude agent): 4/118 diffs. Only the order of `lui s3,%hi("0.%d")` (PRE edge insertion in both branches) vs `daddu a0,s0` in the two branch delay slots after the d<0.1 / d>=1.0 tests. Needs -msoft-float; `else if (d >= 1.0) while (...)` gives the target's guarded jump-to-test loop; ftoi result in a local fixes the format-address s-reg.
+// WIP: 4/118 diffs. Only the order of `lui s3,%hi("0.%d")` (PRE edge insertion in both branches) vs `daddu a0,s0` in the two branch delay slots after the d<0.1 / d>=1.0 tests. Needs -msoft-float; `else if (d >= 1.0) while (...)` gives the target's guarded jump-to-test loop; ftoi result in a local fixes the format-address s-reg.
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0 -msoft-float
 // SLY2_ASM: gnu-reorder-db

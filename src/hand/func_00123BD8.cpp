@@ -1,3 +1,4 @@
+#include "clock.h"
 struct NODE;
 struct OBJ;
 struct CRef {
@@ -17,12 +18,11 @@ struct CRef {
 };
 extern char D_004520A8[];
 struct G;
-extern G D_003DD490;
-struct CLOCK { float t; float dt; };
-extern CLOCK D_002DDED0;
+extern G g_sw;
+extern CLOCK g_clock;
 struct R { char pad[0xC]; int n; };
 extern "C" {
-void func_0011CD98(void *pheap, void *pv);
+void FreeSlotheapPv__FP8SLOTHEAPPv(void *pheap, void *pv);
 void func_002550F8(void *pv);
 NODE *func_00256B48();
 CRef func_00129DA8(CRef *pref);
@@ -39,7 +39,7 @@ struct NODE {
     CRef ref;
     SPM pnext;
     void SetNext(NODE *pn) { pnext = pn; }
-    void operator delete(void *pv) { func_002550F8(pv); func_0011CD98(D_004520A8, pv); }
+    void operator delete(void *pv) { func_002550F8(pv); FreeSlotheapPv__FP8SLOTHEAPPv(D_004520A8, pv); }
 };
 struct SPN {
     NODE *p;
@@ -48,4 +48,4 @@ struct SPN {
     NODE *operator->() { return p; }
 };
 extern "C" CRef func_00123BD8(int c, CRef *aref);
-CRef func_00123BD8(int c, CRef *aref) { CRef res(-1, 0x15); SPN sp; OBJ *pobj = (OBJ *)aref[1].u.pv; NODE *pnNew = func_00256B48(); sp.Set(pnNew); sp->ref = func_00256B48(); NODE *pn = sp->ref.u.pnode; pn->ref = pobj; if (c >= 3) { NODE *pnT = pn; for (NODE *pw = aref[2].u.pnode; pw; pw = pw->pnext.p) { pnT->SetNext(func_00256B48()); pnT = pnT->pnext.p; CRef *pref = &pnT->ref; *pref = func_00256B48(); NODE *pc = pref->u.pnode; pc->ref.SetTag(0x12); pc->SetNext(func_00256B48()); pc->pnext.p->ref = pw->ref; } } G *pg = &D_003DD490; float t = D_002DDED0.t; R *pr = func_00133040(pg, 0, sp.p, t + func_00129DA8(aref).u.g); res = pr->n; return res; }
+CRef func_00123BD8(int c, CRef *aref) { CRef res(-1, 0x15); SPN sp; OBJ *pobj = (OBJ *)aref[1].u.pv; NODE *pnNew = func_00256B48(); sp.Set(pnNew); sp->ref = func_00256B48(); NODE *pn = sp->ref.u.pnode; pn->ref = pobj; if (c >= 3) { NODE *pnT = pn; for (NODE *pw = aref[2].u.pnode; pw; pw = pw->pnext.p) { pnT->SetNext(func_00256B48()); pnT = pnT->pnext.p; CRef *pref = &pnT->ref; *pref = func_00256B48(); NODE *pc = pref->u.pnode; pc->ref.SetTag(0x12); pc->SetNext(func_00256B48()); pc->pnext.p->ref = pw->ref; } } G *pg = &g_sw; float t = g_clock.t; R *pr = func_00133040(pg, 0, sp.p, t + func_00129DA8(aref).u.g); res = pr->n; return res; }

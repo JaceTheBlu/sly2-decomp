@@ -6,8 +6,8 @@ static __inline__ qword Make(float x, float y, float z)
             : "=&r"(q), "=&r"(t) : "f"(x), "f"(y), "f"(z));
     return q;
 }
-void func_0011D608(float g, float *ps, float *pc);
+void CalculateSinCos__FfPfT1(float g, float *ps, float *pc);
 qword func_0011E1A0(float rad, float r, float z)
 {
-    union { qword q; float f[4]; } v; float gA, gB; func_0011D608(rad, &gA, &gB); v.q = Make(gB * r, gA * r, z); return v.q;
+    union { qword q; float f[4]; } v; float gA, gB; CalculateSinCos__FfPfT1(rad, &gA, &gB); v.q = Make(gB * r, gA * r, z); return v.q;
 }

@@ -1,4 +1,4 @@
-struct VTE { short d; short pad; void *pfn; };
+#include "vtable.h"
 struct LO { int pad[3]; struct VTE *vt; };
 struct X;
 struct L { void *pv; struct L *pnext; struct L *pother; struct LO *po; };
@@ -9,12 +9,12 @@ struct C { int a[4]; };
 void func_00133E30(struct P *p);
 void func_00133E80(struct P *p);
 struct C *func_001AE478(struct C *);
-void func_001AE4A0(struct C *, int);
+void _$_18CBinaryInputStream(struct C *, int);
 void func_001A7E10(struct P *, void *);
 void *func_001AA1D8(struct P *, struct X *, struct X *);
 void func_001F5078(struct LO *);
 void func_0011A2E8(void *, struct X *);
-#define VCALL(po, n, T) ((T)(po)->vt[n].pfn)((char *)(po) + (po)->vt[n].d
+#define VCALL(po, n, T) ((T)(po)->vt[n].pfn)((char *)(po) + (po)->vt[n].delta
 void func_00134040(struct P *p)
 {
     struct C ctx;
@@ -75,5 +75,5 @@ void func_00134040(struct P *p)
         px->grf &= ~8L;
         VCALL(px->plo, 58, void (*)(void *)));
     }
-    func_001AE4A0(&ctx, 2);
+    _$_18CBinaryInputStream(&ctx, 2);
 }

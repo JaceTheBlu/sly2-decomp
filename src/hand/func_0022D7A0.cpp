@@ -22,11 +22,11 @@ int func_00117DB8(void *);
 int func_00117D00(void *);
 int func_00117BD0(void *);
 float func_00117E38(void *);
-void func_00117F90(void *,V *);
-void func_00117FB0(void *,V2 *);
-void func_00117EB0(void *,V *);
+void ReadCb12__18CBinaryInputStreamPv(void *,V *);
+void ReadCb8__18CBinaryInputStreamPv(void *,V2 *);
+void ReadVector__18CBinaryInputStreamP6VECTOR(void *,V *);
 void func_00117F18(void *,M4 *);
-void *func_001AE2A0(REQ *);
+void *PvAllocSwClearImpl__FP7SWALLOC(REQ *);
 void *func_0012E1F0(int);
 void *func_002333B4(void *,int,int);
 qword func_0022CA18(E *,E *);
@@ -49,7 +49,7 @@ extern "C" void func_0022D7A0(S *p,void *stream){
  int i=0;
  p->count=func_00117D50(stream);
  REQ request;request.size=p->count*sizeof(E);request.kind=16;
- p->records=(E *)func_001AE2A0(&request);
+ p->records=(E *)PvAllocSwClearImpl__FP7SWALLOC(&request);
  for(;i<p->count;i++){
   E *e=&p->records[i];
   e->reference=Lookup(p,func_00117D50(stream));
@@ -63,11 +63,11 @@ extern "C" void func_0022D7A0(S *p,void *stream){
   int has1=flags&4;
   if(has1){j1=CreateJ1();j1->h.id=func_00117D00(stream);}
   int has2=flags&8;
-  if(has2){j2=CreateJ2();j2->h.id=func_00117D00(stream);j2->g=func_00117E38(stream);func_00117F90(stream,&j2->begin);func_00117FB0(stream,&j2->timingBegin);func_00117F90(stream,&j2->end);func_00117FB0(stream,&j2->timingEnd);j2->a=func_00117D00(stream);j2->b=func_00117D00(stream);j2->c=func_00117DB8(stream);}
+  if(has2){j2=CreateJ2();j2->h.id=func_00117D00(stream);j2->g=func_00117E38(stream);ReadCb12__18CBinaryInputStreamPv(stream,&j2->begin);ReadCb8__18CBinaryInputStreamPv(stream,&j2->timingBegin);ReadCb12__18CBinaryInputStreamPv(stream,&j2->end);ReadCb8__18CBinaryInputStreamPv(stream,&j2->timingEnd);j2->a=func_00117D00(stream);j2->b=func_00117D00(stream);j2->c=func_00117DB8(stream);}
   int has4=flags&16;
   if(has4){j4=CreateJ4();j4->h.id=func_00117D00(stream);j4->lo=func_00117E38(stream);j4->hi=func_00117E38(stream);}
   flags&=32;
-  if(flags){j9=CreateJ9();func_00117EB0(stream,&j9->value);}
+  if(flags){j9=CreateJ9();ReadVector__18CBinaryInputStreamP6VECTOR(stream,&j9->value);}
   switch(e->kind){
   case 0:case 13:case 15:func_00117F18(stream,&e->matrix);break;
   case 8:case 14:{Identity(&e->matrix);e->origin=Lookup(p,func_00117D50(stream));e->matrix.r[3].f[0]=-e->origin->position[0];e->matrix.r[3].f[1]=-e->origin->position[1];e->matrix.r[3].f[2]=-e->origin->position[2];break;}

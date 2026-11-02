@@ -7,7 +7,7 @@ static __inline__ qword Make(float x, float y, float z)
     return q;
 }
 struct S { char pad[0x94]; int k; };
-qword func_0011BFF0(float *m);
+qword DecomposeRotateMatrixEuler__FP7MATRIX3(float *m);
 qword func_0022CA18(struct S *p, float *m)
 {
     qword v;
@@ -17,7 +17,7 @@ qword func_0022CA18(struct S *p, float *m)
     case 1: case 4: case 5: case 9: case 10:
         r.q = Make(m[12], m[13], m[14]); v = r.q; break;
     case 6: case 7:
-        v = func_0011BFF0(m); break;
+        v = DecomposeRotateMatrixEuler__FP7MATRIX3(m); break;
     case 11:
         r.q = Make(m[4], m[8], m[9]); v = r.q; break;
     case 12:

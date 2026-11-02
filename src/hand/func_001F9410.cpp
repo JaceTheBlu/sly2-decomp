@@ -1,3 +1,4 @@
+#include "clock.h"
 // func_001F9410: solve the contacts of a group of touching objects (Sly 1 SolveSwGroup).
 // Builds a DZG over the contacts (func_001585D8), turns every contact into a DZ row with its limits,
 // sets each row's target (bounce or separating speed), solves (func_00158B20) and applies the
@@ -18,27 +19,26 @@ union FLOAT {float value;int bits;};
 struct DZ {int kind;float lower,upper,value;FLOAT target;int unused14;float *coefficients;int flags;DLE link;};
 struct DZS {char pad0[0x40];U normal;XP *source;float *coefficients;char pad58[8];};
 struct DZG {int capacity,count;DZ *rows;DL solved,pending,unused,active;int solvedCount;float *matrix,*inverse,*temporary,*results;int contactCount;XP **contacts;int objectCount;P **objects;DZS *states;};
-struct CLOCK {float time,dt;};
 struct GAME;
 struct FRAME;
-extern CLOCK D_002DDED0;
-extern GAME D_003DD490;
+extern CLOCK g_clock;
+extern GAME g_sw;
 extern "C" {
 FRAME *func_001AE478(FRAME *);
-void func_001AE4A0(FRAME *,int);
+void _$_18CBinaryInputStream(FRAME *,int);
 DZG *func_001585D8(DZG *,int,XP **,int,P **);
 void func_00158668(DZG *,DZ *,DZS *);
 void func_00158988(DZG *,int);
 void func_00158E20(DZG *,float,float);
 void func_0011A6B8(DZG *);
-void func_001A7E60(GAME *,int,XP **);
-void func_001A7FC0(GAME *,int,XP **);
-float func_0011D448(float,float);
+void FindClosestPointOnLine__FP6VECTORN20PfT3(GAME *,int,XP **);
+void FindClosestPointOnLineSegment__FP6VECTORN20PfT3(GAME *,int,XP **);
+float GRandInRange__Fff(float,float);
 void func_00158B20(DZG *,int);
 void func_001F9C48(P *);
 }
 // Stack frame mark: ctor 0x1AE478, dtor 0x1AE4A0 (called with the 2.95 in-charge flag 2).
-struct FRAME {FRAME(){func_001AE478(this);}~FRAME(){func_001AE4A0(this,2);}};
+struct FRAME {FRAME(){func_001AE478(this);}~FRAME(){_$_18CBinaryInputStream(this,2);}};
 
 #define FLT_MAX 3.40282347e+38f
 
@@ -48,7 +48,7 @@ static inline float Dot(qword a,qword b){qword one;float f;__asm__("vmul.xyz %0,
 // "memory": the game re-reads p->second after this dot product.
 static inline float LengthSquared(qword v){qword one;float f;__asm__("vmul.xyz %0,%0,%0\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"+j"(v),"=&j"(one): :"memory");__asm__("mtc1 %1,%0":"=f"(f):"r"(v));return f;}
 static inline float Sqrt(float f){float r;__asm__ volatile("sqrt.s %0,%1":"=f"(r):"f"(f));return r;}
-static inline float ClockDt(){return D_002DDED0.dt;}
+static inline float ClockDt(){return g_clock.dt;}
 static inline void Callback(P *p,int slot){VT *vt=p->vtable;vt[slot].function((char *)p+vt[slot].delta);}
 
 extern "C" void func_001F9410(GAME *game,int flags,int objectCount,P **objects,int contactCount,XP **contacts)
@@ -111,8 +111,8 @@ extern "C" void func_001F9410(GAME *game,int flags,int objectCount,P **objects,i
     int fResting=flags&1;
     int j=fResting;
     if(fResting){
-        func_001A7E60(game,contactCount,contacts);
-        func_001A7FC0(game,contactCount,contacts);
+        FindClosestPointOnLine__FP6VECTORN20PfT3(game,contactCount,contacts);
+        FindClosestPointOnLineSegment__FP6VECTORN20PfT3(game,contactCount,contacts);
         int n;for(n=0;n<contactCount;n++){
             contact=contacts[n];
             row=&group.rows[n];
@@ -124,7 +124,7 @@ extern "C" void func_001F9410(GAME *game,int flags,int objectCount,P **objects,i
         for(;j<contactCount;j++){
             contact=contacts[j];
             row=&group.rows[j];
-            float factor=1.0f+contact->elasticity*func_0011D448(0.9f,1.1f);
+            float factor=1.0f+contact->elasticity*GRandInRange__Fff(0.9f,1.1f);
             row->target.value=Dot(contact->velocity.q,contact->normal.q)*factor;
             float magnitude=LengthSquared(contact->velocity.q);
             if(maximum<magnitude)maximum=magnitude;
@@ -146,8 +146,8 @@ extern "C" void func_001F9410(GAME *game,int flags,int objectCount,P **objects,i
         }
         if(k>=objectCount){
             for(k=0;k<objectCount;k++)func_001F9C48(objects[k]);
-            func_001A7E60(&D_003DD490,contactCount,contacts);
-            func_001A7FC0(&D_003DD490,contactCount,contacts);
+            FindClosestPointOnLine__FP6VECTORN20PfT3(&g_sw,contactCount,contacts);
+            FindClosestPointOnLineSegment__FP6VECTORN20PfT3(&g_sw,contactCount,contacts);
         }
     }else{
         for(k=0;k<objectCount;k++)Callback(objects[k],66);

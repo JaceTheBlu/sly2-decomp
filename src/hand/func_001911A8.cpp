@@ -1,10 +1,12 @@
+#include "vtable.h"
+#include "clock.h"
 // func_001911A8: per-frame update of a hero's action context (the struct at actor+0x4C0; func_00134850 calls it in
 // its state 3). It dispatches on the context's action and loops while the action changed the step (and not to -1).
 // Action 8 / step "other" probes the ground below the actor: a box query along the actor's up axis, a line test
 // against every found object (any hit with a nonzero parameter aborts), then a sphere around the actor's world bounds
 // is pruned against every object's BSP and turned into contacts; any contact aborts, otherwise step 8 is entered.
 //
-// Matching notes (wave-4 lane 8):
+// Matching notes:
 // - case 8 switches on p->step (the field, not the loop's local): gcse turns the load into a copy of the loop-top
 //   load, which gives the `lw a1, step` in the dispatch branch's delay slot; the local itself is spilled.
 // - ProbeGround's exits are plain returns out of a STACKSCOPE scope (out-of-line ctor/dtor 0x1AE478/0x1AE4A0);
@@ -16,7 +18,6 @@ typedef int qword __attribute__((mode(TI)));
 typedef unsigned int uint;
 typedef unsigned long ulong;
 
-struct VTE { short delta, pad; void *fn; };
 struct JOY { char pad0[0x1C]; float amount; char pad20[0x10]; uint grfbtn; };
 struct SURF;
 struct BSP { BSP *pbspNeg, *pbspPos; SURF *psurf; };
@@ -40,16 +41,15 @@ struct CONTEXT {
     ACTOR *pactor; float tStamp; int action; int step; float tHold; ACTOR *pactorFocus; char pad18[8]; float gParam;
     char pad24[0x440 - 0x24]; ATTACH attach; char pad478[0x500 - 0x478]; int fInhibit;
 };
-struct CLOCK { float t, dt; };
 struct SWALLOC { int cb, cbAlign; };
 struct STACKSCOPE { STACKSCOPE(); ~STACKSCOPE(); };   // 0x1AE478 / 0x1AE4A0(this, 2)
 struct VU_FLOAT { qword q; };
 
 extern "C" {
-extern SW D_003DD490;                                   // the world
-extern CLOCK D_002DDED0;                                // g_clock
+extern SW g_sw;                                   // the world
+extern CLOCK g_clock;                                // g_clock
 extern uint D_002DFBC4;
-extern qword D_002A2DC0;                                // (0, 0, 1)
+extern qword g_normalZ;                                // (0, 0, 1)
 extern float D_002BF5B0, D_002BF5B4, D_002BF5B8;
 int func_001C46C0(JOY *, uint, float);
 int func_001C4660(JOY *, uint, float);
@@ -58,7 +58,7 @@ void func_00195A00(void *, int, int, ACTOR *);
 void func_0019CC50(void *, int, int, int);
 int func_00131968(ASEGA *);
 void func_00192BD8(CONTEXT *, int);                     // set the step
-void *func_001AE318(SWALLOC *);                         // stack allocation in the current STACKSCOPE
+void *PvAllocStackImpl__FP7SWALLOC(SWALLOC *);                         // stack allocation in the current STACKSCOPE
 qword func_001A62E8(ACTOR *);                           // world position
 int func_0020F948(void *, SO *);
 void func_0020FAA0(SW *, qword, qword, int (*)(void *, SO *), void *, int *, SO ***);   // objects in a box
@@ -67,20 +67,20 @@ void func_001F38A8(SO *);
 qword func_0011F288(int, qword *);                      // min of points
 qword func_0011F2B8(int, qword *);                      // max of points
 void func_001A9B28(SW *, SO *, SO *, int, BSP *, XP **);
-int func_00118A88(BSP *, BSP *, float, qword, int *, BSP **);   // prune a BSP to a sphere
+int PruneBsp__FP3BSPT0fUxPiPP3BSP(BSP *, BSP *, float, qword, int *, BSP **);   // prune a BSP to a sphere
 void func_001A8B50(SW *, SO *, SO *, int, BSP *, BSP *, XP **);
 void func_001CD098(ATTACH *, ACTOR *);
-int func_00132B10(ACTOR *, int);
+int FIsBasicDerivedFrom__FP5BASIC3CID(ACTOR *, int);
 int func_001423A0(ACTOR *);
 int func_001441A0(ACTOR *);
 uint func_00141EA8(ACTOR *, int);
 }
 void FreeSwXpList(SW *, XP *);
 
-static inline void SetControl(ACTOR *p, int n) { VTE &v = p->vt[88]; ((void (*)(void *, int))v.fn)((char *)p + v.delta, n); }
-static inline int CanAct(ACTOR *p, int n) { VTE &v = p->vt[99]; return ((int (*)(void *, int))v.fn)((char *)p + v.delta, n); }
-static inline void Notify(ACTOR *p, ACTOR *q) { VTE &v = p->vt[51]; ((void (*)(void *, ACTOR *))v.fn)((char *)p + v.delta, q); }
-static inline void *PvAllocStack(int cb) { SWALLOC swalloc; swalloc.cb = cb; swalloc.cbAlign = 0x10; return func_001AE318(&swalloc); }
+static inline void SetControl(ACTOR *p, int n) { VTE &v = p->vt[88]; ((void (*)(void *, int))v.pfn)((char *)p + v.delta, n); }
+static inline int CanAct(ACTOR *p, int n) { VTE &v = p->vt[99]; return ((int (*)(void *, int))v.pfn)((char *)p + v.delta, n); }
+static inline void Notify(ACTOR *p, ACTOR *q) { VTE &v = p->vt[51]; ((void (*)(void *, ACTOR *))v.pfn)((char *)p + v.delta, q); }
+static inline void *PvAllocStack(int cb) { SWALLOC swalloc; swalloc.cb = cb; swalloc.cbAlign = 0x10; return PvAllocStackImpl__FP7SWALLOC(&swalloc); }
 
 static inline VU_FLOAT VuFloat(float g) { VU_FLOAT v; __asm__("qmtc2.ni %1,%0" : "=j"(v.q) : "r"(g)); return v; }
 // The never-chosen "V" alternative is allocation-only: the word stays a MEM until reload (as in func_0014F110).
@@ -113,10 +113,10 @@ static inline void ProbeGround(CONTEXT *p)
     int i;
     qword pos = func_001A62E8(p->pactor);
     qword posBase = QwAdd(pos, p->pactor->posOffset);
-    qword posEnd = QwAdd(posBase, QwScale(D_002A2DC0, VuFloat(&D_002BF5B0)));
+    qword posEnd = QwAdd(posBase, QwScale(g_normalZ, VuFloat(&D_002BF5B0)));
     int cso;
     SO **apso;
-    func_0020FAA0(&D_003DD490, posEnd, posBase, func_0020F948, p->pactor->pvFilter, &cso, &apso);
+    func_0020FAA0(&g_sw, posEnd, posBase, func_0020F948, p->pactor->pvFilter, &cso, &apso);
     for (i = 0; i < cso; i++) {
         int clsg = func_0014C6A0(apso[i], posBase, posEnd, 8, alsg);
         LSG *plsg = alsg;
@@ -130,7 +130,7 @@ static inline void ProbeGround(CONTEXT *p)
     func_001F38A8(psoSelf);
     qword posMin = func_0011F288(pgeom->cpos, pgeom->apos);
     qword posMax = func_0011F2B8(pgeom->cpos, pgeom->apos);
-    func_0020FAA0(&D_003DD490, posMin, posMax, func_0020F948, p->pactor->pvFilter, &cso, &apso);
+    func_0020FAA0(&g_sw, posMin, posMax, func_0020F948, p->pactor->pvFilter, &cso, &apso);
     for (i = 0; i < cso; i++)
         if (cbspMax <= apso[i]->cbsp)
             cbspMax = apso[i]->cbsp;
@@ -142,18 +142,18 @@ static inline void ProbeGround(CONTEXT *p)
         SO *pso = apso[i];
         XP *pxp = 0;
         if (pso->flags & (1UL << 49)) {
-            func_001A9B28(&D_003DD490, pso, psoSelf, 0, 0, &pxp);
+            func_001A9B28(&g_sw, pso, psoSelf, 0, 0, &pxp);
         } else {
             int cbspLeft = cbspMax;
             BSP *pbsp = absp;
-            if (func_00118A88(pso->absp, (BSP *)0x7FFFFFFF, sRadius, posMid, &cbspLeft, &pbsp) == 2) {
+            if (PruneBsp__FP3BSPT0fUxPiPP3BSP(pso->absp, (BSP *)0x7FFFFFFF, sRadius, posMid, &cbspLeft, &pbsp) == 2) {
                 int cbsp = pbsp - absp;
                 pbsp--;
-                func_001A8B50(&D_003DD490, psoSelf, pso, cbsp, pso->absp, pbsp, &pxp);
+                func_001A8B50(&g_sw, psoSelf, pso, cbsp, pso->absp, pbsp, &pxp);
             }
         }
         if (pxp) {
-            FreeSwXpList(&D_003DD490, pxp);
+            FreeSwXpList(&g_sw, pxp);
             return;
         }
     }
@@ -168,7 +168,7 @@ extern "C" void func_001911A8(CONTEXT *p)
         step = p->step;
         switch (p->action) {
         case 1:
-            if (0.15f < D_002DDED0.t - p->tHold && func_001C46C0(pjoy, 0x40, 0.25f)) {
+            if (0.15f < g_clock.t - p->tHold && func_001C46C0(pjoy, 0x40, 0.25f)) {
                 func_00195A00((char *)p->pactor + 0x2C0, 7, 0, p->pactorFocus);
                 break;
             }
@@ -218,7 +218,7 @@ extern "C" void func_001911A8(CONTEXT *p)
         case 10:
             if (!p->pactor->pasega || func_00131968(p->pactor->pasega)) {
                 SetControl(p->pactor, 0);
-            } else if (D_002BF5B8 < D_002DDED0.t - p->tStamp) {
+            } else if (D_002BF5B8 < g_clock.t - p->tStamp) {
                 if (0.0f < p->pactor->pjoy->amount || (p->pactor->pjoy->grfbtn & 0xD0)) {
                     SetControl(p->pactor, 0);
                     return;
@@ -231,7 +231,7 @@ extern "C" void func_001911A8(CONTEXT *p)
                 SetControl(p->pactor, 0);
             break;
         case 5:
-            if (func_00132B10(p->pactorFocus, 11) && func_001423A0(p->pactor)) {
+            if (FIsBasicDerivedFrom__FP5BASIC3CID(p->pactorFocus, 11) && func_001423A0(p->pactor)) {
                 p->pactor->ptarget = p->pactorFocus;
                 p->pactor->gTarget = p->gParam;
                 SetControl(p->pactor, 8);

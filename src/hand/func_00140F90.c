@@ -1,24 +1,23 @@
+#include "dl.h"
+#include "clock.h"
 // func_00140F90 (0x140F90): message handler (p, msg, pv): msg 3 resets x1038 and stops the 0xDF0/0x11B0 actions, msg 9 (pso->p18 == p)
 // switches on pmsg->k (0x15E: x190 = -v and virtual slot 35 called with the 0x1B0 rows times v; 0x161/0x162; 0x27B/0x27C; 0x1C7/0x1C8),
-// msgs 4/5 call virtual slots 8/9 on the 0x1090 entries, msg 1 / msg 11 release 0x4D4 / 0x1310; then forwards to func_001EED78/func_001C3E20.
-// MATCH (Claude agent for Lilly, T1682, 2026-10-25), no pins: from v6 (aligned 2), case 0x15E written with NO volatile asm and no vf6 pin.
+// msgs 4/5 call virtual slots 8/9 on the 0x1090 entries, msg 1 / msg 11 release 0x4D4 / 0x1310; then forwards to func_001EED78/HandlePoMessage__FP2PO5MSGIDPv.
+// MATCH, no pins: from v6 (aligned 2), case 0x15E written with NO volatile asm and no vf6 pin.
 // The -1.0f VU_FLOAT's home store (s.q = sv) goes last, so sv stays live in vf5 across the transform and the earlyclobber output lands
 // in vf6 by itself; with the plain asms sched2 orders lh / lqc2 / lqc2 / addu / lw like the target.
 typedef int qword __attribute__((mode(TI)));
-typedef struct DL { void *head; void *tail; int ibDle; } DL;
-typedef struct DLI { DL *m_pdl; void **m_ppv; int m_ibDle; struct DLI *m_pdliNext; } DLI;
-extern DLI *D_002DD2FC;     /* g_pdliFirst */
+extern DLI *g_pdliFirst;     /* g_pdliFirst */
 struct VT { struct { short d; short pad; void (*pfn)(); } a[64]; };
 #define F(T, p, off) (*(T *)((char *)(p) + (off)))
 struct SO { char pad[0x18]; void *p18; };
 struct MSG { struct SO *pso; float g; int k; };
 struct MSGB { void *p0; void *p4; };
 struct ENT { void *po; int x4; };
-struct CLOCK { float t; float dt; };
 struct GS { char pad[0x4758]; float g4758; };
 struct GG { char pad[0x2010]; void *p2010; };
-extern struct CLOCK D_002DDED0;
-extern struct GS D_003DD490;
+extern struct CLOCK g_clock;
+extern struct GS g_sw;
 extern DL D_003E148C;
 extern struct GG *D_002E1E40;
 extern float D_002BCC94;
@@ -27,7 +26,7 @@ void func_002206C8(void *p, int n);
 qword func_00204E38(void *p, struct SO *pso, float g);
 qword func_001A62E8(void *p);
 void func_002205A8(void *p);
-int func_00132B10(void *p, int n);
+int FIsBasicDerivedFrom__FP5BASIC3CID(void *p, int n);
 int func_00224590(void *p);
 void func_002245B8(void *p);
 void func_00130658(void *p);
@@ -36,22 +35,22 @@ void func_001305B8(void *pa, void *p, float g, int n, float h, void *pb);
 void func_0019F170(void *p, int n);
 void func_0019F220(void *p, int n);
 void *func_001CB250(void *p, int n);
-void func_001A58D0(void *p, int a, int b);
+void SetLoParent__FP2LOP2SOi(void *p, int a, int b);
 void func_00156780(void *p);
 void func_001CCC88(void *p, void *q);
 void func_00131A00(void *p, float g);
 void func_001CD098(void *p, void *q);
 void func_00133448(void *p, void *q);
 void func_001EED78(void *p, int msg, void *pmsg);
-void func_001C3E20(void *p, int msg, void *pmsg);
+void HandlePoMessage__FP2PO5MSGIDPv(void *p, int msg, void *pmsg);
 
 static inline void InitDli(DLI *pdli, DL *pdl)
 {
     pdli->m_pdl = pdl;
     pdli->m_ppv = (void **)pdl;
     pdli->m_ibDle = pdl->ibDle;
-    pdli->m_pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->m_pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static inline void *PvNextDli(DLI *pdli)
 {
@@ -131,14 +130,14 @@ void func_00140F90(void *p, int msg, void *pv)
             if (F(int, p, 0x4C8) == 0xB) {
                 void *po;
                 int n;
-                if (F(void *, p, 0x4D4) != 0 && func_00132B10(F(void *, p, 0x4D4), 100)) {
+                if (F(void *, p, 0x4D4) != 0 && FIsBasicDerivedFrom__FP5BASIC3CID(F(void *, p, 0x4D4), 100)) {
                     po = F(void *, p, 0x4D4);
                     if (func_00224590(po))
                         func_002245B8(po);
                 }
                 n = F(int, p, 0x9BC);
                 if (F(void *, p, 0x130C) != 0) {
-                    __asm__("" : : : "$3", "$4"); /* clobber of dead v1/a0 (Claude agent): target keeps n in a1 */
+                    __asm__("" : : : "$3", "$4"); /* clobber of dead v1/a0: target keeps n in a1 */
                     if (F(int, p, 0x1314) == n) {
                         func_00130658((char *)p + 0x1310);
                         F(int, p, 0x1314) = -1;
@@ -151,24 +150,24 @@ void func_00140F90(void *p, int msg, void *pv)
                     func_00141CD0(p);
                     switch (F(int, p, 0x9BC)) {
                     case 0xE:
-                        func_0019F170(&D_003DD490, 1);
+                        func_0019F170(&g_sw, 1);
                         break;
                     case 0x15:
-                        func_0019F220(&D_003DD490, 0x15);
+                        func_0019F220(&g_sw, 0x15);
                         break;
                     case 0x17: {
                         DLI dli;
                         void *po2;
                         void *pa = func_001CB250(D_002E1E40->p2010, 0);
                         if (pa)
-                            func_001A58D0(pa, 0, 3);
+                            SetLoParent__FP2LOP2SOi(pa, 0, 3);
                         InitDli(&dli, &D_003E148C);
                         while ((po2 = PvNextDli(&dli)) != 0) {
                             if (F(int, po2, 0x54) == 4 && F(void *, po2, 0x44) == p)
                                 func_00156780(po2);
                         }
-                        D_002DD2FC = dli.m_pdliNext;
-                        D_003DD490.g4758 = D_002DDED0.t + D_002BCC94;
+                        g_pdliFirst = dli.m_pdliNext;
+                        g_sw.g4758 = g_clock.t + D_002BCC94;
                         break;
                     }
                     }
@@ -231,5 +230,5 @@ void func_00140F90(void *p, int msg, void *pv)
         break;
     }
     func_001EED78((char *)p + 0x26C, msg, pv);
-    func_001C3E20(p, msg, pv);
+    HandlePoMessage__FP2PO5MSGIDPv(p, msg, pv);
 }

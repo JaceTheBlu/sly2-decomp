@@ -1,14 +1,13 @@
+#include "dl.h"
 typedef int qword __attribute__((mode(TI)));
-typedef struct DL { void *head; void *tail; int ibDle; } DL;
-typedef struct DLI { DL *m_pdl; void **m_ppv; int m_ibDle; struct DLI *m_pdliNext; } DLI;
-extern DLI *D_002DD2FC;
+extern DLI *g_pdliFirst;
 struct SO;
 struct VT { char pad[0xB0]; short d16; short p16; void (*pfn22)(struct SO *); short d17; short p17; void (*pfn23)(struct SO *); };
 struct SO { char pad[0xC]; struct VT *pvt; char pad2[0x28 - 0x10]; long grf; float g30; float g34; float g38; };
 struct ITEM { struct SO *pso; };
 struct CM { char pad[0x14]; int x14; char pad2[0x90 - 0x18]; qword pos; };
 struct P { char pad[0x20]; DL dl; char pad2[0x2C - 0x2C]; char x2C[0x39A4 - 0x2C]; void *pvStop; int x39A8; qword q39B0; qword q39C0; };
-extern struct CM D_002DDF40;
+extern struct CM g_cm;
 extern float D_002BD450;
 void *func_001C4840(void);
 qword func_001A62E8(void *p);
@@ -38,8 +37,8 @@ static inline void InitDli(DLI *pdli, DL *pdl)
     pdli->m_pdl = pdl;
     pdli->m_ppv = (void **)pdl;
     pdli->m_ibDle = pdl->ibDle;
-    pdli->m_pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->m_pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static inline void *PvNextDli(DLI *pdli)
 {
@@ -56,8 +55,8 @@ void func_00147F40(struct P *p)
     int n;
     void *pvB;
     void *pv;
-    pos = D_002DDF40.pos;
-    n = D_002DDF40.x14;
+    pos = g_cm.pos;
+    n = g_cm.x14;
     pvB = func_001C4840();
     if (pvB)
         posB = func_001A62E8(pvB);
@@ -120,5 +119,5 @@ void func_00147F40(struct P *p)
             }
         }
     }
-    D_002DD2FC = dli.m_pdliNext;
+    g_pdliFirst = dli.m_pdliNext;
 }

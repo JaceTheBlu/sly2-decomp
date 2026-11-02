@@ -1,6 +1,7 @@
+#include "vu0.h"
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002A5398;
 struct VTE { short d; short pad; void (*pfn)(void *); };
 struct X { qword a; qword v; };
@@ -11,7 +12,7 @@ void func_001EF0D8(void *p);
 struct O *func_00205438(void *p, int n);
 qword func_00172760(struct S *p);
 qword func_001A62E8(void *p);
-void func_002562A8(struct X *x);
+void __1M(struct X *x);
 void func_0017DD38(void *p, struct X *x);
 float func_002458F0(float y, float x);
 void func_00209818(void *p, float f);
@@ -19,13 +20,11 @@ void func_00172560(struct S *p);
 void func_001728B0(struct S *p);
 void func_00172F10(struct S *p);
 void func_001725E0(struct S *p, int n);
-static __inline__ float GetX(qword q) { float x; __asm__("mtc1 %1,%0" : "=f"(x) : "r"(q)); return x; }
-static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0,%1" : "=r"(y) : "r"(q)); return y; }
 void func_00172320(struct S *p, int n) {
     if (n == p->n30) return;
     func_001EF0D8(p->a18);
     p->n30 = n;
-    p->f34 = D_002DDED0.t;
+    p->f34 = g_clock.t;
     switch (n) {
     case 0:
         { struct O *o = func_00205438(p->p10, 0x9D); struct VTE *e; o->n3C = 0xC; e = &o->vt[8]; e->pfn((char *)o + e->d); }
@@ -38,7 +37,7 @@ void func_00172320(struct S *p, int n) {
             qword v;
             o->nC0 = 1;
             v = func_00172760(p);
-            func_002562A8(&x);
+            __1M(&x);
             x.v = v;
             func_0017DD38(o, &x);
             e = &o->vt[8]; e->pfn((char *)o + e->d);

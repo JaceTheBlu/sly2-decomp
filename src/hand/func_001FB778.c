@@ -1,14 +1,15 @@
+#include "mat.h"
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union {qword q;float f[4];int i[4];} V;
 struct RANGE {float low,high;};
-struct M3 {qword r[3];};
 struct CAMERA {char pad[0x90];qword position;};
-extern char D_003DD490[],D_002BBB60[];
-extern struct CAMERA D_002DDF40;
-extern struct M3 D_002DDFA0;
+extern char g_sw[],D_002BBB60[];
+extern struct CAMERA g_cm;
+extern struct MATRIX3 D_002DDFA0;
 void *func_001C4A48(void*);
 qword func_001A62E8(void*);
-qword func_001A7348(const struct M3*,const struct M3*,qword);
+qword func_001A7348(const struct MATRIX3*,const struct MATRIX3*,qword);
 float func_0011D948(void*,float);
 float func_002458F0(float,float);
 static inline qword Sub(qword a,qword b){register qword r __asm__("vf3");__asm__("vsub.xyzw %0,%1,%2":"=&j"(r):"j"(a),"j"(b));return r;}
@@ -17,7 +18,6 @@ __asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x $ACC,%0,%0y\n\tv
 __asm__("vsqrt $Q,%1x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q":"=j"(d):"j"(d));
 save->q=a;
 __asm__("qmfc2.ni %0,%1":"=r"(g):"j"(d));return g;}
-static inline float X(qword q){float f;__asm__("mtc1 %1,%0":"=f"(f):"r"(q));return f;}
 static inline float Y(qword q){int bits;float f;__asm__("prot3w %0,%1":"=r"(bits):"r"(q));__asm__("mtc1 %1,%0":"=f"(f):"r"(bits));return f;}
 static inline qword Bits(qword v){qword q;__asm__("qmfc2.ni %0,%1":"=r"(q):"j"(v));return q;}
 static inline void Rounded(int*out,float f){float bits;__asm__("cvt.w.s %0,%1":"=&f"(bits):"f"(f));__asm__("swc1 %1,%0":"=m"(*out):"f"(bits));}
@@ -29,9 +29,9 @@ void func_001FB778(void *unused,qword point,const struct RANGE*limits,float*outV
  float high,low,distance,value;
  register qword difference __asm__("vf3");
  source.q=point;
- player=func_001C4A48(D_003DD490);
+ player=func_001C4A48(g_sw);
  if(player)reference=func_001A62E8(player);
- else reference=D_002DDF40.position;
+ else reference=g_cm.position;
  high=limits->high;low=limits->low;
  {register qword input __asm__("vf2")=source.q;
   distance=Length(Sub(input,reference),&delta);}
@@ -43,7 +43,7 @@ void func_001FB778(void *unused,qword point,const struct RANGE*limits,float*outV
      qword direction;
      float angle;
      direction=func_001A7348(0,&D_002DDFA0,Bits(difference));
-     angle=func_002458F0(-Y(direction),X(direction));
+     angle=func_002458F0(-Y(direction),GetX(direction));
      if(limits->high<limits->low)angle+=3.1415927f;
      Rounded(outAngle,angle*57.295776f);return;
    }else *outAngle=0;

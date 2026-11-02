@@ -1,8 +1,8 @@
+#include "mat.h"
 // World bounds from transformed path points and segment controls.
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};
-struct M4 {qword r[4];};
-struct S {char pad[0xA0];struct M4 mat;int mode;char padE4[4];int n;float *times,*dist;qword *points;char padF8[0x48];qword *incoming,*outgoing;};
+struct S {char pad[0xA0];struct MATRIX4 mat;int mode;char padE4[4];int n;float *times,*dist;qword *points;char padF8[0x48];qword *incoming,*outgoing;};
 extern void func_00231368(struct S*);
 static inline qword Point(qword old,qword r0,qword r1,qword r2,qword r3,qword p){__asm__("vmulax.xyz ACC,%1,%5x\n\tvmadday.xyz ACC,%2,%5y\n\tvmaddaz.xyz ACC,%3,%5z\n\tvmaddw.xyz %0,%4,$vf0w":"+j"(old):"j"(r0),"j"(r1),"j"(r2),"j"(r3),"j"(p));return old;}
 void func_001E7BB8(struct S*p,qword*lo,qword*hi){
@@ -10,7 +10,7 @@ void func_001E7BB8(struct S*p,qword*lo,qword*hi){
  register qword maximum __asm__("vf5"),minimum __asm__("vf6");
  register qword *first __asm__("$5");
  func_00231368(p);
- {register struct M4*m __asm__("$2");
+ {register struct MATRIX4*m __asm__("$2");
  __asm__("lw %0,%2\n\taddiu %1,%3,%4":"=&r"(first),"=r"(m):"m"(p->points),"r"(p),"I"((unsigned)&((struct S*)0)->mat));
  __asm__("lqc2 %0,0x30(%8)\n\tlqc2 %1,0x10(%8)\n\tlqc2 %2,0x20(%8)\n\tlqc2 %3,%7":"=j"(r3),"=j"(r1),"=j"(r2),"=j"(r0):"m"(m->r[3]),"m"(m->r[1]),"m"(m->r[2]),"m"(p->mat.r[0]),"r"(m));}
  {register qword value __asm__("vf1")=*first;register int mode __asm__("$2");
@@ -85,11 +85,11 @@ typedef char bound_layout_0[(sizeof(qword)==16)?1:-1];
 typedef char bound_layout_1[(__alignof__(qword)==16)?1:-1];
 typedef char bound_layout_2[(sizeof(union U)==16)?1:-1];
 typedef char bound_layout_3[(__alignof__(union U)==16)?1:-1];
-typedef char bound_layout_4[(sizeof(struct M4)==64)?1:-1];
-typedef char bound_layout_5[(__alignof__(struct M4)==16)?1:-1];
-typedef char bound_layout_6[(sizeof(((struct M4*)0)->r)==64)?1:-1];
-typedef char bound_layout_7[(sizeof(((struct M4*)0)->r[0])==16)?1:-1];
-typedef char bound_layout_8[(OFF(struct M4,r)==0)?1:-1];
+typedef char bound_layout_4[(sizeof(struct MATRIX4)==64)?1:-1];
+typedef char bound_layout_5[(__alignof__(struct MATRIX4)==16)?1:-1];
+typedef char bound_layout_6[(sizeof(((struct MATRIX4*)0)->r)==64)?1:-1];
+typedef char bound_layout_7[(sizeof(((struct MATRIX4*)0)->r[0])==16)?1:-1];
+typedef char bound_layout_8[(OFF(struct MATRIX4,r)==0)?1:-1];
 typedef char bound_layout_9[(OFF(struct S,mat)==0xA0)?1:-1];
 typedef char bound_layout_10[(OFF(struct S,mode)==0xE0)?1:-1];
 typedef char bound_layout_11[(OFF(struct S,n)==0xE8)?1:-1];

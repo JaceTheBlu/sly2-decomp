@@ -1,10 +1,10 @@
+#include "clock.h"
 struct JOY {
     char pad[0x1024]; int dirX; int dirY; float tNextX; float tRepX; float tNextY; float tRepY;
     float gX; float gY; float gMag; char p1[0x6C]; int grfHeld;
 };
-struct CLOCK { char pad[0x3C]; float g3c; };
-extern struct CLOCK D_002DDED0;
-int func_00187D80(struct JOY *p, int grf);
+extern struct CLOCK g_clock;
+int PvAllocSwCopyImpl__FiPv(struct JOY *p, int grf);
 static __inline__ float GClamp(float g, float lo, float hi)
 {
     if (g < lo) return lo;
@@ -15,7 +15,7 @@ int func_001880D8(struct JOY *p)
 {
     float g;
     if (!p->dirY) {
-        int grf = func_00187D80(p, 0x5000);
+        int grf = PvAllocSwCopyImpl__FiPv(p, 0x5000);
         if (grf & 0x1000) p->dirY = -1;
         else if (grf & 0x4000) p->dirY = 1;
         else if (p->gMag >= 0.8f && __builtin_fabsf(p->gY) > __builtin_fabsf(p->gX)) {
@@ -25,7 +25,7 @@ int func_001880D8(struct JOY *p)
         if (p->dirY) {
             g = 0.3333f;
             p->tRepY = g;
-            p->tNextY = D_002DDED0.g3c + g;
+            p->tNextY = g_clock.tFrame + g;
         }
     } else {
         int fHeld = 0;
@@ -40,10 +40,10 @@ int func_001880D8(struct JOY *p)
         }
         if (!fHeld) {
             p->dirY = 0;
-        } else if (p->tNextY <= D_002DDED0.g3c) {
+        } else if (p->tNextY <= g_clock.tFrame) {
             g = GClamp(2.0f * p->tRepY / 3.0f, 0.1f, 0.3333f);
             p->tRepY = g;
-            p->tNextY = D_002DDED0.g3c + g;
+            p->tNextY = g_clock.tFrame + g;
         } else {
             return 0;
         }

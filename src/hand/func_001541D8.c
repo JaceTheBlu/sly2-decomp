@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 struct VTE { short d; short pad; int (*pfn)(void *); };
 struct SO { char pad[0xC]; struct VTE *vt; char pad1[0x240 - 0x10]; qword pos; char pad2[0x11AC - 0x250]; int x11AC; };
@@ -6,43 +7,42 @@ struct C { char pad[0x64]; struct L *pl; };
 struct T { char pad[0xE4]; struct C *pc; void *xE8; void *xEC; int xF0; int xF4; int xF8; };
 struct W { char pad[0xEC]; void *xEC; char pad1[0x130 - 0xF0]; struct W *pNext; };
 struct BUF { char a[0x180]; };
-extern char D_003DD490[];
+extern char g_sw[];
 extern struct W *D_003E1480;
 void *func_001C4840(void *p);
 int func_001A61A0(struct SO *p);
-int func_00132B10(void *p, int k);
+int FIsBasicDerivedFrom__FP5BASIC3CID(void *p, int k);
 int func_0020F1B8(void *p);
 qword func_001A62E8(struct SO *p);
 qword func_00153E60(struct T *p);
 qword func_001A6F00(int z, struct W *pw, qword v);
-int func_00118668(void *p, int mask, qword a, qword b, int n, struct BUF *pbuf);
+int ClsgClipEdgeToBsp__FP3BSPT0UxUxiP3LSG(void *p, int mask, qword a, qword b, int n, struct BUF *pbuf);
 int func_00227C90(void *p, qword v);
 int func_00154770(struct T *p, struct SO *pso);
 int func_001545F0(struct T *p, struct SO *pso);
-static inline qword Add(qword a, qword b) { qword d; __asm__("vadd.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 
 int func_001541D8(struct T *p, struct SO *pso, int k)
 {
     struct BUF buf;
     qword v;
     struct W *pw;
-    struct SO *pme = func_001C4840(D_003DD490);
+    struct SO *pme = func_001C4840(g_sw);
     if (!pso) { k = 0; goto done; }
     if (!func_001A61A0(pso)) { k = 0; goto done; }
-    if (func_00132B10(pso, 0x32) && pso->vt[77].pfn((char *)pso + pso->vt[77].d) == 2) { k = 0; goto done; }
-    if (func_00132B10(pso, 0x34) && pme && func_00132B10(pme, 0x46)) { k = 0; goto done; }
-    if (func_0020F1B8(D_003DD490)) { k = 0; goto done; }
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(pso, 0x32) && pso->vt[77].pfn((char *)pso + pso->vt[77].d) == 2) { k = 0; goto done; }
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(pso, 0x34) && pme && FIsBasicDerivedFrom__FP5BASIC3CID(pme, 0x46)) { k = 0; goto done; }
+    if (func_0020F1B8(g_sw)) { k = 0; goto done; }
     if (p->xF4) { k = 0; goto done; }
-    if (func_00132B10(pso, 0x34) && pso->x11AC) { k = 0; goto done; }
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(pso, 0x34) && pso->x11AC) { k = 0; goto done; }
     if (p->xF0) { k = 1; goto done; }
-    if (func_00132B10(pso, 0x33))
-        v = Add(func_001A62E8(pso), pso->pos);
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(pso, 0x33))
+        v = QwAdd(func_001A62E8(pso), pso->pos);
     else
         v = func_001A62E8(pso);
     for (pw = D_003E1480; pw; pw = pw->pNext) {
         qword a = func_001A6F00(0, pw, func_00153E60(p));
         qword b = func_001A6F00(0, pw, v);
-        if (func_00118668(pw->xEC, 0x7FFFFFFF, a, b, 4, &buf) > 0) { k = 0; goto done; }
+        if (ClsgClipEdgeToBsp__FP3BSPT0UxUxiP3LSG(pw->xEC, 0x7FFFFFFF, a, b, 4, &buf) > 0) { k = 0; goto done; }
     }
     switch (k) {
     case 0:

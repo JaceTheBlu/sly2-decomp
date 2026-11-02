@@ -1,4 +1,4 @@
-// (Claude agent) ee-gcc2.9-991111 -O2 gnu-reorg: 11/595 - only c.eq.s->bc1f nop missing at 0x249438 (if(z==0.0) before while(iq[jz]==0)) and an extra nop before that short loop; tool-side?
+// ee-gcc2.9-991111 -O2 gnu-reorg: 11/595 - only c.eq.s->bc1f nop missing at 0x249438 (if(z==0.0) before while(iq[jz]==0)) and an extra nop before that short loop; tool-side?
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorg

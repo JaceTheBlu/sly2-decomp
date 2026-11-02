@@ -1,4 +1,4 @@
-/* func_001E95B0 (Claude agent, wave-2 lane 7): append a time sample to a sampled path (two U arrays a/b, a
+/* func_001E95B0: append a time sample to a sampled path (two U arrays a/b, a
  * path with positions/distances, a time array). If the new time is earlier than the last sample the tail is
  * truncated; otherwise samples are inserted until the new time is within a step of the last one or the
  * capacity is reached, interpolating a/b/pos/dist for the sample that becomes the second-to-last.

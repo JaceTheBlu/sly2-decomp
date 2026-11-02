@@ -1,5 +1,5 @@
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+#include "clock.h"
+extern struct CLOCK g_clock;
 struct VTE { short d; short pad; void (*pfn)(void *); };
 struct O { char pad[0xC]; struct VTE *vt; char pad2[0x28]; int n38; int n3C; };
 struct T { char pad[0xF60]; int nF60; };
@@ -11,7 +11,7 @@ void func_0017B750(struct S *p, int n) {
     func_001EF0D8(p->a18);
     if (!p->n30) p->pt->nF60 = 0;
     p->n30 = n;
-    p->g34 = D_002DDED0.t;
+    p->g34 = g_clock.t;
     if (!n) {
         struct O *o = func_00205438(p->pt, 0x9D);
         struct VTE *e;

@@ -1,6 +1,6 @@
 typedef int qword __attribute__((mode(TI)));
 struct G { char pad[0x45CC]; void *p45CC; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 struct I { char pad[0x128]; void *p128; };
 struct D { char pad[0x10]; void *p10; };
 struct C { char pad[0xDC]; struct D *pDC; };
@@ -33,7 +33,7 @@ void func_0017D8A8(struct S *p) {
         if (r == 0) {
             fail = 1;
         } else if (r != q) {
-            struct G *g = &D_003DD490;
+            struct G *g = &g_sw;
             int n;
             if ((p->nB4 = func_001C21D8(g->p45CC, p->p10, v, 1, 1, p->aB8)) <= 0) {
                 if (p->nC0 == 0) {

@@ -1,7 +1,7 @@
 #include "m2c_prelude.h"
-M2C_UNK func_00256EE0(void *);                      /* extern */
+M2C_UNK __as__3SPXP1X(void *);                      /* extern */
 
 void func_00127B18(void *arg0) {
     M2C_FIELD(arg0, s32 *, 8) = 1;
-    func_00256EE0(arg0 + 0xC);
+    __as__3SPXP1X(arg0 + 0xC);
 }

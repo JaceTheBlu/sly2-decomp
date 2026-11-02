@@ -1,5 +1,4 @@
-struct DL { void *pvFirst; void *pvLast; int ibDle; };
-struct DLE { void *pvNext; void *pvPrev; };
+#include "dl.h"
 struct DZS {
     char pad0[0xC];
     float gC;
@@ -19,8 +18,8 @@ struct DZG {
 };
 
 extern "C" {
-void func_0011A200(DL *pdl);
-void func_0011A210(DLE *pdle);
+void ClearDl__FP2DL(DL *pdl);
+void ClearDle__FP3DLE(DLE *pdle);
 void func_0011A220(DL *pdl, void *pv);
 }
 
@@ -29,15 +28,15 @@ void ClearDzgSolution(DZG *pdzg)
     int i;
 
     pdzg->n3C = 0;
-    func_0011A200(&pdzg->dlA);
-    func_0011A200(&pdzg->dlB);
-    func_0011A200(&pdzg->dlC);
-    func_0011A200(&pdzg->dlD);
+    ClearDl__FP2DL(&pdzg->dlA);
+    ClearDl__FP2DL(&pdzg->dlB);
+    ClearDl__FP2DL(&pdzg->dlC);
+    ClearDl__FP2DL(&pdzg->dlD);
 
     for (i = 0; i < pdzg->cdzs; i++) {
         DZS *pdzs = &pdzg->adzs[i];
         pdzs->gC = pdzs->g10 = 0.0f;
-        func_0011A210(&pdzs->dle);
+        ClearDle__FP3DLE(&pdzs->dle);
         func_0011A220(&pdzg->dlD, pdzs);
     }
 }

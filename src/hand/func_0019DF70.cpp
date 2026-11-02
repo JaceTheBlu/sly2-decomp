@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f; } U;
 #include "mat.h"
@@ -8,13 +9,12 @@ struct S1030 { char pad[0x14]; struct S14 *x14; int pad2; float x1c; };
 struct O { char pad[0xC]; VT *vt; char pad2[0x1030-0x10]; struct S1030 *x1030; };
 struct CURVE;
 struct P { struct O *x0; int x4; int x8; struct CURVE *xc; float x10; int x14; int x18; };
-struct CLOCK { float t; float dt; };
-extern "C" struct CLOCK D_002DDED0;
+extern "C" struct CLOCK g_clock;
 extern "C" qword D_002A2DD0;
 extern "C" void func_001C3500(struct CURVE *a, int b, M3 *pm, float g);
 extern "C" M3 *func_001A6318(struct O *o);
 extern "C" void func_00117308(M3 *a, float g, float dt, float one, qword v, M3 *pm, qword z, M3 *pm2, qword *derivative);
-extern "C" M3 func_0011BC00(M3 *a, M3 *b);
+extern "C" M3 CalculateDmat__FP7MATRIX3T0(M3 *a, M3 *b);
 extern "C" void func_0011BCF8(M3 *pm, float *pg, U *pv);
 static inline qword Scale(qword v,float g){U u;register qword s __asm__("vf2");qword r;__asm__("qmtc2.ni %1,%0":"=j"(s):"r"(g));u.q=s;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(r):"j"(v),"j"(u.q));return r;}
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((struct t*)0x10000)->m)-0x10000)
@@ -34,7 +34,6 @@ typedef char S14_PrefixSize[sizeof(struct S14)==120?1:-1];
 typedef char S1030_PrefixSize[sizeof(struct S1030)==32?1:-1];
 typedef char O_PrefixSize[sizeof(struct O)==4148?1:-1];
 typedef char P_PrefixSize[sizeof(struct P)==28?1:-1];
-typedef char CLOCK_PrefixSize[sizeof(struct CLOCK)==8?1:-1];
 typedef char qword_Size[sizeof(qword)==16?1:-1];
 typedef char U_Size[sizeof(U)==16?1:-1];
 typedef char VT_Size[sizeof(VT)==8?1:-1];
@@ -51,7 +50,7 @@ extern "C" void func_0019DF70(struct P *p)
     func_001C3500(p->xc, p->x18 == 0, &m, p->x10);
     if (p->x4 == 0 || p->x4 == 4) {
         struct O *o = p->x0;
-        float dt = D_002DDED0.dt;
+        float dt = g_clock.dt;
         float g = o->x1030->x14->x74 - o->x1030->x1c;
         M3 *pa;
         g = g > dt ? g : dt;
@@ -61,7 +60,7 @@ extern "C" void func_0019DF70(struct P *p)
         m2 = m;
     }
     pm = &m2;
-    m4 = func_0011BC00(func_001A6318(p->x0), pm);
+    m4 = CalculateDmat__FP7MATRIX3T0(func_001A6318(p->x0), pm);
     func_0011BCF8(&m4, &f, &vec);
-    {O *o=p->x0;VT *vt=o->vt;void (*call)(void *,qword)=(void(*)(void*,qword))vt[36].pfn;void *thisp=(char*)o+vt[36].d;call(thisp,Scale(vec.q,f/D_002DDED0.dt));}
+    {O *o=p->x0;VT *vt=o->vt;void (*call)(void *,qword)=(void(*)(void*,qword))vt[36].pfn;void *thisp=(char*)o+vt[36].d;call(thisp,Scale(vec.q,f/g_clock.dt));}
 }

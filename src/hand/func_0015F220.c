@@ -4,7 +4,7 @@ struct FONT { char pad[0x3C]; int n3C; ulong q40; int pad48[2]; ulong q50; };
 void func_00166BD8(struct GIFS *, int, int, int);
 void func_00166E90(struct GIFS *, int, ulong);
 void func_00166EF0(struct GIFS *, int, ulong);
-int func_0015F148(struct FONT *, struct GIFS *);
+int FEnsureLoaded__8CFontBrxP4GIFS(struct FONT *, struct GIFS *);
 void func_0015F220(struct FONT *pfont, float *prc, struct GIFS *pgifs)
 {
     int fFlush;
@@ -17,7 +17,7 @@ void func_0015F220(struct FONT *pfont, float *prc, struct GIFS *pgifs)
         func_00166BD8(pgifs, 0, 1, 0xE);
         func_00166E90(pgifs, 0x40, (ulong)x0 | ((ulong)x1 << 16) | ((ulong)y0 << 32) | ((ulong)y1 << 48));
     }
-    fFlush = func_0015F148(pfont, pgifs);
+    fFlush = FEnsureLoaded__8CFontBrxP4GIFS(pfont, pgifs);
     func_00166BD8(pgifs, 6, 1, 0xE);
     if (fFlush)
         func_00166E90(pgifs, 0x3F, 0);

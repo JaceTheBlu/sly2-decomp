@@ -1,4 +1,4 @@
-// (Claude agent) framebuffer packet builder. Keys: FrameBits with shifts (masks appear at combine, no CSE across calls), TEX steps as copies a/b/c/d of an uninitialised TEX, separate frame/frame2 locals, values[2],[4],[0] order.
+// framebuffer packet builder. Keys: FrameBits with shifts (masks appear at combine, no CSE across calls), TEX steps as copies a/b/c/d of an uninitialised TEX, separate frame/frame2 locals, values[2],[4],[0] order.
 #define FIELD_OFFSET(t,m) ((uint)&(((t*)0)->m))
 #include "gifs.h"
 #include "vifs.h"

@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } U;
 typedef struct { qword r[3]; } M3;
@@ -7,8 +8,6 @@ qword func_001A62E8(void *p);
 qword func_00150780(struct X *p);
 float func_002458F0(float y, float x);
 void func_0011B720(M3 *pm, float a, float b);
-static inline qword Sub(qword a, qword b) { qword d; __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
-static inline qword Add(qword a, qword b) { qword d; __asm__("vadd.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 static inline qword Len(qword v)
 {
     qword d, one;
@@ -22,7 +21,6 @@ static inline qword Normalize(qword v)
     __asm__("vdiv Q, $vf0w, %1x\n\tvwaitq\n\tvmulq.xyzw %0, %2, Q" : "=j"(r) : "j"(l), "j"(v));
     return r;
 }
-static inline float GFromQ(qword v) { float g; __asm__("qmfc2.ni %0, %1" : "=r"(g) : "j"(v)); return g; }
 static inline qword VecMul(qword v, float g)
 {
     qword r;
@@ -43,14 +41,14 @@ qword func_001507F8(struct X *p)
     if (p->p14) {
         U n;
         qword a = func_001A62E8(p->p14);
-        n.q = Normalize(Sub(a, func_00150780(p)));
+        n.q = Normalize(QwSub(a, func_00150780(p)));
         p->gA4 = func_002458F0(n.f[1], n.f[0]);
-        r = Add(func_00150780(p), VecMul(n.q, -GFromQ(Len(D_002A5000))));
+        r = QwAdd(func_00150780(p), VecMul(n.q, -GFromVf(Len(D_002A5000))));
     } else {
         M3 m;
         qword v = D_002A5000;
         func_0011B720(&m, p->gA4, p->gA8);
-        r = Add(func_00150780(p), MulM3(&m, v));
+        r = QwAdd(func_00150780(p), MulM3(&m, v));
     }
     return r;
 }

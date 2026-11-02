@@ -6,8 +6,8 @@
 // the far end of every edge in the chain (min); the surface with the largest `min` above D_002A6AD0 wins, and bestOrig is its `orig`.
 // SURFACE.flags bit 8 marks surfaces already ranked (set while scanning, cleared again before the contacts are emitted).
 //
-// How the match was found (w2lane8 v4 + wave-3 lane 4; all natural C++, VU asm only):
-//  - SCALAR/VECTOR have default constructors that call func_002564B8 / func_002564C0 (the engine's 16-byte vector initialisers); PlaneDist's two SCALAR
+// How the match was found:
+//  - SCALAR/VECTOR have default constructors that call __3VUF / func_002564C0 (the engine's 16-byte vector initialisers); PlaneDist's two SCALAR
 //    locals therefore become the ctor calls + the dead dot/one stores at sp+0x10.. of every inlined expansion.
 //  - `float d` and `NODE *m` live at function scope and are shared by the edge loop and the emit loop: cse1 canonicalises the `if (n)` loop guard to the
 //    lowest-numbered pseudo of its equivalence class, so loops over `n` (declared after `head`) test `head` and loops over `m` test `m`.
@@ -21,9 +21,9 @@
 typedef int qword __attribute__((mode(TI)));
 struct SCALAR;
 struct VECTOR;
-extern "C" SCALAR *func_002564B8(SCALAR *);
+extern "C" SCALAR *__3VUF(SCALAR *);
 extern "C" VECTOR *func_002564C0(VECTOR *);
-struct SCALAR { qword q; SCALAR() { (void)func_002564B8(this); } };
+struct SCALAR { qword q; SCALAR() { (void)__3VUF(this); } };
 struct VECTOR { qword q; VECTOR() { (void)func_002564C0(this); } };
 struct VU_VECTOR4 { qword q; VU_VECTOR4(qword a) { q = a; } };
 struct W;

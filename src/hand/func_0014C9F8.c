@@ -3,8 +3,8 @@ struct CTX { int a[4]; };
 struct AREQ { int cb; int cbAlign; };
 struct LSG { qword v0; qword v10; qword v20; qword v30; float at[2]; int x48; int x4C; int x50; int pad[3]; };
 struct CTX *func_001AE478(struct CTX *);
-void func_001AE4A0(struct CTX *, int);
-void *func_001AE318(struct AREQ *);
+void _$_18CBinaryInputStream(struct CTX *, int);
+void *PvAllocStackImpl__FP7SWALLOC(struct AREQ *);
 void func_001AE5A0(void *, void *, int);
 
 int func_0014C9F8(int c1, struct LSG *alsg1, int c2, struct LSG *alsg2_, int cMax, struct LSG *alsgOut, int k)
@@ -24,7 +24,7 @@ int func_0014C9F8(int c1, struct LSG *alsg1, int c2, struct LSG *alsg2_, int cMa
         struct AREQ *preq = &req;
         preq->cb = cMax * sizeof(struct LSG);
         preq->cbAlign = 0x10;
-        alsgT = func_001AE318(preq);
+        alsgT = PvAllocStackImpl__FP7SWALLOC(preq);
     }
     i1 = 0;
     i2 = 0;
@@ -85,6 +85,6 @@ int func_0014C9F8(int c1, struct LSG *alsg1, int c2, struct LSG *alsg2_, int cMa
     }
     c = plsg - alsgT;
     func_001AE5A0(alsgOut, alsgT, c * sizeof(struct LSG));
-    func_001AE4A0(&ctx, 2);
+    _$_18CBinaryInputStream(&ctx, 2);
     return c;
 }

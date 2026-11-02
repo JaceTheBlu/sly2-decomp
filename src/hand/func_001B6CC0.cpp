@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 struct VT { short d; short pad; void *pfn; };
 struct O { char pad[0x80]; qword v80; };
@@ -5,12 +6,11 @@ struct P {
     char pad0[0xC]; struct VT *vt; char pad1[0xE8 - 0x10]; struct O *pE8; char pad1b[0x190 - 0xEC]; qword v190;
     char pad4[0x13D8 - 0x1A0]; int x13D8;
 };
-extern "C" qword D_002A2DC0;
+extern "C" qword g_normalZ;
 enum { FACTOR_ADDRESS = 0x002C09A4 };
 extern "C" void func_001FAC30(struct P *p, qword v);
 typedef union { qword q; float f[4]; } U;
 static inline qword Scale(qword a, float g) { U u; qword k, r; __asm__("qmtc2.ni %1, %0" : "=j"(k) : "r"(g)); u.q = k; __asm__("vmulx.xyzw %0, %1, %2x" : "=j"(r) : "j"(a), "j"(u.q)); return r; }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword Factor(qword a,qword k,qword negative,U *pu) {
     U &u=*pu; register qword r __asm__("vf3");
     __asm__("sqc2 %2,%0\n\tvmulx.xyzw %1,%3,%2x\n\tsqc2 %4,%0":"=m"(u.q),"=&j"(r):"j"(k),"j"(a),"j"(negative));
@@ -50,8 +50,8 @@ extern "C" void func_001B6CC0(struct P *p)
         __asm__("qmtc2.ni %1,%0":"=j"(kn):"r"(-1.0f));
         __asm__("vmulx.xyzw %0,%1,%2x":"=j"(n):"j"(p->v190),"j"(kn));
         int bits = ReadFactor();
-        qword d = Sub(n, v);
-        qword up = D_002A2DC0;
+        qword d = QwSub(n, v);
+        qword up = g_normalZ;
         qword projected = Projection(d,up);
         /* Projection has retired vf4; both outputs feed the final scale. */
         register qword factor __asm__("vf4"); register qword difference __asm__("vf1");

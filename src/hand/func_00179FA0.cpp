@@ -1,35 +1,35 @@
+#include "mat.h"
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((t*)0)->m))
 typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];};
-struct M3{qword r[3];};
 struct CONTROL;
 struct P{char pad[0x124];int kind;char pad128[0x2C0-0x128];unsigned long flags;char pad2C8[0xF80-0x2C8];int mode;P*linked;char padF88[0xFD0-0xF88];char control[0];};
 struct INFO{char pad[0x58];P*target;int reverse;int extra;};
 struct DRIVER{char pad[8];INFO*info;};
-struct C{char pad[0x10];P*actor;char pad14[0x40-0x14];DRIVER*driver;char pad44[0x50-0x44];U point;P*target;int reverse,extra,basisValid;M3 matrix;};
-union TEMP{struct{U direction;M3 rotation;}first;M3 basis;};
+struct C{char pad[0x10];P*actor;char pad14[0x40-0x14];DRIVER*driver;char pad44[0x50-0x44];U point;P*target;int reverse,extra,basisValid;MATRIX3 matrix;};
+union TEMP{struct{U direction;MATRIX3 rotation;}first;MATRIX3 basis;};
 struct WORK{TEMP temp;float curve;};
 struct LIMIT{float low,high;};
 extern "C"{
  extern unsigned long D_002DFB70;
  extern int D_002DFB78;
- extern qword D_002A2DC0;
+ extern qword g_normalZ;
  extern LIMIT D_002BE6B8;
  unsigned long func_00207A20(int);
- int func_00132B10(P*,int);
+ int FIsBasicDerivedFrom__FP5BASIC3CID(P*,int);
  qword func_001A62E8(P*);
- M3*func_001A6318(P*);
+ MATRIX3*func_001A6318(P*);
  void func_001E6F60(P*,qword,void*,qword*,qword*,float*,float*);
  float func_002458F0(float,float);
- float func_0011CF60(float);
- void func_0011B500(M3*,float,qword);
- M3*func_0011B830(M3*,qword,qword);
- void func_001C3500(P*,int,M3*,float);
+ float RadNormalize__Ff(float);
+ void LoadRotateMatrixRad__FfUx(MATRIX3*,float,qword);
+ MATRIX3*func_0011B830(MATRIX3*,qword,qword);
+ void func_001C3500(P*,int,MATRIX3*,float);
  void func_0017A468(C*);
  int func_00173610(qword*,float,float,int,int(*)(void));
  void func_00174950(C*);
  void func_00209818(CONTROL*,float);
- void func_00209840(CONTROL*,M3*);
+ void func_00209840(CONTROL*,MATRIX3*);
  void func_0020C6F8(INFO*,qword);
  void func_001EEFC0(C*);
 }
@@ -46,7 +46,7 @@ static inline qword BasisInputs(C*p,U*home,qword current,P**actor){
  __asm__("vsub.xyzw %0,%1,%0":"+j"(b):"j"(a));*actor=o;return b;
 }
 typedef char U_Size[sizeof(U)==16?1:-1];
-typedef char M3_Size[sizeof(M3)==48?1:-1];
+typedef char M3_Size[sizeof(MATRIX3)==48?1:-1];
 typedef char TEMP_Size[sizeof(TEMP)==64?1:-1];
 typedef char WORK_Size[sizeof(WORK)==80?1:-1];
 typedef char P_kind_Offset[FIELD_OFFSET(P,kind)==292?1:-1];
@@ -85,35 +85,35 @@ extern "C" void func_00179FA0(C*p){
  unsigned long active=0;
  if(p->target){
   float heading;
-  if(func_00132B10(p->target,10)){
+  if(FIsBasicDerivedFrom__FP5BASIC3CID(p->target,10)){
    P*target=p->target;
    qword position=func_001A62E8(p->actor);
    func_001E6F60(target,position,0,&p->point.q,&work.temp.first.direction.q,0,&work.curve);
    heading=func_002458F0(work.temp.first.direction.f[1],work.temp.first.direction.f[0]);
   }else{
    p->point.q=func_001A62E8(p->target);
-   M3*a=func_001A6318(p->target);
-   M3*b=func_001A6318(p->target);
+   MATRIX3*a=func_001A6318(p->target);
+   MATRIX3*b=func_001A6318(p->target);
    heading=func_002458F0(((U*)a->r)->f[1],((U*)b->r)->f[0]);
   }
-  if(func_00132B10(p->target,13)){
+  if(FIsBasicDerivedFrom__FP5BASIC3CID(p->target,13)){
    active|=func_00207A20(0x1B);
-   if(!p->reverse)heading=func_0011CF60(heading+3.1415927410125732421875f);
+   if(!p->reverse)heading=RadNormalize__Ff(heading+3.1415927410125732421875f);
    p->basisValid=1;
-   func_0011B500(&work.temp.first.rotation,heading,D_002A2DC0);
+   LoadRotateMatrixRad__FfUx(&work.temp.first.rotation,heading,g_normalZ);
    p->matrix=work.temp.first.rotation;
-  }else if(func_00132B10(p->target,0x27)){
+  }else if(FIsBasicDerivedFrom__FP5BASIC3CID(p->target,0x27)){
    active|=func_00207A20(0x29);
-  }else if(func_00132B10(p->target,11)){
+  }else if(FIsBasicDerivedFrom__FP5BASIC3CID(p->target,11)){
    active|=func_00207A20(0x27);
    p->basisValid=1;
    func_001C3500(p->target,p->reverse,&p->matrix,work.curve);
    func_0017A468(p);
-  }else if(func_00132B10(p->target,0x13)&&p->target->kind==3){
+  }else if(FIsBasicDerivedFrom__FP5BASIC3CID(p->target,0x13)&&p->target->kind==3){
    active|=func_00207A20(0x28);
    p->basisValid=1;
-   M3*m=func_001A6318(p->target);
-   (void)func_0011B830(&work.temp.basis,m->r[0],D_002A2DC0);
+   MATRIX3*m=func_001A6318(p->target);
+   (void)func_0011B830(&work.temp.basis,m->r[0],g_normalZ);
    p->matrix=work.temp.basis;
    func_0017A468(p);
   }else{
@@ -140,7 +140,7 @@ extern "C" void func_00179FA0(C*p){
    otherPoint=p->point;
    qword current=func_001A62E8(p->actor);
    P*actor;direction.q=BasisInputs(p,&otherPoint,current,&actor);
-   M3*m=func_001A6318(actor->linked);
+   MATRIX3*m=func_001A6318(actor->linked);
    (void)func_0011B830(&work.temp.basis,m->r[0],direction.q);
    func_00209840(Control(p->actor),&work.temp.basis);
    break;

@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 struct VT { struct { short d; short pad; float *(*pfn)(void *); } a[40]; };
 struct P { char pad[0x18]; float g18; };
@@ -7,14 +8,12 @@ struct O { char pad[0xC]; struct VT *pvt; char pad1[0x150 - 0x10]; struct P *p15
 extern qword func_001A62E8(void *p);
 extern int func_0011D910(void *p, float g);
 extern struct T *func_001EEEE0(void *p, int n);
-extern void func_0018C250(struct O *p, int n, int m);
+extern void SetJtJts__FP2JT3JTS4JTBS(struct O *p, int n, int m);
 extern float func_002458F0(float y, float x);
-extern float func_0011CF60(float g);
+extern float RadNormalize__Ff(float g);
 extern int func_0018ED98(struct O *p);
 extern float D_002BF4AC;
 extern char D_002BF4B0[];
-static __inline__ float GetZ(qword q) { float z; __asm__("pextuw %0, $0, %1" : "=r"(z) : "r"(q)); return z; }
-static __inline__ qword VSub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 int func_0018EE38(struct O *p)
 {
     int n;
@@ -22,7 +21,7 @@ int func_0018EE38(struct O *p)
         qword d, l;
         float g;
         int f;
-        d = VSub(func_001A62E8(p->p10DC), func_001A62E8(p));
+        d = QwSub(func_001A62E8(p->p10DC), func_001A62E8(p));
         __asm__("vmul.xy %0, %1, %1\n\tvaddy.x %0, %0, %0y" : "=j"(l) : "j"(d));
         __asm__("vsqrt Q, %1x\n\tvwaitq\n\tvaddq.x %0, $vf0, Q" : "=j"(l) : "j"(l));
         __asm__("qmfc2.ni %0, %1" : "=r"(g) : "j"(l));
@@ -35,7 +34,7 @@ int func_0018EE38(struct O *p)
                 int k = pt->n50;
                 if (k < 2) {
                     if (k >= 0) {
-                        func_0018C250(p, 0x10, -1);
+                        SetJtJts__FP2JT3JTS4JTBS(p, 0x10, -1);
                         return -1;
                     }
                 }
@@ -45,7 +44,7 @@ int func_0018EE38(struct O *p)
     if (p->n18D0 == 5) {
         float *pa = p->pvt->a[31].pfn((char *)p + p->pvt->a[31].d);
         float *pb = p->pvt->a[31].pfn((char *)p + p->pvt->a[31].d);
-        float d = func_0011CF60(p->p150->g18 - func_002458F0(pa[1], pb[0]));
+        float d = RadNormalize__Ff(p->p150->g18 - func_002458F0(pa[1], pb[0]));
         float ad = __builtin_fabsf(d);
         if (ad < 0.7853982f)
             n = 0xE;

@@ -1,16 +1,8 @@
-struct CRef {
-    int m_tagk; union { int n; float g; void *pv; } u;
-    CRef() { m_tagk = -1; }
-    CRef(const CRef &r);
-    void Decref();
-    void InitTag(int tagk);
-    ~CRef() { Decref(); }
-    CRef &operator=(const CRef &r);
-};
+#include "cref.h"
 struct W;
 extern char D_004520A8[];
 extern "C" {
-void func_0011CD98(void *pheap, void *pv);
+void FreeSlotheapPv__FP8SLOTHEAPPv(void *pheap, void *pv);
 void func_002550F8(void *pv);
 W *func_00256B48();
 CRef func_00129BC8(CRef *pref, void *a, void *b);
@@ -26,7 +18,7 @@ struct W {
     CRef ref;
     SPM pnext;
     void SetNext(W *pw) { pnext = pw; }
-    void operator delete(void *pv) { func_002550F8(pv); func_0011CD98(D_004520A8, pv); }
+    void operator delete(void *pv) { func_002550F8(pv); FreeSlotheapPv__FP8SLOTHEAPPv(D_004520A8, pv); }
 };
 struct SPW {
     W *p;

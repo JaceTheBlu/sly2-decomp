@@ -1,13 +1,14 @@
+#include "mat.h"
+#include "vu0.h"
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct M3 { qword r[3]; };
-union M4 { struct { qword r[4]; } q; M3 m3; float af[4][4]; };
-struct CLOCK { float t; float dt; };
-extern "C" CLOCK D_002DDED0;
+union M4 { struct { qword r[4]; } q; MATRIX3 m3; float af[4][4]; };
+extern "C" CLOCK g_clock;
 struct CM {
     char pad0[0x20]; float g20; float g24; char pad1[0x60 - 0x28];
-    M3 mat; qword pos; char pad2[0x300 - 0xA0]; int n300;
+    MATRIX3 mat; qword pos; char pad2[0x300 - 0xA0]; int n300;
 };
-extern "C" CM D_002DDF40;
+extern "C" CM g_cm;
 extern "C" char D_002BDAB0[], D_002BDAC0[];
 struct LO;
 struct LOV { char pad[0xF8]; short d31; short p31; M4 *(*pfn31)(LO *); };
@@ -16,16 +17,16 @@ struct Y { char pad[0x1BC]; float g1BC; char pad1[0x1D0 - 0x1C0]; LO *plo; int n
 struct X { Y *py; };
 extern "C" {
 void func_0014FD40(X *p);
-M3 func_0011BC00(M4 *pm, M3 *pm2);
-void func_0011BCF8(M3 *pm, float *pg, qword *pv);
-float func_0011D018(float gCur, float gTarget, float dt, void *psmp, float *pdgNext); /* GSmooth */
-M3 func_0011B500(qword v, float g);
-qword *func_00256D18(qword *p, qword v);
+MATRIX3 CalculateDmat__FP7MATRIX3T0(M4 *pm, MATRIX3 *pm2);
+void func_0011BCF8(MATRIX3 *pm, float *pg, qword *pv);
+float GSmooth__FfffP3SMPPf(float gCur, float gTarget, float dt, void *psmp, float *pdgNext); /* GSmooth */
+MATRIX3 LoadRotateMatrixRad__FfUx(qword v, float g);
+qword *__as__6VECTORG9VU_VECTOR(qword *p, qword v);
 void func_0014E168(CM *p, M4 *m);
 void func_0014F5A0(CM *p, float g);
 void func_00151950(X *p);
 }
-static inline M3 Mul(const M3 &a, const M3 &b) return r
+static inline MATRIX3 Mul(const MATRIX3 &a, const MATRIX3 &b) return r
 {
     qword a0 = a.r[0], a1 = a.r[1], a2 = a.r[2];
     __asm__("vmulax.xyz ACC,%1,%4x\n\tvmadday.xyz ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z"
@@ -36,7 +37,6 @@ static inline M3 Mul(const M3 &a, const M3 &b) return r
         : "=j"(r.r[2]) : "j"(a0), "j"(a1), "j"(a2), "j"(b.r[2]));
 }
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } };
-static inline qword Sub(qword a, qword b) { qword d; __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 static inline float Length(qword a)
 {
     qword d, one;
@@ -60,36 +60,36 @@ void func_00151950(X *p)
     Y *py = p->py;
     LO *plo = py->plo;
     M4 m = *plo->pvt->pfn31((LO *)((char *)plo + plo->pvt->d31));
-    if (D_002DDF40.n300 == 0 && py->n1D4 != 0) {
-        M3 mRel;
-        M3 mNew;
+    if (g_cm.n300 == 0 && py->n1D4 != 0) {
+        MATRIX3 mRel;
+        MATRIX3 mNew;
         union { qword q; } axis;
         float rad;
-        mRel = func_0011BC00(&m, &D_002DDF40.mat);
+        mRel = CalculateDmat__FP7MATRIX3T0(&m, &g_cm.mat);
         func_0011BCF8(&mRel, &rad, &axis.q);
         if (rad < 0.0001f) {
             mNew = m.m3;
         } else {
-            float g = func_0011D018(rad, 0.0f, D_002DDED0.dt, D_002BDAB0, 0);
-            mNew = Mul(func_0011B500(axis.q, g), m.m3);
+            float g = GSmooth__FfffP3SMPPf(rad, 0.0f, g_clock.dt, D_002BDAB0, 0);
+            mNew = Mul(LoadRotateMatrixRad__FfUx(axis.q, g), m.m3);
         }
-        qword d = Sub(D_002DDF40.pos, m.q.r[3]);
+        qword d = QwSub(g_cm.pos, m.q.r[3]);
         float dist = Length(d);
         qword pos;
         if (dist < 0.0001f)
             pos = m.q.r[3];
         else
-            pos = AddScaled(m.q.r[3], d, VU_FLOAT(func_0011D018(dist, 0.0f, D_002DDED0.dt, D_002BDAC0, 0) / dist));
-        func_00256D18(&m.q.r[3], pos);
+            pos = AddScaled(m.q.r[3], d, VU_FLOAT(GSmooth__FfffP3SMPPf(dist, 0.0f, g_clock.dt, D_002BDAC0, 0) / dist));
+        __as__6VECTORG9VU_VECTOR(&m.q.r[3], pos);
         m.m3 = mNew;
         m.af[3][3] = 1.0f;
         m.af[2][3] = 0.0f;
         m.af[1][3] = 0.0f;
         m.af[0][3] = 0.0f;
     }
-    func_0014E168(&D_002DDF40, &m);
-    if (D_002DDF40.g24 != D_002DDF40.g20)
-        D_002DDF40.g24 = py->g1BC;
+    func_0014E168(&g_cm, &m);
+    if (g_cm.g24 != g_cm.g20)
+        g_cm.g24 = py->g1BC;
     else
-        func_0014F5A0(&D_002DDF40, py->g1BC);
+        func_0014F5A0(&g_cm, py->g1BC);
 }

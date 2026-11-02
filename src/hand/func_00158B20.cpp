@@ -1,4 +1,5 @@
-// func_00158B20 (Claude agent, T1655): DZG constraint-add loop. Each pass re-solves (func_00158988), picks the free
+#include "clock.h"
+// func_00158B20: DZG constraint-add loop. Each pass re-solves (func_00158988), picks the free
 // contact row whose projected push (the rows' gC-weighted af[j].av[i] vectors minus the normal part) is largest, then
 // appends a new row paired with it: its g10 = -|v|, its F gets the push divided by g10 and the SO, its g8/g4 limits come from
 // the object's friction data, and func_00158668 (AppendDzgDz) gets the new row and its F.
@@ -12,9 +13,8 @@ struct ALO { char pad[0xE8]; ZZ *pzz; };
 struct SO { char pad[8]; ALO *palo; char pad2[0x80 - 0xC]; qword normal; char pad3[0x94 - 0x90]; float g94; char pad4[0x9C - 0x98]; int k9C; int padA0[4]; qword vB0; };
 struct F { char pad[0x40]; qword v; SO *pso; qword *av; char pad2[0x60 - 0x58]; };
 struct DZG { int x0; int cdz; DZ *adz; char pad[0x50 - 0xC]; int cso; SO **apso; int pad58[2]; F *af; };
-struct CLOCK { float t; float dt; };
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern float D_002BDDE8;
 void func_00158988(DZG *pdzg, int grf);
 void func_00158668(DZG *pdzg, DZ *pdz, F *pf);
@@ -123,7 +123,7 @@ void func_00158B20(DZG *pdzg, int grf)
             ZZ *pzz = psoBest->palo->pzz;
             float gLimit;
             if (grf & 1) {
-                gLimit = -pzz->g88 * pzz->gD0 * D_002DDED0.dt;
+                gLimit = -pzz->g88 * pzz->gD0 * g_clock.dt;
                 float g = __builtin_fabsf(pdz->pdzOther->gC);
                 pdz->g8 = psoBest->g94 * (g < gLimit ? gLimit : g);
             } else {

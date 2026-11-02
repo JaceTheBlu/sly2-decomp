@@ -1,4 +1,4 @@
-struct DL { void *pvFirst; void *pvLast; int ibDle; };
+#include "dl.h"
 struct O { char pad[0x1C4]; struct DL dl; char pad2[0x1D8 - 0x1D0]; void *powner; };
 extern struct DL D_003E1A4C;
 void func_0011A220(struct DL *pdl, void *pv);

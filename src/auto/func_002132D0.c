@@ -1,8 +1,8 @@
 #include "m2c_prelude.h"
-M2C_UNK func_001179D8(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
+M2C_UNK SetDecompress__18CBinaryInputStreamiPUc(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_00129EC8(void *);                      /* extern */
-M2C_UNK func_00166920(M2C_UNK *);                   /* extern */
-s32 func_001AE318(s32 *);                           /* extern */
+M2C_UNK __4GIFS(M2C_UNK *);                   /* extern */
+s32 PvAllocStackImpl__FP7SWALLOC(s32 *);                           /* extern */
 extern M2C_UNK D_0025AFA0;
 extern M2C_UNK D_0025B870;
 extern M2C_UNK D_002A8A78;
@@ -28,7 +28,7 @@ extern s32 D_002DD2EC;
 extern s32 D_002DD2F0;
 extern s32 D_002DD2F4;
 extern s32 D_002DD318;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDF0C;
 extern f32 D_002DDF10;
 extern f32 D_002DE3B8;
@@ -45,7 +45,7 @@ extern M2C_UNK D_003D4A60;
 extern M2C_UNK D_003D9EDC;
 extern s32 D_003D9EF4;
 extern M2C_UNK D_003DA4F0;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 extern void *D_003E1060;
 extern void *D_003E106C;
 extern M2C_UNK D_003E1C20;

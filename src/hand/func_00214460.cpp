@@ -28,7 +28,7 @@ int func_00117BD0(BIS *);
 int func_00117D50(BIS *);
 int func_00117DB8(BIS *);
 float func_00117E38(BIS *);
-void func_00117ED0(BIS *,M3 *);
+void ReadMatrix__18CBinaryInputStreamP7MATRIX3(BIS *,M3 *);
 void *func_00116918(HEAP *,int,int);
 void func_002156B8(FRAME *);
 }
@@ -75,7 +75,7 @@ extern "C" void func_00214460(OWNER *owner,BIS *stream,ROOT *root){
      ITEM *item=&key->items[m];
      item->a0=func_00117C20(stream);item->a2=func_00117C20(stream);item->a4=func_00117C20(stream);item->a6=func_00117D50(stream);
      item->flags=func_00117BD0(stream);item->mode=func_00117BD0(stream);item->id=func_00117DB8(stream);
-     M3 raw;func_00117ED0(stream,&raw);M3 matrix=raw;CopyXY(&item->matrix,matrix);
+     M3 raw;ReadMatrix__18CBinaryInputStreamP7MATRIX3(stream,&raw);M3 matrix=raw;CopyXY(&item->matrix,matrix);
     }
     key->colorCount=func_00117BD0(stream);
     key->colors=(COLORS *)func_00116918(owner->heap,(int)key->colorCount*8,0x12);

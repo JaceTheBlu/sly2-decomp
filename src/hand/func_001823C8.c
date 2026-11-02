@@ -1,3 +1,4 @@
+#include "vu0.h"
 // func_001823C8: contact generator. From lane H3v1 (no pins); the plane distance's scalar leaves the VU via gcc's qmfc2 plus an mtc1 asm (GX), as in Lilly's GXOfQw.
 
 typedef int qword __attribute__((mode(TI)));
@@ -11,16 +12,14 @@ typedef struct CONTACT{char pad[0xB0];}CONTACT;
 typedef struct P{char pad0[0xE0];int contactCount;CONTACT*contacts;char padE8[0xE0];int entryCount;ENTRY entries[1];}P;
 typedef struct SEGMENT{qword a,b,plane;char pad30[0x30];}SEGMENT;
 typedef struct WORK{U direction,newEndpoint,oldEndpoint;SEGMENT segments[2];U scale,dot,one;}WORK;
-extern qword D_002A2DA0;extern int D_003DD490;
+extern qword D_002A2DA0;extern int g_sw;
 extern void func_001F5990(P*,REQUEST*,int,int,int,CONTACT**);
-extern qword*func_002564B8(qword*);
-extern int func_0014C748(qword,float,qword,qword,int,SEGMENT*);
+extern qword*__3VUF(qword*);
+extern int ClsgClipEdgeToSphere__FUxfUxUxiP3LSG(qword,float,qword,qword,int,SEGMENT*);
 extern void func_001A7C18(void*,CONTACT*,REQUEST*,qword,qword,int,NODE*,int,CONTACT**,float);
 
 static inline qword Sub(qword a,qword b){__asm__("vsub.xyzw %0,%0,%1":"+j"(a):"j"(b));return a;}
-static inline qword Broadcast(float f){qword r;__asm__("qmtc2.ni %1,%0":"=j"(r):"r"(f));return r;}
 static inline qword BroadcastBits(int b){qword r;__asm__("qmtc2.ni %1,%0":"=j"(r):"r"(b));return r;}
-static inline float Scalar(qword a){float f;__asm__("qmfc2.ni %0,%1":"=r"(f):"j"(a));return f;}
 static inline qword MAdd(qword a,qword b,qword s){__asm__("vadda.xyzw ACC,%0,$vf0\n\tvmaddx.xyzw %0,%1,%2x":"+j"(a):"j"(b),"j"(s));return a;}
 static inline qword MAdd2(qword a,qword b,qword s){qword r;__asm__("vadda.xyzw ACC,%1,$vf0\n\tvmaddx.xyzw %0,%2,%3x":"=j"(r):"j"(a),"j"(b),"j"(s));return r;}
 static inline qword Point(const M4*m,qword p){qword r=m->r[0].q;__asm__("vmulax.xyz ACC,%0,%4x\n\tvmadday.xyz ACC,%1,%4y\n\tvmaddaz.xyz ACC,%2,%4z\n\tvmaddw.xyz %0,%3,$vf0w":"+j"(r):"j"(m->r[1].q),"j"(m->r[2].q),"j"(m->r[3].q),"j"(p));return r;}
@@ -30,15 +29,14 @@ static inline float Planar(U*p){
  qword dv; /* allocation-only "=j"(dv) tied to direction: the asm leaves it unchanged, it gives the vdiv a VF copy so direction's GPR dies here */
  __asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=&j"(d),"=&j"(root),"=j"(dv):"2"(direction),"r"(direction),"r"(direction)); /* allocation-only "r": direction is reloaded through a GPR (lq+qmtc2) */
  __asm__("vsqrt Q,%1x\n\tvwaitq\n\tvaddq.x %0,$vf0,Q":"=j"(root):"j"(d));
- if(Scalar(root)<0.0001f)p->q=D_002A2DA0;
+ if(GFromVf(root)<0.0001f)p->q=D_002A2DA0;
  else{__asm__("vdiv Q,$vf0w,%2x\n\tvwaitq\n\tvmulq.xyzw %0,%1,Q":"=j"(d):"j"(dv),"j"(root));p->q=d;}
- return Scalar(root);
+ return GFromVf(root);
 }
-static inline float GX(qword qw){float x;__asm__("mtc1 %1,%0":"=f"(x):"r"(qw));return x;}
 static inline float Distance(U*dot,U*one,qword plane,qword point){
  qword d=point,o;
  __asm__("vmul.xyz %0,%2,%0\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddaz.x ACC,%1,%0z\n\tvmsubw.x %0,%1,%2w":"+j"(d),"=&j"(o):"j"(plane));
- one->q=o;dot->q=d;return GX(d);
+ one->q=o;dot->q=d;return GetX(d);
 }
 void func_001823C8(P*p,REQUEST*q,int unused2,int unused3,int unused4,CONTACT**pout){
  WORK w;int i,count;qword center;CONTACT**out=pout;
@@ -56,21 +54,21 @@ void func_001823C8(P*p,REQUEST*q,int unused2,int unused3,int unused4,CONTACT**po
    w.direction.q=Sub(n->position.q,center);w.direction.i[2]=0;
    distance=Planar(&w.direction);
    if(distance<radius){
-    w.newEndpoint.q=Broadcast(-q->radius);
-    func_001A7C18(&D_003DD490,&p->contacts[p->contactCount-1],q,MAdd(center,w.direction.q,w.newEndpoint.q),w.direction.q,10,n,0,out,distance-radius);
+    w.newEndpoint.q=QwFromG(-q->radius);
+    func_001A7C18(&g_sw,&p->contacts[p->contactCount-1],q,MAdd(center,w.direction.q,w.newEndpoint.q),w.direction.q,10,n,0,out,distance-radius);
    }else{
     int j;
     for(j=q->start;j<q->count;j++){
      w.newEndpoint.q=Point(&q->matrix,q->vertices[j]);w.oldEndpoint.q=q->world[j];
      w.newEndpoint.f[2]=w.oldEndpoint.f[2]=n->position.f[2];
-     if(func_0014C748(n->position.q,radius,w.newEndpoint.q,w.oldEndpoint.q,2,w.segments)>0){
+     if(ClsgClipEdgeToSphere__FUxfUxUxiP3LSG(n->position.q,radius,w.newEndpoint.q,w.oldEndpoint.q,2,w.segments)>0){
       qword plane,point,result;
       w.scale.q=BroadcastBits(*(int*)&q->radius);
       plane=w.segments[0].plane;point=w.oldEndpoint.q;
       result=MAdd2(point,plane,w.scale.q);
-      func_002564B8(&w.dot.q);func_002564B8(&w.one.q);
+      __3VUF(&w.dot.q);__3VUF(&w.one.q);
       distance=Distance(&w.dot,&w.one,plane,point)-q->radius;
-      func_001A7C18(&D_003DD490,&p->contacts[p->contactCount-1],q,result,plane,10,n,0,out,distance);
+      func_001A7C18(&g_sw,&p->contacts[p->contactCount-1],q,result,plane,10,n,0,out,distance);
       break;
      }
     }

@@ -2,7 +2,7 @@ struct MSG { int cb; int nKind; };
 struct V { int a, b; void *p8; };
 struct G { char pad[0x4778]; unsigned int c; void *a[4]; };
 struct V *func_00258658(void *p, int n);
-void *func_001AE2A0(struct MSG *pmsg);
+void *PvAllocSwClearImpl__FP7SWALLOC(struct MSG *pmsg);
 void func_001C4848(struct G *p, void *q)
 {
     if (p->c < 4) {
@@ -13,7 +13,7 @@ void func_001C4848(struct G *p, void *q)
             struct MSG msg;
             msg.cb = 0x14;
             msg.nKind = 0x10;
-            pv->p8 = func_001AE2A0(&msg);
+            pv->p8 = PvAllocSwClearImpl__FP7SWALLOC(&msg);
         }
     }
 }

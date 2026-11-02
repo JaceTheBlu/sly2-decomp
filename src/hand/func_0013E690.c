@@ -4,10 +4,10 @@ int func_00117DB8(void *pbs);
 float func_00117E38(void *pbs);
 int func_00117D50(void *pbs);
 int func_00117C80(void *pbs);
-void func_00129330(CRef *ret, float *ag);
-void func_00129398(CRef *ret, float *ag);
-void func_001291E0(CRef *ret, float *ag);
-void func_0012A0B0(CRef *ret, int tagk);
+void __4CRefPC3V16(CRef *ret, float *ag);
+void __4CRefPC2V8(CRef *ret, float *ag);
+void __4CRefPC6VECTOR(CRef *ret, float *ag);
+void SetTag__4CRef4TAGK(CRef *ret, int tagk);
 CRef *func_0013E690(CRef *ret, int k, void *pbs)
 {
     float ag[3];
@@ -38,12 +38,12 @@ CRef *func_0013E690(CRef *ret, int k, void *pbs)
             for (j = 0; j < 3; j++)
                 *pg++ = func_00117E38(pbs);
         }
-        func_00129330(ret, ag);
+        __4CRefPC3V16(ret, ag);
         break;
     case 10:
         ag[0] = func_00117E38(pbs);
         ag[1] = func_00117E38(pbs);
-        func_00129398(ret, ag);
+        __4CRefPC2V8(ret, ag);
         break;
     case 2:
         {
@@ -52,14 +52,14 @@ CRef *func_0013E690(CRef *ret, int k, void *pbs)
             for (j = 0; j < 3; j++)
                 *pg++ = func_00117E38(pbs);
         }
-        func_001291E0(ret, ag);
+        __4CRefPC6VECTOR(ret, ag);
         break;
     default:
         if (((k & ~0x8000) >> 12) == 1) {
             ret->u.n = func_00117C80(pbs);
             ret->m_tagk = 0x15;
         } else {
-            func_0012A0B0(ret, 0x24);
+            SetTag__4CRef4TAGK(ret, 0x24);
         }
         break;
     }

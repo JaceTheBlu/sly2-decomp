@@ -1,9 +1,10 @@
+#include "clock.h"
+#include "vtable.h"
 // Create position and orientation jobs for the selected animated object.
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};
 union M4 {qword rows[4];float values[16];};
 struct M3 {qword rows[3];};
-struct VTE {short delta,pad;void *fn;};
 struct SPACE;
 struct JOB;
 struct CHANNEL {char pad90[0x90];JOB *current;char pad94[0xC];SPACE *space;int wordA4;float endTime;};
@@ -13,36 +14,35 @@ struct FOLLOW {char pad80[0x80];qword velocity;};
 struct LO {char padC[0xC];VTE *vt;char pad10[0x48];CHANNEL *position,*orientation;SPACE *space;char pad64[0x84];FOLLOW *follow;char padEC[0xC4];M3 basis;char pad1E0[0xE50];ANIM *playing;};
 struct SOURCE {char padC[0xC];VTE *vt;};
 struct P {LO *owner;char pad4[0x30];SOURCE *source;char pad38[0x5C];JOB *positionJob,*otherJob,*orientationJob;};
-struct CLOCK {float time,dt;};
 union VIEWS {struct {M4 intermediate,product,inverse;} matrices;struct {M3 angles,converted;} basis;U scalar;};
 struct WORK {M4 original,sample,start,final;VIEWS views;qword velocity,destination,delta,endVelocity;};
 extern "C" {
 extern qword D_002C1EE0;
 extern float D_002C1EF0;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 void func_0012E460(JOB **);
-float func_0012F990(MOTION *,int);
-void func_001300B8(MOTION *,float,float,LO *,SPACE *,SPACE *,M4 *,M4 *);
+float TFindAsegLabel__FP4ASEG3OID(MOTION *,int);
+void PredictAsegEffect(MOTION *,float,float,LO *,SPACE *,SPACE *,M4 *,M4 *);
 qword func_001A62E8(LO *);
-qword *func_00256D18(qword *,qword);
-M4 *func_0011C168(M4 *,const M4 *,const M4 *);
+qword *__as__6VECTORG9VU_VECTOR(qword *,qword);
+M4 *__ml__FRC7MATRIX4T0(M4 *,const M4 *,const M4 *);
 LO *func_001CCA40(LO *,LO *);
 M4 func_001A71B0(LO *,LO *,const M4 *);
 M4 func_0011C318(const M4 *);
-void func_001A58D0(LO *,int,int);
+void SetLoParent__FP2LOP2SOi(LO *,int,int);
 float func_00196928(qword,qword,float,float,float,float);
 void func_00131A00(ANIM *,float);
 qword func_0022FC48(SPACE *,SPACE *,qword);
 qword func_0022FCC8(SPACE *,SPACE *,qword);
 JOB *func_0012DE58(LO *,CHANNEL *,int,float,qword,qword);
 M3 *func_0022FD38(M3 *,SPACE *,SPACE *,const M3 *);
-qword func_0011BFF0(const M3 *);
+qword DecomposeRotateMatrixEuler__FP7MATRIX3(const M3 *);
 JOB *func_0012DC18(LO *,CHANNEL *,int,int,int,qword);
 void func_001F6860(LO *,int);
 }
 static inline void*operator new(unsigned size,void*destination){return destination;}
-static inline SPACE *SourceMatrix(SOURCE *p,M4 *out){VTE &v=p->vt[32];return ((SPACE*(*)(SOURCE *,M4 *))v.fn)((SOURCE *)((char *)p+v.delta),out);}
-static inline M4 *WorldMatrix(LO *p){VTE &v=p->vt[31];return ((M4*(*)(LO *))v.fn)((LO *)((char *)p+v.delta));}
+static inline SPACE *SourceMatrix(SOURCE *p,M4 *out){VTE &v=p->vt[32];return ((SPACE*(*)(SOURCE *,M4 *))v.pfn)((SOURCE *)((char *)p+v.delta),out);}
+static inline M4 *WorldMatrix(LO *p){VTE &v=p->vt[31];return ((M4*(*)(LO *))v.pfn)((LO *)((char *)p+v.delta));}
 static inline float Max(float a,float b){float r;__asm__("max.s %0,%1,%2":"=f"(r):"f"(a),"f"(b));return r;}
 static inline qword*TranslationSlot(WORK&w){register qword*slot __asm__("$4");__asm__("addiu %0,%1,0xB0":"=r"(slot):"r"(&w));return slot;}
 static inline M4*SampleOutput(M4*value){register M4*result __asm__("$8");__asm__("daddu %0,%1,$zero":"=r"(result):"r"(value));return result;}
@@ -60,13 +60,13 @@ extern "C" void func_001CCC88(P *input,LO *other){
  WORK work;
  func_0012E460(&p->positionJob);register float zero __asm__("$f21")=0.0f;func_0012E460(&p->otherJob);func_0012E460(&p->orientationJob);
  ANIM *anim=p->owner->playing;MOTION *motion=anim->motion;
- float time=func_0012F990(motion,0x1C7),phase=(time-anim->start)/anim->duration;
+ float time=TFindAsegLabel__FP4ASEG3OID(motion,0x1C7),phase=(time-anim->start)/anim->duration;
  SPACE *space=SourceMatrix(p->source,&work.original);register M4*workingBase __asm__("$19")=&work.sample;
- func_001300B8(motion,time,zero,p->owner,space,p->owner->space,SampleOutput(workingBase),0);
+ PredictAsegEffect(motion,time,zero,p->owner,space,p->owner->space,SampleOutput(workingBase),0);
  LO *owner=p->owner;
  M4 *start=&work.start;M3 *basis=&owner->basis;register M4*product __asm__("$21");
  qword location=func_001A62E8(owner);
- func_00256D18(TranslationSlot(work),location);
+ __as__6VECTORG9VU_VECTOR(TranslationSlot(work),location);
  {
  register qword firstRow __asm__("$2");register M4*intermediate __asm__("$16");register float homogeneous __asm__("$f0");
  __asm__("lq %0,%2\n\taddiu %1,%3,0x140":"=&r"(firstRow),"=r"(product):"m"(owner->basis.rows[0]),"r"(&work));
@@ -76,10 +76,10 @@ extern "C" void func_001CCC88(P *input,LO *other){
  register qword row1 __asm__("$3"),row2 __asm__("$2");
  __asm__("lq %0,16(%4)\n\tdaddu %2,%6,$zero\n\tsq %0,16(%5)\n\tlq %1,32(%4)\n\tsq %1,32(%5)\n\tswc1 %7,%3\n\tswc1 %7,32+%3\n\tswc1 %7,16+%3"
   :"=&r"(row1),"=&r"(row2),"=&r"(workingBase),"=m"(*(BASIS_TAIL*)((char*)&work.start+12)):"r"(basis),"r"(start),"r"(intermediate),"f"(zero));
- start->values[15]=homogeneous;func_0011C168(destination,left,right);
+ start->values[15]=homogeneous;__ml__FRC7MATRIX4T0(destination,left,right);
  register const M4*originalArgument __asm__("$6");register M4*secondDestination __asm__("$4");
  __asm__("daddu %0,%2,$zero\n\tdaddu %1,%3,$zero":"=r"(originalArgument),"=r"(secondDestination):"r"(&work.original),"r"(intermediate));
- func_0011C168(secondDestination,product,originalArgument);
+ __ml__FRC7MATRIX4T0(secondDestination,product,originalArgument);
  }
  LO*counterpart;
  {
@@ -102,14 +102,14 @@ extern "C" void func_001CCC88(P *input,LO *other){
    :"=&r"(row3),"=&r"(sourceArgument),"=&r"(row0),"=m"(*(M3*)&work.views.matrices.intermediate.rows[1]):"m"(work.views.matrices.product.rows[3]),"r"(workingBase),"m"(work.views.matrices.product.rows[0]),"r"(row1),"r"(row2));
   work.views.matrices.intermediate.rows[0]=row0;new(inverseArgument)M4(func_0011C318(sourceArgument));
   }
-  func_0011C168(product,finalMatrix,inverse);
+  __ml__FRC7MATRIX4T0(product,finalMatrix,inverse);
   {
   register qword row0 __asm__("$2"),row1 __asm__("$3"),row2 __asm__("$4"),row3 __asm__("$5");
   __asm__("lq %0,%5\n\tlq %1,%6\n\tlq %2,%7\n\tlq %3,%8\n\tsq %0,%4\n\tsq %1,16+%4\n\tsq %2,32+%4\n\tsq %3,48+%4"
    :"=&r"(row0),"=&r"(row1),"=&r"(row2),"=&r"(row3),"=m"(work.final):"m"(work.views.matrices.product.rows[0]),"m"(work.views.matrices.product.rows[1]),"m"(work.views.matrices.product.rows[2]),"m"(work.views.matrices.product.rows[3]));
   }
  }
- func_001A58D0(object,0,15);
+ SetLoParent__FP2LOP2SOi(object,0,15);
  const qword*velocityAddress=object->follow?&object->follow->velocity:&D_002C1EE0;register float unit __asm__("$f20");register LO*initialOwner __asm__("$4");{register qword initialVelocity __asm__("$2");
  __asm__("lq %0,%4\n\tdaddu %1,%5,$zero\n\t.set noat\n\tlui $at,0x3F80\n\tmtc1 $at,%2\n\t.set at\n\tsq %0,%3":"=r"(initialVelocity),"=r"(initialOwner),"=f"(unit),"=m"(work.velocity):"m"(*velocityAddress),"r"(object):"$1");}
  {register qword destination __asm__("$2");__asm__("lq %0,%1":"=r"(destination):"m"(work.final.rows[3]));work.destination=destination;}
@@ -133,10 +133,10 @@ extern "C" void func_001CCC88(P *input,LO *other){
   :"=&j"(positive),"+&j"(negativeOrEnd),"=r"(callbackVelocity),"=m"(work.views.scalar.q):"r"(positiveBits),"m"(work.delta),"j"(inverse),"j"(speedVector),"j"(first));
  typedef void(*APPLY)(LO*,qword);register APPLY apply __asm__("$6");register LO*receiver __asm__("$4");
  __asm__("lh %0,%4\n\tlw %1,%5\n\tsqc2 %6,%2\n\taddu %0,%8,%0\n\tsqc2 %7,%3"
-  :"=&r"(receiver),"=&r"(apply),"=m"(work.views.scalar.q),"=m"(work.endVelocity):"m"(table[35].delta),"m"(table[35].fn),"j"(inverse),"j"(negativeOrEnd),"r"(object));
+  :"=&r"(receiver),"=&r"(apply),"=m"(work.views.scalar.q),"=m"(work.endVelocity):"m"(table[35].delta),"m"(table[35].pfn),"j"(inverse),"j"(negativeOrEnd),"r"(object));
  work.views.scalar.q=positive;apply(receiver,callbackVelocity);
  }
- float endTime=D_002DDED0.time+phase;
+ float endTime=g_clock.t+phase;
  qword position=func_0022FC48(0,object->position->space,work.final.rows[3]);
  qword endVelocity=func_0022FCC8(0,object->position->space,work.endVelocity);
  {
@@ -147,7 +147,7 @@ extern "C" void func_001CCC88(P *input,LO *other){
  }
  func_0022FD38(&work.views.basis.converted,0,object->orientation->space,(M3*)finalMatrix);
  work.views.basis.angles=work.views.basis.converted;
- qword angles=func_0011BFF0((M3*)workingBase);
+ qword angles=DecomposeRotateMatrixEuler__FP7MATRIX3((M3*)workingBase);
  register CHANNEL*orientationChannel __asm__("$5");register LO*orientationOwner __asm__("$4");register qword anglesArgument __asm__("$9");
  __asm__("lw %0,%3\n\tdaddu %1,%4,$zero\n\tpor %2,$zero,%5":"=&r"(orientationChannel),"=&r"(orientationOwner),"=r"(anglesArgument):"m"(object->orientation),"r"(object),"r"(angles));
  JOB *job=func_0012DC18(orientationOwner,orientationChannel,5,9,2,anglesArgument);p->orientationJob=job;
@@ -156,7 +156,6 @@ extern "C" void func_001CCC88(P *input,LO *other){
 }
 
 #define OFF(t,m) ((int)&((t*)0)->m)
-typedef char motion_job_layout[(sizeof(void*)==4 && sizeof(qword)==16 && sizeof(U)==16 && sizeof(M3)==0x30 && sizeof(M4)==0x40 && sizeof(VTE)==8 && sizeof(VIEWS)==0xC0 && sizeof(WORK)==0x200 && OFF(VTE,delta)==0 && OFF(VTE,fn)==4 && OFF(CHANNEL,current)==0x90 && OFF(CHANNEL,space)==0xA0 && OFF(CHANNEL,endTime)==0xA8 && OFF(ANIM,motion)==0x14 && OFF(ANIM,start)==0x1C && OFF(ANIM,duration)==0x40 && OFF(FOLLOW,velocity)==0x80 && OFF(LO,vt)==0xC && OFF(LO,position)==0x58 && OFF(LO,orientation)==0x5C && OFF(LO,space)==0x60 && OFF(LO,follow)==0xE8 && OFF(LO,basis)==0x1B0 && OFF(LO,playing)==0x1030 && OFF(SOURCE,vt)==0xC && OFF(P,owner)==0 && OFF(P,source)==0x34 && OFF(P,positionJob)==0x94 && OFF(P,otherJob)==0x98 && OFF(P,orientationJob)==0x9C && OFF(CLOCK,time)==0 && OFF(VIEWS,matrices.intermediate)==0 && OFF(VIEWS,matrices.product)==0x40 && OFF(VIEWS,matrices.inverse)==0x80 && OFF(VIEWS,basis.angles)==0 && OFF(VIEWS,basis.converted)==0x30 && OFF(WORK,original)==0 && OFF(WORK,sample)==0x40 && OFF(WORK,start)==0x80 && OFF(WORK,final)==0xC0 && OFF(WORK,views)==0x100 && OFF(WORK,velocity)==0x1C0 && OFF(WORK,destination)==0x1D0 && OFF(WORK,delta)==0x1E0 && OFF(WORK,endVelocity)==0x1F0)?1:-1];
 
 typedef char inverse_field_layout[(__alignof__(M4)==0x10 && OFF(WORK,views)+OFF(VIEWS,matrices.inverse)==0x180 && OFF(WORK,views)+OFF(VIEWS,matrices.intermediate)==0x100)?1:-1];
 
@@ -165,7 +164,6 @@ typedef char ccc88_final_0[(sizeof(int)==4)?1:-1];
 typedef char ccc88_final_1[(sizeof(unsigned)==4)?1:-1];
 typedef char ccc88_final_2[(sizeof(short)==2)?1:-1];
 typedef char ccc88_final_3[(sizeof(float)==4)?1:-1];
-typedef char ccc88_final_4[(sizeof(CLOCK)==8)?1:-1];
 typedef char ccc88_final_5[(__alignof__(qword)==16)?1:-1];
 typedef char ccc88_final_6[(__alignof__(U)==16)?1:-1];
 typedef char ccc88_final_7[(__alignof__(M4)==16)?1:-1];
@@ -190,14 +188,8 @@ typedef char ccc88_final_25[(OFF(M4,values[11])==0x2C)?1:-1];
 typedef char ccc88_final_26[(OFF(M4,values[15])==0x3C)?1:-1];
 typedef char ccc88_final_27[(OFF(LO,basis.rows[1])==0x1C0)?1:-1];
 typedef char ccc88_final_28[(OFF(LO,basis.rows[2])==0x1D0)?1:-1];
-typedef char ccc88_final_29[(31*sizeof(VTE)+OFF(VTE,delta)==0xF8)?1:-1];
-typedef char ccc88_final_30[(31*sizeof(VTE)+OFF(VTE,fn)==0xFC)?1:-1];
-typedef char ccc88_final_31[(32*sizeof(VTE)+OFF(VTE,delta)==0x100)?1:-1];
-typedef char ccc88_final_32[(32*sizeof(VTE)+OFF(VTE,fn)==0x104)?1:-1];
-typedef char ccc88_final_33[(35*sizeof(VTE)+OFF(VTE,delta)==0x118)?1:-1];
-typedef char ccc88_final_34[(35*sizeof(VTE)+OFF(VTE,fn)==0x11C)?1:-1];
 typedef char ccc88_final_35[(sizeof(((VTE*)0)->delta)==2)?1:-1];
-typedef char ccc88_final_36[(sizeof(((VTE*)0)->fn)==4)?1:-1];
+typedef char ccc88_final_36[(sizeof(((VTE*)0)->pfn)==4)?1:-1];
 typedef char ccc88_final_37[(sizeof(((WORK*)0)->velocity)==16)?1:-1];
 typedef char ccc88_final_38[(sizeof(((WORK*)0)->destination)==16)?1:-1];
 typedef char ccc88_final_39[(sizeof(((WORK*)0)->delta)==16)?1:-1];

@@ -8,13 +8,13 @@ struct HEAP_SCOPE;
 extern "C"{
 extern int D_002DEB28,D_003E0F8C;
 extern char D_002DEB30[],D_002E65E0[],D_003D4A60[];
-extern G D_003DD490;
+extern G g_sw;
 HEAP_SCOPE*func_001AE478(HEAP_SCOPE*);
-void*func_001AE378(const REQUEST&);
-void func_001AE4A0(HEAP_SCOPE*,int);
+void*PvAllocStackClearImpl__FP7SWALLOC(const REQUEST&);
+void _$_18CBinaryInputStream(HEAP_SCOPE*,int);
 void func_00164CE8(P*,int,int*,P**);
 void func_00165A60(P*,int);
-int func_00210AE0(void);
+int _IppoFindPo__FP2PO(void);
 int func_00161660(void*);
 int func_001637E8(P*);
 void func_00162CD0(void*,P*);
@@ -22,8 +22,8 @@ void func_001ABD98(void*,int);
 CRef*func_001291A8(CRef*,const CRef*);
 void func_00129EC8(CRef*);
 }
-static inline void*Allocate(int n){return func_001AE378(REQUEST(n,16));}
-struct HEAP_SCOPE{HEAP_SCOPE(){func_001AE478(this);}~HEAP_SCOPE(){func_001AE4A0(this,2);}};
+static inline void*Allocate(int n){return PvAllocStackClearImpl__FP7SWALLOC(REQUEST(n,16));}
+struct HEAP_SCOPE{HEAP_SCOPE(){func_001AE478(this);}~HEAP_SCOPE(){_$_18CBinaryInputStream(this,2);}};
 struct OVERRIDE{CONTEXT*context;P*object;int oldX,oldY;
     OVERRIDE(P*p,int x,int y):context(0),object(p){if(object){oldX=object->x;object->x=x;oldY=object->y;object->y=y;}}
     ~OVERRIDE(){if(context){context->x=oldX;context->y=oldY;}if(object){object->x=oldX;object->y=oldY;}}
@@ -57,9 +57,9 @@ extern "C" void func_00164DF0(P*p,int state){
     }
     func_00165A60(p,state);
     D_002DEB28=0;
-    int mode=func_00210AE0();
+    int mode=_IppoFindPo__FP2PO();
     if((unsigned)mode<9){
-        void*object=D_003DD490.players[mode];
+        void*object=g_sw.players[mode];
         if(object){SetValue(object,func_00161660(D_002DEB30));}
     }
     if(func_001637E8(p)&&old!=-1&&old<2&&p->state>=2){

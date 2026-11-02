@@ -1,12 +1,12 @@
 struct FRAME;
 extern "C" FRAME*func_001AE478(FRAME*);
-extern "C" void func_001AE4A0(FRAME*,int);
-struct FRAME {FRAME(){(void)func_001AE478(this);}~FRAME(){func_001AE4A0(this,2);}};
+extern "C" void _$_18CBinaryInputStream(FRAME*,int);
+struct FRAME {FRAME(){(void)func_001AE478(this);}~FRAME(){_$_18CBinaryInputStream(this,2);}};
 struct X {char pad0[0x5C];int x5C;char pad1[0x6C-0x60];int x6C;char pad2[0x7C-0x70];X*x7C;};
 struct T {char pad[0xCC];int tags[2];};
 struct P {int a,b;T*t;};
 struct G {char pad[0x3B0C];X*x;};
-extern "C" G D_003DD490;
+extern "C" G g_sw;
 extern "C" void func_00165C98(int*,X***);
 extern "C" void func_002338C0(void*,unsigned,unsigned,int(*)(const void*,const void*));
 extern "C" int func_00165C28(const void*,const void*);
@@ -42,7 +42,7 @@ extern "C" void func_0019D948(P*p){
  T*pt=p->t;
  if(!pt)return;
  pt->tags[0]=pt->tags[1]=-1;
- G*pg=&D_003DD490;
+ G*pg=&g_sw;
  if(!pg->x || pg->x->x6C==-1)return;
  p->t->tags[0]=pg->x->x6C;
  int n=1,i=0;

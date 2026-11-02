@@ -1,3 +1,4 @@
+#include "util.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union U{qword q;float f[4];int i[4];}U;
 typedef struct NODE{char pad0[0xE0];struct NODE*nextE0;char padE4[4];unsigned flags;char padEC[0x18];struct NODE*next104;char pad108[4];float reach;char pad110[0x64];struct NODE*next174;char pad178[0x3C];struct NODE*next1B4;}NODE;
@@ -6,10 +7,9 @@ typedef struct P{char pad0[0x10];NODE*actor;char pad14[0x28];float time;char pad
 typedef struct ROW{U point;float angle;}ROW;
 typedef struct QUERY{U point;float heading;unsigned count;ROW row[64];U candidate,delta,scalar;}QUERY;
 typedef struct WORK{QUERY query;NODE*result256[256];NODE*result32[32];NODE*result128[128];}WORK;
-typedef struct LM{float low,high;}LM;
 extern NODE*D_003E13FC,*D_003E13F0,*D_003E1408,*D_003E13E4,*D_003E13C0,*D_003E13D8,*D_003E13CC,*D_003E13B4,*D_003E1450;
-extern char D_003DD490;
-extern qword D_002A2DA0,D_002A2DC0;
+extern char g_sw;
+extern qword D_002A2DA0,g_normalZ;
 extern const float D_002A53D0;
 extern LM D_002BE5A8,D_002BE5B0;
 
@@ -17,11 +17,11 @@ extern "C" {
 extern qword func_001A62E8(NODE*);extern float func_00204740(NODE*);
 extern int func_00172798(QUERY*);
 extern void func_001E6F60(NODE*,qword,void*,qword*,qword*,float*,float*);
-extern int func_00132B10(NODE*,int);
+extern int FIsBasicDerivedFrom__FP5BASIC3CID(NODE*,int);
 extern int func_0015E9C8(void*,int,int,NODE*,int,NODE**);
 extern int func_00172888(ROW*,ROW*);
 extern void func_002338C0(void*,unsigned,unsigned,int(*)(ROW*,ROW*));
-extern qword func_0011E1A0(float,float,float);extern float func_0011D448(float,float);
+extern qword func_0011E1A0(float,float,float);extern float GRandInRange__Fff(float,float);
 }
 struct VU_FLOAT{qword qw;};
 static inline qword QwSub(qword a,qword b){qword r;__asm__("vsub.xyzw %0, %1, %2":"=j"(r):"j"(a),"j"(b));return r;}
@@ -76,13 +76,13 @@ extern "C" void func_001728B0(P*p){
  for(object=D_003E13D8;object;object=object->next104){w.query.candidate.q=func_001A62E8(object);func_00172798(&w.query);}
  for(object=D_003E13CC;object;object=object->next1B4){func_001E6F60(object,w.query.point.q,0,&w.query.candidate.q,0,0,0);func_00172798(&w.query);}
  for(object=D_003E13B4;object;object=object->nextE0){
-  if((object->flags&1)&&func_00132B10(object,0x13)){w.query.candidate.q=func_001A62E8(object);func_00172798(&w.query);}
+  if((object->flags&1)&&FIsBasicDerivedFrom__FP5BASIC3CID(object,0x13)){w.query.candidate.q=func_001A62E8(object);func_00172798(&w.query);}
  }
- {int count=func_0015E9C8(&D_003DD490,0x505,0x23,0,0x100,w.result256);
+ {int count=func_0015E9C8(&g_sw,0x505,0x23,0,0x100,w.result256);
  if(count>0){cursor=w.result256;remaining=count;do{NODE*item=*cursor++;--remaining;w.query.candidate.q=func_001A62E8(item);func_00172798(&w.query);}while(remaining);}}
- {int count=func_0015E9C8(&D_003DD490,0x505,0x67,0,0x20,w.result32);
+ {int count=func_0015E9C8(&g_sw,0x505,0x67,0,0x20,w.result32);
  if(count>0){cursor=w.result32;remaining=count;do{NODE*item=*cursor++;--remaining;w.query.candidate.q=func_001A62E8(item);func_00172798(&w.query);}while(remaining);}}
- {int count=func_0015E9C8(&D_003DD490,0x505,0x1B,0,0x80,w.result128);
+ {int count=func_0015E9C8(&g_sw,0x505,0x1B,0,0x80,w.result128);
  if(count>0){cursor=w.result128;remaining=count;do{NODE*item=*cursor++;--remaining;w.query.candidate.q=func_001A62E8(item);func_00172798(&w.query);}while(remaining);}}
  for(object=D_003E1450;object;object=object->next174){w.query.candidate.q=func_001A62E8(object);func_00172798(&w.query);}
  lastAngle=0.0f;
@@ -92,7 +92,7 @@ extern "C" void func_001728B0(P*p){
   PAIR*previous=0;
   for(i=0;i<(int)w.query.count&&accepted<4;i++){
    ROW*row=&w.query.row[i];qword original=row->point.q;
-   qword up=D_002A2DC0;
+   qword up=g_normalZ;
    qword delta=QwSub(original,w.query.point.q);
    qword qwFallback=D_002A2DA0;
    qword planar=QwSub(delta,QwScaleX(up,QwDot(delta,up)));
@@ -112,9 +112,9 @@ extern "C" void func_001728B0(P*p){
  qword anchor=QwAdd(origin,func_0011E1A0(w.query.heading+3.1415927f,-350.0f,0.0f));
  while(accepted<4){
   float angle,length;qword point;
-  lastAngle+=func_0011D448(D_002BE5A8.low,D_002BE5A8.high);
+  lastAngle+=GRandInRange__Fff(D_002BE5A8.gMin,D_002BE5A8.gMax);
   angle=lastAngle+w.query.heading;
-  length=func_0011D448(D_002BE5B0.low,D_002BE5B0.high);
+  length=GRandInRange__Fff(D_002BE5B0.gMin,D_002BE5B0.gMax);
   point=QwAdd(anchor,func_0011E1A0(angle,length,0.0f));
   {PAIR*pair=&p->pair[accepted];pair->candidate.q=point;pair->original.q=point;}accepted++;
  }
@@ -160,5 +160,5 @@ typedef char WORK_query_Offset[((unsigned)&((WORK*)0)->query==0)?1:-1];
 typedef char WORK_result256_Offset[((unsigned)&((WORK*)0)->result256==2128)?1:-1];
 typedef char WORK_result32_Offset[((unsigned)&((WORK*)0)->result32==3152)?1:-1];
 typedef char WORK_result128_Offset[((unsigned)&((WORK*)0)->result128==3280)?1:-1];
-typedef char LM_low_Offset[((unsigned)&((LM*)0)->low==0)?1:-1];
-typedef char LM_high_Offset[((unsigned)&((LM*)0)->high==4)?1:-1];
+typedef char LM_low_Offset[((unsigned)&((LM*)0)->gMin==0)?1:-1];
+typedef char LM_high_Offset[((unsigned)&((LM*)0)->gMax==4)?1:-1];

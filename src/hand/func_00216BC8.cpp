@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Render generated sprite text, wrapped speech, or the scrolling ticker.
 typedef unsigned int uint;
 typedef int qword __attribute__((mode(TI)));
@@ -10,13 +11,13 @@ typedef struct {char pad[0x3BE8];void *font;} WORLD;
 typedef struct {int id;void (*get)(char *,void *,void *);void *context;} STRINGGEN;
 typedef struct {char pad10[0x10];int state;float time;int pad18;float finish;} SCROLL;
 typedef struct {float t,dt;} CLOCK;
-extern WORLD D_003DD490;
+extern WORLD g_sw;
 extern STRINGGEN D_003E1C88[];
 extern const char D_002A8B80[],D_002A8B88[];
 extern char D_004435F0[];
 extern RGBA D_004435F4;
 extern SCROLL D_003DA0C0;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern const float D_002C40B8;
 extern "C" void *func_0013E368(WORLD *,int);
 extern "C" char *func_0021ED58(char *,const char *);
@@ -28,17 +29,16 @@ extern "C" void func_00215CA8(RT *,char *);
 extern "C" int func_00215D40(RT *);
 extern "C" void func_00215D00(RT *,RGBA *);
 extern "C" float func_00215ED8(RT *);
-extern "C" float func_0011D898(float,float);
+extern "C" float GModPositive__Fff(float,float);
 extern "C" void func_001DA5C8(SCROLL *,int);
 extern "C" void func_002166B0(RT *,T *,DATA *);
-static inline float Max(float a,float b){return a<b?b:a;}
 
 extern "C" void func_00216BC8(S *p,T *t,DATA *data,int unused){
     char text[0x400];
     RT rt;
     DATA style;
     char marquee[2*sizeof(text)+3*5];
-    if(!D_003DD490.font)return;
+    if(!g_sw.font)return;
     text[0]=0;
     if(p->kind==1){
         uint i;
@@ -46,7 +46,7 @@ extern "C" void func_00216BC8(S *p,T *t,DATA *data,int unused){
         if(i>=108)*(long *)text=*(const long *)D_002A8B80;
         else D_003E1C88[i].get(text,D_003E1C88[i].context,p->owner);
     }else if(p->kind==0){
-        func_0021ED58(text,(const char *)func_0013E368(&D_003DD490,p->id));
+        func_0021ED58(text,(const char *)func_0013E368(&g_sw,p->id));
     }
     if(p->kind==1 && p->id==0x2EF){
         int lines=1,ch,visible;
@@ -82,15 +82,15 @@ extern "C" void func_00216BC8(S *p,T *t,DATA *data,int unused){
         func_0021EDA0(marquee,D_002A8B88);
         func_0021EDA0(marquee,text);
         func_0021EDA0(marquee,D_002A8B88);
-        elapsed=D_002DDED0.t-D_003DA0C0.time;
+        elapsed=g_clock.t-D_003DA0C0.time;
         if(elapsed<D_002C40B8){
             data->fade*=elapsed/D_002C40B8;
         }else{
             elapsed-=D_002C40B8;
             period=textWidth*0.01f;
-            position=func_0011D898(elapsed,period);
+            position=GModPositive__Fff(elapsed,period);
             if(D_003DA0C0.finish>=0.0f){
-                float finish=Max(D_003DA0C0.finish,(textWidth+Max(0.0f,textWidth-p->width*scale)+paddingWidth)*0.01f);
+                float finish=GMax(D_003DA0C0.finish,(textWidth+GMax(0.0f,textWidth-p->width*scale)+paddingWidth)*0.01f);
                 if(elapsed>=finish)func_001DA5C8(&D_003DA0C0,3);
             }
             t->a[4]-=position/period*textWidth;

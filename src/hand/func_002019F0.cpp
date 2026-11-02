@@ -8,7 +8,7 @@ struct SPRBUF {
     SPRBUF(){func_002333B4(this,0,sizeof(*this));}
 };
 struct SLOTHEAP;
-extern "C" SLOTHEAP *func_0011CCA8(SLOTHEAP*,int,int,int);
+extern "C" SLOTHEAP *__8SLOTHEAPiii(SLOTHEAP*,int,int,int);
 struct SLOTHEAP {
     int bytes,count,alignment;void *head;int allocated;void *block;
 };
@@ -19,27 +19,27 @@ static inline SPRBUF MakeSecond(){SPRBUF b;b.aqw=(ulong*)((int)D_003DD400|0x2000
 SPRBUF D_003DD2C0[2]={MakeFirst(),MakeSecond()};
 struct POOLA;extern POOLA D_004520A8;
 extern SLOTHEAP ViewA __asm__("D_004520A8");
-struct POOLA:SLOTHEAP{POOLA(){if(++D_002DD2E0==1)func_0011CCA8(&ViewA,0x14,0x2000,0x10);}};
+struct POOLA:SLOTHEAP{POOLA(){if(++D_002DD2E0==1)__8SLOTHEAPiii(&ViewA,0x14,0x2000,0x10);}};
 POOLA D_004520A8;
 struct POOLB;extern POOLB D_004520D0;
 extern SLOTHEAP ViewB __asm__("D_004520D0");
-struct POOLB:SLOTHEAP{POOLB(){if(++D_002DD2E4==1)func_0011CCA8(&ViewB,0x18,0x800,0x10);}};
+struct POOLB:SLOTHEAP{POOLB(){if(++D_002DD2E4==1)__8SLOTHEAPiii(&ViewB,0x18,0x800,0x10);}};
 POOLB D_004520D0;
 struct POOLC;extern POOLC D_004520F8;
 extern SLOTHEAP ViewC __asm__("D_004520F8");
-struct POOLC:SLOTHEAP{POOLC(){if(++D_002DD2E8==1)func_0011CCA8(&ViewC,0x28,0x200,0x10);}};
+struct POOLC:SLOTHEAP{POOLC(){if(++D_002DD2E8==1)__8SLOTHEAPiii(&ViewC,0x28,0x200,0x10);}};
 POOLC D_004520F8;
 struct POOLD;extern POOLD D_00452120;
 extern SLOTHEAP ViewD __asm__("D_00452120");
-struct POOLD:SLOTHEAP{POOLD(){if(++D_002DD2EC==1)func_0011CCA8(&ViewD,0x1C,0x800,0x10);}};
+struct POOLD:SLOTHEAP{POOLD(){if(++D_002DD2EC==1)__8SLOTHEAPiii(&ViewD,0x1C,0x800,0x10);}};
 POOLD D_00452120;
 struct POOLE;extern POOLE D_00452148;
 extern SLOTHEAP ViewE __asm__("D_00452148");
-struct POOLE:SLOTHEAP{POOLE(){if(++D_002DD2F0==1)func_0011CCA8(&ViewE,0xC,0xC8,0x10);}};
+struct POOLE:SLOTHEAP{POOLE(){if(++D_002DD2F0==1)__8SLOTHEAPiii(&ViewE,0xC,0xC8,0x10);}};
 POOLE D_00452148;
 struct POOLF;extern POOLF D_00452170;
 extern SLOTHEAP ViewF __asm__("D_00452170");
-struct POOLF:SLOTHEAP{POOLF(){if(++D_002DD2F4==1)func_0011CCA8(&ViewF,0x14,0x100,0x10);}};
+struct POOLF:SLOTHEAP{POOLF(){if(++D_002DD2F4==1)__8SLOTHEAPiii(&ViewF,0x14,0x100,0x10);}};
 POOLF D_00452170;
 
 typedef char check_pointer[(sizeof(void*)==4)?1:-1];

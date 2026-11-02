@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union {qword q;float f[4];} U;
 struct LO{char pad[0x30];qword pos;char pad40[0x60];struct LO*parent;char padA4[0xC];qword velocity;};
@@ -6,17 +7,16 @@ struct O{char pad[0x58];struct LO*lo;char pad5C[0x8C];struct ACC*acc;};
 struct X{char pad[0x180];struct O*object;};
 struct ANIM{char pad[0x40];float rate;};
 struct P{char pad[0x1030];struct ANIM*anim;char pad1034[0x3BC];struct X*x;char pad13F4[0x58];int state;};
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern float D_002C09C8;
 qword func_0022FCC8(struct LO*,struct LO*,qword);
-int func_0011D508(float,float,float,float*);
-void func_00130D30(struct ANIM*,int,float,float);
+int CSolveQuadratic__FfffPf(float,float,float,float*);
+void SeekAsega__FP5ASEGA4SEEKff(struct ANIM*,int,float,float);
 static inline float Clamp(float inputValue,float inputLower,const float*upper){register float value __asm__("$f0")=inputValue;register float lower __asm__("$f12")=inputLower;float limit=*upper;if(value<lower)return lower;if(limit<value)return limit;return value;}
 static inline qword Scale(qword v,float f,U*u){qword s,r;__asm__("qmtc2.ni %1,%0":"=j"(s):"r"(f));u->q=s;__asm__("vmulx.xyzw %0,%1,%2x":"=&j"(r):"j"(v),"j"(u->q));return r;}
 static inline qword FinalLaunchScale(const qword*up,int bits,U*scalar){register qword factor __asm__("vf2"),source __asm__("vf1"),result __asm__("vf3");__asm__("qmtc2.ni %4,%0\n\tlqc2 %1,%5\n\tvmulx.xyzw %2,%1,%0x\n\tsqc2 %0,%3":"=j"(factor),"=j"(source),"=j"(result),"=m"(scalar->q):"r"(bits),"m"(*up));return result;}
 static inline qword AddScaled(qword a,qword b,qword s,U*u){qword r;u->q=s;__asm__("vadda.xyzw ACC,%1,$vf0\n\tvmaddx.xyzw %0,%2,%3x":"=j"(r):"j"(a),"j"(b),"j"(u->q));return r;}
 static inline qword AddScaledMemory(const U*p,qword b,qword s){qword a,r;__asm__("lqc2 %1,%2\n\tvadda.xyzw ACC,%1,$vf0\n\tvmaddx.xyzw %0,%3,%4x":"=j"(r),"=&j"(a):"m"(p->q),"j"(b),"j"(s));return r;}
-static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword Div(qword v,qword s,U*u){qword r;u->q=s;__asm__("vdiv Q,$vf0w,%1x\n\tvwaitq\n\tvmulq.xyzw %0,%2,Q":"=j"(r):"j"(u->q),"j"(v));return r;}
 static inline void Store(qword*p,qword q){__asm__("sqc2 %1,%0":"=m"(*p):"j"(q));}
 static inline struct P*CaptureActor(struct P*input){register struct P*output __asm__("$16");__asm__("daddu %0,%1,$zero":"=r"(output):"r"(input));return output;}
@@ -49,11 +49,11 @@ void func_001B7700(struct P*p,qword goal,float*animation,float*duration,qword*ou
  switch(owner->state){
  case 0:{
   struct LO*parent=owner->x->object->lo->parent;
-  qword first=func_0022FCC8(0,parent,Scale(D_002A2DC0,2500.0f,&roots));
+  qword first=func_0022FCC8(0,parent,Scale(g_normalZ,2500.0f,&roots));
   {
    register struct LO*space __asm__("$4");register int bits __asm__("$2");
    __asm__("sq %3,%0\n\tdaddu %1,%z5,$zero\n\tmfc1 %2,%4":"=m"(start.q),"=r"(space),"=r"(bits):"r"(first),"f"(-2000.0f),"rJ"((struct LO*)0));
-   end=func_0022FCC8(space,parent,FinalLaunchScale(&D_002A2DC0,bits,&roots));
+   end=func_0022FCC8(space,parent,FinalLaunchScale(&g_normalZ,bits,&roots));
   }
   break;
  }
@@ -85,11 +85,11 @@ void func_001B7700(struct P*p,qword goal,float*animation,float*duration,qword*ou
    __asm__("pextuw %0,$zero,%2\n\tmtc1 %3,%1":"=&r"(goalWord),"=f"(positionZ):"r"(goal),"r"(positionWord));
    __asm__("mtc1 %2,%0\n\tlq %1,%3":"=f"(goalZ),"=r"(velocityWord):"r"(goalWord),"m"(v.q));
    __asm__("mul.s %0,%0,%2\n\tpextuw %1,$zero,%3":"+f"(accelerationZ),"=r"(velocityZ):"f"(half),"1"(velocityWord));
-   count=func_0011D508(accelerationZ,velocityZ,positionZ-goalZ,outputRoots);
+   count=CSolveQuadratic__FfffPf(accelerationZ,velocityZ,positionZ-goalZ,outputRoots);
   }
   if(!count)t=D_002C09C8;
   else t=Clamp(roots.f[count-1],D_002C09C8,duration);
-  func_00130D30(owner->anim,0,*animation-t*owner->anim->rate,owner->anim->rate);
+  SeekAsega__FP5ASEGA4SEEKff(owner->anim,0,*animation-t*owner->anim->rate,owner->anim->rate);
   {
    register qword actualAcceleration __asm__("vf3");register qword qt __asm__("vf1");
    register float averageTime __asm__("$f0")=0.5f;register int bits __asm__("$2");
@@ -103,7 +103,7 @@ void func_001B7700(struct P*p,qword goal,float*animation,float*duration,qword*ou
     __asm__("swc1 %2,%0\n\tqmtc2.ni %3,%1":"=m"(*duration),"=j"(averageScalar):"f"(t),"r"(bits));
     predicted=AddScaled(actualPosition,mean,averageScalar,&u);
   {
-   qword correction=Div(Sub(goal,predicted),qt,&u);
+   qword correction=Div(QwSub(goal,predicted),qt,&u);
    register qword initial __asm__("vf5");register qword final __asm__("vf2");
    __asm__("lqc2 %0,%2\n\tvadd.xyzw %0,%0,%3\n\tvadd.xyzw %1,%4,%3":"=&j"(initial),"=j"(final):"m"(v.q),"j"(correction),"j"(predictedEnd));
    start.q=initial;end=final;

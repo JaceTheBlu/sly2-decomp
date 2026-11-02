@@ -1,4 +1,4 @@
-// func_001681F8 (Claude agent, T1651): builds one VIF packet per entry of a model's packet list: a DMA CNT tag, an UNPACK of
+// func_001681F8: builds one VIF packet per entry of a model's packet list: a DMA CNT tag, an UNPACK of
 // 6 qwords to VU address 0x301 (entry word + bounding sphere + model matrix), padding, and a DMA RET tag, then queues it
 // in a render-list entry (func_001CD998) with the descriptor's chain. Stamps the game tick at the end.
 // From lanef9v1 (aligned 5) plus func_00169198's packet idioms (template UNPACK tag, CopyQws with the empty do-while).
@@ -93,11 +93,11 @@ struct G
     int tick;
 };
 extern DMA D_002DEA28;
-extern G D_003DD490;
+extern G g_sw;
 extern "C" {
 void func_001AE5A0(void *pvDst, const void *pvSrc, uint cb);
 void *func_0023320C(void *pvDst, const void *pvSrc, uint cb);
-M4 *func_0011C168(M4 *pmatDst, const M4 *pmatA, const M4 *pmatB);
+M4 *__ml__FRC7MATRIX4T0(M4 *pmatDst, const M4 *pmatA, const M4 *pmatB);
 float func_0011CAB0(const M3 *pmat);
 RPL *func_001CD998(void);
 }
@@ -146,7 +146,7 @@ static inline M4 ModelMatrix(const ENTRY *entry) return model
     if (parent)
     {
         M4 product;
-        func_0011C168(&product, &model, parent);
+        __ml__FRC7MATRIX4T0(&product, &model, parent);
         func_0023320C(&model, &product, sizeof(M4));
     }
 }
@@ -202,5 +202,5 @@ extern "C" void func_001681F8(PACKETS *p)
         prpl->pad4 = 0;
         prpl->chain = descriptor->chain;
     }
-    p->tick = D_003DD490.tick;
+    p->tick = g_sw.tick;
 }

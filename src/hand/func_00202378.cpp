@@ -1,3 +1,4 @@
+#include "vu0.h"
 /* func_00202378 (Lilly / Claude agent, T1560): four-ray visibility of an actor from the selector's origin (p+0x20, the caller
  * func_00202540 raises it by 20). Collects the objects between the two points (func_0020FAA0 with the func_00202350 filter),
  * then casts rays from the origin to the actor's centre (pulled radius 0xE4 towards the viewer) and to that centre moved by
@@ -11,21 +12,18 @@ union V {qword q;float f[4];};
 struct LO {char padE4[0xE4];float radius;char padE8[0x20];int state;};
 struct P {char pad20[0x20];qword position;};
 struct QUERY {int count;LO **objects;};
-// Stack-scope object (sp+0): func_001AE478 opens it, func_001AE4A0(this,2) frees the stack memory taken since.
+// Stack-scope object (sp+0): func_001AE478 opens it, _$_18CBinaryInputStream(this,2) frees the stack memory taken since.
 struct FRAME;
 extern "C" FRAME *func_001AE478(FRAME *);
-extern "C" void func_001AE4A0(FRAME *,int);
-struct FRAME {FRAME(){func_001AE478(this);}~FRAME(){func_001AE4A0(this,2);}};
+extern "C" void _$_18CBinaryInputStream(FRAME *,int);
+struct FRAME {FRAME(){func_001AE478(this);}~FRAME(){_$_18CBinaryInputStream(this,2);}};
 extern "C" qword func_001A62E8(LO *);
 extern "C" int func_00202350(void *,LO *);
 extern "C" void func_0020FAA0(void *,qword,qword,int (*)(void *,LO *),void *,int *,LO ***);
 extern "C" LO *func_0014CC58(int,qword,qword,int,LO **,void *);
-extern char D_003DD490[];
+extern char g_sw[];
 extern qword D_002DDFA0[3];
-static inline qword Add(qword a,qword b){qword r;__asm__("vadd.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
-static inline qword Sub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
 static inline qword Cross(qword a,qword b){qword r;__asm__("vopmula.xyz $ACC,%1,%2\n\tvopmsub.xyz %0,%2,%1":"=j"(r):"j"(a),"j"(b));return r;}
-static inline qword Scale(qword v,qword k){qword r;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(r):"j"(v),"j"(k));return r;}
 // v / |v|: the dot product names v twice (the side vector's registers only match that way)
 static inline qword Normalize(qword v)
 {
@@ -48,21 +46,21 @@ extern "C" void func_00202378(P *p,LO *other)
     V *point;
     qword origin=func_001A62E8(other);
     radius=other->radius;
-    func_0020FAA0(D_003DD490,origin,p->position,func_00202350,0,&query.count,&query.objects);
+    func_0020FAA0(g_sw,origin,p->position,func_00202350,0,&query.count,&query.objects);
     {
         qword up=D_002DDFA0[1];
-        qword direction=Normalize(Sub(p->position,origin));
+        qword direction=Normalize(QwSub(p->position,origin));
         qword k,side;
         __asm__("qmtc2.ni %1,%0":"=j"(k):"r"(radius));
         scale.q=k;
         side=Normalize(Cross(up,direction));
         SCALE_IN_PLACE(direction,scale.q);
-        origin=Add(origin,direction);
+        origin=QwAdd(origin,direction);
         SCALE_IN_PLACE(up,scale.q);
         points[0].q=origin;
-        points[1].q=Add(origin,up);
-        points[2].q=Sub(origin,up);
-        points[3].q=Add(origin,Scale(side,scale.q));
+        points[1].q=QwAdd(origin,up);
+        points[2].q=QwSub(origin,up);
+        points[3].q=QwAdd(origin,QwScaleX(side,scale.q));
     }
     point=points;
     for(;i<4;++i){

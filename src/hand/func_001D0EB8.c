@@ -1,17 +1,18 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
 struct B { qword x,y; };
 struct MIX_STATE {union U direction,scalar;};
 struct S { char pad[0x70]; qword pos; char pad80[0x10]; qword vel; };
-extern qword D_002A2DD0,D_002A2DA0,D_002A2DC0;
+extern qword D_002A2DD0,D_002A2DA0,g_normalZ;
 union FLOATWORD {float value;int bits;};
 struct CLOCK {float time;union FLOATWORD dt;};
 extern union FLOATWORD D_002DDED4;
 void func_001CF0A0(struct S*);
-float func_0011D448(float,float);
+float GRandInRange__Fff(float,float);
 int func_0011D4D0(float,float,float);
 void func_0011E2D8(qword,qword,qword,struct B*);
-void func_0011D608(float,float*,float*);
+void CalculateSinCos__FfPfT1(float,float*,float*);
 static inline const void*ClockHigh(void){register const void*page __asm__("$2");__asm__("lui %0,%%hi(D_002DDED4)":"=r"(page));return page;}
 static inline qword Factors(const float*cs,float speed,float*first,float*second){
  register float a __asm__("$f1")=cs[0],b __asm__("$f0");
@@ -20,10 +21,7 @@ static inline qword Factors(const float*cs,float speed,float*first,float*second)
  __asm__("lwc1 %1,%5\n\tmul.s %0,%0,%4\n\tlw %2,%%lo(D_002DDED4)(%6)\n\tqmtc2.ni %2,%3\n\tmul.s %1,%1,%4":"+&f"(a),"=&f"(b),"=r"(word),"=j"(dt):"f"(speed),"m"(cs[1]),"r"(page),"m"(wordView->bits));
  *first=a;*second=b;return dt;
 }
-static inline float X(qword q) {float f; __asm__("mtc1 %1,%0" : "=f"(f) : "r"(q)); return f;}
-static inline float Y(qword q) {float f; __asm__("prot3w %0,%1" : "=r"(f) : "r"(q)); return f;}
-static inline float Z(qword q) {float f; __asm__("pextuw %0,$zero,%1" : "=r"(f) : "r"(q)); return f;}
-static inline void FNear(int *pf,qword a,qword b) { if(func_0011D4D0(X(b),X(a),0.0001f)) if(func_0011D4D0(Y(b),Y(a),0.0001f)) *pf=func_0011D4D0(Z(b),Z(a),0.0001f)!=0; }
+static inline void FNear(int *pf,qword a,qword b) { if(func_0011D4D0(GetX(b),GetX(a),0.0001f)) if(func_0011D4D0(GetY(b),GetY(a),0.0001f)) *pf=func_0011D4D0(GetZ(b),GetZ(a),0.0001f)!=0; }
 static inline qword BcX(float f){register qword value __asm__("vf3");__asm__("qmtc2.ni %1,%0":"=j"(value):"r"(f));return value;}
 static inline qword BcYAndPublishX(float f,qword x,union U*home){
  register qword value __asm__("vf4");
@@ -48,7 +46,7 @@ static inline qword NormalizeAndAxes(const struct S*owner,qword*rawPage,qword*xA
          "vadday.x $ACC,%1,%1y\n\tvmaddz.x %1,$vf3,%1z\n\t"
          "lui %2,%%hi(%5)\n\taddiu %2,%2,%%lo(%5)\n\taddiu %3,%3,%%lo(%6)"
    :"=j"(velocity),"=j"(length),"=&r"(up),"+r"(x)
-   :"m"(owner->vel),"i"(&D_002A2DC0),"i"(&D_002A2DA0):"vf3");
+   :"m"(owner->vel),"i"(&g_normalZ),"i"(&D_002A2DA0):"vf3");
  __asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q\n\tlq %1,%4\n\t"
          "vdiv $Q,$vf0w,%0x\n\tvwaitq\n\tvmulq.xyzw %0,%3,$Q\n\tlq %2,%5"
    :"+&j"(length),"=&r"(upValue),"=r"(xValue)
@@ -65,7 +63,7 @@ void func_001D0EB8(struct S*p) {
     int near=0,choose=0;
     float roll;
     func_001CF0A0(p);
-    roll=func_0011D448(0.0f,1.0f);
+    roll=GRandInRange__Fff(0.0f,1.0f);
     FNear(&near,p->vel,D_002A2DD0);
     if(!near&&roll<0.3f) choose=1;
     if(choose) {
@@ -78,9 +76,9 @@ void func_001D0EB8(struct S*p) {
         norm.q=NormalizeAndAxes(p,(qword*)0x002A0000,&xAxis,&upAxis);
         BasisArguments(norm.q,&basis,&normalArgument,&basisOutput);
         func_0011E2D8(normalArgument,xAxis,upAxis,basisOutput);
-        speed=func_0011D448(100.0f,100.0f+(1.0f-roll*3.33333325386f)*300.0f);
-        angle=func_0011D448(0.0f,6.28318548203f);
-        func_0011D608(angle,&cs[0],&cs[1]);
+        speed=GRandInRange__Fff(100.0f,100.0f+(1.0f-roll*3.33333325386f)*300.0f);
+        angle=GRandInRange__Fff(0.0f,6.28318548203f);
+        CalculateSinCos__FfPfT1(angle,&cs[0],&cs[1]);
         kt=Factors(cs,speed,&cx,&cy);
         kx=BcX(cx);ky=BcYAndPublishX(cy,kx,&state.scalar);
         MixAndAdvance(p,&basis,&state,kx,ky,kt);

@@ -477,7 +477,7 @@ inline void SetSaveVarInt(SVPATH *psvp, int n)
     SetSaveVarRef(psvp, ref);
 }
 CRef SetSaveVarByName(const CRef &ref, const char *pchz, ...);
-extern "C" int func_00210AE0();
+extern "C" int _IppoFindPo__FP2PO();
 int NGetEpisodeBest();
 void ResolveSwSaveVars(SW *psw) __asm__("func_0020E3C0");
 void ResolveSwSaveVars(SW *psw)
@@ -504,8 +504,8 @@ void ResolveSwSaveVars(SW *psw)
     }
     SetSaveVarInt(psw->psvpLang, D_002E1E54);
     SetSaveVarInt(psw->psvpWidCurrent, GetCurrentJob());
-    SetSaveVarInt(psw->psvpEpisodeCurrent, func_00210AE0());
-    if (func_00210AE0() > NGetEpisodeBest())
-        SetSaveVarByName(CRef((TAGK)0x15, func_00210AE0()), "episodeBest", 0);
+    SetSaveVarInt(psw->psvpEpisodeCurrent, _IppoFindPo__FP2PO());
+    if (_IppoFindPo__FP2PO() > NGetEpisodeBest())
+        SetSaveVarByName(CRef((TAGK)0x15, _IppoFindPo__FP2PO()), "episodeBest", 0);
     OnGameEvent(&D_002DEB30, 3, 0);
 }

@@ -1,7 +1,7 @@
 typedef struct { float a, b; } F2;
 struct G { char pad[0x24]; float x24; char pad2[0x60 - 0x28]; int x60; };
-extern struct G D_002DDF40;
-extern struct { float t; float dt; } D_002DDED0;
+extern struct G g_cm;
+extern struct { float t; float dt; } g_clock;
 extern float D_003E1BE0;
 extern F2 D_002BD950, D_002BD958, D_002BD960, D_002BD968, D_002BD970;
 struct X {
@@ -14,10 +14,10 @@ void func_001FB2F8(void *, int);
 void func_00258040(int *, void *);
 void func_001FB018(int);
 void func_0011BC88(void *, float *, float *);
-int func_00132B10(int, int);
+int FIsBasicDerivedFrom__FP5BASIC3CID(int, int);
 void *func_001A6318(int);
 float func_0011D948(F2 *, float);
-void func_0014F610(struct G *, float);
+void SetCmNearClip__FP2CMf(struct G *, float);
 
 void func_0014FF38(struct X *p)
 {
@@ -34,9 +34,9 @@ void func_0014FF38(struct X *p)
         func_00258040(&p->x38, pv2);
     }
     func_001FB018(p->x34);
-    pg = &D_002DDF40;
+    pg = &g_cm;
     func_0011BC88(&pg->x60, &p->x10, &p->x14);
-    if (func_00132B10(p->x0, 0x34)) {
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(p->x0, 0x34)) {
         p->x3C = D_002BD950;
         p->x44 = D_002BD958;
     } else {
@@ -58,9 +58,9 @@ void func_0014FF38(struct X *p)
     p->x1C = 0;
     p->x20 = 0;
     p->x24 = 0;
-    p->x2C = D_002DDF40.x24 / p->x28;
-    p->x30 = D_002DDF40.x24;
-    func_0014F610(&D_002DDF40, 49.0f);
+    p->x2C = g_cm.x24 / p->x28;
+    p->x30 = g_cm.x24;
+    SetCmNearClip__FP2CMf(&g_cm, 49.0f);
     p->x54++;
-    D_003E1BE0 = D_002DDED0.t;
+    D_003E1BE0 = g_clock.t;
 }

@@ -15,10 +15,10 @@ struct REQUEST{
 /* Every home is written by the native return, matrix-copy or vector phase. */
 struct WORK{U row[23];};
 inline void*operator new(unsigned int,void*p){return p;}
-struct GAME{char pad[0x3D58];int stamp;};extern "C" GAME D_003DD490;
+struct GAME{char pad[0x3D58];int stamp;};extern "C" GAME g_sw;
 extern "C" float func_002456F0(float);
-extern "C" M3 func_0011B500(qword,float);
-extern "C" qword*func_00256D18(qword*,qword);
+extern "C" M3 LoadRotateMatrixRad__FfUx(qword,float);
+extern "C" qword*__as__6VECTORG9VU_VECTOR(qword*,qword);
 extern "C" float func_0011E4B0(qword,qword,qword*);
 extern "C" qword func_0022FCC8(void*,void*,qword);
 static inline float CopySnapshot(REQUEST*q){float high;register FRAME*d __asm__("$4")=q->current;register qword odd __asm__("$3"),even __asm__("$2");__asm__("li.s %2,1.0\n\tlw %0,%3\n\tlq %1,%4":"=&r"(d),"=r"(odd),"=f"(high):"m"(q->current),"m"(q->snapshot.r[0].q):"at");d->local.r[0].q=odd;even=q->snapshot.r[1].q;d->local.r[1].q=even;odd=q->snapshot.r[2].q;d->local.r[2].q=odd;even=q->snapshot.r[3].q;d->local.r[3].q=even;return high;}
@@ -36,7 +36,7 @@ extern "C" void func_00186A50(void*context,REQUEST*request){
  if(cosine<low)cosine=low;else if(high<cosine)cosine=high;
  originalBasis=(M3*)&q->snapshot;
  float initialAngle=func_002456F0(cosine);
- (void)new(&w.row[0])M3(func_0011B500(q->axis,initialAngle-q->referenceAngle));
+ (void)new(&w.row[0])M3(LoadRotateMatrixRad__FfUx(q->axis,initialAngle-q->referenceAngle));
  register FRAME*output __asm__("$16");register M3*rest __asm__("$2");
  register qword r0 __asm__("vf3"),r1 __asm__("vf5"),r2 __asm__("vf4"),first __asm__("vf2");
  __asm__("lqc2 %0,0x50(%6)\n\taddiu %1,%6,0x50\n\tlqc2 %3,0x10(%7)\n\tlqc2 %2,0(%7)\n\tlqc2 %4,0x20(%7)\n\tlw %5,8(%6)\n\tvmulax.xyz $ACC,%2,%0x\n\tvmadday.xyz $ACC,%3,%0y\n\tvmaddz.xyz %0,%4,%0z\n\tsqc2 %0,0x30(%7)"
@@ -47,7 +47,7 @@ extern "C" void func_00186A50(void*context,REQUEST*request){
  __asm__("lqc2 $vf2,%4\n\tvmulax.xyz $ACC,%0,$vf2x\n\tvmadday.xyz $ACC,%2,$vf2y\n\tvmaddz.xyz %0,%3,$vf2z\n\tsqc2 %0,%1"
   :"+j"(r0),"=m"(w.row[5].q):"j"(r1),"j"(r2),"m"(rest->r[2].q):"vf2");
  w.row[8].q=r0;
- (void)func_00256D18(translationOutput,translation);
+ (void)__as__6VECTORG9VU_VECTOR(translationOutput,translation);
  register U*axis __asm__("$6");register M3*alignedReturn __asm__("$18"),*twistedReturn __asm__("$19");
  register qword firstRow __asm__("$3"),secondRow __asm__("$2");register float one __asm__("$f0");
  __asm__("lq %0,0x30(%4)\n\taddiu %1,%4,0x30\n\tli.s %2,1.0\n\taddiu %3,%4,0x90"
@@ -72,7 +72,7 @@ extern "C" void func_00186A50(void*context,REQUEST*request){
  register M3*destination __asm__("$4");register qword normalized __asm__("vf3");register float keptAngle __asm__("$f12");
  __asm__("qmtc2.ni %4,$vf1\n\tdaddu %0,%5,$zero\n\tvmul.xyz $vf2,$vf1,$vf1\n\tvaddw.x $vf3,$vf0,$vf0w\n\tvadday.x $ACC,$vf2,$vf2y\n\tvmaddz.x $vf2,$vf3,$vf2z\n\tmov.s %2,%6\n\tvsqrt Q,$vf2x\n\tvwaitq\n\tvaddq.x $vf2,$vf0,Q\n\tsqc2 $vf1,%3\n\tvdiv Q,$vf0w,$vf2x\n\tvwaitq\n\tvmulq.xyzw %1,$vf1,Q"
   :"=r"(destination),"=j"(normalized),"=f"(keptAngle),"=m"(w.row[3].q):"r"(converted),"r"(alignedReturn),"f"(angle):"vf1","vf2");
- (void)new(destination)M3(func_0011B500(normalized,keptAngle));
+ (void)new(destination)M3(LoadRotateMatrixRad__FfUx(normalized,keptAngle));
  register qword aligned0 __asm__("$2"),aligned1 __asm__("$3"),aligned2 __asm__("$4");register CONTROL*control __asm__("$8");
  __asm__("lq %0,0x90(%4)\n\tlq %1,0xA0(%4)\n\tlq %2,0xB0(%4)\n\tlw %3,%5"
   :"=&r"(aligned0),"=&r"(aligned1),"=&r"(aligned2),"=r"(control):"p"(&w),"m"(q->control):"memory");
@@ -89,10 +89,10 @@ extern "C" void func_00186A50(void*context,REQUEST*request){
  register M3*turnDestination __asm__("$4");register qword normalizedTurn __asm__("vf4");register float twist __asm__("$f12");
  __asm__("qmtc2.ni %3,$vf2\n\tlwc1 %2,%5\n\tvmul.xyz $vf1,$vf2,$vf2\n\tvaddw.x $vf3,$vf0,$vf0w\n\tvadday.x $ACC,$vf1,$vf1y\n\tvmaddz.x $vf1,$vf3,$vf1z\n\tdaddu %0,%4,$zero\n\tvsqrt Q,$vf1x\n\tvwaitq\n\tvaddq.x $vf1,$vf0,Q\n\tvdiv Q,$vf0w,$vf1x\n\tvwaitq\n\tvmulq.xyzw %1,$vf2,Q"
   :"=r"(turnDestination),"=j"(normalizedTurn),"=f"(twist):"r"(convertedTurn),"r"(twistedReturn),"m"(q->twist):"vf1","vf2","vf3");
- (void)new(turnDestination)M3(func_0011B500(normalizedTurn,twist));
+ (void)new(turnDestination)M3(LoadRotateMatrixRad__FfUx(normalizedTurn,twist));
  register FRAME*current __asm__("$4");register GAME*game __asm__("$5");
  __asm__("lqc2 $vf9,0xC0(%2)\n\tlui %1,%%hi(%5)\n\tlqc2 $vf6,0xD0(%2)\n\taddiu %1,%1,%%lo(%5)\n\tlqc2 $vf7,0xE0(%2)\n\tlqc2 $vf2,0x40(%2)\n\tlqc2 $vf3,0x50(%2)\n\tvmulax.xyz $ACC,$vf9,$vf2x\n\tvmadday.xyz $ACC,$vf6,$vf2y\n\tvmaddz.xyz $vf2,$vf7,$vf2z\n\tlqc2 $vf1,0x60(%2)\n\tvmulax.xyz $ACC,$vf9,$vf3x\n\tvmadday.xyz $ACC,$vf6,$vf3y\n\tvmaddz.xyz $vf3,$vf7,$vf3z\n\tlqc2 $vf8,0x20(%4)\n\tvmulax.xyz $ACC,$vf9,$vf1x\n\tvmadday.xyz $ACC,$vf6,$vf1y\n\tvmaddz.xyz $vf1,$vf7,$vf1z\n\tlqc2 $vf5,0x10(%3)\n\tvmulax.xyz $ACC,$vf2,$vf8x\n\tvmadday.xyz $ACC,$vf3,$vf8y\n\tvmaddz.xyz $vf8,$vf1,$vf8z\n\tlqc2 $vf4,0x10(%4)\n\tvmulax.xyz $ACC,$vf2,$vf5x\n\tvmadday.xyz $ACC,$vf3,$vf5y\n\tvmaddz.xyz $vf5,$vf1,$vf5z\n\tsqc2 $vf2,0x120(%2)\n\tvmulax.xyz $ACC,$vf2,$vf4x\n\tvmadday.xyz $ACC,$vf3,$vf4y\n\tvmaddz.xyz $vf4,$vf1,$vf4z\n\tsqc2 $vf3,0x130(%2)\n\tsqc2 $vf1,0x140(%2)\n\tlw %0,4(%3)\n\tsqc2 $vf4,0xB0(%2)\n\tsqc2 $vf8,0xC0(%2)\n\tsqc2 $vf9,0x70(%2)\n\tsqc2 $vf6,0x80(%2)\n\tsqc2 $vf7,0x90(%2)\n\tsqc2 $vf2,0xF0(%2)\n\tsqc2 $vf3,0x100(%2)\n\tsqc2 $vf1,0x110(%2)\n\tsqc2 $vf5,0x120(%2)\n\tsqc2 $vf5,0xA0(%2)\n\tsqc2 $vf4,0x130(%2)\n\tsqc2 $vf8,0x140(%2)\n\tsqc2 $vf5,0(%0)"
-  :"=&r"(current),"=&r"(game):"p"(&w),"r"(q),"r"(originalBasis),"i"(&D_003DD490):"vf1","vf2","vf3","vf4","vf5","vf6","vf7","vf8","vf9","memory");
+  :"=&r"(current),"=&r"(game):"p"(&w),"r"(q),"r"(originalBasis),"i"(&g_sw):"vf1","vf2","vf3","vf4","vf5","vf6","vf7","vf8","vf9","memory");
  /* Publish the actual affine rows and shared generation stamp. */
  register int stamp __asm__("$2");
  __asm__ __volatile__("lq %1,0xB0(%4)\n\tsq %1,0x10(%0)\n\tlq $3,0xC0(%4)\n\tsw $zero,0xC(%0)\n\tsq $3,0x20(%0)\n\tsw $zero,0x2C(%0)\n\tsw $zero,0x1C(%0)\n\tlw %1,0x3D58(%2)\n\taddiu %1,%1,1\n\tsw %1,0x3D58(%2)\n\tlw $3,4(%3)\n\tlw %0,8(%3)\n\tsw %1,0xA4($3)"

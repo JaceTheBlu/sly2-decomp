@@ -1,6 +1,6 @@
 typedef int qword __attribute__((mode(TI)));
 struct G;
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern float D_002A66A0;
 struct E { qword a; qword b; };
 struct O { char pad[0x240]; qword x240; };
@@ -15,7 +15,7 @@ void func_0019FAF8(struct P *p, struct E *pe)
     int c, i;
     float best;
     struct E *e;
-    c = func_0015E9C8(&D_003DD490, 0x505, 0x33, 0, 0x10, apv);
+    c = func_0015E9C8(&g_sw, 0x505, 0x33, 0, 0x10, apv);
     best = D_002A66A0;
     for (i = 0; i < p->x4; i++) {
         float g;

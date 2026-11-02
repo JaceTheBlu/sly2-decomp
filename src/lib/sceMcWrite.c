@@ -7,7 +7,7 @@ extern RpcCD D_00450880;
 extern McRwSend D_00450900;
 extern int D_00451E40[];
 extern int D_002C8354;
-extern int D_002C8350;
+extern int _mc_errno;
 void func_00243ED8(void *);
 int func_00234A70(int);
 int func_00234A40(int);
@@ -39,6 +39,6 @@ int sceMcWrite(int fd, const void *buf, int size)
         func_00234A40(D_002C8354);
         return -91;
     }
-    D_002C8350 = 6;
+    _mc_errno = 6;
     return 0;
 }

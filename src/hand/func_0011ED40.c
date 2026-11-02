@@ -1,4 +1,4 @@
-// func_0011ED40 (Claude agent, lane A22, 2026-10-23): matched from build/hand_wip/func_0011ED40.v4.c.
+// func_0011ED40: matched from build/hand_wip/func_0011ED40.v4.c.
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f; } U;
 static inline qword Sub(qword a, qword b)

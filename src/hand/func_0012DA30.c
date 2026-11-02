@@ -1,12 +1,10 @@
-// v3 (Claude agent): MATCHES, but only with an unused duplicate "j"(dv) input on the first vadd (emits nothing).
+#include "vu0.h"
+// v3: MATCHES, but only with an unused duplicate "j"(dv) input on the first vadd (emits nothing).
 // The extra VF-class use makes regclass put dv in the VU register class, so it is spilled to 0(sp) across the calls
 // like the target. Kept here pending a policy decision / a natural source form giving dv one more "j" use.
-// wip (Claude agent): sibling of matched func_0012D108. ~60 diff: target spills dv (vsub result) to the stack
+// wip: sibling of matched func_0012D108. ~60 diff: target spills dv (vsub result) to the stack
 // (sqc2 vf3,0(sp); lq before prot3w/pextuw; lqc2 vf2 for the vadds) and uses only s0-s2; ours keeps dv in $s1.
 typedef int qword __attribute__((mode(TI)));
-static __inline__ float GetX(qword q) { float x; __asm__("mtc1 %1,%0" : "=f"(x) : "r"(q)); return x; }
-static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0,%1" : "=r"(y) : "r"(q)); return y; }
-static __inline__ float GetZ(qword q) { float z; __asm__("pextuw %0,$0,%1" : "=r"(z) : "r"(q)); return z; }
 int func_0011D4D0(float a, float b, float eps);
 void func_00230598(void *pv, void *px);
 struct X { char pad[0x90]; void *p90; char pad2[0xC0 - 0x94]; qword vC0; qword vD0; qword vE0; };

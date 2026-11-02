@@ -1,11 +1,4 @@
-struct CRef {
-    int m_tagk;
-    int m_tag;
-    CRef() { m_tagk = -1; }
-    CRef(const CRef &);
-    ~CRef() { Decref(); }
-    void Decref();
-};
+#include "cref.h"
 struct ENT {
     short ch;
     signed char kind;
@@ -16,7 +9,7 @@ struct ENT {
 };
 struct OBJ { int c; ENT *ae; char ht[1]; };
 struct G { char pad[0x3B7C]; void *apv[9]; };
-extern G D_003DD490;
+extern G g_sw;
 extern int D_002C2DC0[];
 extern char D_002A78F0[];
 CRef func_002581C0(void *, unsigned char *);
@@ -42,7 +35,7 @@ extern "C" int func_001D82B8(OBJ *p, unsigned char *pb)
     int i;
     int k;
     for (i = 0; i < 9; i++) {
-        void *pv = D_003DD490.apv[i];
+        void *pv = g_sw.apv[i];
         int w = D_002C2DC0[i];
         total += w * 100;
         if (pv)

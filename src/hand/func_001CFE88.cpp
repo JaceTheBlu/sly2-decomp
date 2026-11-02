@@ -1,27 +1,26 @@
+#include "mat.h"
+#include "vu0.h"
 // Follow an animated target: sample the target's pose (func_002309E8), blend the end velocity of a Hermite step from
 // the position delta, the current velocity and the acceleration, run the step (func_00117120), then spin the
 // orientation about its axis in proportion to the elapsed time.
 typedef int qword __attribute__((mode(TI)));
-struct M3 { qword r[3]; };
-struct M4 { qword r[4]; };
 union U { qword q; float f; };
 struct X { char pad[0x60]; void *data; };
 struct S {
     char pad[0x14]; float start, duration; X *x; char pad20[0x40 - 0x20];
-    M3 mat; qword pos, prev, vel, accel; char padB0[0xF0 - 0xB0]; qword axis; float angle;
+    MATRIX3 mat; qword pos, prev, vel, accel; char padB0[0xF0 - 0xB0]; qword axis; float angle;
 };
-extern struct CLOCK { float t, dt; } D_002DDED0;
+extern struct CLOCK { float t, dt; } g_clock;
 extern "C" {
-void func_002309E8(void *, int, M4 *, M4 *, float);
+void func_002309E8(void *, int, MATRIX4 *, MATRIX4 *, float);
 void func_00117120(float, float, float, qword, qword, qword, qword, qword *, qword *, qword *);
-M3 *func_0011B500(M3 *, qword, float);
+MATRIX3 *LoadRotateMatrixRad__FfUx(MATRIX3 *, qword, float);
 void func_001CFE88(S *);
 }
-// returns an M3 built by func_0011B500 straight into the (named) return slot
-static inline M3 Rotation(qword axis, float angle) return result { func_0011B500(&result, axis, angle); }
+// returns an MATRIX3 built by LoadRotateMatrixRad__FfUx straight into the (named) return slot
+static inline MATRIX3 Rotation(qword axis, float angle) return result { LoadRotateMatrixRad__FfUx(&result, axis, angle); }
 // broadcast a float into a VU register; the union local is the dead scratch store the original left on the stack
 static inline qword Splat(float f) { U u; qword q; __asm__("qmtc2.ni %1,%0" : "=j"(q) : "r"(f)); u.q = q; return q; }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword Scale(qword a, qword s) { __asm__("vmulx.xyzw %0,%0,%1x" : "+j"(a) : "j"(s)); return a; }
 // d*s1.x + v*s2.x + a*s3.x
 static inline qword Blend(qword d, qword v, qword a, qword s1, qword s2, qword s3)
@@ -31,23 +30,22 @@ static inline qword Blend(qword d, qword v, qword a, qword s1, qword s2, qword s
             : "=j"(r) : "j"(d), "j"(v), "j"(a), "j"(s1), "j"(s2), "j"(s3));
     return r;
 }
-static inline float Max(float a, float b) { return a < b ? b : a; }
 // a (3x3 rotation) * b, row by row
-static inline M3 Mul(const M3 &a, const M3 &b) return r {
+static inline MATRIX3 Mul(const MATRIX3 &a, const MATRIX3 &b) return r {
     __asm__("vmulax.xyz $ACC,%1,%4x\n\tvmadday.xyz $ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z" : "=j"(r.r[0]) : "j"(a.r[0]), "j"(a.r[1]), "j"(a.r[2]), "j"(b.r[0]));
     __asm__("vmulax.xyz $ACC,%1,%4x\n\tvmadday.xyz $ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z" : "=j"(r.r[1]) : "j"(a.r[0]), "j"(a.r[1]), "j"(a.r[2]), "j"(b.r[1]));
     __asm__("vmulax.xyz $ACC,%1,%4x\n\tvmadday.xyz $ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z" : "=j"(r.r[2]) : "j"(a.r[0]), "j"(a.r[1]), "j"(a.r[2]), "j"(b.r[2]));
 }
 void func_001CFE88(S *p)
 {
-    CLOCK *clock = &D_002DDED0;
+    CLOCK *clock = &g_clock;
     if (clock->t < p->start) return;
-    M4 m;
-    M3 spin;
+    MATRIX4 m;
+    MATRIX3 spin;
     p->prev = p->pos;
-    float remain = Max(clock->dt, p->start + p->duration - clock->t);
+    float remain = GMax(clock->dt, p->start + p->duration - clock->t);
     func_002309E8(p->x->data, 0, &m, 0, remain);
-    qword delta = Sub(m.r[3], p->pos);
+    qword delta = QwSub(m.r[3], p->pos);
     qword w1 = Splat(1.5f / remain);
     qword w2 = Splat(-0.5f);
     qword w3 = Splat(0.25f);
@@ -57,10 +55,10 @@ void func_001CFE88(S *p)
     qword endvel = Blend(delta, v, Scale(p->accel, dt), w1, w2, w3);
     func_00117120(remain, cdt, 1.0f, p->pos, v, m.r[3], endvel, &p->pos, &p->vel, 0);
     spin = Rotation(p->axis, p->angle * remain / p->duration);
-    p->mat = Mul(spin, *(M3 *)&m);
+    p->mat = Mul(spin, *(MATRIX3 *)&m);
 }
 
 #define OFF(t, m) ((int)&((t *)0)->m)
-typedef char follow_layout[(sizeof(qword) == 16 && sizeof(M3) == 0x30 && sizeof(M4) == 0x40 && sizeof(U) == 16 && OFF(CLOCK, t) == 0 && OFF(CLOCK, dt) == 4 &&
+typedef char follow_layout[(sizeof(qword) == 16 && sizeof(MATRIX3) == 0x30 && sizeof(MATRIX4) == 0x40 && sizeof(U) == 16 && OFF(CLOCK, t) == 0 && OFF(CLOCK, dt) == 4 &&
                             OFF(X, data) == 0x60 && OFF(S, start) == 0x14 && OFF(S, duration) == 0x18 && OFF(S, x) == 0x1C && OFF(S, mat) == 0x40 && OFF(S, pos) == 0x70 &&
                             OFF(S, prev) == 0x80 && OFF(S, vel) == 0x90 && OFF(S, accel) == 0xA0 && OFF(S, axis) == 0xF0 && OFF(S, angle) == 0x100) ? 1 : -1];

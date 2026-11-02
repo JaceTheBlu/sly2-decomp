@@ -1,5 +1,6 @@
-// MATCH (Claude agent, lane E21), from fresh3 (56). Fixes: (1) for-increment written `k++, i++` (loop.c prepends each biv to loop_iv_list, so the LAST-incremented biv's giv inits are emitted first in the preheader; the target computes i*16 before k*16/k*4, which clobbers v1 and stops reload inheriting k from the k<c test); (2) Dot's d output `=j` (not earlyclobber) so it shares a's vf2.
-// DRAFT (Claude agent, lane E5): fresh rewrite, aligned 49 (old 80). Outer while(k<c && (pblk || (pblk=alloc))) gives the target loop shape; GRand(&p->lm) inline gives the hoisted plm slot; unsigned n0 &= ~1u gives lui/ori. Left: giv bases (target base = &apd[i] for a-side, separate &afr[1].apos[i] giv for the copy).
+#include "util.h"
+// MATCH, from fresh3 (56). Fixes: (1) for-increment written `k++, i++` (loop.c prepends each biv to loop_iv_list, so the LAST-incremented biv's giv inits are emitted first in the preheader; the target computes i*16 before k*16/k*4, which clobbers v1 and stops reload inheriting k from the k<c test); (2) Dot's d output `=j` (not earlyclobber) so it shares a's vf2.
+// DRAFT: fresh rewrite, aligned 49 (old 80). Outer while(k<c && (pblk || (pblk=alloc))) gives the target loop shape; GRand(&p->lm) inline gives the hoisted plm slot; unsigned n0 &= ~1u gives lui/ori. Left: giv bases (target base = &apd[i] for a-side, separate &afr[1].apos[i] giv for the copy).
 typedef int qword __attribute__((mode(TI)));
 struct EMITTER;
 struct PD { unsigned int n0; int n4; float g8; float gC; };
@@ -16,19 +17,18 @@ struct PRG {
     char pad1A4[0x3B0 - 0x1A4]; int c3B0; char pad3B4[0x434 - 0x3B4]; int f434; int pad438; int k43C; int pad440;
     int c444; BLK *pblkFirst;
 };
-struct LM { float gMin, gMax; };
 struct EMITTER { char pad[0xC8]; int fC8; char padCC[0xF0 - 0xCC]; int kF0; int fF4; LM lm; };
 struct EMITX { PRG **ppprg; void *ppripg; EMITTER *pemitter; };
 struct CM { char pad[0x70]; qword dir; };
 extern "C" {
-extern CM D_002DDF40;
-extern char D_003DD490[];
+extern CM g_cm;
+extern char g_sw[];
 PRG *func_001390D8(void *pv);
 void func_001394C8(PRG *pprg, EMITTER *p);
 BLK *func_00138FF8(void *pv, PRG *pprg);
 void *func_002333B4(void *pv, int b, int cb);
 int func_0011D3F8(int nMin, int nMax);
-float func_0011D448(float gMin, float gMax);
+float GRandInRange__Fff(float gMin, float gMax);
 void func_0015B428(EMITTER *p, EMITX *px, int c, qword *apos, qword *av, float *ag1, float *ag2, qword *aa, qword *ab);
 }
 
@@ -41,7 +41,7 @@ static inline float Dot(qword a, qword b)
     return g;
 }
 
-static inline float GRand(LM *plm) { return func_0011D448(plm->gMin, plm->gMax); }
+static inline float GRand(LM *plm) { return GRandInRange__Fff(plm->gMin, plm->gMax); }
 
 void func_0015B428(EMITTER *p, EMITX *px, int c, qword *apos, qword *av, float *ag1, float *ag2, qword *aa, qword *ab)
 {
@@ -49,7 +49,7 @@ void func_0015B428(EMITTER *p, EMITX *px, int c, qword *apos, qword *av, float *
     if (px && px->ppprg)
         pprg = *px->ppprg;
     if (!pprg) {
-        pprg = func_001390D8(D_003DD490);
+        pprg = func_001390D8(g_sw);
         if (!pprg)
             return;
         if (px && px->ppprg)
@@ -62,7 +62,7 @@ void func_0015B428(EMITTER *p, EMITX *px, int c, qword *apos, qword *av, float *
     }
     BLK *pblk = pprg->pblkFirst;
     int k = 0;
-    while (k < c && (pblk || (pblk = func_00138FF8(D_003DD490, pprg)))) {
+    while (k < c && (pblk || (pblk = func_00138FF8(g_sw, pprg)))) {
         qword *pq1 = pblk->afr[1].apos;
         for (unsigned int i = pblk->c; i < 43 && k < c; k++, i++) {
             FR *pfr = &pblk->afr[0];
@@ -80,10 +80,10 @@ void func_0015B428(EMITTER *p, EMITX *px, int c, qword *apos, qword *av, float *
             if (pprg->k43C == 2) {
                 float g = GRand(&p->lm);
                 pd->g8 = g;
-                if (!p->kF0 && 0.0f < Dot(D_002DDF40.dir, pfr->av[i]))
+                if (!p->kF0 && 0.0f < Dot(g_cm.dir, pfr->av[i]))
                     pd->g8 = -g;
                 if (p->fF4)
-                    pd->gC = func_0011D448(-3.14159265f, 3.14159265f);
+                    pd->gC = GRandInRange__Fff(-3.14159265f, 3.14159265f);
             }
             if (pprg->k160 == 2) {
                 PAIR *ppair = &pblk->apair[i];

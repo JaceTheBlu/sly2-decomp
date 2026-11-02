@@ -1,6 +1,6 @@
 // func_00194A40: ported from Lilly's personal Sly 2 decomp (src/P2/jtgrab.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002BF660 (D_002BF660), D_002BF664 (D_002BF664), D_002BF70C (D_002BF70C), D_003DA0C0 (g_hintbox), D_003DD490 (g_sw)
+// Globals: D_002BF660 (D_002BF660), D_002BF664 (D_002BF664), D_002BF70C (D_002BF70C), D_003DA0C0 (g_hintbox), g_sw (g_sw)
 // 0x00194A40 GatherJtGrabCandidates__FP2SWP10STEPPLAYERUi  (MATCHES Sly 2; our name for the record)
 // Every frame (UpdateJtPre 0x18B7E8 asks with 0xFFFF; the others with a mask the current state allows): collects the hero's grab
 // candidates. grf says which of the world's grab lists to walk: 1 the HNDs (found in the TARGET list), 2 PIPEs, 4 class 27, 8 HSHAPEs,
@@ -626,7 +626,7 @@ struct SW : public BASIC
       struct EMITTER *apemitTracked[4];
       uint32_t   _pad_360    [ 1 ] ;
 };
-extern SW D_003DD490;
+extern SW g_sw;
 struct XP;
 enum CRVK
 {
@@ -1434,49 +1434,49 @@ void GatherJtGrabCandidates(SW *psw, STEPPLAYER *pstepplayer, uint grf)
     qword qwPosJt = PosLoWorld(pstepplayer);
     if (grf & 8)
     {
-        DL *pdlpcid12 = &D_003DD490.dlCid12;
+        DL *pdlpcid12 = &g_sw.dlCid12;
         for (CID12 *pcid12 = (CID12 *)pdlpcid12->head; pcid12; pcid12 = (CID12 *)pcid12->dle.next)
             AddJtGrabCandidate(psw, pstepplayer, qwPosJt, pcid12, pcid12, 4, ajtgrabcand);
     }
     if (grf & 0x10)
     {
-        DL *pdlpcid34 = &D_003DD490.dlCid34;
+        DL *pdlpcid34 = &g_sw.dlCid34;
         for (CID34 *pcid34 = (CID34 *)pdlpcid34->head; pcid34; pcid34 = (CID34 *)pcid34->dle.next)
             AddJtGrabCandidate(psw, pstepplayer, qwPosJt, pcid34, pcid34, 4, ajtgrabcand);
     }
     if (grf & 0x80)
     {
-        DL *pdlpcid35 = &D_003DD490.dlCid35;
+        DL *pdlpcid35 = &g_sw.dlCid35;
         for (CID35 *pcid35 = (CID35 *)pdlpcid35->head; pcid35; pcid35 = (CID35 *)pcid35->dle.next)
             AddJtGrabCandidate(psw, pstepplayer, qwPosJt, pcid35, pcid35, 4, ajtgrabcand);
     }
     if (grf & 4)
     {
-        DL *pdlpcid27 = &D_003DD490.dlCid27;
+        DL *pdlpcid27 = &g_sw.dlCid27;
         for (CID27 *pcid27 = (CID27 *)pdlpcid27->head; pcid27; pcid27 = (CID27 *)pcid27->dle.next)
             AddJtGrabCandidate(psw, pstepplayer, qwPosJt, pcid27, pcid27, 4, ajtgrabcand);
     }
     if (grf & 0x400)
     {
-        DL *pdlpcid39 = &D_003DD490.dlCid39;
+        DL *pdlpcid39 = &g_sw.dlCid39;
         for (CID39 *pcid39 = (CID39 *)pdlpcid39->head; pcid39; pcid39 = (CID39 *)pcid39->dle.next)
             AddJtGrabCandidate(psw, pstepplayer, qwPosJt, pcid39, pcid39, 4, ajtgrabcand);
     }
     if (grf & 0x200)
     {
-        DL *pdlpcid13 = &D_003DD490.dlCid13;
+        DL *pdlpcid13 = &g_sw.dlCid13;
         for (CID13 *pcid13 = (CID13 *)pdlpcid13->head; pcid13; pcid13 = (CID13 *)pcid13->dle.next)
             AddJtGrabCandidate(psw, pstepplayer, qwPosJt, pcid13, pcid13, 4, ajtgrabcand);
     }
     if (grf & 2)
     {
-        DL *pdlpcid11 = &D_003DD490.dlCid11;
+        DL *pdlpcid11 = &g_sw.dlCid11;
         for (CID11 *pcid11 = (CID11 *)pdlpcid11->head; pcid11; pcid11 = (CID11 *)pcid11->dle.next)
             AddJtGrabCandidate(psw, pstepplayer, qwPosJt, pcid11, pcid11, 4, ajtgrabcand);
     }
     if (grf & 1)
     {
-        DL *pdlTarget = &D_003DD490.dlTarget;
+        DL *pdlTarget = &g_sw.dlTarget;
         for (TARGET *ptarget = (TARGET *)pdlTarget->head; ptarget; ptarget = (TARGET *)ptarget->dleTarget.next)
         {
             if ((ptarget->grftak & 1) && FIsBasicDerivedFrom(ptarget, (CID)19))
@@ -1485,14 +1485,14 @@ void GatherJtGrabCandidates(SW *psw, STEPPLAYER *pstepplayer, uint grf)
     }
     if (grf & 0x20)
     {
-        DL *pdlpcid38 = &D_003DD490.dlCid38;
+        DL *pdlpcid38 = &g_sw.dlCid38;
         for (CID38 *pcid38 = (CID38 *)pdlpcid38->head; pcid38; pcid38 = (CID38 *)pcid38->dle.next)
             AddJtGrabCandidate(psw, pstepplayer, qwPosJt, pcid38, pcid38, 4, ajtgrabcand);
     }
     int ccand;
     for (ccand = 4; ccand > 0 && !ajtgrabcand[ccand - 1].plo; ccand--)
         ;
-    SW *pswG = &D_003DD490;
+    SW *pswG = &g_sw;
     EmitJtGrabSparkles(pswG, pstepplayer, ccand, ajtgrabcand);
     UpdateJtGrabCandidates(pswG, pstepplayer, ccand, ajtgrabcand);
     int idHintOld = GetHintBoxTextId(&D_003DA0C0);
@@ -1510,14 +1510,14 @@ void GatherJtGrabCandidates(SW *psw, STEPPLAYER *pstepplayer, uint grf)
         if (pproxy && pproxy->oid == 0x624 && D_002BF70C < pswG->ajtgrabcand[0].tUnk14)
             idHint = 0x125;
         else
-            idHint = D_003DD490.ajtgrabcand[0].pspot->nUnk14;
+            idHint = g_sw.ajtgrabcand[0].pspot->nUnk14;
     }
     if (idHint != idHintOld)
     {
         if (idHint == -1)
-            ClearIfSlotId(&D_003DA0C0, D_003DD490.idHintGrab);
+            ClearIfSlotId(&D_003DA0C0, g_sw.idHintGrab);
         else
             SetHintBoxText(&D_003DA0C0, idHint, -1.0f);
-        D_003DD490.idHintGrab = idHint;
+        g_sw.idHintGrab = idHint;
     }
 }

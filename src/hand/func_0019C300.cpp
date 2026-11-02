@@ -1,8 +1,8 @@
+#include "mat.h"
 // Compute motion correction in a predicted target frame.
 
 typedef int qword __attribute__((mode(TI)));
 struct VTE { short delta,pad; void *fn; };
-struct M4 { qword row[4]; };
 union V { qword q; float a[4]; };
 struct MOTION { char before[0x80]; qword acceleration; };
 struct OBJECT {
@@ -13,13 +13,13 @@ struct CONTEXT { OBJECT *owner; };
 struct SPACE;
 extern "C" {
     qword func_001A62E8(OBJECT *);
-    void func_002309E8(SPACE *,SPACE *,M4 *,M4 *,float);
-    M4 *func_0011C168(M4 *,const M4 *,const M4 *);
+    void func_002309E8(SPACE *,SPACE *,MATRIX4 *,MATRIX4 *,float);
+    MATRIX4 *__ml__FRC7MATRIX4T0(MATRIX4 *,const MATRIX4 *,const MATRIX4 *);
     extern qword D_002A2DD0;
     extern float D_002BF910;
 }
 typedef qword (*VECTOR_GETTER)(OBJECT *);
-typedef SPACE *(*INVERSE_GETTER)(OBJECT *,M4 *);
+typedef SPACE *(*INVERSE_GETTER)(OBJECT *,MATRIX4 *);
 static inline float Abs(float a) {
     float r;__asm__("abs.s %0,%1":"=f"(r):"f"(a));return r;
 }
@@ -34,8 +34,8 @@ typedef char Float_Size[(sizeof(float))==4?1:-1];
 typedef char Short_Size[(sizeof(short))==2?1:-1];
 typedef char V_Size[(sizeof(V))==16?1:-1];
 typedef char V_Align[(__alignof__(V))==16?1:-1];
-typedef char M4_Size[(sizeof(M4))==64?1:-1];
-typedef char M4_Align[(__alignof__(M4))==16?1:-1];
+typedef char M4_Size[(sizeof(MATRIX4))==64?1:-1];
+typedef char M4_Align[(__alignof__(MATRIX4))==16?1:-1];
 typedef char VTE_Size[(sizeof(VTE))==8?1:-1];
 typedef char VTE_Align[(__alignof__(VTE))==4?1:-1];
 typedef char MOTION_Size[(sizeof(MOTION))==144?1:-1];
@@ -54,25 +54,25 @@ typedef char OBJECT_vt_Offset[((unsigned)&((OBJECT*)0)->vt)==12?1:-1];
 typedef char OBJECT_motion_Offset[((unsigned)&((OBJECT*)0)->motion)==232?1:-1];
 typedef char OBJECT_radius_Offset[((unsigned)&((OBJECT*)0)->radius)==4128?1:-1];
 typedef char CONTEXT_owner_Offset[((unsigned)&((CONTEXT*)0)->owner)==0?1:-1];
-typedef char M4_row0_Offset[((unsigned)&((M4*)0)->row[0])==0?1:-1];
-typedef char M4_row1_Offset[((unsigned)&((M4*)0)->row[1])==16?1:-1];
-typedef char M4_row2_Offset[((unsigned)&((M4*)0)->row[2])==32?1:-1];
-typedef char M4_row3_Offset[((unsigned)&((M4*)0)->row[3])==48?1:-1];
+typedef char M4_row0_Offset[((unsigned)&((MATRIX4*)0)->r[0])==0?1:-1];
+typedef char M4_row1_Offset[((unsigned)&((MATRIX4*)0)->r[1])==16?1:-1];
+typedef char M4_row2_Offset[((unsigned)&((MATRIX4*)0)->r[2])==32?1:-1];
+typedef char M4_row3_Offset[((unsigned)&((MATRIX4*)0)->r[3])==48?1:-1];
 extern "C" void func_0019C300(CONTEXT *context,OBJECT *target,qword localPoint,
                              float *score,qword *point,qword *velocity,float duration) {
     V delta;
-    M4 predicted,inverse;
+    MATRIX4 predicted,inverse;
     V scalar;
-    M4 product;
+    MATRIX4 product;
     V future,position,oldVelocity,comparison,prediction;
     position.q=func_001A62E8(context->owner);
     OBJECT *owner=context->owner;
     VTE *vt=owner->vt;
     oldVelocity.q=((VECTOR_GETTER)vt[33].fn)((OBJECT*)((char*)owner+vt[33].delta));
-    register M4*inverseOwner __asm__("$17");
+    register MATRIX4*inverseOwner __asm__("$17");
     SPACE*frame;
     {
-      register M4*inverseArgument __asm__("$5");
+      register MATRIX4*inverseArgument __asm__("$5");
       register VTE*targetVt __asm__("$6");
       register MOTION*motion __asm__("$3");
       register qword time __asm__("vf3");
@@ -99,28 +99,28 @@ extern "C" void func_0019C300(CONTEXT *context,OBJECT *target,qword localPoint,
     }
     {
       register qword snapshot __asm__("$3")=prediction.q;
-      register M4*published __asm__("$16");
+      register MATRIX4*published __asm__("$16");
       register SPACE*receiver __asm__("$4");
       register float dtArgument __asm__("$f12");
       __asm__ volatile("la %0,%a4\n\tdaddu %1,%5,$zero\n\tmov.s %2,%6\n\tsq %7,%3":"=&r"(published),"=&r"(receiver),"=f"(dtArgument),"=m"(comparison.q):"p"(&predicted),"r"(frame),"f"(duration),"r"(snapshot));
-      register SPACE*sourceSpace __asm__("$5");register M4*optionalOutput __asm__("$7");const int nullValue=0;
+      register SPACE*sourceSpace __asm__("$5");register MATRIX4*optionalOutput __asm__("$7");const int nullValue=0;
       __asm__("daddu %0,%z2,$zero\n\tdaddu %1,%z2,$zero":"=r"(optionalOutput),"=r"(sourceSpace):"rJ"(nullValue));
       func_002309E8(receiver,sourceSpace,published,optionalOutput,dtArgument);
-      func_0011C168(&product,published,inverseOwner);
+      __ml__FRC7MATRIX4T0(&product,published,inverseOwner);
     }
     register float squared __asm__("$f2"),radius __asm__("$f1"),radiusSquared __asm__("$f0");
     register OBJECT*radiusOwner __asm__("$2");
     {
  register qword a __asm__("vf1"),b __asm__("vf2"),c __asm__("vf3"),d __asm__("vf4"),p __asm__("vf6");
- __asm__("lqc2 %0,%5\n\tlqc2 %1,%6\n\tlqc2 %2,%7\n\tlqc2 %3,%8\n\tlqc2 %4,%9":"=j"(a),"=j"(b),"=j"(c),"=j"(d),"=j"(p):"m"(product.row[0]),"m"(product.row[1]),"m"(product.row[2]),"m"(product.row[3]),"m"(localPoint));
+ __asm__("lqc2 %0,%5\n\tlqc2 %1,%6\n\tlqc2 %2,%7\n\tlqc2 %3,%8\n\tlqc2 %4,%9":"=j"(a),"=j"(b),"=j"(c),"=j"(d),"=j"(p):"m"(product.r[0]),"m"(product.r[1]),"m"(product.r[2]),"m"(product.r[3]),"m"(localPoint));
  register qword q __asm__("vf5");
  /* Capture the inherited VF5.W after the actual matrix-product call. */
- __asm__ volatile("vmulax.xyz $ACC,%2,%6x\n\tvmadday.xyz $ACC,%3,%6y\n\tvmaddaz.xyz $ACC,%4,%6z\n\tvmaddw.xyz %0,%5,$vf0w\n\tsqc2 %2,%1":"=&j"(q),"=m"(predicted.row[0]):"j"(a),"j"(b),"j"(c),"j"(d),"j"(p));
+ __asm__ volatile("vmulax.xyz $ACC,%2,%6x\n\tvmadday.xyz $ACC,%3,%6y\n\tvmaddaz.xyz $ACC,%4,%6z\n\tvmaddw.xyz %0,%5,$vf0w\n\tsqc2 %2,%1":"=&j"(q),"=m"(predicted.r[0]):"j"(a),"j"(b),"j"(c),"j"(d),"j"(p));
  {
  register qword other __asm__("vf1");
- __asm__("lqc2 %3,%6\n\tsqc2 %4,%0\n\tvsub.xyzw %2,%2,%3\n\tsqc2 %5,%1":"=m"(predicted.row[1]),"=m"(predicted.row[2]),"+&j"(q),"=&j"(other):"j"(b),"j"(c),"m"(comparison.q));
+ __asm__("lqc2 %3,%6\n\tsqc2 %4,%0\n\tvsub.xyzw %2,%2,%3\n\tsqc2 %5,%1":"=m"(predicted.r[1]),"=m"(predicted.r[2]),"+&j"(q),"=&j"(other):"j"(b),"j"(c),"m"(comparison.q));
  }
- __asm__("vmul.xyz $vf1,%4,%4\n\tvaddw.x $vf2,$vf0,$vf0w\n\tvadday.x $ACC,$vf1,$vf1y\n\tvmaddz.x $vf1,$vf2,$vf1z\n\tsqc2 %5,%0\n\tsqc2 %4,%1\n\tqmfc2.ni $2,$vf1\n\tmtc1 $2,%2\n\tlw %3,%6":"=m"(predicted.row[3]),"=m"(delta.q),"=f"(squared),"=&r"(radiusOwner):"j"(q),"j"(d),"m"(context->owner):"vf1","vf2");
+ __asm__("vmul.xyz $vf1,%4,%4\n\tvaddw.x $vf2,$vf0,$vf0w\n\tvadday.x $ACC,$vf1,$vf1y\n\tvmaddz.x $vf1,$vf2,$vf1z\n\tsqc2 %5,%0\n\tsqc2 %4,%1\n\tqmfc2.ni $2,$vf1\n\tmtc1 $2,%2\n\tlw %3,%6":"=m"(predicted.r[3]),"=m"(delta.q),"=f"(squared),"=&r"(radiusOwner):"j"(q),"j"(d),"m"(context->owner):"vf1","vf2");
 
     }
     __asm__("lwc1 %0,%2\n\tmul.s %1,%0,%0":"=f"(radius),"=f"(radiusSquared):"m"(radiusOwner->radius));

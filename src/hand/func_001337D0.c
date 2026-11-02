@@ -1,11 +1,11 @@
-/* MATCH (Claude agent laneB14, 2026-10-23), from v2 (3). One register pin (k3 in s5) plus commented empty asms:
+#include "vtable.h"
+/* MATCH, from v2 (3). One register pin (k3 in s5) plus commented empty asms:
  * - an empty asm after `pe = ae` keeps the loop-made i+1 (addiu s4) last in its block, so reorg puts it in the b slot;
  * - that asm lengthens ae's live range by one insn, which drops ae's global-alloc priority below p's (s2/s3 swap).
  *   Five empty asms after the first loop add the same length to p's range (they stand in for ~5 insns the original
  *   had there), restoring the target's p/ae priority order;
  * - paae is set (before k3) so the aae address is computed ahead of the k3 constant, as in the target. */
-/* v2 (Claude agent laneB12, 2026-10-23): aligned 7 -> 3. The /12 pointer-diff divisions written out as (bytes * k3) >> 2 with k3 = 0xAAAAAAAB in ONE commented register pin ($21 = s5, as in the target): fixes the s4/s5 swap. Left: ori s5 before addiu fp, and i+1 (addiu s4) scheduled right after the sll instead of in the b delay slot (j = i + 1 / i = j step, split init: same 3). */
-struct VTE { short d; short pad; void *pfn; };
+/* v2: aligned 7 -> 3. The /12 pointer-diff divisions written out as (bytes * k3) >> 2 with k3 = 0xAAAAAAAB in ONE commented register pin ($21 = s5, as in the target): fixes the s4/s5 swap. Left: ori s5 before addiu fp, and i+1 (addiu s4) scheduled right after the sll instead of in the b delay slot (j = i + 1 / i = j step, split init: same 3). */
 struct LO { int pad[3]; struct VTE *vt; };
 struct X;
 struct L { void *pv; struct L *pnext; struct L *pother; struct LO *po; int f; };
@@ -17,11 +17,11 @@ struct P { char pad[0x3CD0]; int c; struct E *aae[3]; char a3CE0[0x3CF8 - 0x3CE0
 struct L *func_00133CB8(struct P *, struct X *, struct X *);
 void func_001A7E10(struct P *, void *);
 void func_001F5078(struct LO *);
-void func_0011CD98(void *, void *);
+void FreeSlotheapPv__FP8SLOTHEAPPv(void *, void *);
 void func_0011A2E8(void *, struct X *);
 int func_0011A380(void *, struct X *);
 void *func_002332B8(void *, void *, int);
-#define VCALL(po, n, T) ((T)(po)->vt[n].pfn)((char *)(po) + (po)->vt[n].d
+#define VCALL(po, n, T) ((T)(po)->vt[n].pfn)((char *)(po) + (po)->vt[n].delta
 void func_001337D0(struct P *p, struct X *px)
 {
     struct L *pl, *plNext;
@@ -37,8 +37,8 @@ void func_001337D0(struct P *p, struct X *px)
             func_001A7E10(p, pl->pv);
         }
         plNext = pl->pnext;
-        func_0011CD98(p->aCF8, pl);
-        func_0011CD98(p->aCF8, pl2);
+        FreeSlotheapPv__FP8SLOTHEAPPv(p->aCF8, pl);
+        FreeSlotheapPv__FP8SLOTHEAPPv(p->aCF8, pl2);
     }
     /* five empty asms: lengthen p's live range (global-alloc priority), emulating the original insn count here */
     __asm__ __volatile__("");
@@ -77,5 +77,5 @@ void func_001337D0(struct P *p, struct X *px)
     }
     }
     p->c -= 2;
-    func_0011CD98(p->a3CE0, px);
+    FreeSlotheapPv__FP8SLOTHEAPPv(p->a3CE0, px);
 }

@@ -8,14 +8,14 @@ struct TREE {int count,flag,unused;void *nodes;};
 struct P {LO *owner;int flags;float radius;int material;char pad10[0xC];int pinnedCount;char pad20[0x48];TREE tree;GEO local,world;};
 struct FRAME {int pad[4];};
 extern "C" FRAME *func_001AE478(FRAME *);
-extern "C" void func_001AE4A0(FRAME *,int);
+extern "C" void _$_18CBinaryInputStream(FRAME *,int);
 struct MSG {int bytes,alignment;};
-extern "C" void *func_001AE378(MSG *);
+extern "C" void *PvAllocStackClearImpl__FP7SWALLOC(MSG *);
 extern "C" void func_001AE5A0(void *,const void *,unsigned int);
 extern "C" M4 *func_0011C318(M4 *,const M4 *);
-extern "C" M4 *func_0011C168(M4 *,const M4 *,const M4 *);
-extern "C" void func_00166270(GEO *,const M4 *,GEO *);
-extern "C" void func_001191E8(TREE *,GEO *,TREE *,GEO *);
+extern "C" M4 *__ml__FRC7MATRIX4T0(M4 *,const M4 *,const M4 *);
+extern "C" void CloneGeom__FP4GEOMP7MATRIX4T0(GEO *,const M4 *,GEO *);
+extern "C" void CloneBspc__FP4BSPCP4GEOMT0T1(TREE *,GEO *,TREE *,GEO *);
 
 static inline float SquaredLength(qword a){qword one;float f;__asm__("vmul.xyz %0,%0,%0\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"+j"(a),"=&j"(one));__asm__("mtc1 %1,%0":"=f"(f):"r"(a));return f;}
 /* volatile: the game's sqrt.s is a barrier for the scheduler (the radius store must precede the next constant). */
@@ -33,14 +33,14 @@ extern "C" void func_001F70C0(P *source,LO *space,int inserted,P *dest)
     dest->radius=Sqrt(maximum);
     temporary=source->local;
     request.bytes=(temporary.count+inserted)*16;allocation->alignment=16;
-    qword *points=(qword *)func_001AE378(allocation);
+    qword *points=(qword *)PvAllocStackClearImpl__FP7SWALLOC(allocation);
     int pinned=source->pinnedCount;
     func_001AE5A0(points,temporary.points,pinned*16);
     func_001AE5A0(points+(pinned+inserted),temporary.points+pinned,(temporary.count-pinned)*16);
     temporary.count+=inserted;temporary.points=points;
-    {M4 product,inverse;func_0011C168(&product,(func_0011C318(&inverse,&space->matrix),&inverse),&source->owner->matrix);transform=product;}
-    func_00166270(&temporary,&transform,&dest->local);
-    func_00166270(&dest->local,&space->matrix,&dest->world);
-    func_001191E8(&source->tree,&source->world,&dest->tree,&dest->world);
-    func_001AE4A0(&frame,2);
+    {M4 product,inverse;__ml__FRC7MATRIX4T0(&product,(func_0011C318(&inverse,&space->matrix),&inverse),&source->owner->matrix);transform=product;}
+    CloneGeom__FP4GEOMP7MATRIX4T0(&temporary,&transform,&dest->local);
+    CloneGeom__FP4GEOMP7MATRIX4T0(&dest->local,&space->matrix,&dest->world);
+    CloneBspc__FP4BSPCP4GEOMT0T1(&source->tree,&source->world,&dest->tree,&dest->world);
+    _$_18CBinaryInputStream(&frame,2);
 }

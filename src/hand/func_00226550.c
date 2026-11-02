@@ -1,11 +1,10 @@
-typedef struct DL { void *head; void *tail; int ibDle; } DL;
-typedef struct DLI { DL *m_pdl; void **m_ppv; int m_ibDle; struct DLI *m_pdliNext; } DLI;
-extern DLI *D_002DD2FC;     /* g_pdliFirst */
-struct CLOCK { float t; float dt; char pad[8]; float g10; };
-extern struct CLOCK D_002DDED0;
+#include "dl.h"
+#include "clock.h"
+extern DLI *g_pdliFirst;     /* g_pdliFirst */
+extern struct CLOCK g_clock;
 extern char D_002E65E0[];
-extern char D_003DD040[];
-extern char D_002DDF40[];
+extern char g_sndmgr[];
+extern char g_cm[];
 extern char D_002DD598[];
 struct VTE { short d; short pad; void (*pfn)(); };
 struct O { char pad[0xC]; struct VTE *vt; };
@@ -24,7 +23,7 @@ void func_00156728(void *pv);
 void func_001F8DD8(struct S *p);
 void func_001BE1E8(void);
 void func_001EC968(void);
-void func_001AB1A0(void *pv);
+void UpdateSave__FP4SAVE(void *pv);
 void func_001FD830(void *pv);
 void func_0014D478(void *pv);
 void func_0020F7E0(struct S *p);
@@ -34,8 +33,8 @@ static inline void InitDli(DLI *pdli, DL *pdl)
     pdli->m_pdl = pdl;
     pdli->m_ppv = (void **)pdl;
     pdli->m_ibDle = pdl->ibDle;
-    pdli->m_pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->m_pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static inline void *PvNextDli(DLI *pdli)
 {
@@ -47,7 +46,7 @@ void func_00226550(struct S *p)
 {
     func_00149C80(p);
     func_00147F40(p);
-    if (D_002DDED0.dt <= 0.0f) {
+    if (g_clock.dt <= 0.0f) {
         func_002267C0(p);
     } else {
         struct L *pl;
@@ -78,12 +77,12 @@ void func_00226550(struct S *p)
         func_001BE1E8();
         func_001EC968();
         func_00149C80(p);
-        D_002DD2FC = dli.m_pdliNext;
+        g_pdliFirst = dli.m_pdliNext;
     }
-    func_001AB1A0(D_002E65E0);
-    func_001FD830(D_003DD040);
-    if (0.0f < D_002DDED0.g10)
-        func_0014D478(D_002DDF40);
+    UpdateSave__FP4SAVE(D_002E65E0);
+    func_001FD830(g_sndmgr);
+    if (0.0f < g_clock.dtReal)
+        func_0014D478(g_cm);
     func_0020F7E0(p);
     func_00128148(D_002DD598);
 }

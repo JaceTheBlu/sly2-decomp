@@ -1,3 +1,5 @@
+#include "clock.h"
+#include "vu0.h"
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((t*)0)->m))
 typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];};
@@ -6,31 +8,27 @@ struct CONTACT{char pad[8];P*owner;char padC[0x74];qword normal;char pad90[0x1C]
 struct LINK{CONTACT*first;LINK*next;};
 struct COLLISION{char pad[0x64];LINK*groups;};
 struct P{char pad[0xEC];COLLISION*collision;char padF0[0x118];int mode;};
-struct CLOCK{float time,delta;};
 struct REQUEST{int bytes,alignment;};
 union WORK{REQUEST request;U scalar;};
 struct MARK;
 extern "C"{
-extern CLOCK D_002DDED0;
-extern qword D_002A2DC0;
+extern CLOCK g_clock;
+extern qword g_normalZ;
 extern float D_002A656C;
 MARK*func_001AE478(MARK*);
-void func_001AE4A0(MARK*,int);
-void*func_001AE318(REQUEST*);
+void _$_18CBinaryInputStream(MARK*,int);
+void*PvAllocStackImpl__FP7SWALLOC(REQUEST*);
 void func_0011AD30(int,float*,float*,float*,float);
 }
-struct MARK{MARK(){func_001AE478(this);}~MARK(){func_001AE4A0(this,2);}};
-static inline qword Scalar(float f){qword q;__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(f));return q;}
-static inline qword Scale(qword v,qword k){qword q;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(q):"j"(v),"j"(k));return q;}
+struct MARK{MARK(){func_001AE478(this);}~MARK(){_$_18CBinaryInputStream(this,2);}};
 static inline qword Copy(qword v){qword q;__asm__("vmove.xyzw %0,%1":"=j"(q):"j"(v));return q;}
-static inline qword Normal(P*p,CONTACT*c,WORK*work){qword normal=c->normal;if(c->owner!=p){qword minus=Scalar(-1.0f);work->scalar.q=minus;normal=Scale(normal,work->scalar.q);}return normal;}
+static inline qword Normal(P*p,CONTACT*c,WORK*work){qword normal=c->normal;if(c->owner!=p){qword minus=QwFromG(-1.0f);work->scalar.q=minus;normal=QwScaleX(normal,work->scalar.q);}return normal;}
 static inline void StoreDot(float*out,qword a,qword b){register qword product __asm__("vf1"),one __asm__("vf2");int bits;__asm__("vmul.xyz %1,%4,%5\n\tvaddw.x %2,$vf0,$vf0w\n\tvadday.x $ACC,%1,%1y\n\tvmaddz.x %1,%2,%1z\n\tqmfc2.ni %0,%1\n\tsw %0,%3":"=&r"(bits),"=&j"(product),"=j"(one),"=m"(*out):"j"(a),"j"(b));}
-static inline qword AddScaled(qword sum,qword normal,float weight,WORK*work){work->scalar.q=Scalar(weight);__asm__("vadda.xyzw $ACC,%1,$vf0\n\tvmaddx.xyzw %0,%2,%3x":"=j"(sum):"j"(sum),"j"(normal),"j"(work->scalar.q));return sum;}
+static inline qword AddScaled(qword sum,qword normal,float weight,WORK*work){work->scalar.q=QwFromG(weight);__asm__("vadda.xyzw $ACC,%1,$vf0\n\tvmaddx.xyzw %0,%2,%3x":"=j"(sum):"j"(sum),"j"(normal),"j"(work->scalar.q));return sum;}
 static inline float Z(qword q){register qword bits __asm__("$2");register float f __asm__("$f0");__asm__("qmfc2.ni %0,%1":"=r"(bits):"j"(q));__asm__("pextuw %1,$zero,%1\n\tmtc1 %1,%0":"=f"(f),"+r"(bits));return f;}
 typedef char U_Size[sizeof(U)==16?1:-1];
 typedef char CONTACT_Size[sizeof(CONTACT)==176?1:-1];
 typedef char LINK_Size[sizeof(LINK)==8?1:-1];
-typedef char CLOCK_Size[sizeof(CLOCK)==8?1:-1];
 typedef char REQUEST_Size[sizeof(REQUEST)==8?1:-1];
 typedef char WORK_Size[sizeof(WORK)==16?1:-1];
 typedef char CONTACT_owner_Offset[FIELD_OFFSET(CONTACT,owner)==8?1:-1];
@@ -41,7 +39,6 @@ typedef char LINK_next_Offset[FIELD_OFFSET(LINK,next)==4?1:-1];
 typedef char COLLISION_groups_Offset[FIELD_OFFSET(COLLISION,groups)==100?1:-1];
 typedef char P_collision_Offset[FIELD_OFFSET(P,collision)==236?1:-1];
 typedef char P_mode_Offset[FIELD_OFFSET(P,mode)==520?1:-1];
-typedef char CLOCK_time_Offset[FIELD_OFFSET(CLOCK,time)==0?1:-1];
 typedef char REQUEST_bytes_Offset[FIELD_OFFSET(REQUEST,bytes)==0?1:-1];
 typedef char REQUEST_alignment_Offset[FIELD_OFFSET(REQUEST,alignment)==4?1:-1];
 typedef char MARK_Size[sizeof(MARK)==1?1:-1];
@@ -58,7 +55,7 @@ typedef char WORK_request_Offset[FIELD_OFFSET(WORK,request)==0?1:-1];
 typedef char WORK_scalar_Offset[FIELD_OFFSET(WORK,scalar)==0?1:-1];
 typedef char U_q_Offset[FIELD_OFFSET(U,q)==0?1:-1];
 extern "C" int func_0019A098(P*p,float previous,float*stamp){
- float now=D_002DDED0.time;
+ float now=g_clock.t;
  if(now-previous<1.0f)return 0;
  if(stamp){if(now-*stamp<1.0f)return 0;*stamp=now;}
  if(p->mode)return 0;
@@ -74,10 +71,10 @@ extern "C" int func_0019A098(P*p,float previous,float*stamp){
  register REQUEST*argument __asm__("$4");
  register qword result __asm__("vf3");
  // The scalar home is overwritten by the real matrix-size request.
- __asm__("mult $3,%7,%7\n\tla %0,%a5\n\tmfc1 $2,%4\n\tdaddu %1,%0,$zero\n\tqmtc2.ni $2,$vf2\n\tsqc2 $vf2,%3\n\tlui $2,%%hi(%6)\n\taddiu $2,$2,%%lo(%6)\n\tsll $3,$3,2\n\tlqc2 $vf1,0($2)\n\tvmulx.xyzw %2,$vf1,$vf2x\n\tsw $3,%3":"=&r"(request),"=&r"(argument),"=j"(result),"=m"(work.scalar.q):"f"(negative),"p"(&work.request),"i"(&D_002A2DC0),"r"(count):"$2","$3","vf1","vf2","hi","lo","memory");
+ __asm__("mult $3,%7,%7\n\tla %0,%a5\n\tmfc1 $2,%4\n\tdaddu %1,%0,$zero\n\tqmtc2.ni $2,$vf2\n\tsqc2 $vf2,%3\n\tlui $2,%%hi(%6)\n\taddiu $2,$2,%%lo(%6)\n\tsll $3,$3,2\n\tlqc2 $vf1,0($2)\n\tvmulx.xyzw %2,$vf1,$vf2x\n\tsw $3,%3":"=&r"(request),"=&r"(argument),"=j"(result),"=m"(work.scalar.q):"f"(negative),"p"(&work.request),"i"(&g_normalZ),"r"(count):"$2","$3","vf1","vf2","hi","lo","memory");
  down.q=result;
  request->alignment=16;
- returned=(float*)func_001AE318(argument);
+ returned=(float*)PvAllocStackImpl__FP7SWALLOC(argument);
  }
  register float*matrix __asm__("$22");float*rhs;
  register int rowbytes __asm__("$18")=count*4;
@@ -85,10 +82,10 @@ extern "C" int func_0019A098(P*p,float previous,float*stamp){
  register REQUEST*argument __asm__("$4");
  __asm__("sw %3,%2\n\tdaddu %0,%4,$zero\n\tdaddu %1,%5,$zero":"=&r"(argument),"=r"(matrix),"=m"(work.request.bytes):"r"(rowbytes),"r"(request),"r"(returned));
  request->alignment=16;
- rhs=(float*)func_001AE318(argument);
+ rhs=(float*)PvAllocStackImpl__FP7SWALLOC(argument);
  }
  work.request.bytes=rowbytes;request->alignment=16;
- float*weights=(float*)func_001AE318(request);
+ float*weights=(float*)PvAllocStackImpl__FP7SWALLOC(request);
  float*cursor=matrix;
  for(group=p->collision->groups;group;group=group->next){
   for(c=group->first;c;c=c->next){

@@ -1,9 +1,9 @@
+#include "mat.h"
 // Update linked world matrices through the VU matrix microprogram.
 typedef int qword __attribute__((mode(TI)));
-struct M4 {qword r[4];};
-struct X {M4 local,world;char pad80[0x20];X *parent;int priority;char pada8[0x58];};
+struct X {MATRIX4 local,world;char pad80[0x20];X *parent;int priority;char pada8[0x58];};
 struct S {char pad[0x50];int count;X *array;};
-extern M4 D_002A2D30;
+extern MATRIX4 D_002A2D30;
 extern "C" void func_0022FA20(S *);
 extern "C" void func_0022FAA0(S *p) {
     if(p->count>0) {

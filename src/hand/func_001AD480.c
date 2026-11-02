@@ -1,4 +1,4 @@
-struct CRef { int m_tagk; float m_tag; };
+#include "cref.h"
 struct B { char data[0x5464]; };
 struct G { char pad[0x24]; struct B a[3]; char pad2[0xFD58 - 0x24 - 3 * 0x5464]; struct B *xFD58; };
 struct H { char pad[0x4C]; int x4C; };
@@ -16,7 +16,7 @@ void func_001AD480(struct S *s)
     struct B *p = &D_002E65E0.a[s->x8];
     float f;
     func_002581C0(&ref, D_003E0FAC, p);
-    f = ref.m_tag;
+    f = ref.m_g;
     func_00129EC8(&ref);
     D_002E65E0.xFD58 = p;
     if (f == 0.0f)

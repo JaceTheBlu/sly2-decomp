@@ -1,4 +1,5 @@
-/* func_001D4568 (Claude agent, wave-3 lane 9): hit reaction. After the base handler (func_001F7588) accepts the event, the
+#include "vu0.h"
+/* func_001D4568: hit reaction. After the base handler (func_001F7588) accepts the event, the
  * remaining count is updated (clamped at 0) and, for kind 0x100 (random hit) or 0x1000 (hit from a sender), a random linear
  * and angular impulse is built and added to the object's velocity through its virtual get/set pairs (vtable slots 33/35 and
  * 34/36).
@@ -21,13 +22,13 @@ static inline VU_FLOAT VuFloat(float g) { VU_FLOAT v; __asm__("qmtc2.ni %1, %0" 
 struct VENTRY { short delta, pad; void *fn; };
 struct P { char pad0[0xC]; VENTRY *vt; char pad10[0x550]; int remaining; };
 struct EVENT { P *sender; char pad4[8]; int kind, change; };
-extern qword D_002A2DA0, D_002A2DC0;
+extern qword D_002A2DA0, g_normalZ;
 extern float D_002C21D0[2], D_002C21D8[2], D_002C21E0[2], D_002C21E8[2], D_002C21F0[2], D_002C21F8[2], D_002C2200[2];
 extern "C" {
 int func_001F7588(P *, EVENT *);
 void func_001D4C88(P *);
 void func_001D4940(P *, int);
-float func_0011D448(float, float);
+float GRandInRange__Fff(float, float);
 qword func_0011E1A0(float, float, float);
 qword func_001A62E8(P *);
 int func_001D4568(P *, EVENT *);
@@ -45,12 +46,11 @@ static inline VV Dot(VV a, VV b)
     return r;
 }
 static inline VV Length(VV v) { return Sqrt(Dot(v, v)); }
-static inline float GFromQw(qword q) { float g; __asm__("mtc1 %1, %0" : "=f"(g) : "r"(q)); return g; }
 static inline VV DivideQ(VV v, VV l) { qword r; __asm__("vdiv $Q, $vf0w, %1x\n\tvwaitq\n\tvmulq.xyzw %0, %2, $Q" : "=j"(r) : "j"(l), "j"(v)); return r; }
 static inline VV NormalizeSafe(VV v, VV fallback)
 {
     VV len = Length(v);
-    if (GFromQw(len) < 0.0001f)
+    if (GetX(len) < 0.0001f)
         return fallback;
     return DivideQ(v, len);
 }
@@ -67,7 +67,7 @@ static inline VV VecCombo(VU_FLOAT f1, VV v1, VU_FLOAT f2, VV v2)
               "jm"(f1.q), "j"(f2.q)); /* last two: allocation only */
     return r;
 }
-static inline float Random(const float *range) { return func_0011D448(range[0], range[1]); }
+static inline float Random(const float *range) { return GRandInRange__Fff(range[0], range[1]); }
 /* object vector (virtual get) += delta (virtual set) */
 static inline void AddVector(P *p, int get, int set, const VU_VECTOR4 &delta)
 {
@@ -96,11 +96,11 @@ int func_001D4568(P *p, EVENT *event)
     {
     case 0x100:
     {
-        float angle = func_0011D448(-3.14159274f, 3.14159274f);
+        float angle = GRandInRange__Fff(-3.14159274f, 3.14159274f);
         float horizontal = Random(D_002C21D0);
         float vertical = Random(D_002C21D8);
         linear.q = func_0011E1A0(angle, horizontal, vertical);
-        angular.q = VuFloat(Random(D_002C21E0)) * NormalizeSafe(Cross(D_002A2DC0, linear.q), D_002A2DA0);
+        angular.q = VuFloat(Random(D_002C21E0)) * NormalizeSafe(Cross(g_normalZ, linear.q), D_002A2DA0);
         break;
     }
     case 0x1000:
@@ -108,13 +108,13 @@ int func_001D4568(P *p, EVENT *event)
         VV position = func_001A62E8(p);
         VV delta = Sub(position, func_001A62E8(event->sender));
         VU_VECTOR4 direction;
-        direction.q = NormalizeSafe(Sub(delta, ScaleV(Dot(delta, D_002A2DC0), D_002A2DC0)), D_002A2DA0);
+        direction.q = NormalizeSafe(Sub(delta, ScaleV(Dot(delta, g_normalZ), g_normalZ)), D_002A2DA0);
         VU_FLOAT first(Random(D_002C21E8));
-        linear.q = VecCombo(first, direction.q, VuFloat(Random(D_002C21F0)), D_002A2DC0);
+        linear.q = VecCombo(first, direction.q, VuFloat(Random(D_002C21F0)), g_normalZ);
         VU_FLOAT second(Random(D_002C21F8));
         VU_VECTOR4 side;
-        side.q = Cross(D_002A2DC0, direction.q);
-        angular.q = VecCombo(second, side.q, VuFloat(Random(D_002C2200)), D_002A2DC0);
+        side.q = Cross(g_normalZ, direction.q);
+        angular.q = VecCombo(second, side.q, VuFloat(Random(D_002C2200)), g_normalZ);
         break;
     }
     }

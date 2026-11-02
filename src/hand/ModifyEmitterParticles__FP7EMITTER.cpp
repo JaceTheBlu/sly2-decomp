@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 union V { qword q; struct { float x, y, z, w; } v; float a[4]; };
 struct BLK { qword apos[2][0x84]; int ibuf; int cpart; int pad[2]; BLK *pblkNext; };
@@ -8,14 +9,12 @@ struct EMITB { int pad0; int f4; EMITO *pemito; };
 struct EMITTER { char pad[0xE4]; EMITB *pemitb; char pad1[0x140 - 0xE8]; float sBox; char pad2[0x150 - 0x144]; PRG *pprg; };
 extern "C" {
 qword func_001A62E8(ALO *palo);
-float func_0011D898(float g, float gMod);
+float GModPositive__Fff(float g, float gMod);
 }
-static inline qword Sub(qword a, qword b) { qword d; __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
-static inline qword Add(qword a, qword b) { qword d; __asm__("vadd.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 static inline void Wrap(float *pg, float &gMin, float &gMax, float &gBox, float *pdg)
 {
     if (*pg < gMin || gMax < *pg) {
-        *pdg = gMin + func_0011D898(*pg - gMin, gBox) - *pg;
+        *pdg = gMin + GModPositive__Fff(*pg - gMin, gBox) - *pg;
         *pg += *pdg;
     }
 }
@@ -27,8 +26,8 @@ void ModifyEmitterParticles(EMITTER *pemitter)
         volatile int unused;
         vecBox.v.z = sBox; vecBox.v.y = sBox; vecBox.v.x = sBox;
         if (pemitter->pemitb->pemito->palo) {
-            posMin.q = Sub(func_001A62E8(pemitter->pemitb->pemito->palo), vecBox.q);
-            posMax.q = Add(func_001A62E8(pemitter->pemitb->pemito->palo), vecBox.q);
+            posMin.q = QwSub(func_001A62E8(pemitter->pemitb->pemito->palo), vecBox.q);
+            posMax.q = QwAdd(func_001A62E8(pemitter->pemitb->pemito->palo), vecBox.q);
         } else {
             qword m, k;
             __asm__("qmtc2.ni %1, %0" : "=j"(k) : "r"(-1.0f));

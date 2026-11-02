@@ -1,7 +1,7 @@
 struct AREQ { int cb; int cbAlign; };
-extern "C" void *func_001AE2A0(AREQ *preq);
+extern "C" void *PvAllocSwClearImpl__FP7SWALLOC(AREQ *preq);
 struct CBase {
-    void *operator new(unsigned int cb) { AREQ req; req.cb = cb; req.cbAlign = 0x10; return func_001AE2A0(&req); }
+    void *operator new(unsigned int cb) { AREQ req; req.cb = cb; req.cbAlign = 0x10; return PvAllocSwClearImpl__FP7SWALLOC(&req); }
     virtual void F();
 };
 struct C0 : CBase { int a[3]; virtual void F(); };

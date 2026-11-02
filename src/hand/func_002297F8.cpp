@@ -1,9 +1,10 @@
+#include "mat.h"
+#include "vu0.h"
 // Resolve one contact between two physics objects: spring push, friction impulses (linear and
 // angular), restoring torque, and the water-splash / emitter-clear effects.
 typedef int qword __attribute__((mode(TI)));
 union V {qword q;float f[4];};
-struct M3 {qword r[3];};
-struct M4 {M3 basis;qword position;};
+struct M4 {MATRIX3 basis;qword position;};
 struct COEF {float f[3];};
 struct O;
 struct VE {short delta,pad;qword (*get)(void *);};
@@ -14,11 +15,11 @@ struct STATE {V minimum,maximum;};
 struct EMITTER;
 struct WATER;
 struct O {char pad[0xC];VE *vt;char pad10[0x48];NODE *body,*rotation,*motion;char pad64[0x84];PHYS *physics;STATE *state;char padF0[0x84];EMITTER *emitter;};
-union PHASE {V vectors[3];M3 basis;};
+union PHASE {V vectors[3];MATRIX3 basis;};
 union AXIS {COEF coefficients;V vector;};
 struct WORK {V point,normal,velocity;PHASE phase;AXIS axis;V angularNormal,angularTangent,scalar;float angle;};
 extern qword D_002A2DD0;
-extern M3 D_002A2D00;
+extern MATRIX3 D_002A2D00;
 extern COEF D_002C4470,D_002C4480;
 extern float D_002DDED4;
 extern "C" {
@@ -28,30 +29,27 @@ qword func_001FA810(CONSTRAINT *,NODE *,qword);
 void func_001FAC30(O *,qword);
 qword func_001A62E8(O *);
 void func_00228C18(O *,qword,qword *,qword *);
-float func_0011E290(qword,qword,qword *,qword *);
+float SProjectVector(qword,qword,qword *,qword *);
 int func_00230380(int);
 void func_001F5E10(O *,qword,const COEF *,qword,const COEF *);
-void func_001F5C30(O *,const M3 *,const COEF *,qword,const COEF *);
+void func_001F5C30(O *,const MATRIX3 *,const COEF *,qword,const COEF *);
 M4 *func_001A6318(O *);
-void func_0011B938(const M3 *,M3 *,M3 *);
-void func_0011BCF8(const M3 *,float *,qword *);
+void func_0011B938(const MATRIX3 *,MATRIX3 *,MATRIX3 *);
+void func_0011BCF8(const MATRIX3 *,float *,qword *);
 void func_001FAC98(O *,qword);
 void func_0015A2C0(O *,WATER *,float,qword,qword,float,float);
-int func_00132B10(O *,int);
+int FIsBasicDerivedFrom__FP5BASIC3CID(O *,int);
 void func_001FB098(EMITTER *,float);
 void func_00258040(EMITTER **,EMITTER *);
 }
-static inline float X(qword q){float f;__asm__("mtc1 %1,%0":"=f"(f):"r"(q));return f;}
 static inline float Y(qword q){qword v;float f;__asm__("prot3w %0,%1":"=r"(v):"r"(q));__asm__("mtc1 %1,%0":"=f"(f):"r"(v));return f;}
 static inline float Z(qword q){qword v;float f;__asm__("pextuw %0,$zero,%1":"=r"(v):"r"(q));__asm__("mtc1 %1,%0":"=f"(f):"r"(v));return f;}
-static inline bool Near(qword a,qword b,float epsilon){return func_0011D4D0(X(a),X(b),epsilon)&&func_0011D4D0(Y(a),Y(b),epsilon)&&func_0011D4D0(Z(a),Z(b),epsilon);}
-static inline qword Scalar(float f){qword q;__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(f));return q;}
-static inline qword Scale(qword v,qword k){qword r;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(r):"j"(v),"j"(k));return r;}
+static inline bool Near(qword a,qword b,float epsilon){return func_0011D4D0(GetX(a),GetX(b),epsilon)&&func_0011D4D0(Y(a),Y(b),epsilon)&&func_0011D4D0(Z(a),Z(b),epsilon);}
 static inline qword Get(O *o,int slot){VE *v=o->vt;return v[slot].get((char *)o+v[slot].delta);}
 static inline qword Sub(qword a,qword b){qword r;asm("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"0"(b));return r;}
 static inline qword AddNormal(qword motion,const V &projection){qword r;asm("vadd.xyzw %0,%1,%2":"=j"(r):"0"(motion),"j"(projection.q));return r;}
 static inline qword AddTangent(qword motion,const V &projection){qword r;asm("vadd.xyzw %0,%1,%2":"=j"(r):"0"(motion),"j"(projection.q));return r;}
-static inline qword NegativeAngular(qword angular,float sign,qword &scalar){qword factor;asm("qmtc2.ni %1,%0":"=j"(factor):"r"(sign));scalar=factor;return Scale(angular,factor);}
+static inline qword NegativeAngular(qword angular,float sign,qword &scalar){qword factor;asm("qmtc2.ni %1,%0":"=j"(factor):"r"(sign));scalar=factor;return QwScaleX(angular,factor);}
 // The coefficient tables are indexed directly (not through a pointer) so each loop forms its own address.
 #define GAIN2(G,amount,friction) {for(i=0;i<3;i++)coefficients->f[i]=G.f[i]*amount*friction;}
 #define GAIN1(G,friction) {for(i=0;i<3;i++)coefficients->f[i]=G.f[i]*friction;}
@@ -68,13 +66,13 @@ extern "C" void func_002297F8(O *a,O *b){
  float factor;
  if(spring!=0.0f){
   asm volatile("": : :"memory"); // the original re-reads a->physics here instead of reusing the pointer loaded above
-  qword k=Scalar(-spring*span);w.velocity.q=k;
-  func_001FAC30(a,func_001FA810(&a->physics->constraint,a->motion,Scale(a->physics->direction.q,k)));
+  qword k=QwFromG(-spring*span);w.velocity.q=k;
+  func_001FAC30(a,func_001FA810(&a->physics->constraint,a->motion,QwScaleX(a->physics->direction.q,k)));
  }
  if(friction!=0.0f){
   func_00228C18(b,func_001A62E8(a),&w.velocity.q,&w.phase.vectors[0].q);
   qword linear=Get(a,33);qword relative=Sub(w.velocity.q,linear);
-  float dot=func_0011E290(relative,w.normal.q,&w.phase.vectors[1].q,&w.phase.vectors[2].q);
+  float dot=SProjectVector(relative,w.normal.q,&w.phase.vectors[1].q,&w.phase.vectors[2].q);
   if(span==1.0f||0.0f<dot)factor=1.0f;else factor=span*0.5f+0.5f;
   if(func_00230380(a->body->kind)){
    COEF *coefficients=&w.axis.coefficients;
@@ -87,7 +85,7 @@ extern "C" void func_002297F8(O *a,O *b){
    qword angular=Get(a,34);
    qword k;
    qword negative=NegativeAngular(angular,-1.0f,k);
-   w.scalar.q=k;func_0011E290(negative,w.normal.q,&w.angularNormal.q,&w.angularTangent.q);
+   w.scalar.q=k;SProjectVector(negative,w.normal.q,&w.angularNormal.q,&w.angularTangent.q);
    COEF *coefficients=&w.axis.coefficients;
    GAIN2(D_002C4480,span,friction);
    func_001F5C30(a,&D_002A2D00,0,AddNormal(angular,w.angularNormal),coefficients);
@@ -99,16 +97,16 @@ extern "C" void func_002297F8(O *a,O *b){
  if(spring!=0.0f){
   func_0011B938(&func_001A6318(a)->basis,&w.phase.basis,0);
   func_0011BCF8(&w.phase.basis,&w.angle,&w.axis.vector.q);
-  float gain=spring*3.0f;qword k=Scalar(w.angle*gain*span);
-  qword rotation=Scale(w.axis.vector.q,k);w.angularNormal.q=k;
+  float gain=spring*3.0f;qword k=QwFromG(w.angle*gain*span);
+  qword rotation=QwScaleX(w.axis.vector.q,k);w.angularNormal.q=k;
   func_001FAC98(a,rotation);
  }
  if(0.0f<span&&span<1.0f&&0.9f<w.normal.f[2]){
   float radius=((a->state->maximum.f[0]-a->state->minimum.f[0])+(a->state->maximum.f[1]-a->state->minimum.f[1]))*0.25f;
   func_0015A2C0(a,(WATER *)b,D_002DDED4,w.velocity.q,w.point.q,0.1f,radius);
  }
- else if(func_00132B10(a,0x32))Clear(&a->emitter);
+ else if(FIsBasicDerivedFrom__FP5BASIC3CID(a,0x32))Clear(&a->emitter);
 }
 
 #define OFF(t,m) ((int)&((t*)0)->m)
-typedef char contact_layout_assert[(sizeof(V)==0x10 && sizeof(M3)==0x30 && sizeof(M4)==0x40 && OFF(M4,basis)==0 && OFF(M4,position)==0x30 && sizeof(COEF)==0xC && sizeof(CONSTRAINT)==0x20 && sizeof(PHASE)==0x30 && sizeof(AXIS)==0x10 && sizeof(WORK)==0xB0 && sizeof(VE)==8 && OFF(O,vt)==0xc && OFF(O,body)==0x58 && OFF(O,rotation)==0x5c && OFF(O,motion)==0x60 && OFF(O,physics)==0xe8 && OFF(O,state)==0xec && OFF(O,emitter)==0x174 && OFF(NODE,kind)==0x98 && OFF(PHYS,direction)==0x80 && OFF(PHYS,constraint)==0xb0 && OFF(PHYS,mass)==0xd0 && OFF(PHYS,spring)==0xd4 && OFF(PHYS,friction)==0xd8 && OFF(CONSTRAINT,direction)==0x0 && OFF(CONSTRAINT,kind)==0x10 && OFF(STATE,minimum)==0x0 && OFF(STATE,maximum)==0x10 && OFF(WORK,point)==0x0 && OFF(WORK,normal)==0x10 && OFF(WORK,velocity)==0x20 && OFF(WORK,phase)==0x30 && OFF(WORK,axis)==0x60 && OFF(WORK,angularNormal)==0x70 && OFF(WORK,angularTangent)==0x80 && OFF(WORK,scalar)==0x90 && OFF(WORK,angle)==0xa0)?1:-1];
+typedef char contact_layout_assert[(sizeof(V)==0x10 && sizeof(MATRIX3)==0x30 && sizeof(M4)==0x40 && OFF(M4,basis)==0 && OFF(M4,position)==0x30 && sizeof(COEF)==0xC && sizeof(CONSTRAINT)==0x20 && sizeof(PHASE)==0x30 && sizeof(AXIS)==0x10 && sizeof(WORK)==0xB0 && sizeof(VE)==8 && OFF(O,vt)==0xc && OFF(O,body)==0x58 && OFF(O,rotation)==0x5c && OFF(O,motion)==0x60 && OFF(O,physics)==0xe8 && OFF(O,state)==0xec && OFF(O,emitter)==0x174 && OFF(NODE,kind)==0x98 && OFF(PHYS,direction)==0x80 && OFF(PHYS,constraint)==0xb0 && OFF(PHYS,mass)==0xd0 && OFF(PHYS,spring)==0xd4 && OFF(PHYS,friction)==0xd8 && OFF(CONSTRAINT,direction)==0x0 && OFF(CONSTRAINT,kind)==0x10 && OFF(STATE,minimum)==0x0 && OFF(STATE,maximum)==0x10 && OFF(WORK,point)==0x0 && OFF(WORK,normal)==0x10 && OFF(WORK,velocity)==0x20 && OFF(WORK,phase)==0x30 && OFF(WORK,axis)==0x60 && OFF(WORK,angularNormal)==0x70 && OFF(WORK,angularTangent)==0x80 && OFF(WORK,scalar)==0x90 && OFF(WORK,angle)==0xa0)?1:-1];

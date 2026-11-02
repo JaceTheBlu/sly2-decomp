@@ -3,18 +3,18 @@ struct BSP;
 struct O { char pad[0x2DC]; int x2DC; };
 struct S { char pad[0xE0]; struct O *pE0; char pad1[0x108 - 0xE4]; struct BSP *p108; char pad2[0x124 - 0x10C]; int x124; char pad3[0x13C - 0x128]; int x13C; };
 struct G;
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern int D_002DE240;
 extern "C" struct O *func_001C4A48(struct G *pg);
 extern "C" void func_00221178(struct S *p, int k);
 extern "C" qword func_001A62E8(struct O *po);
 extern "C" qword func_001A6F00(void *source, struct S *p, qword q);
 extern "C" struct BSP *func_00118FB0(struct BSP *p, unsigned int limit, qword v);
-extern "C" int func_00132B10(struct O *po, int n);
+extern "C" int FIsBasicDerivedFrom__FP5BASIC3CID(struct O *po, int n);
 static inline int AutomaticSentinel(){int value;__asm__("addiu %0,$zero,-1":"=r"(value));return value;}
 extern "C" void func_00221298(struct S *p)
 {
-    struct O *po = func_001C4A48(&D_003DD490);
+    struct O *po = func_001C4A48(&g_sw);
     int f;
     if (!po) return;
     if (po != p->pE0) {
@@ -26,7 +26,7 @@ extern "C" void func_00221298(struct S *p)
     if(initial==sentinel) f=func_00118FB0(p->p108, 0x7FFFFFFF, func_001A6F00(0, p, func_001A62E8(po))) != 0;
     else f=initial;
     if (p->x124) goto set;
-    if (!func_00132B10(po, 0x34)) goto set;
+    if (!FIsBasicDerivedFrom__FP5BASIC3CID(po, 0x34)) goto set;
     if (po->x2DC == -1) goto set;
     if (D_002DE240) goto set;
     if (p->x13C == -1) return;

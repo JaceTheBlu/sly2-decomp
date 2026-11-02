@@ -12,7 +12,7 @@ struct S { struct LO *x0; int x4; int x8; int xc; int x10; struct T *x14; int x1
 extern qword D_002A2DB0;
 qword func_001A62E8(void *p);
 M4 *func_001A6318(struct LO *p);
-void func_001E6ED8(struct T *t, qword a, struct PROJECTION *projection, qword *p0, qword *p1, float *pf0, float *pf1, float g);
+void UpdateUbgSgs__FP3UBG(struct T *t, qword a, struct PROJECTION *projection, qword *p0, qword *p1, float *pf0, float *pf1, float g);
 float func_001E6620(struct T *t);
 float func_001E6648(struct T *t);
 void func_001E6F10(struct T *t, float g, qword *point, qword *direction);
@@ -45,7 +45,7 @@ void func_00193DE8(struct S *p)
         U v0, v1;
         struct T *t = p->x14;
         int k;
-        func_001E6ED8(t, *p->x0->x218, 0, &v0.q, &v1.q, &p->x1c, &p->x20, p->x1c);
+        UpdateUbgSgs__FP3UBG(t, *p->x0->x218, 0, &v0.q, &v1.q, &p->x1c, &p->x20, p->x1c);
         k = 0x22;
         if (!t->x1bc && !t->xe4) {
             U vel;

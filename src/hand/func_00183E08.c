@@ -4,7 +4,7 @@ struct O { char pad[0xC]; struct VTE *vt; char p1[0xEF0]; char xf00[4]; };
 struct Q { char pad[0xC]; char xc[0x38]; int fl; };
 struct S { char pad[0xC]; struct VTE *vt; char p1[0x16C]; int x17c; char p2[0x10]; struct O *x190; };
 struct M { struct Q *q; void *pv; };
-extern char D_003DD490[];
+extern char g_sw[];
 int func_001F7588(struct S *p, struct Q *q);
 qword func_001A62E8(struct S *p);
 void func_00156B98(void *g, int n, qword pos, struct S *p);
@@ -17,7 +17,7 @@ int func_00183E08(struct S *p, struct Q *q)
     if (!func_001F7588(p, q)) return 0;
     if (p->x17c == 3) return 1;
     if (!(q->fl & 8)) return 1;
-    func_00156B98(D_003DD490, 0, func_001A62E8(p), p);
+    func_00156B98(g_sw, 0, func_001A62E8(p), p);
     if (p->x190) {
         struct O *o;
         func_0019CD38(p->x190->xf00, -1);

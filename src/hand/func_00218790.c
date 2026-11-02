@@ -1,5 +1,4 @@
-static inline float GMin(float a, float b) { return b < a ? b : a; }
-static inline float GMax(float a, float b) { return a < b ? b : a; }
+#include "vu0.h"
 void func_00218790(unsigned char *pa, unsigned char *pb, unsigned char *pc, unsigned char *pd,
                    unsigned char *pout0, unsigned char *pout1)
 {

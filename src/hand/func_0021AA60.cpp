@@ -9,7 +9,7 @@ struct STRINGGEN {
 };
 extern "C" {
 LINEAR *func_00116A98(LINEAR *,int,void *);
-POOL *func_0011CCA8(POOL *,int,int,int);
+POOL *__8SLOTHEAPiii(POOL *,int,int,int);
 void func_00210EB0(char *,void *,void *);
 }
 extern LINEAR D_003E1C70;
@@ -242,11 +242,11 @@ extern "C" void func_0021AA60(int initialize,int priority){
   STRINGGEN special;
   special.id=0x5C1;special.get=func_00210EB0;special.context=D_002C40A0;
   *destination=special;
-  if(++D_002DD2E0==1)func_0011CCA8(&D_004520A8,0x14,0x2000,0x10);
-  if(++D_002DD2E4==1)func_0011CCA8(&D_004520D0,0x18,0x800,0x10);
-  if(++D_002DD2E8==1)func_0011CCA8(&D_004520F8,0x28,0x200,0x10);
-  if(++D_002DD2EC==1)func_0011CCA8(&D_00452120,0x1C,0x800,0x10);
-  if(++D_002DD2F0==1)func_0011CCA8(&D_00452148,0xC,0xC8,0x10);
-  if(++D_002DD2F4==1)func_0011CCA8(&D_00452170,0x14,0x100,0x10);
+  if(++D_002DD2E0==1)__8SLOTHEAPiii(&D_004520A8,0x14,0x2000,0x10);
+  if(++D_002DD2E4==1)__8SLOTHEAPiii(&D_004520D0,0x18,0x800,0x10);
+  if(++D_002DD2E8==1)__8SLOTHEAPiii(&D_004520F8,0x28,0x200,0x10);
+  if(++D_002DD2EC==1)__8SLOTHEAPiii(&D_00452120,0x1C,0x800,0x10);
+  if(++D_002DD2F0==1)__8SLOTHEAPiii(&D_00452148,0xC,0xC8,0x10);
+  if(++D_002DD2F4==1)__8SLOTHEAPiii(&D_00452170,0x14,0x100,0x10);
  }
 }

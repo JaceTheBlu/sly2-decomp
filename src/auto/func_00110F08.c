@@ -1,7 +1,7 @@
 #include "m2c_prelude.h"
 M2C_UNK func_001291A8(s32, s32 *);                  /* extern */
 M2C_UNK func_00129EC8(s32 *);                       /* extern */
-M2C_UNK func_0012A0B0(s32 *, M2C_UNK);              /* extern */
+M2C_UNK SetTag__4CRef4TAGK(s32 *, M2C_UNK);              /* extern */
 extern M2C_UNK D_002A3F20;
 extern M2C_UNK D_002A3F90;
 extern M2C_UNK D_002A3FA0;
@@ -62,5 +62,5 @@ static inline void *m2c_ctor_0(void *p)
 void *func_00110F08(s32 arg0) {
     void *temp_v0;
 
-    return m2c_ctor_0(func_001AE4F8(0xF0));
+    return m2c_ctor_0(__builtin_new(0xF0));
 }

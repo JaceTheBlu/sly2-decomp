@@ -1,20 +1,21 @@
-// func_00155FB0 (Claude agent, lane D20): matched from v8.
-// g_normalZ: Sly 1 name of the (0,0,1) vector at D_002A2DC0.
+#include "mat.h"
+#include "vec.h"
+#include "vu0.h"
+#include "util.h"
+// func_00155FB0: matched from v8.
+// g_normalZ: Sly 1 name of the (0,0,1) vector at g_normalZ.
 // The clamp scale lives in a function-scope VUV sc (declared after lm) so its slot sits at 0x30 before frame.
 // Sub2 clobbers vf4, which is dead there (the next write to vf4 is the qmtc2 of func_0011E208's result), so the pos reload takes vf2.
 // The empty volatile asm in the loop stops jump threading of the two f tests.
-// DRAFT (Claude agent): escape/flee target position search (logic complete, not close: frame 0x130 vs 0x1D0 - target returns func_256CE8/256D08 VECTOR4 results via hidden pointer slots 0xB0..0xE0 and spills more temps; unreachable `b; mov.s f22,f20` block at 0x1561EC not reproduced).
+// DRAFT: escape/flee target position search (logic complete, not close: frame 0x130 vs 0x1D0 - target returns func_256CE8/256D08 VECTOR4 results via hidden pointer slots 0xB0..0xE0 and spills more temps; unreachable `b; mov.s f22,f20` block at 0x1561EC not reproduced).
 typedef int qword __attribute__((mode(TI)));
-struct M3 { qword r[3]; };
-struct VECTOR { float x, y, z, w; };
-struct LM { float gMin, gMax; };
 class SO;
 struct VT { char pad[0x108]; short d; short pad2; qword (*pfn)(SO *); };
 class SO { public: char pad[0xC]; VT *pvt; };
 struct VUV { qword q; VUV() {} VUV(const VUV &v) : q(v.q) {} };
 struct FRAME { int a[4]; };
 extern "C" {
-extern char D_003DD490[];
+extern char g_sw[];
 extern qword g_normalZ;
 extern float D_002BDC98;
 extern VECTOR D_002BDC60;
@@ -26,19 +27,19 @@ extern float D_002A513C;
 SO *func_001C4840(void *p);
 extern char D_002DE578[];
 qword func_001A62E8(void *p);
-M3 *func_001A6318(void *p);
+MATRIX3 *func_001A6318(void *p);
 float func_00154C90(void *p);
 VUV func_00256CE8(float g);
 VUV func_00256D08(VECTOR *pv);
 qword func_00258480(qword a, qword b, qword c, qword d);
-void func_00256D18(VECTOR *pv, qword v);
+void __as__6VECTORG9VU_VECTOR(VECTOR *pv, qword v);
 float func_002458F0(float y, float x);
 qword func_0011E1A0(float a, float b, float c);
-void func_0011EFB0(qword v, float *pa, float *pb, float *pc);
+void DecomposeSphere__FUxPfN21(qword v, float *pa, float *pb, float *pc);
 FRAME *func_001AE478(FRAME *pf);
-void func_001AE4A0(FRAME *pf, int n);
+void _$_18CBinaryInputStream(FRAME *pf, int n);
 void func_001B44D8(int *pc, void **pa);
-float func_0011CF60(float g);
+float RadNormalize__Ff(float g);
 qword func_0011E208(float pan, float tilt, float s);
 int func_0014CC58(int n, qword a, qword b, int c, void *pv, qword *phit);
 qword func_00155FB0(void *p, qword pos);
@@ -55,7 +56,6 @@ static inline qword Scale(VU_VECTOR v, VU_FLOAT s) { qword r; __asm__("vmulx.xyz
 static inline qword ScaleR(VU_VECTOR v, const VUV &s) { qword r; __asm__("vmulx.xyzw %0, %1, %2x" : "=j"(r) : "j"(v.q), "j"(s.q), "j"(v.q)); return r; }
 static inline qword Sub2(qword a, qword b) { qword d; __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b) : "vf4"); /* clobber of dead vf4 */ return d; }
 static inline qword Add(qword a, qword b) { qword d; __asm__("vadd.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b), "j"(a)); /* extra operand: allocation only */ return d; }
-static inline qword Sub(qword a, qword b) { qword d; __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 static inline float Len(qword a)
 {
     qword d, t;
@@ -71,8 +71,8 @@ static inline int FFast(qword v) { return D_002BDC98 < Len(v); }
 
 qword func_00155FB0(void *p, qword pos)
 {
-    SO *pso = func_001C4840(D_003DD490);
-    float dist = Len(Sub(func_001A62E8(pso), pos));
+    SO *pso = func_001C4840(g_sw);
+    float dist = Len(QwSub(func_001A62E8(pso), pos));
     float u = func_00154C90(D_002DE578);
     qword posTarget = AddScaled(func_001A62E8(pso), g_normalZ, VU_FLOAT(50.0f));
     VUV off;
@@ -93,7 +93,7 @@ qword func_00155FB0(void *p, qword pos)
         VECTOR *pv0 = &D_002BDC60;
         VECTOR *pv1 = &D_002BDC80;
         qword cq = func_00258480(func_00256CE8(u1).q, func_00256D08(pv0).q, func_00256CE8(u).q, func_00256D08(pv1).q);
-        func_00256D18(&clq, cq);
+        __as__6VECTORG9VU_VECTOR(&clq, cq);
         g = clq.x + dist * (clq.y + dist * clq.z);
         lm.gMin = u1 * D_002BDC70[0] + u * D_002BDC90[0];
         lm.gMax = u1 * D_002BDC70[1] + u * D_002BDC90[1];
@@ -104,18 +104,18 @@ qword func_00155FB0(void *p, qword pos)
         }
         off.q = ScaleR(vel, sc);
     } else {
-        M3 *pm = func_001A6318(pso);
-        M3 *pm2 = func_001A6318(pso);
+        MATRIX3 *pm = func_001A6318(pso);
+        MATRIX3 *pm2 = func_001A6318(pso);
         off.q = func_0011E1A0(func_002458F0(((float *)pm)[1], ((float *)pm2)[0]), D_002BDC98, 0.0f);
     }
-    func_0011EFB0(Sub(Add(posTarget, off.q), pos), &pan, &tilt, &s);
+    DecomposeSphere__FUxPfN21(QwSub(Add(posTarget, off.q), pos), &pan, &tilt, &s);
     func_001AE478(&frame);
     func_001B44D8(&c, &av);
     gBest = D_002A513C;
     for (i = 0; i < 11; i++) {
         qword test;
         float g;
-        float panT = func_0011CF60(pan + D_002BDCA0[i]);
+        float panT = RadNormalize__Ff(pan + D_002BDCA0[i]);
         test = Add(pos, func_0011E208(panT, tilt, s));
         int f = func_0014CC58(0, pos, test, c, av, &hit.q);
         if (f)
@@ -133,7 +133,7 @@ qword func_00155FB0(void *p, qword pos)
     }
     {
         qword r = Add(pos, func_0011E208(panBest, tilt, s));
-        func_001AE4A0(&frame, 2);
+        _$_18CBinaryInputStream(&frame, 2);
         return r;
     }
 }

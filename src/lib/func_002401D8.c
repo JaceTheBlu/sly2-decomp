@@ -1,5 +1,5 @@
 /* func_002401D8 = strcmp (newlib r5900 string routine, like memcmp/memcpy/memmove/memset: hand-written
- * assembly, kept as a top-level asm block). (Claude agent, T1553 for Lilly)
+ * assembly, kept as a top-level asm block).
  * Why asm and not C: the 64-bit constants use the dli expansion of the game-era assembler (Sony's libc C
  * compiler ee-gcc 2.9 expands them with lui and cannot compile any TI-mode MMI operation); pcpyud has a
  * don't-care rt ($a0) exactly like memcmp's; and the registers are reused like an asm programmer would

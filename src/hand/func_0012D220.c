@@ -1,12 +1,13 @@
-/* MATCH (Claude agent laneB22, 2026-10-23): from v8 (3). 2nd block: dt read as the scalar D_002DDED4 (g_clock.dt) through an "rV" asm input: expand keeps the MEM (V allows memory) but only r fits at reload, so reload loads it at the asm through the dying %hi reg (target lw v0,lo(v0) after the lqc2s); vsub then pin-free as "+j"(d = s.pos). */
-/* v8 (Claude agent laneB21, 2026-10-23): aligned 7 -> 3. posT load: x8 ($v0) and a dummy z ($v1) kept live across it by two commented empty allocation-only asms, so the reload reg for the spilled posT is $a1 like the target (find_reg takes the first free reg in alloc order); the keep-alive asm has an output (+r po) so it is not volatile and reload_cse removes the a1 reload. Left: 2nd-block dt load (target: lui early + lw v0,lo(v0) right before the vsub = reload of a MEM). */
-/* v7 (Claude agent laneB19, 2026-10-23): aligned 8 -> 7. Allocation-only "r"(p->x8) on the 2nd-block vsub/qmtc2 asm gives x8 $v1. Left: posT lq v0+por (target lq a1), lw dt scheduled before the lqc2s and dt in $a0 (target: reload-style lw v0,lo(v0) right before the vsub). */
-/* v6 (Claude agent laneB15, 2026-10-23): aligned 9 -> 8. dv is a plain qword (spilled across the calls, so the dot reads its reload: lqc2 vf3) kept apart from d by a commented empty asm on d; posT a plain qword too (spill slots dv 0x40 / posT 0x50 in pseudo order). Left: posT load lq v0 + por a1 (target lq a1 directly), second block lw x8/dt regs. */
-/* v5 (Claude agent laneB11, 2026-10-23): aligned 11 -> 9. One commented pin: d (second-block vsub output) to vf2. Left: first block dot VF numbers (dv reload vf3 / one vf2 swapped; output-order swap 16, =&j same), second block lw x8 -> v1 and lw dt scheduled before the lqc2s (target after). */
-/* v4 (Claude agent laneB8, 2026-10-23): aligned 12 -> 11. Second block: vsub and the dt qmtc2 fused in ONE asm (vC0 as first input), plus a "memory" clobber on the vdiv asm (keeps the dt sqc2 before it, out of the b delay slot). Left: pos/vC0 VF regs swapped and lw dt scheduled early; first block unchanged. */
-/* v3 (Claude agent laneB7, 2026-10-23): aligned 13 -> 12. func_001C4AF8 takes a 2nd qword arg (posT; it sq a1 to its stack); posT as a U memory local so the load goes straight into a1. */
-/* v2 (Claude agent, 2026-10-23): aligned 15 -> 13: qmtc2 asm before the vsub, vsub as "=j"(d) : s.pos, vC0 (gets dt vf3). Left: target schedules vsub before qmtc2 with s.pos vf2/vC0 vf1, output vf2. */
-// WIP (Claude agent): 15 diffs - VU reg numbering only: dv reload should be vf3 / one-vector vf2 (ours swapped), second block wants lw of g_clock.dt after the lqc2s and vsub in vf2; posT lq via $a1.
+#include "clock.h"
+/* MATCH: from v8 (3). 2nd block: dt read as the scalar D_002DDED4 (g_clock.dt) through an "rV" asm input: expand keeps the MEM (V allows memory) but only r fits at reload, so reload loads it at the asm through the dying %hi reg (target lw v0,lo(v0) after the lqc2s); vsub then pin-free as "+j"(d = s.pos). */
+/* v8: aligned 7 -> 3. posT load: x8 ($v0) and a dummy z ($v1) kept live across it by two commented empty allocation-only asms, so the reload reg for the spilled posT is $a1 like the target (find_reg takes the first free reg in alloc order); the keep-alive asm has an output (+r po) so it is not volatile and reload_cse removes the a1 reload. Left: 2nd-block dt load (target: lui early + lw v0,lo(v0) right before the vsub = reload of a MEM). */
+/* v7: aligned 8 -> 7. Allocation-only "r"(p->x8) on the 2nd-block vsub/qmtc2 asm gives x8 $v1. Left: posT lq v0+por (target lq a1), lw dt scheduled before the lqc2s and dt in $a0 (target: reload-style lw v0,lo(v0) right before the vsub). */
+/* v6: aligned 9 -> 8. dv is a plain qword (spilled across the calls, so the dot reads its reload: lqc2 vf3) kept apart from d by a commented empty asm on d; posT a plain qword too (spill slots dv 0x40 / posT 0x50 in pseudo order). Left: posT load lq v0 + por a1 (target lq a1 directly), second block lw x8/dt regs. */
+/* v5: aligned 11 -> 9. One commented pin: d (second-block vsub output) to vf2. Left: first block dot VF numbers (dv reload vf3 / one vf2 swapped; output-order swap 16, =&j same), second block lw x8 -> v1 and lw dt scheduled before the lqc2s (target after). */
+/* v4: aligned 12 -> 11. Second block: vsub and the dt qmtc2 fused in ONE asm (vC0 as first input), plus a "memory" clobber on the vdiv asm (keeps the dt sqc2 before it, out of the b delay slot). Left: pos/vC0 VF regs swapped and lw dt scheduled early; first block unchanged. */
+/* v3: aligned 13 -> 12. func_001C4AF8 takes a 2nd qword arg (posT; it sq a1 to its stack); posT as a U memory local so the load goes straight into a1. */
+/* v2: aligned 15 -> 13: qmtc2 asm before the vsub, vsub as "=j"(d) : s.pos, vC0 (gets dt vf3). Left: target schedules vsub before qmtc2 with s.pos vf2/vC0 vf1, output vf2. */
+// WIP: 15 diffs - VU reg numbering only: dv reload should be vf3 / one-vector vf2 (ours swapped), second block wants lw of g_clock.dt after the lqc2s and vsub in vf2; posT lq via $a1.
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } U;
 struct VTE { short d; short pad; void (*pfn)(); };
@@ -18,13 +19,12 @@ struct P {
     int x0; void *x4; struct X *x8; int xC; int pad10[4]; qword v20; struct POLY poly30; int pad3C; struct POLY poly40; int pad4C;
     float g50; float g54; float g58; float g5C; float g60; int x64; int x68; int x6C; void *x70; int x74;
 };
-extern char D_003DD490[];
+extern char g_sw[];
 extern qword D_002A2DD0;
 extern float D_002A45A8;
-struct CLOCK { float t; int dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern int D_002DDED4;  /* g_clock.dt */
-void *func_0015E938(void *pg, int k, int n, void *pv);
+void *PloFindSwObject__FP2SWi3OIDP2LO(void *pg, int k, int n, void *pv);
 void *func_001C4AF8(void *pg, qword pos);
 qword func_001A62E8(void *po);
 void func_002301D0(void *a, struct X *b);
@@ -55,7 +55,7 @@ void func_0012D220(struct P *p)
     qword vel;
 
     if (p->x70 == 0 && p->x6C != -1)
-        p->x70 = func_0015E938(D_003DD490, 0x104, p->x6C, p->x4);
+        p->x70 = PloFindSwObject__FP2SWi3OIDP2LO(g_sw, 0x104, p->x6C, p->x4);
     {
         struct X *x8 = p->x8;
         int z;
@@ -65,7 +65,7 @@ void func_0012D220(struct P *p)
         __asm__("" : "+r"(po) : "r"(x8), "r"(z));  /* empty asm, allocation only: x8 ($v0) and z ($v1) stay live past the posT load, so reload picks $a1 for it (non-volatile: has an output, so reload_cse can drop the later a1 reload) */
     }
     if (!po)
-        po = func_001C4AF8(D_003DD490, posT);
+        po = func_001C4AF8(g_sw, posT);
     if (po) {
         qword d, t;
         d = func_001A62E8(po);

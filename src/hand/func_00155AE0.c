@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct VTE { short d; short pad; void (*pfn)(void *); };
 struct LM { char pad[0x60]; float gMin; float gMax; };
@@ -9,12 +10,11 @@ struct X {
     char pad[0x10]; struct SO *pso; int x14; int x18; char pad1[0x30 - 0x1C]; int state; float t34;
     char pad2[0x3C - 0x38]; float g3C; void *x40; float t44; float t48; int x4C; int x50; struct LM *plm;
 };
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern qword D_002A2DD0;
 extern float D_002A5138;
 void func_0020AC28(struct SO *pso, int a, int b, qword q);
-float func_0011D448(float a, float b);
+float GRandInRange__Fff(float a, float b);
 void func_001EF0D8(int *p);
 void *func_00155A68(struct X *p);
 struct ASEG *func_00205438(struct SO *pso, int id);
@@ -47,15 +47,15 @@ void func_00155AE0(struct X *p, int k)
         break;
     case 3:
         {
-            float t = D_002DDED0.t;
-            p->pso->tF04 = t + func_0011D448(p->plm->gMin, p->plm->gMax);
+            float t = g_clock.t;
+            p->pso->tF04 = t + GRandInRange__Fff(p->plm->gMin, p->plm->gMax);
         }
         p->plm = 0;
         break;
     }
     func_001EF0D8(&p->x18);
     p->state = k;
-    p->t34 = D_002DDED0.t;
+    p->t34 = g_clock.t;
     switch (k) {
     case 0: {
         struct ASEG *pa;

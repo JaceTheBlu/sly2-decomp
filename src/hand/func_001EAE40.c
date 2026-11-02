@@ -4,7 +4,7 @@ extern int D_003DCFF8;
 extern struct E *D_003DCFFC;
 extern int D_003DCF9C;
 int func_00117C20(void *pbis);
-void *func_001AE378(struct AR *par);
+void *PvAllocStackClearImpl__FP7SWALLOC(struct AR *par);
 void func_001EA8A8(void *pbis, struct E *pe);
 void func_001EAE40(void *pbis)
 {
@@ -13,7 +13,7 @@ void func_001EAE40(void *pbis)
     D_003DCFF8 = func_00117C20(pbis);
     ar.cb = D_003DCFF8 * sizeof(struct E);
     ar.cbAlign = 0x10;
-    D_003DCFFC = func_001AE378(&ar);
+    D_003DCFFC = PvAllocStackClearImpl__FP7SWALLOC(&ar);
     D_003DCF9C = 0;
     for (; i < D_003DCFF8; i++) {
         func_001EA8A8(pbis, &D_003DCFFC[i]);

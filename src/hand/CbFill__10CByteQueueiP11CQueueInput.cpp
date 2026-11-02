@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef unsigned char byte;
 class CQueueInput { public: virtual int CbRead(int cb, void *pv); };
 class CQueueOutput { public: virtual int CbWrite(int cb, void *pv); virtual int FDrain(); };
@@ -14,7 +15,6 @@ public:
     int CbFill(int cb, CQueueInput *pqi);
     int CbDrain(int cb, CQueueOutput *pqo);
 };
-static inline int Min(int a, int b) { return a < b ? a : b; }
 int CByteQueue::CbFill(int cb, CQueueInput *pqi)
 {
     int cbFill = 0;
@@ -23,7 +23,7 @@ int CByteQueue::CbFill(int cb, CQueueInput *pqi)
         cbLeft = m_cbFree;
     while (cbLeft != 0) {
         int ib = m_ibFree;
-        int cbT = pqi->CbRead(Min(cbLeft, m_cb - ib), m_ab + ib);
+        int cbT = pqi->CbRead(NMin(cbLeft, m_cb - ib), m_ab + ib);
         if (cbT == 0)
             break;
         cbFill += cbT;

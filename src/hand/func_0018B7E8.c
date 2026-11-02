@@ -1,7 +1,8 @@
+#include "vtable.h"
+#include "vu0.h"
 
 typedef int qword __attribute__((mode(TI)));
 typedef union{qword q;float f[4];}U;
-struct VTE{short delta,pad;void*fn;};
 struct STATE{char pad[0x18];float heading,amount;};
 struct MODEL{char pad14[0x14];void*table;char pad18[4];float base;char pad20[0x20];float scale;};
 struct COMPONENT{struct VTE*vt;};struct BINDING{int key;struct COMPONENT*component;};
@@ -24,31 +25,30 @@ struct P{
  char pad2030[8];void*blend;
 };
 union PHASE{qword direction;U scalar;};
-extern qword D_002A2DD0;extern char D_003DD490[];
+extern qword D_002A2DD0;extern char g_sw[];
 extern float D_002BF3C0,D_002BF3C4,D_002BF3C8,D_002BF3CC,D_002BF35C;
-float func_00204740(struct P*);float func_0011CF60(float);
+float func_00204740(struct P*);float RadNormalize__Ff(float);
 void func_00194A40(void*,struct P*,unsigned int);
 void func_0018B2C0(struct P*);void func_0018A8C8(struct P*);void func_0018F0A8(struct P*);
-struct BINDING*func_0012FF10(void*,struct P*,void*,int);
+struct BINDING*PchnFindAseg__FP4ASEGP3ALOii(void*,struct P*,void*,int);
 void func_00190520(struct P*);void func_00197F98(void*);void func_00191A10(void*);void func_00137218(void*);
 void func_001A0720(struct P*,void*,int,float,float);void func_0018B460(struct P*);
 void func_0020BB58(void*,float);void func_002046F0(struct P*,void*);
 qword func_0011E1A0(float,float,float);qword func_001A6FC0(void*,void*,qword);
 int func_001DAEA8(int);void func_0018E1E0(struct P*);qword func_00204E38(struct P*,struct MODEL*,float);
 void func_00131A00(struct MODEL*,float);void func_00204660(struct P*,float);
-void func_001441E8(struct P*,float);void func_0018C250(struct P*,int,int);
-float func_0011CFE0(float,float);void func_001384C0(void*);
+void func_001441E8(struct P*,float);void SetJtJts__FP2JT3JTS4JTBS(struct P*,int,int);
+float func_0011CFE0(float,float);void ReblendAsegbl__FP6ASEGBL(void*);
 void func_001A1358(void*);void func_0019FC30(struct P*);int func_00131968(void*);void func_001306A8(void**);
 static inline void*At(struct P*p,int offset){return(char*)p+offset;}
 static inline void ReadBinding(struct BINDING*b,struct MODEL*m,qword*out){
  struct COMPONENT*c=b->component;struct VTE*entry=&c->vt[3];
- ((void(*)(void*,int,qword*,float,float))entry->fn)((char*)c+entry->delta,0,out,m->base,m->scale);
+ ((void(*)(void*,int,qword*,float,float))entry->pfn)((char*)c+entry->delta,0,out,m->base,m->scale);
 }
 static inline qword ScaleIn(qword a,qword b){__asm__("vmulx.xyzw %0,%0,%1x":"+j"(a):"j"(b));return a;}
 static inline qword FirstNegative(const qword*input,U*out,float g){qword a,s;register qword bits __asm__("$2");__asm__("lqc2 %0,%3\n\tmfc1 %1,%4\n\tqmtc2.ni %1,%2":"=j"(a),"=&r"(bits),"=j"(s):"m"(*input),"f"(g));out->q=s;return ScaleIn(a,out->q);}
 static inline qword SecondNegative(const qword*input,U*out,float g){qword a,s;register qword bits __asm__("$3");__asm__("lqc2 %0,%3\n\tmfc1 %1,%4\n\tqmtc2.ni %1,%2":"=j"(a),"=&r"(bits),"=j"(s):"m"(*input),"f"(g));out->q=s;return ScaleIn(a,out->q);}
-static inline qword Scale(qword a,qword b){qword r;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(r):"j"(a),"j"(b));return r;}
-static inline qword NegativeModelNative(struct P*p,U*u){qword v=func_00204E38(p,p->model,p->model->base),s;register qword bits __asm__("$4");__asm__("mfc1 %0,%1":"=r"(bits):"f"(-1.0f));__asm__("qmtc2.ni %1,%0":"=j"(s):"r"(bits));u->q=s;return Scale(v,u->q);}
+static inline qword NegativeModelNative(struct P*p,U*u){qword v=func_00204E38(p,p->model,p->model->base),s;register qword bits __asm__("$4");__asm__("mfc1 %0,%1":"=r"(bits):"f"(-1.0f));__asm__("qmtc2.ni %1,%0":"=j"(s):"r"(bits));u->q=s;return QwScaleX(v,u->q);}
 
 static inline qword NegativeWithState(struct P*p,U*u,struct STATE**stateOut,float*zeroOut){
  qword input=func_00204E38(p,p->model,p->model->base);register qword v __asm__("vf3");register qword s __asm__("vf1");register qword result __asm__("vf2");register float zero __asm__("$f1");register qword bits __asm__("$4");register struct STATE*state __asm__("$3");
@@ -66,16 +66,15 @@ static inline void PrepareAnimation(struct P*p,U*u,struct MODEL**modelOut,struct
  WriteVectorPair(result,&p->velocity,scalar,&u->q);*modelOut=model;*stateOut=state;
 }
 
-static inline float Z(qword q){float r;__asm__("pextuw %0,$zero,%1":"=r"(r):"r"(q));return r;}
 void func_0018B7E8(struct P*p){
  union PHASE phase;U scalar;float initialHeading;
- initialHeading=func_00204740(p);(void)func_0011CF60(p->state->heading-initialHeading);
- func_00194A40(D_003DD490,p,0xFFFF);
+ initialHeading=func_00204740(p);(void)RadNormalize__Ff(p->state->heading-initialHeading);
+ func_00194A40(g_sw,p,0xFFFF);
  func_0018B2C0(p);func_0018A8C8(p);func_0018F0A8(p);
  switch(p->mode){
  case 4:case 9:{
   struct MODEL*m=p->model;struct BINDING*b;p->velocity=D_002A2DD0;
-  if(m){b=func_0012FF10(m->table,p,(void*)1,1);
+  if(m){b=PchnFindAseg__FP4ASEGP3ALOii(m->table,p,(void*)1,1);
    if(b){ReadBinding(b,m,&phase.direction);p->velocity=FirstNegative(&phase.direction,&scalar,-1.0f);}
   }break;
  }
@@ -93,7 +92,7 @@ void func_0018B7E8(struct P*p){
  }break;
  case 16:
   if(func_001DAEA8(0x1C))func_0018E1E0(p);
-  else if(p->enabled){struct BINDING*b=func_0012FF10(p->table,p,(void*)1,1);if(b){ReadBinding(b,p->model,&phase.direction);p->velocity=SecondNegative(&phase.direction,&scalar,-1.0f);}}
+  else if(p->enabled){struct BINDING*b=PchnFindAseg__FP4ASEGP3ALOii(p->table,p,(void*)1,1);if(b){ReadBinding(b,p->model,&phase.direction);p->velocity=SecondNegative(&phase.direction,&scalar,-1.0f);}}
   break;
  case 19:p->velocity=NegativeModelNative(p,&phase.scalar);break;
  case 20:{struct MODEL*model;struct STATE*state;PrepareAnimation(p,&phase.scalar,&model,&state);func_00131A00(model,state->amount);func_00204660(p,p->state->heading);break;}
@@ -101,12 +100,12 @@ void func_0018B7E8(struct P*p){
  case 24:{
   register float one __asm__("$f20");register float weight __asm__("$f1");qword velocity;struct VTE*entry;
   func_001441E8(p,D_002BF3C4);
-  if(p->submode==12){float angle=func_0011CF60(func_00204740(p)-p->heading);if(__builtin_fabsf(angle)<D_002BF3C8)func_0018C250(p,24,13);}
+  if(p->submode==12){float angle=RadNormalize__Ff(func_00204740(p)-p->heading);if(__builtin_fabsf(angle)<D_002BF3C8)SetJtJts__FP2JT3JTS4JTBS(p,24,13);}
   else func_00204660(p,p->state->heading);
-  one=1.0f;entry=&p->vt[34];velocity=((qword(*)(void*))entry->fn)((char*)p+entry->delta);
-  weight=D_002BF3CC*func_0011CFE0(Z(velocity)/(p->factor*D_002BF35C),one);
+  one=1.0f;entry=&p->vt[34];velocity=((qword(*)(void*))entry->pfn)((char*)p+entry->delta);
+  weight=D_002BF3CC*func_0011CFE0(GetZ(velocity)/(p->factor*D_002BF35C),one);
   {register float zero __asm__("$f2")=0.0f;register float magnitude __asm__("$f3");register float left __asm__("$f0");__asm__("abs.s %0,%2\n\tmax.s %1,%3,%2\n\tneg.s %2,%2":"=f"(magnitude),"=f"(left),"+f"(weight):"f"(zero));__asm__("swc1 %4,%0\n\tsub.s %1,%1,%5\n\tmax.s %2,%2,%6\n\tswc1 %2,%3":"=m"(p->left),"+f"(one),"+f"(zero),"=m"(p->right):"f"(left),"f"(magnitude),"f"(weight));p->middle=one;}
-  func_001384C0(p->blend);break;
+  ReblendAsegbl__FP6ASEGBL(p->blend);break;
  }
  case 0:case 1:break;
  }
@@ -116,12 +115,11 @@ void func_0018B7E8(struct P*p){
 
 typedef char qword_Size[(sizeof(qword)==16)?1:-1];
 typedef char U_Size[(sizeof(U)==16)?1:-1];
-typedef char VTE_Size[(sizeof(struct VTE)==8)?1:-1];
 typedef char PHASE_Size[(sizeof(union PHASE)==16)?1:-1];
 typedef char STATE_Size[(sizeof(struct STATE)==32)?1:-1];
 typedef char BINDING_Size[(sizeof(struct BINDING)==8)?1:-1];
 typedef char VTE_delta_Offset[((unsigned)&((struct VTE*)0)->delta==0)?1:-1];
-typedef char VTE_fn_Offset[((unsigned)&((struct VTE*)0)->fn==4)?1:-1];
+typedef char VTE_fn_Offset[((unsigned)&((struct VTE*)0)->pfn==4)?1:-1];
 typedef char STATE_heading_Offset[((unsigned)&((struct STATE*)0)->heading==24)?1:-1];
 typedef char STATE_amount_Offset[((unsigned)&((struct STATE*)0)->amount==28)?1:-1];
 typedef char MODEL_table_Offset[((unsigned)&((struct MODEL*)0)->table==20)?1:-1];

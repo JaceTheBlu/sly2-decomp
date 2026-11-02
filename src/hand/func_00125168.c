@@ -1,8 +1,8 @@
+#include "cref.h"
 typedef int qword __attribute__((mode(TI)));
-typedef struct CRef { int m_tagk; int m_tag; } CRef;
 typedef struct VECTOR { float x, y, z, w; } __attribute__((aligned(16))) VECTOR;
 typedef struct CM { char pad[0x4C]; float g; char pad2[0x10]; qword mat[4]; } CM;
-extern CM D_002DDF40;
+extern CM g_cm;
 CRef *func_00129248(CRef *pref, qword v);
 static __inline__ void SetVector(VECTOR *pv, float x, float y, float z)
 {
@@ -16,7 +16,7 @@ static __inline__ void SetVector(VECTOR *pv, float x, float y, float z)
 CRef *func_00125168(CRef *ret)
 {
     VECTOR vec;
-    CM *pcm = &D_002DDF40;
+    CM *pcm = &g_cm;
     qword *pm = pcm->mat;
     SetVector(&vec, pcm->g, 0.0f, 0.0f);
     {

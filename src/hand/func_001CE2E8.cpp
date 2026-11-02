@@ -1,4 +1,5 @@
-/* func_001CE2E8 (Claude agent, wave-3 lane 6): for an active particle system (mode 1), walk the subject nodes and their shape lists; for
+#include "clock.h"
+/* func_001CE2E8: for an active particle system (mode 1), walk the subject nodes and their shape lists; for
  * every usable shape query its tree for candidate entries (scratch-frame allocation), then let each live rip test its contacts against the
  * shape (vtable slot 8, stop at the first hit); finally notify the owner (vtable slot 9) if the rip list reports a change.
  *
@@ -9,7 +10,7 @@
  *  - the rip loop is a real for loop (loop depth weights the rip/hit allocation priorities);
  *  - the tree origin is read through a const-reference accessor: that load is not a struct-member MEM any more, so it may alias the
  *    `entries` store, which sched1 then issues right after the allocation call (the target's store order and $v0 for p->state);
- *  - func_00118A88 uses the matched callee's argument order (pos, eps, count, entries).
+ *  - PruneBsp__FP3BSPT0fUxPiPP3BSP uses the matched callee's argument order (pos, eps, count, entries).
  */
 typedef int qword __attribute__((mode(TI)));
 struct DL { void *head, *tail; int offset; };
@@ -26,24 +27,23 @@ struct OBJ { char padEC[0xEC]; STATE *state; };
 struct NODE { int pad; NODE *next; char pad8[4]; OBJ *object; };
 struct PVE { short delta, pad; void (*fn)(void *); };
 struct P { char padC[0xC]; PVE *vt; char pad10[0xDC]; STATE *state; char padF0[0x60]; int mode; char pad154[8]; DL rips; };
-struct CLOCK { float t, dt; };
 struct REQ { int cb, align; };
 struct FRAME { int a[4]; };
 extern "C" {
-extern DLI *D_002DD2FC; /* innermost active list iterator */
-extern CLOCK D_002DDED0;
+extern DLI *g_pdliFirst; /* innermost active list iterator */
+extern CLOCK g_clock;
 FRAME *func_001AE478(FRAME *);
-void func_001AE4A0(FRAME *, int);
-void *func_001AE318(const REQ *);
-int func_00118A88(void *, int, qword, float, int *, ENTRY **);
+void _$_18CBinaryInputStream(FRAME *, int);
+void *PvAllocStackImpl__FP7SWALLOC(const REQ *);
+int PruneBsp__FP3BSPT0fUxPiPP3BSP(void *, int, qword, float, int *, ENTRY **);
 int func_0014C6D8(SHAPE *, ENTRY *, qword, qword, int, XP *);
-int func_00132B10(void *, int);
-int func_0011A3B0(DL *);
+int FIsBasicDerivedFrom__FP5BASIC3CID(void *, int);
+int FIsDlEmpty__FP2DL(DL *);
 void func_001CE2E8(P *);
 }
 /* the scratch request and the rip iterator share one stack slot */
 union PHASE { REQ request; DLI rip; };
-static inline void Init(DLI *it, DL *list) { it->list = list; it->next = (void **)list; it->offset = list->offset; it->outer = D_002DD2FC; D_002DD2FC = it; }
+static inline void Init(DLI *it, DL *list) { it->list = list; it->next = (void **)list; it->offset = list->offset; it->outer = g_pdliFirst; g_pdliFirst = it; }
 static inline void *Next(DLI *it) { void *p = *it->next; it->next = (void **)((char *)p + it->offset); return p; }
 static inline void SetAlign(REQ *r, int a) { r->align = a; }
 static inline const qword &Origin(STATE *s) { return s->origin; }
@@ -54,7 +54,7 @@ void func_001CE2E8(P *p)
         NODE *node;
         for (node = p->state->nodes; node; node = node->next) {
             if (node->object->state->flags & 4) continue;
-            int special = func_00132B10(node->object->state->subject, 0x59);
+            int special = FIsBasicDerivedFrom__FP5BASIC3CID(node->object->state->subject, 0x59);
             DLI shapes;
             Init(&shapes, &node->object->state->shapes);
             SHAPE *shape;
@@ -72,9 +72,9 @@ void func_001CE2E8(P *p)
                         remaining = Min(0x1555, shape->capacity);
                         phase.request.cb = remaining * 12;
                         SetAlign(&phase.request, 16);
-                        entries = (ENTRY *)func_001AE318(&phase.request);
-                        if (func_00118A88(shape->tree, 0x7FFFFFFF, Origin(p->state), p->state->radius, &remaining, &entries) != 2) {
-                            func_001AE4A0(&frame, 2);
+                        entries = (ENTRY *)PvAllocStackImpl__FP7SWALLOC(&phase.request);
+                        if (PruneBsp__FP3BSPT0fUxPiPP3BSP(shape->tree, 0x7FFFFFFF, Origin(p->state), p->state->radius, &remaining, &entries) != 2) {
+                            _$_18CBinaryInputStream(&frame, 2);
                             continue;
                         }
                         entries--;
@@ -82,7 +82,7 @@ void func_001CE2E8(P *p)
                     Init(&phase.rip, &p->rips);
                     RIP *rip;
                     for (rip = (RIP *)Next(&phase.rip); rip; rip = (RIP *)Next(&phase.rip)) {
-                        if (D_002DDED0.t <= rip->start) continue;
+                        if (g_clock.t <= rip->start) continue;
                         int count = func_0014C6D8(shape, entries, rip->extra, rip->position, 4, contacts);
                         int i = 0;
                         if (i < count) do {
@@ -91,12 +91,12 @@ void func_001CE2E8(P *p)
                             i++;
                         } while (i < count);
                     }
-                    D_002DD2FC = phase.rip.outer;
-                    func_001AE4A0(&frame, 2);
+                    g_pdliFirst = phase.rip.outer;
+                    _$_18CBinaryInputStream(&frame, 2);
                 }
             }
-            D_002DD2FC = shapes.outer;
+            g_pdliFirst = shapes.outer;
         }
-        if (func_0011A3B0(&p->rips)) p->vt[9].fn((char *)p + p->vt[9].delta);
+        if (FIsDlEmpty__FP2DL(&p->rips)) p->vt[9].fn((char *)p + p->vt[9].delta);
     }
 }

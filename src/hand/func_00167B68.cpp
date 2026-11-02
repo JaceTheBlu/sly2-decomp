@@ -18,11 +18,11 @@ struct HDR { signed char c0; signed char citem; char pad[0x12]; };
 struct X { char pad[8]; int oid; char pad2[0x9C - 0xC]; X *pxNext; };
 struct S { void *pvOwner; char pad[0x38 - 4]; int cgrp; HDR *ahdr; GRP *agrp; char pad2[0x4C - 0x44]; int f4C; char pad3[0x58 - 0x50]; X *pxFirst; };
 struct G;
-extern G D_003DD490;
+extern G g_sw;
 extern int D_003E11EC;
-extern "C" LO *func_0015E938(G *pg, int kind, int oid, void *owner);
+extern "C" LO *PloFindSwObject__FP2SWi3OIDP2LO(G *pg, int kind, int oid, void *owner);
 extern "C" void func_0011C318(MATRIX4 *pmatDst, MATRIX4 *pmatSrc);
-extern "C" void func_0011C168(MATRIX4 *pmatDst, MATRIX4 *pmatA, MATRIX4 *pmatB);
+extern "C" void __ml__FRC7MATRIX4T0(MATRIX4 *pmatDst, MATRIX4 *pmatA, MATRIX4 *pmatB);
 extern "C" void *func_002333B4(void *pv, int n, int cb);
 extern "C" void func_0022B7A0(LO *plo, X *px);
 extern "C" void func_00167B68(S *p)
@@ -34,7 +34,7 @@ extern "C" void func_00167B68(S *p)
         GRP *pgrp = &p->agrp[i];
         for (int j = 0; j < phdr->citem; j++) {
             ITEM *pitem = &pgrp->aitem[j];
-            pitem->plo = func_0015E938(&D_003DD490, 4, pitem->oid, p->pvOwner);
+            pitem->plo = PloFindSwObject__FP2SWi3OIDP2LO(&g_sw, 4, pitem->oid, p->pvOwner);
             if (pitem->plo)
                 pitem->pbone = pitem->plo->PboneFind(pitem->n8);
             if (pitem->pbone) {
@@ -42,7 +42,7 @@ extern "C" void func_00167B68(S *p)
                 if (pgrp->pbone) {
                     MATRIX4 matT;
                     func_0011C318(&matT, &pitem->pbone->mat);
-                    func_0011C168(&mat, &matT, &pgrp->pbone->mat);
+                    __ml__FRC7MATRIX4T0(&mat, &matT, &pgrp->pbone->mat);
                 } else {
                     func_0011C318(&mat, &pitem->pbone->mat);
                 }
@@ -57,7 +57,7 @@ extern "C" void func_00167B68(S *p)
         }
     }
     for (X *px = p->pxFirst; px; px = px->pxNext) {
-        LO *plo = func_0015E938(&D_003DD490, 4, px->oid, p->pvOwner);
+        LO *plo = PloFindSwObject__FP2SWi3OIDP2LO(&g_sw, 4, px->oid, p->pvOwner);
         if (plo)
             func_0022B7A0(plo, px);
     }

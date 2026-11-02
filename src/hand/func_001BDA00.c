@@ -1,3 +1,4 @@
+#include "dl.h"
 typedef struct VTE { short d; short pad; void (*pfn)(); } VTE;
 typedef struct AREQ { int cb; int align; } AREQ;
 typedef struct O {
@@ -20,11 +21,10 @@ typedef struct O {
     int x1E8;
     void *x1EC;
 } O;
-typedef struct DL { O *pvFirst; O *pvLast; int ibDle; } DL;
 extern DL D_003E1A40;
-O *func_0013E3C8(int a, int b, int c, int d);
+O *PloNew__F3CIDP2SO3OIDi(int a, int b, int c, int d);
 void func_002333B4(void *p, int c, int n);
-void *func_001AE1D0(AREQ *preq);
+void *PvAllocSwImpl__Fi(AREQ *preq);
 void func_0011A220(DL *pdl, O *p);
 void func_0011A2E8(DL *pdl, O *p);
 
@@ -35,10 +35,10 @@ O *func_001BDA00(void)
     AREQ req;
     float *pm;
 
-    p = D_003E1A40.pvFirst;
+    p = D_003E1A40.head;
     if (!p) {
         for (i = 0; i < 16; i++) {
-            O *q = func_0013E3C8(0xE, 0, 0x2CD, -1);
+            O *q = PloNew__F3CIDP2SO3OIDi(0xE, 0, 0x2CD, -1);
             q->xE0 = 0;
             q->xE4 = 1;
             q->x1C0 = 1;
@@ -50,21 +50,21 @@ O *func_001BDA00(void)
             pm[0] = 1.0f;
             req.cb = 0x80;
             req.align = 0x10;
-            q->xEC = (float *)func_001AE1D0(&req);
+            q->xEC = (float *)PvAllocSwImpl__Fi(&req);
             for (j = 0; j < 32; j++) q->xEC[j] = (float)j;
             req.cb = 0x80;
             req.align = 0x10;
-            q->xF0 = func_001AE1D0(&req);
+            q->xF0 = PvAllocSwImpl__Fi(&req);
             req.cb = 0x200;
             req.align = 0x10;
-            q->xF4 = func_001AE1D0(&req);
+            q->xF4 = PvAllocSwImpl__Fi(&req);
             req.cb = 0x1F0;
             req.align = 0x10;
-            q->x1EC = func_001AE1D0(&req);
+            q->x1EC = PvAllocSwImpl__Fi(&req);
             ((void (*)(void *))q->vt[9].pfn)((char *)q + q->vt[9].d);
             func_0011A220(&D_003E1A40, q);
         }
-        p = D_003E1A40.pvFirst;
+        p = D_003E1A40.head;
     }
     func_0011A2E8(&D_003E1A40, p);
     p->x1E8 = -1;

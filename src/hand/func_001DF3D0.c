@@ -1,4 +1,4 @@
-extern struct CLOCK { float t; float dt; } D_002DDED0;
+extern struct CLOCK { float t; float dt; } g_clock;
 typedef struct { float a; float b; float c; float max; float u; } SEG;
 typedef struct {
     int pad0;
@@ -40,7 +40,7 @@ void func_001DF3D0(OBJ *p)
             if (q->kind != 1)
                 continue;
             ps = &q->aseg[q->i];
-            ps->u = u = ps->u + p->speed * D_002DDED0.dt;
+            ps->u = u = ps->u + p->speed * g_clock.dt;
             if (ps->max < u) {
                 float r = func_00245A18(u, ps->max);
                 q->i = (q->i + 1) % q->c;

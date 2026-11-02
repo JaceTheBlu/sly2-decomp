@@ -1,3 +1,4 @@
+#include "vu0.h"
 // func_001A4478: per-frame "shader basis" packets for a query point.
 //  1. point = *p->input (optionally transformed by M4 *transform); func_001A3F78 collects the 4 best-ranked objects.
 //  2. If p->strength != 0: four 48-byte VIF packets (tag 0x6C03C000 | (i*3+0x15) + 12 words), from each result
@@ -41,12 +42,12 @@ struct WORLD;
 extern VIFS D_002DEA28;
 extern BLOCK D_002BFC60;
 extern float D_002BFC90, D_002BFC94;
-extern qword D_002A2DA0, D_002A2DB0, D_002A2DC0;
-extern CAMERA D_002DDF40;
+extern qword D_002A2DA0, D_002A2DB0, g_normalZ;
+extern CAMERA g_cm;
 extern "C" {
 void func_001A3F78(WORLD *world, qword pos, int capacity, RESULT *results);
 void func_0011E2D8(qword a, qword b, qword c, M3 *pm);
-qword *func_00256D18(qword *p, qword v);
+qword *__as__6VECTORG9VU_VECTOR(qword *p, qword v);
 int func_001A4258(qword pos, float radius, int csphere, SPHERE *asphere);
 }
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1,%0" : "=j"(q) : "r"(f)); } };
@@ -65,8 +66,6 @@ static inline qword AddScaled(qword base, const qword &v, VU_FLOAT g)
     return r;
 }
 static inline qword Scale(qword v, VU_FLOAT g) { qword r; __asm__("vmulx.xyzw %0,%1,%2x" : "=j"(r) : "j"(v), "j"(g.q)); return r; }
-static inline qword Add(qword a, qword b) { qword r; __asm__("vadd.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword Divide(qword v, VU_FLOAT g) { qword r; __asm__("vdiv $Q,$vf0w,%1x\n\tvwaitq\n\tvmulq.xyzw %0,%2,$Q" : "=j"(r) : "j"(g.q), "j"(v)); return r; }
 static inline float Length(qword v)
 {
@@ -160,13 +159,13 @@ extern "C" void func_001A4478(WORLD *world, M4 *transform, P *p)
             Clear(p);
         } else {
             qword center = Divide(sum, VU_FLOAT(total));
-            qword dir = Sub(point, center);
+            qword dir = QwSub(point, center);
             float dist = Length(dir);
             float limit = D_002BFC94 * p->limit;
             float extent;
             if (dist < limit) {
                 if (dist < 1.0f)
-                    dir = D_002A2DC0;
+                    dir = g_normalZ;
                 else
                     dir = Divide(dir, VU_FLOAT(dist));
                 center = AddScaled(point, dir, VU_FLOAT(-limit));
@@ -180,7 +179,7 @@ extern "C" void func_001A4478(WORLD *world, M4 *transform, P *p)
             basis.row[2].q = Scale(dir, VU_FLOAT(extent));
             PACKET packet;
             U *row = packet.basis;
-            func_00256D18(&packet.position.q, center);
+            __as__6VECTORG9VU_VECTOR(&packet.position.q, center);
             row[0] = basis.row[0];
             row[1] = basis.row[1];
             row[2] = basis.row[2];
@@ -192,11 +191,11 @@ extern "C" void func_001A4478(WORLD *world, M4 *transform, P *p)
             SPHERE spheres[3];
             spheres[0].pos = point;
             spheres[0].radius = p->limit;
-            spheres[1].pos = Add(center, basis.row[2].q);
+            spheres[1].pos = QwAdd(center, basis.row[2].q);
             spheres[1].radius = p->limit * extent / dist;
             spheres[2].pos = AddScaled(center, basis.row[2].q, VU_FLOAT(1.5f));
             *(int *)&spheres[2].radius = 0;
-            packet.kind = func_001A4258(D_002DDF40.position, D_002DDF40.radius, 3, spheres);
+            packet.kind = func_001A4258(g_cm.position, g_cm.radius, 3, spheres);
             {
                 uchar *pb = D_002DEA28.m_pb;
                 p->pbBasis = pb;

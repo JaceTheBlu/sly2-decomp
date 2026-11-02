@@ -1,3 +1,4 @@
+#include "clock.h"
 struct CRef;
 extern "C" void func_00129EC8(CRef *);
 struct CRef {
@@ -8,9 +9,8 @@ struct CRef {
 struct VTE { short d; short pad; void *(*pfn)(void *); };
 struct E { int id; int a; float g; };
 struct P { char pad[0xC]; VTE *vt; char pad2[0x1180 - 0x10]; E ae[3]; };
-struct CLOCK { float t; float dt; };
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern char D_002A4D50[];
 extern char D_002A4D58[];
 void func_00141C08(P *p, E *pe, int n);
@@ -24,7 +24,7 @@ extern "C" void func_00141FC8(P *p, unsigned int i, int id)
         func_00141C08(p, pe, -1);
         pe->id = id;
         pe->a = 0;
-        pe->g = D_002DDED0.t;
+        pe->g = g_clock.t;
         for (int j = 0; j < 3; j++) {
             char ach[16];
             E *pe2 = &p->ae[j];

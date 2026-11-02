@@ -1,5 +1,5 @@
 struct O { char pad[0x18]; int id; char pad1[0x16C - 0x1C]; int c; int aid[1]; };
-struct O *func_0015E938(void *pg, int k, int id, struct O *p);
+struct O *PloFindSwObject__FP2SWi3OIDP2LO(void *pg, int k, int id, struct O *p);
 int func_0015E9C8(void *pg, int a, int b, struct O *po, int n, struct O **apo);
 struct O *func_00227FE8(void *pg, int id, int k)
 {
@@ -9,7 +9,7 @@ struct O *func_00227FE8(void *pg, int id, int k)
     int n, i;
     int a = 5;
     if (k != -1) {
-        po = func_0015E938(pg, 5, k, 0);
+        po = PloFindSwObject__FP2SWi3OIDP2LO(pg, 5, k, 0);
         if (po) a = 1;
     }
     poRet = 0;

@@ -11,9 +11,9 @@ extern f32 D_002C3DE0;
 extern f32 D_002C3DE4;
 extern M2C_UNK D_002DA9D0;
 extern M2C_UNK D_002DAA10;
-extern f32 D_002DDED0;
-extern M2C_UNK D_002DDF40;
-extern M2C_UNK D_003DD490;
+extern f32 g_clock;
+extern M2C_UNK g_cm;
+extern M2C_UNK g_sw;
 extern s32 D_003E148C;
 
 void func_0020B478(s32 arg0, s32 arg1) {

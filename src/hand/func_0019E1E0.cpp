@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));typedef unsigned long ulong;
 union U{qword q;float f[4];int i[4];};struct VE{short delta,pad;void*fn;};
 struct INPUT{char pad0[0x10];float x,y;char pad18[4];float amount;};
@@ -7,20 +8,19 @@ struct PATH{char pad0[0x28];ulong flags;char pad30[0xE4-0x30];int cyclic;};
 struct C{P*actor;int state;float time;PATH*path;float distance,speed;int descending;float reset;int previous;char pad24[12];U offset;char pad40[0x10];float weight0;char pad54[8];float speed0,weight1;char pad64[8];float speed1;ANIMATION*animation;};
 struct CLOCK{float time,dt;};struct SMP{float maximum,minimum,duration;};struct LM{float low,high;};struct WORK{U ahead,behind;union{U input;SMP smooth;}reuse;LM limit;};
 extern "C"{
-extern CLOCK D_002DDED0;extern U D_002A2DD0,D_002A2DC0;extern SMP D_002BF928;
+extern CLOCK g_clock;extern U D_002A2DD0,g_normalZ;extern SMP D_002BF928;
 qword func_0011F088(qword,qword,float,SMP*,U*);
 void func_00195A00(void*,int,void*,void*);int func_001C46C0(INPUT*,int,float);int func_001C4660(INPUT*,int,float);void func_001C4738(INPUT*,int);
 void func_0019CC50(void*,int,void*,void*);int func_00131968(ASEGA*);void func_0019EAB0(C*,int);
 float func_001E6728(PATH*,float);void func_001E6F10(PATH*,float,U*,U*);qword func_001C4768(INPUT*,qword);
-void func_0019E110(C*,LM*);float func_0011D018(float,float,float,SMP*,float*);void func_001F4BF8(P*);float func_001E6648(PATH*);float func_0011D898(float,float);void func_001384C0(ANIMATION*);
+void func_0019E110(C*,LM*);float GSmooth__FfffP3SMPPf(float,float,float,SMP*,float*);void func_001F4BF8(P*);float func_001E6648(PATH*);float GModPositive__Fff(float,float);void ReblendAsegbl__FP6ASEGBL(ANIMATION*);
 float fabsf(float);
 }
 static inline ulong Eligible(PATH*p){return (p->flags>>60)&1;}
 static inline int CanAct(P*p,int kind){VE&v=p->vt[99];return ((int(*)(void*,int))v.fn)((char*)p+v.delta,kind);}
-static inline qword Sub(qword a,qword b){qword q;__asm__("vsub.xyzw %0,%1,%2":"=j"(q):"j"(a),"j"(b));return q;}
 static inline qword Direction(U*a,U*b,U*&axis){
  register qword direction __asm__("vf3");register U*address __asm__("$2");
- __asm__("lqc2 $vf2,%2\n\tlui %0,%%hi(%4)\n\tlqc2 $vf1,%3\n\taddiu %0,%0,%%lo(%4)\n\tvsub.xyzw %1,$vf2,$vf1":"=&r"(address),"=j"(direction):"m"(a->q),"m"(b->q),"i"(&D_002A2DC0):"vf1","vf2");
+ __asm__("lqc2 $vf2,%2\n\tlui %0,%%hi(%4)\n\tlqc2 $vf1,%3\n\taddiu %0,%0,%%lo(%4)\n\tvsub.xyzw %1,$vf2,$vf1":"=&r"(address),"=j"(direction):"m"(a->q),"m"(b->q),"i"(&g_normalZ):"vf1","vf2");
  axis=address;return direction;
 }
 static inline qword Normal(qword v,U*axis){
@@ -34,7 +34,6 @@ static inline qword Normal(qword v,U*axis){
  else{__asm__("vdiv $Q,$vf0w,%1x\n\tvwaitq\n\tvmulq.xyzw %0,%2,$Q":"=j"(r):"j"(d),"j"(v));}
  qword q;__asm__("qmfc2.ni %0,%1":"=r"(q):"j"(r));return q;
 }
-static inline float Z(qword q){float f;__asm__("pextuw %0,$zero,%1":"=r"(f):"r"(q));return f;}
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((t*)0)->m))
 typedef char U_Size[sizeof(U)==16?1:-1];
 typedef char VE_Size[sizeof(VE)==8?1:-1];
@@ -84,7 +83,7 @@ typedef char WORK_limit_Offset[FIELD_OFFSET(WORK,limit)==48?1:-1];
 typedef char CLOCK_time_Offset[FIELD_OFFSET(CLOCK,time)==0?1:-1];
 typedef char CLOCK_dt_Offset[FIELD_OFFSET(CLOCK,dt)==4?1:-1];
 extern "C" void func_0019E1E0(C*p){
- WORK w;float lowSpeed,highSpeed;P*actor=p->actor;actor->offset.q=func_0011F088(actor->offset.q,D_002A2DD0.q,D_002DDED0.dt,&D_002BF928,0);
+ WORK w;float lowSpeed,highSpeed;P*actor=p->actor;actor->offset.q=func_0011F088(actor->offset.q,D_002A2DD0.q,g_clock.dt,&D_002BF928,0);
  register float amount __asm__("$f4"),dot __asm__("$f3"),zero __asm__("$f2");register int previous __asm__("$5");
  {register INPUT*input __asm__("$18")=p->actor->input;
  if(!Eligible(p->path)){func_00195A00(p->actor->controller,0,0,0);return;}
@@ -94,18 +93,18 @@ extern "C" void func_0019E1E0(C*p){
  if(p->state==0||p->state==4)return;
  func_001E6F10(p->path,func_001E6728(p->path,p->distance+50.0f),&w.ahead,0);
  func_001E6F10(p->path,func_001E6728(p->path,p->distance-50.0f),&w.behind,0);
- U*axis;qword direction=Direction(&w.ahead,&w.behind,axis);qword normalized=Normal(direction,axis);float z=Z(normalized);
+ U*axis;qword direction=Direction(&w.ahead,&w.behind,axis);qword normalized=Normal(direction,axis);float z=GetZ(normalized);
  if(fabsf(z)>0.5f){
   if(z>0.0f){if(!p->descending)goto checkMemory;goto turn;}
   if(!p->descending)goto turn;
  }
  checkMemory:
- if(p->reset>0.4f&&p->descending&&Z(normalized)>-0.3f)goto turn;
- if(p->reset<-0.4f&&!p->descending&&Z(normalized)<0.3f)goto turn;
+ if(p->reset>0.4f&&p->descending&&GetZ(normalized)>-0.3f)goto turn;
+ if(p->reset<-0.4f&&!p->descending&&GetZ(normalized)<0.3f)goto turn;
  goto proceed;
  turn:func_0019EAB0(p,4);return;
  proceed:;
- register qword tangent __asm__("$2")=func_001C4768(input,Sub(w.ahead.q,w.behind.q));
+ register qword tangent __asm__("$2")=func_001C4768(input,QwSub(w.ahead.q,w.behind.q));
  __asm__("lwc1 $f1,0x10(%6)\n\tqmtc2.ni %5,$vf4\n\tlwc1 $f0,0x14(%6)\n\tmtc1 $zero,%2\n\tmfc1 $3,$f1\n\tmfc1 $4,$f0\n\tpextlw $3,$4,$3\n\tmfc1 $4,%2\n\tpcpyld $3,$4,$3\n\tlwc1 %0,0x1c(%6)\n\tqmtc2.ni $3,$vf3\n\tlw %1,0x20(%7)\n\tvmul.xyz $vf1,$vf4,$vf3\n\tvaddw.x $vf2,$vf0,$vf0w\n\tvadday.x ACC,$vf1,$vf1y\n\tvmaddz.x $vf1,$vf2,$vf1z\n\tsq $3,%3\n\tqmfc2.ni $2,$vf1\n\tmtc1 $2,%4":"=f"(amount),"=r"(previous),"=f"(zero),"=m"(w.reuse.input.q),"=f"(dot):"r"(tangent),"r"(input),"r"(p):"$2","$3","$4","$f0","$f1","vf1","vf2","vf3","vf4","memory");
  }
  switch(previous){case 0:if(amount<0.25f)p->previous=-1;else if(dot<-0.7f)p->previous=1;break;
@@ -127,15 +126,15 @@ extern "C" void func_0019E1E0(C*p){
  }
  else{speed=0.0f;mode=1;maximumInput=p->speed1;}
  if(p->descending)speed=-speed;
- register CLOCK*clock __asm__("$19")=&D_002DDED0;
+ register CLOCK*clock __asm__("$19")=&g_clock;
  register float nextMemory __asm__("$f0");register PATH*path __asm__("$3");
  __asm__("abs.s $f5,%2\n\tlwc1 $f2,4(%7)\n\t.set noat\n\tlui $1,0x3f80\n\tmtc1 $1,%2\n\t.set at\n\tneg.s %0,$f2\n\tlwc1 $f4,0x1c(%8)\n\tsub.s %2,%2,$f2\n\t.set noat\n\tlui $1,0x3e4c\n\tori $1,$1,0xcccd\n\tmtc1 $1,$f3\n\t.set at\n\tswc1 $f5,%3\n\tmul.s %0,%0,%6\n\tswc1 $f3,%4\n\tmul.s %2,%2,$f4\n\tsw $zero,%5\n\tdiv.s %0,%0,$f5\n\tlw %1,0xc(%8)\n\tadd.s %0,%0,%2":"=f"(nextMemory),"=r"(path),"+f"(maximumInput),"=m"(w.reuse.smooth.maximum),"=m"(w.reuse.smooth.duration),"=m"(w.reuse.smooth.minimum):"f"(speed),"r"(clock),"r"(p):"$1","$f2","$f3","$f4","$f5","memory");
  p->reset=nextMemory;
- if(!path->cyclic){func_0019E110(p,&w.limit);(void)func_0011D018(p->distance,w.limit.low,clock->dt,&w.reuse.smooth,&lowSpeed);(void)func_0011D018(p->distance,w.limit.high,clock->dt,&w.reuse.smooth,&highSpeed);float low=-highSpeed,high=-lowSpeed;if(speed<low)speed=low;else if(high<speed)speed=high;}
+ if(!path->cyclic){func_0019E110(p,&w.limit);(void)GSmooth__FfffP3SMPPf(p->distance,w.limit.low,clock->dt,&w.reuse.smooth,&lowSpeed);(void)GSmooth__FfffP3SMPPf(p->distance,w.limit.high,clock->dt,&w.reuse.smooth,&highSpeed);float low=-highSpeed,high=-lowSpeed;if(speed<low)speed=low;else if(high<speed)speed=high;}
  register float stopped __asm__("$f21")=0.0f;
  p->speed=-speed;
- if(speed!=stopped){p->distance+=p->speed*D_002DDED0.dt;func_001F4BF8(p->actor);}
- if(p->path->cyclic)p->distance=func_0011D898(p->distance,func_001E6648(p->path));
+ if(speed!=stopped){p->distance+=p->speed*g_clock.dt;func_001F4BF8(p->actor);}
+ if(p->path->cyclic)p->distance=GModPositive__Fff(p->distance,func_001E6648(p->path));
  register float magnitude __asm__("$f2")=fabsf(speed);
  if(magnitude<0.01f)mode=1;
  else{
@@ -145,7 +144,7 @@ extern "C" void func_0019E1E0(C*p){
   register ANIMATION*animation __asm__("$4");register float complement __asm__("$f0");
   __asm__(".set noat\n\tlui $1,0x3f80\n\tmtc1 $1,%0\n\t.set at\n\tlw %1,0x70(%3)\n\tsub.s %0,%0,%4\n\tswc1 %4,%2":"=f"(complement),"=r"(animation),"=m"(p->weight1):"r"(p),"f"(weight):"$1","memory");
   p->weight0=complement;
-  func_001384C0(animation);
+  ReblendAsegbl__FP6ASEGBL(animation);
  }
  func_0019EAB0(p,mode);
 }

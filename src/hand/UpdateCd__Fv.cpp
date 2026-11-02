@@ -1,4 +1,4 @@
-// UpdateCd (Claude agent, 2026-10-17): matched. Keys: `int lsn = D_002A2E5C; lsn += 0xCA0;` (fixes s0/s1), CRC table via a local `unsigned int *tbl` with a byte offset `(char *)tbl + (idx << 2)` (gives addu v0,t1,v0).
+// UpdateCd: matched. Keys: `int lsn = D_002A2E5C; lsn += 0xCA0;` (fixes s0/s1), CRC table via a local `unsigned int *tbl` with a byte offset `(char *)tbl + (idx << 2)` (gives addu v0,t1,v0).
 extern int D_002BD4C0;
 extern int D_003DD0E4;
 extern char D_003DA4F0[];
@@ -8,7 +8,7 @@ extern char D_002A2E50[];
 extern unsigned int D_002A2E68[];
 extern unsigned int D_002A2E60;
 extern "C" {
-int func_0014B9C0(void);
+int FValidCdMmode__Fv(void);
 void func_001DD6C8(void *p);
 int func_001DD780(void *p);
 void func_001DD728(void *p);
@@ -28,7 +28,7 @@ void UpdateCd(void)
     int cds = D_002BD4C0;
     switch (cds) {
     case 3:
-        if (D_003DD0E4 && !func_0014B9C0()) {
+        if (D_003DD0E4 && !FValidCdMmode__Fv()) {
             func_001DD6C8(D_003DA4F0);
             D_002BD4C0 = 1;
         }
@@ -37,7 +37,7 @@ void UpdateCd(void)
         if (func_001DD780(D_003DA4F0)) {
             int lsn = D_002A2E5C;
             lsn += 0xCA0;
-            if (func_0014B9C0() && func_00242840(lsn, 1, D_002DD680, D_002A2E50) == cds)
+            if (FValidCdMmode__Fv() && func_00242840(lsn, 1, D_002DD680, D_002A2E50) == cds)
                 D_002BD4C0 = 2;
         }
         break;

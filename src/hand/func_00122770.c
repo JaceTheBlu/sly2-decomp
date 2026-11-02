@@ -1,5 +1,5 @@
+#include "cref.h"
 typedef int qword __attribute__((mode(TI)));
-typedef struct CRef { int m_tagk; int m_tag; } CRef;
 CRef *func_00129248(CRef *pref, qword v);
 CRef *func_001291A8(CRef *pref, CRef *prefSrc);
 void func_00129EC8(CRef *pref);

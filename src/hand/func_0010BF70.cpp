@@ -1,13 +1,5 @@
+#include "cref.h"
 typedef int qword __attribute__((mode(TI)));
-struct CRef {
-    int m_tagk; union { int n; float g; void *pv; } u;
-    CRef() { m_tagk = -1; }
-    CRef(const CRef &r);
-    void Decref();
-    ~CRef() { Decref(); }
-    CRef &operator=(const CRef &r);
-    CRef &operator=(void *pv);
-};
 extern "C" {
 CRef func_00201360(int c, void *aref, int *ak, void *an);
 void *func_001C4AF8(void *p, qword q);

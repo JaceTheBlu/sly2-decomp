@@ -5,7 +5,7 @@ struct P { char pad[0x188]; int x188; int x18C; int x190; struct A *pa; };
 extern int D_003E0F9C;
 extern char D_003DA0C0[];
 extern char D_002DEB30[];
-int func_00132B10(struct Q *q, int k);
+int FIsBasicDerivedFrom__FP5BASIC3CID(struct Q *q, int k);
 void func_001DA4B8(void *pv, int n, float g);
 void *func_001FBB90(int n);
 void func_001FB2F8(void *pv, int n);
@@ -16,7 +16,7 @@ void func_00184130(struct P *p, struct Q *q);
 void func_0013D020(struct P *p, struct Q *q)
 {
     struct A *pqa, *ppa;
-    if (!func_00132B10(q, 0x34))
+    if (!FIsBasicDerivedFrom__FP5BASIC3CID(q, 0x34))
         return;
     pqa = q->pa;
     ppa = p->pa;

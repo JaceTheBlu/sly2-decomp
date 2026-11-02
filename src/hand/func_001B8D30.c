@@ -1,11 +1,11 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct CLOCK { float t,dt; };
 struct CLIP; struct ANIMATION;
 struct COMPONENT_DATA;
 struct COMPONENT { struct COMPONENT_DATA *value; };
 struct SCRIPT { int opaque; struct CLIP *clip; char rest[0x14]; };
 struct M3 { qword row[3]; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern qword D_002A2DD0;
 struct VE { short d; short pad; void (*pfn)(); };
 struct O { char pad[0xC]; struct VE *vt; char pad1[0x40 - 0x10]; qword v40; char rest[0x20]; };
@@ -43,7 +43,6 @@ typedef char P_x1890_Offset[FIELD_OFFSET(P,x1890)==6288?1:-1];
 typedef char P_x1900_Offset[FIELD_OFFSET(P,x1900)==6400?1:-1];
 typedef char P_x1904_Offset[FIELD_OFFSET(P,x1904)==6404?1:-1];
 typedef char P_x1908_Offset[FIELD_OFFSET(P,x1908)==6408?1:-1];
-typedef char CLOCK_Size[sizeof(struct CLOCK)==8?1:-1];
 typedef char COMPONENT_Size[sizeof(struct COMPONENT)==4?1:-1];
 typedef char SCRIPT_Size[sizeof(struct SCRIPT)==28?1:-1];
 typedef char M3_Size[sizeof(struct M3)==48?1:-1];
@@ -63,7 +62,7 @@ void func_001B8D30(struct P *p, int st)
         p->x1900 = 0;
     }
     p->x1840 = st;
-    p->f1844 = D_002DDED0.t;
+    p->f1844 = g_clock.t;
     o = 0;
     n = 0;
     switch (st) {

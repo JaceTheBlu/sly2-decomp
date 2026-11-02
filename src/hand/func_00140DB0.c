@@ -1,4 +1,4 @@
-/* func_00140DB0 (Claude agent for Lilly, T1644): saves s->v, scales it by 0.01 when the
+/* func_00140DB0: saves s->v, scales it by 0.01 when the
    other entry's k (s->ae[1 - i].k) is one of three known values and p allows it
    (p->p150->x80 != 1 or func_00144068(p)), calls func_001FAD00 with the same arguments,
    then restores s->v.

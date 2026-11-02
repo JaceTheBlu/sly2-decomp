@@ -1,14 +1,14 @@
+#include "vtable.h"
 // Select and blend the movement vector for the active mode.
 typedef int qword __attribute__((mode(TI)));
 typedef union U{qword q;float f[4];int bits[4];}U;
 typedef union F{float value;int bits;}F;
-struct VT{short delta,pad;void*fn;};
-struct O{char pad[0xC];struct VT*vt;};
+struct O{char pad[0xC];struct VTE*vt;};
 struct M3{U row[3];};
 struct P{struct O*self;char pad4[0x30-4];struct O*target;char pad34[8];int mode;char pad40[0x20];U velocity;};
 extern F D_002BFACC,D_002BFAD0,D_002BFAD4,D_002BFB00,D_002BFB04;
-extern U D_002BFAE0,D_002BFAF0,D_002A2DA0,D_002A2DC0;
-int func_00132B10(struct O*,int);
+extern U D_002BFAE0,D_002BFAF0,D_002A2DA0,g_normalZ;
+int FIsBasicDerivedFrom__FP5BASIC3CID(struct O*,int);
 qword func_0011E9F8(qword,float);
 qword func_001A62E8(struct O*);
 struct M3*func_001A6318(struct O*);
@@ -55,7 +55,7 @@ void func_001A16C8(struct P*p){
     switch(p->mode){
     case 0x200:
     case 0x8000:
-        if(func_00132B10(p->target,0x33)){
+        if(FIsBasicDerivedFrom__FP5BASIC3CID(p->target,0x33)){
             qword k=Scalar(D_002BFACC.value+1.0f);
             qword v=Scale(p->velocity.q,k);
             scratch.q=k;
@@ -65,7 +65,7 @@ void func_001A16C8(struct P*p){
         }
         break;
     case 0x40:
-        if(func_00132B10(p->target,0x36)){
+        if(FIsBasicDerivedFrom__FP5BASIC3CID(p->target,0x36)){
             struct O*target=p->target;
             struct M3*basis;
             qword delta,local;
@@ -80,12 +80,12 @@ void func_001A16C8(struct P*p){
         }
         break;
     case 0x100:
-        if(func_00132B10(p->target,0x4F)){
+        if(FIsBasicDerivedFrom__FP5BASIC3CID(p->target,0x4F)){
             struct O*target=p->target;
             qword n,a,b,mixed,z;
-            if(func_00132B10(target,0x51)){
-                struct VT*vt=target->vt;
-                struct M3*basis=((struct M3*(*)(void*))vt[31].fn)((char*)target+vt[31].delta);
+            if(FIsBasicDerivedFrom__FP5BASIC3CID(target,0x51)){
+                struct VTE*vt=target->vt;
+                struct M3*basis=((struct M3*(*)(void*))vt[31].pfn)((char*)target+vt[31].delta);
                 scratch=basis->row[0];
             }else{
                 qword targetPoint;
@@ -102,7 +102,7 @@ void func_001A16C8(struct P*p){
                 // Read blend data and initialize the scalar temporary.
                 __asm__("lui %0,%%hi(%7)\n\tlui %1,%%hi(%8)\n\tlui %2,%%hi(%9)\n\tlw %0,%%lo(%7)(%0)\n\taddiu %2,%2,%%lo(%9)\n\tlw %1,%%lo(%8)(%1)\n\tlqc2 %5,0(%2)\n\tqmtc2.ni %0,%3\n\tqmtc2.ni %1,%4\n\tsqc2 %3,%6"
                     :"=&r"(first),"=&r"(second),"=&r"(up),"=j"(weight),"=j"(lift),"=j"(axis),"=m"(scalar.q)
-                    :"i"(&D_002BFB00.bits),"i"(&D_002BFB04.bits),"i"(&D_002A2DC0):"memory");
+                    :"i"(&D_002BFB00.bits),"i"(&D_002BFB04.bits),"i"(&g_normalZ):"memory");
                 a=weight;b=lift;z=axis;
             }
 
@@ -115,8 +115,8 @@ void func_001A16C8(struct P*p){
     }
     {
         struct O*object=p->self;
-        struct VT*vt=object->vt;
-        ((void(*)(void*,qword))vt[35].fn)((char*)object+vt[35].delta,output.q);
+        struct VTE*vt=object->vt;
+        ((void(*)(void*,qword))vt[35].pfn)((char*)object+vt[35].delta,output.q);
     }
     func_001A0B40(p,7);
 }

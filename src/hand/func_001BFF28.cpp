@@ -1,4 +1,4 @@
-// func_001BFF28: build a route between two points over the navigation graph (wave-3 lane 4, from w2lane6.v1).
+// func_001BFF28: build a route between two points over the navigation graph.
 // Finds the triangles containing both points, projects the points onto them (func_001BFDB0), links a temporary start
 // vertex to the start triangle's corners and the goal vertex to the goal triangle's corners, runs the path search
 // (func_001BF980) and the path simplifier (func_001BFC18), copies the route out, drops points closer than the minimum
@@ -24,13 +24,13 @@ extern "C" {
 TRI *func_001BF1F8(G *, BSP *, qword, int);
 qword func_001BFDB0(TRI *, qword);
 void func_001AE478(void *);
-void func_001AE4A0(void *, int);
-void *func_001AE318(AREQ *);
+void _$_18CBinaryInputStream(void *, int);
+void *PvAllocStackImpl__FP7SWALLOC(AREQ *);
 void func_001BF980(G *, V *, V *, int, int *, V **);
 void func_001BFC18(G *, int *, V **);
 int func_001BFF28(G *, qword, qword, int, U *);
 }
-struct MARK { MARK() { func_001AE478(this); } ~MARK() { func_001AE4A0(this, 2); } };
+struct MARK { MARK() { func_001AE478(this); } ~MARK() { _$_18CBinaryInputStream(this, 2); } };
 // the unused second output keeps gcse from hoisting the qmtc2 out of the loops (not single_set)
 static inline qword ToVF(qword v) { qword r; int dummy; __asm__("qmtc2.ni %2,%0" : "=j"(r), "=r"(dummy) : "r"(v)); return r; }
 static inline int Dist2DI(qword a, qword b)
@@ -82,11 +82,11 @@ int func_001BFF28(G *g, qword from, qword to, int capacity, U *out)
     } else {
         MARK mark;
         write = out + 1;
-        V **path = (V **)func_001AE318(AREQ().Set(0x200));
+        V **path = (V **)PvAllocStackImpl__FP7SWALLOC(AREQ().Set(0x200));
         V initial;
         initial.pos.q = start;
         initial.cEdge = 3;
-        initial.aEdge = (E *)func_001AE318(AREQ().Set(0x18));
+        initial.aEdge = (E *)PvAllocStackImpl__FP7SWALLOC(AREQ().Set(0x18));
         qword sv = ToVF(start);
         for (int i = 0; i < 3; i++) {
             V *v = first->apv[i];

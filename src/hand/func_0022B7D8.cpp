@@ -134,7 +134,7 @@ struct WR
 
 extern VECTOR D_002A2DA0; // (1, 0, 0, 0)
 extern VECTOR D_002A2DB0; // (0, 1, 0, 0)
-extern VECTOR D_002A2DC0; // (0, 0, 1, 0)
+extern VECTOR g_normalZ; // (0, 0, 1, 0)
 extern VECTOR D_002A2DD0; // (0, 0, 0, 0)
 
 extern "C"
@@ -142,10 +142,10 @@ extern "C"
 void *func_002333B4(void *pv, int b, uint cb);                       // memset
 void func_001AE5A0(void *pvDst, const void *pvSrc, uint cb);         // CopyAb
 qword func_001A6F00(SO *psoFrom, SO *psoTo, qword pos);              // ConvertLoPos
-float func_0011CF60(float rad);                                      // RadNormalize
-void func_0011D608(float rad, float *pgSin, float *pgCos);           // CalculateSinCos
+float RadNormalize__Ff(float rad);                                      // RadNormalize
+void CalculateSinCos__FfPfT1(float rad, float *pgSin, float *pgCos);           // CalculateSinCos
 MATRIX4 func_0011C318(const MATRIX4 *pmat);                          // the inverse of a 4x4 matrix
-MATRIX4 func_0011C168(const MATRIX4 &matL, const MATRIX4 &matR);     // MATRIX4 operator*
+MATRIX4 __ml__FRC7MATRIX4T0(const MATRIX4 &matL, const MATRIX4 &matR);     // MATRIX4 operator*
 }
 
 // pos (w = 1) transformed by mat
@@ -298,7 +298,7 @@ extern "C" void func_0022B7D8(WR *pwr)
                 posBend = QwScale(*(qword *)&D_002A2DB0, VuFloat((pwrbg->weki.sInner + pwrbg->weki.sOuter) * 0.5f));
                 break;
             case 6:
-                posBend = QwScale(*(qword *)&D_002A2DC0, VuFloat((pwrbg->weki.sInner + pwrbg->weki.sOuter) * 0.5f));
+                posBend = QwScale(*(qword *)&g_normalZ, VuFloat((pwrbg->weki.sInner + pwrbg->weki.sOuter) * 0.5f));
                 break;
             default:
                 posBend = *(qword *)&D_002A2DD0;
@@ -308,7 +308,7 @@ extern "C" void func_0022B7D8(WR *pwr)
             matInverse = func_0011C318(&dmat);
             posBend = QwTransformPos(matInverse, posBend);
             if (pwrbg->pglob->pmatUnk08)
-                dmat = func_0011C168(pwrbg->weki.dmat, *pwrbg->pglob->pmatUnk08);
+                dmat = __ml__FRC7MATRIX4T0(pwrbg->weki.dmat, *pwrbg->pglob->pmatUnk08);
         }
 
         for (WRBGBATCH *pwrbgbatch = (WRBGBATCH *)pwrbg->slBatch.head; pwrbgbatch; pwrbgbatch = pwrbgbatch->pwrbgbatchNext)
@@ -364,7 +364,7 @@ extern "C" void func_0022B7D8(WR *pwr)
 
             MATRIX4 matWorld = pwrbg->pglob->pxf->matWorld;
             if (pwrbg->pglob->pmatUnk08)
-                matWorld = func_0011C168(matWorld, *pwrbg->pglob->pmatUnk08);
+                matWorld = __ml__FRC7MATRIX4T0(matWorld, *pwrbg->pglob->pmatUnk08);
             posWorldBend = func_001A6F00(pwrbg->pso, 0, posBend);
 
             // the state vectors of every warp entry
@@ -387,7 +387,7 @@ extern "C" void func_0022B7D8(WR *pwr)
                         VU_FLOAT gDot = VuDot(VU_VECTOR(posWorld), Normalize(VU_VECTOR(pwre->axis)));
                         float rScale = pwre->spatialFrequency * 6.2831855f;
                         float rad = GFromVu(gDot) * rScale;
-                        func_0011D608(func_0011CF60(rad), &gSin, &gCos);
+                        CalculateSinCos__FfPfT1(RadNormalize__Ff(rad), &gSin, &gCos);
                         pwarpvtx->ag[is] = gCos * *pu;
                         pwarpvtx->ag[is + 1] = gSin * *pu;
                         break;

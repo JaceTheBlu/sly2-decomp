@@ -1,5 +1,5 @@
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+#include "clock.h"
+extern struct CLOCK g_clock;
 extern int D_002E1E40;
 extern char D_002DEB30[];
 struct VE { short d; short pad; void (*pfn)(); };
@@ -17,7 +17,7 @@ void func_001BA828(struct S *p, int st)
     if (p->x30 == 0) func_00171C18(p->x18, p->x10 + 0x1090);
     func_001EF0D8(&p->x18);
     p->x30 = st;
-    p->f34 = D_002DDED0.t;
+    p->f34 = g_clock.t;
     switch (st) {
     case 0: {
         struct O *o = func_00205438(p->x10, 0xA9);

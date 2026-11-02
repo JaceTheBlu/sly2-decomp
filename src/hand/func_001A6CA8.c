@@ -8,13 +8,13 @@ struct O {
     unsigned int b56 : 4;
     unsigned int f60 : 1;
 };
-extern char D_003DD490[];
+extern char g_sw[];
 void func_00147E88(void *, void *);
 void func_001A6CA8(struct O *p, int n)
 {
     if (n != p->n52) {
         p->n52 = n;
         if (!p->pParent && p->f60 != 0)
-            func_00147E88(D_003DD490, p->pv14);
+            func_00147E88(g_sw, p->pv14);
     }
 }

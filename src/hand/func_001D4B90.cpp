@@ -2,7 +2,7 @@ extern char D_002C94A0[];
 struct OBJ;
 struct X;
 extern "C" void func_001D4D30(X *,OBJ *);
-extern "C" void *func_001AE4F8(int);
+extern "C" void *__builtin_new(int);
 struct A { int x0; };
 struct B : A {
     int x4;
@@ -21,7 +21,7 @@ struct X : B {
 };
 struct OBJ { char pad[0x4F8]; unsigned int n; X *a[8]; };
 static inline X *CreateItem(OBJ *owner) {
- void *allocated=func_001AE4F8(sizeof(X));
+ void *allocated=__builtin_new(sizeof(X));
  register X *item __asm__("$16");
  register unsigned page __asm__("$3");
  __asm__("lui %0,%%hi(%3)\n\tdaddu %1,%2,$zero"

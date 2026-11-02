@@ -1,4 +1,4 @@
-// func_00185D18 (Claude agent, lane G16, 2026-10-24): MATCH, no register pins, VU helper asms only.
+// func_00185D18: MATCH, no register pins, VU helper asms only.
 // From laneG15v1 (6). Keys: (1) D_002BE918 is `extern const float` read straight into the qmtc2's "rV" operand
 // (VuFloatFromMem(float)): reload makes the lw, and the unchanging MEM keeps the *ppos/*pvel stores free of
 // anti-dependences on it (3). (2) the last AddScaled2 lists a dead "$2" (v0) clobber: the extra dependence on the lw

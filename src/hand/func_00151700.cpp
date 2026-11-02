@@ -1,21 +1,21 @@
-// func_00151700 (Claude agent): camera path keyframe lerp. VU_FLOAT is a qmtc2 asm fed by a gcc mfc1, and Dot ends
+#include "clock.h"
+// func_00151700: camera path keyframe lerp. VU_FLOAT is a qmtc2 asm fed by a gcc mfc1, and Dot ends
 // with separate qmfc2/mtc1 asms, so the float t lives only in an FPR and sub.s schedules like the original.
 extern "C" {
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } U;
 typedef struct { qword r[3]; } M3;
 typedef union { struct { qword r[4]; } q; M3 m3; float af[4][4]; } M4;
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 struct CM { char pad[0x390]; float g390; };
-extern struct CM D_002DDF40;
+extern struct CM g_cm;
 extern qword D_002BDA70[];
 struct K { qword pos; qword rot; float fov; };
 struct PATH { struct K *pk0; struct K *pk1; float dt; int pad; int ik; };
 struct X { char pad[0x10]; struct PATH *ppath; };
 void func_0014FD40(struct X *p);
 void func_0011B628(M3 *pm, qword v);
-qword *func_00256D18(qword *p, qword v);
+qword *__as__6VECTORG9VU_VECTOR(qword *p, qword v);
 void func_0014E168(struct CM *p, M4 *m);
 void func_0014F5A0(struct CM *p, float g);
 
@@ -56,7 +56,7 @@ extern "C" void func_00151700(struct X *p)
     U c;
     struct PATH *ppath;
     func_0014FD40(p);
-    u = D_002DDED0.t - D_002DDF40.g390;
+    u = g_clock.t - g_cm.g390;
     t = GClamp(u / p->ppath->dt, 0.0f, 1.0f);
     u = t;
     c.f[1] = u * u;
@@ -73,7 +73,7 @@ extern "C" void func_00151700(struct X *p)
         M4 *pm4;
         func_0011B628(&m3, rot.q);
         pm4 = &m4;
-        func_00256D18(&pm4->q.r[3], pos.q);
+        __as__6VECTORG9VU_VECTOR(&pm4->q.r[3], pos.q);
         pm4->q.r[0] = m3.r[0];
         pm4->q.r[1] = m3.r[1];
         pm4->q.r[2] = m3.r[2];
@@ -81,7 +81,7 @@ extern "C" void func_00151700(struct X *p)
         m4.af[1][3] = 0.0f;
         m4.af[0][3] = 0.0f;
         pm4->af[3][3] = 1.0f;
-        func_0014E168(&D_002DDF40, pm4);
+        func_0014E168(&g_cm, pm4);
     }
-    func_0014F5A0(&D_002DDF40, fov);
+    func_0014F5A0(&g_cm, fov);
 }

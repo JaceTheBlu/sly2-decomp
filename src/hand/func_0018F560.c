@@ -3,7 +3,7 @@ typedef struct { float x, y, z, w; } __attribute__((aligned(16))) VEC;
 struct S { char pad[0x1A8]; float g; char p1[0x1714]; int n; char p2[4]; int st; };
 extern char D_002BF4C0[];
 void func_0018F2B0(struct S *p, int a, void *pv, int *pn, VEC *pq, float g, float h, float k);
-void func_001384C0(void *p);
+void ReblendAsegbl__FP6ASEGBL(void *p);
 void func_002046B0(struct S *p, qword q);
 void func_00204CA8(struct S *p);
 static __inline__ float GClamp(float g, float lo, float hi)
@@ -24,7 +24,7 @@ void func_0018F560(struct S *p, VEC *pvOut, void *pv)
     else t = 1.0f;
     pvOut->w = t;
     pvOut->x = 1.0f - t;
-    func_001384C0(pv);
+    ReblendAsegbl__FP6ASEGBL(pv);
     p->n = n;
     if (n && p->st == 0) {
         func_002046B0(p, *(qword *)&v);

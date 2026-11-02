@@ -1,4 +1,4 @@
-// (Claude agent, lane E7) MATCH from the 3-diff wip: ONE register pin, the 0.0f compare constant in $f12 (x's incoming reg;
+// MATCH from the 3-diff wip: ONE register pin, the 0.0f compare constant in $f12 (x's incoming reg;
 // without the pin global-alloc gives it $f4).
 struct GIFS;
 struct GLYPH { unsigned short ch; unsigned short u; unsigned short v; unsigned short dx; };

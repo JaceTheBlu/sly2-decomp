@@ -7,7 +7,7 @@ struct R { char pad[8]; struct E *ae; };
 struct A { int kind; int id; };
 struct F { char pad[0x18]; unsigned char count; char pad1[3]; struct A *aa; };
 struct S { char pad[4]; struct F *af; char pad1[8]; struct R *r; };
-extern char D_003DD040[];
+extern char g_sndmgr[];
 extern "C" struct M *func_001FBB90(int id);
 extern "C" void func_001FB2F8(struct M *, struct O *);
 extern "C" void func_001FB098(struct M *, float);
@@ -46,8 +46,8 @@ extern "C" void func_00219190(struct S *p,int fi,int i) {
             if(Presence(e->pm)) Stop(SlotAddress(e));
             break;
         }
-        case 2: func_001FE5F0(D_003DD040,a->id,0); break;
-        case 3: func_001FE738(D_003DD040); break;
+        case 2: func_001FE5F0(g_sndmgr,a->id,0); break;
+        case 3: func_001FE738(g_sndmgr); break;
         }
     } while(++j<f->count);
 }

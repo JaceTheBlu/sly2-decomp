@@ -4,11 +4,11 @@ typedef struct KG { K k; float g; } KG;
 typedef struct GS { char pad[0x3E38]; int x3E38; } GS;
 typedef struct CM { char pad[0x4C]; float rNear; float rFar; char pad2[0xC]; MATRIX4 m60; char pad3[0xA0]; MATRIX4 m140; } CM;
 typedef struct P { char pad[0x20]; int x20; } P;
-extern GS D_003DD490;
-extern void *D_002DEA4C;
+extern GS g_sw;
+extern void *g_pfrmOpen;
 extern char D_002DEA50[];
 extern char D_002DF940[], D_002DFA80[], D_002DF800[], D_002DF010[];
-extern CM D_002DDF40;
+extern CM g_cm;
 extern K D_002C1F00, D_002C1F10;
 extern char D_003E12B8[];
 extern void func_00157598(P *, void *);
@@ -24,8 +24,8 @@ void func_00157CF0(P *p, void *a1, void *a2)
 {
     KG akg[2];
     MATRIX4 m1, m2;
-    if (D_003DD490.x3E38) {
-        if (D_002DEA4C == D_002DEA50)
+    if (g_sw.x3E38) {
+        if (g_pfrmOpen == D_002DEA50)
             func_00157598(p, D_002DF940);
         else
             func_00157598(p, D_002DFA80);
@@ -38,7 +38,7 @@ void func_00157CF0(P *p, void *a1, void *a2)
     func_002270C8(p, 0x25, D_002DF010, 0);
     func_00226CA8(p, 0, 0);
     {
-        CM *pcm = &D_002DDF40;
+        CM *pcm = &g_cm;
         float rNear = pcm->rNear;
         float rFar = pcm->rFar;
         float r = (rNear + rFar) / (rNear - rFar);
@@ -48,8 +48,8 @@ void func_00157CF0(P *p, void *a1, void *a2)
         akg[1].k = D_002C1F10;
         akg[1].g = -r / s;
         func_00226F28(p, 0xC, 2, akg, 0);
-        if (D_003DD490.x3E38) {
-            if (D_002DEA4C == D_002DEA50)
+        if (g_sw.x3E38) {
+            if (g_pfrmOpen == D_002DEA50)
                 func_0014F768(pcm, 1, 0, &m1, &m2);
             else
                 func_0014F768(pcm, 2, 0, &m1, &m2);

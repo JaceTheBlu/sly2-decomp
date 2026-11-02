@@ -1,7 +1,8 @@
+#include "dl.h"
 // func_00139AB8 (0x139AB8): DMA-double-buffered VU particle update over the DLI list at p->dl (0x448), accumulating the
 // bounding box of every particle batch in vMin/vMax (func_00139950, microprogram), then sets the bounding sphere
 // p->vF0 = centre, p->g100 = radius + p->g120 (or calls virtual slot 9 when p->c444 drops to 0).
-// MATCH (Claude agent for Lilly, T1675, 2026-10-25), built on lilly2 (T1663: arg block) and lilly1 (T1659: sceDmaSync returns int).
+// MATCH, built on lilly2 (T1663: arg block) and lilly1 (T1659: sceDmaSync returns int).
 // The prologue (hi $LC0 v0, zero v1, hi $LC1 v0, f0 stores then f1 stores) needs VECTOR = struct with an anonymous union:
 // store_constructor clears the struct (sq zero) and then ALWAYS emits a CLOBBER for the union member, even when already
 // cleared (expr.c, UNION_TYPE). That clobber is deleted by reload, so it only exists for sched1: it sits between lwc1 A
@@ -10,8 +11,6 @@ typedef int qword __attribute__((mode(TI)));
 #define FLT_MAX 3.40282347e+38f /* $LC0/$LC1 at 0x2A4AF4/0x2A4AF8: this function's literal pool */
 struct VECTOR { union { struct { float x, y, z; } v; qword q; }; };
 struct M4 { qword a[4]; };
-struct DL { void *head; void *tail; int ibDle; };
-struct DLI { DL *m_pdl; void **m_ppv; int m_ibDle; DLI *m_pdliNext; };
 struct BUF { char ab[0x2B0]; char ab2[0x560 - 0x2B0]; char ab3[0x840 - 0x560]; };
 struct Q { BUF abuf[2]; int i; int c; };
 struct SBE { int cb; char *pv; };
@@ -29,8 +28,8 @@ struct PX : P {
     char pad124[0x170 - 0x124]; char x170[0x43C - 0x170]; int x43C; int pad440; int c444; DL dl;
 };
 extern "C" {
-extern DLI *D_002DD2FC;
-extern float D_002DDED0[];
+extern DLI *g_pdliFirst;
+extern float g_clock[];
 extern int D_002C3C5C;
 extern SPRBUF D_003DD2C0[2];
 extern void *D_002DE59C;
@@ -53,8 +52,8 @@ static inline void InitDli(DLI *pdli, DL *pdl)
     pdli->m_pdl = pdl;
     pdli->m_ppv = (void **)pdl;
     pdli->m_ibDle = pdl->ibDle;
-    pdli->m_pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->m_pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static inline void *PvNextDli(DLI *pdli)
 {
@@ -65,7 +64,7 @@ static inline void *PvNextDli(DLI *pdli)
 static inline VU_FLOATM VuFloatDt()
 {
     VU_FLOATM v;
-    __asm__("lw %0, %1" : "=r"(v.qw) : "m"(D_002DDED0[1]));
+    __asm__("lw %0, %1" : "=r"(v.qw) : "m"(g_clock[1]));
     return v;
 }
 static inline char *PvSprBuf(int i)
@@ -147,6 +146,6 @@ void func_00139AB8(PX *p)
         float g = GFromQw(QwLength(QwSub(c, vMax.q)));
         p->g100 = g + p->g120;
     }
-    D_002DD2FC = dli.m_pdliNext;
+    g_pdliFirst = dli.m_pdliNext;
     }
 }

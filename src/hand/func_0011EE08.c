@@ -1,4 +1,4 @@
-// func_0011EE08: closest point on segment p0-p1 to pos (Claude agent). The dead stack copy of the t vector is a
+// func_0011EE08: closest point on segment p0-p1 to pos. The dead stack copy of the t vector is a
 // volatile sqc2 asm (keeps it ahead of beqz); the ppos copy goes vf->gpr via a gcc reload (empty asm with "0") so
 // reorg can steal its qmfc2 into the delay slot.
 typedef int qword __attribute__((mode(TI)));

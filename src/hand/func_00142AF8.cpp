@@ -1,11 +1,11 @@
-// func_00142AF8 (Claude agent, laneC38 2026-10-24): MATCH from fresh5 (aligned 18). Every matrix product is written with Lilly's
+#include "util.h"
+#include "clock.h"
+// func_00142AF8: MATCH from fresh5 (aligned 18). Every matrix product is written with Lilly's
 // MATRIX3 operator* (the NRV helper from src/hand/func_0021CB18.cpp / func_001F4558.cpp: rows read into qword locals, each
 // result row stored through a VU_VECTOR4 copy), and the first func_0022FD38 call is a plain assignment (no dead-copy wrapper).
 // The one remaining trick is fresh3's commented clobber of the dead a0 in the c4678 block.
 typedef int qword __attribute__((mode(TI)));
 struct M3 { qword r[3]; };
-struct CLOCK { float t; float dt; };
-struct LM { float gMin; float gMax; };
 struct R { char pad[0x40]; M3 m40; char pad1[0xA0 - 0x70]; void *pA0; };
 struct Q { char pad[8]; R *p8; };
 struct S {
@@ -20,12 +20,12 @@ struct P {
 };
 struct GS { char pad[0x4678]; int c4678; char pad1[0x4690 - 0x467C]; S *ps4690; };
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern int D_002DD640;
 extern float D_002A4D68;
 extern qword D_002A2DA0;
 extern S *D_003E1474;
-extern GS D_003DD490;
+extern GS g_sw;
 void func_00142880(P *p);
 void func_001427C8(P *p, int n, S *ps);
 void func_001428D8(P *p, S *ps, void **ppv, float *pg, float *pg2);
@@ -37,10 +37,10 @@ qword func_001A6F00(int n, P *p, qword q);
 void func_0011E958(qword v, float *pa, float *pb);
 float func_0011D978(LM *plm, float g);
 M3 func_0011B720(float a, float b);
-M3 func_0011B500(qword v, float g);
+M3 LoadRotateMatrixRad__FfUx(qword v, float g);
 M3 func_0022FD38(void *pvFrom, void *pvTo, M3 *pm);
 M3 func_0011B340(const M3 *pm);
-qword func_0011BFF0(M3 *pm);
+qword DecomposeRotateMatrixEuler__FP7MATRIX3(M3 *pm);
 void func_0012D108(Q *pq, qword q);
 void func_00142AF8(P *p);
 }
@@ -83,7 +83,7 @@ void func_00142AF8(P *p)
         f = 1;
     if (p->nF04 != -1)
         f = 0;
-    if (p->g114C < D_002DDED0.t && (p->n1148 != 0 || f)) {
+    if (p->g114C < g_clock.t && (p->n1148 != 0 || f)) {
         p->n1148 = !p->n1148;
         func_00142880(p);
     }
@@ -113,9 +113,9 @@ void func_00142AF8(P *p)
                     nBest = psBest->nF4;
                 }
             }
-            if (D_003DD490.c4678 > 0 && nBest < 3) {
-                __asm__("" : : : "$4"); /* clobber of dead a0 (Claude agent): target keeps &D_003DD490 in a1 */
-                ps = D_003DD490.ps4690;
+            if (g_sw.c4678 > 0 && nBest < 3) {
+                __asm__("" : : : "$4"); /* clobber of dead a0: target keeps &g_sw in a1 */
+                ps = g_sw.ps4690;
                 if (ps) {
                     float g3, g4;
                     func_001428D8(p, ps, &p->p10F8, &g3, &g4);
@@ -154,7 +154,7 @@ void func_00142AF8(P *p)
         }
     }
     M3 m0, m1;
-    m0 = func_0011B720(pan, tilt) * func_0011B500(D_002A2DA0, g);
+    m0 = func_0011B720(pan, tilt) * LoadRotateMatrixRad__FfUx(D_002A2DA0, g);
     m1 = func_0022FD38(0, p->p60, &p->pq->p8->m40);
     m1 = m1 * func_0011B340(&p->m1150);
     M3 m2;
@@ -163,5 +163,5 @@ void func_00142AF8(P *p)
     else
         m2 = m0 * p->m1150;
     m2 = func_0022FD38(p->p60, p->pq->p8->pA0, &m2);
-    func_0012D108(p->pq, func_0011BFF0(&m2));
+    func_0012D108(p->pq, DecomposeRotateMatrixEuler__FP7MATRIX3(&m2));
 }

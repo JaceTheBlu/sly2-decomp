@@ -1,5 +1,5 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
-typedef struct M4 { qword r[4]; } M4;
 typedef struct VT { short d; short pad; void (*pfn)(); } VT;
 typedef struct LO { char pad[0xC]; VT *vt; } LO;
 typedef struct P {
@@ -23,14 +23,14 @@ typedef struct OBJ { VT *vt; } OBJ;
 typedef struct E { OBJ *x0; int x4; char pad8[8]; struct E *x10; } E;
 typedef struct A { char pad0[0x1C]; float x1C; char pad20[0x34 - 0x20]; C *x34; E *x38; char pad3C[4]; float x40; } A;
 typedef struct G { char pad[0x3D58]; int x3D58; } G;
-extern G D_003DD490;
+extern G g_sw;
 extern qword D_002A2DD0;
 int func_00131968(A *);
 int func_0012CEE0(C *);
 void func_0022DD00(LO *, P *);
 qword func_0022CA18(P *, P *);
-qword func_0011BFF0(qword *);
-M4 func_0022C8C0(P *, qword);
+qword DecomposeRotateMatrixEuler__FP7MATRIX3(qword *);
+MATRIX4 func_0022C8C0(P *, qword);
 void func_00117120(float, float, float, qword, qword, qword, qword, qword *, int, int);
 
 void func_00230CF0(A *a, int flag)
@@ -79,18 +79,18 @@ void func_00230CF0(A *a, int flag)
             v = p->xC0[0];
             break;
         case 5:
-            v = func_0011BFF0(p->xC0);
+            v = DecomposeRotateMatrixEuler__FP7MATRIX3(p->xC0);
             break;
         default:
             v = D_002A2DD0;
             break;
         }
         {
-            M4 t = func_0022C8C0(p, v);
-            *(M4 *)p->m = t;
+            MATRIX4 t = func_0022C8C0(p, v);
+            *(MATRIX4 *)p->m = t;
         }
         p->xB0 = D_002A2DD0;
-        p->xA4 = ++D_003DD490.x3D58;
+        p->xA4 = ++g_sw.x3D58;
     }
     for (i = 0; i < n; i++)
         list[i]->vt[18].pfn((char *)list[i] + list[i]->vt[18].d);

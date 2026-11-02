@@ -1,12 +1,4 @@
-struct CRef {
-    int m_tagk;
-    int m_tag;
-    CRef() { m_tagk = -1; }
-    CRef(const CRef &);
-    ~CRef() { Decref(); }
-    CRef &operator=(const CRef &);
-    void Decref();
-};
+#include "cref.h"
 struct FRAME {
     int a[4];
     FRAME();
@@ -17,7 +9,7 @@ struct TRIE;
 struct KEYS { KEY *a[11]; };
 struct GS { char pad[0x3B2C]; KEY *k[11]; };
 extern "C" {
-extern GS D_003DD490;
+extern GS g_sw;
 extern TRIE D_003E0EA8;
 int func_001D7D30(TRIE *, char *);
 CRef func_001D7ED8(TRIE *, KEY *, char *);
@@ -30,7 +22,7 @@ static inline CRef Set(KEY *k, CRef *r, char *pb) { return func_00258200(k, r, p
 extern "C" void func_001D8D80(char *pb, int f)
 {
     FRAME frame;
-    KEY *keys[11] = { D_003DD490.k[0], D_003DD490.k[7], D_003DD490.k[10], D_003DD490.k[8], D_003DD490.k[9], D_003DD490.k[1], D_003DD490.k[2], D_003DD490.k[3], D_003DD490.k[4], D_003DD490.k[5], D_003DD490.k[6] };
+    KEY *keys[11] = { g_sw.k[0], g_sw.k[7], g_sw.k[10], g_sw.k[8], g_sw.k[9], g_sw.k[1], g_sw.k[2], g_sw.k[3], g_sw.k[4], g_sw.k[5], g_sw.k[6] };
     CRef aref[11];
     unsigned int i;
     if (f && !func_001D7D30(&D_003E0EA8, pb))

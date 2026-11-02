@@ -1,3 +1,5 @@
+#define CREF_PLAIN   /* this source uses CRef as plain data: no constructor/destructor calls */
+#include "cref.h"
 struct X;
 class CSave {
 public:
@@ -49,7 +51,6 @@ inline CSave::~CSave()
         m_p4->fF8 = m_nC;
     }
 }
-struct CRef { int m_tagk; int m_tag; };
 class FRAME {
 public:
     int a[4];
@@ -58,18 +59,18 @@ public:
 };
 struct G { char pad[0x3BF4]; int f3bf4; char pad2[0x3C38 - 0x3BF8]; int f3c38; int f3c3c; };
 struct SS { int pad[4]; int f10; int f14; int oid; };
-extern G D_003DD490;
+extern G g_sw;
 extern char D_002A5238[];
 extern "C" void func_00165C98(int *pc, X ***papx);
 extern "C" void func_00164270(X *p);
-extern "C" X *func_0015E938(G *pg, int kind, int oid, void *owner);
+extern "C" X *PloFindSwObject__FP2SWi3OIDP2LO(G *pg, int kind, int oid, void *owner);
 extern "C" void func_00164DF0(X *p, int n);
 extern "C" void func_001D8B20(CRef *pref, CRef *parg, void *pv, int n);
 extern "C" void func_00129EC8(CRef *pref);
 extern "C" void func_001657D0(X *p, int n);
 extern "C" void func_00165280(SS *ps)
 {
-    if (!(D_003DD490.f3bf4 & 8))
+    if (!(g_sw.f3bf4 & 8))
         return;
     FRAME fr;
     int c;
@@ -81,7 +82,7 @@ extern "C" void func_00165280(SS *ps)
         CSave save(pxT, 3, 0);
         func_00164270(pxT);
     }
-    X *px = func_0015E938(&D_003DD490, 0x105, ps->oid, 0);
+    X *px = PloFindSwObject__FP2SWi3OIDP2LO(&g_sw, 0x105, ps->oid, 0);
     ps->f10 = px->f7c->f18;
     ps->f14 = px->f18;
     CSave save(px, 3, 0);
@@ -101,7 +102,7 @@ extern "C" void func_00165280(SS *ps)
         CSave save2(pxT, 3, 0);
         func_001657D0(pxT, -1);
     }
-    D_003DD490.f3c38 = px->fB8;
-    D_003DD490.f3c3c = -1;
-    D_003DD490.f3bf4 = (D_003DD490.f3bf4 & ~8) | 4;
+    g_sw.f3c38 = px->fB8;
+    g_sw.f3c3c = -1;
+    g_sw.f3bf4 = (g_sw.f3bf4 & ~8) | 4;
 }

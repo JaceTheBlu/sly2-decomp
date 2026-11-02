@@ -1,7 +1,7 @@
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db
-// (Claude agent) -Os: only diff = DOMAIN block 'li a0,2' vs ours 'sw v1 type; li v1,2' (sched/regalloc tie, ~4 insns). -O2 has lui+daddu hi-copy.
+// -Os: only diff = DOMAIN block 'li a0,2' vs ours 'sw v1 type; li v1,2' (sched/regalloc tie, ~4 insns). -O2 has lui+daddu hi-copy.
 struct exception {
     int type;
     char *name;

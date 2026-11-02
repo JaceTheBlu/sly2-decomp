@@ -1,10 +1,10 @@
+#include "mat.h"
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
-struct M3 { qword r[3]; };
 struct PO { char pad[0x2DC]; int x2DC; float g2E0; char pad2[0xDF4 - 0x2E4]; int xDF4; char pad3[0x18C8 - 0xDF8]; int x18C8; char pad4[0x18D8 - 0x18CC]; int x18D8; };
 struct T { char pad[0x330]; int x330; };
 struct P { char pad[0x10]; struct PO *p10; char pad2[0x30 - 0x14]; int x30; float x34; struct T *p38; };
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern qword D_002A2DA0;
 extern float D_002BD360;
 extern float D_002BD368;
@@ -13,9 +13,9 @@ extern float D_002BD370;
 void func_001EEF98(struct P *p);
 int func_001A61A0(struct T *p);
 qword func_001A62E8(void *p);
-struct M3 *func_001A6318(void *p);
+struct MATRIX3 *func_001A6318(void *p);
 void func_00146E18(struct P *p, int n);
-float func_0011D448(float gMin, float gMax);
+float GRandInRange__Fff(float gMin, float gMax);
 
 static __inline__ float Dot(qword a, qword b)
 {
@@ -72,9 +72,9 @@ void func_001467A0(struct P *p)
         switch (state) {
         case 0:
             if (g < D_002BD360) {
-                struct M3 *pm = func_001A6318(p->p10);
+                struct MATRIX3 *pm = func_001A6318(p->p10);
                 if (0.8f < Dot(pm->r[0], d.q)) {
-                    if (func_0011D448(0.0f, 1.0f) < 0.3f)
+                    if (GRandInRange__Fff(0.0f, 1.0f) < 0.3f)
                         func_00146E18(p, 3);
                     else
                         func_00146E18(p, 2);
@@ -88,11 +88,11 @@ void func_001467A0(struct P *p)
                 func_00146E18(p, 0);
             break;
         case 2:
-            if (p->p10->x18D8 == -1 && 0.1f < D_002DDED0.t - p->x34)
+            if (p->p10->x18D8 == -1 && 0.1f < g_clock.t - p->x34)
                 func_00146E18(p, -1);
             break;
         case 3: {
-            float t = D_002DDED0.t;
+            float t = g_clock.t;
             if (0.1f < t - p->x34) {
                 struct PO *po = p->p10;
                 if (po->x2DC != -1) {
@@ -104,7 +104,7 @@ void func_001467A0(struct P *p)
             break;
         }
         case 4:
-            if (0.1f < D_002DDED0.t - p->x34 && p->p10->x18C8 != 13)
+            if (0.1f < g_clock.t - p->x34 && p->p10->x18C8 != 13)
                 func_00146E18(p, -1);
             break;
         }

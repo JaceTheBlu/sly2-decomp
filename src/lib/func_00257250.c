@@ -3,7 +3,7 @@
 typedef struct { int ref; char pad[8]; int c; char pad2[4]; void *m; } S;
 extern char D_004520D0[];
 void func_00257250(S **pp, int f);
-void func_00129EC8(void *); void func_00255438(S *); void func_0011CD98(void *, S *); void func_001AE520(void *);
+void func_00129EC8(void *); void func_00255438(S *); void FreeSlotheapPv__FP8SLOTHEAPPv(void *, S *); void func_001AE520(void *);
 void func_00257250(S **pp, int f)
 {
     S *p = *pp;
@@ -12,7 +12,7 @@ void func_00257250(S **pp, int f)
             func_00257250((S **)&p->m, 2);
             func_00129EC8(&p->c);
             func_00255438(p);
-            func_0011CD98(D_004520D0, p);
+            FreeSlotheapPv__FP8SLOTHEAPPv(D_004520D0, p);
         }
     }
     if (f & 1) func_001AE520(pp);

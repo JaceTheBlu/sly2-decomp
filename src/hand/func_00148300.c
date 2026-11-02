@@ -1,11 +1,11 @@
-/* func_00148300 (Claude agent): case 2 before case 0, and a block-local r per case (so the g38 load ties to f20). */
+/* func_00148300: case 2 before case 0, and a block-local r per case (so the g38 load ties to f20). */
 typedef int qword __attribute__((mode(TI)));
 struct VTE { short d; short pad; void (*pfn)(void *); };
 struct SO { char pad[0xC]; struct VTE *vt; char pad1[0x14 - 0x10]; int id; char pad2[0x28 - 0x18]; long x28; char pad3[8]; float g38; };
 struct G { char pad[0x14]; int grf; char pad2[0x90 - 0x18]; qword pos; };
 struct P { char pad[0x2C]; char m2C[4]; };
 extern int D_003E0E70;
-extern struct G D_002DDF40;
+extern struct G g_cm;
 void *func_001C4840(void);
 qword func_001A62E8(void *p);
 int func_0011A380(void *p, int id);
@@ -30,8 +30,8 @@ void func_00148300(struct P *p, struct SO *pso)
     void *po;
     int fIn, id;
     if (D_003E0E70) return;
-    posA = D_002DDF40.pos;
-    grf = D_002DDF40.grf;
+    posA = g_cm.pos;
+    grf = g_cm.grf;
     po = func_001C4840();
     if (po) posB = func_001A62E8(po);
     else posB = posA;

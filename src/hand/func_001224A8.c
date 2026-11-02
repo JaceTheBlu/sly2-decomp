@@ -1,7 +1,7 @@
-typedef struct CRef { int m_tagk; int m_tag; } CRef;
+#include "cref.h"
 typedef float (*PFNG)(float);
 extern PFNG D_002BBB70[];
-void func_00129558(CRef *pref, float g);
+void __as__4CReff(CRef *pref, float g);
 CRef *func_001291A8(CRef *pref, CRef *prefSrc);
 void func_00129EC8(CRef *pref);
 CRef *func_001224A8(CRef *ret, CRef *parg, int i)
@@ -14,7 +14,7 @@ CRef *func_001224A8(CRef *ret, CRef *parg, int i)
     } else {
         g = (float)parg->m_tag;
     }
-    func_00129558(&ref, D_002BBB70[i](g));
+    __as__4CReff(&ref, D_002BBB70[i](g));
     func_001291A8(ret, &ref);
     func_00129EC8(&ref);
     return ret;

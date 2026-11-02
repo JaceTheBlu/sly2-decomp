@@ -16,7 +16,7 @@ typedef struct { u_int chcr; u_int p0[3]; u_int madr; u_int p1[3]; u_int qwc; u_
 #define D_CTRL (*(volatile u_int *)0x1000E000)
 #define D_STAT (*(volatile u_int *)0x1000E010)
 extern int D_002AB380[];
-extern sceDmaChan *D_002C6710[];
+extern sceDmaChan *_sceDmaChans[];
 void func_00241408(void *p, int n);
 int sceDmaPutEnv(sceDmaEnv *env);
 int sceDmaReset(int mode)
@@ -26,7 +26,7 @@ int sceDmaReset(int mode)
     int ret = D_CTRL & 1;
     for (i = 0; i < 10; i++) {
         if (D_002AB380[i]) {
-            volatile sceDmaChan *d = D_002C6710[i];
+            volatile sceDmaChan *d = _sceDmaChans[i];
             d->sadr = 0;
             d->chcr = 0;
             d->tadr = 0;

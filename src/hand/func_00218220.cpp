@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 struct RGBA { unsigned int u; RGBA(unsigned int x) {u=x;} } __attribute__((aligned(16)));
 struct M23 {float a[6];} __attribute__((aligned(16)));
@@ -5,12 +6,10 @@ struct O {char pad[0xF4]; void *follow; M23 *pm;};
 struct S {char pad[0x24]; O *owner; int enabled;};
 extern "C" M23 D_002A3A10;
 struct G;
-extern "C" G D_002DDF40;
+extern "C" G g_cm;
 extern "C" qword func_001A62E8(void *);
 extern "C" qword func_0014F308(void *,qword);
 extern "C" void func_002183E8(S *,int,M23 *,float,const RGBA &,const RGBA &);
-static inline float GetX(qword q) {float f; __asm__("mtc1 %1,%0":"=f"(f):"r"(q));return f;}
-static inline float GetY(qword q) {float f; __asm__("prot3w %0,%1":"=r"(f):"r"(q));return f;}
 static inline M23 Mul(const M23 &q, const M23 &n)
 {
     float m0 = q.a[0], m1 = q.a[1], m2 = q.a[2], m3 = q.a[3], m4 = q.a[4], m5 = q.a[5];
@@ -27,7 +26,7 @@ extern "C" void func_00218220(S *p,float dt) {
     if(p->enabled) {
         M23 m=D_002A3A10;
         if(p->owner->follow) {
-            qword pos=func_001A62E8(p->owner->follow); qword q=func_0014F308(&D_002DDF40,pos);
+            qword pos=func_001A62E8(p->owner->follow); qword q=func_0014F308(&g_cm,pos);
             m.a[4] = GetX(q)*320.0f+320.0f;
             m.a[5] = GetY(q)*-246.40001f+246.40001f;
         }

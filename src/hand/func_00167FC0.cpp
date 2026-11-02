@@ -1,24 +1,24 @@
+#include "vu0.h"
 #include "vifs.h"
 struct X { char pad[0x120]; QW amat[3]; int f150[4]; int f160; };
 struct G;
-extern G D_003DD490;
+extern G g_sw;
 extern char D_0025E090[];
 extern char D_0025E668[];
-extern "C" void func_00160918(VIFS *pvifs, void *pvStart, void *pvEnd);
+extern "C" void EnsureVu1Code__FP4VIFSPvT1(VIFS *pvifs, void *pvStart, void *pvEnd);
 extern "C" int func_0015E9C8(G *pg, int kind, int n, int m, int c, void **apv);
 extern "C" void func_001AE5A0(void *pvDst, void *pvSrc, unsigned int cb);
-static inline int Min(int a, int b) { return a < b ? a : b; }
 extern "C" void func_00167FC0(VIFS *pvifs)
 {
     X *apx[0x180];
     int i;
     X *px;
     int cActive = 0;
-    func_00160918(pvifs, D_0025E090, D_0025E668);
+    EnsureVu1Code__FP4VIFSPvT1(pvifs, D_0025E090, D_0025E668);
     pvifs->AddDmaCnt();
     pvifs->AddVifFlusha();
     pvifs->AddVifBaseOffset(0x32, 0);
-    int c = func_0015E9C8(&D_003DD490, 0x505, 4, 0, 0x180, (void **)apx);
+    int c = func_0015E9C8(&g_sw, 0x505, 4, 0, 0x180, (void **)apx);
     for (i = 0; i < c; i++) {
         px = apx[i];
         if (!px->f160)
@@ -38,7 +38,7 @@ extern "C" void func_00167FC0(VIFS *pvifs)
         if (px->f160)
             continue;
         if (n >= iEnd) {
-            iEnd = n + Min(cActive - n, 32);
+            iEnd = n + NMin(cActive - n, 32);
             pvifs->UnpackHelper(UPK_V4_32, (iEnd - n) * 3, n * 3 + 1, 0, &pb);
         }
         func_001AE5A0(pb, px->amat, 0x30);

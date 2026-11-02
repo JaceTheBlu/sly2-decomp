@@ -1,4 +1,6 @@
-// func_001D6B00 (wave-3 lane 10): launch an object (pso) from a launcher (plaunch). The launch point is the target point in
+#include "vu0.h"
+#include "util.h"
+// func_001D6B00: launch an object (pso) from a launcher (plaunch). The launch point is the target point in
 // the source's frame, optionally advanced by a predicted time (clqPredict over the distance, clamped to lmPredict), then
 // moved by clqOffset(distance) along the direction to it. Depending on the object's class it gets a speed vector (0x52),
 // a velocity toward that point at its own launch speed plus a matching orientation (0x51), or a ballistic launch velocity
@@ -20,7 +22,6 @@ union MATRIX4 { qword r[4]; float m[4][4]; };
 struct MATRIX3 { qword r[3]; };
 struct XF { MATRIX4 mat; MATRIX4 matWorld; };
 struct CLQ { float g0, g1, g2, gUnused; };
-struct LM { float gMin, gMax; };
 struct VECTOR4 { qword q; VECTOR4(const qword &v) { q = v; } VECTOR4(const VECTOR4 &v) { q = v.q; } };
 struct SO;
 struct BASIC {
@@ -66,25 +67,25 @@ struct LAUNCH {
 };
 extern XF D_002C44F0;           // identity frame
 extern qword D_002A2DA0;        // default direction
-extern char D_003DD490[];
+extern char g_sw[];
 extern "C" {
 qword func_001A62E8(SO *);                                       // PosLoWorld
-MATRIX4 *func_0011C168(MATRIX4 *, MATRIX4 *, MATRIX4 *);
+MATRIX4 *__ml__FRC7MATRIX4T0(MATRIX4 *, MATRIX4 *, MATRIX4 *);
 void *func_002333B4(void *, int, int);                           // memset
 void func_002309E8(XF *, int, MATRIX4 *, MATRIX4 *, float);
-int func_00132B10(SO *, int);                                    // FIsBasicDerivedFrom
+int FIsBasicDerivedFrom__FP5BASIC3CID(SO *, int);                                    // FIsBasicDerivedFrom
 void func_0013BC60(SO *, LAUNCH *);
 void func_00134320(void *, SO *);
 void func_001F5720(SO *, void *);
 void func_001F57C0(SO *, void *);
-void func_001A58D0(SO *, int, int);
+void SetLoParent__FP2LOP2SOi(SO *, int, int);
 void func_001F4898(SO *, qword);
 qword func_001F5860(SO *);
 qword func_001D6848(float, qword, qword, qword);                 // CalculateLaunchVelocity
 void func_0011B7E0(MATRIX3 *, qword);
-float func_0011D448(float, float);                               // GRandInRange
+float GRandInRange__Fff(float, float);                               // GRandInRange
 }
-static inline float GRandInRange(const LM &lm) { return func_0011D448(lm.gMin, lm.gMax); }
+static inline float GRandInRange(const LM &lm) { return GRandInRange__Fff(lm.gMin, lm.gMax); }
 struct VV { qword q; VV() {} VV(const qword &v) { q = v; } operator qword() const { return q; } };
 struct VU_FLOAT {
     qword q;
@@ -101,9 +102,7 @@ struct VECTOR {
         __asm__("mfc1 %0,%2\n\tmfc1 %1,%3\n\tpextlw %0,%1,%0\n\tmfc1 %1,%4\n\tpcpyld %0,%1,%0" : "=&r"(q), "=&r"(t) : "f"(x), "f"(y), "f"(z));
     }
 };
-static inline qword QwToVf(qword v) { qword r; __asm__("qmtc2.ni %1,%0" : "=j"(r) : "r"(v)); return r; }
 static inline qword QwFromVf(qword v) { qword r; __asm__("qmfc2.ni %0,%1" : "=r"(r) : "j"(v)); return r; }
-static inline float GFromVf(qword v) { float g; __asm__("mtc1 %1,%0" : "=f"(g) : "r"(v)); return g; }
 static inline float GFromVfBits(qword v)
 {
     int n;
@@ -112,7 +111,6 @@ static inline float GFromVfBits(qword v)
     __asm__("mtc1 %1,%0" : "=f"(g) : "r"(n));
     return g;
 }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword Point(const MATRIX4 &m, qword v)
 {
     qword r;
@@ -133,7 +131,7 @@ static inline qword Normalize(qword v)
 {
     qword fallback = D_002A2DA0;
     qword l = Length(v);
-    if (GFromVf(l) < 0.0001f)
+    if (GetX(l) < 0.0001f)
         l = fallback;
     else
         l = Div(v, l);
@@ -156,7 +154,7 @@ static inline qword NormalizeTo(qword v)
 {
     qword fallback = D_002A2DA0;
     qword l = Length(v);
-    if (GFromVf(l) < 0.0001f)
+    if (GetX(l) < 0.0001f)
         goto tiny;
     return Div(v, l);
 tiny:
@@ -193,33 +191,33 @@ extern "C" void func_001D6B00(LAUNCH *plaunch, SO *pso)
     float dist;
     {
         MATRIX4 mat;
-        func_0011C168(&mat, &pxf->matWorld, &matParent);
-        dpos = Sub(Point(mat, plaunch->posTarget), posStart);
-        dist = GFromVf(Length(dpos));
+        __ml__FRC7MATRIX4T0(&mat, &pxf->matWorld, &matParent);
+        dpos = QwSub(Point(mat, plaunch->posTarget), posStart);
+        dist = GetX(Length(dpos));
         float t = GClamp(GFromClq(plaunch->clqPredict, dist), plaunch->lmPredict.gMin, plaunch->lmPredict.gMax);
         if (t != 0.0f) {
             MATRIX4 matPredict;
             func_002309E8(pxf, 0, &mat, 0, t);
-            func_0011C168(&matPredict, &mat, &matParent);
-            dpos = Sub(Point(matPredict, plaunch->posTarget), posStart);
+            __ml__FRC7MATRIX4T0(&matPredict, &mat, &matParent);
+            dpos = QwSub(Point(matPredict, plaunch->posTarget), posStart);
         }
     }
-    dist = GFromVf(Length(dpos));
+    dist = GetX(Length(dpos));
     float offset = GClampR(GFromClq(plaunch->clqOffset, dist), plaunch->lmOffset.gMin, plaunch->lmOffset.gMax);
     qword posAim;
     qword posLaunch = AddScaled(posOrigin, VU_FLOAT(offset), Normalize(dpos));
     posAim = QwFromVf(posLaunch);
-    if (func_00132B10(pso, 0x4F)) {
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(pso, 0x4F)) {
         func_0013BC60(pso, plaunch);
-        func_00134320(D_003DD490, pso);
+        func_00134320(g_sw, pso);
     }
     pso->Add();
     func_001F5720(pso, 0);
     func_001F57C0(pso, 0);
-    func_001A58D0(pso, 0, 3);
-    if (func_00132B10(pso, 0x52)) {
+    SetLoParent__FP2LOP2SOi(pso, 0, 3);
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(pso, 0x52)) {
         func_001F4898(pso, VECTOR(pso->svLaunch, 0.0f, 0.0f).q);
-    } else if (func_00132B10(pso, 0x51)) {
+    } else if (FIsBasicDerivedFrom__FP5BASIC3CID(pso, 0x51)) {
         qword v = VuFloatFromWord(pso->svLaunch) * Normalize2(posAim, posStart);
         pso->SetVelocity(v);
         MATRIX3 mat;
@@ -232,12 +230,12 @@ extern "C" void func_001D6B00(LAUNCH *plaunch, SO *pso)
     }
     if (plaunch->lmSpin.gMax > 0.0f) {
         float g = GRandInRange(plaunch->lmSpin);
-        float x = func_0011D448(-1.0f, 1.0f);
-        float y = func_0011D448(-1.0f, 1.0f);
-        float z = func_0011D448(-1.0f, 1.0f);
+        float x = GRandInRange__Fff(-1.0f, 1.0f);
+        float y = GRandInRange__Fff(-1.0f, 1.0f);
+        float z = GRandInRange__Fff(-1.0f, 1.0f);
         qword w = NormalizeTo(QwToVf(VECTOR(x, y, z).q)) * VU_FLOAT(g);
         pso->SetAngularVelocity(w);
     }
-    if (func_00132B10(pso, 0x50))
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(pso, 0x50))
         pso->SetTarget(plaunch->psoSource, VECTOR4(plaunch->posTarget));
 }

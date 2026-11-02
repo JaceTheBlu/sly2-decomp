@@ -1,20 +1,21 @@
+#include "vecmat.h"
+#include "mat.h"
+#include "vu0.h"
+#include "clock.h"
 // func_00202D38 (0x202D38, 524 instructions): per-frame update of the Sly-only interaction prompt (screen projection of the
 // actor's head, proximity/size gain, state machine, input check). MATCH (Lilly/Claude T1613), no register pins.
 // Case 9 flag is `!link || link->state == 1` (the game's `beqz link` jumps TO the `li a0,1`); the label before that set
 // keeps jump.c from turning it into movn.
 typedef int qword __attribute__((mode(TI)));
-struct M4 {qword r[4];};
-struct CM {char pad0[0x60];M4 mat;};
+struct CM {char pad0[0x60];MATRIX4 mat;};
 struct LINK {char pad0[0x54];int state;};
 struct ACTOR {char pad0[0xE4];float headOffset,threshold;LINK *link;char padF0[0x18];int state,mode,choice;};
 struct DISPLAY {char pad0[0x110];int actorChoice,risingChoice,fallingChoice,nearChoice,emptyChoice;};
 struct MODEL {char pad0[0x20];int state;};
 struct P {int state;char pad4[0xC];qword origin;char pad20[0x10];int count;ACTOR *items[22];ACTOR *actor;float proximity,sizeGain;int rising;float choiceTime;int savedFlags;void *resource;MODEL *model;DISPLAY *primary,*secondary;int refreshPending,visible,selected,pending;};
-struct CLOCK {float time,dt;};
 struct PLAYER {char pad0[0x150];void *control;};
-struct VU_FLOAT {qword qw;};
-extern CM D_002DDF40;
-extern CLOCK D_002DDED0;
+extern CM g_cm;
+extern CLOCK g_clock;
 extern PLAYER *D_002E1E40;
 extern char D_002DE2E0[];
 extern "C" {
@@ -33,36 +34,29 @@ int func_00203758(ACTOR *);
 int func_0014FD50(void *);
 int func_001C46C0(void *,int,float);
 }
-static inline VU_FLOAT VuFloatFromMemWord(int n){VU_FLOAT v;__asm__("qmtc2 %1,%0":"=j"(v.qw):"rV"(n));return v;}
-static inline qword QwScaleX(qword a,qword s){qword r;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(r):"j"(a),"j"(s));return r;}
-static inline qword QwAdd(qword a,qword b){qword r;__asm__("vadd.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
-static inline qword QwSub(qword a,qword b){qword r;__asm__("vsub.xyzw %0,%1,%2":"=j"(r):"j"(a),"j"(b));return r;}
+static inline VU_FLOAT VuFloatFromMemWord(int n){VU_FLOAT v;__asm__("qmtc2 %1,%0":"=j"(v.q):"rV"(n));return v;}
 static inline qword QwLengthXY(qword v){qword r;__asm__("vmul.xy %0,%1,%1\n\tvaddy.x %0,%0,%0y":"=j"(r):"j"(v));__asm__("vsqrt $Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,$Q":"=j"(r):"0"(r));return r;}
 // camera up row; the pointer parameter gives the game's &cm+0x60 base register (lqc2 0x10(s1), then s1-0x60 for the calls)
-static inline qword QwUp(const M4 *m){return m->r[1];}
-static inline float GXOfQw(qword qw){float x;__asm__("mtc1 %1,%0":"=f"(x):"r"(qw));return x;}
-static inline float GYOfQw(qword qw){float y;__asm__("prot3w %0,%1":"=r"(y):"r"(qw));return y;}
-static inline float GZOfQw(qword qw){float z;__asm__("pextuw %0,$0,%1":"=r"(z):"r"(qw));return z;}
+static inline qword QwUp(const MATRIX4 *m){return m->r[1];}
 // screen position of a projected point: x and y from [-1,1] to pixels, z kept
 static inline VU_FLOAT ScreenFromProjected(qword q)
 {
     VU_FLOAT v;
     int t;
-    float x=GXOfQw(q)*320.0f+320.0f;
-    float y=GYOfQw(q)*-246.40000915527344f+246.40000915527344f;
-    float z=GZOfQw(q);
-    __asm__("mfc1 %0,%2\n\tmfc1 %1,%3\n\tpextlw %0,%1,%0\n\tmfc1 %1,%4\n\tpcpyld %0,%1,%0":"=&r"(v.qw),"=&r"(t):"f"(x),"f"(y),"f"(z));
+    float x=GetX(q)*320.0f+320.0f;
+    float y=GetY(q)*-246.40000915527344f+246.40000915527344f;
+    float z=GetZ(q);
+    __asm__("mfc1 %0,%2\n\tmfc1 %1,%3\n\tpextlw %0,%1,%0\n\tmfc1 %1,%4\n\tpcpyld %0,%1,%0":"=&r"(v.q),"=&r"(t):"f"(x),"f"(y),"f"(z));
     return v;
 }
 static inline float Min(float a,float b){return a<b?a:b;}
-static inline float Max(float a,float b){return a<b?b:a;}
-static inline float GClamp(float g,float gMin,float gMax){return Max(gMin,Min(g,gMax));}
+static inline float GClamp(float g,float gMin,float gMax){return GMax(gMin,Min(g,gMax));}
 extern "C" void func_00202D38(P *p)
 {
     if(!p->primary)return;
     if(!p->secondary)return;
     if(p->refreshPending){p->refreshPending=0;func_0019CCE8(p->model);}
-    if(p->choiceTime+5.0f<D_002DDED0.time)func_00213928(p->primary,0x35B);
+    if(p->choiceTime+5.0f<g_clock.t)func_00213928(p->primary,0x35B);
     if(p->state<8)if(p->state>=2){
         func_00202540(p);
         func_002020C8(p);
@@ -71,20 +65,20 @@ extern "C" void func_00202D38(P *p)
     if(p->actor){
         qword world=func_001A62E8(p->actor);
         VU_FLOAT offset=VuFloatFromMemWord(*(int *)&p->actor->headOffset);
-        qword head=QwAdd(world,QwScaleX(QwUp(&D_002DDF40.mat),offset.qw));
-        qword base=func_0014F308(&D_002DDF40,world);
-        qword top=func_0014F308(&D_002DDF40,head);
+        qword head=QwAdd(world,QwScaleX(QwUp(&g_cm.mat),offset.q));
+        qword base=func_0014F308(&g_cm,world);
+        qword top=func_0014F308(&g_cm,head);
         VU_FLOAT screen=ScreenFromProjected(base);
-        float distance=GXOfQw(QwLengthXY(QwSub(screen.qw,p->origin)));
+        float distance=GetX(QwLengthXY(QwSub(screen.q,p->origin)));
         VU_FLOAT screenTop=ScreenFromProjected(top);
-        float size=GXOfQw(QwLengthXY(QwSub(screen.qw,screenTop.qw)));
+        float size=GetX(QwLengthXY(QwSub(screen.q,screenTop.q)));
         float proximity=1.0f-(distance-128.0f)/128.0f;
         size=size/120.0f;
         p->rising=1;
         p->proximity=GClamp(proximity,0.0f,1.0f);
         p->sizeGain=size;
         if(size>1.0f){p->rising=0;p->sizeGain=2.0f-size;}
-        p->sizeGain=Max(p->sizeGain,0.0f);
+        p->sizeGain=GMax(p->sizeGain,0.0f);
     }
     switch(p->state){
     case -1:
@@ -140,7 +134,7 @@ extern "C" void func_00202D38(P *p)
                 else{p->pending=p->primary->emptyChoice;func_00202768(p,2);}
                 changed=1;
             }
-            if(changed){func_00213B00(p->primary,0x35B);p->choiceTime=D_002DDED0.time;}
+            if(changed){func_00213B00(p->primary,0x35B);p->choiceTime=g_clock.t;}
         }
         break;
     case 9:

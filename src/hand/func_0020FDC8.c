@@ -1,7 +1,7 @@
 struct O { char pad[0x148]; long fl; };
 struct A { int pad; struct O *po; };
 struct M { int cb; int align; int pad[2]; };
-void *func_001AE318(struct M *pm);
+void *PvAllocStackImpl__FP7SWALLOC(struct M *pm);
 void func_0020FDC8(int n, struct A **apa, int *pc, struct O ***pppo)
 {
     struct M m;
@@ -10,7 +10,7 @@ void func_0020FDC8(int n, struct A **apa, int *pc, struct O ***pppo)
     int i;
     m.cb = n * 4;
     m.align = 0x10;
-    apo = (struct O **)func_001AE318(&m);
+    apo = (struct O **)PvAllocStackImpl__FP7SWALLOC(&m);
     for (i = 0; i < n; i++) {
         struct O *po = apa[i]->po;
         if (!(po->fl & 0x40000000)) {

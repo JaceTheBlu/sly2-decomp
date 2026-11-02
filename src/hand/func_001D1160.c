@@ -1,5 +1,5 @@
 typedef int qword __attribute__((mode(TI)));
-extern struct { float t; float dt; } D_002DDED0;
+extern struct { float t; float dt; } g_clock;
 typedef struct { int k; int pad[7]; qword q; int pad2[4]; } MSG;
 struct TGT;
 typedef struct { short d; short pad; void (*pf)(struct TGT *, MSG *); } VTE;
@@ -17,7 +17,7 @@ void func_001D1160(OBJ *p)
 {
     func_001CF268(p);
     if (p->xF0) {
-        p->xF8 += D_002DDED0.dt * p->xF4;
+        p->xF8 += g_clock.dt * p->xF4;
         while (p->xF8 >= 1.0f) {
             MSG m;
             TGT *t;

@@ -6,7 +6,7 @@ struct S {
     char pad190[0x1C0 - 0x190]; int c1C0; struct E a1C4[3];
     int n230; char pad234[0x298 - 0x234]; float g298; float g29C; float g2A0;
 };
-extern char D_003DD040[];
+extern char g_sndmgr[];
 extern char D_002DEB30[];
 int func_001C4660(void *, int, float);
 int func_001C4700(void *, int);
@@ -32,7 +32,7 @@ void func_001533B0(struct S *p, struct O *po)
         if (pe->n20)
             continue;
         func_001619A0(D_002DEB30, 0x35, p);
-        if (func_001FE3F8(D_003DD040) < pe->gC - p->g58) {
+        if (func_001FE3F8(g_sndmgr) < pe->gC - p->g58) {
             func_00152390(po, -1, -1, 1);
             func_00153640(p, p->g298);
             return;

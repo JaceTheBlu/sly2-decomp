@@ -1,4 +1,6 @@
-// UpdateWrMatrixes (0x22C028). Circle case: the scalar-home sqc2 stores and one combine carry "memory" clobbers to fix their order (Claude agent).
+#include "vu0.h"
+#include "clock.h"
+// UpdateWrMatrixes (0x22C028). Circle case: the scalar-home sqc2 stores and one combine carry "memory" clobbers to fix their order.
 typedef int qword __attribute__((mode(TI)));
 union V {qword q;float f[4];};
 struct M3 {float f[3][4];} __attribute__((aligned(16)));
@@ -10,18 +12,16 @@ struct BEND {ONZ bend,swivel;};
 union PAYLOAD {CIRCLE circle;BEND bend;};
 struct WRE {int kind,index;char pad8[8];V axis,vectorA;PAYLOAD data;};
 struct WR {char pad[0x50];float time;int count,count58,index5C;WRE entries[8];int count6E0;char pad6E4[0xC];M4 matrices[4],coordinates[4];char pad8F0[0xC];void *source;};
-struct CLOCK {float t,dt;};
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern "C" {
-void func_001A5E28(WR *);
+void UpdateLo(WR *);
 void func_0022B7D8(WR *);
-float func_0011CF60(float);
-void func_0011D608(float,float *,float *);
+float RadNormalize__Ff(float);
+void CalculateSinCos__FfPfT1(float,float *,float *);
 float func_0022BF70(ONZ *);
-M3 func_0011B500(qword,float);
+M3 LoadRotateMatrixRad__FfUx(qword,float);
 }
 static inline qword ScalarLoad(const float &f){int bits;qword q;__asm__("lw %0,%1":"=r"(bits):"m"(f));__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(bits));return q;}
-static inline qword Scalar(float f){qword q;__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(f));return q;}
 static inline qword ScalarHome(V &home,qword value){__asm__("sqc2 %1,%0":"=m"(home.q):"j"(value));return value;}
 static inline qword Combine(qword fa,qword a,qword fb,qword b){qword r;__asm__("vmulax.xyzw ACC,%2,%1x\n\tvmaddx.xyzw %0,%4,%3x":"=j"(r):"j"(fa),"j"(a),"j"(fb),"j"(b));return r;}
 static inline qword CombineM(qword fa,qword a,qword fb,qword b){qword r;__asm__("vmulax.xyzw ACC,%2,%1x\n\tvmaddx.xyzw %0,%4,%3x":"=j"(r):"j"(fa),"j"(a),"j"(fb),"j"(b):"memory");return r;}
@@ -32,8 +32,8 @@ static inline qword Unit(qword v){qword len,one,r;__asm__("vmul.xyz %0,%2,%2\n\t
 static inline qword UnitFresh(qword v){qword len,one,r;__asm__("vmul.xyz %0,%2,%2\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(len),"=&j"(one):"j"(v));__asm__("vsqrt Q,%0x\n\tvwaitq\n\tvaddq.x %0,$vf0,Q":"+j"(len));__asm__("vdiv Q,$vf0w,%2x\n\tvwaitq\n\tvmulq.xyzw %0,%1,Q":"=&j"(r):"j"(v),"j"(len));return r;}
 static inline qword Rotate(const M3 &m,qword v){__asm__("vmulax.xyz ACC,%1,%0x\n\tvmadday.xyz ACC,%2,%0y\n\tvmaddz.xyz %0,%3,%0z":"+j"(v):"j"(*(const qword *)m.f[0]),"j"(*(const qword *)m.f[1]),"j"(*(const qword *)m.f[2]));return v;}
 void UpdateWrMatrixes(WR *p){
- func_001A5E28(p);
- if(D_002DDED0.t==p->time)return;
+ UpdateLo(p);
+ if(g_clock.t==p->time)return;
  if(p->source)func_0022B7D8(p);
  for(int i=0;i<p->count;i++){
   WRE *entry=&p->entries[i];
@@ -43,11 +43,11 @@ void UpdateWrMatrixes(WR *p){
   case 0:{
    V position,uv,temporary;
    float sine,cosine;
-   float angle=(D_002DDED0.t*entry->data.circle.frequency+entry->data.circle.phase)*6.2831855f;
-   func_0011D608(func_0011CF60(angle),&sine,&cosine);
+   float angle=(g_clock.t*entry->data.circle.frequency+entry->data.circle.phase)*6.2831855f;
+   CalculateSinCos__FfPfT1(RadNormalize__Ff(angle),&sine,&cosine);
    int column=entry->data.circle.column,next=column+1;
    V *pos0=&matrix->r[column],*pos1=&matrix->r[next],*uv0=&coordinates->r[column],*uv1=&coordinates->r[next];
-   qword qn=Scalar(-sine),qc=ScalarLoad(cosine),qs=Scalar(sine);
+   qword qn=QwFromG(-sine),qc=ScalarLoad(cosine),qs=QwFromG(sine);
  {position.q=Combine(qc,entry->vectorA.q,qs,entry->data.circle.vectorB.q);}
    CopyXYZ(*pos0,position);
  ScalarHomeM(temporary,qc);
@@ -64,14 +64,14 @@ void UpdateWrMatrixes(WR *p){
    V rotated;
    float bend=func_0022BF70(&entry->data.bend.bend);
    float swivel=func_0022BF70(&entry->data.bend.swivel);
-   first=func_0011B500(UnitFresh(entry->vectorA.q),swivel);
+   first=LoadRotateMatrixRad__FfUx(UnitFresh(entry->vectorA.q),swivel);
    rotated.q=Rotate(first,Unit(entry->axis.q));
-   result=func_0011B500(UnitFresh(rotated.q),bend);
+   result=LoadRotateMatrixRad__FfUx(UnitFresh(rotated.q),bend);
 
    matrix->r[0].f[0]=result.f[0][0]-1.0f;matrix->r[0].f[1]=result.f[0][1];matrix->r[0].f[2]=result.f[0][2];matrix->r[1].f[0]=result.f[1][0];matrix->r[1].f[1]=result.f[1][1]-1.0f;matrix->r[1].f[2]=result.f[1][2];matrix->r[2].f[0]=result.f[2][0];matrix->r[2].f[1]=result.f[2][1];matrix->r[2].f[2]=result.f[2][2]-1.0f;
    break;
   }
   }
  }
- p->time=D_002DDED0.t;
+ p->time=g_clock.t;
 }

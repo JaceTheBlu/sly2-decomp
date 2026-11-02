@@ -1,3 +1,5 @@
+#include "util.h"
+#include "clock.h"
 // func_00195368 = EmitJtGrabSparkles(SW *psw, STEPPLAYER *pstepplayer, int ccand, JTGRABCAND *ajtgrabcand)
 // (name and JTGRABCAND layout from src/hand/func_00194A40.cpp / func_00194F70.cpp; psw is unused).
 // For every grab candidate that has a spot, emits a random number of sparkles (emitter rate * dt, the fraction
@@ -23,7 +25,6 @@ struct VU_VECTOR
     VU_VECTOR(const VECTOR &v) { q = v.q; }
 };
 
-struct LM { float gMin, gMax; };
 struct GRABSPOT
 {
     char pad0[0x20];
@@ -70,11 +71,10 @@ struct EMITTER
 struct EMITX { PRG **ppprg; void *ppripg; EMITTER *pemitter; };
 struct SW;
 struct STEPPLAYER { char pad0[0x12F8]; EMITTER *pemitterGrab; };
-struct CLOCK { float t, dt; };
 
 extern "C" {
-extern CLOCK D_002DDED0;    // g_clock
-float func_0011D448(float gMin, float gMax);                    // GRandInRange
+extern CLOCK g_clock;    // g_clock
+float GRandInRange__Fff(float gMin, float gMax);                    // GRandInRange
 void *func_002333B4(void *pv, int b, unsigned int cb);          // memset
 void func_0015B428(EMITB *pemitb, EMITX *pemitx, int cpart, VECTOR *apos, VECTOR *av, float *atBirth, float *atDeath,
                    void *pv1, void *pv2);
@@ -82,7 +82,7 @@ void func_00195368(SW *psw, STEPPLAYER *pstepplayer, int ccand, JTGRABCAND *ajtg
 }
 void OnEmitterValuesChanged(EMITTER *pemitter);
 
-static inline float GRand(LM *plm) { return func_0011D448(plm->gMin, plm->gMax); }
+static inline float GRand(LM *plm) { return GRandInRange__Fff(plm->gMin, plm->gMax); }
 static inline VU_VECTOR operator*(VU_FLOAT g, VU_VECTOR v)
 {
     __asm__("vmulx.xyzw %0,%0,%1x" : "+j"(v.q) : "j"(g.q));
@@ -122,8 +122,8 @@ void func_00195368(SW *psw, STEPPLAYER *pstepplayer, int ccand, JTGRABCAND *ajtg
 
         if (pcand->nPriority == -1)
             continue;
-        g = pemitter->gRate * D_002DDED0.dt;
-        gRand = func_0011D448(0.0f, 1.0f);
+        g = pemitter->gRate * g_clock.dt;
+        gRand = GRandInRange__Fff(0.0f, 1.0f);
         c = (int)g;
         g -= (float)c;
         if (gRand < g)
@@ -137,7 +137,7 @@ void func_00195368(SW *psw, STEPPLAYER *pstepplayer, int ccand, JTGRABCAND *ajtg
             s = VU_FLOAT(GRand(&pemitp->lmSv));
             VU_VECTOR vs = s * v;
             vScaled.q = vs.q;
-            float tBirth = D_002DDED0.t;
+            float tBirth = g_clock.t;
             tBirth -= GRand(&pemitp->lmAge);
             atBirth[cpart] = tBirth;
             atDeath[cpart] = tBirth + pemitp->dtLife;

@@ -1,3 +1,5 @@
+#include "vu0.h"
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];int i[4];};
 struct M3 {U r[3];M3(){} M3(const M3&m){r[0]=m.r[0];r[1]=m.r[1];r[2]=m.r[2];} M3&operator=(const M3&m){r[0]=m.r[0];r[1]=m.r[1];r[2]=m.r[2];return *this;}};
@@ -5,17 +7,16 @@ struct OWNER {M3 matrix;U position;char pad40[0x60];OWNER *parent;int stamp;char
 struct VT {short delta,pad;void (*fn)(void *);};
 struct P {char padC[0xC];VT *vt;char pad10[0x48];OWNER *position,*rotation;char pad60[0x88];void *enabled;char padEC[4];U force[2];};
 struct G {char pad3D58[0x3D58];int stamp;};
-struct CLOCK {float time,dt;};
-extern CLOCK D_002DDED0;
-extern G D_003DD490;
+extern CLOCK g_clock;
+extern G g_sw;
 extern "C" void func_00230598(P *,OWNER *);
 extern "C" qword func_0022FCC8(void *,OWNER *,qword);
 extern "C" int func_0011D4D0(float,float,float);
 extern qword D_002A2DD0;
 extern "C" void func_001F4BF8(P *);
-extern "C" qword *func_00256D18(qword *,qword);
-extern "C" M3 *func_0011B570(M3 *,qword);
-static inline M3 BuildRotation(qword vector) return matrix {func_0011B570(&matrix,vector);}
+extern "C" qword *__as__6VECTORG9VU_VECTOR(qword *,qword);
+extern "C" M3 *LoadRotateMatrix__FUx(M3 *,qword);
+static inline M3 BuildRotation(qword vector) return matrix {LoadRotateMatrix__FUx(&matrix,vector);}
 extern "C" void NormalizeRotateMatrix3__FP7MATRIX3(M3 *);
 static inline qword Scalar(float f,U *out){qword q;__asm__("qmtc2.ni %1,%0":"=j"(q):"r"(f));out->q=q;return out->q;}
 static inline qword AddScaled(qword p,qword v,qword k){__asm__("vadda.xyzw $ACC,%1,$vf0\n\tvmaddx.xyzw %0,%0,%2x":"+j"(v):"j"(p),"j"(k));return v;}
@@ -27,11 +28,10 @@ static inline M3 Mul(const M3 &a,const M3 &b) return r
     __asm__("vmulax.xyz ACC,%1,%4x\n\tvmadday.xyz ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z":"=j"(r.r[1].q):"j"(a0),"j"(a1),"j"(a2),"j"(b.r[1].q));
     __asm__("vmulax.xyz ACC,%1,%4x\n\tvmadday.xyz ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z":"=j"(r.r[2].q):"j"(a0),"j"(a1),"j"(a2),"j"(b.r[2].q));
 }
-static inline float X(qword q){float f;__asm__("mtc1 %1,%0":"=f"(f):"r"(q));return f;}
 static inline float Y(qword q){register float f __asm__("$2");__asm__("prot3w %0,%1":"=r"(f):"r"(q));return f;}
 static inline float Z(qword q){register float f __asm__("$2");__asm__("pextuw %0,$zero,%1":"=r"(f):"r"(q));return f;}
 static inline int NearFlag(int code){register int r __asm__("$21");__asm__("sltu %0,$zero,%1":"=r"(r):"r"(code));return r;}
-static inline void Near(int *out,qword a,qword b){if(func_0011D4D0(X(a),X(b),0.0001f))if(func_0011D4D0(Y(a),Y(b),0.0001f))*out=NearFlag(func_0011D4D0(Z(a),Z(b),0.0001f));}
+static inline void Near(int *out,qword a,qword b){if(func_0011D4D0(GetX(a),GetX(b),0.0001f))if(func_0011D4D0(Y(a),Y(b),0.0001f))*out=NearFlag(func_0011D4D0(Z(a),Z(b),0.0001f));}
 static inline qword Zero(){register qword r __asm__("vf3");__asm__("vsub.xyzw %0,$vf0,$vf0":"=j"(r));return r;}
 static inline void Consume(P *p,OWNER *object,U &pending,qword*out){func_00230598(p,object);qword world=func_0022FCC8(0,object->parent,pending.q);__asm__("sw $zero,%0\n\tsq %3,%1\n\tsw $zero,%2":"=m"(pending.i[1]),"=m"(*out),"=m"(pending.i[2]):"r"(world));}
 static inline float YFromHome(const qword &q){register qword bits __asm__("$2");register float r __asm__("$f13");__asm__("lq %0,%2\n\tprot3w %0,%0\n\tmtc1 %0,%1":"=r"(bits),"=f"(r):"m"(q));return r;}
@@ -75,21 +75,21 @@ extern "C" void func_001F9E70(P *input)
             int incrementNear=0;NearVector(&incrementNear,D_002A2DD0,shift);
             if(!incrementNear){
                 qword point;qword *positionAddress=PointAddress(position,&point);
-                qword delta;float halfDt=HalfAndDelta(D_002DDED0.dt,0.5f,shift,&delta);
+                qword delta;float halfDt=HalfAndDelta(g_clock.dt,0.5f,shift,&delta);
                 qword k=Scalar(halfDt,&scalar);
-                func_00256D18(positionAddress,AddScaled(point,delta,k));
+                __as__6VECTORG9VU_VECTOR(positionAddress,AddScaled(point,delta,k));
                 position->position.f[3]=1.0f;
-                position->stamp=++D_003DD490.stamp;
+                position->stamp=++g_sw.stamp;
             }
             incrementNear=0;NearVector(&incrementNear,D_002A2DD0,turn);
             if(!incrementNear){
-                frame=Mul(BuildRotation(Scale(turn,Scalar(D_002DDED0.dt*0.5f,&scalar))),rotation->matrix);
+                frame=Mul(BuildRotation(Scale(turn,Scalar(g_clock.dt*0.5f,&scalar))),rotation->matrix);
                 NormalizeRotateMatrix3__FP7MATRIX3(&frame);
                 rotation->matrix=frame;
                 rotation->matrix.r[1].i[3]=0;
                 rotation->matrix.r[2].i[3]=0;
                 rotation->matrix.r[0].i[3]=0;
-                rotation->stamp=++D_003DD490.stamp;
+                rotation->stamp=++g_sw.stamp;
             }
             p->vt[18].fn((char *)p+p->vt[18].delta);
         }
@@ -138,7 +138,5 @@ typedef char layout_P_force_Span[(sizeof(((P*)0)->force)==0x20)?1:-1];
 typedef char layout_G_PrefixSize[(sizeof(G)==0x3D5C)?1:-1];
 typedef char layout_G_Alignment[(__alignof__(G)==4)?1:-1];
 typedef char layout_G_stamp_Offset[((unsigned)&((G*)0)->stamp==0x3D58)?1:-1];
-typedef char layout_CLOCK_Size[(sizeof(CLOCK)==8)?1:-1];
-typedef char layout_CLOCK_Alignment[(__alignof__(CLOCK)==4)?1:-1];
-typedef char layout_CLOCK_time_Offset[((unsigned)&((CLOCK*)0)->time==0)?1:-1];
+typedef char layout_CLOCK_time_Offset[((unsigned)&((CLOCK*)0)->t==0)?1:-1];
 typedef char layout_CLOCK_dt_Offset[((unsigned)&((CLOCK*)0)->dt==4)?1:-1];

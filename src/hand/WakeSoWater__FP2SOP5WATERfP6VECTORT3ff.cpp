@@ -1,5 +1,6 @@
+#include "clock.h"
 // WakeSoWater (0x15A2C0): wake sound, ripple and splash for an SO moving through WATER.
-// (Lilly's agent, T1683) MATCH, no register pins. Built from the lilly1/v3 drafts (Claude agents, T1679 / lane E20).
+// (Lilly's agent, T1683) MATCH, no register pins. Built from the lilly1/v3 drafts.
 //
 // Sly 2 signature (SO *, WATER *, qword pos, qword v, float dt, float gFrac, float gScale) despite the Sly 1 mangled name.
 // The splash is func_0015BE28(pos, dir, cParticle, EMITP, EMITV, &e, 0, 0) with the EMITP (0x40) and EMITV (0x70) blocks
@@ -60,16 +61,15 @@ struct WATER { char pad[0x18]; int x18; char pad1c[0x178 - 0x1C]; EX *px178; EX 
 struct RIP { char pad[0x1C]; EX *pex; float g20; float g24; char pad28[0xEC - 0x28]; EVTT *pvt; };
 struct E { int x0, x4; EX *p8; EX *pC; WATER *p10; };
 union V4 { qword q; float a[4]; };
-struct CLOCK { float t; };
 
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern int D_002BDEB0[];
-extern qword D_002A2DC0;
-extern char D_003DD490[];
-float func_0011D448(float lo, float hi);
+extern qword g_normalZ;
+extern char g_sw[];
+float GRandInRange__Fff(float lo, float hi);
 int func_0011D3F8(int lo, int hi);
-int func_00132B10(SO *p, int n);
+int FIsBasicDerivedFrom__FP5BASIC3CID(SO *p, int n);
 void func_001FB1F8(void *p, float g);
 void func_001FB098(void *p, float g);
 void *func_001FBB90(int id);
@@ -116,11 +116,11 @@ void WakeSoWater(SO *p, WATER *pwater, qword pos, qword v, float dt, float gFrac
     float g = 0.0f;
     VTE *pvte = &p->pvt->a[33];
     float d = GetX(Length(Sub(pos, pvte->pfn((char *)p + pvte->d))));
-    int fWake = func_0011D448(g, 3.0f) < dt;
+    int fWake = GRandInRange__Fff(g, 3.0f) < dt;
     SND *psnd;
     float t, u;
     psnd = 0;
-    if (func_00132B10(p, 0x32))
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(p, 0x32))
         psnd = (SND *)p;
     if (d > 10.0f || fWake) {
         u = (d - 10.0f) * 0.0012658228f;
@@ -141,16 +141,16 @@ void WakeSoWater(SO *p, WATER *pwater, qword pos, qword v, float dt, float gFrac
         if (!fWake) {
             u = 1.0f - t * (1.0f - gFrac);
             if (psnd) {
-                fWake = u < D_002DDED0.t - psnd->t;
+                fWake = u < g_clock.t - psnd->t;
             } else {
-                float tc = D_002DDED0.t;
+                float tc = g_clock.t;
                 int c0 = (int)(tc / u);
                 int c1 = (int)((tc + dt) / u);
                 fWake = c0 != c1;
             }
         }
         if (fWake && pwater->px17C) {
-            RIP *prip = func_001CE888(D_003DD490, 7, 0);
+            RIP *prip = func_001CE888(g_sw, 7, 0);
             if (prip) {
                 EVT *pe = &prip->pvt->a[1];
                 pe->pfn((char *)prip + pe->d, gScale, v, 0);
@@ -158,10 +158,10 @@ void WakeSoWater(SO *p, WATER *pwater, qword pos, qword v, float dt, float gFrac
                 prip->g24 = gScale * 0.6f;
                 prip->pex = pwater->px17C;
                 if (psnd)
-                    psnd->t = D_002DDED0.t;
+                    psnd->t = g_clock.t;
                 if (500.0f < d && pwater->px178) {
                     EMITP emitp = { 1, 0, pwater->px178->id, pwater->px17C->id, pwater->x18, 0, {{ 8.0f, 12.0f, 1.0f }} };
-                    EMITV emitv = { {{ d * 0.5f, d * 0.75f, 0.0f, 1.0f }}, p->pxE8->v, D_002A2DC0, 0, 0, 1.0f, 5.0f,
+                    EMITV emitv = { {{ d * 0.5f, d * 0.75f, 0.0f, 1.0f }}, p->pxE8->v, g_normalZ, 0, 0, 1.0f, 5.0f,
                                     {{ 0.39269909f, 1.0471976f }}, { 0 }, {{ 1.0f, 0.0f, -1.0f }} };
                     E e;
                     V4 posSplash;
@@ -171,7 +171,7 @@ void WakeSoWater(SO *p, WATER *pwater, qword pos, qword v, float dt, float gFrac
                     e.p8 = pwater->px178;
                     e.pC = pwater->px17C;
                     e.p10 = pwater;
-                    func_0015BE28(posSplash.q, D_002A2DC0, func_0011D3F8(4, 6), emitp, emitv, &e, 0, 0);
+                    func_0015BE28(posSplash.q, g_normalZ, func_0011D3F8(4, 6), emitp, emitv, &e, 0, 0);
                 }
             }
         }

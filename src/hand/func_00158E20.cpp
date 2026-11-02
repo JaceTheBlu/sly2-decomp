@@ -1,4 +1,4 @@
-// (Claude agent) fresh14: b operands read through a plain qword pointer (scalar MEM, so the load waits for the VUF temp store)
+// fresh14: b operands read through a plain qword pointer (scalar MEM, so the load waits for the VUF temp store)
 typedef int qword __attribute__((mode(TI)));
 struct AL { int cb; int cbAlign; int pad[2]; AL(int c, int a) { cb = c; cbAlign = a; } };
 struct SO { char pad[0xF0]; qword xF0; qword x100; };
@@ -8,8 +8,8 @@ struct A { int x0, x4, x8; float g; char pad[0x28 - 0x10]; };
 struct S { int x0; int c; A *aa; char pad[0x58 - 0xC]; int cso; SO **apso; B *ab; };
 extern "C" {
 void func_001AE478(void *p);
-void func_001AE4A0(void *p, int n);
-void *func_001AE318(const AL &al);
+void _$_18CBinaryInputStream(void *p, int n);
+void *PvAllocStackImpl__FP7SWALLOC(const AL &al);
 qword func_0011E9F8(qword v, float g);
 void func_00158E20(S *p, float g1, float g2);
 }
@@ -19,14 +19,14 @@ static inline qword AddScale(qword a, qword b, const VUF &t)
     __asm__ __volatile__("vadda.xyzw $ACC, %0, $vf0\n\tvmaddx.xyzw %0, %1, %2x" : "+j"(a) : "j"(b), "j"(t.q), "j"(t.q), "j"(b));  /* last two operands: allocation only */
     return a;
 }
-class FRAME { public: FRAME() { func_001AE478(this); } ~FRAME() { func_001AE4A0(this, 2); } };
+class FRAME { public: FRAME() { func_001AE478(this); } ~FRAME() { _$_18CBinaryInputStream(this, 2); } };
 void func_00158E20(S *p, float g1, float g2)
 {
     FRAME frame;
     int i;
     SO *pso;
     { register int n asm("$3") = p->cso;  /* register pin: cso in v1 like the target */
-      func_001AE318(AL(n * 32, 0x10)); }
+      PvAllocStackImpl__FP7SWALLOC(AL(n * 32, 0x10)); }
     for (i = 0; i < p->c; i++) {
         A *pa = &p->aa[i];
         if (pa->g == 0.0f) continue;

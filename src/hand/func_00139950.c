@@ -1,5 +1,6 @@
-// laneZ2 v4 (Claude agent, 2026-10-30): particle update through VU0 microprogram 0x10.
-// Built from build/hand_wip/func_00139950.lilly1.c (Claude agent for Lilly, T1646). The fixed vf21-vf31 registers
+#include "clock.h"
+// laneZ2 v4: particle update through VU0 microprogram 0x10.
+// Built from build/hand_wip/func_00139950.lilly1.c. The fixed vf21-vf31 registers
 // of the microprogram are bound only inside the inline VU helper UpdateMs10, which loads them, runs vcallms 0x10
 // per live particle and stores the results after the cfc2.i interlock; the function body has no register pins.
 // Microprogram ABI: vf27 = dt, vf28..vf31 = matrix rows 3..0, vf23/vf24 = the pa/pb entries; it accumulates the
@@ -9,9 +10,8 @@
 typedef int qword __attribute__((mode(TI)));
 typedef struct { qword r[4]; } M4;
 typedef struct { float x, y, z, w; } V;
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
-float func_0011CF60(float);
+extern struct CLOCK g_clock;
+float RadNormalize__Ff(float);
 
 static __inline__ float FloatFromQw(qword q)
 {
@@ -26,7 +26,7 @@ static __inline__ void MoveExtra(qword *pc, int i, int j, int k, qword dt)
     pc[j] = pc[i];
     if (k == 2) {
         float g = FloatFromQw(dt);
-        ((V *)&pc[j])->w = func_0011CF60(((V *)&pc[i])->w + ((V *)&pc[i])->z * g);
+        ((V *)&pc[j])->w = RadNormalize__Ff(((V *)&pc[i])->w + ((V *)&pc[i])->z * g);
     }
 }
 
@@ -44,7 +44,7 @@ static __inline__ int UpdateMs10(const M4 *pm, qword dt, qword *pa, qword *pb, q
     register qword v22 __asm__("vf22");
     register qword v23 __asm__("vf23");
     register qword v24 __asm__("vf24");
-    float t = D_002DDED0.t;
+    float t = g_clock.t;
     int cDead = 0;
     int j = -1;
     int i;

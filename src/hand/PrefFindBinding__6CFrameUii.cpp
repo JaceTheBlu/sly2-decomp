@@ -1,4 +1,5 @@
-struct CRef { int m_tagk; int m_tag; };
+#define CREF_PLAIN   /* this source uses CRef as plain data: no constructor/destructor calls */
+#include "cref.h"
 struct BINDING { int a, b; unsigned int sym; CRef ref; BINDING *pnext; };
 class CFrame {
 public:

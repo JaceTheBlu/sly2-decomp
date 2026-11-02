@@ -1,4 +1,7 @@
-/* func_001E9090: one simulation step of a rope-like path chain (wave-4 lane 2, from w3lane9's rewrite).
+#include "mat.h"
+#include "vu0.h"
+#include "clock.h"
+/* func_001E9090: one simulation step of a rope-like path chain.
  *
  * The first point is the start offset transformed by the first space's matrix; its velocity comes from
  * func_0022D348. Every later point is integrated (accel = force - damping * v, v += accel * dt,
@@ -20,9 +23,8 @@ typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
 struct VV { qword q; VV() {} VV(const qword &v) { q = v; } operator qword() const { return q; } };
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } };
-struct M4 { qword r[4]; };
-struct SPACE { char pad[0x40]; M4 matrix; };
-struct VT { short delta, pad; M4 *(*fn)(void *); };
+struct SPACE { char pad[0x40]; MATRIX4 matrix; };
+struct VT { short delta, pad; MATRIX4 *(*fn)(void *); };
 struct PATH { char pad[0xC]; VT *vt; char pad10[0xE8 - 0x10]; int count; int padEC; float *dist; U *pos; };
 struct CHAIN
 {
@@ -40,18 +42,17 @@ struct CHAIN
     float *distance;        // rest distance along the chain
     float damping;
 };
-struct CLOCK { float t, dt; };
-extern CLOCK D_002DDED0;    // g_clock
+extern CLOCK g_clock;    // g_clock
 extern qword D_002A2DA0;    // fallback direction
 extern "C" {
 qword func_0022D348(SPACE *, SPACE *, qword);
-M4 *func_0011C318(M4 *, M4 *);   // invert
+MATRIX4 *func_0011C318(MATRIX4 *, MATRIX4 *);   // invert
 void func_001E95B0(CHAIN *, float);
 void func_001E6330(PATH *);
 void func_001E9090(CHAIN *);
 }
 
-static inline VV TransformPoint(const M4 &m, VV v)
+static inline VV TransformPoint(const MATRIX4 &m, VV v)
 {
     qword r;
     __asm__("vmulax.xyz $ACC, %1, %5x\n\tvmadday.xyz $ACC, %2, %5y\n\tvmaddaz.xyz $ACC, %3, %5z\n\tvmaddw.xyz %0, %4, $vf0w"
@@ -60,7 +61,6 @@ static inline VV TransformPoint(const M4 &m, VV v)
 }
 static inline VV Sub(VV a, VV b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline float GFromVf(VV v) { float g; __asm__("qmfc2.ni %0, %1" : "=r"(g) : "j"(v)); return g; }
-static inline float GFromQw(qword q) { float g; __asm__("mtc1 %1, %0" : "=f"(g) : "r"(q)); return g; }
 static inline VV Sqrt(VV v) { qword r; __asm__("vsqrt $Q, %1x\n\tvwaitq\n\tvaddq.x %0, $vf0, $Q" : "=j"(r) : "j"(v)); return r; }
 static inline VV Dot(VV a, VV b)
 {
@@ -102,11 +102,10 @@ static inline VV VecCombo3(VV base, VU_FLOAT g1, VV v1, VU_FLOAT g2, VV v2)
             : "=j"(r) : "j"(base), "j"(g1.q), "j"(v1), "j"(g2.q), "j"(v2));
     return r;
 }
-static inline float Abs(float g) { return __builtin_fabsf(g); }
 
 void func_001E9090(CHAIN *p)
 {
-    float dt = D_002DDED0.dt;
+    float dt = g_clock.dt;
     VV prev = TransformPoint(p->first->matrix, p->start);
     int n = p->path->count;
     p->position[0].q = prev;
@@ -121,8 +120,8 @@ void func_001E9090(CHAIN *p)
         VV pos = VecCombo3(p->position[i].q, VU_FLOAT(dt * 0.5f), p->velocity[i].q, VU_FLOAT(dt * 0.5f), vel);
         VV delta = Sub(pos, prev);
         VV dir = NormalizeSafe(delta, D_002A2DA0);
-        float proj = -GFromQw(DotVf1(Sub(vel, prevVel), dir));
-        float d = Abs(p->distance[i] - p->distance[i - 1]);
+        float proj = -GetX(DotVf1(Sub(vel, prevVel), dir));
+        float d = GAbs(p->distance[i] - p->distance[i - 1]);
         prev = AddScaled(prev, VU_FLOAT(d), dir);
         prevVel = AddScaled(vel, VU_FLOAT(proj), dir);
         p->position[i].q = prev;
@@ -135,7 +134,7 @@ void func_001E9090(CHAIN *p)
         func_001E95B0(p, p->distance[n - 2] + GFromVf(Length(Sub(p->position[n - 2].q, p->position[n - 1].q))));
         n = p->path->count;
     }
-    M4 inverse;
+    MATRIX4 inverse;
     {
         PATH *path = p->path;
         VT *e = &path->vt[31];

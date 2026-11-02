@@ -8,7 +8,7 @@ struct S {
     char pad168[0x18]; void *follow; float rate; float distance;
     char pad18c[4]; qword previous;
 };
-extern struct CLOCK { float t; float dt; } D_002DDED0;
+extern struct CLOCK { float t; float dt; } g_clock;
 void func_001F3980(struct S *);
 qword func_001A62E8(void *);
 void func_0021C5F8(struct S *, qword);
@@ -35,7 +35,7 @@ void func_0021C1C8(struct S *p)
     if (!p->state) {
         struct T *e = &p->array[p->index];
         p->index = (p->index + 1) % p->count;
-        e->t = D_002DDED0.t;
+        e->t = g_clock.t;
         e->g = p->g;
         e->m = *p->vt->matrix((char *)p + p->vt->d);
         if (p->g <= 0.0f)

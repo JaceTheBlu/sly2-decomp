@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef struct S {
     char pad0[0x10];
     char *pb;      /* 0x10 */
@@ -22,7 +23,6 @@ extern int func_00241E88(int);
 extern int func_00242AE0(void);
 extern void func_0014BC78(unsigned int isector, unsigned int csector, void *pv, int mode);
 
-static __inline__ int Min(int a, int b) { return a < b ? a : b; }
 void func_001849A0(S *p)
 {
     int cbuf;
@@ -48,7 +48,7 @@ void func_001849A0(S *p)
     do {
         if (p->x44 > 0) {
 
-            int t = Min(func_00242810() + p->x4c, p->x44);
+            int t = NMin(func_00242810() + p->x4c, p->x44);
 
             if (p->x40 < t) {
                 p->x40 = t;
@@ -75,7 +75,7 @@ void func_001849A0(S *p)
 
         if (p->x58 < p->x54 && p->x44 == 0 && p->x48 > 0) {
 
-            int c = Min(p->x48, cbuf);
+            int c = NMin(p->x48, cbuf);
 
             p->x40 = 0;
             p->x44 = c;
@@ -94,7 +94,7 @@ void func_001849A0(S *p)
             int c = (p->x58 == 1) ? p->x40 : cbuf;
             int v = c - (p->pb - (p->abSpool + p->x5c * cbuf));
 
-            p->cb = Min(v, 0x1000);
+            p->cb = NMin(v, 0x1000);
 
         }
     } while (p->cb == 0 && p->x48 > 0);

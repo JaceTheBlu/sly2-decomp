@@ -1,9 +1,9 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 struct X; struct SPACE;
 struct S { struct X *a0; struct SPACE *a4; int pad[2]; qword v; };
 void func_001E67B8(struct X *, float, qword *, qword *);
 qword func_001FA970(struct SPACE *, qword);
-static inline qword Sub(qword a,qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword SquareBits(qword a) {
     register qword d __asm__("vf1"),one __asm__("vf3");
     __asm__("vmul.xyz %0, %2, %2\n\tvaddw.x %1, $vf0, $vf0w\n\tvadday.x $ACC, %0, %0y\n\tvmaddz.x %0, %1, %0z" : "=j"(d), "=&j"(one) : "j"(a));

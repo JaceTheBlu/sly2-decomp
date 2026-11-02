@@ -1,4 +1,4 @@
-extern char D_002E6550[], D_003DD490[];
+extern char D_002E6550[], g_sw[];
 int func_001ACC80(void *p);
 char *func_0013E368(void *p, int n);
 char *strcpy(char *, const char *);
@@ -8,13 +8,13 @@ void func_001AD820(char *buf)
     switch (func_001ACC80(D_002E6550)) {
     case 1:
         strcpy(buf, "&2S&.: ");
-        func_0021EDA0(buf, func_0013E368(D_003DD490, 0x38));
+        func_0021EDA0(buf, func_0013E368(g_sw, 0x38));
         break;
     case 2:
         strcpy(buf, "&2S&. : ");
-        func_0021EDA0(buf, func_0013E368(D_003DD490, 0x36));
+        func_0021EDA0(buf, func_0013E368(g_sw, 0x36));
         func_0021EDA0(buf, "       ");
-        func_0021EDA0(buf, func_0013E368(D_003DD490, 0x37));
+        func_0021EDA0(buf, func_0013E368(g_sw, 0x37));
         func_0021EDA0(buf, " : &2T&.");
         break;
     }

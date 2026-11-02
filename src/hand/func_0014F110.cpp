@@ -1,27 +1,26 @@
-// func_0014F110 (Claude agent, lane K5, 2026-10-24): MATCH. Built on laneK4v1 (K3/K4 fresh rewrite in the func_0014C748 style).
+#include "vu0.h"
+#include "clock.h"
+// func_0014F110: MATCH. Built on laneK4v1 (K3/K4 fresh rewrite in the ClsgClipEdgeToSphere__FUxfUxUxiP3LSG style).
 // Keys: the VU_FLOAT(const float *) ctor's word input has a never-chosen "V" alternative ("r,V"), so it stays a MEM until
 // reload: the clock dt load is then an input reload (lw v0 for the vdiv; for the final AddScaled reload reuses the dying
 // pclock register, lw s0,0x10(s0)), which also shortens the clock chain in sched1 so no extra operand is needed on the vdiv;
 // v is computed before posMin so the spill slots come out v 0x30 / posMin 0x40. No register pins.
 typedef int qword __attribute__((mode(TI)));
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } VU_FLOAT(const float *pg) { __asm__("qmtc2.ni %1, %0" : "=j,j"(q) : "r,V"(*(const int *)pg)); } /* never-chosen "V" (non-offsettable mem) alternative: allocation-only (the word stays a MEM until reload) */ };
-struct CLOCK { float t, dt, x8, xC, dtPrev; };
-struct FRAME { int n; FRAME(); ~FRAME(); }; /* out-of-line ctor/dtor: func_001AE478 / func_001AE4A0(this, 2) */
+struct FRAME { int n; FRAME(); ~FRAME(); }; /* out-of-line ctor/dtor: func_001AE478 / _$_18CBinaryInputStream(this, 2) */
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern qword D_002BD8F0, D_002BD900;
 extern float D_002BD8D8, D_002BD8DC;
-extern char D_003DD490[];
+extern char g_sw[];
 void *func_001AE478(FRAME *p);
-void func_001AE4A0(FRAME *p, int n);
+void _$_18CBinaryInputStream(FRAME *p, int n);
 void func_0020FAA0(void *g, qword a, qword b, void *pfn, void *o, int *pi, int *pj);
 qword func_0014EDA0(void *p, int i, int j, void *pfn, qword a, qword v, float g, float h);
 void func_0014F030(void);
 void func_0014F040(void);
 qword func_0014F110(void *p, qword pos, qword posTarget);
 }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
-static inline qword Add(qword a, qword b) { qword r; __asm__("vadd.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword DivideBy(const qword &v, const VU_FLOAT &g) { qword r; __asm__("vdiv $Q, $vf0w, %2x\n\tvwaitq\n\tvmulq.xyzw %0, %1, $Q" : "=j"(r) : "j"(v), "j"(g.q)); return r; }
 static inline qword AddScaled(qword base, const qword &vec, const VU_FLOAT &s)
 {
@@ -41,15 +40,15 @@ static inline float Length(const qword &v) { return GXOfQw(QwSqrt(QwDot(v, v)));
 
 qword func_0014F110(void *p, qword pos, qword posTarget)
 {
-    CLOCK *pclock = &D_002DDED0;
+    CLOCK *pclock = &g_clock;
     int ii, jj;
-    qword dpos = Sub(posTarget, pos);
-    qword v = DivideBy(dpos, VU_FLOAT(&pclock->dtPrev));
-    qword posMin = Add(pos, D_002BD8F0);
-    qword posMax = Add(pos, D_002BD900);
+    qword dpos = QwSub(posTarget, pos);
+    qword v = DivideBy(dpos, VU_FLOAT(&pclock->dtReal));
+    qword posMin = QwAdd(pos, D_002BD8F0);
+    qword posMax = QwAdd(pos, D_002BD900);
     FRAME frame;
-    func_0020FAA0(D_003DD490, posMin, posMax, (void *)func_0014F030, 0, &ii, &jj);
+    func_0020FAA0(g_sw, posMin, posMax, (void *)func_0014F030, 0, &ii, &jj);
     qword w = func_0014EDA0(p, ii, jj, (void *)func_0014F040, pos, v, D_002BD8D8, Length(v) + D_002BD8DC);
-    qword r = AddScaled(pos, w, VU_FLOAT(&pclock->dtPrev));
+    qword r = AddScaled(pos, w, VU_FLOAT(&pclock->dtReal));
     return r;
 }

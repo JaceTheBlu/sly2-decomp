@@ -1,17 +1,19 @@
-// func_0013A1E8: light-list VU upload (Claude agent for Lilly, T1676; built on the team's v2..v14 drafts).
+#include "mat.h"
+#include "vu0.h"
+#include "dl.h"
+// func_0013A1E8: light-list VU upload.
 // Collects the lights of p->xE0's list whose position (PosLoWorld 0x1A62E8 + PmatLoWorld 0x1A6318 rotating p->vF0)
 // passes the camera tests func_0014F850 / func_0014F898, as M4s in a stack array (or the single D_002A2D30 when the
 // list check fails), then uploads each light per DMA queue through the VIF helpers.
 // Matching notes (gather loop, the last diffs; found with sched1/sched2/local-alloc dumps):
-//  * The g100 lw must issue after the &D_002DDF40 addiu in sched1 (else lw and lui overlap and the lui gets v1):
+//  * The g100 lw must issue after the &g_cm addiu in sched1 (else lw and lui overlap and the lui gets v1):
 //    the lw is written inside the VU_FLOAT asm with an allocation-only "r"(pcm) input.
 //  * The vF0 barrier is an operand-less volatile asm: a "+j"(v) one gives v 2 more refs, and local-alloc then
 //    ranks the vF0 chain above mat.r[2] (vF0 vf1 instead of vf2).
-//  * Plain Sub (2 refs on pcm->pos): with SubE's duplicate operand the cm pos qty outranks the vF0 chain (vf2/vf3 swap).
+//  * Plain QwSub (2 refs on pcm->pos): with SubE's duplicate operand the cm pos qty outranks the vF0 chain (vf2/vf3 swap).
 //  * The empty "=r"(z) asm only exists for sched2 (see the comment there).
 typedef int qword __attribute__((mode(TI)));
 struct CM;
-struct M3 { qword r[3]; };
 struct M4 { qword r[3]; float x30, y30, z30, w30; };
 struct FRAME { int a[4]; };
 struct AL { int cb; int align; AL(int c, int a) { cb = c; align = a; } };
@@ -19,11 +21,10 @@ struct VU_FLOAT {
     qword q;
     /* else branch: word move into a 128-bit GPR value; volatile keeps the g100 load before the vsub like the target */
     VU_FLOAT(float f) { __asm__ volatile("" : "=r"(q) : "0"(*(int *)&f)); }
-    /* gather loop: the lw itself, with an allocation-only "r"(pcm) so it can only issue after &D_002DDF40 is built
+    /* gather loop: the lw itself, with an allocation-only "r"(pcm) so it can only issue after &g_cm is built
        (sched1 then keeps the lw and the lui apart, and both get v0 like the target) */
     VU_FLOAT(const float *pf, CM *pcm) { __asm__("lw %0, %1" : "=r"(q) : "m"(*pf), "r"(pcm)); }
 };
-struct DL { void *head; void *tail; int ibDle; };
 struct LO;
 struct EX { int pad[2]; struct LO **pplo; };
 struct LO { char pad[0x10]; LO *x10; char pad14[0x38 - 0x14]; float g38; char pad3C[0xE4 - 0x3C]; EX *xE4; char padE8[0x11C - 0xE8]; LO *x11C; char pad120[8]; LO *x128; };
@@ -34,24 +35,24 @@ struct DMA { int x0; int x4; int x8; int xC; };
 struct VIFS { int pad[3]; int xC; };
 struct CM { char pad[0x90]; qword pos; };
 extern "C" {
-extern M3 D_002A2D00;
+extern MATRIX3 D_002A2D00;
 extern M4 D_002A2D30;
-extern CM D_002DDF40;
+extern CM g_cm;
 extern VIFS D_002DEA28;
 extern char D_00000000[];
 extern char D_00000390[];
 extern char D_00000870[];
 void func_001AE478(FRAME *pf);
-void func_001AE4A0(FRAME *pf, int n);
-int func_0011A3B0(void *pdl);
+void _$_18CBinaryInputStream(FRAME *pf, int n);
+int FIsDlEmpty__FP2DL(void *pdl);
 int func_0011A3C0(void *pdl);
-void *func_001AE318(const AL &al);
+void *PvAllocStackImpl__FP7SWALLOC(const AL &al);
 int func_001A61A0(LO *plo);
 qword func_001A62E8(LO *plo);
-M3 *func_001A6318(LO *plo);
+MATRIX3 *func_001A6318(LO *plo);
 int func_0014F850(CM *pcm, qword d, VU_FLOAT r);
 int func_0014F898(CM *pcm, qword d, float g, float *pg);
-void func_00256D18(void *pv, qword v);
+void __as__6VECTORG9VU_VECTOR(void *pv, qword v);
 DMA *func_001CD998(void);
 void func_001574B8(VIFS *p);
 void func_0013A688(P *p);
@@ -64,13 +65,12 @@ void func_001576F0(VIFS *p);
 void func_00157620(VIFS *p);
 void func_0013A1E8(P *p);
 }
-static inline void *PvAllocStack(int cb) { return func_001AE318(AL(cb, 0x10)); }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
+static inline void *PvAllocStack(int cb) { return PvAllocStackImpl__FP7SWALLOC(AL(cb, 0x10)); }
 /* earlyclobber output (else branch: vsub vf3 distinct from its inputs); the 2nd "j"(b) is allocation-only */
 static inline qword SubE(qword a, qword b) { qword r; __asm__("vsub.xyzw %0, %1, %2" : "=&j"(r) : "j"(a), "j"(b), "j"(b)); return r; }
 /* "r"(z) inputs below are allocation-only: they only add scheduler dependences (see the comment in the gather loop) */
 static inline qword AddZ(qword a, qword b, int z) { qword r; __asm__("vadd.xyzw %0, %1, %2" : "=j"(r) : "j"(a), "j"(b), "r"(z)); return r; }
-static inline qword RotKZ(const M3 &m, qword v, qword k, int z)
+static inline qword RotKZ(const MATRIX3 &m, qword v, qword k, int z)
 {
     qword r;
     /* "r"(k) (the VU_FLOAT) keeps the lw on the Rot's critical path, like the target's sched2 order */
@@ -84,12 +84,12 @@ void func_0013A1E8(P *p)
     func_001AE478(&frame);
     int cLight;
     M4 *aLight;
-    if (p->xE0 != 0 && func_0011A3B0(&p->xE0->x11C) == 0) {
+    if (p->xE0 != 0 && FIsDlEmpty__FP2DL(&p->xE0->x11C) == 0) {
         cLight = 0;
         aLight = (M4 *)PvAllocStack(func_0011A3C0(&p->xE0->x11C) << 6);
         M4 *pl = aLight;
         LO *plo = p->xE0->x11C;
-        M3 *pmId;
+        MATRIX3 *pmId;
         if (!plo) goto done;
         pmId = &D_002A2D00;
     top:
@@ -98,7 +98,7 @@ void func_0013A1E8(P *p)
             {
             LO **pplo = plo->xE4->pplo;
             qword pos;
-            M3 mat;
+            MATRIX3 mat;
             if (*pplo) {
                 pos = func_001A62E8(*pplo);
                 mat = *func_001A6318(*pplo);
@@ -111,19 +111,19 @@ void func_0013A1E8(P *p)
             }
             qword v = p->vF0;
             __asm__ volatile(""); /* barrier: the vF0 load issues first (an operand-less one adds no refs to v) */
-            CM *pcm = &D_002DDF40;
+            CM *pcm = &g_cm;
             VU_FLOAT vf(&p->g100, pcm);
             /* empty asm, emits nothing: z depends on pcm and feeds the Rot and the Add, so in sched2 it takes the
                second issue slot next to the lw and the mat.r[1] lqc2 waits a cycle (target order lw, lqc2, por, Rot) */
             int z; __asm__("" : "=r"(z) : "r"(pcm));
-            qword d = Sub(AddZ(RotKZ(mat, v, vf.q, z), pos, z), pcm->pos);
+            qword d = QwSub(AddZ(RotKZ(mat, v, vf.q, z), pos, z), pcm->pos);
             __asm__("" : "+j"(d)); /* empty asm: extra refs so d is caller-saved in vf1 */
-            if (!func_0014F850(&D_002DDF40, d, vf))
+            if (!func_0014F850(&g_cm, d, vf))
                 goto next;
             float g;
-            if (!func_0014F898(&D_002DDF40, d, plo->g38, &g))
+            if (!func_0014F898(&g_cm, d, plo->g38, &g))
                 goto next;
-            func_00256D18(&pl->x30, pos);
+            __as__6VECTORG9VU_VECTOR(&pl->x30, pos);
             cLight++;
             pl->r[0] = mat.r[0];
             pl->r[1] = mat.r[1];
@@ -139,7 +139,7 @@ void func_0013A1E8(P *p)
             if (plo) goto top;
     done:;
     } else {
-        register CM *pcm asm("$4") = &D_002DDF40; /* register pin: the target builds &D_002DDF40 in a0 */
+        register CM *pcm asm("$4") = &g_cm; /* register pin: the target builds &g_cm in a0 */
         qword v = p->vF0;
         __asm__("" : "+j"(v)); /* empty asm: keeps vF0 in a pseudo */
         VU_FLOAT vf(p->g100);
@@ -150,7 +150,7 @@ void func_0013A1E8(P *p)
     }
     if (cLight == 0) {
     none:
-        func_001AE4A0(&frame, 2);
+        _$_18CBinaryInputStream(&frame, 2);
         return;
     }
     int c = 0;
@@ -190,5 +190,5 @@ void func_0013A1E8(P *p)
     func_001576F0(&D_002DEA28);
     func_00157620(&D_002DEA28);
     pdma->x8 = save;
-    func_001AE4A0(&frame, 2);
+    _$_18CBinaryInputStream(&frame, 2);
 }

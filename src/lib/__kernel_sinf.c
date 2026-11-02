@@ -1,4 +1,4 @@
-// (Claude agent) 5/65: exact except the mfc1->bnel hazard nop (needs gnu_reorder.py rule, see notes/245000.md); MATCH with that rule in scratch.
+// 5/65: exact except the mfc1->bnel hazard nop (needs gnu_reorder.py rule, see notes/245000.md); MATCH with that rule in scratch.
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db

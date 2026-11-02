@@ -20,7 +20,7 @@ public:
 #undef V
     virtual LOX *PloFind(int n);
 };
-extern "C" void *func_001AE2A0(ALLOCREQ *preq);
+extern "C" void *PvAllocSwClearImpl__FP7SWALLOC(ALLOCREQ *preq);
 extern "C" void func_002303A0(LOBase *p, LOX *plo, int n);
 extern "C" void func_001603B8(LOBase *p, CBinaryInputStream *pbis)
 {
@@ -29,7 +29,7 @@ extern "C" void func_001603B8(LOBase *p, CBinaryInputStream *pbis)
         ALLOCREQ req;
         req.cb = 0x10;
         req.nKind = 0x10;
-        E *pe = (E *)func_001AE2A0(&req);
+        E *pe = (E *)PvAllocSwClearImpl__FP7SWALLOC(&req);
         pe->p0 = p->PloFind(pbis->S16Read());
         if (!pe->p0)
             pe->p0 = &D_002C44F0;

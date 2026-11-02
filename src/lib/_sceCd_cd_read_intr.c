@@ -2,7 +2,7 @@
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db
 typedef struct { int size1; int size2; char *dst1; char *dst2; char buf1[0x40]; char buf2[0x40]; } FixAlign;
-extern char D_002C67A0[];
+extern char _sceCd_mode[];
 void func_002418D0(void *);
 void _sceCd_cd_read_intr(void *data)
 {
@@ -22,5 +22,5 @@ void _sceCd_cd_read_intr(void *data)
             d[i] = du[i] = p->buf2[i];
         }
     }
-    func_002418D0(D_002C67A0);
+    func_002418D0(_sceCd_mode);
 }

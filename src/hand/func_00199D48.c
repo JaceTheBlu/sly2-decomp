@@ -1,5 +1,5 @@
 /* Pick the best supporting contact of a probe object: walk its contact groups, skip contacts
-   whose other body sits under a kind-2 object, test the callback (func_001999D0), then probe a
+   whose other body sits under a kind-2 object, test the callback (FCheckJtEdgeGrab), then probe a
    point offset along the contact direction and reject it if it lies inside the other body's BSP.
    Returns the contact whose other endpoint is highest in Z; *outSide / *outNormal describe it. */
 #define FIELD_OFFSET(t,m) ((uint)&(((t*)0)->m))
@@ -51,11 +51,11 @@ typedef char CONTACT_next_Offset[FIELD_OFFSET(CONTACT,next)==172?1:-1];
 typedef char CONTACT_difference_Offset[FIELD_OFFSET(CONTACT,difference)==176?1:-1];
 extern float D_002C3C60[],D_002BF8A4;
 extern int D_002BF8A8;
-extern qword D_002A2DC0;
-extern char D_003DD490[];
+extern qword g_normalZ;
+extern char g_sw[];
 extern int func_00144068(LO *);
-extern int func_001999D0(P *,SHAPE *,qword,int,void *,U *);
-extern void func_001A7FC0(void *,int,CONTACT **);
+extern int FCheckJtEdgeGrab(P *,SHAPE *,qword,int,void *,U *);
+extern void FindClosestPointOnLineSegment__FP6VECTORN20PfT3(void *,int,CONTACT **);
 extern BSPNODE *func_00118FB0(BSPNODE *,BSPNODE *,qword);
 static inline qword Scalar(float f)
 {
@@ -119,9 +119,9 @@ CONTACT *func_00199D48(P *p,int *outSide,qword *outNormal)
             case 2: if (side==1) continue; info=contact->info[1]; break;
             default: continue;
             }
-            if (!func_001999D0(p,shape,InputPosition(contact,side),contact->kind,info,&direction)) continue;
+            if (!FCheckJtEdgeGrab(p,shape,InputPosition(contact,side),contact->kind,info,&direction)) continue;
             if ((p->self->ec->flags&2) || (shape->owner->ec->flags&2))
-                func_001A7FC0(D_003DD490,1,&contact);
+                FindClosestPointOnLineSegment__FP6VECTORN20PfT3(g_sw,1,&contact);
             if (0.0f < D_002C3C60[side]*contact->difference.f[2]) continue;
             {
                 qword back; qword lift; qword value; U *selected;
@@ -130,7 +130,7 @@ CONTACT *func_00199D48(P *p,int *outSide,qword *outNormal)
                 /* "rV": the word is a memory operand that fails 'V' at reload, so reload loads it at the asm through the
                    dying %hi register (lui v1 / lw v1,%lo(v1)) instead of a separate pseudo; allocation only */
                 __asm__("qmtc2.ni %1,%0":"=j"(lift):"rV"(D_002BF8A8));
-                value=Project(selected->q,direction.q,back,D_002A2DC0,lift);
+                value=Project(selected->q,direction.q,back,g_normalZ,lift);
                 scalar=(U){back};       /* the original keeps both scalars in one 16-byte stack temporary */
                 point.q=value;
                 scalar=(U){lift};

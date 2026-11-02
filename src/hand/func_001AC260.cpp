@@ -1,18 +1,18 @@
 typedef unsigned int uint;
-struct FRAME;extern "C" void func_001AE4A0(FRAME*,int);
-struct FRAME {FRAME()__asm__("func_001AE478");~FRAME(){func_001AE4A0(this,2);}};
+struct FRAME;extern "C" void _$_18CBinaryInputStream(FRAME*,int);
+struct FRAME {FRAME()__asm__("func_001AE478");~FRAME(){_$_18CBinaryInputStream(this,2);}};
 struct REQUEST {uint bytes,alignment;};
 struct X;
 extern "C" void func_00258248(X *px);
 struct X { uint x0; uint x4; int x8; char pad[0x110 - 0xC]; X() { x8 = 2; func_00258248(this); } };
 struct Y;extern "C" void func_00184950(Y*,int);
-struct Y {int flags;unsigned char*cursor;int left,consumed;unsigned char*raw;int rawBytes,decompFlags,pending,word20;unsigned char*window;int word28,word2C;void*vt;int capacity;unsigned char*buffer;int handle3C,word40,word44;uint word48;int word4C,word50,word54,word58,word5C,word60;char tail64[0xC];Y(int cb,void*pv,int flags) __asm__("func_001848A8");~Y(){func_00184950(this,2);}};
+struct Y {int flags;unsigned char*cursor;int left,consumed;unsigned char*raw;int rawBytes,decompFlags,pending,word20;unsigned char*window;int word28,word2C;void*vt;int capacity;unsigned char*buffer;int handle3C,word40,word44;uint word48;int word4C,word50,word54,word58,word5C,word60;char tail64[0xC];Y(int cb,void*pv,int flags) __asm__("__3OBJiPvi");~Y(){func_00184950(this,2);}};
 struct K {uint x0,x4;char pad[0x34-8];uint x34;int pad2;uint x3C;};
 extern "C" {
 extern char D_002A6CB8[];
 int func_0021ECD8(char *buf, const char *fmt, ...);
 int func_001AC7A0(void *p, char *name, int mode, int *ph);
-void *func_001AE318(REQUEST *pmsg);
+void *PvAllocStackImpl__FP7SWALLOC(REQUEST *pmsg);
 int func_00184D60(Y *py, X *px);
 int func_001AC8A8(void *p, int h, char *buf, int n, int *pn);
 int func_00117898(Y *py, int cb, char *buf);
@@ -91,7 +91,7 @@ int func_001AC260(void *p, const char *a, K *k, const char *b)
         REQUEST *pmsg = &msg;
         pmsg->bytes = 0x403F;
         pmsg->alignment = 0x10;
-        void *pv = func_001AE318(pmsg);
+        void *pv = PvAllocStackImpl__FP7SWALLOC(pmsg);
         Y y(0x403F, pv, 0);
         if (!SetKey(&x, k) || !func_00184D60(&y, &x))
             ret = 0x27;

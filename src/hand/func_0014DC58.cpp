@@ -1,6 +1,6 @@
 // func_0014DC58: ported from Lilly's personal Sly 2 decomp (src/P2/cm.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002A2DE0 (D_002A2DE0), D_002BD850 (D_002BD850), D_002BD854 (SW_CmJolt), D_002DDED0 (g_clock), D_002BBB60 (g_lmZeroOne), D_002BD860 (s_clqUToUJolt), D_002BD870 (s_dposJolt), D_002BD880 (s_rotJolt), D_002BD8A0 (s_vecOffset), D_002BD890 (s_vecRange)
+// Globals: D_002A2DE0 (D_002A2DE0), D_002BD850 (D_002BD850), D_002BD854 (SW_CmJolt), g_clock (g_clock), D_002BBB60 (g_lmZeroOne), D_002BD860 (s_clqUToUJolt), D_002BD870 (s_dposJolt), D_002BD880 (s_rotJolt), D_002BD8A0 (s_vecOffset), D_002BD890 (s_vecRange)
 // 0x0014DC58 UpdateCmMat4__FP2CM  (T1386; Sly 1 never matched it)
 // The camera's placement CM::mat (3 rotation rows, row 3 = the position; SetCmMat4 / SetCmPanTilt / the policies set it) or its projection changed:
 //  1. the world -> clip matrix matViewProj = CombineEyeLookAtProj(eye, matProj), where eye is CM::mat itself, or, for 0.5 s after a camera jolt
@@ -11,7 +11,7 @@
 //     tan(y) * 18.1, each also stored transposed (x, y, z of the four normals = agFrustumXyz / agFrustumWideXyz, the VU0 cull microprogram's vf10-vf12);
 //  4. UpdateCmVisZone picks the vis zone the camera is in.
 // How it matches: the jolt's float is moved into a GPR once (VuFloatOfFloat is CSEd) and spilled across the calls; the shake matrix is built in
-// matEye (rotation rows from LoadRotateMatrix, the position row through func_00256D18, w column last) and multiplied in place (a temp + copy); the
+// matEye (rotation rows from LoadRotateMatrix, the position row through __as__6VECTORG9VU_VECTOR, w column last) and multiplied in place (a temp + copy); the
 // frustum copy loops index the four planes with separate pointers; the wide copy continues at agFrustumXyz[4 * i] (agFrustumWideXyz directly follows
 // agFrustumXyz) with the first loop's counter, so loop.c, not gcse, makes its start address (a plain pcm->agFrustumWideXyz is hoisted into an s register
 // by PRE); the pointers of the wide planes are the PRE-hoisted copies the game has before the first BuildFrustrum call.
@@ -148,7 +148,7 @@ struct CLOCK
       int cWrapAround;
       undefined4 unk_0x5c;
 };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 struct TN;
 enum CPP
 {
@@ -411,7 +411,7 @@ extern qword D_002BD880;
 extern qword D_002BD890;
 extern qword D_002BD8A0;
 extern qword D_002A2DE0;
-extern float *func_00256D18(float *pg, qword qw);
+extern float *__as__6VECTORG9VU_VECTOR(float *pg, qword qw);
 static inline qword QwMulX(qword qwRow, VU_FLOAT gScale)
 {
     qword qw;
@@ -439,7 +439,7 @@ void UpdateCmMat4(CM *pcm) __asm__("func_0014DC58");
 void UpdateCmMat4(CM *pcm)
 {
     MATRIX4 matEye;
-    float dtJolt = D_002DDED0.t - pcm->tJolt;
+    float dtJolt = g_clock.t - pcm->tJolt;
     if (dtJolt > D_002BD850)
     {
         CombineEyeLookAtProj(&pcm->mat, &pcm->matProj, &pcm->matViewProj);
@@ -450,7 +450,7 @@ void UpdateCmMat4(CM *pcm)
         float gJolt = sinf(dtJolt * D_002BD854) * gEnv;
         {
             MATRIX3 matRot = LoadRotateMatrix(QwMulX(D_002BD880, VuFloatOfFloat(gJolt)));
-            func_00256D18(matEye.mat[3], QwMulX(D_002BD870, VuFloatOfFloat(gJolt)));
+            __as__6VECTORG9VU_VECTOR(matEye.mat[3], QwMulX(D_002BD870, VuFloatOfFloat(gJolt)));
             *(MATRIX3 *)&matEye = matRot;
         }
         matEye.mat[3][3] = 1.0f;

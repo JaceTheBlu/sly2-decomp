@@ -1,4 +1,4 @@
-// g_pfrmOpen: Sly 1 name of the current-frame pointer (symbol_addrs g_pfrmOpen, set in OpenFrame); D_002DEA4C in config.
+// g_pfrmOpen: Sly 1 name of the current-frame pointer (symbol_addrs g_pfrmOpen, set in OpenFrame); g_pfrmOpen in config.
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned long ulong;
 typedef struct { qword r[4]; } M4;
@@ -18,8 +18,8 @@ extern FR *g_pfrmOpen;
 extern FR D_002DEA50;
 extern char D_002DF800[], D_002DF940[], D_002DFA80[], D_002DEDC0[];
 extern char D_002DEA00[];
-extern GAME D_003DD490;
-extern CM D_002DDF40;
+extern GAME g_sw;
+extern CM g_cm;
 extern V3 D_002C1F00, D_002C1F10;
 extern int D_002DE5A4;
 extern int D_002BDD20[];
@@ -33,7 +33,7 @@ void func_00226CA8(VIFS *p, int a, int b);
 void func_00226F28(VIFS *p, int a, int b, void *pv, int n);
 void func_0014F768(CM *p, int k, void *pv, M4 *pm0, M4 *pm1);
 void func_001576F0(VIFS *p);
-void func_001574A0(void *p);
+void Flush__4DMAS(void *p);
 void func_001EA9F0(GAME *p, int n);
 
 void func_00157FA0(GAME *pgame)
@@ -58,7 +58,7 @@ void func_00157FA0(GAME *pgame)
     func_001574B8(&D_002DEA28);
     if (pgame->f3E3C || aiFirst[1] == ac[1])
         func_002270C8(&D_002DEA28, 0x25, D_002DEDC0, 0);
-    if (D_003DD490.f3E38) {
+    if (g_sw.f3E38) {
         func_00226D10(&D_002DEA28);
         if (g_pfrmOpen == &D_002DEA50)
             func_00157598(&D_002DEA28, D_002DF940);
@@ -67,8 +67,8 @@ void func_00157FA0(GAME *pgame)
     }
     func_00226CA8(&D_002DEA28, 0, 0);
     {
-        float sNear = D_002DDF40.sNear;
-        float sFar = D_002DDF40.sFar;
+        float sNear = g_cm.sNear;
+        float sFar = g_cm.sFar;
         float k = (sNear + sFar) / (sNear - sFar);
         float g = sNear * (1.0f - k);
         v0.v = D_002C1F00;
@@ -79,14 +79,14 @@ void func_00157FA0(GAME *pgame)
     func_00226F28(&D_002DEA28, 0xC, 2, &v0, 0);
     func_00226F28(&D_002DEA28, 0, 1, &D_002DE5A4, 0xD);
     D_002DE5A4 = 0;
-    if (D_003DD490.f3E38) {
+    if (g_sw.f3E38) {
         if (g_pfrmOpen == &D_002DEA50)
-            func_0014F768(&D_002DDF40, 1, 0, &mat0, &mat1);
+            func_0014F768(&g_cm, 1, 0, &mat0, &mat1);
         else
-            func_0014F768(&D_002DDF40, 2, 0, &mat0, &mat1);
+            func_0014F768(&g_cm, 2, 0, &mat0, &mat1);
     } else {
-        M4 *pm0 = &D_002DDF40.m140;
-        M4 *pm1 = &D_002DDF40.m60;
+        M4 *pm0 = &g_cm.m140;
+        M4 *pm1 = &g_cm.m60;
         mat0 = *pm0;
         mat1 = *pm1;
     }
@@ -120,8 +120,8 @@ void func_00157FA0(GAME *pgame)
     if (kPrev != -1)
         D_002BDD88[kPrev].pfnEnd(&D_002DEA28, kindPrev, -1);
     D_003D4A50 = 0;
-    func_001574A0(D_002DEA00);
-    func_001574A0(&D_002DEA28);
+    Flush__4DMAS(D_002DEA00);
+    Flush__4DMAS(&D_002DEA28);
     if (pgame->f3EA8) {
         pgame->f3EA8 = 0;
         func_001EA9F0(pgame, 0);

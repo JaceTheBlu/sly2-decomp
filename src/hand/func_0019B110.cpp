@@ -1,3 +1,5 @@
+#include "vu0.h"
+#include "clock.h"
 // func_0019B110: chooses the jump target of the player (JTAIR, the family of Lilly's jtair.c: func_0019A750 is
 // JtPlanLaunchVz). Every candidate list (D_003E13B4..D_003E142C are 12-byte DL heads) is scanned; a candidate is
 // scored with func_0011D9E0 (a 1-D minimizer over the matched func_0019AA58/ABB8/ABF0/AC88/AAB8/AB38 callbacks),
@@ -112,7 +114,6 @@ struct OBJCTX { JTAIR *pjtair; void *plo; int pad[2]; qword v; };               
 struct PAIR { JTAIR *pjtair; void *plo; };                                               // func_0019ABF0
 struct SOLIST { int cpso; void **apso; };                                                // func_0019B0A8
 
-struct CLOCK { float t, dt; };
 typedef float (*PFNSCORE)(void *, float);
 
 extern "C" {
@@ -121,7 +122,7 @@ extern CURVE *D_003E13CC, *D_003E13C0, *D_003E13F0;
 extern HOOK *D_003E13B4;
 extern MESH *D_003E142C;
 extern STEPPLAYER *D_002F7900;      // the partner
-extern CLOCK D_002DDED0;            // g_clock
+extern CLOCK g_clock;            // g_clock
 extern qword D_002A2DD0;            // zero vector
 extern float D_002BF8E0;            // score limit
 extern float D_002BF8E4, D_002BF8E8, D_002BF8EC, D_002BF8F0, D_002BF8F4, D_002BF8F8, D_002BF8FC, D_002BF904, D_002BF908;
@@ -130,7 +131,7 @@ extern float D_002BF90C, D_002BF914, D_002BF918;
 qword func_001A62E8(void *plo);                                         // PosLoWorld
 void *func_002333B4(void *pv, int b, uint cb);                         // memset
 qword func_0019A750(JTAIR *pjtair, int nKind);                         // JtPlanLaunchVz
-int func_00132B10(void *plo, int cid);
+int FIsBasicDerivedFrom__FP5BASIC3CID(void *plo, int cid);
 void func_0019A4A0(JTAIR *pjtair, VU_VECTOR v, void *plo, VU_VECTOR pos, VU_VECTOR dpos, float *pt, float *pg,
                    VECTOR *ppos, VECTOR *pv);
 float FUN_001cf138(JTAIR *pjtair, void *plo, float g, float dg);
@@ -161,8 +162,6 @@ float func_002458F0(float y, float x);                                 // atan2f
 void func_00195FB8(JTAIR *pjtair, int nKind, void *plo);
 }
 
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
-static inline qword Add(qword a, qword b) { qword r; __asm__("vadd.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline float LengthSquared(qword v)
 {
     qword l, one; float r;
@@ -198,7 +197,7 @@ extern "C" void func_0019B110(JTAIR *pjtair, void *ploForce)
     vLaunch.q = func_0019A750(pjtair, 4);
     float tBest = 0.0f;
 
-    if (func_00132B10(pjtair->pstepplayer, 0x35)) {
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(pjtair->pstepplayer, 0x35)) {
         for (SHAPE *pshape = D_003E13D8; pshape; pshape = pshape->pshapeNext) {
             if (!(pshape->grf & grf))
                 continue;
@@ -273,7 +272,7 @@ extern "C" void func_0019B110(JTAIR *pjtair, void *ploForce)
                     continue;
                 if ((phook->grfHook & 1) == 0)
                     continue;
-                if (!func_00132B10(phook, 0x13))
+                if (!FIsBasicDerivedFrom__FP5BASIC3CID(phook, 0x13))
                     continue;
             }
             if (!(phook->grf & grf))
@@ -283,7 +282,7 @@ extern "C" void func_0019B110(JTAIR *pjtair, void *ploForce)
             if (phook != ploForce) {
                 if (phook->sHeight < pos.f[2] - posTarget.f[2])
                     continue;
-                if (1000000.0f < LengthSquared(Sub(posHook, pos.q)))
+                if (1000000.0f < LengthSquared(QwSub(posHook, pos.q)))
                     continue;
             }
             OBJCTX ctx;
@@ -304,7 +303,7 @@ extern "C" void func_0019B110(JTAIR *pjtair, void *ploForce)
             }
             nKind = 14;
             ploBest = phook;
-            posBest.q = Add(posHit.q, pjtair->pstepplayer->qwUnk240);
+            posBest.q = QwAdd(posHit.q, pjtair->pstepplayer->qwUnk240);
             vBest = vHit;
             gBest = GMinOf(gBest, g);
             tBest = t;
@@ -315,7 +314,7 @@ extern "C" void func_0019B110(JTAIR *pjtair, void *ploForce)
             if (pmesh != ploForce) {
                 if (pmesh->sHeight < pos.f[2] - posTarget.f[2])
                     continue;
-                if (1000.0f < Length(Sub(posTarget.q, pos.q)))
+                if (1000.0f < Length(QwSub(posTarget.q, pos.q)))
                     continue;
             }
             TRI triHit;
@@ -340,7 +339,7 @@ extern "C" void func_0019B110(JTAIR *pjtair, void *ploForce)
                 continue;
             nKind = 16;
             ploBest = pmesh;
-            posBest.q = Add(posHit.q, pjtair->pstepplayer->qwUnk240);
+            posBest.q = QwAdd(posHit.q, pjtair->pstepplayer->qwUnk240);
             vBest = vHit;
             gBest = GMinOf(gBest, gMesh);
             tBest = t;
@@ -348,7 +347,7 @@ extern "C" void func_0019B110(JTAIR *pjtair, void *ploForce)
         }
     }
 
-    if (func_00132B10(pjtair->pstepplayer, 0x37) && D_002F7900 && D_002F7900->nPartnerState == 15 &&
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(pjtair->pstepplayer, 0x37) && D_002F7900 && D_002F7900->nPartnerState == 15 &&
         !D_002F7900->fPartnerBusy) {
         posTarget.q = func_001A62E8(D_002F7900->ploPartnerTarget);
         func_0019A4A0(pjtair, vLaunch, D_002F7900->ploPartnerTarget, posTarget, D_002A2DD0, &t, &g, &posHit, &vHit);
@@ -385,7 +384,7 @@ LPartnerDone:
         if (pcurve != ploForce) {
             if (pcurve->sHeight < pos.f[2] - posTarget.f[2])
                 continue;
-            if (1000.0f < Length(Sub(posTarget.q, pos.q)))
+            if (1000.0f < Length(QwSub(posTarget.q, pos.q)))
                 continue;
         }
         PAIR pair;
@@ -413,7 +412,7 @@ LPartnerDone:
             continue;
         nKind = 15;
         ploBest = pcurve;
-        posBest.q = Add(posHit.q, pjtair->pstepplayer->qwUnk240);
+        posBest.q = QwAdd(posHit.q, pjtair->pstepplayer->qwUnk240);
         vBest = vHit;
         gBest = GMinOf(gBest, gCurve);
         tBest = t;
@@ -430,7 +429,7 @@ LPartnerDone:
         OBJCTX ctx;
         VECTOR dpos;
         float u;
-        dpos.q = Sub(pos.q, posShape);
+        dpos.q = QwSub(pos.q, posShape);
         ctx.v = v.q;
         ctx.pjtair = pjtair;
         ctx.plo = pshape;
@@ -527,8 +526,8 @@ LPartnerDone:
 
     if (nKind != -1) {
         XF *pxf = pjtair->pstepplayer->pxf;
-        pxf->tGoal = D_002DDED0.t + tBest;
-        pxf->posGoal = Sub(posBest.q, pjtair->pstepplayer->qwUnk240);
+        pxf->tGoal = g_clock.t + tBest;
+        pxf->posGoal = QwSub(posBest.q, pjtair->pstepplayer->qwUnk240);
         pxf->vGoal = vBest.q;
         pjtair->uTarget = uBest;
         pjtair->sTarget = sBest;

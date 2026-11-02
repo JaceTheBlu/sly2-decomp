@@ -15,7 +15,7 @@ public:
     int *a60;
 };
 struct G;
-extern G D_003DD490;
+extern G g_sw;
 extern "C" int func_00162670(O *p);
 extern "C" int func_0020E040(G *pg);
 extern "C" void func_00162DD0(O *p);
@@ -41,7 +41,7 @@ extern "C" void func_00162BB8(O *p, int n, int m)
                 break;
             }
         }
-    } else if (n == 0x10 && p->f50 && !func_0020E040(&D_003DD490)) {
+    } else if (n == 0x10 && p->f50 && !func_0020E040(&g_sw)) {
         func_00162DF8(p);
     }
 }

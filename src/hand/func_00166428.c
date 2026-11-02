@@ -1,7 +1,7 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
-typedef struct M4 { qword r[4]; } M4;
 
-void func_00166428(const M4 *matrix, unsigned int count,
+void func_00166428(const MATRIX4 *matrix, unsigned int count,
                    const qword *in0, qword *output)
 {
     if (count) {
@@ -14,7 +14,7 @@ void func_00166428(const M4 *matrix, unsigned int count,
         register qword odd __asm__("vf5");
 
         const qword *input;
-        /* first input row: volatile asm keeps it ahead of the pointer/end updates (Claude agent) */
+        /* first input row: volatile asm keeps it ahead of the pointer/end updates */
         __asm__ __volatile__("lqc2 %0,%1" : "=j"(even) : "m"(*in0));
         input = in0 + 1;
         end = (unsigned int)output + end;
@@ -45,8 +45,8 @@ void func_00166428(const M4 *matrix, unsigned int count,
 
 typedef char layout_qword[(sizeof(qword)==16)?1:-1];
 typedef char layout_pointer[(sizeof(void*)==4)?1:-1];
-typedef char layout_M4[(sizeof(M4)==0x40)?1:-1];
-typedef char layout_M4_row0[((unsigned long)&((M4*)0)->r[0]==0x0)?1:-1];
-typedef char layout_M4_row1[((unsigned long)&((M4*)0)->r[1]==0x10)?1:-1];
-typedef char layout_M4_row2[((unsigned long)&((M4*)0)->r[2]==0x20)?1:-1];
-typedef char layout_M4_row3[((unsigned long)&((M4*)0)->r[3]==0x30)?1:-1];
+typedef char layout_M4[(sizeof(MATRIX4)==0x40)?1:-1];
+typedef char layout_M4_row0[((unsigned long)&((MATRIX4*)0)->r[0]==0x0)?1:-1];
+typedef char layout_M4_row1[((unsigned long)&((MATRIX4*)0)->r[1]==0x10)?1:-1];
+typedef char layout_M4_row2[((unsigned long)&((MATRIX4*)0)->r[2]==0x20)?1:-1];
+typedef char layout_M4_row3[((unsigned long)&((MATRIX4*)0)->r[3]==0x30)?1:-1];

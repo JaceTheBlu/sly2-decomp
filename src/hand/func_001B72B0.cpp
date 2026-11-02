@@ -1,12 +1,12 @@
 // func_001B72B0: rotation (quaternion) and position of `stop` relative to the owner's two end nodes of p->link.
 //  - No pose: transform the input basis into the right parent's frame (func_0022FD38) and take its rotation
-//    (func_0011BFF0); transform the input position through the left parent (func_0022FC48).
+//    (DecomposeRotateMatrixEuler__FP7MATRIX3); transform the input position through the left parent (func_0022FC48).
 //  - With a pose: collect the parent chain from pose->first up to `stop` (at most 16 nodes) and the indices of the
 //    owner's left/right nodes in it, build the relative frame replace = inverse(from * pose * inverse(input) * to)
 //    (rotation re-orthonormalised through the quaternion, position = the right node's local position), then
 //    accumulate the chain with `replace` substituted for the right node and output the final position.
 //
-// How the match was found (wave-4 lane 3, from w3lane6.v2 at aligned 16):
+// How the match was found:
 //  - Matrix products by value with const-reference operands, nested as written in one expression
 //    (`M4 result = Mul(Mul(from, inverse), to)`): the outer call's return slot address is put in a register before the
 //    inner call is expanded, so gcse meets &result before the inner temporary (the game's PRE copy order).
@@ -33,18 +33,18 @@ extern "C" M4 D_002A2D30;   // identity matrix
 extern "C" M3 func_0022FD38(NODE *, NODE *, const M3 &);
 extern "C" M4 func_0022FF40(NODE *, NODE *, const M4 &);
 extern "C" VU_VECTOR func_0022FC48(NODE *, NODE *, VU_VECTOR);
-extern "C" VU_VECTOR func_0011BFF0(const M3 *);
+extern "C" VU_VECTOR DecomposeRotateMatrixEuler__FP7MATRIX3(const M3 *);
 extern "C" void func_0011B628(M3 *, VU_VECTOR);
-extern "C" qword *func_00256D18(qword *, VU_VECTOR);
+extern "C" qword *__as__6VECTORG9VU_VECTOR(qword *, VU_VECTOR);
 extern "C" void func_0011C318(M4 *, const M4 *);
-extern "C" M4 func_0011C168(const M4 &, const M4 &);
+extern "C" M4 __ml__FRC7MATRIX4T0(const M4 &, const M4 &);
 
 extern "C" void func_001B72B0(P *const p, NODE *stop, const M4 *input, VU_VECTOR *outRotation, VU_VECTOR *outPosition)
 {
     if (!p->link->pose) {
         M3 basis;
         basis = func_0022FD38(stop, p->link->owner->right->parent, input->basis);
-        *outRotation = func_0011BFF0(&basis);
+        *outRotation = DecomposeRotateMatrixEuler__FP7MATRIX3(&basis);
         *outPosition = func_0022FC48(stop, p->link->owner->left->parent, input->position.q);
         return;
     }
@@ -65,13 +65,13 @@ extern "C" void func_001B72B0(P *const p, NODE *stop, const M4 *input, VU_VECTOR
         }
         M4 from = func_0022FF40(p->link->pose->first, owner->right, D_002A2D30);
         M4 to = func_0022FF40(owner->right->parent, stop, D_002A2D30);
-        from = func_0011C168(from, p->link->pose->transform);
+        from = __ml__FRC7MATRIX4T0(from, p->link->pose->transform);
         M4 replace;
-        M4 result = func_0011C168(func_0011C168(from, inverse), to);
+        M4 result = __ml__FRC7MATRIX4T0(__ml__FRC7MATRIX4T0(from, inverse), to);
         func_0011C318(&replace, &result);
-        rotation.q = func_0011BFF0(&replace.basis);
+        rotation.q = DecomposeRotateMatrixEuler__FP7MATRIX3(&replace.basis);
         func_0011B628(&result.basis, rotation.q);
-        func_00256D18(&replace.position.q, chain[right]->local.position.q);
+        __as__6VECTORG9VU_VECTOR(&replace.position.q, chain[right]->local.position.q);
         M4 *pmat = &replace;
         pmat->basis = result.basis;
         replace.basis.row[0].i[3] = replace.basis.row[1].i[3] = replace.basis.row[2].i[3] = 0;
@@ -79,16 +79,16 @@ extern "C" void func_001B72B0(P *const p, NODE *stop, const M4 *input, VU_VECTOR
         result = D_002A2D30;
         M4 upper = D_002A2D30;
         for (int i = count - 1; i > left; i--) {
-            if (i == right) result = func_0011C168(result, replace);
-            else result = func_0011C168(result, chain[i]->local);
+            if (i == right) result = __ml__FRC7MATRIX4T0(result, replace);
+            else result = __ml__FRC7MATRIX4T0(result, chain[i]->local);
         }
         for (j = left - 1; j >= 0; j--) {
-            if (j == right) upper = func_0011C168(upper, replace);
-            else upper = func_0011C168(upper, chain[j]->local);
+            if (j == right) upper = __ml__FRC7MATRIX4T0(upper, replace);
+            else upper = __ml__FRC7MATRIX4T0(upper, chain[j]->local);
         }
-        upper = func_0011C168(upper, p->link->pose->transform);
+        upper = __ml__FRC7MATRIX4T0(upper, p->link->pose->transform);
         M4 product;
-        M4 intermediate = func_0011C168(func_0011C168(upper, inverse), result);
+        M4 intermediate = __ml__FRC7MATRIX4T0(__ml__FRC7MATRIX4T0(upper, inverse), result);
         func_0011C318(&product, &intermediate);
         finalPosition = product.position;
         if (outRotation) *outRotation = rotation.q;

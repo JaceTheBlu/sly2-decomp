@@ -2,7 +2,7 @@ struct E { int x0; int x4; int x8; };
 struct S { int x0; int pad[4]; int x14; struct E *x18; };
 struct D { int a; int b; };
 extern char D_002BFA30[];
-struct E *func_001AE238(struct D *d, void *p);
+struct E *PvAllocSwCopyImpl__FP7SWALLOCPv(struct D *d, void *p);
 int func_001F4C58(int a, int b, int c);
 void func_001A1098(struct S *s)
 {
@@ -11,7 +11,7 @@ void func_001A1098(struct S *s)
     s->x14 = 7;
     d.a = 0x54;
     d.b = 0x10;
-    s->x18 = func_001AE238(&d, D_002BFA30);
+    s->x18 = PvAllocSwCopyImpl__FP7SWALLOCPv(&d, D_002BFA30);
     for (i = 0; i < s->x14; i++) {
         struct E *e = &s->x18[i];
         e->x8 = func_001F4C58(s->x0, e->x0, 6);

@@ -29,8 +29,8 @@ typedef struct OBJ {
     int x120;
     int x124;
 } OBJ;
-extern struct CLOCK { float a[16]; } D_002DDED0;
-extern char D_003DD490[];
+extern struct CLOCK { float a[16]; } g_clock;
+extern char g_sw[];
 extern int D_003E0F9C;
 void func_0020EFC0(void *, int);
 void func_0020F030(void *, int);
@@ -46,15 +46,15 @@ void func_001DD300(OBJ *p, int s)
     if (s == p->x40)
         return;
     if (p->x40 == -1) {
-        func_0020EFC0(D_003DD490, 0);
+        func_0020EFC0(g_sw, 0);
         VCALL(p, 10);
     }
     old = p->x40;
     p->x40 = s;
-    p->x44 = D_002DDED0.a[15];
+    p->x44 = g_clock.a[15];
     switch (s) {
     case -1:
-        func_0020F030(D_003DD490, 0);
+        func_0020F030(g_sw, 0);
         VCALL(p, 11);
         if (p->x24->x58 > 0)
             func_00212A50(p->x24, 1);

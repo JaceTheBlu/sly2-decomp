@@ -11,7 +11,7 @@ void *func_001DB7A8(void *); /* constructor: returns this */
 void *func_001DCC58(void *); /* constructor: returns this */
 void *func_001DD648(void *); /* constructor: returns this */
 void *func_001DD7D8(void *); /* constructor: returns this */
-void func_0011CCA8(void *, int, int, int);
+void __8SLOTHEAPiii(void *, int, int, int);
 void func_00258348(void *, int);
 static inline void InitBase(BASE *p, void *vt)
 {
@@ -33,17 +33,17 @@ void func_001DE008(int init, int prio)
             func_001DD648(D_003DA4F0);
             func_001DD7D8(D_003DA530);
             if (++D_002DD2E0 == 1)
-                func_0011CCA8(D_004520A8, 0x14, 0x2000, 0x10);
+                __8SLOTHEAPiii(D_004520A8, 0x14, 0x2000, 0x10);
             if (++D_002DD2E4 == 1)
-                func_0011CCA8(D_004520D0, 0x18, 0x800, 0x10);
+                __8SLOTHEAPiii(D_004520D0, 0x18, 0x800, 0x10);
             if (++D_002DD2E8 == 1)
-                func_0011CCA8(D_004520F8, 0x28, 0x200, 0x10);
+                __8SLOTHEAPiii(D_004520F8, 0x28, 0x200, 0x10);
             if (++D_002DD2EC == 1)
-                func_0011CCA8(D_00452120, 0x1C, 0x800, 0x10);
+                __8SLOTHEAPiii(D_00452120, 0x1C, 0x800, 0x10);
             if (++D_002DD2F0 == 1)
-                func_0011CCA8(D_00452148, 0xC, 0xC8, 0x10);
+                __8SLOTHEAPiii(D_00452148, 0xC, 0xC8, 0x10);
             if (++D_002DD2F4 == 1)
-                func_0011CCA8(D_00452170, 0x14, 0x100, 0x10);
+                __8SLOTHEAPiii(D_00452170, 0x14, 0x100, 0x10);
         } else {
             func_00258348(D_003DA530, 2);
             func_00258348(D_003DA4F0, 2);

@@ -1,6 +1,6 @@
 // func_002044B0: a STEP's contact-velocity adjustment (vtable slot 56; Sly 1 has AdjustStepXpVelocity(STEP *, XP *, int)).
 // After the base version (func_001F4FC0), for a kind-0xE contact: the closing speed along the contact normal is smoothed
-// with GSmooth (func_0011D018) toward two limits (SMPs D_002C3C98 / D_002C3CA8), the change is limited to dt * 9000 up and
+// with GSmooth (GSmooth__FfffP3SMPPf) toward two limits (SMPs D_002C3C98 / D_002C3CA8), the change is limited to dt * 9000 up and
 // dt * -4500 down, and this side's velocity gets normal * -speed plus (matTarget * vUnk190 without its part along the
 // normal) * gUnk180. Finally the contact distance moves by gUnk210 - gUnk248.
 // Matched with one asm statement per VU0 operation, no register pins: the local pmat gives the target's pointer/row registers,
@@ -53,12 +53,12 @@ struct CLOCK
     float dt;
 };
 
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002C3C98[];
 extern float D_002C3CA8[];
 
 void func_001F4FC0(struct STEP *pstep, struct XP *pxp, int ixpd);
-float func_0011D018(float gCur, float gTarget, float dt, float *psmp, float *pdgNext);
+float GSmooth__FfffP3SMPPf(float gCur, float gTarget, float dt, float *psmp, float *pdgNext);
 
 static inline qword QwSub(qword a, qword b)
 {
@@ -129,19 +129,19 @@ extern "C" void func_002044B0(struct STEP *pstep, struct XP *pxp, int ixpd)
     float gVn = FloatOfVf(QwDot(QwSub(pxp->axpd[0].v, pxp->axpd[1].v), pxp->normal));
     float gVnMin;
     float gVnTarget;
-    func_0011D018(pxp->gDist, pstep->gUnk210, D_002DDED0.dt, D_002C3C98, &gVnMin);
-    func_0011D018(pxp->gDist, 0.0f, D_002DDED0.dt, D_002C3CA8, &gVnTarget);
+    GSmooth__FfffP3SMPPf(pxp->gDist, pstep->gUnk210, g_clock.dt, D_002C3C98, &gVnMin);
+    GSmooth__FfffP3SMPPf(pxp->gDist, 0.0f, g_clock.dt, D_002C3CA8, &gVnTarget);
     gVn = gVn > gVnMin ? gVn : gVnMin;
     if (gVn < gVnTarget)
     {
         float dg = gVnTarget - gVn;
-        float dgMax = D_002DDED0.dt * 9000.0f;
+        float dgMax = g_clock.dt * 9000.0f;
         gVn += dg < dgMax ? dg : dgMax;
     }
     else
     {
         float dg = gVnTarget - gVn;
-        float dgMin = D_002DDED0.dt * -4500.0f;
+        float dgMin = g_clock.dt * -4500.0f;
         gVn += dg > dgMin ? dg : dgMin;
     }
 

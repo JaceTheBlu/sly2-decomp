@@ -3,12 +3,12 @@ struct CTX { int a[4]; CTX(); ~CTX(); };
 struct AREQ { int cb; int align; AREQ(int c, int a) { cb = c; align = a; } };
 struct P { char pad[0xE8]; int c; char pad1[0xF4 - 0xEC]; qword *a; };
 extern "C" {
-void *func_001AE318(const AREQ &r);
+void *PvAllocStackImpl__FP7SWALLOC(const AREQ &r);
 void func_002338C0(void *base, int n, int cb, int (*cmp)(const void *, const void *));
 void func_001AE5A0(void *dst, const void *src, int cb);
 int func_001BDBC8(const void *a, const void *b);
 }
-static inline void *Alloc(int cb) { return func_001AE318(AREQ(cb, 0x10)); }
+static inline void *Alloc(int cb) { return PvAllocStackImpl__FP7SWALLOC(AREQ(cb, 0x10)); }
 static inline float CrossZ(qword a, qword b, qword c)
 {
     qword d, e, r; float z;

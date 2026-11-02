@@ -1,9 +1,9 @@
+#include "cref.h"
 struct C { int a[4]; };
-struct CRef { int m_tagk; int m_n; };
 struct S { char pad[0x184]; int f184; };
 extern char D_003D4A60[];
 void func_001AE478(struct C *);
-void func_001AE4A0(struct C *, int);
+void _$_18CBinaryInputStream(struct C *, int);
 void *func_0013D1A8(struct S *);
 void func_002581C0(struct CRef *, void *, void *);
 void func_00129EC8(struct CRef *);
@@ -12,7 +12,7 @@ static inline int NFromRef(void *pv)
     struct CRef ref;
     int n;
     func_002581C0(&ref, pv, D_003D4A60);
-    n = ref.m_n;
+    n = ref.m_tag;
     func_00129EC8(&ref);
     return n;
 }
@@ -28,6 +28,6 @@ int func_0013D248(struct S *p) {
     case 0x2c0: n = 0x2bd; break;
     case 0x2c1: n = 0x2be; break;
     }
-    func_001AE4A0(&ctx, 2);
+    _$_18CBinaryInputStream(&ctx, 2);
     return n;
 }

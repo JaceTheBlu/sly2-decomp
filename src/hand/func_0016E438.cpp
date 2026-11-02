@@ -12,21 +12,21 @@ struct HEADER{ushort flags,base,weight,pad6,position,positionEnd,color,end,bones
 struct REQUEST{int bytes,alignment;REQUEST(int cb,int a):bytes(cb),alignment(a){}};
 extern "C"{
 void*func_001AE478(void*);
-void func_001AE4A0(void*,int);
-void*func_001AE2A0(const REQUEST&);
-void func_0014E270(ENV*,float*,float);
+void _$_18CBinaryInputStream(void*,int);
+void*PvAllocSwClearImpl__FP7SWALLOC(const REQUEST&);
+void SetCmLookAt__FP2CMfPv(ENV*,float*,float);
 void*func_002333B4(void*,int,uint);
 void func_001699E8(P*,D*,E*,SPHERE*,int,int,const int*,FACE**,CBinaryInputStream*);
-extern ENV D_002DDF40;
+extern ENV g_cm;
 extern uint D_002DEB50;
 extern QW D_002DEB60;
 extern uint D_002BE540[];
 extern UPK D_002BE558[];
 extern char D_00000000[],D_00000738[],D_000007F0[];
 }
-struct MARK{MARK(){func_001AE478(this);}~MARK(){func_001AE4A0(this,2);}};
-struct LEASE{~LEASE(){}void Acquire(){func_001AE478(this);}void Release(){func_001AE4A0(this,2);}};
-static inline void*Allocate(int bytes){return func_001AE2A0(REQUEST(bytes,16));}
+struct MARK{MARK(){func_001AE478(this);}~MARK(){_$_18CBinaryInputStream(this,2);}};
+struct LEASE{~LEASE(){}void Acquire(){func_001AE478(this);}void Release(){_$_18CBinaryInputStream(this,2);}};
+static inline void*Allocate(int bytes){return PvAllocSwClearImpl__FP7SWALLOC(REQUEST(bytes,16));}
 typedef char PARAM_Size[sizeof(PARAM)==12?1:-1];
 typedef char D_Size[sizeof(D)==20?1:-1];
 typedef char BONE_Size[sizeof(BONE)==80?1:-1];
@@ -71,7 +71,7 @@ extern "C" void func_0016E438(P*p,D*desc,E*entry,PARAM*param,SPHERE*sphere,int g
  vifs.AllocSw(0x2000);vifs.AddDmaCnt();
  float*environment;
  vifs.UnpackHelper(UPK_V4_32,1,9,0,(uint**)&environment);
- func_0014E270(&D_002DDF40,environment,param->value);
+ SetCmLookAt__FP2CMfPv(&g_cm,environment,param->value);
  int count=stream->U8Read();desc->count=count;
  entry->bones=(BONE*)Allocate((char)count*sizeof(BONE));
  for(;i<desc->count;i++){

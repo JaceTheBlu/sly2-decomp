@@ -1,9 +1,9 @@
 #include "m2c_prelude.h"
 M2C_UNK func_001291A8(M2C_UNK *, M2C_UNK *, s32, s32); /* extern */
 M2C_UNK func_00129EC8(M2C_UNK *);                   /* extern */
-s32 func_001AE318(s128 *);                          /* extern */
+s32 PvAllocStackImpl__FP7SWALLOC(s128 *);                          /* extern */
 extern s128 D_002A2DB0;
-extern s128 D_002A2DC0;
+extern s128 g_normalZ;
 extern s128 D_002A2DD0;
 extern f32 D_002A7834;
 extern f32 D_002A7838;
@@ -38,9 +38,9 @@ extern M2C_UNK D_002C2260;
 extern s32 D_002C2D8C;
 extern M2C_UNK D_002C44F0;
 extern M2C_UNK D_002C94A0;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDF10;
-extern M2C_UNK D_002DDF40;
+extern M2C_UNK g_cm;
 extern M2C_UNK D_002DE2E0;
 extern M2C_UNK D_002DEA28;
 extern s32 D_002DFBC0;
@@ -51,7 +51,7 @@ extern void *D_003D4A50;
 extern s32 D_003D4A54;
 extern M2C_UNK D_003D4A60;
 extern M2C_UNK D_003DA150;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 extern s32 D_003E0FD8;
 
 s32 func_001D2DD0(s32 arg0, s32 arg1) {

@@ -1,7 +1,7 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } VU;
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002BD344;
 extern struct { float a; float b; } D_002BD348;
 extern qword D_002A2DA0;
@@ -74,7 +74,7 @@ void func_00145DB0(struct P *p)
                 func_00146158(p, 0);
             break;
         case 2:
-            if (p->p10->x1810 == -1 && 0.1f < D_002DDED0.t - p->x34)
+            if (p->p10->x1810 == -1 && 0.1f < g_clock.t - p->x34)
                 func_00146158(p, -1);
             break;
         }

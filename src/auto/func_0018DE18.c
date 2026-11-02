@@ -1,7 +1,7 @@
 #include "m2c_prelude.h"
 extern M2C_UNK D_002A2D00;
 extern s128 D_002A2DA0;
-extern s128 D_002A2DC0;
+extern s128 g_normalZ;
 extern s128 D_002A2DD0;
 extern M2C_UNK D_002BBB60;
 extern f32 D_002BF3A0;
@@ -37,10 +37,10 @@ extern f32 D_002BF58C;
 extern f32 D_002BF590;
 extern f32 D_002BF594;
 extern M2C_UNK D_002BF598;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDED4;
 extern M2C_UNK D_002DE2E0;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 extern void *D_003E13B4;
 extern s32 D_003E1BEC;
 

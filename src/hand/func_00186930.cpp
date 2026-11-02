@@ -1,4 +1,4 @@
-// (Claude agent) Matched: volatile point load after the first m10 store and a volatile addiu for the matrix-row pointer pin the scheduling (same idea as func_00186820).
+// Matched: volatile point load after the first m10 store and a volatile addiu for the matrix-row pointer pin the scheduling (same idea as func_00186820).
 typedef int qword __attribute__((mode(TI)));
 typedef struct { qword r[4]; } MATRIX4;
 struct A { MATRIX4 m; char pad[0x30]; qword v70; char pad2[0x20]; void *pA0; };

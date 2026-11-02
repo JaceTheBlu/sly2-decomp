@@ -4,7 +4,7 @@ typedef union{qword q;float f[4];int i[4];}U;
 struct ANIM{char pad[0x40];float rate;};
 struct P{char pad[0x190];U acceleration;char pad1A0[0xE90];struct ANIM*anim;int pad1034;int side;};
 struct ENTRY{union{float value;int bits;}weight;int active;char pad8[8];U direction;};
-void func_001384C0(void*);
+void ReblendAsegbl__FP6ASEGBL(void*);
 static inline qword Dot(qword a,qword b){qword d,one;__asm__("vmul.xyz %0,%2,%3\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(d),"=&j"(one):"j"(a),"j"(b));return d;}
 static inline float FloatX(qword q){int bits;float f;__asm__("qmfc2.ni %0,%1":"=r"(bits):"j"(q));__asm__("mtc1 %1,%0":"=f"(f):"r"(bits));return f;}
 static inline float Max(float a,float b){float f;__asm__("max.s %0,%1,%2":"=f"(f):"f"(a),"f"(b));return f;}
@@ -63,5 +63,5 @@ void func_001A0450(struct P*p,struct ENTRY*axes,void*request){
   scalar.q=k;
   axes++;
  }
- {qword q;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(q):"j"(total.q),"j"(rk));{register void*argument __asm__("$4")=request;scalar.q=rk;p->acceleration.q=q;func_001384C0(argument);}}
+ {qword q;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(q):"j"(total.q),"j"(rk));{register void*argument __asm__("$4")=request;scalar.q=rk;p->acceleration.q=q;ReblendAsegbl__FP6ASEGBL(argument);}}
 }

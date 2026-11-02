@@ -2,7 +2,7 @@ typedef union QW { unsigned int aun[4]; unsigned short aus[8]; } QW;
 typedef struct ALLOCREQ { int cb; int nKind; } ALLOCREQ;
 struct X { int pad[4]; int cqw; };
 struct Y { int pad[4]; QW *aqw; char *pb; };
-QW *func_001AE238(ALLOCREQ *preq, QW *aqw);
+QW *PvAllocSwCopyImpl__FP7SWALLOCPv(ALLOCREQ *preq, QW *aqw);
 void func_00169EB8(struct X *px, struct Y *py, int cqw, QW *aqwSrc, int fReloc, int nNew, int nOld)
 {
     ALLOCREQ req;
@@ -10,7 +10,7 @@ void func_00169EB8(struct X *px, struct Y *py, int cqw, QW *aqwSrc, int fReloc, 
     req.cb = cqw << 4;
     req.nKind = 0x10;
     px->cqw = cqw;
-    aqw = func_001AE238(&req, aqwSrc);
+    aqw = PvAllocSwCopyImpl__FP7SWALLOCPv(&req, aqwSrc);
     py->aqw = aqw;
     py->pb += (char *)aqw - (char *)aqwSrc;
     if (fReloc) {

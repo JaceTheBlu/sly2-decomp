@@ -1,11 +1,14 @@
+#include "vu0.h"
+#include "dl.h"
+#include "clock.h"
 // func_00139DC0 (0x139DC0): CPU fallback of func_00139AB8 (taken when p->x160 != 0 or D_002BC9C0 is set). For every particle
 // batch in the DLI list at p->dl it copies the live particles (b.w > clock.t) from abuf[i] to abuf[(i + 1) & 1]: x160 0 =
 // velocity transformed by func_0015BFD8's matrix, 1 = plain copy, 2 = func_00117120 path; x43C == 2 updates c.w through
-// func_0011CF60. It accumulates the bounding box in vMin/vMax and sets p->vF0 = centre, p->g100 = radius + p->g120 (or calls
+// RadNormalize__Ff. It accumulates the bounding box in vMin/vMax and sets p->vF0 = centre, p->g100 = radius + p->g120 (or calls
 // virtual slot 9 when p->c444 drops to 0).
-// MATCH (Claude agent for Lilly, T1677, 2026-10-25): lilly5 (T1673) + the T1675 func_00139AB8 prologue fix: VECTOR is a
+// MATCH: lilly5 (T1673) + the T1675 func_00139AB8 prologue fix: VECTOR is a
 // struct with an anonymous union, so store_constructor emits a sched1-only CLOBBER after the clear, which gives both pool
-// his $v0 and the zero reload $v1. Loop givs: the post-switch copies go through c-based pointers pcs/pcd (laneC2f).
+// his $v0 and the zero reload $v1. Loop givs: the post-switch copies go through c-based pointers pcs/pcd.
 typedef int qword __attribute__((mode(TI)));
 #define FLT_MAX 3.40282347e+38f /* $LC0/$LC1 at 0x2A4AFC/0x2A4B00: this function's literal pool */
 typedef union { qword q; struct { float x, y, z, w; } v; } VEC;
@@ -16,8 +19,6 @@ static inline qword AddScaled(qword a, qword b, VU_FLOAT s)
     __asm__("vadda.xyzw $ACC, %1, $vf0\n\tvmaddx.xyzw %0, %2, %3x" : "=j"(r) : "j"(a), "j"(b), "j"(s.q));
     return r;
 }
-static inline qword Min(qword a, qword b) { qword r; __asm__("vmini.xyz %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
-static inline qword Max(qword a, qword b) { qword r; __asm__("vmax.xyz %0, %1, %2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline qword Mid(qword a, qword b, VU_FLOAT h)
 {
     qword c;
@@ -27,8 +28,6 @@ static inline qword Mid(qword a, qword b, VU_FLOAT h)
 struct M4 { qword r[4]; };
 struct VECTOR { union { struct { float x, y, z; } v; qword q; }; };
 
-struct DL { void *head; void *tail; int ibDle; };
-struct DLI { struct DL *m_pdl; void **m_ppv; int m_ibDle; struct DLI *m_pdliNext; };
 struct BUF { VEC a[0x2B]; VEC b[0x2B]; VEC c[0x2B]; char pad[0x840 - 0x810]; };
 struct E { qword v0; qword v10; };
 struct Q { struct BUF abuf[2]; int i; int c; struct E *ae; };
@@ -37,17 +36,16 @@ struct P {
     char pad0[0xC]; struct VT *pvt; char pad10[0xF0 - 0x10]; qword vF0; float g100; char pad104[0x120 - 0x104]; float g120;
     char pad124[0x160 - 0x124]; int x160; char pad164[0x170 - 0x164]; char x170[0x43C - 0x170]; int x43C; int pad440; int c444; struct DL dl;
 };
-struct CLOCK { float t; float dt; };
 #define CA(p) ((VEC *)((int)(p) - 0x560))
 #define CB(p) ((VEC *)((int)(p) - 0x2B0))
-extern struct CLOCK D_002DDED0;
-extern struct DLI *D_002DD2FC;
+extern struct CLOCK g_clock;
+extern struct DLI *g_pdliFirst;
 extern int D_002BC9C0;
 extern "C" {
 void func_00139AB8(struct P *p);
 struct M4 func_0015BFD8(void *p);
 void func_00117120(float, float, float, qword, qword, qword, qword, qword *, qword *, int);
-float func_0011CF60(float g);
+float RadNormalize__Ff(float g);
 void func_00139098(struct Q *pq);
 void func_00139DC0(struct P *p);
 }
@@ -62,8 +60,8 @@ static __inline__ void InitDli(struct DLI *pdli, struct DL *pdl)
     pdli->m_pdl = pdl;
     pdli->m_ppv = (void **)pdl;
     pdli->m_ibDle = pdl->ibDle;
-    pdli->m_pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->m_pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static __inline__ void *PvNextDli(struct DLI *pdli)
 {
@@ -104,8 +102,8 @@ void func_00139DC0(struct P *p)
         iNext = (pq->i + 1) & 1;
         pbn = &pq->abuf[iNext];
         for (i = 0; i < pq->c; i++) {
-            struct CLOCK *pclock = &D_002DDED0;
-            float t = D_002DDED0.t;
+            struct CLOCK *pclock = &g_clock;
+            float t = g_clock.t;
             float tEnd = pb->b[i].v.w;
             if (tEnd <= t) {
                 cDead++;
@@ -140,9 +138,9 @@ void func_00139DC0(struct P *p)
             CB(pcd)[0].v.w = CB(pcs)[0].v.w;
             *pcd = *pcs;
             if (p->x43C == 2)
-                pcd->v.w = func_0011CF60(pcs->v.w + pcs->v.z * pclock->dt);
-            *(qword *)&vMin = Min(*(qword *)&vMin, CA(pcd)[0].q);
-            *(qword *)&vMax = Max(*(qword *)&vMax, CA(pcd)[0].q);
+                pcd->v.w = RadNormalize__Ff(pcs->v.w + pcs->v.z * pclock->dt);
+            *(qword *)&vMin = QwMin(*(qword *)&vMin, CA(pcd)[0].q);
+            *(qword *)&vMax = QwMax(*(qword *)&vMax, CA(pcd)[0].q);
             }
             j++;
         }
@@ -167,6 +165,6 @@ void func_00139DC0(struct P *p)
         __asm__("mtc1 %1, %0" : "=f"(g) : "r"(l));
         p->g100 = g + p->g120;
     }
-    D_002DD2FC = dli.m_pdliNext;
+    g_pdliFirst = dli.m_pdliNext;
     }
 }

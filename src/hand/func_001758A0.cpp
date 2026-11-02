@@ -1,15 +1,16 @@
+#include "vtable.h"
+#include "util.h"
+#include "clock.h"
 // func_001758A0: pick the first enabled response ENTRY of p that accepts target (range, height, angle, optional
 // line of sight), ask p's HandleSpliceEvent(0x18) about it with a CRef(true), then run the response.
-// (Claude agent, T1672) MATCH from lanef10v1 with real C++ locals instead of the SLOT union and explicit calls:
-// FRAME with out-of-line ctor/dtor (func_001AE478 / func_001AE4A0(this, 2)), CRef(bool) with inline dtor
+// MATCH from lanef10v1 with real C++ locals instead of the SLOT union and explicit calls:
+// FRAME with out-of-line ctor/dtor (func_001AE478 / _$_18CBinaryInputStream(this, 2)), CRef(bool) with inline dtor
 // (func_00129EC8), and `void *argument = (char *)entry + 0x18;` declared after the CRef.
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
 struct M4 { U row[4]; };
-struct VTE { short delta, pad; void *fn; };
 struct NAME { unsigned identity; };
 struct SCALE { char pad[0x20]; float value; };
-struct LM { float low, high; };
 struct ENTRY {
     char pad0[0x50];
     LM distance, height;
@@ -36,7 +37,7 @@ struct P {
     char padFC0[4];
     SCALE *scale;
 };
-struct FRAME { int n; FRAME(); ~FRAME(); }; /* out-of-line ctor/dtor: func_001AE478 / func_001AE4A0(this, 2) */
+struct FRAME { int n; FRAME(); ~FRAME(); }; /* out-of-line ctor/dtor: func_001AE478 / _$_18CBinaryInputStream(this, 2) */
 struct LSG { U point; char rest[0x50]; };
 struct LOS { U start, end; LSG hit; };
 extern "C" void func_00129EC8(void *);
@@ -46,7 +47,6 @@ struct CREF {
     ~CREF() { func_00129EC8(this); }
 };
 struct POLY { float a, b, c; };
-struct CLOCK { float time, dt; };
 struct BASIC {
     char pad0[0xC];
     virtual void VUnk00();
@@ -54,11 +54,11 @@ struct BASIC {
     virtual void HandleSpliceEvent(unsigned symidEvent, int fPost, int cargs, void **ppvargs, CREF *pref);
 };
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern POLY D_002BE600;
 extern LM D_002BBB60;
-extern char D_003DD490[];
-int func_00132B10(P *, int);
+extern char g_sw[];
+int FIsBasicDerivedFrom__FP5BASIC3CID(P *, int);
 int func_0020A818(void *, P *);
 qword func_001A62E8(P *);
 unsigned func_001C9950(unsigned);
@@ -147,11 +147,11 @@ extern "C" ENTRY *func_001758A0(P *p, P *target, void *gate)
         if (!enabled)
             return 0;
     }
-    if (D_002DDED0.time < p->cooldown)
+    if (g_clock.t < p->cooldown)
         return 0;
-    if (func_00132B10(target, 0x32)) {
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(target, 0x32)) {
         VTE *e = &target->vt[77];
-        if (((int (*)(void *))e->fn)((char *)target + e->delta))
+        if (((int (*)(void *))e->pfn)((char *)target + e->delta))
             return 0;
     }
     if (gate && !func_0020A818(gate, p))
@@ -185,7 +185,7 @@ extern "C" ENTRY *func_001758A0(P *p, P *target, void *gate)
         }
         gain = D_002BE600.a + distance * (D_002BE600.b + distance * D_002BE600.c);
         {
-            float lo = D_002BBB60.low, hi = D_002BBB60.high;
+            float lo = D_002BBB60.gMin, hi = D_002BBB60.gMax;
             if (gain < lo)
                 gain = lo;
             else if (hi < gain)
@@ -200,7 +200,7 @@ extern "C" ENTRY *func_001758A0(P *p, P *target, void *gate)
             void **objects;
             line.start.q = from;
             line.end.q = to;
-            func_0020FAA0(D_003DD490, from, to, func_00175820, entry, &count, &objects);
+            func_0020FAA0(g_sw, from, to, func_00175820, entry, &count, &objects);
             if (func_0014CC58(0, line.start.q, line.end.q, count, objects, &line.hit) &&
                 Blocked(&line, entry->minHit))
                 continue;
@@ -214,7 +214,7 @@ extern "C" ENTRY *func_001758A0(P *p, P *target, void *gate)
             if (entry->response) {
                 M4 frame;
                 VTE *e = &target->vt[32];
-                void *owner = ((void *(*)(void *, M4 *))e->fn)((char *)target + e->delta, &frame);
+                void *owner = ((void *(*)(void *, M4 *))e->pfn)((char *)target + e->delta, &frame);
                 func_0020AB68(p, entry, owner, frame.row[3].q);
                 entry = 0;
                 if (gate)

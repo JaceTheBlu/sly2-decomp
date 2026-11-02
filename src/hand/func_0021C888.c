@@ -1,12 +1,12 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
-struct M3 { qword r[3]; };
 struct S;
 struct N;
 struct E;
-struct O { struct M3 mat; char pad[0x70-0x30]; qword pos; char pad1[0xA8-0x80]; struct E *entry; };
+struct O { struct MATRIX3 mat; char pad[0x70-0x30]; qword pos; char pad1[0xA8-0x80]; struct E *entry; };
 struct VE { short d; short pad; struct O *(*get)(void *,int); };
 struct S { char pad[0xC]; struct VE *vt; };
-struct E { struct M3 mat; qword pos; qword world; qword x50; struct N *node; struct O *object; int x68; int x6C; };
+struct E { struct MATRIX3 mat; qword pos; qword world; qword x50; struct N *node; struct O *object; int x68; int x6C; };
 struct N { int count; struct E *entries; int x8; float xC; float x10; float x14; float x18; int x1C; qword q20; qword q30; qword q40; };
 struct Hook { int kind; struct S *owner; struct O *object; int xC; int x10; int flags; void *vt; struct E *entry; };
 struct Alloc { int cb; int align; };
@@ -14,14 +14,14 @@ extern char D_002DB338[];
 int func_00117D00(void *);
 int func_00117BD0(void *);
 float func_00117E38(void *);
-void func_00117EB0(void *,qword *);
+void ReadVector__18CBinaryInputStreamP6VECTOR(void *,qword *);
 int func_00117D50(void *);
-void *func_001AE2A0(struct Alloc *);
+void *PvAllocSwClearImpl__FP7SWALLOC(struct Alloc *);
 struct Hook *func_0012E1F0(int);
 void func_00230018(struct S *,struct O *,struct Hook *);
 qword func_0022FC48(struct O *,struct O *,qword);
 qword func_0022FCC8(struct O *,struct O *,qword);
-static inline void *Alloc(int cb) { struct Alloc req; req.cb=cb; req.align=16; return func_001AE2A0(&req); }
+static inline void *Alloc(int cb) { struct Alloc req; req.cb=cb; req.align=16; return PvAllocSwClearImpl__FP7SWALLOC(&req); }
 void func_0021C888(struct S *p,void *stream) {
     int count=func_00117D00(stream);
     int i,j;
@@ -33,8 +33,8 @@ void func_0021C888(struct S *p,void *stream) {
         n->x10=func_00117E38(stream);
         n->x14=func_00117E38(stream);
         n->x18=func_00117E38(stream);
-        func_00117EB0(stream,&n->q20);
-        func_00117EB0(stream,&n->q30);
+        ReadVector__18CBinaryInputStreamP6VECTOR(stream,&n->q20);
+        ReadVector__18CBinaryInputStreamP6VECTOR(stream,&n->q30);
         n->count=func_00117D00(stream);
         n->entries=(struct E *)Alloc(n->count*sizeof(struct E));
         for(j=0;j<n->count;j++) {

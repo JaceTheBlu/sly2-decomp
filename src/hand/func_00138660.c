@@ -1,7 +1,7 @@
-// MATCH (Claude agent, laneC2c 2026-10-23): v10 plus b copied through an empty volatile "+j" asm before the 2nd Madd (the b reload is issued before the d load).
+#include "vtable.h"
+// MATCH: v10 plus b copied through an empty volatile "+j" asm before the 2nd Madd (the b reload is issued before the d load).
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } VU;
-struct VTE { short d; short pad; void *pfn; };
 struct O { struct VTE *vt; };
 struct SEG { float g0; float g4; };
 struct CL { char pad[0x74]; float x74; };
@@ -30,8 +30,8 @@ void func_00117120(float, float, float, qword, qword, qword, qword, VU *, VU *, 
 static __inline__ qword Madd(qword a, qword v, qword s)
 {
     qword r;
-    __asm__ __volatile__("vadda.xyzw $ACC, %0, $vf0" : : "j"(a), "j"(s) : "memory"); /* unused "j"(s): allocation-only operand (Claude agent) */
-    __asm__ __volatile__("vmaddx.xyzw %0, %1, %2x" : "=j"(r) : "j"(v), "j"(s), "0"(a)); /* "0"(a): r shares a's VF reg like the target (Claude agent) */
+    __asm__ __volatile__("vadda.xyzw $ACC, %0, $vf0" : : "j"(a), "j"(s) : "memory"); /* unused "j"(s): allocation-only operand */
+    __asm__ __volatile__("vmaddx.xyzw %0, %1, %2x" : "=j"(r) : "j"(v), "j"(s), "0"(a)); /* "0"(a): r shares a's VF reg like the target */
     return r;
 }
 
@@ -59,7 +59,7 @@ void func_00138660(struct P *p, struct Q *pq)
         struct O *po = p->xC[pa->xD4];
         if (po) {
             struct VTE *e = &po->vt[2];
-            ((void (*)(void *, struct Q *))e->pfn)((char *)po + e->d, pq);
+            ((void (*)(void *, struct Q *))e->pfn)((char *)po + e->delta, pq);
         } else {
             qword v = p->x10;
             float *pv = pq->xD0.f;
@@ -109,7 +109,7 @@ void func_00138660(struct P *p, struct Q *pq)
             struct B *pb = p->x8;
             if (!pb) {
                 float g = pe->p4->x74;
-                ratio = g / ((struct P volatile *)p)->p4->x74; /* volatile read (Claude agent): the target reloads p->p4 here (no cse with the loop test's load) */
+                ratio = g / ((struct P volatile *)p)->p4->x74; /* volatile read: the target reloads p->p4 here (no cse with the loop test's load) */
                 t[1] = u * g;
             } else {
                 struct SEG *ps = (struct SEG *)((char *)pe + pb->x0) + iSeg;
@@ -124,19 +124,19 @@ void func_00138660(struct P *p, struct Q *pq)
             q.x88 = &t[1];
             {
                 struct VTE *e = &po->vt[2];
-                ((void (*)(void *, struct Q *))e->pfn)((char *)po + e->d, &q);
+                ((void (*)(void *, struct Q *))e->pfn)((char *)po + e->delta, &q);
             }
             func_00117120(q.x84 - q.x80, t[1] - q.x80, ratio, q.xC0.q, q.xD0.q, q.xE0.q, q.xF0.q, &c, &d, 0);
         }
         {
             qword s;
-            register int wb asm("$19") = *(int *)&pe->w; /* register pin (Claude agent): target loads pe->w into pe's dying register */
+            register int wb asm("$19") = *(int *)&pe->w; /* register pin: target loads pe->w into pe's dying register */
             __asm__ __volatile__("qmtc2.ni %1, %0" : "=j"(s) : "r"(wb));
             a = MaddN(a, c.q, s);
             w.q = s;
             {
             qword bb = b;
-            __asm__ __volatile__("" : "+j"(bb)); /* empty asm (Claude agent): b is reloaded here, before the d load, like the target */
+            __asm__ __volatile__("" : "+j"(bb)); /* empty asm: b is reloaded here, before the d load, like the target */
             b = Madd(bb, d.q, s);
             }
         }
@@ -144,5 +144,5 @@ void func_00138660(struct P *p, struct Q *pq)
     pq->x9A = 4;
     pq->xC0.q = a;
     pq->xD0.q = b;
-    __asm__ __volatile__("" : : "r"(pq)); /* empty asm (Claude agent): one more use of pq for global-alloc priority (pq s2, pe s3 like the target) */
+    __asm__ __volatile__("" : : "r"(pq)); /* empty asm: one more use of pq for global-alloc priority (pq s2, pe s3 like the target) */
 }

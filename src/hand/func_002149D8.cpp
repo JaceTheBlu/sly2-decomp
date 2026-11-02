@@ -1,3 +1,4 @@
+#include "mat.h"
 // func_002149D8: reads one sprite descriptor from the stream into sprites[id] and builds its packet data.
 // Kinds: 4 index, 8 nested children + word/float tables, 3 shader, 2 polygon (2x3 matrix + vertices),
 // 6/7 textured rectangle (GIF packet; 7 also posts the owner's callback), 1 geometry records grouped
@@ -17,7 +18,6 @@ struct OWNER {char pad[0xC4];HEAP *heap;};
 struct ROOT;
 struct WORLD;
 struct SPRITE;
-struct M3 {qword r[3];};
 struct M23 {float a[6];} __attribute__((aligned(16)));
 struct PAIR {short x,y;};
 struct RAWCOLOR {uchar r,g,b,a;};
@@ -42,10 +42,10 @@ int func_00117D50(BIS *);
 int func_00117D00(BIS *);
 int func_00117DB8(BIS *);
 float func_00117E38(BIS *);
-void func_00117ED0(BIS *,M3 *);
-void func_00117968(BIS *,int,void *);
+void ReadMatrix__18CBinaryInputStreamP7MATRIX3(BIS *,MATRIX3 *);
+void Read__18CBinaryInputStreamiPv(BIS *,int,void *);
 void *func_00116918(HEAP *,int,int);
-void *func_001AE378(ALLOCREQ *);
+void *PvAllocStackClearImpl__FP7SWALLOC(ALLOCREQ *);
 void func_00214398(OWNER *,BIS *,ROOT *,int *,SPRITE **);
 void func_00149A50(WORLD *,OWNER *,PMF,SPRITE *);
 }
@@ -53,16 +53,16 @@ void func_00149A50(WORLD *,OWNER *,PMF,SPRITE *);
 struct STACKSCOPE {STACKSCOPE();~STACKSCOPE();};
 extern int D_002C40A4;
 extern PMF D_002A8B08;
-extern WORLD D_003DD490;
+extern WORLD g_sw;
 extern QW D_002A2E10;
 extern char D_00000650[],D_00000140[];
-static inline void *Acquire(ALLOCREQ *request,int bytes,int alignment){request->cb=bytes;request->cbAlign=alignment;return func_001AE378(request);}
-static inline void CopyXY(M23 &dst,const M3 &src){
+static inline void *Acquire(ALLOCREQ *request,int bytes,int alignment){request->cb=bytes;request->cbAlign=alignment;return PvAllocStackClearImpl__FP7SWALLOC(request);}
+static inline void CopyXY(M23 &dst,const MATRIX3 &src){
  const float *a=(const float *)&src.r[0],*b=(const float *)&src.r[1],*c=(const float *)&src.r[2];
  dst.a[0]=a[0];dst.a[1]=a[1];dst.a[2]=b[0];dst.a[3]=b[1];dst.a[4]=c[0];dst.a[5]=c[1];
 }
 extern "C" void func_002149D8(OWNER *const owner,BIS *stream,ROOT *root,int,SPRITE *sprites){
- STACKSCOPE outer;M3 raw;
+ STACKSCOPE outer;MATRIX3 raw;
  int id=func_00117C20(stream);SPRITE *sprite=&sprites[id];sprite->root=root;sprite->id=id;
  sprite->kind=func_00117C80(stream);
  switch(sprite->kind){
@@ -90,10 +90,10 @@ extern "C" void func_002149D8(OWNER *const owner,BIS *stream,ROOT *root,int,SPRI
   break;
  }
  case 2:{
-  func_00117ED0(stream,&raw);M3 matrix=raw;CopyXY(sprite->data.polygon.matrix,matrix);
+  ReadMatrix__18CBinaryInputStreamP7MATRIX3(stream,&raw);MATRIX3 matrix=raw;CopyXY(sprite->data.polygon.matrix,matrix);
   sprite->data.polygon.count=func_00117C20(stream);
   sprite->data.polygon.vertices=(VERTEX *)func_00116918(owner->heap,sprite->data.polygon.count*sizeof(VERTEX),0x14);
-  func_00117968(stream,sprite->data.polygon.count*sizeof(VERTEX),sprite->data.polygon.vertices);break;
+  Read__18CBinaryInputStreamiPv(stream,sprite->data.polygon.count*sizeof(VERTEX),sprite->data.polygon.vertices);break;
  }
  case 6:case 7:{
   PAIR first,second;
@@ -122,7 +122,7 @@ extern "C" void func_002149D8(OWNER *const owner,BIS *stream,ROOT *root,int,SPRI
   vif.AddVifUnpack(UPK_V4_32,((uint)gif.m_pb-(uint)gif.m_ab)>>4,gif.m_ab,7);
   vif.AddVifMscal(D_00000650);vif.EndDmaCnt();vif.AddDmaRet();
   if(sprite->kind==6)vif.DetachCopySw(owner->heap,&sprite->data.effect.count,0,&sprite->data.effect.packet);
-  else{vif.DetachCopySw(owner->heap,&sprite->data.picture.count,0,&sprite->data.picture.packet);func_00149A50(&D_003DD490,owner,D_002A8B08,sprite);}
+  else{vif.DetachCopySw(owner->heap,&sprite->data.picture.count,0,&sprite->data.picture.packet);func_00149A50(&g_sw,owner,D_002A8B08,sprite);}
   break;
  }
  case 1:{

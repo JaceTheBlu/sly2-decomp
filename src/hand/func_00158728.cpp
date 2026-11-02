@@ -1,4 +1,4 @@
-// (Claude agent, lane E14) MATCH: the next av pointer is computed at the top of the k body (avNext = av + 1) and assigned after the vsub; this gives the target k+1/av+1 s7/fp assignment.
+// MATCH: the next av pointer is computed at the top of the k body (avNext = av + 1) and assigned after the vsub; this gives the target k+1/av+1 s7/fp assignment.
 typedef int qword __attribute__((mode(TI)));
 struct AL { int cb; int cbAlign; AL(int c, int a) { cb = c; cbAlign = a; } };
 struct DZ;
@@ -31,10 +31,10 @@ struct C { E ae[2]; };
 struct DZG { int x0; int c4; char pad[0x50 - 8]; int c50; C **apc; int pad58[2]; F *af; };
 struct DZ { char pad[0x18]; int *ag; };
 extern "C" {
-void *func_001AE318(AL *pal);
+void *PvAllocStackImpl__FP7SWALLOC(AL *pal);
 void func_00158728(DZG *pdzg, int a, DZ *pdz, X *px);
 }
-static inline void *PvAlloc(int cb, int cbAlign) { AL al(cb, cbAlign); return func_001AE318(&al); }
+static inline void *PvAlloc(int cb, int cbAlign) { AL al(cb, cbAlign); return PvAllocStackImpl__FP7SWALLOC(&al); }
 static __inline__ int Dot(qword a, qword b)
 {
     qword r, one;

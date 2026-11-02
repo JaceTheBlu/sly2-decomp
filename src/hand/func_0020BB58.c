@@ -5,7 +5,7 @@ union FLOATWORD { float value; int bits; };
 struct R { char pad[0x40]; union FLOATWORD scale; };
 struct ANIMATION;
 struct S { struct T *pt; struct ANIMATION *animation; int pad[2]; float f10; char pad2[0x50 - 0x14]; float f50; int n54; };
-void func_001384C0(struct ANIMATION *);
+void ReblendAsegbl__FP6ASEGBL(struct ANIMATION *);
 struct R *func_0020BB48(struct S *p);
 qword func_0020BAD8(struct S *p);
 static inline void InitScalar(U *value,int bits) {
@@ -34,7 +34,7 @@ void func_0020BB58(struct S *p, float g)
         p->f50 = g;
         p->f10 = 1.0f - g;
     }
-    func_001384C0(p->animation);
+    ReblendAsegbl__FP6ASEGBL(p->animation);
     pt = p->pt;
     InitScalar(&a,func_0020BB48(p)->scale.bits);
     b = a;

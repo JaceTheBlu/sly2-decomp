@@ -1,6 +1,6 @@
+#include "mat.h"
 // BuildFrustrum(pmat, gx, gy, anormal): 4 side-plane normals. Hard-reg VF vars in Normalize1 pin the first block allocation.
 typedef int qword __attribute__((mode(TI)));
-struct MATRIX3 { qword r[3]; };
 extern "C" void BuildFrustrum(MATRIX3 *pmat, float gx, float gy, qword *anormal);
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } };
 struct VU_VECTOR { qword q; VU_VECTOR(const qword &v) { q = v; } };

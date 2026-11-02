@@ -4,7 +4,7 @@ struct MSG { int cb; int nKind; };
 struct O { char pad[0x60]; struct O *next; };
 struct G { float mn[4]; float mx[3]; char pad[0x34 - 0x1C]; struct O *first; char pad2[0x40 - 0x38]; struct G *next; };
 struct S { char pad[0x3D1C]; struct G *first; };
-void *func_001AE318(struct MSG *pmsg);
+void *PvAllocStackImpl__FP7SWALLOC(struct MSG *pmsg);
 void func_00133E30(struct S *p);
 void func_00133E80(struct S *p);
 
@@ -22,7 +22,7 @@ void func_0020FAA0(struct S *p, qword a, qword b, int (*pfn)(void *, struct O *)
         pm->nKind = 0x10;
     }
     c = 0;
-    ap = func_001AE318(&msg);
+    ap = PvAllocStackImpl__FP7SWALLOC(&msg);
     func_00133E30(p);
     func_00133E80(p);
     for (g = p->first; g; g = g->next) {

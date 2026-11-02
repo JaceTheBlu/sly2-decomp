@@ -1,7 +1,7 @@
 struct VTE { short d; short pad; void (*pfn)(void *); };
 struct P { char pad[0xC]; struct VTE *pvt; char pad2[0x40 - 0x10]; int n40; char pad3[0x4E - 0x44]; short n4E; unsigned short f50; unsigned short n52; char pad4[0x68 - 0x54]; long l68; };
 struct G { char pad[0x1F0]; long l1F0; long l1F8; };
-extern struct G D_003DD040;
+extern struct G g_sndmgr;
 void func_001FCC30(void);
 void func_001FBB30(void);
 void func_002330D0(int, int, int, int, int, int, int, void (*)(void), long);
@@ -20,5 +20,5 @@ void func_001FC878(struct P *p)
         func_001FB658(p, 0x400, 0);
     }
     if ((p->f50 & 0x800) && p->n4E <= 0)
-        p->l68 += D_003DD040.l1F0 - D_003DD040.l1F8;
+        p->l68 += g_sndmgr.l1F0 - g_sndmgr.l1F8;
 }

@@ -1,31 +1,31 @@
+#include "mat.h"
+#include "clock.h"
 // Emit an oriented particle in the supplied parent space.
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];};
-struct M3 {qword r[3];};
 struct LO {char pad158[0x158];float height;};
 struct POLY {float a,b,c;};
 struct EMIT {char pad8[8];LO*owner;char padC[8];float start,duration;char pad1C[4];POLY size;};
 struct O;
 struct VE {short delta,pad;void(*fn)(void*,qword,int,float);};
-struct O {char pad18[0x18];float duration;LO*visual;char pad20[8];float spin;char pad2C[0x14];M3 matrix;U position;char pad80[0x10];U velocity;char padA0[0x4C];VE*vt;LO*space;};
-struct CLOCK {float t,dt;};
-extern CLOCK D_002DDED0;
-extern char D_003DD490[];
-extern qword D_002A2DA0,D_002A2DB0,D_002A2DC0;
+struct O {char pad18[0x18];float duration;LO*visual;char pad20[8];float spin;char pad2C[0x14];MATRIX3 matrix;U position;char pad80[0x10];U velocity;char padA0[0x4C];VE*vt;LO*space;};
+extern CLOCK g_clock;
+extern char g_sw[];
+extern qword D_002A2DA0,D_002A2DB0,g_normalZ;
 extern "C" {
 O *func_001CE888(void*,void*,void*);
 qword func_0022FC48(void*,LO*,qword);
-float func_0011D448(float,float);
+float GRandInRange__Fff(float,float);
 void func_0011E2D8(qword,qword,qword,qword*);
-M3 func_0011B628(qword);
-M3 func_0011BA08(qword,qword);
+MATRIX3 func_0011B628(qword);
+MATRIX3 BuildRotateVectorsMatrix__FUxUx(qword,qword);
 O *func_001CF6B0(EMIT*,LO*,LO*,qword,qword);
 }
 static inline float Polynomial(POLY*p,float t){return p->a+t*(p->b+t*p->c);}
 static inline float Dot(qword a,qword b){qword d,one;float f;__asm__("vmul.xyz %0,%2,%3\n\tvaddw.x %1,$vf0,$vf0w\n\tvadday.x ACC,%0,%0y\n\tvmaddz.x %0,%1,%0z":"=j"(d),"=j"(one):"j"(a),"j"(b));__asm__("mtc1 %1,%0":"=f"(f):"r"(d));return f;}
 static inline qword Scale(qword a,float f,U&home){qword k;__asm__("qmtc2.ni %1,%0":"=j"(k):"r"(f));home.q=k;__asm__("vmulx.xyzw %0,%1,%2x":"=j"(a):"j"(a),"j"(k));return a;}
-static inline qword Transform(M3&m,qword a){__asm__("vmulax.xyz ACC,%1,%0x\n\tvmadday.xyz ACC,%2,%0y\n\tvmaddz.xyz %0,%3,%0z":"+j"(a):"j"(m.r[0]),"j"(m.r[1]),"j"(m.r[2]));return a;}
-static inline M3 Mul(const M3&a,const M3&b) return r {
+static inline qword Transform(MATRIX3&m,qword a){__asm__("vmulax.xyz ACC,%1,%0x\n\tvmadday.xyz ACC,%2,%0y\n\tvmaddz.xyz %0,%3,%0z":"+j"(a):"j"(m.r[0]),"j"(m.r[1]),"j"(m.r[2]));return a;}
+static inline MATRIX3 Mul(const MATRIX3&a,const MATRIX3&b) return r {
  qword a0=a.r[0],a1=a.r[1],a2=a.r[2];
  __asm__("vmulax.xyz ACC,%1,%4x\n\tvmadday.xyz ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z":"=j"(r.r[0]):"j"(a0),"j"(a1),"j"(a2),"j"(b.r[0]));
  __asm__("vmulax.xyz ACC,%1,%4x\n\tvmadday.xyz ACC,%2,%4y\n\tvmaddz.xyz %0,%3,%4z":"=j"(r.r[1]):"j"(a0),"j"(a1),"j"(a2),"j"(b.r[1]));
@@ -34,25 +34,25 @@ static inline M3 Mul(const M3&a,const M3&b) return r {
 O *func_001CF6B0(EMIT*p,LO*visual,LO*space,qword position,qword direction){
  O*object=0;
  if(visual){
-  object=func_001CE888(D_003DD490,(void*)10,0);
+  object=func_001CE888(g_sw,(void*)10,0);
   if(object){
    float zero=0.0f;
    U local;local.q=func_0022FC48(0,space,position);
-   float size=Polynomial(&p->size,(D_002DDED0.t-p->start)/p->duration);
-   size*=func_0011D448(0.8f,1.4f);
+   float size=Polynomial(&p->size,(g_clock.t-p->start)/p->duration);
+   size*=GRandInRange__Fff(0.8f,1.4f);
    object->vt[1].fn((char*)object+object->vt[1].delta,local.q,0,size);
    object->visual=visual;object->duration=5.0f;object->spin=-size;object->space=space;
-   M3 frame;frame.r[2]=direction;
+   MATRIX3 frame;frame.r[2]=direction;
    func_0011E2D8(direction,D_002A2DA0,D_002A2DB0,frame.r);
-   U angles;angles.f[1]=zero;angles.f[0]=zero;angles.f[2]=func_0011D448(zero,6.28318548f);
-   M3 rotation;
+   U angles;angles.f[1]=zero;angles.f[0]=zero;angles.f[2]=GRandInRange__Fff(zero,6.28318548f);
+   MATRIX3 rotation;
    rotation=func_0011B628(angles.q);
-   {M3 orient=Mul(frame,rotation);
+   {MATRIX3 orient=Mul(frame,rotation);
    object->matrix=orient;}
-   qword *up=&D_002A2DC0;
+   qword *up=&g_normalZ;
    if(__builtin_fabsf(Dot(direction,*up))<0.7f){
     U flat;flat.q=direction;flat.f[2]=zero;
-    M3 tilt;tilt=func_0011BA08(flat.q,direction);
+    MATRIX3 tilt;tilt=BuildRotateVectorsMatrix__FUxUx(flat.q,direction);
     U home;
     object->velocity.q=Transform(tilt,Scale(*up,-50.0f,home));
    }

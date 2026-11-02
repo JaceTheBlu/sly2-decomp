@@ -7,7 +7,7 @@ struct X { char pad[0x70]; qword pos; };
 
 struct S { struct X *px; int x4; float r; };
 
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 
 void func_001A7C18(void *p, struct S *a, struct S *b, qword pos, qword dir, int k, int x, int y, struct CONTACT **out, float g);
 
@@ -47,7 +47,7 @@ void func_001A9C40(void *p, struct S *a, struct S *b, struct CONTACT **out)
 
         g = 0.0f;
 
-        dir = D_002A2DC0;
+        dir = g_normalZ;
 
     } else {
 

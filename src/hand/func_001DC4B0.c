@@ -1,4 +1,4 @@
-extern struct CLOCK { float a[16]; } D_002DDED0;
+extern struct CLOCK { float a[16]; } g_clock;
 typedef struct {
     char pad[0x28];
     int state;
@@ -17,7 +17,7 @@ void func_001DC4B0(OBJ *p, unsigned int n)
     if (n == p->state)
         return;
     p->state = n;
-    p->t = D_002DDED0.a[15];
+    p->t = g_clock.a[15];
     switch (n) {
     case 0:
         func_001DC260(p, 1);

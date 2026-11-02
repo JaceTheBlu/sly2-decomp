@@ -1,25 +1,26 @@
-// func_00151C38 (Claude agent, lane D12): matched from the v7 draft. Normalize's sqrt and divide are two asms (sqrt into a
+#include "mat.h"
+#include "vu0.h"
+#include "util.h"
+// func_00151C38: matched from the v7 draft. Normalize's sqrt and divide are two asms (sqrt into a
 // separate length temp), which lengthens the VU chain so the scheduler orders the block like the target; Cross lists `a`
 // twice (allocation-only operand) so the VF numbering matches.
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
-struct M3 { qword r[3]; };
-union M4 { struct { qword r[4]; } q; M3 m3; float af[4][4]; };
+union M4 { struct { qword r[4]; } q; MATRIX3 m3; float af[4][4]; };
 struct CM;
-extern "C" CM D_002DDF40;
+extern "C" CM g_cm;
 struct CLQ { float g0, g1, g2, pad; };
-struct LM { float gMin, gMax; int pad[2]; };
 extern "C" float D_002BDACC;
 extern "C" CLQ D_002BDAD0, D_002BDAF0, D_002BDB10, D_002BDB30;
 extern "C" LM D_002BDAE0, D_002BDB00, D_002BDB20, D_002BDB40;
-extern "C" qword D_002A2DC0;
+extern "C" qword g_normalZ;
 struct ALO;
 struct X { char pad[0x10]; ALO *p10; ALO *p14; };
 extern "C" {
 void func_0014FD40(X *p);
 qword func_001A62E8(ALO *p);
-M3 *func_0011B7E0(M3 *pm, qword v);
-qword *func_00256D18(qword *p, qword v);
+MATRIX3 *func_0011B7E0(MATRIX3 *pm, qword v);
+qword *__as__6VECTORG9VU_VECTOR(qword *p, qword v);
 void func_0014E168(CM *p, M4 *m);
 void func_0014F5A0(CM *p, float g);
 void func_00151C38(X *p);
@@ -35,8 +36,6 @@ static inline qword VecCombo(VU_FLOAT f1, VU_VECTOR v1, VU_FLOAT f2, VU_VECTOR v
     __asm__("vmulax.xyzw $ACC, %2, %1x\n\tvmaddx.xyzw %0, %4, %3x" : "=j"(r) : "j"(f1.q), "j"(v1.q), "j"(f2.q), "j"(v2.q), "j"(f1.q), "j"(f2.q)); /* extra unused operands: allocation only */
     return r;
 }
-static inline qword Sub(qword a, qword b) { qword d; __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
-static inline qword Add(qword a, qword b) { qword d; __asm__("vadd.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 static inline float Length(qword a)
 {
     qword d, one;
@@ -66,13 +65,13 @@ static inline qword Normalize(qword a)
 struct VU_FLOATJ { qword q; VU_FLOATJ(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } };
 static inline qword Scale(qword a, VU_FLOATJ s) { qword r; __asm__("vmulx.xyzw %0, %1, %2x" : "=j"(r) : "j"(a), "j"(s.q)); return r; }
 
-static inline void Cm1(M4 *pm) { func_0014E168(&D_002DDF40, pm); }
-static inline void Cm2(float g) { func_0014F5A0(&D_002DDF40, g); }
+static inline void Cm1(M4 *pm) { func_0014E168(&g_cm, pm); }
+static inline void Cm2(float g) { func_0014F5A0(&g_cm, g); }
 void func_00151C38(X *p)
 {
     U d;
     func_0014FD40(p);
-    d.q = Sub(func_001A62E8(p->p10), func_001A62E8(p->p14));
+    d.q = QwSub(func_001A62E8(p->p10), func_001A62E8(p->p14));
     d.f[2] = 0.0f;
     float dist = Length(d.q);
     U focus;
@@ -81,17 +80,17 @@ void func_00151C38(X *p)
     U pos;
     pos.q = focus.q;
     pos.f[2] += GClampR(GFromClq(D_002BDAD0, dist), D_002BDAE0.gMin, D_002BDAE0.gMax);
-    qword n = Normalize(Cross(d.q, D_002A2DC0));
+    qword n = Normalize(Cross(d.q, g_normalZ));
     float g = GClamp(GFromClq(D_002BDAF0, dist), D_002BDB00.gMin, D_002BDB00.gMax);
     U pos2;
-    pos2.q = Add(focus.q, Scale(n, VU_FLOATJ(g)));
+    pos2.q = QwAdd(focus.q, Scale(n, VU_FLOATJ(g)));
     pos2.f[2] += GClamp(GFromClq(D_002BDB10, dist), D_002BDB20.gMin, D_002BDB20.gMax);
     {
         M4 m4;
-        M3 m3;
-        func_0011B7E0(&m3, Sub(pos.q, pos2.q));
+        MATRIX3 m3;
+        func_0011B7E0(&m3, QwSub(pos.q, pos2.q));
         M4 *pm4 = &m4;
-        func_00256D18(&pm4->q.r[3], pos2.q);
+        __as__6VECTORG9VU_VECTOR(&pm4->q.r[3], pos2.q);
         pm4->q.r[0] = m3.r[0];
         pm4->q.r[1] = m3.r[1];
         pm4->q.r[2] = m3.r[2];

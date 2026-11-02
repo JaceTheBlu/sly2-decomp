@@ -1,8 +1,8 @@
+#include "clock.h"
 struct P { int id; };
 struct Q { void *p0; };
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
-extern char D_003DD040[];
+extern struct CLOCK g_clock;
+extern char g_sndmgr[];
 extern char D_002A97F0[];
 float func_001FCFD0(void *p, int id);
 int func_00215E30(struct Q *q);
@@ -16,7 +16,7 @@ void func_00227820(struct P *p, struct Q *q)
     float f;
     int c, n, fShow;
     if (p->id == -1) return;
-    pv = D_003DD040;
+    pv = g_sndmgr;
     f = func_001FCFD0(pv, p->id) - 0.5f;
     c = func_00215E30(q);
     if (f <= 0.0f || !func_001FE848(pv, p->id))
@@ -27,7 +27,7 @@ void func_00227820(struct P *p, struct Q *q)
         func_00215E80(q, n);
         fShow = 1;
     } else {
-        fShow = (int)(D_002DDED0.t * 4.0f) & 1;
+        fShow = (int)(g_clock.t * 4.0f) & 1;
     }
     if (fShow) func_0021EDA0(q->p0, D_002A97F0);
 }

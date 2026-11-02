@@ -4,8 +4,8 @@ struct VT { struct { short d; short pad; qword (*pfn)(void *); } a[40]; };
 struct X { char pad[0xA0]; void *pA0; };
 struct O { char pad[0xC]; struct VT *pvt; char pad1[0x5C - 0x10]; struct X *p5C; char pad2[0x1C0 - 0x60]; int n1C0;
     char pad3[0x204 - 0x1C4]; float g204; char pad4[0x210 - 0x208]; qword v210; char pad5[0x378 - 0x220]; char a378[0xC]; float g384; };
-extern qword D_002A2DC0;
-extern "C" MATRIX3 func_0011B500(qword v, float g);
+extern qword g_normalZ;
+extern "C" MATRIX3 LoadRotateMatrixRad__FfUx(qword v, float g);
 extern "C" MATRIX3 func_0022FD38(void *pv, int n, MATRIX3 *pm);
 extern "C" void func_001F59A0(struct O *p, MATRIX3 *pm, void *pv);
 extern "C" void func_001FAC30(struct O *p, qword v);
@@ -16,7 +16,7 @@ void func_00180EE8(struct O *p)
 {
     if (p->n1C0 != 4) {
         MATRIX3 mat;
-        mat = func_0011B500(D_002A2DC0, p->g204);
+        mat = LoadRotateMatrixRad__FfUx(g_normalZ, p->g204);
         if (p->n1C0 != 3)
             mat = func_0022FD38(p->p5C->pA0, 0, &mat);
         func_001F59A0(p, &mat, p->a378);

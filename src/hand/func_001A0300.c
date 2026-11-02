@@ -8,8 +8,8 @@ struct A { VT *vt; };
 struct O { int x0; struct A *x4; };
 struct K { char pad[0x74]; WORD x74; };
 struct E { float x0; struct K *x4; int pad[2]; qword x10; };
-struct O *func_0012FF10(struct K *k, struct ACTOR *p, void *a, int b);
-void func_00137A30(struct ACTOR *p, int cb, int c, struct E *ae, int count, int *keys, int *counts, struct MULTI **pn);
+struct O *PchnFindAseg__FP4ASEGP3ALOii(struct K *k, struct ACTOR *p, void *a, int b);
+void EnsureAsegBlendDynamic__FP3ALOiiPviPiT5PP6ASEGBL(struct ACTOR *p, int cb, int c, struct E *ae, int count, int *keys, int *counts, struct MULTI **pn);
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((struct t*)0x10000)->m)-0x10000)
 typedef char A_vt_Offset[FIELD_OFFSET(A,vt)==0?1:-1];
 typedef char O_x4_Offset[FIELD_OFFSET(O,x4)==4?1:-1];
@@ -35,7 +35,7 @@ void func_001A0300(struct ACTOR *p, struct E *ae, struct MULTI **pn)
     struct MULTI *n;
     for (i = 0; i < 8; i++, e++) {
         if (e->x4) {
-            struct O *o = func_0012FF10(e->x4, p, (void *)1, 1);
+            struct O *o = PchnFindAseg__FP4ASEGP3ALOii(e->x4, p, (void *)1, 1);
             if (o) {
                 o->x4->vt[3].pfn((struct A *)((char *)o->x4 + o->x4->vt[3].d), 0.0f, 1.0f, &v0.q, 0);
                 o->x4->vt[3].pfn((struct A *)((char *)o->x4 + o->x4->vt[3].d), e->x4->x74.value, 1.0f, &v1.q, 0);
@@ -54,6 +54,6 @@ void func_001A0300(struct ACTOR *p, struct E *ae, struct MULTI **pn)
             }
         }
     }
-    func_00137A30(p, 0x20, 8, ae, 0, 0, 0, &n);
+    EnsureAsegBlendDynamic__FP3ALOiiPviPiT5PP6ASEGBL(p, 0x20, 8, ae, 0, 0, 0, &n);
     *pn = n;
 }

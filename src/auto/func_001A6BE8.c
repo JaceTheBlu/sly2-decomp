@@ -5,9 +5,9 @@ M2C_UNK CopyAb__FPvT0Ui(s32, s32, s32);             /* extern */
 M2C_UNK func_00129EC8(void *);                      /* extern */
 extern f32 D_002A6A40;
 extern M2C_UNK D_002C44F0;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern M2C_UNK D_002DEB30;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 extern M2C_UNK D_003DD4A0;
 extern M2C_UNK D_003DD4BC;
 extern s32 D_003E139C;

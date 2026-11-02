@@ -1,8 +1,10 @@
+#include "vtable.h"
+#include "mat.h"
 // func_001DE5D8: (re)build the endpoint state of every entry of p and its bounding box. Each entry has two endpoints;
 // an endpoint names an object: a path (shape test 10) becomes a moving endpoint with a 1/2/6-segment motion profile
 // (mode 8 / 0 / 16, the last a trapezoidal accelerate-cruise-decelerate profile), shape 3/0x30 objects and missing
 // objects become fixed points. All points (or the whole transformed path) are accumulated into a min/max box that
-// becomes p's single bound (func_00166270 copies it to world space). Fresh rewrite (wave-4 lane 9).
+// becomes p's single bound (CloneGeom__FP4GEOMP7MATRIX4T0 copies it to world space). Fresh rewrite.
 // What mattered:
 //  - Min/Max take VU_VECTOR (const qword & conversion) parameters as in func_001DF0A0: the extra RTL copies keep the
 //    endpoint loop large enough that loop.c does not hoist 1.0f and 16 out of it;
@@ -15,8 +17,6 @@ typedef int qword __attribute__((mode(TI)));
 typedef unsigned long ulong;
 typedef unsigned int uint;
 
-struct VTE { short delta, pad; void *fn; };
-struct M4 { qword rows[4]; };
 struct PATH {
     char pad0[0xC];
     VTE *vt;
@@ -42,7 +42,7 @@ struct BOUND {
     int tag;
     ulong flags;
     int id, pinned;
-    M4 matrix;
+    MATRIX4 matrix;
     char pad60[8];
     int tree[4];
     GEO local, world;
@@ -68,35 +68,35 @@ struct P {
 };
 struct MSG { int bytes, alignment; };
 struct G;
-extern G D_003DD490;
+extern G g_sw;
 extern qword D_002A2DF0, D_002A2E00;
 extern float D_002C3610;
 extern "C" {
 void func_001F2BA8(P *);
-void *func_0015E938(G *, int, int, P *);
-int func_00132B10(void *, int);
+void *PloFindSwObject__FP2SWi3OIDP2LO(G *, int, int, P *);
+int FIsBasicDerivedFrom__FP5BASIC3CID(void *, int);
 float func_001E6648(PATH *);
 void func_001E6F10(PATH *, qword *, qword *, float);
 void *func_002333B4(void *, int, int);
 qword func_001A62E8(void *);
 qword func_0022FC48(void *, void *, qword);
-void *func_001AE2A0(MSG *);
-void func_00166270(GEO *, const M4 *, GEO *);
+void *PvAllocSwClearImpl__FP7SWALLOC(MSG *);
+void CloneGeom__FP4GEOMP7MATRIX4T0(GEO *, const MATRIX4 *, GEO *);
 void func_001F2B20(P *);
 }
 
 struct VU_VECTOR { qword q; VU_VECTOR(const qword &v) { q = v; } };
 static inline qword Min(VU_VECTOR a, VU_VECTOR b) { qword r; __asm__("vmini.xyz %0, %1, %2" : "=j"(r) : "j"(a.q), "j"(b.q)); return r; }
 static inline qword Max(VU_VECTOR a, VU_VECTOR b) { qword r; __asm__("vmax.xyz %0, %1, %2" : "=j"(r) : "j"(a.q), "j"(b.q)); return r; }
-static inline qword Transform(const M4 *m, qword p)
+static inline qword Transform(const MATRIX4 *m, qword p)
 {
     qword r;
     __asm__("vmulax.xyz ACC,%1,%5x\n\tvmadday.xyz ACC,%2,%5y\n\tvmaddaz.xyz ACC,%3,%5z\n\tvmaddw.xyz %0,%4,$vf0w"
-            : "=j"(r) : "j"(m->rows[0]), "j"(m->rows[1]), "j"(m->rows[2]), "j"(m->rows[3]), "j"(p));
+            : "=j"(r) : "j"(m->r[0]), "j"(m->r[1]), "j"(m->r[2]), "j"(m->r[3]), "j"(p));
     return r;
 }
 static inline float Clamp(float f, float low, float high) { if (f < low) return low; else if (high < f) return high; else return f; }
-static inline M4 *GetMatrix(PATH *path) { VTE *v = &path->vt[31]; return ((M4 * (*)(void *))v->fn)((char *)path + v->delta); }
+static inline MATRIX4 *GetMatrix(PATH *path) { VTE *v = &path->vt[31]; return ((MATRIX4 * (*)(void *))v->pfn)((char *)path + v->delta); }
 static inline void SetDirty(P *p) { uint f = p->flags; if ((f ^ 1) & 1) *(uint *)f |= 2; else p->flags = f | 2; }
 
 extern "C" void func_001DE5D8(P *p)
@@ -113,9 +113,9 @@ extern "C" void func_001DE5D8(P *p)
             ENDPOINT *endpoint = &entry->endpoints[j];
             endpoint->kind = -1;
             if (endpoint->id != -1) {
-                void *object = func_0015E938(&D_003DD490, 1, endpoint->id, p);
+                void *object = PloFindSwObject__FP2SWi3OIDP2LO(&g_sw, 1, endpoint->id, p);
                 if (object) {
-                    if (func_00132B10(object, 10)) {
+                    if (FIsBasicDerivedFrom__FP5BASIC3CID(object, 10)) {
                         PATH *path = (PATH *)object;
                         PARAMS params = endpoint->track.params;
                         int reverse = 0;
@@ -228,7 +228,7 @@ extern "C" void func_001DE5D8(P *p)
                             }
                             SetDirty(p);
                         }
-                    } else if (func_00132B10(object, 3) || func_00132B10(object, 0x30)) {
+                    } else if (FIsBasicDerivedFrom__FP5BASIC3CID(object, 3) || FIsBasicDerivedFrom__FP5BASIC3CID(object, 0x30)) {
                         endpoint->kind = 0;
                         endpoint->point = func_001A62E8(object);
                     }
@@ -246,7 +246,7 @@ extern "C" void func_001DE5D8(P *p)
                 break;
             case 1: {
                 // the matrix callback may change the endpoint's path, so it is re-read
-                M4 matrix = *GetMatrix(endpoint->track.path);
+                MATRIX4 matrix = *GetMatrix(endpoint->track.path);
                 int k;
                 for (k = 0; k < endpoint->track.path->count; k++) {
                     qword point = Transform(&matrix, endpoint->track.path->points[k]);
@@ -263,7 +263,7 @@ extern "C" void func_001DE5D8(P *p)
         p->boundCount = 1;
         request.bytes = sizeof(BOUND);
         request.alignment = 16;
-        BOUND *bound = (BOUND *)func_001AE2A0(&request);
+        BOUND *bound = (BOUND *)PvAllocSwClearImpl__FP7SWALLOC(&request);
         p->bounds = bound;
         bound->object = p->space;
         bound->owner = p;
@@ -272,8 +272,8 @@ extern "C" void func_001DE5D8(P *p)
         bound->local.count = 2;
         request.alignment = 16;
         request.bytes = 2 * sizeof(qword);
-        bound->local.points = (U *)func_001AE2A0(&request);
-        func_00166270(&bound->local, 0, &bound->world);
+        bound->local.points = (U *)PvAllocSwClearImpl__FP7SWALLOC(&request);
+        CloneGeom__FP4GEOMP7MATRIX4T0(&bound->local, 0, &bound->world);
         bound->world.points[0].q = minimum;
         bound->world.points[1].q = maximum;
         { U *out = bound->local.points; out[0].q = func_0022FC48(0, p->space, minimum); }

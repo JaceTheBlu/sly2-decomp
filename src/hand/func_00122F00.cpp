@@ -1,22 +1,14 @@
+#include "cref.h"
+#include "mat.h"
 // Script matrix-slerp builtin. Matched by Claude agent (2026-10-17): MulM3 uses the g++ named return value (`return m`),
 // stores each row right after its asm, and also writes a second (dead) M3 copy t, which is the target's 0xB0 slot.
 typedef int qword __attribute__((mode(TI)));
 typedef struct { qword r[3]; } M3;
 typedef union { qword q; float g; } UF;
-struct MATRIX4 { float m[4][4]; };
-struct CRef {
-    int m_tagk; union { int n; float g; void *pv; } u;
-    CRef() { m_tagk = -1; }
-    CRef(int tagk) { InitTag(tagk); }
-    CRef(const CRef &r);
-    void Decref();
-    void InitTag(int tagk);
-    ~CRef() { Decref(); }
-};
 extern "C" {
-M3 func_0011BC00(M3 *pa, M3 *pb);
+M3 CalculateDmat__FP7MATRIX3T0(M3 *pa, M3 *pb);
 void func_0011BCF8(M3 *pmat, float *prad, qword *pvec);
-M3 func_0011B500(float rad, qword axis);
+M3 LoadRotateMatrixRad__FfUx(float rad, qword axis);
 void *func_002333B4(void *pv, int n, int cb);
 }
 static inline M3 MulM3(const M3 &a, M3 *pb) return m
@@ -36,14 +28,14 @@ static inline M3 MulM3(const M3 &a, M3 *pb) return m
 extern "C" CRef func_00122F00(void *pv, CRef *aref);
 CRef func_00122F00(void *pv, CRef *aref)
 {
-    M3 mat = func_0011BC00((M3 *)aref[0].u.pv, (M3 *)aref[1].u.pv);
+    M3 mat = CalculateDmat__FP7MATRIX3T0((M3 *)aref[0].m_p, (M3 *)aref[1].m_p);
     UF normal;
     float rad;
     func_0011BCF8(&mat, &rad, &normal.q);
     CRef ref(0x1B);
-    MATRIX4 *pm = (MATRIX4 *)ref.u.pv;
+    MATRIX4 *pm = (MATRIX4 *)ref.m_p;
     func_002333B4(pm, 0, 0x40);
-    pm->m[0][0] = pm->m[1][1] = pm->m[2][2] = pm->m[3][3] = 1.0f;
-    *(M3 *)ref.u.pv = MulM3(func_0011B500(rad * aref[2].u.g, normal.q), (M3 *)aref[0].u.pv);
+    pm->mat[0][0] = pm->mat[1][1] = pm->mat[2][2] = pm->mat[3][3] = 1.0f;
+    *(M3 *)ref.m_p = MulM3(LoadRotateMatrixRad__FfUx(rad * aref[2].m_g, normal.q), (M3 *)aref[0].m_p);
     return ref;
 }

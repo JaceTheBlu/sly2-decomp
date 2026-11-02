@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef struct { unsigned char r, g, b, a; } RGBA;
 typedef struct { int n; RGBA ac[1]; } LIST;
 typedef struct { char pad[0xC]; int xC; char pad2[0xC]; LIST *x1C; } Y;
@@ -8,9 +9,8 @@ int func_00117C20(void *);
 int func_00117BD0(void *);
 int func_00117C80(void *);
 void func_001ED278(RGBA *);
-void *func_001AE1D0(DESC *);
+void *PvAllocSwImpl__Fi(DESC *);
 
-static inline int Min(int a, int b) { return a < b ? a : b; }
 
 void func_00258F40(X *p, void *ps)
 {
@@ -24,10 +24,10 @@ void func_00258F40(X *p, void *ps)
     y = &p->xE4->y;
     u.d.cb = n * 4 + 4;
     u.d.align = 0x10;
-    l = func_001AE1D0(&u.d);
+    l = PvAllocSwImpl__Fi(&u.d);
     y->x1C = l;
     y->xC = func_00117BD0(ps);
-    l->n = Min(n, 32);
+    l->n = NMin(n, 32);
     for (i = 0; i < n; i++) {
         *(int *)&u.c = func_00117C80(ps);
         func_001ED278(&u.c);

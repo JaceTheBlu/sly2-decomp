@@ -10,7 +10,7 @@ typedef struct C{char pad[0x10];P*actor;int pad14;void*sub;char pad1C[0x30-0x1C]
 typedef struct X{void*a,*b;char pad8[8];qword point;}X;
 typedef struct WORK{X frame;U point;}WORK;
 typedef struct CLOCK{float time,dt;}CLOCK;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern float D_002BE614,D_003E1BE8;
 void func_001EEF98(C*);
 int func_001EF0A8(C*);
@@ -21,7 +21,7 @@ int func_00175D00(C*);
 void func_00176458(C*,int);
 qword func_001A62E8(P*);
 void*func_001C0D70(qword,int);
-void func_002562A8(X*);
+void __1M(X*);
 void func_0017DD38(void*,X*);
 int func_00175748(void*);
 int func_0017B7F8(void*);
@@ -104,7 +104,7 @@ void func_00176098(C*p){
     if(distance<p->actor->close &&region==ActorRegion(p->actor)){func_00176458(p,0);break;}
     if(p->region==region&&!Moved(p,&work.point))break;
     p->region=region;p->cached=work.point;
-    func_002562A8(&work.frame);
+    __1M(&work.frame);
     {register qword framePoint __asm__("$3")=work.point.q;
      work.frame.point=framePoint;
     }
@@ -130,7 +130,7 @@ void func_00176098(C*p){
    break;
   }
  }while(old!=p->state);
- if(p->actor->emit &&old<4 &&old>=0 &&p->actor->time<=D_002DDED0.time &&D_003E1BE8<=D_002DDED0.time)
+ if(p->actor->emit &&old<4 &&old>=0 &&p->actor->time<=g_clock.time &&D_003E1BE8<=g_clock.time)
   func_0020B140(p->actor,p->target);
 }
 

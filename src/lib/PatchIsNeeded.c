@@ -2,7 +2,7 @@
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db
 __asm__(".macro sq r, m\n\tsd \\r, \\m\n\t.endm\n\t.macro lq r, m\n\tld \\r, \\m\n\t.endm");
-// (Claude agent) near miss: 3/26, prologue order only (target sd s0 before sd ra; Sony saves low regs first)
+// near miss: 3/26, prologue order only (target sd s0 before sd ra; Sony saves low regs first)
 int func_00234AD0(unsigned int *);
 int func_00234AC0(unsigned int *);
 int PatchIsNeeded(void)

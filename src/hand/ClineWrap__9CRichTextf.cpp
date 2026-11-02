@@ -1,4 +1,4 @@
-// (Claude agent) newline kept in a local (two copies of 10 in the target); the register pin only swaps s2/s3 with the hoisted compare constant.
+// newline kept in a local (two copies of 10 in the target); the register pin only swaps s2/s3 with the hoisted compare constant.
 struct CFont;
 extern "C" {
 extern const unsigned char D_002AA6A1[];

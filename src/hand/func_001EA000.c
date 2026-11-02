@@ -1,4 +1,4 @@
-// func_001EA000 (lane 5): matched. Samples an object's path over [tStart, tEnd] and collects the time segments where
+// func_001EA000: matched. Samples an object's path over [tStart, tEnd] and collects the time segments where
 // func_001E9F50 finds a valid position into ps->aseg10 (func_001BD560 == 3 means "no bound found", so tStart/tEnd are
 // used), intersects them with ps->aseg through func_0014C9F8 and fixes up a wrap-around pair at the end.
 // Notes for whoever touches this again:
@@ -24,7 +24,7 @@ struct S {
 };
 struct X { char pad[0x40]; float a; float b; char pad2[0x18]; } __attribute__((aligned(16)));
 struct G { char pad[0x3D70]; int n3D70; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 extern float D_002C367C;
 float func_001E6620(struct O *);
 float func_001E6648(struct O *);
@@ -123,5 +123,5 @@ void func_001EA000(struct S *ps)
         }
     }
     ps->cC = n;
-    ps->n98 = ++D_003DD490.n3D70;
+    ps->n98 = ++g_sw.n3D70;
 }

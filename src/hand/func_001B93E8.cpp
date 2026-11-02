@@ -1,9 +1,9 @@
+#include "vtable.h"
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((t*)0)->m))
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned long ulong;
 union U { qword q; float f[4]; int i[4]; };
 struct M4 { U row[4]; };
-struct VTE { short delta,pad; void *fn; };
 struct NODE { M4 local,world; char pad80[0x18]; short state; char pad9A[6]; NODE*parent; };
 struct OWNER { char pad[0xC]; VTE*vt; char pad10[0x18]; ulong flags; char pad30[0x28]; NODE*left,*right; };
 struct ASEG;
@@ -19,12 +19,9 @@ struct P { char pad[0xC]; VTE*vt; char pad10[0x50]; NODE*node; char pad64[0x12C]
 struct CLOCK { float time,dt; };
 typedef char U_Size[sizeof(U)==16?1:-1];
 typedef char M4_Size[sizeof(M4)==64?1:-1];
-typedef char VTE_Size[sizeof(VTE)==8?1:-1];
 typedef char EVENT_Size[sizeof(EVENT)==16?1:-1];
 typedef char CLOCK_Size[sizeof(CLOCK)==8?1:-1];
 typedef char STRETCH_Size[sizeof(STRETCH)==208?1:-1];
-typedef char VTE_delta_Offset[FIELD_OFFSET(VTE,delta)==0?1:-1];
-typedef char VTE_fn_Offset[FIELD_OFFSET(VTE,fn)==4?1:-1];
 typedef char M4_row_Offset[FIELD_OFFSET(M4,row)==0?1:-1];
 typedef char NODE_state_Offset[FIELD_OFFSET(NODE,state)==152?1:-1];
 typedef char NODE_parent_Offset[FIELD_OFFSET(NODE,parent)==160?1:-1];
@@ -74,18 +71,18 @@ typedef char P_m1618_Offset[FIELD_OFFSET(P,m1618)==5656?1:-1];
 typedef char P_m161C_Offset[FIELD_OFFSET(P,m161C)==5660?1:-1];
 typedef char P_m1620_Offset[FIELD_OFFSET(P,m1620)==5664?1:-1];
 typedef char P_m1624_Offset[FIELD_OFFSET(P,m1624)==5668?1:-1];
-extern "C" CLOCK D_002DDED0;
+extern "C" CLOCK g_clock;
 extern "C" M4 D_002A2D30;
 extern "C" float D_002C0A3C,D_002C0A40;
 extern "C" void func_0012E460(MOTION**);
 extern "C" void func_001F5720(OWNER*,int);
-extern "C" void func_001A58D0(OWNER*,int,int);
+extern "C" void SetLoParent__FP2LOP2SOi(OWNER*,int,int);
 extern "C" void func_001F6860(OWNER*,int);
-extern "C" EVENT*func_0012F938(ASEG*,int);
+extern "C" EVENT*PeaFindAsegLabel__FP4ASEG3OID(ASEG*,int);
 extern "C" void func_002309E8(void*,void*,M4*,M4*,float);
 extern "C" M4 func_001A71B0(void*,void*,M4*);
 extern "C" void func_001B72B0(P*,NODE*,const M4*,qword*,qword*);
-extern "C" int func_00132B10(OWNER*,int);
+extern "C" int FIsBasicDerivedFrom__FP5BASIC3CID(OWNER*,int);
 extern "C" void func_00209E28(OWNER*,int);
 extern "C" void func_00209E88(OWNER*);
 extern "C" void func_001B7700(P*,qword,float*,float*,qword*,qword*);
@@ -101,7 +98,7 @@ extern "C" void func_001B93E8(P*p,int state) {
  if(p->state==state)return;
  if(p->state==1){func_0012E460(&p->m13FC);func_0012E460(&p->m1400);}
  p->state=state;
- p->time=D_002DDED0.time;
+ p->time=g_clock.time;
  OWNER*owner;
  switch(state){
  case 0:p->flag=0;break;
@@ -113,23 +110,23 @@ extern "C" void func_001B93E8(P*p,int state) {
   func_001F5720(owner,0);
   p->oldLeft=owner->left->state;
   p->oldRight=owner->right->state;
-  func_001A58D0(owner,0,15);
+  SetLoParent__FP2LOP2SOi(owner,0,15);
   func_001F6860(owner,1);
   M4 predicted;
   float duration;
-  EVENT*event=func_0012F938(p->anim->clip,0x1C7);
+  EVENT*event=PeaFindAsegLabel__FP4ASEG3OID(p->anim->clip,0x1C7);
   duration=(event->time-p->anim->time)/p->anim->rate;
   func_002309E8(p->root->node,p->node,&predicted,0,duration);
   M4 work=func_001A71B0(p,0,&predicted);
   predicted=work;
   func_001B72B0(p,0,&predicted,&work.row[0].q,&work.row[1].q);
-  if(func_00132B10(owner,0x38))func_00209E28(owner,(int)p);
+  if(FIsBasicDerivedFrom__FP5BASIC3CID(owner,0x38))func_00209E28(owner,(int)p);
   func_001B7700(p,work.row[1].q,&event->time,&duration,&work.row[2].q,&work.row[3].q);
-  p->m13FC=func_0012DE58(owner,owner->left,(void*)5,D_002DDED0.time+duration,work.row[1].q,work.row[3].q);
+  p->m13FC=func_0012DE58(owner,owner->left,(void*)5,g_clock.time+duration,work.row[1].q,work.row[3].q);
   VTE*entry=&owner->vt[35];
   void*receiver=(char*)owner+entry->delta;
   qword velocity=func_0022FCC8(owner->left->parent,0,work.row[2].q);
-  ((void(*)(void*,qword))entry->fn)(receiver,velocity);
+  ((void(*)(void*,qword))entry->pfn)(receiver,velocity);
   p->m1400=func_0012DC18(owner,owner->right,(void*)5,7,2,work.row[0].q);
   break;
  }
@@ -144,7 +141,7 @@ extern "C" void func_001B93E8(P*p,int state) {
   break;
  valid:
   ROOT*root=p->root;
-  func_001A58D0(owner,(int)root,15);
+  SetLoParent__FP2LOP2SOi(owner,(int)root,15);
   func_001F6860(owner,1);
   U position,rotation;
   M4 frame;
@@ -154,7 +151,7 @@ extern "C" void func_001B93E8(P*p,int state) {
   if(p->link->first){
    GOAL*goal=p->link->first;
    STRETCH*stretch=p->first;
-   stretch->frame=((void*(*)(void*,M4*))goal->vt[32].fn)((char*)goal+goal->vt[32].delta,&frame);
+   stretch->frame=((void*(*)(void*,M4*))goal->vt[32].pfn)((char*)goal+goal->vt[32].delta,&frame);
    stretch->position=frame.row[3];
    stretch->tuning=D_002C0A3C;
    p->m1618=func_0012DD28(p,stretch->first,(void*)5,stretch);
@@ -164,14 +161,14 @@ extern "C" void func_001B93E8(P*p,int state) {
   if(p->link->second){
    GOAL*goal=p->link->second;
    STRETCH*stretch=p->second;
-   stretch->frame=((void*(*)(void*,M4*))goal->vt[32].fn)((char*)goal+goal->vt[32].delta,&frame);
+   stretch->frame=((void*(*)(void*,M4*))goal->vt[32].pfn)((char*)goal+goal->vt[32].delta,&frame);
    stretch->position=frame.row[3];
    stretch->tuning=D_002C0A40;
    p->m1620=func_0012DD28(p,stretch->first,(void*)5,stretch);
    p->m1624=func_0012DD28(p,stretch->second,(void*)5,stretch);
    p->m160C=func_0012DDB0(p,p->targetSecond,(void*)5,(void*)5,(int)stretch->frame,&frame);
   }
-  if(func_00132B10(owner,0x38))func_00209E88(owner);
+  if(FIsBasicDerivedFrom__FP5BASIC3CID(owner,0x38))func_00209E88(owner);
   ClearXYZ(&p->velocity);
   break;
  }

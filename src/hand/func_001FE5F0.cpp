@@ -10,7 +10,7 @@ struct Ref {
 struct D { char pad[0x48]; int n48; char pad2[0x54 - 0x4C]; int n54; };
 struct P { char pad[0x200]; Ref r200; char pad2[0x22C - 0x204]; X *a[6]; int n244; int n248; int n24C; };
 struct G;
-extern G D_003DD490;
+extern G g_sw;
 extern char D_004435F0[];
 extern "C" {
 void func_001FE738(P *, int);
@@ -33,7 +33,7 @@ extern "C" X *func_001FE5F0(P *p, int k, int f)
     p->n24C = 0;
     if (!f) func_00227728(D_004435F0, k, pd->n48);
     if (pd->n48 != -1 && pd->n54) {
-        register X *po __asm__("$19")=func_0015ED78(&D_003DD490, 5, pd->n48, 0);
+        register X *po __asm__("$19")=func_0015ED78(&g_sw, 5, pd->n48, 0);
         if (po) {
             register int i __asm__("$18")=0;
             register int primaryRole __asm__("$20")=3;

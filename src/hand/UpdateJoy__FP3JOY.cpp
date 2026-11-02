@@ -1,3 +1,4 @@
+#include "clock.h"
 struct JOY {
     char pad0[0x1000];
     int nPort;      /* 0x1000 */
@@ -11,8 +12,7 @@ struct JOY {
     int fRumbleEnabled; /* 0x10E8 */
 };
 
-struct CLOCK { char pad[0x3C]; float tReal; };
-extern "C" CLOCK D_002DDED0;
+extern "C" CLOCK g_clock;
 
 extern "C" {
 int func_00243388(int port, int slot);
@@ -26,7 +26,7 @@ int func_00243BD0(int port, int slot);
 int func_00243500(int port, int slot);
 int func_00187998(JOY *pjoy);
 void func_001D51B8(void *prumble);
-void func_001875B8(JOY *pjoy, int joys, int joyk);
+void SetJoyJoys__FP3JOY4JOYS4JOYK(JOY *pjoy, int joys, int joyk);
 }
 
 void UpdateJoy(JOY *pjoy)
@@ -51,12 +51,12 @@ void UpdateJoy(JOY *pjoy)
 
 
     if (pjoy->joys != 3 && pjoy->joyk != 0) {
-        if (D_002DDED0.tReal - pjoy->tJoys >= 2.0f)
+        if (g_clock.tFrame - pjoy->tJoys >= 2.0f)
             state = 0;
     }
 
     if (pjoy->joyk != 0 && state == 0)
-        func_001875B8(pjoy, 1, 0);
+        SetJoyJoys__FP3JOY4JOYS4JOYK(pjoy, 1, 0);
 
 
     if (!fReady)
@@ -168,5 +168,5 @@ void UpdateJoy(JOY *pjoy)
         break;
     }
 
-    func_001875B8(pjoy, joys, joyk);
+    SetJoyJoys__FP3JOY4JOYS4JOYK(pjoy, joys, joyk);
 }

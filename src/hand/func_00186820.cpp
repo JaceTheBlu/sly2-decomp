@@ -1,4 +1,4 @@
-// Paired-distance update; volatile on the first two VU asm groups keeps the p4 load between them (Claude agent).
+// Paired-distance update; volatile on the first two VU asm groups keeps the p4 load between them.
 typedef int qword __attribute__((mode(TI)));
 typedef struct { qword r[4]; } MATRIX4;
 struct A { MATRIX4 m; char pad[0x30]; qword v70; char pad2[0x20]; void *pA0; };

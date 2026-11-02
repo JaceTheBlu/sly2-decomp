@@ -1,12 +1,12 @@
 #include "m2c_prelude.h"
 M2C_UNK CopyAb__FPvT0Ui(void *, s32, M2C_UNK);      /* extern */
-M2C_UNK func_00117968(s32, s32, s32);               /* extern */
-M2C_UNK func_001179B8(s32, s32);                    /* extern */
+M2C_UNK Read__18CBinaryInputStreamiPv(s32, s32, s32);               /* extern */
+M2C_UNK Skip__18CBinaryInputStreami(s32, s32);                    /* extern */
 M2C_UNK func_00117F18(s32, void *);                 /* extern */
 M2C_UNK func_001291A8(s32 *, s32 *);                /* extern */
 M2C_UNK func_00129EC8(s32 *);                       /* extern */
-M2C_UNK func_00166920(M2C_UNK *);                   /* extern */
-s32 func_001AE318(s32 *, s32 *);                    /* extern */
+M2C_UNK __4GIFS(M2C_UNK *);                   /* extern */
+s32 PvAllocStackImpl__FP7SWALLOC(s32 *, s32 *);                    /* extern */
 M2C_UNK func_002355E0(s32, M2C_UNK);                /* extern */
 extern M2C_UNK D_002A2D00;
 extern f32 D_002A7758;
@@ -56,12 +56,12 @@ extern s32 D_002DD2EC;
 extern s32 D_002DD2F0;
 extern s32 D_002DD2F4;
 extern s32 D_002DD314;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDED4;
 extern f32 D_002DDF0C;
 extern M2C_UNK D_002DEA00;
 extern M2C_UNK D_002DEA28;
-extern void *D_002DEA4C;
+extern void *g_pfrmOpen;
 extern s32 D_002DEDBC;
 extern M2C_UNK D_002DF260;
 extern M2C_UNK D_002E5270;
@@ -72,8 +72,8 @@ extern s32 D_003D3A40;
 extern s32 D_003D3A44;
 extern M2C_UNK D_003D3A50;
 extern M2C_UNK D_003D4A60;
-extern M2C_UNK D_003DD040;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sndmgr;
+extern M2C_UNK g_sw;
 extern M2C_UNK D_003E0EA8;
 extern s32 D_003E1398;
 extern s32 D_003E1BF4;

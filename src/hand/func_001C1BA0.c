@@ -4,7 +4,7 @@ struct O { char pad[0x1A0]; union { qword q; float g[4]; } a; union { qword q; f
 struct S { char pad[0xF8]; int xF8; int xFC; int x100; struct E *x104; struct E *x108; struct O **x10C; int x110; int x114; };
 struct M { struct O *po; void *pv; };
 struct G { char pad[0x3D70]; int x3D70; };
-extern struct G D_003DD490;
+extern struct G g_sw;
 int func_001C1700(struct S *p, int z, qword a, qword b, int c, void **ap);
 int func_001BD8A8(struct O *po, void *pv);
 void func_001BDE80(int n, struct M *pm);
@@ -37,5 +37,5 @@ void func_001C1BA0(struct S *p, struct O *po)
     }
     po->x1DC = p;
     p->x100 += 2;
-    p->x114 = ++D_003DD490.x3D70;
+    p->x114 = ++g_sw.x3D70;
 }

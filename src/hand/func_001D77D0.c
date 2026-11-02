@@ -7,8 +7,8 @@ typedef struct {
     int c;
     void *a[8];
 } OBJ;
-void *func_001F07E8(void *);
-int func_001F0438(LIST *, void *);
+void *GetSmaCur__FP3SMA(void *);
+int IsmsFindSmRequired__FP2SM3OID(LIST *, void *);
 void *func_001F04F8(LIST *, int);
 void func_001F0660(void *, void *);
 void func_001F1448(int, OBJ *, int, int, void **);
@@ -18,7 +18,7 @@ void func_001D77D0(OBJ *p, int d)
     int i;
     if (p->x188 == 0)
         return;
-    i = func_001F0438(p->plist, func_001F07E8(p->x188));
+    i = IsmsFindSmRequired__FP2SM3OID(p->plist, GetSmaCur__FP3SMA(p->x188));
     i0 = i;
     for (;;) {
         void *pv;

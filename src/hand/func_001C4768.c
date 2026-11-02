@@ -1,16 +1,16 @@
+#include "mat.h"
 // Rotate a direction into a matrix frame, take the perpendicular (-y, z, 0) and normalize it (fallback D_002A2DB0).
 // VF hard-register pins in Norm reproduce the original VF numbering.
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f[4]; };
-struct M3 { qword row[3]; };
-struct S { char pad[0x40]; struct M3 mat; };
+struct S { char pad[0x40]; struct MATRIX3 mat; };
 extern qword D_002A2DB0;
-static inline qword Local(const struct M3 *m, qword v)
+static inline qword Local(const struct MATRIX3 *m, qword v)
 {
     qword q, one, a, b, c;
-    q = m->row[0];
+    q = m->r[0];
     __asm__("vmul.xyzw %2,%0,%7\n\tvmaxw.xyzw %1,$vf0,$vf0w\n\tvmul.xyzw %3,%5,%7\n\tvmul.xyzw %4,%6,%7\n\tvadday.x $ACC,%2,%2y\n\tvmaddz.x %0,%1,%2z\n\tvaddax.y $ACC,%3,%3x\n\tvmaddz.y %0,%1,%3z\n\tvaddax.z $ACC,%4,%4x\n\tvmaddy.z %0,%1,%4y"
-            : "+j"(q), "=&j"(one), "=&j"(a), "=&j"(b), "=&j"(c) : "j"(m->row[1]), "j"(m->row[2]), "j"(v));
+            : "+j"(q), "=&j"(one), "=&j"(a), "=&j"(b), "=&j"(c) : "j"(m->r[1]), "j"(m->r[2]), "j"(v));
     return q;
 }
 static inline qword Norm(qword v, qword fallback)

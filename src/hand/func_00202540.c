@@ -6,7 +6,7 @@ struct O {char pad[0xC];struct VT *vt;char pad10[0x28];float height;char pad3C[0
 struct REF {struct O*o;};
 struct P {char pad[0x20];V position;int count;struct O *items[20];char pad84[8];struct O*best;char pad90[0x18];struct REF *ref;};
 struct CAMERA {char pad[0x90];qword position;};
-extern struct CAMERA D_002DDF40;
+extern struct CAMERA g_cm;
 extern const float D_002A8550;
 int func_00203790(struct O*);
 qword func_001A62E8(struct O*);
@@ -51,7 +51,7 @@ void func_00202540(struct P*p)
    float distance; qword eye,threshold,point;
    if(!func_00203790(o))continue;
    Store(&position.q,func_001A62E8(o));
-   camera=&D_002DDF40;
+   camera=&g_cm;
    radius.q=ScalarBits(&o->radius);
    PlaneArguments(&eye,&threshold,&point,radius.q,&camera->position,&position.q);
    if(!func_0014F850(camera,PlaneDelta(point,eye),threshold))continue;

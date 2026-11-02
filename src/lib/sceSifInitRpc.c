@@ -18,7 +18,7 @@ typedef struct {
 } RpcData;
 typedef struct { int x0, x4, x8, xc; } Cmd;
 #define UNCACHED(p) ((void *)((unsigned int)(p) | 0x20000000))
-extern int D_002C49F0;
+extern int _rpc_inited;
 extern unsigned char D_00448E00[];
 extern unsigned char D_00449600[];
 extern unsigned char D_00449E00[];
@@ -39,11 +39,11 @@ void sceSifInitRpc(unsigned int mode)
 {
     Cmd *cmd;
     DIntr();
-    if (D_002C49F0) {
+    if (_rpc_inited) {
         func_002394A0();
         return;
     }
-    D_002C49F0 = 1;
+    _rpc_inited = 1;
     func_002394A0();
     sceSifInitCmd();
     DIntr();

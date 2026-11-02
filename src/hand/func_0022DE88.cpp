@@ -1,6 +1,6 @@
 // func_0022DE88: ported from Lilly's personal Sly 2 decomp (src/P2/xf.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002A2DA0 (D_002A2DA0), D_002DDED0 (g_clock), D_002A2DD0 (g_qwZero), D_003DD490 (g_sw)
+// Globals: D_002A2DA0 (D_002A2DA0), g_clock (g_clock), D_002A2DD0 (g_qwZero), g_sw (g_sw)
 // 0x0022DE88 UpdateSoSlots__FP2SO (our name, was FUN_0022DE88; SO::Update 0x1F3980 calls it right after the SO's own update). THE per-frame step of an SO's XF slots:
 // for every XF it runs SlotRefresh and then, by the XF's role (nRole, see SlotRefresh / SlotSetRole), moves the XF's local matrix `mat` and stamps it (nStampWorld = ++g_sw.nStampXf):
 //   roles 1 2   constant acceleration qwUnkF0 on the velocity vUnkB0: xfk 1 moves the position row (trapezoid: pos += (v_old + v_new) * dt / 2), xfk 6 turns the rotation by the
@@ -289,7 +289,7 @@ struct CLOCK
       int cWrapAround;
       undefined4 unk_0x5c;
 };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 struct WRBG;
 struct SUBGLOBX
 {
@@ -644,7 +644,7 @@ struct SW : public BASIC
       struct EMITTER *apemitTracked[4];
       uint32_t   _pad_360    [ 1 ] ;
 };
-extern SW D_003DD490;
+extern SW g_sw;
 struct CONSTR
 {
       qword vecNormal;
@@ -790,7 +790,7 @@ extern "C" void func_0022FA20(SO *pso);
 extern "C" void func_00186A50(SO *pso, void *pv);
 void UpdateXflock(SO *pso, struct XFLOCK *pxflock);
 void UpdateChainLink(SO *pso, struct CHAINLINK *plink);
-extern "C" float *func_00256D18(float *pg, qword qw);
+extern "C" float *__as__6VECTORG9VU_VECTOR(float *pg, qword qw);
 struct GFTUNE
 {
     float g;
@@ -987,7 +987,7 @@ void UpdateSoSlots(SO *pso)
                 {
                 case 1:
                 {
-                    float dt = D_002DDED0.dt;
+                    float dt = g_clock.dt;
                     qword qwV0 = *(qword *)&pxf->vUnkB0;
                     VU_FLOAT vfDt = VuFloat(dt);
                     qword qwF0 = *(qword *)&pxf->qwUnkF0;
@@ -1002,10 +1002,10 @@ void UpdateSoSlots(SO *pso)
                         VU_FLOAT vfHalf = VuFloat(dt * 0.5f);
                         qword qwSum = QwAdd(qwVel, *(qword *)&pxf->vUnkB0);
                         qword qwPos = QwMulAddX(qwPos0, qwSum, vfHalf.qw);
-                        func_00256D18(pxf->mat.mat[3], qwPos);
+                        __as__6VECTORG9VU_VECTOR(pxf->mat.mat[3], qwPos);
                         *(qword *)&pxf->vUnkB0 = qwVel;
                         pxf->mat.mat[3][3] = 1.0f;
-                        pxf->nStampWorld = ++D_003DD490.nStampXf;
+                        pxf->nStampWorld = ++g_sw.nStampXf;
                     }
                     else
                     {
@@ -1019,7 +1019,7 @@ void UpdateSoSlots(SO *pso)
                 }
                 case 6:
                 {
-                    float dt = D_002DDED0.dt;
+                    float dt = g_clock.dt;
                     qword qwV0 = *(qword *)&pxf->vUnkB0;
                     VU_FLOAT vfDt = VuFloat(dt);
                     qword qwF0 = *(qword *)&pxf->qwUnkF0;
@@ -1034,7 +1034,7 @@ void UpdateSoSlots(SO *pso)
                         qword qwSum = QwAdd(*(qword *)&pxf->vUnkB0, qwVel);
                         TurnSlotMat(pxf, (MATRIX3 *)&pxf->mat, QwMulX(qwSum, vfHalf.qw));
                         *(qword *)&pxf->vUnkB0 = qwVel;
-                        pxf->nStampWorld = ++D_003DD490.nStampXf;
+                        pxf->nStampWorld = ++g_sw.nStampXf;
                     }
                     else
                     {
@@ -1053,14 +1053,14 @@ void UpdateSoSlots(SO *pso)
                 if (pxf->xfk == 6)
                 {
                     fIdle = 0;
-                    float gAngle = RadNormalize(*(float *)&pxf->qwRestUnkE0 + D_002DDED0.dt * *(float *)&pxf->qwUnkD0);
+                    float gAngle = RadNormalize(*(float *)&pxf->qwRestUnkE0 + g_clock.dt * *(float *)&pxf->qwUnkD0);
                     *(float *)&pxf->qwRestUnkE0 = gAngle;
                     MATRIX3 matRot = LoadRotateMatrixRad(gAngle, pxf->qwRest);
                     *(MATRIX3 *)&pxf->mat = matRot;
                     pxf->mat.mat[1][3] = 0.0f;
                     pxf->mat.mat[2][3] = 0.0f;
                     pxf->mat.mat[0][3] = 0.0f;
-                    pxf->nStampWorld = ++D_003DD490.nStampXf;
+                    pxf->nStampWorld = ++g_sw.nStampXf;
                 }
                 break;
             case 4:
@@ -1085,7 +1085,7 @@ void UpdateSoSlots(SO *pso)
                     qword qwVal = QwSlotValue(pxf);
                     pxf->mat = SlotStoreValue(pxf, qwVal);
                 }
-                pxf->nStampWorld = ++D_003DD490.nStampXf;
+                pxf->nStampWorld = ++g_sw.nStampXf;
                 if (pxf->nRole == 6 && pxf->nPhase == 2)
                     SlotSetRole(pso, pxf, 10);
             }
@@ -1151,7 +1151,7 @@ void UpdateSoSlots(SO *pso)
                     }
                     else
                     {
-                        gOut = GSmooth(0.0f, gAngle, D_002DDED0.dt, &smp, &dgNext);
+                        gOut = GSmooth(0.0f, gAngle, g_clock.dt, &smp, &dgNext);
                         switch (pxf->nRole)
                         {
                             case 0xb:
@@ -1160,13 +1160,13 @@ void UpdateSoSlots(SO *pso)
                                 qword qwNewOmega = QwSMulAddX(VuFloat(dgNext - gRateAlong).qw, *(qword *)&vecAxis, qwRotRate);
                                 qword qwV0 = *(qword *)&pxf->vUnkB0;
                                 qword qwDOmega = QwSub(qwNewOmega, qwV0);
-                                float gNeed = GLength(qwDOmega) / D_002DDED0.dt;
+                                float gNeed = GLength(qwDOmega) / g_clock.dt;
                                 if (gMax < gNeed)
                                 {
                                     qword qwLimited = QwMulAddX(qwV0, qwDOmega, VuFloat(gMax / gNeed).qw);
                                     MATRIX3 matRot;
                                     MATRIX3 matTurn;
-                                    matRot = LoadRotateMatrix(QwXMul(VuFloat(D_002DDED0.dt * 0.5f).qw, QwAdd(*(qword *)&pxf->vUnkB0, qwLimited)));
+                                    matRot = LoadRotateMatrix(QwXMul(VuFloat(g_clock.dt * 0.5f).qw, QwAdd(*(qword *)&pxf->vUnkB0, qwLimited)));
                                     matTurn = matRot * matOld;
                                     NormalizeRotateMatrix3(&matTurn);
                                     *(qword *)&pxf->vUnkB0 = qwLimited;
@@ -1181,14 +1181,14 @@ void UpdateSoSlots(SO *pso)
                             case 9:
                             {
                                 float gMin;
-                                if (D_002DDED0.t < *(float *)&pxf->pxfRef)
-                                    gMin = gAngle * D_002DDED0.dt / ((*(float *)&pxf->pxfRef - D_002DDED0.t) + D_002DDED0.dt);
+                                if (g_clock.t < *(float *)&pxf->pxfRef)
+                                    gMin = gAngle * g_clock.dt / ((*(float *)&pxf->pxfRef - g_clock.t) + g_clock.dt);
                                 else
                                     gMin = gAngle;
                                 if (gOut < gMin)
                                 {
                                     gOut = gMin;
-                                    dgNext = gOut / D_002DDED0.dt;
+                                    dgNext = gOut / g_clock.dt;
                                 }
                                 break;
                             }
@@ -1277,7 +1277,7 @@ void UpdateSoSlots(SO *pso)
                     }
                     else
                     {
-                        gOut = GSmooth(0.0f, gDist, D_002DDED0.dt, &smp, &dgNext);
+                        gOut = GSmooth(0.0f, gDist, g_clock.dt, &smp, &dgNext);
                         switch (pxf->nRole)
                         {
                             case 0xb:
@@ -1285,7 +1285,7 @@ void UpdateSoSlots(SO *pso)
                                 VU_FLOAT vfRate = VuFloat(dgNext - gVelAlong);
                                 qword qwDV = QwMulAddX(qwTargetVel, qwDir, vfRate.qw);
                                 qwDV = QwSub(qwDV, *(qword *)&pxf->vUnkB0);
-                                float gNeed = GLength(qwDV) / D_002DDED0.dt;
+                                float gNeed = GLength(qwDV) / g_clock.dt;
                                 float gMax;
                                 if (pxf->xfk < 13)
                                 {
@@ -1300,7 +1300,7 @@ void UpdateSoSlots(SO *pso)
                                 {
                                     qword qwV0 = *(qword *)&pxf->vUnkB0;
                                     VU_FLOAT vfLimit = VuFloat(gMax / gNeed);
-                                    VU_FLOAT vfHalf = VuFloat(D_002DDED0.dt * 0.5f);
+                                    VU_FLOAT vfHalf = VuFloat(g_clock.dt * 0.5f);
                                     qwDV = QwMulAddX(qwV0, qwDV, vfLimit.qw);
                                     qword qwSum = QwAdd(*(qword *)&pxf->vUnkB0, qwDV);
                                     *(qword *)&pxf->vUnkB0 = qwDV;
@@ -1312,14 +1312,14 @@ void UpdateSoSlots(SO *pso)
                             case 9:
                             {
                                 float gMin;
-                                if (D_002DDED0.t < *(float *)&pxf->pxfRef)
-                                    gMin = gDist * D_002DDED0.dt / ((*(float *)&pxf->pxfRef - D_002DDED0.t) + D_002DDED0.dt);
+                                if (g_clock.t < *(float *)&pxf->pxfRef)
+                                    gMin = gDist * g_clock.dt / ((*(float *)&pxf->pxfRef - g_clock.t) + g_clock.dt);
                                 else
                                     gMin = gDist;
                                 if (gOut < gMin)
                                 {
                                     gOut = gMin;
-                                    dgNext = gOut / D_002DDED0.dt;
+                                    dgNext = gOut / g_clock.dt;
                                 }
                                 break;
                             }
@@ -1350,7 +1350,7 @@ void UpdateSoSlots(SO *pso)
                 }
             LChaseDone:
                 fIdle = 0;
-                pxf->nStampWorld = ++D_003DD490.nStampXf;
+                pxf->nStampWorld = ++g_sw.nStampXf;
                 break;
             }
             case 0xd:
@@ -1366,20 +1366,20 @@ void UpdateSoSlots(SO *pso)
             {
                 VECTOR4 vecPos;
                 VECTOR4 vecVel;
-                if (*(float *)&pxf->pxfRef <= D_002DDED0.t)
+                if (*(float *)&pxf->pxfRef <= g_clock.t)
                 {
                     *(qword *)&vecPos = pxf->qwRest;
                     ClearXyz(&vecVel);
                 }
                 else
                 {
-                    HermiteVec4((*(float *)&pxf->pxfRef - D_002DDED0.t) + D_002DDED0.dt, D_002DDED0.dt, 1.0f, *(qword *)pxf->mat.mat[3], *(qword *)&pxf->vUnkB0, pxf->qwRest, pxf->qwUnkD0, &vecPos, &vecVel, 0);
+                    HermiteVec4((*(float *)&pxf->pxfRef - g_clock.t) + g_clock.dt, g_clock.dt, 1.0f, *(qword *)pxf->mat.mat[3], *(qword *)&pxf->vUnkB0, pxf->qwRest, pxf->qwUnkD0, &vecPos, &vecVel, 0);
                 }
                 fIdle = 0;
-                func_00256D18(pxf->mat.mat[3], *(qword *)&vecPos);
+                __as__6VECTORG9VU_VECTOR(pxf->mat.mat[3], *(qword *)&vecPos);
                 pxf->mat.mat[3][3] = 1.0f;
                 *(qword *)&pxf->vUnkB0 = *(qword *)&vecVel;
-                pxf->nStampWorld = ++D_003DD490.nStampXf;
+                pxf->nStampWorld = ++g_sw.nStampXf;
                 break;
             }
             case 0x12:
@@ -1395,7 +1395,7 @@ void UpdateSoSlots(SO *pso)
                     SLOT_RATE_SWITCH(pxf, qw, qwTargetVel)
                     float gKp = (float)(ushort)pxf->nUnkAc * s_gKpPos.g;
                     float gKd = (float)(ushort)pxf->nUnkAe * s_gKdPos.g;
-                    float dt = D_002DDED0.dt;
+                    float dt = g_clock.dt;
                     qword qwV0 = *(qword *)&pxf->vUnkB0;
                     qword qwDV = QwSub(qwTargetVel, qwV0);
                     qword qwDPos = QwSub(qwTarget, *(qword *)pxf->mat.mat[3]);
@@ -1416,14 +1416,14 @@ void UpdateSoSlots(SO *pso)
                         SlotSetRole(pso, pxf, 0x13);
                     }
                     qword qwPos0 = *(qword *)pxf->mat.mat[3];
-                    func_00256D18(pxf->mat.mat[3], QwAddMulXMulX(qwPos0, qwV0, qwV1, VuFloat(dt * 0.5f).qw));
+                    __as__6VECTORG9VU_VECTOR(pxf->mat.mat[3], QwAddMulXMulX(qwPos0, qwV0, qwV1, VuFloat(dt * 0.5f).qw));
                     *(qword *)&pxf->vUnkB0 = qwV1;
                     pxf->mat.mat[3][3] = 1.0f;
                     break;
                 }
                 case 6:
                 {
-                    float dt = D_002DDED0.dt;
+                    float dt = g_clock.dt;
                     MATRIX3 matOld = *(MATRIX3 *)&pxf->mat;
                     MATRIX3 matTarget;
                     MATRIX3 matDmat;
@@ -1480,7 +1480,7 @@ void UpdateSoSlots(SO *pso)
                 }
                 }
                 fIdle = 0;
-                pxf->nStampWorld = ++D_003DD490.nStampXf;
+                pxf->nStampWorld = ++g_sw.nStampXf;
                 break;
             }
         }

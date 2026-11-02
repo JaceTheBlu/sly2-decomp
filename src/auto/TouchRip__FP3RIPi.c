@@ -2,7 +2,7 @@
 extern M2C_UNK D_002A2D00;
 extern s128 D_002A2DA0;
 extern s128 D_002A2DB0;
-extern s128 D_002A2DC0;
+extern s128 g_normalZ;
 extern s128 D_002A2DD0;
 extern f32 D_002A7810;
 extern s128 D_002BBB50;
@@ -33,10 +33,10 @@ extern f32 D_002C20A4;
 extern M2C_UNK D_002C20A8;
 extern M2C_UNK D_002C20C0;
 extern M2C_UNK D_002C94A0;
-extern f32 D_002DDED0;
+extern f32 g_clock;
 extern f32 D_002DDED4;
-extern M2C_UNK D_002DDF40;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_cm;
+extern M2C_UNK g_sw;
 extern M2C_UNK D_003E1144;
 extern M2C_UNK D_003E14E4;
 

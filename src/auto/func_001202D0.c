@@ -9,6 +9,6 @@ extern s128 D_002A2DA0;
 extern s128 D_002A2DD0;
 
 s32 func_001202D0(s32 arg0) {
-    func_0012A0B0(arg0, 0x24);
+    SetTag__4CRef4TAGK(arg0, 0x24);
     return arg0;
 }

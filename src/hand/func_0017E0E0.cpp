@@ -1,8 +1,9 @@
+#include "vu0.h"
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct X;
 extern "C" {
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002BE76C;
 extern float D_002BE770[16];
 struct X { qword a; qword v; X(); };
@@ -16,14 +17,12 @@ float func_002458F0(float y, float x);
 qword func_001C1EC0(struct X *s, qword v);
 qword func_0011E1A0(float a, float b, float c);
 int func_001C0B50(void *q, qword v, qword *out);
-void func_002562A8(struct X *x);
+void __1M(struct X *x);
 void func_0017DD38(void *p, struct X *x);
 }
-inline X::X() { func_002562A8(this); }
+inline X::X() { __1M(this); }
 extern "C" {
 }
-static __inline__ float GetX(qword q) { float x; __asm__("mtc1 %1,%0" : "=f"(x) : "r"(q)); return x; }
-static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0,%1" : "=r"(y) : "r"(q)); return y; }
 extern "C" void func_0017E0E0(struct S *p) {
     union { qword q; } hit;
     qword a, b, d, r;
@@ -33,7 +32,7 @@ extern "C" void func_0017E0E0(struct S *p) {
     void *q;
     float ang, best;
     unsigned int i;
-    p->f3C = D_002DDED0.t;
+    p->f3C = g_clock.t;
     t = p->p18;
     a = func_001A62E8(p->p38);
     b = func_001A62E8(p->p10);

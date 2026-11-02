@@ -2,7 +2,7 @@
 // right after it in the same file and shares its FRAME / VU_FLOAT / VV / AddScaled idioms). Casts a line from point up to
 // point + axis * gMax and, failing that, down to point + axis * gMin, against `apcand` (fetched with func_0020FAA0 when the
 // caller passed none); returns the hit position, or point itself when gMin >= 0 and nothing above was found.
-// Matching notes (wave 4, lane 1):
+// Matching notes:
 //  * FRAME is a plain RAII local with out-of-line ctor/dtor (as in func_001C6FD8); g++ emits the three `dtor(this, 2)` calls
 //    and cross-jumping rebuilds the target's shared tails. Parameters are used directly (their homes are 0x80/0x84).
 //  * The game loads func_0020FAA0's third argument (posMax) into $a2 BEFORE the `apcand == 0` test: that load is the last insn
@@ -32,8 +32,8 @@ int func_001C5570(void *, CANDIDATE *);
 void func_0020FAA0(void *, qword, qword, int (*)(void *, CANDIDATE *), void *, int *, CANDIDATE ***);
 CANDIDATE *PsoHitTestLineObjects(int, qword, qword, int, CANDIDATE **, LSG *)
     __asm__("PsoHitTestLineObjects__FiP6VECTORT1iPP2SOP3LSG");
-extern char D_003DD490[];
-extern qword D_002A2DC0;
+extern char g_sw[];
+extern qword g_normalZ;
 }
 // base + v * g
 static inline qword AddScaled(VV base, VU_FLOAT g, qword v)
@@ -48,11 +48,11 @@ extern "C" int func_001C6DE8(float gMin, float gMax, float gThreshold, qword poi
 {
     LSG lsg;
     FRAME frame;
-    qword posMax = AddScaled(point, VU_FLOAT(gMax), D_002A2DC0);
-    qword posMin = AddScaled(point, VU_FLOAT(gMin), D_002A2DC0);
+    qword posMax = AddScaled(point, VU_FLOAT(gMax), g_normalZ);
+    qword posMin = AddScaled(point, VU_FLOAT(gMin), g_normalZ);
     register qword posMaxArg __asm__("$6") = posMax;   // pin: the game loads this $a2 argument before the test (see top)
     if (!apcand)
-        func_0020FAA0(D_003DD490, point, posMaxArg, func_001C5570, 0, &ccand, &apcand);
+        func_0020FAA0(g_sw, point, posMaxArg, func_001C5570, 0, &ccand, &apcand);
     if (gMax > 0) {
         if (PsoHitTestLineObjects(0, point, posMax, ccand, apcand, &lsg) && lsg.t == 0) {
             if (lsg.u == 1 || lsg.normalB.f[2] < gThreshold)

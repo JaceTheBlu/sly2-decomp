@@ -1,7 +1,8 @@
-// `/` script builtin (Claude agent). The int-matrix path builds its VU_FLOAT temp in the caller, before the inline scale
+#include "cref.h"
+#include "vec.h"
+// `/` script builtin. The int-matrix path builds its VU_FLOAT temp in the caller, before the inline scale
 // helper frame, so the temp reuses the freed CRef slot at sp+0x10 as in the original.
 typedef int qword __attribute__((mode(TI)));
-struct VECTOR { float x, y, z, w; };
 struct MATRIX4 { float af[16]; } __attribute__((aligned(16)));
 struct V8 { float x, y; };
 struct VU_FLOAT {
@@ -12,18 +13,7 @@ struct VU_FLOAT {
 struct VU_FLOAT_X { qword q; VU_FLOAT_X(float f); };
 struct VU_VECTOR { qword q; VU_VECTOR(const VECTOR &v); };
 qword operator*(VU_FLOAT_X f, VU_VECTOR v);
-extern "C" qword *func_00256D18(VECTOR *p, qword v);
-struct CRef {
-    int m_tagk; union { int n; float g; void *pv; } u;
-    CRef() { m_tagk = -1; }
-    CRef(const CRef &r);
-    void Decref();
-    void InitTag(int tagk);
-    ~CRef() { Decref(); }
-    CRef &operator=(const CRef &r);
-    CRef &operator=(int n);
-    CRef &operator=(float g);
-};
+extern "C" qword *__as__6VECTORG9VU_VECTOR(VECTOR *p, qword v);
 struct NODE { int x0, x4; CRef ref; NODE *pnext; };
 CRef func_00129BC8(CRef *pref, void *a, void *b);
 extern "C" CRef func_0011FEC8(void *pv, CRef *aref);
@@ -62,7 +52,7 @@ CRef func_0011FEC8(void *pv, CRef *aref)
     int fInt = 0;
     switch (aref[0].m_tagk) {
     case 0x15:
-        ref = (float)aref[0].u.n;
+        ref = (float)aref[0].m_tag;
         fInt = 1;
         break;
     case 0x16:
@@ -75,7 +65,7 @@ CRef func_0011FEC8(void *pv, CRef *aref)
     }
     NODE *pn = 0;
     if (aref[1].m_tagk)
-        pn = (NODE *)aref[1].u.pv;
+        pn = (NODE *)aref[1].m_p;
     for (; pn; pn = pn->pnext) {
         CRef *pr = &pn->ref;
         switch (ref.m_tagk) {
@@ -83,40 +73,40 @@ CRef func_0011FEC8(void *pv, CRef *aref)
             float d;
             switch (pr->m_tagk) {
             case 0x16:
-                d = pr->u.g;
+                d = pr->m_g;
                 fInt = 0;
                 break;
             case 0x15:
-                d = (float)pr->u.n;
+                d = (float)pr->m_tag;
                 break;
             default:
                 continue;
             }
-            ref.u.g /= d;
+            ref.m_g /= d;
             break;
         }
         case 0x1A:
             switch (pr->m_tagk) {
-            case 0x15: DivVector((qword *)ref.u.pv, (float)pr->u.n); break;
-            case 0x16: DivVector((qword *)ref.u.pv, pr->u.g); break;
+            case 0x15: DivVector((qword *)ref.m_p, (float)pr->m_tag); break;
+            case 0x16: DivVector((qword *)ref.m_p, pr->m_g); break;
             }
             break;
         case 0x1B:
             switch (pr->m_tagk) {
-            case 0x15: ScaleM((MATRIX4 *)ref.u.pv, VU_FLOAT(1.0f / (float)pr->u.n).F()); break;
-            case 0x16: DivMatrix((MATRIX4 *)ref.u.pv, pr->u.g); break;
+            case 0x15: ScaleM((MATRIX4 *)ref.m_p, VU_FLOAT(1.0f / (float)pr->m_tag).F()); break;
+            case 0x16: DivMatrix((MATRIX4 *)ref.m_p, pr->m_g); break;
             }
             break;
         case 0x1C:
             switch (pr->m_tagk) {
             case 0x15: {
-                VECTOR *pvec = (VECTOR *)ref.u.pv;
-                func_00256D18(pvec, VU_FLOAT_X(1.0f / (float)pr->u.n) * VU_VECTOR(*pvec));
+                VECTOR *pvec = (VECTOR *)ref.m_p;
+                __as__6VECTORG9VU_VECTOR(pvec, VU_FLOAT_X(1.0f / (float)pr->m_tag) * VU_VECTOR(*pvec));
                 break;
             }
             case 0x16: {
-                VECTOR *pvec = (VECTOR *)ref.u.pv;
-                func_00256D18(pvec, VU_FLOAT_X(1.0f / pr->u.g) * VU_VECTOR(*pvec));
+                VECTOR *pvec = (VECTOR *)ref.m_p;
+                __as__6VECTORG9VU_VECTOR(pvec, VU_FLOAT_X(1.0f / pr->m_g) * VU_VECTOR(*pvec));
                 break;
             }
             }
@@ -124,12 +114,12 @@ CRef func_0011FEC8(void *pv, CRef *aref)
         case 0x1D: {
             float d;
             switch (pr->m_tagk) {
-            case 0x15: d = (float)pr->u.n; break;
-            case 0x16: d = pr->u.g; break;
+            case 0x15: d = (float)pr->m_tag; break;
+            case 0x16: d = pr->m_g; break;
             default: continue;
             }
             float s = 1.0f / d;
-            V8 *p = (V8 *)ref.u.pv;
+            V8 *p = (V8 *)ref.m_p;
             p->x *= s;
             p->y *= s;
             break;
@@ -137,6 +127,6 @@ CRef func_0011FEC8(void *pv, CRef *aref)
         }
     }
     if (fInt && ref.m_tagk == 0x16)
-        ref = (int)ref.u.g;
+        ref = (int)ref.m_g;
     return ref;
 }

@@ -1,6 +1,6 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];int i[4];};
-struct M3{qword r[3];};
 struct M4{U r[4];};
 struct V3{float f[3];};
 struct PLANE{V3 normal;float distance;};
@@ -9,12 +9,12 @@ struct QW;
 struct P{int width,height;char pad8[8];int directCount;QW*directData;char pad18[8];O*camera;};
 struct V;
 extern "C" V3 D_002C1F00,D_002C1F10;
-extern "C" M3*func_001A6318(O*);
+extern "C" MATRIX3*func_001A6318(O*);
 extern "C" qword func_001A62E8(O*);
-extern "C" qword*func_00256D18(qword*,qword);
+extern "C" qword*__as__6VECTORG9VU_VECTOR(qword*,qword);
 extern "C" float func_002450F0(float);
 extern "C" void func_0011C448(float,float,float,float,float,float,M4*);
-extern "C" void func_0014D8F8(M4*,M4*,M4*);
+extern "C" void CombineEyeLookAtProj(M4*,M4*,M4*);
 extern "C" void func_001574B8(V*);
 extern "C" void func_00226D10(V*);
 extern "C" void func_002270C8(V*,int,QW*,int);
@@ -33,7 +33,7 @@ extern "C" void func_001BE6F0(P*p,V*v){
  M4 projection,product;
  PLANE planes[2];
  O*object;
- M3*basis;
+ MATRIX3*basis;
  register float aspect __asm__("$f20");
  float slope;
  if(!p->camera)return;
@@ -52,7 +52,7 @@ extern "C" void func_001BE6F0(P*p,V*v){
   minus0.q=nx;
  }
  {qword position=func_001A62E8(object);
- func_00256D18(&view.r[3].q,position);}
+ __as__6VECTORG9VU_VECTOR(&view.r[3].q,position);}
  aspect=(float)p->width;
  aspect/=(float)p->height;
  pv->r[0]=minus2;
@@ -65,7 +65,7 @@ extern "C" void func_001BE6F0(P*p,V*v){
  slope*=4096.0f;
  aspect*=4096.0f;
  func_0011C448((float)p->width/aspect,(float)p->height/slope,0.0f,0.0f,p->camera->clipFar,p->camera->clipNear,&projection);
- func_0014D8F8(pv,&projection,&product);
+ CombineEyeLookAtProj(pv,&projection,&product);
  {O*camera=p->camera;
   float z=(camera->clipFar+camera->clipNear)/(camera->clipFar-camera->clipNear);
   float k=1.0f-z;

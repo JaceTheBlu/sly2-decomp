@@ -1,19 +1,19 @@
+#include "clock.h"
 struct DL { void *pvFirst; void *pvLast; int ibDle; };
 struct DLI { struct DL *pdl; void **ppv; int ibDle; struct DLI *pdliNext; };
-extern struct DLI *D_002DD2FC;
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+extern struct DLI *g_pdliFirst;
+extern struct CLOCK g_clock;
 struct E { char pad[0x4C]; float t; };
 struct P { char pad[0x4118]; char pool[0x18]; struct DL dl; };
 void func_0011A2E8(struct DL *, void *);
-void func_0011CD98(void *, void *);
+void FreeSlotheapPv__FP8SLOTHEAPPv(void *, void *);
 static inline void InitDli(struct DLI *pdli, struct DL *pdl)
 {
     pdli->pdl = pdl;
     pdli->ppv = (void **)pdl;
     pdli->ibDle = pdl->ibDle;
-    pdli->pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static inline void *PvNextDli(struct DLI *pdli)
 {
@@ -27,9 +27,9 @@ void func_001F77C0(struct P *p)
     struct E *pe;
     InitDli(&dli, &p->dl);
     while ((pe = PvNextDli(&dli)) != 0) {
-        if (D_002DDED0.t < pe->t + 0.25f) continue;
+        if (g_clock.t < pe->t + 0.25f) continue;
         func_0011A2E8(&p->dl, pe);
-        func_0011CD98(p->pool, pe);
+        FreeSlotheapPv__FP8SLOTHEAPPv(p->pool, pe);
     }
-    D_002DD2FC = dli.pdliNext;
+    g_pdliFirst = dli.pdliNext;
 }

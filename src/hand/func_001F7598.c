@@ -1,10 +1,7 @@
+#include "vtable.h"
 typedef int qword __attribute__((mode(TI)));
 struct O;
-struct VT {
-    short d; short pad;
-    void *pfn;
-};
-struct O { char pad[0xC]; struct VT *pvt; struct O *pNext; };
+struct O { char pad[0xC]; struct VTE *pvt; struct O *pNext; };
 struct K {
     struct O *p0; int n4; void *p8; int nC;
     char pad[0x44 - 0x10];
@@ -16,14 +13,14 @@ struct M2 { struct O **ppo; int *pn; };
 struct M3 { struct K *pk; };
 extern struct N *D_003E15C0;
 extern char D_003E15A8[];
-extern float D_002DDED0;
+extern float g_clock;
 struct O *func_001A5BF0(void *);
 int func_001F78D8(struct O *, int);
 struct K *func_0011CCC0(void *);
-void func_0011A210(void *);
+void ClearDle__FP3DLE(void *);
 void func_0011A220(void *, void *);
 
-#define VCALL(po, slot, T) ((T)(po)->pvt[slot].pfn)((void *)((char *)(po) + (po)->pvt[slot].d)
+#define VCALL(po, slot, T) ((T)(po)->pvt[slot].pfn)((void *)((char *)(po) + (po)->pvt[slot].delta)
 
 struct O *func_001F7598(struct K *pk)
 {
@@ -42,8 +39,8 @@ struct O *func_001F7598(struct K *pk)
             pk->p48 = po;
             pkNew = func_0011CCC0(D_003E15A8);
             *pkNew = *pk;
-            pkNew->f4C = D_002DDED0;
-            func_0011A210(pkNew->dle);
+            pkNew->f4C = g_clock;
+            ClearDle__FP3DLE(pkNew->dle);
             func_0011A220(&D_003E15C0, pkNew);
             if (pk->n44 & 0xF8) {
                 {

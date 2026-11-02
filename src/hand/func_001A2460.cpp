@@ -1,7 +1,8 @@
+#include "vtable.h"
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 union U {qword q;float f[4];int i[4];};
 struct M4 {U r[4];};
-struct VTE {short delta,pad;void*fn;};
 struct P;
 struct EFFECT {char pad[0xC];VTE*vt;};
 struct L {char pad[0xC];VTE*vt;char pad10[0x164];EFFECT*effect;char pad178[0xC];int kind,tag;};
@@ -10,15 +11,14 @@ struct P {char pad[0xC];VTE*vt;char pad10[0x2CC];int state;char pad2E0[0xB14];in
 struct HIT {L*target;int pad4;P*source;int tag,kind;char pad14[0xC];U point,direction;char pad40[0x20];};
 struct MSG {int type;char pad4[0x1C];U position;};
 struct CLOCK {float time,dt;};
-extern "C" CLOCK D_002DDED0;
+extern "C" CLOCK g_clock;
 extern "C" qword func_001A62E8(P*);
 extern "C" void*func_002333B4(void*,int,int);
 extern "C" P*func_001F7598(HIT*);
 extern "C" int func_001A2788(P*,L*,qword*);
 extern "C" void func_002309E8(void*,void*,M4*,M4*,float);
-extern "C" M4 func_0011C168(const M4*,const M4*);
-static inline float Z(qword q){float f;__asm__("pextuw %0,$zero,%1":"=r"(f):"r"(q));return f;}
-static inline qword Direction(P*p){return ((qword(*)(void*))p->vt[33].fn)((char*)p+p->vt[33].delta);}
+extern "C" M4 __ml__FRC7MATRIX4T0(const M4*,const M4*);
+static inline qword Direction(P*p){return ((qword(*)(void*))p->vt[33].pfn)((char*)p+p->vt[33].delta);}
 extern "C" void func_001A2460(P*p){
  U point;
  int valid;
@@ -27,12 +27,12 @@ extern "C" void func_001A2460(P*p){
   point.f[2]+=p->height;
   if(p->mode==3||p->mode==10)point.f[2]-=10.0f;
   L*link=p->link;
-  valid=((int(*)(void*,qword))link->vt[73].fn)((char*)link+link->vt[73].delta,point.q);
+  valid=((int(*)(void*,qword))link->vt[73].pfn)((char*)link+link->vt[73].delta,point.q);
  }else valid=0;
  if(!valid)return;
  if(p->link->kind){
   int notify=0;
-  if(Z(Direction(p))<0.0f||(p->state==-1&&p->mode!=7))notify=1;
+  if(GetZ(Direction(p))<0.0f||(p->state==-1&&p->mode!=7))notify=1;
   if(notify){
    HIT hit;
    func_002333B4(&hit,0,sizeof(hit));
@@ -57,12 +57,12 @@ extern "C" void func_001A2460(P*p){
  register U*predpos __asm__("$20")=&predicted.r[3];
  for(;i<p->count;i++){
   ENTRY*entry=&p->entries[i];
-  if(D_002DDED0.time-entry->time<0.05f)continue;
+  if(g_clock.time-entry->time<0.05f)continue;
   P*object=entry->object;
   position.q=func_001A62E8(object);
-  void*frame=((void*(*)(void*,M4*))object->vt[32].fn)((char*)object+object->vt[32].delta,pbase);
-  func_002309E8(frame,0,ppred,0,D_002DDED0.dt);
-  predicted=func_0011C168(ppred,pbase);
+  void*frame=((void*(*)(void*,M4*))object->vt[32].pfn)((char*)object+object->vt[32].delta,pbase);
+  func_002309E8(frame,0,ppred,0,g_clock.dt);
+  predicted=__ml__FRC7MATRIX4T0(ppred,pbase);
   int crossed=0;
   if(point.f[2]<=position.f[2]){if(predpos->f[2]<=point.f[2])crossed=1;}
   else if(point.f[2]<=predpos->f[2])crossed=1;
@@ -72,8 +72,8 @@ extern "C" void func_001A2460(P*p){
    msg.position.f[2]=point.f[2];
    msg.type=4;
    EFFECT*effect=p->link->effect;
-   ((void(*)(void*,MSG*))effect->vt[51].fn)((char*)effect+effect->vt[51].delta,&msg);
-   entry->time=D_002DDED0.time;
+   ((void(*)(void*,MSG*))effect->vt[51].pfn)((char*)effect+effect->vt[51].delta,&msg);
+   entry->time=g_clock.time;
   }
  }
 }

@@ -19,24 +19,24 @@ struct L {
     void *p28;
 };
 extern void **D_003DD004;
-void func_00117968(void *, int, void *);
+void Read__18CBinaryInputStreamiPv(void *, int, void *);
 void func_001ED278(int *);
 int func_00117D50(void *);
-void *func_001AE2A0(struct MSG *);
+void *PvAllocSwClearImpl__FP7SWALLOC(struct MSG *);
 void func_001EB1A8(void *, struct C *);
 static inline void InitEnt(struct ENT *pe, int n, struct MSG *pmsg)
 {
     pe->n = n;
     pmsg->cb = n * 16;
     pmsg->nKind = 0x10;
-    pe->p = func_001AE2A0(pmsg);
+    pe->p = PvAllocSwClearImpl__FP7SWALLOC(pmsg);
 }
 void func_001EB2F0(void *pbis, struct L *p)
 {
     struct MSG msg;
     int i, j;
     struct ENT *ae, *pe;
-    func_00117968(pbis, 0x18, p);
+    Read__18CBinaryInputStreamiPv(pbis, 0x18, p);
     func_001ED278(&p->c8);
     func_001ED278(&p->cC);
     func_001ED278(&p->c10);
@@ -45,7 +45,7 @@ void func_001EB2F0(void *pbis, struct L *p)
         p->p28 = D_003DD004[i];
     msg.cb = p->b17 * 0x14;
     msg.nKind = 0x10;
-    p->ac = func_001AE2A0(&msg);
+    p->ac = PvAllocSwClearImpl__FP7SWALLOC(&msg);
     for (j = 0; j < p->b17; j++) {
         struct C *pc = &p->ac[j];
         func_001EB1A8(pbis, pc);
@@ -72,7 +72,7 @@ void func_001EB2F0(void *pbis, struct L *p)
     }
     msg.cb = p->n1C * 8;
     msg.nKind = 0x10;
-    ae = func_001AE2A0(&msg);
+    ae = PvAllocSwClearImpl__FP7SWALLOC(&msg);
     p->ae = ae;
     switch (p->b4) {
     case 0:

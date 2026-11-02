@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword q; float f[4]; } VU;
 struct WORK{VU scalar;VU forward,reverse;VU kept;};
@@ -12,20 +13,19 @@ typedef struct S {
     qword v40; float g50; int pad54[5]; C *p68;
 } S;
 typedef struct R { unsigned int x0; char pad[0x30 - 4]; float g30; int x34; int pad38; int x3C; } R;
-typedef struct CLOCK { float t; float dt; } CLOCK;
 struct SMP {float a,b,duration;};
 
-extern "C" CLOCK D_002DDED0;
+extern "C" CLOCK g_clock;
 extern "C" SMP D_002BF348;
 
 extern "C" float func_00204740(A *p);
-extern "C" int func_00132B10(B *p, int n);
+extern "C" int FIsBasicDerivedFrom__FP5BASIC3CID(B *p, int n);
 extern "C" float func_001E6648(B *p);
 extern "C" float func_001E6620(B *p);
 extern "C" void func_001E6F10(B *p, qword *pv, qword *direction, float g);
 extern "C" qword func_001A62E8(A *p);
 extern "C" M *func_001A6318(A *p);
-extern "C" float func_0011D018(SMP *p, float a, float b, float c, float *output);
+extern "C" float GSmooth__FfffP3SMPPf(SMP *p, float a, float b, float c, float *output);
 
 static __inline__ float GMin(float a,float b){return a<b?a:b;}
 static __inline__ float GMax(float a,float b){return a>b?a:b;}
@@ -55,7 +55,7 @@ extern "C" void func_0018A4E8(S *ps, R *pr)
     goto tail;
     {
     a12:
-        if (func_00132B10(ps->p14, 0xC)) {
+        if (FIsBasicDerivedFrom__FP5BASIC3CID(ps->p14, 0xC)) {
             B *pb = ps->p14;
             if (ps->x2C == 1) {
                 g = ps->g20 + (ps->g50*125.0f)*ps->g50;
@@ -102,7 +102,7 @@ c0:
         lift=50.0f;__asm__("lwc1 %0,%1":"=f"(height):"m"(((float*)&ps->v40)[2]));
         liftValue:((float*)&ps->v40)[2]=height+lift;
 tail:
-    if (func_00132B10(ps->p14, 0xC) && ps->p14->xE4 == 0) {
+    if (FIsBasicDerivedFrom__FP5BASIC3CID(ps->p14, 0xC) && ps->p14->xE4 == 0) {
         float k;
         float c = 30.0f;
         register float h __asm__("$f0")=func_001E6648(ps->p14)-c;
@@ -129,7 +129,7 @@ tail:
         } else {
             k = 0.0f;
         }
-        ps->p68->p114->g10 = func_0011D018(&D_002BF348, ps->p68->p114->g10, k, D_002DDED0.dt, 0);
+        ps->p68->p114->g10 = GSmooth__FfffP3SMPPf(&D_002BF348, ps->p68->p114->g10, k, g_clock.dt, 0);
     }
     switch (ps->x8) {
     case 0:
@@ -151,7 +151,6 @@ typedef char Pointer_Size[(sizeof(void*)==4)?1:-1];
 typedef char VU_Size[(sizeof(VU)==16)?1:-1];
 typedef char WORK_Size[(sizeof(WORK)==0x40)?1:-1];
 typedef char M_Size[(sizeof(M)==0x40)?1:-1];
-typedef char CLOCK_Size[(sizeof(CLOCK)==8)?1:-1];
 typedef char S_Size[(sizeof(S)==0x70)?1:-1];
 typedef char R_Size[(sizeof(R)==0x40)?1:-1];
 typedef char A_x1024_Offset[((unsigned)&((A*)0)->x1024==4132)?1:-1];

@@ -2,12 +2,12 @@
 /* Warning: missing "jr $ra" in last block of func_0020D468 (initial). */
 
 M2C_UNK CopyAb__FPvT0Ui(void *, s32, s32);          /* extern */
-M2C_UNK func_00117968(s32, s32, s32);               /* extern */
-M2C_UNK func_001179B8(s32, s32);                    /* extern */
-M2C_UNK func_001179D8(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
+M2C_UNK Read__18CBinaryInputStreamiPv(s32, s32, s32);               /* extern */
+M2C_UNK Skip__18CBinaryInputStreami(s32, s32);                    /* extern */
+M2C_UNK SetDecompress__18CBinaryInputStreamiPUc(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_001291A8(s32 *, s32 *, s32, s32);      /* extern */
 M2C_UNK func_00129EC8(s32 *);                       /* extern */
-s32 func_001AE318(s32 *, s32, s32, s128);           /* extern */
+s32 PvAllocStackImpl__FP7SWALLOC(s32 *, s32, s32, s128);           /* extern */
 M2C_UNK func_00238528(s32, s32, s32);               /* extern */
 extern s32 D_002A39E8;
 extern M2C_UNK D_002A8910;
@@ -50,8 +50,8 @@ extern M2C_UNK D_002C3EB0;
 extern M2C_UNK D_002DC018;
 extern void *D_002DD5BC;
 extern s32 D_002DD648;
-extern f32 D_002DDED0;
-extern M2C_UNK D_002DDF40;
+extern f32 g_clock;
+extern M2C_UNK g_cm;
 extern s32 D_002DE570;
 extern M2C_UNK D_002DEB30;
 extern s32 D_002DFB80;
@@ -67,9 +67,9 @@ extern M2C_UNK D_002F7980;
 extern s32 D_003D4A54;
 extern M2C_UNK D_003D4A60;
 extern M2C_UNK D_003D9E70;
-extern M2C_UNK D_003DD040;
+extern M2C_UNK g_sndmgr;
 extern s32 D_003DD48C;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 extern s32 D_003E1080;
 extern s32 D_003E1C30;
 extern s32 D_003E1C38;

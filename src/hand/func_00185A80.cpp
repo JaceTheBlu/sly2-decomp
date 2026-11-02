@@ -1,4 +1,5 @@
-// func_00185A80 (Claude agent, lane G16, 2026-10-24): MATCH, no register pins, VU helper asms only.
+#include "vecmat.h"
+// func_00185A80: MATCH, no register pins, VU helper asms only.
 // From laneG13v1 (12). Keys: (1) loop 2: the plane.w read before a qmfc2 helper with a "memory" clobber, then an
 // mtc1 helper with allocation-only "f"(w) operands (12 -> 9). (2) loop 3 as a fresh block-scoped `int k`/`int m`
 // with the weights read through Lilly's VuFloatFromMemWord ("rV": reload makes the lw) (9 -> 1). (3) an early
@@ -17,7 +18,6 @@ static inline qword DotQ(qword a, qword b)
         : "=j"(d), "=j"(one) : "j"(a), "j"(b) : "memory");
     return d;
 }
-struct VU_FLOAT { qword q; };
 static inline VU_FLOAT VuFloatFromMemWord(int n) { VU_FLOAT v; __asm__("qmtc2.ni %1, %0" : "=j"(v.q) : "rV"(n)); return v; }
 static inline qword AddScaled(qword a, qword b, VU_FLOAT s)
 {

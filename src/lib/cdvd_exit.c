@@ -3,7 +3,7 @@
 // SLY2_ASM: gnu-reorder-db
 // volatile store/load keep Sony's source order (store of -1 before the sema-id load)
 extern int D_002C6754;
-extern volatile int D_002C67A0;
+extern volatile int _sceCd_mode;
 extern int D_002C6760;
 extern int D_002C6768;
 extern int D_002C676C;
@@ -17,7 +17,7 @@ void cdvd_exit(void)
 {
     int r;
     if (D_002C6754) {
-        D_002C67A0 = -1;
+        _sceCd_mode = -1;
         func_00234A40(*(volatile int *)&D_002C6760);
     }
     func_00234A30(D_002C6768);

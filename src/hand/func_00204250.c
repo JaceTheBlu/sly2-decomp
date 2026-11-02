@@ -6,7 +6,7 @@ struct ENDPOINT { void *shape, *owner, *object, *lo; qword pos; qword local; int
 struct XP { struct ENDPOINT ae[2]; U normal; float distance, friction, response; int kind; float lower, upper; int tag; struct XP *next; };
 struct STATE { char pad[0xD0]; float mass; };
 struct P { char padE8[0xE8]; struct STATE *state; char padEC[0x258 - 0xEC]; void *mesh; };
-extern char D_003DD490[];
+extern char g_sw[];
 extern qword D_002A2DA0;
 extern float D_002C3C60[], D_002C3C90;
 void func_001F4FB0(void);
@@ -97,6 +97,6 @@ void func_00204250(struct P *p, struct XP *x, int side)
         diff.q = Sub(&x->ae[side].pos, &x->ae[1 - side].pos);
         d = Dot(diff.q, dir.q);
         point.q = AddScaled(&x->ae[1 - side].pos, dir.q, d);
-        func_001A7C18(D_003DD490, p->mesh, x->ae[1 - side].shape, point.q, dir.q, 10, 0, 0, &x->next, d);
+        func_001A7C18(g_sw, p->mesh, x->ae[1 - side].shape, point.q, dir.q, 10, 0, 0, &x->next, d);
     }
 }

@@ -1,3 +1,4 @@
+#include "vu0.h"
 typedef int qword __attribute__((mode(TI)));
 struct P { char pad[0x10F8]; void *p10F8; int x10FC; };
 extern float D_002BD2C0;
@@ -5,9 +6,7 @@ extern float D_002BD2C4;
 qword func_001A62E8(void *p);
 qword func_001A6F00(void *pm, struct P *p, qword v);
 float func_002458F0(float y, float x);
-static __inline__ float GetX(qword q) { float x; __asm__("mtc1 %1,%0" : "=f"(x) : "r"(q)); return x; }
-static __inline__ float GetY(qword q) { float y; __asm__("prot3w %0,%1" : "=r"(y) : "r"(q)); return y; }
-static __inline__ float GAbs(float g) { return g < 0.0f ? -g : g; }
+static __inline__ float GAbsCmp(float g) { return g < 0.0f ? -g : g; }
 int func_001430C8(struct P *p)
 {
     int n;

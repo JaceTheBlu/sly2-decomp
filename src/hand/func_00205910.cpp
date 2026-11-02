@@ -1,17 +1,17 @@
 /* func_00205910 (Lilly / Claude agent, T1593): terrain-fit of the crawl probes (our name UpdateCrawlCollide, 0x205910; see
  * re/symbols: the 3-probe floor follower of the vent crawl, called from UpdateJtGrab case 8).  MATCH, no register pins.
- * What it does: the actor's orientation is turned about the up axis (D_002A2DC0) by its heading (p+0x1A8) into a position+rotation
+ * What it does: the actor's orientation is turned about the up axis (g_normalZ) by its heading (p+0x1A8) into a position+rotation
  * matrix matCur (copied to matOrig); the largest probe radius (length of the local probe points, start -FLT_MAX D_002A85F8) is the
  * sphere for the nearby-objects query (func_0020FC60, filter func_0020FA50 with p+0xEC as context).  Then D_002C3CE4 passes: every
  * probe point is placed with matCur and snapped to the floor by the line test func_00173610 (height->max / height->min); a probe
  * that finds no floor is dropped by D_002C3CE0 along matCur's up row.  The plane through the three probes gives a normal (cross of
- * the two edges, D_002A2DC0 if shorter than 0.0001), func_0011BA08 builds the rotation from matOrig's up row to it, func_0011BCF8
- * measures its angle, which is limited to D_002C3CE8 (func_0011B500 rebuilds the rotation about the same axis with the limit),
+ * the two edges, g_normalZ if shorter than 0.0001), BuildRotateVectorsMatrix__FUxUx builds the rotation from matOrig's up row to it, func_0011BCF8
+ * measures its angle, which is limited to D_002C3CE8 (LoadRotateMatrixRad__FfUx rebuilds the rotation about the same axis with the limit),
  * and matCur = adjustment * matOrig.  The final rotation is stored at p+0x1B0.
  * How it matches (everything came from the personal decomp's recipes, nothing from register pins):
  *  - M3 * M3 is the game's inline NRV operator* (three dead VU_VECTOR4 homes at +0x140), `pmatOrig` is a pointer declared in the loop
  *    so rows 1/2 of matOrig are read through a hoisted pointer register while row 0 is `0x40(sp)`.
- *  - the first rotation is an NRV wrapper over func_0011B500 (hidden pointer = plain `addiu a0,sp,0x80`); the loop's calls return
+ *  - the first rotation is an NRV wrapper over LoadRotateMatrixRad__FfUx (hidden pointer = plain `addiu a0,sp,0x80`); the loop's calls return
  *    the matrix by value (hidden pointer = a hoisted pseudo, s7).  `adjustment`/`angle` are declared after the probe loop so their
  *    frame slots come after the VU_FLOAT home of the drop scale (0xD0).
  *  - normalise-or-fallback = QwLengthUntied form (the fallback is a pointer computed before the cross product, `lq` after it);
@@ -34,20 +34,20 @@ struct FRAME {FRAME(){}~FRAME(){}};
 struct P {char pad0[0xEC];void *attachment;char padF0[0xB8];float heading;char pad1AC[4];MATRIX3 basis;};
 struct HEIGHT {float min,max;};
 struct GAME;
-extern GAME D_003DD490;
-extern qword D_002A2DC0;
+extern GAME g_sw;
+extern qword g_normalZ;
 extern const float D_002A85F8;
 extern float D_002C3CE0;
 extern float D_002C3CE8;
 extern int D_002C3CE4;
 extern "C" {
-MATRIX3 func_0011B500(qword,float);
-MATRIX3 *func_0011B500r(MATRIX3 *,qword,float) __asm__("func_0011B500");
-MATRIX3 func_0011BA08(qword,qword);
+MATRIX3 LoadRotateMatrixRad__FfUx(qword,float);
+MATRIX3 *func_0011B500r(MATRIX3 *,qword,float) __asm__("LoadRotateMatrixRad__FfUx");
+MATRIX3 BuildRotateVectorsMatrix__FUxUx(qword,qword);
 qword func_001A62E8(P *);
-qword *func_00256D18(qword *,qword);
+qword *__as__6VECTORG9VU_VECTOR(qword *,qword);
 FRAME *func_001AE478(FRAME *);
-void func_001AE4A0(FRAME *,int);
+void _$_18CBinaryInputStream(FRAME *,int);
 void func_0020FC60(GAME *,qword,float,int (*)(void *,void *),void *,int *,void ***);
 int func_0020FA50(void *,void *);
 int func_00173610(qword *,float,float,int,void *);
@@ -85,7 +85,7 @@ static inline MATRIX3 operator*(const MATRIX3 &matL,const MATRIX3 &matR) return 
 static inline MATRIX3 Rotation(qword axis,float angle) return r {func_0011B500r(&r,axis,angle);}
 static inline void InitMat(MATRIX4 *pm,const MATRIX3 &rot,qword pos)
 {
-    func_00256D18((qword *)pm->mat[3],pos);
+    __as__6VECTORG9VU_VECTOR((qword *)pm->mat[3],pos);
     *(MATRIX3 *)pm=rot;
     pm->mat[3][3]=1.0f;
     pm->mat[2][3]=0;pm->mat[1][3]=0;pm->mat[0][3]=0;
@@ -95,7 +95,7 @@ static inline void InitMat(MATRIX4 *pm,const MATRIX3 &rot,qword pos)
 extern "C" void func_00205910(P *p,HEIGHT *height,int pointCount,const qword *localPoints)
 {
     MATRIX4 matCur,matOrig;
-    InitMat(&matCur,Rotation(D_002A2DC0,p->heading),func_001A62E8(p));
+    InitMat(&matCur,Rotation(g_normalZ,p->heading),func_001A62E8(p));
     matOrig=matCur;
     float radius=D_002A85F8;
     for(int i=0;i<pointCount;i++){float length=GLength(localPoints[i]);radius=(radius>length)?radius:length;}
@@ -103,7 +103,7 @@ extern "C" void func_00205910(P *p,HEIGHT *height,int pointCount,const qword *lo
     FRAME *frame=&storage;
     func_001AE478(frame);
     int nearbyCount;void **nearby;
-    func_0020FC60(&D_003DD490,*(qword *)matCur.mat[3],radius,func_0020FA50,p->attachment,&nearbyCount,&nearby);
+    func_0020FC60(&g_sw,*(qword *)matCur.mat[3],radius,func_0020FA50,p->attachment,&nearbyCount,&nearby);
     U points[3];
     U point;
     for(int pass=0;pass<D_002C3CE4;pass++){
@@ -115,7 +115,7 @@ extern "C" void func_00205910(P *p,HEIGHT *height,int pointCount,const qword *lo
         }
         MATRIX3 adjustment;
         float angle;
-        const qword *pFallback=&D_002A2DC0;
+        const qword *pFallback=&g_normalZ;
         qword origin=points[0].q;
         qword first=QwSub(points[1].q,origin);
         qword second=QwSub(points[2].q,origin);
@@ -125,15 +125,15 @@ extern "C" void func_00205910(P *p,HEIGHT *height,int pointCount,const qword *lo
         qword normal;
         if(GFromVf(qwLen)<0.0001f)normal=qwFallback;
         else{__asm__("vdiv $Q, $vf0w, %0x\n\tvwaitq": :"j"(qwLen));__asm__("vmulq.xyzw %0, %1, $Q":"=j"(normal):"j"(qwCross));}
-        adjustment=func_0011BA08(*(qword *)matOrig.mat[2],normal);
+        adjustment=BuildRotateVectorsMatrix__FUxUx(*(qword *)matOrig.mat[2],normal);
         func_0011BCF8(&adjustment,&angle,&point.q);
-        if(D_002C3CE8<angle)adjustment=func_0011B500(point.q,D_002C3CE8);
+        if(D_002C3CE8<angle)adjustment=LoadRotateMatrixRad__FfUx(point.q,D_002C3CE8);
         const MATRIX3 *pmatOrig=(MATRIX3 *)&matOrig;
         *(MATRIX3 *)&matCur=adjustment**pmatOrig;
         matCur.mat[2][3]=0;matCur.mat[1][3]=0;matCur.mat[0][3]=0;
     }
     p->basis=*(MATRIX3 *)&matCur;
-    func_001AE4A0(frame,2);
+    _$_18CBinaryInputStream(frame,2);
     GCSE_PAD10
     GCSE_PAD10
     GCSE_PAD10

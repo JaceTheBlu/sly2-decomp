@@ -1,12 +1,12 @@
 #include "m2c_prelude.h"
 M2C_UNK CopyAb__FPvT0Ui(s32, s32, s32);             /* extern */
-M2C_UNK func_00117968(s32, s32, M2C_UNK *);         /* extern */
-M2C_UNK func_001179B8(s32, s32);                    /* extern */
-M2C_UNK func_00117F70(s32, void *);                 /* extern */
+M2C_UNK Read__18CBinaryInputStreamiPv(s32, s32, M2C_UNK *);         /* extern */
+M2C_UNK Skip__18CBinaryInputStreami(s32, s32);                    /* extern */
+M2C_UNK ReadVector4__18CBinaryInputStreamP7VECTOR4(s32, void *);                 /* extern */
 M2C_UNK func_001291A8(s32 *, s32 *);                /* extern */
 M2C_UNK func_00129EC8(s32 *);                       /* extern */
-s32 func_001AE318(void *, s32, s32, M2C_UNK, s32, s32); /* extern */
-extern s128 D_002A2DC0;
+s32 PvAllocStackImpl__FP7SWALLOC(void *, s32, s32, M2C_UNK, s32, s32); /* extern */
+extern s128 g_normalZ;
 extern s128 D_002A2DD0;
 extern s128 D_002A2DE0;
 extern f32 D_002A4B18;
@@ -19,18 +19,18 @@ extern M2C_UNK D_002AC880;
 extern M2C_UNK D_002BAAE8;
 extern s32 D_002BC9D0;
 extern M2C_UNK D_002BC9F0;
-extern M2C_UNK D_002CBE20;
+extern M2C_UNK _vt$17CQueueInputMemory;
 extern M2C_UNK D_002CBE38;
-extern M2C_UNK D_002DD590;
-extern f32 D_002DDED0;
-extern M2C_UNK D_002DDF40;
+extern M2C_UNK g_heapSw;
+extern f32 g_clock;
+extern M2C_UNK g_cm;
 extern M2C_UNK D_002DEB30;
 extern M2C_UNK D_002DEDC0;
 extern s32 D_002E1E54;
 extern M2C_UNK D_003D4A60;
 extern M2C_UNK D_003DA0C0;
-extern M2C_UNK D_003DD040;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sndmgr;
+extern M2C_UNK g_sw;
 extern M2C_UNK D_003E0EA8;
 extern s32 D_003E0F9C;
 extern M2C_UNK D_003E1C20;

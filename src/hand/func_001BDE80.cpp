@@ -1,5 +1,6 @@
+#include "vtable.h"
 /* func_001BDE80: merge a set of convex polygons into one new polygon (hull of all their transformed points), re-centre
-   it on the average point, then reparent the old polygons' children to the new one (lane 10).
+   it on the average point, then reparent the old polygons' children to the new one.
    X is the polygon object (apos = point array, c = point count incl. the closing duplicate, vt = vtable).
 
    Notes on the compile (all general tricks, see build/lane_notes/lane10.md):
@@ -12,20 +13,19 @@ typedef int qword __attribute__((mode(TI)));
 typedef struct { qword r[4]; } M4;
 struct CTX;
 extern "C" CTX*func_001AE478(CTX*);
-extern "C" void func_001AE4A0(CTX*,int);
-struct CTX { CTX(){(void)func_001AE478(this);}~CTX(){func_001AE4A0(this,2);} };
+extern "C" void _$_18CBinaryInputStream(CTX*,int);
+struct CTX { CTX(){(void)func_001AE478(this);}~CTX(){_$_18CBinaryInputStream(this,2);} };
 struct AREQ { int cb; int align; AREQ(int c, int a) { cb = c; align = a; } };
 struct DL { void *pvFirst; void *pvLast; int ibDle; };
 struct DLI { DL *pdl; void **ppv; int ibDle; DLI *pdliNext; };
 struct X;
-struct VT { short d; short pad; void *pfn; };
-struct X { int x0, x4, x8; VT *vt; char pad[0xE4 - 0x10]; int xE4; int c; char pad2[0xF4 - 0xEC]; qword *apos;
+struct X { int x0, x4, x8; VTE *vt; char pad[0xE4 - 0x10]; int xE4; int c; char pad2[0xF4 - 0xEC]; qword *apos;
            char pad3[0x190 - 0xF8]; int x190; char pad4[0x1C0 - 0x194]; int x1C0; DL dl; char pad5[0x1D8 - 0x1D0]; X*x1D8; };
-extern DLI *D_002DD2FC;
+extern DLI *g_pdliFirst;
 extern qword D_002A2DD0;
 extern DL D_003E1A40;
 extern "C" {
-void *func_001AE318(const AREQ &r);
+void *PvAllocStackImpl__FP7SWALLOC(const AREQ &r);
 X *func_001BDA00(void);
 void func_001BDBF0(X *p, int n, qword *pts);
 void func_001BDE18(X *p, X *pNew);
@@ -34,7 +34,7 @@ void func_0011A220(DL *pdl, void *pv);
 void func_001E6180(X *p);
 int func_001BC2F8(X *p);
 }
-static inline void *Alloc(int cb) { return func_001AE318(AREQ(cb, 0x10)); }
+static inline void *Alloc(int cb) { return PvAllocStackImpl__FP7SWALLOC(AREQ(cb, 0x10)); }
 /* point * 4x4 matrix (xyz only, w from row 3) */
 static inline qword MulPt(M4*m,qword*point){
  qword out;
@@ -45,8 +45,8 @@ static inline void InitDli(DLI *pdli, DL *pdl)
     pdli->pdl = pdl;
     pdli->ppv = (void **)pdl;
     pdli->ibDle = pdl->ibDle;
-    pdli->pdliNext = D_002DD2FC;
-    D_002DD2FC = pdli;
+    pdli->pdliNext = g_pdliFirst;
+    g_pdliFirst = pdli;
 }
 static inline void *PvNextDli(DLI *pdli)
 {
@@ -70,7 +70,7 @@ extern "C" void func_001BDE80(int n, X **ap)
     k = -16;
     do {
         px = ap[polygon];
-        M4 m=*((M4 *(*)(X *))px->vt[31].pfn)((X *)((char *)px + px->vt[31].d));   /* virtual GetMatrix() */
+        M4 m=*((M4 *(*)(X *))px->vt[31].pfn)((X *)((char *)px + px->vt[31].delta));   /* virtual GetMatrix() */
         j = 0;
         if (j < px->c - 1) {
             qword *pw = (qword*)((unsigned)k + (unsigned)apos);
@@ -90,7 +90,7 @@ extern "C" void func_001BDE80(int n, X **ap)
         /* sum /= (c-1) via vdiv/vmulq; the extra "+j"(k2) is allocation/ordering only: it keeps the dead store of k2 after the vmulq */
         __asm__("vdiv $Q, $vf0w, %2x\n\tvwaitq\n\tvmulq.xyzw %0, %0, $Q" : "+j"(sum), "+j"(k2) : "j"(k2));
         void (*pfn)(X *, qword) = (void (*)(X *, qword))pNew->vt[29].pfn;   /* virtual SetCenter(sum); pfn load must precede the u store */
-        pfn((X *)((char *)pNew + pNew->vt[29].d), (u.q = k2, sum));
+        pfn((X *)((char *)pNew + pNew->vt[29].delta), (u.q = k2, sum));
         int pointIndex = pNew->c;
         while (--pointIndex >= 0) {
             qword point=pNew->apos[pointIndex];
@@ -109,9 +109,9 @@ extern "C" void func_001BDE80(int n, X **ap)
                 pv->x1D8 = 0;
                 func_001BDE18(pv, pNew);
             }
-            ((void (*)(X *))px->vt[9].pfn)((X *)((char *)px + px->vt[9].d));
+            ((void (*)(X *))px->vt[9].pfn)((X *)((char *)px + px->vt[9].delta));
             func_0011A220(&D_003E1A40, px);
-            D_002DD2FC = dli.pdliNext;
+            g_pdliFirst = dli.pdliNext;
         } else {
             func_001BDE18(px, pNew);
         }

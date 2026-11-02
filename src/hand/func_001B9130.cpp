@@ -27,7 +27,7 @@ typedef struct P {
 } P;
 extern "C" float D_002C3C60[];
 extern "C" float D_002C0A38;
-extern "C" char D_003DD490[];
+extern "C" char g_sw[];
 extern "C" void func_00204250(P *p, X *px, int i);
 extern "C" void func_001A2100(void *p, X *px, int i);
 extern "C" void func_0019E9C8(void *p, X *px, int i);
@@ -61,7 +61,7 @@ extern "C" void func_001B9130(P *p, X *px, int i)
     case 3:
         if (p->x13D8 == 1) {
             if (D_002C3C60[i] * *(float *)((char *)px + 0x88) > 0.7f) {
-                func_001A9FE0(D_003DD490, func_001AA020(D_003DD490, px), p->x13E4);
+                func_001A9FE0(g_sw, func_001AA020(g_sw, px), p->x13E4);
             }
         }
         break;

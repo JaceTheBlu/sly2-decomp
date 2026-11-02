@@ -1,4 +1,4 @@
-struct CRef { int tagk; int tag; };
+#include "cref.h"
 void func_002013D8(struct CRef *pref, void *p, int a, int b, int *pn, int *an);
 unsigned long func_00207A40(int c, int *a);
 void func_00129EC8(struct CRef *pref);

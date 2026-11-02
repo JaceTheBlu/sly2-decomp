@@ -1,16 +1,16 @@
 extern "C" {
 void func_001AE478(void *p);
-void func_001AE4A0(void *p, int n);
+void _$_18CBinaryInputStream(void *p, int n);
 struct X { char pad[0x14]; unsigned long *px14; };
 X *func_001EC880(int);
-void func_00166920(void *);
-void func_001572E0(void *, int);
+void __4GIFS(void *);
+void AllocStack__4DMASi(void *, int);
 void func_00166BD8(void *, int, int, int);
 void func_00166E90(void *, int, unsigned long);
 void func_00166968(void *);
 void func_001573F8(void *, int, int *, int, int *);
 }
-class FRAME { public: FRAME() { func_001AE478(this); } ~FRAME() { func_001AE4A0(this, 2); } };
+class FRAME { public: FRAME() { func_001AE478(this); } ~FRAME() { _$_18CBinaryInputStream(this, 2); } };
 struct BUF { int a[12]; };
 struct P { char pad[0xC4]; int xC4; };
 struct Q { int x0; int x4; char pad8[8]; int x10; char pad14[8]; int x1C; int x20; };
@@ -24,8 +24,8 @@ void func_002155C0(P *p, Q *q)
         X *x = func_001EC880(q->x10);
         if (x) {
             BUF b;
-            func_00166920(&b);
-            func_001572E0(&b, 0x10);
+            __4GIFS(&b);
+            AllocStack__4DMASi(&b, 0x10);
             func_00166BD8(&b, 0, 1, 0xE);
             func_00166E90(&b, 6, *x->px14);
             func_00166E90(&b, 0x14, 0x60);

@@ -5,11 +5,11 @@ struct P { int pad[3]; struct VTE *vt; int x10; struct Q *pq; int x18; float g1C
     float g40; char pad3[0x50 - 0x44]; int i50; };
 struct G { struct P *p; };
 struct CLOCK { float t; float dt; char pad[0x38]; float g40; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 void func_00130F88(struct P *p);
 int func_00131968(struct P *p);
 int func_001317D8(struct P *p, float *pt, float *pdt);
-void func_00130B18(struct P *p);
+void RetractAsega__FP5ASEGA(struct P *p);
 static __inline__ unsigned int GrfQ(struct Q *pq) { unsigned int x = pq->x40; return ((x ^ 1) & 1) ? *(unsigned int *)x : x; }
 static __inline__ void End(struct G *pg) { struct P *po = pg->p; ((void (*)(void *))po->vt[2].pfn)((char *)po + po->vt[2].d); }
 void func_00130918(struct P *p)
@@ -25,9 +25,9 @@ void func_00130918(struct P *p)
         __asm__ __volatile__("" : : "r"(&g) : "memory");
         ((void (*)(void *))p->vt[1].pfn)((char *)p + p->vt[1].d);
         if (GrfQ(p->pq) & 0x100)
-            p->g1C = p->g1C + p->g40 * D_002DDED0.g40;
+            p->g1C = p->g1C + p->g40 * g_clock.g40;
         else
-            p->g1C = p->g1C + p->g40 * D_002DDED0.dt;
+            p->g1C = p->g1C + p->g40 * g_clock.dt;
         func_00130F88(p);
         if (func_00131968(p))
             { End(&g); return; }
@@ -45,7 +45,7 @@ void func_00130918(struct P *p)
         if (func_00131968(p))
             { End(&g); return; }
         if (f && !(p->grf & 0x38))
-            func_00130B18(p);
+            RetractAsega__FP5ASEGA(p);
         for (pl = p->pl; pl; pl = pl->pnext)
             ((void (*)(void *, int, int, float, float))pl->po->vt[2].pfn)((char *)pl->po + pl->po->vt[2].d, pl->x4, 0, p->g1C, p->g40);
         End(&g);

@@ -1,14 +1,14 @@
 #include "m2c_prelude.h"
 M2C_UNK CopyAb__FPvT0Ui(s128 *, s128 *, s8, s128);  /* extern */
-M2C_UNK func_00117968(s32, s32, s32 *);             /* extern */
-M2C_UNK func_00117EB0(s32, s32 *);                  /* extern */
+M2C_UNK Read__18CBinaryInputStreamiPv(s32, s32, s32 *);             /* extern */
+M2C_UNK ReadVector__18CBinaryInputStreamP6VECTOR(s32, s32 *);                  /* extern */
 M2C_UNK func_00117F18(s32, M2C_UNK *);              /* extern */
-M2C_UNK func_00117F90(s32, M2C_UNK *);              /* extern */
-M2C_UNK func_00117FB0(s32, M2C_UNK *);              /* extern */
-M2C_UNK func_001572E0(M2C_UNK *, s32);              /* extern */
+M2C_UNK ReadCb12__18CBinaryInputStreamPv(s32, M2C_UNK *);              /* extern */
+M2C_UNK ReadCb8__18CBinaryInputStreamPv(s32, M2C_UNK *);              /* extern */
+M2C_UNK AllocStack__4DMASi(M2C_UNK *, s32);              /* extern */
 M2C_UNK func_001573C0(M2C_UNK *, s32 *, s32 *, s32 *); /* extern */
-s32 *func_001AE318(s32 *, s8, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_00226C10(M2C_UNK *, s64, s64, s64);    /* extern */
+s32 *PvAllocStackImpl__FP7SWALLOC(s32 *, s8, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK __4VIFS(M2C_UNK *, s64, s64, s64);    /* extern */
 M2C_UNK func_00226FD0(M2C_UNK *, s32, s32, s32);    /* extern */
 M2C_UNK func_00240460(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_00240600(void *, s32 *, s32 *, s32 *); /* extern */
@@ -31,10 +31,10 @@ extern M2C_UNK D_002BE558;
 extern s32 D_002BE580;
 extern s32 D_002BE590;
 extern s32 D_002BE594;
-extern M2C_UNK D_002DDF40;
+extern M2C_UNK g_cm;
 extern s32 D_002DE598;
 extern M2C_UNK D_002DEA28;
-extern s32 D_002DEA4C;
+extern s32 g_pfrmOpen;
 extern M2C_UNK D_002DEA50;
 extern s32 D_002DEB50;
 extern s32 D_002DEB54;
@@ -77,7 +77,7 @@ extern s32 D_003DCF98;
 extern s32 D_003DCF9C;
 extern s32 D_003DCFA0;
 extern s32 D_003DCFA8;
-extern M2C_UNK D_003DD490;
+extern M2C_UNK g_sw;
 extern s32 D_003E11EC;
 extern s32 D_003E12C8;
 extern s32 D_003E12D0;
@@ -111,5 +111,5 @@ Please include it in the input .s file(s), or in an additional file.
 */
 
 void func_0016EA20(s32 arg0) {
-    func_00160918(arg0, (s32) &D_0025B880, (s32) &D_0025C1B0);
+    EnsureVu1Code__FP4VIFSPvT1(arg0, (s32) &D_0025B880, (s32) &D_0025C1B0);
 }

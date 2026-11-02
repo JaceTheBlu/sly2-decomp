@@ -1,3 +1,5 @@
+#include "mat.h"
+#include "clock.h"
 // Handle movement-state response events.
 typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];};
@@ -25,19 +27,17 @@ struct STATE{int kind,pad4,pad8,padC;MSG msg;};
 struct HELPER{char pad0[0x58];float until;unsigned flags;};
 struct S{char pad0[0x10];OBJECT*actor;int pad14;HELPER*helper;char pad1C[0x14];STATE current;};
 struct SLOT{int kind;char pad4[0xC];};
-struct M4{qword r[4];};
-struct CLOCK{float t,dt;};
 struct WORK{STATE next;U scalar,own,other,copy,delta;};
 struct OFFSETINPUTS{qword own,other,copy;};
 extern "C"{
 extern OBJECT*D_002F7900;
-extern void*D_003E14BC;extern void*D_003E14B0;extern void*D_003E14B8;struct GAMESTATE{char pad[0x4028];void*context;};extern GAMESTATE D_003DD490;
-extern CLOCK D_002DDED0;extern float D_002BE620;
+extern void*D_003E14BC;extern void*D_003E14B0;extern void*D_003E14B8;struct GAMESTATE{char pad[0x4028];void*context;};extern GAMESTATE g_sw;
+extern CLOCK g_clock;extern float D_002BE620;
 void*func_002333B4(void*,int,unsigned);
 void func_00176750(S*,STATE*);
-qword func_001A62E8(void*);M4*func_001A6318(void*);
+qword func_001A62E8(void*);MATRIX4*func_001A6318(void*);
 qword func_001A6FC0(void*,void*,qword);
-int func_00132B10(void*,int);
+int FIsBasicDerivedFrom__FP5BASIC3CID(void*,int);
 void func_001B9DB8(OBJECT*,qword);
 void func_001B9D28(OBJECT*,qword);
 OBJECT*func_00156698(void*,qword,OBJECT*);
@@ -99,7 +99,7 @@ extern "C" int func_00176BE8(S*p,int event,MSG*msg){
  if(p->actor->selected==msg->data.object)func_0020A9A8(p->actor->tuning,5);
  if(msg->data.kind==0x80000&&(msg->data.flags&8)){
   if(p->current.kind==8){
-   HELPER*h=p->helper;func_0017A5B0(h,0);h->until=Max(D_002DDED0.t+D_002BE620,h->until);
+   HELPER*h=p->helper;func_0017A5B0(h,0);h->until=Max(g_clock.t+D_002BE620,h->until);
   }else{
    p->actor->otherProgress+=msg->data.amount;
    if(p->actor->otherProgress<=0){
@@ -110,7 +110,7 @@ extern "C" int func_00176BE8(S*p,int event,MSG*msg){
  if(msg->data.kind==0x200000&&(msg->data.flags&8)){
   if(func_0020A378(p->actor,msg->data.object,func_00207A20(6))){
    {int reserve=p->actor->reserve+msg->data.amount;int limited=4<reserve?reserve:5;p->actor->reserve=limited;}
-   (void)func_00156698(D_003DD490.context,func_001A62E8(p->actor),p->actor);
+   (void)func_00156698(g_sw.context,func_001A62E8(p->actor),p->actor);
    Clear(&w.next);w.next.kind=7;w.next.msg.data.object=msg->data.object;func_00176750(p,&w.next);goto finish;
   }
  }
@@ -130,7 +130,7 @@ extern "C" int func_00176BE8(S*p,int event,MSG*msg){
   void*context=msg->data.kind==0x40000?D_003E14BC:D_003E14B0;
   qword position=func_001A62E8(p->actor);(void)func_00156698(context,position,p->actor);
  }
- if(Below(p->current.kind,11)&&!Below(p->current.kind,8)&&func_00132B10(msg->data.object,0x65)&&(originalFlags&0xB0))flags=originalFlags|0x40;
+ if(Below(p->current.kind,11)&&!Below(p->current.kind,8)&&FIsBasicDerivedFrom__FP5BASIC3CID(msg->data.object,0x65)&&(originalFlags&0xB0))flags=originalFlags|0x40;
  if(func_0020A298(p->actor,msg->data.object,func_00207A20(0x17)))flags|=0x80;
  if(flags&0x40)flags&=~0xB0;
  if(flags&0xA0)flags&=~0x10;
@@ -145,7 +145,7 @@ extern "C" int func_00176BE8(S*p,int event,MSG*msg){
    p->actor->progress+=msg->data.amount;
    if(p->actor->progress>0){
     func_001305B8(p->actor->clip,p->actor,0.0f,1.0f,1,&p->actor->animation);
-    p->actor->animationTime=D_002DDED0.t;
+    p->actor->animationTime=g_clock.t;
    }else flags|=0x20;
   }else flags|=0x20;
  }
@@ -158,10 +158,10 @@ extern "C" int func_00176BE8(S*p,int event,MSG*msg){
  }
  if(flags&0x40){w.next.kind=11;w.next.msg=*selected;selected=&w.next.msg;}
  if(flags&0xE0){
-  if(func_00132B10(selected->data.object,0x34)){
+  if(FIsBasicDerivedFrom__FP5BASIC3CID(selected->data.object,0x34)){
    qword own=func_001A62E8(p->actor);OBJECT*otherObject=selected->data.object;w.own.q=own;w.other.q=func_001A62E8(otherObject);
    qword scalar=Raw(-150.0f);w.copy.q=scalar;OBJECT*frameObject=selected->data.object;w.scalar.q=scalar;
-   M4*frame=func_001A6318(frameObject);
+   MATRIX4*frame=func_001A6318(frameObject);
    int special;
    {
     register qword axis __asm__("vf1"),origin __asm__("vf2"),delta __asm__("vf3");
@@ -173,7 +173,7 @@ extern "C" int func_00176BE8(S*p,int event,MSG*msg){
       :"=&j"(axis),"=&j"(origin),"=&j"(delta),"=&r"(receiver),"=&r"(queryKind)
       :"m"(frame->r[0]),"m"(inputs),"m"(selected->data.object),"i"(targetKind));
     w.delta.q=delta;
-    special=func_00132B10(receiver,queryKind);
+    special=FIsBasicDerivedFrom__FP5BASIC3CID(receiver,queryKind);
    }
    qword direction=w.delta.q;
    if(special&&selected->data.object->state==12){
@@ -183,7 +183,7 @@ extern "C" int func_00176BE8(S*p,int event,MSG*msg){
    }
    qword normalized=Normalize(direction);*(qword*)&w.scalar=Scalar(500.0f);
    selected->data.direction=ScaleInPlace(normalized,w.scalar.q);
-  }else if(p->actor->mode==-1&&func_00132B10(selected->data.object,0x38)&&selected->data.object->mode==0x22)func_00207030(p->actor,0x22);
+  }else if(p->actor->mode==-1&&FIsBasicDerivedFrom__FP5BASIC3CID(selected->data.object,0x38)&&selected->data.object->mode==0x22)func_00207030(p->actor,0x22);
   p->current.kind=-1;func_00176750(p,&w.next);
  }
 finish:
@@ -203,8 +203,7 @@ typedef char layout_MSG[(sizeof(MSG)==0x60)?1:-1];
 typedef char layout_STATE[(sizeof(STATE)==0x70)?1:-1];
 typedef char layout_HELPER[(sizeof(HELPER)==0x60)?1:-1];
 typedef char layout_SLOT[(sizeof(SLOT)==0x10)?1:-1];
-typedef char layout_M4[(sizeof(M4)==0x40)?1:-1];
-typedef char layout_CLOCK[(sizeof(CLOCK)==8)?1:-1];
+typedef char layout_M4[(sizeof(MATRIX4)==0x40)?1:-1];
 typedef char layout_U_q[((unsigned long)&((U*)0)->q==0x0)?1:-1];
 typedef char layout_U_f[((unsigned long)&((U*)0)->f==0x0)?1:-1];
 typedef char layout_VE_delta[((unsigned long)&((VE*)0)->delta==0x0)?1:-1];

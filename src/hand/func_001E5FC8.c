@@ -1,15 +1,16 @@
+#include "mat.h"
+#include "vu0.h"
 // Cache eleven Hermite samples of one path segment (control points transformed by the path matrix)
 // and the cumulative lengths between them.
 typedef int qword __attribute__((mode(TI)));
 union U { qword q; float f; };
-struct M4 { qword a, b, c, d; };
 struct PATH {
     char pad[0xEC];
     float *times;       // 0xEC
     float *dist;        // 0xF0
     qword *points;      // 0xF4
     char padF8[8];
-    struct M4 mat;      // 0x100
+    struct MATRIX4 mat;      // 0x100
     qword *in;          // 0x140, incoming tangents
     qword *out;         // 0x144, outgoing tangents
     int segment;        // 0x148, segment currently cached
@@ -32,7 +33,6 @@ static inline qword Point(qword m0, qword m1, qword m2, qword m3, qword v)
             : "=j"(r) : "j"(m0), "j"(m1), "j"(m2), "j"(m3), "j"(v));
     return r;
 }
-static inline qword Sub(qword a, qword b) { qword r; __asm__("vsub.xyzw %0,%1,%2" : "=j"(r) : "j"(a), "j"(b)); return r; }
 static inline float Len(qword a)
 {
     qword one;
@@ -54,9 +54,9 @@ void func_001E5FC8(struct PATH *p, int i)
     if (i == p->segment)
         return;
     {
-        struct M4 *m = &p->mat;
+        struct MATRIX4 *m = &p->mat;
         qword v0 = p->points[i], v1 = p->points[i + 1], o0 = p->out[i], i1 = p->in[i + 1];
-        qword m1 = m->b, m2 = m->c, m3 = m->d, m0 = p->mat.a;
+        qword m1 = m->r[1], m2 = m->r[2], m3 = m->r[3], m0 = p->mat.r[0];
         p->lengths[0] = 0;
         // Computed in argument order; the scheduler then emits them as b, end, start, a.
         start = Point(m0, m1, m2, m3, v0);
@@ -69,7 +69,7 @@ void func_001E5FC8(struct PATH *p, int i)
         float frac = (float)j * 0.1f;
         func_00117120(duration, frac * duration, 1.0f, start, a, end, b, &cur.q, 0, 0);
         if (j > 0)
-            p->lengths[j] = p->lengths[j - 1] + Len(Sub(prev.q, cur.q));
+            p->lengths[j] = p->lengths[j - 1] + Len(QwSub(prev.q, cur.q));
         prev.q = cur.q;
     }
     p->segment = i;

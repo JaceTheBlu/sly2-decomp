@@ -1,6 +1,6 @@
 // func_0013E818: ported from Lilly's personal Sly 2 decomp (src/P2/brx.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_003DD490 (g_sw)
+// Globals: g_sw (g_sw)
 // 0x0013E818 LoadOptionFromBrx__FPvP5EOPIDiP18CBinaryInputStream  (MATCHES Sly 2, T1071; 99.8% in T0906, 98.2% in T1003)
 // T1071: the MMI packs are written as in quirks section 41 (the mfc1 INSIDE the asm, "f" float operands): case 3 and case 2 are each ONE fused asm
 // (the game's registers and the order `lhu v0,2(sp)`, mfc1, mfc1, pextlw come out exactly). The seven spill slots at sp+0x268..0x280 are gcse's
@@ -147,7 +147,7 @@ public:
 };
 struct SW;
 class CPair;
-extern SW D_003DD490;
+extern SW g_sw;
 typedef int GRFEOPID;
 enum OTYP
 {
@@ -398,7 +398,7 @@ void LoadOptionFromBrx(void *const pvStruct, EOPID *peopid, GRFEOPID grfeopid, C
                 if (grfeopid & 0x80)
                 {
                     int oid = pbis->S32Read();
-                    OIDFIELD *poidfield = (OIDFIELD *)func_00210120(&D_003DD490);
+                    OIDFIELD *poidfield = (OIDFIELD *)func_00210120(&g_sw);
                     poidfield->oid = (OID)oid;
                     poidfield->ib = pf - (char *)pvStruct;
                     LORUN *plorun = AddLoRunListEntry((LO *)pvStruct);
@@ -576,7 +576,7 @@ void LoadOptionFromBrx(void *const pvStruct, EOPID *peopid, GRFEOPID grfeopid, C
             if (grfeopid & 0x100)
             {
                 int oid = pbis->S32Read();
-                OIDSETTER *poidsetter = (OIDSETTER *)func_00210120(&D_003DD490);
+                OIDSETTER *poidsetter = (OIDSETTER *)func_00210120(&g_sw);
                 poidsetter->oid = (OID)oid;
                 poidsetter->setter = peopid->setFile;
                 LORUN *plorun = AddLoRunListEntry((LO *)pvStruct);

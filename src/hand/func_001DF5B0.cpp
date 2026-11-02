@@ -1,4 +1,4 @@
-// func_001DF5B0 (w2lane4, wave 2): per-frame render of a "connector" (a chain of links drawn between pairs of points).
+// func_001DF5B0: per-frame render of a "connector" (a chain of links drawn between pairs of points).
 // After the generic update (func_001F3C70) and a camera visibility test of the connector's bounding sphere
 // (func_0014F850), each link is queried for its two end points and its length (func_001DEF98). A link longer than its
 // maximum is pulled back toward the first point, then the line object, the stretched middle object and the two end caps
@@ -7,7 +7,7 @@
 //  * The radius temporary VU_FLOAT(const float *, int) is a volatile empty asm (word load into a 128-bit GPR value); it acts as the
 //    scheduler barrier that keeps the camera/bound loads before the call arguments, which is what puts the camera address
 //    straight into $a0 and the bound pointer in $v1.
-//  * D_002A2DC0 must NOT be const: a const global would be an unchanging load that sched2 moves above the spill store of `dir`.
+//  * g_normalZ must NOT be const: a const global would be an unchanging load that sched2 moves above the spill store of `dir`.
 //  * `dir` is a plain qword that lives across func_0011B830, so it is spilled (store right after the vsub, reload for the
 //    argument and for Length). Length lists its input twice (as in the other matched Length/Dot helpers), which decides the
 //    reload register.
@@ -29,8 +29,8 @@ struct P {
     void *line, *stretch; int count; ENTRY *entries; ENDPOINT endpoints[2];
 };
 struct CAMERA { char pad0[0x90]; U position; };
-extern CAMERA D_002DDF40;
-extern qword D_002A2DC0;
+extern CAMERA g_cm;
+extern qword g_normalZ;
 struct VU_FLOAT {
     qword q;
     VU_FLOAT(float f) { __asm__("qmtc2.ni %1,%0" : "=j"(q) : "r"(f)); }
@@ -44,7 +44,7 @@ void func_001DEF98(P *, ENTRY *, qword *, float *);
 void func_001A5FB8(void *, qword, qword, float, float);
 M3 func_0011B830(qword, qword);
 M4 func_0011C210(qword, const M3 *, const U *);
-qword *func_00256D18(qword *, qword);
+qword *__as__6VECTORG9VU_VECTOR(qword *, qword);
 void func_001A5EE8(void *, const M4 *, float, float);
 }
 static inline qword Subtract(qword a, qword b)
@@ -85,7 +85,7 @@ extern "C" void func_001DF5B0(P *p)
     func_001F3C70(p);
     BOUND *bound = p->bound;
     if (!bound) return;
-    CAMERA *cam = &D_002DDF40;
+    CAMERA *cam = &g_cm;
     qword boundPosition = bound->position.q;
     VU_FLOAT radius(&bound->radius, 0);
     qword relativePosition = Subtract(boundPosition, cam->position.q);
@@ -104,7 +104,7 @@ extern "C" void func_001DF5B0(P *p)
         qword dir;
         if (p->stretch || p->endpoints[0].object || p->endpoints[1].object) {
             dir = Subtract(points[1].q, points[0].q);
-            basis = func_0011B830(dir, D_002A2DC0);
+            basis = func_0011B830(dir, g_normalZ);
         }
         if (p->stretch) {
             float length = Length(dir);
@@ -131,7 +131,7 @@ extern "C" void func_001DF5B0(P *p)
                     matrix = func_0011C210(points[j].q, &basis, &scale);
                 } else {
                     M4 *pm = &matrix;
-                    func_00256D18(&matrix.rows[3].q, points[j].q);
+                    __as__6VECTORG9VU_VECTOR(&matrix.rows[3].q, points[j].q);
                     matrix.rows[0] = basis.rows[0]; pm->rows[1] = basis.rows[1]; pm->rows[2] = basis.rows[2];
                     matrix.rows[0].bits[3] = matrix.rows[1].bits[3] = matrix.rows[2].bits[3] = 0;
                     pm->rows[3].f[3] = 1.0f;

@@ -1,9 +1,9 @@
+#include "vtable.h"
 typedef unsigned int uint;
-struct VT {short adjustment,unused;void *function;};
 struct ACTOR {char pad0[0xF4];int id;int unusedF8,key;};
-struct X {char pad0[0xC];VT *vtable;char pad10[0x30];uint flags;char pad44[0x14];void *shown;char pad5C[0x98];ACTOR *actor;};
+struct X {char pad0[0xC];VTE *vtable;char pad10[0x30];uint flags;char pad44[0x14];void *shown;char pad5C[0x98];ACTOR *actor;};
 struct P {int state;char pad4[0x70];int specialCount;char pad78[0x14];ACTOR *actor;char pad90[0x10];uint savedFlags;void *resource;X **model;X *primary,*secondary;char padB4[8];int selected,pending;};
-extern char D_003DD490[],D_003DD040[],D_002DDED0[],D_002DE390[],D_002DEB30[];
+extern char g_sw[],g_sndmgr[],g_clock[],D_002DE390[],D_002DEB30[];
 extern "C" {
 void func_0020EFC0(void *,int);
 void func_0020F030(void *,int);
@@ -13,7 +13,7 @@ void func_002021F8(P *);
 void func_00213928(X *,int);
 void func_00213B00(X *,int);
 void func_00214300(X *,int);
-void func_0014D1D0(void *,int,float);
+void SetClockRate__FP5CLOCK3CRKf(void *,int,float);
 void func_001FE5B8(void *,int,int);
 void func_0014FE28(void *);
 void *func_001FE5F0(void *,int,int);
@@ -31,8 +31,8 @@ void func_00212E40(X *,int,float);
 void func_00212A70(X *,int);
 void func_00212A50(X *,int);
 }
-static inline void Post(X *x,int n){VT *entry=&x->vtable[49];((void (*)(void *,int))entry->function)((char *)x+entry->adjustment,n);}
-static inline void Clear(X *x){VT *entry=&x->vtable[50];((void (*)(void *))entry->function)((char *)x+entry->adjustment);}
+static inline void Post(X *x,int n){VTE *entry=&x->vtable[49];((void (*)(void *,int))entry->pfn)((char *)x+entry->delta,n);}
+static inline void Clear(X *x){VTE *entry=&x->vtable[50];((void (*)(void *))entry->pfn)((char *)x+entry->delta);}
 static inline int Untag(int word)
 {
     register int result __asm__("v0");
@@ -52,8 +52,8 @@ extern "C" void func_00202768(P *p,int nextState)
     if(!p->primary)return;
     if(!p->secondary)return;
     if(((uint)(p->state-8)<2)!=((uint)(nextState-8)<2)){
-        if((uint)(nextState-8)<2)func_0020EFC0(D_003DD490,0);
-        else func_0020F030(D_003DD490,0);
+        if((uint)(nextState-8)<2)func_0020EFC0(g_sw,0);
+        else func_0020F030(g_sw,0);
     }
     switch(p->state){
     case -1:case 0:case 2:case 3:case 10:break;
@@ -77,8 +77,8 @@ extern "C" void func_00202768(P *p,int nextState)
         break;
     case 8:
         Restore(*p->model,p->savedFlags);
-        func_0014D1D0(D_002DDED0,0,1.0f);
-        func_001FE5B8(D_003DD040,1,1);
+        SetClockRate__FP5CLOCK3CRKf(g_clock,0,1.0f);
+        func_001FE5B8(g_sndmgr,1,1);
         func_00213928(p->primary,0x358);
         break;
     case 9:
@@ -86,7 +86,7 @@ extern "C" void func_00202768(P *p,int nextState)
         func_00214300(p->primary,-1);
         Post(p->primary,0x310);
         if(p->resource){
-            if(p->actor->key!=-1)func_001FE5F0(D_003DD040,p->actor->key,0);
+            if(p->actor->key!=-1)func_001FE5F0(g_sndmgr,p->actor->key,0);
             func_00147C20(p->resource,0x608,p->actor->key);
         }
         func_002036E8(p->actor,1);
@@ -149,8 +149,8 @@ extern "C" void func_00202768(P *p,int nextState)
             register uint inlineWord __asm__("v0")=raw|0x102;
             __asm__("sw %1,%0" : "=m"(updated->flags) : "r"(inlineWord));
         }
-        func_001FE5B8(D_003DD040,1,0);
-        func_0014D1D0(D_002DDED0,0,0.0f);
+        func_001FE5B8(g_sndmgr,1,0);
+        SetClockRate__FP5CLOCK3CRKf(g_clock,0,0.0f);
         break;
     }
     case 9:

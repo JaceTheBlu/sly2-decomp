@@ -14,7 +14,7 @@ extern int D_002C3680[];
 extern int D_002DE598;
 void func_0011DFA0(const float *, VEC3 *);
 int func_00170548(void *, int);
-void func_00166920(GIFS *);
+void __4GIFS(GIFS *);
 void func_00157330(GIFS *, int, void *);
 void func_001574B8(GIFS *);
 void func_00170650(int, int, int, int, int, int, GIFS *);
@@ -97,7 +97,7 @@ void func_001EA9F0(O *p, void *pbs)
     qword *x;
     if (pbs)
         p->tex0 = ((ulong)func_00170548(pbs, 4) << 37) | 0x2000000001B00000L;
-    func_00166920(&dmas);
+    __4GIFS(&dmas);
     func_00157330(&dmas, 0x80, aqw);
     func_001574B8(&dmas);
     func_00170650((int)((p->tex0 >> 37) & 0x3FFF), 1, 0, 0x10, 0x10, 0x40, &dmas);

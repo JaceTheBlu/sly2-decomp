@@ -1,5 +1,7 @@
+#include "vtable.h"
+#include "clock.h"
 // func_00191A10: per-frame update of a hero's movement/action context (the struct at actor+0x4C0; called from the
-// actor's mode handler, see func_0018B7E8 / func_00134DA8). Dispatches on the context's action, then commits the
+// actor's mode handler, see func_0018B7E8 / UpdateJt__FP2JTf). Dispatches on the context's action, then commits the
 // animation / axis weights for the resulting step.
 //
 // Matched from w5lane7's near-miss (3/953). Notes on the forms that matter (each verified against the target):
@@ -15,7 +17,6 @@ typedef unsigned int uint;
 
 union U { qword q; float f[4]; int i[4]; };
 struct M3 { U r[3]; };
-struct VTE { short delta, pad; void *fn; };
 struct JOY { char pad0[0x10]; float x, y, heading, amount; };
 struct ANIM { char pad0[0x14]; void *table; char pad18[4]; float phase; char pad20[0x20]; float rate; };
 struct COMPONENT { VTE *vt; };
@@ -39,11 +40,10 @@ struct CONTEXT {
     char pad224[0x240 - 0x224]; PROGRAM program240; char pad2E4[0x330 - 0x2E4]; ENTRY axes2[8]; void *request2;
     char pad434[0x440 - 0x434]; char sub[0x10];
 };
-struct CLOCK { float t, dt; };
 struct VU_FLOAT { qword q; };
 
 extern "C" {
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern ACTOR *D_002E1E40;
 extern qword D_002A2DA0;                    // (1, 0, 0, 0)
 extern float D_002BF5BC, D_002BF5C0, D_002BF5C4, D_002BF5C8, D_002BF5CC;
@@ -52,41 +52,41 @@ extern U D_002BF5D0[3], D_002BF600[3];
 qword func_001A62E8(ACTOR *);
 void func_00182CD8(void *, ACTOR *, float *, U *, float *);
 qword func_0011F088(qword, qword, float, SMP *, U *);
-int func_00132B10(void *, int);
+int FIsBasicDerivedFrom__FP5BASIC3CID(void *, int);
 qword func_0011E1A0(float, float, float);
 float func_001E6620(FOCUS *);
 float func_001E6648(FOCUS *);
 float func_001E6610(FOCUS *);
 float func_001E6630(FOCUS *);
-float func_0011D018(float, float, float, SMP *, float *);
+float GSmooth__FfffP3SMPPf(float, float, float, SMP *, float *);
 void func_001940B0(CONTEXT *, int);
 void func_00204660(ACTOR *, float);
 float func_00204740(ACTOR *);
-float func_0011CF60(float);
+float RadNormalize__Ff(float);
 void func_00192BD8(CONTEXT *, int);
 void func_0020BB58(PROGRAM *, float);
 void func_0020BC08(PROGRAM *);
 void func_001441E8(ACTOR *, float);
-void func_001E6ED8(FOCUS *, qword, void *, U *, U *, float *, float *, float);
+void UpdateUbgSgs__FP3UBG(FOCUS *, qword, void *, U *, U *, float *, float *, float);
 void func_00195A00(void *, int, int, int);
 float func_002458F0(float, float);
 void func_001E6F60(FOCUS *, qword, void *, void *, U *, void *, void *);
 void func_001CC2E8(void *);
 void func_001A0450(ACTOR *, ENTRY *, void *);
 void func_00205910(ACTOR *, HEIGHT *, int, U *);
-BINDING *func_0012FF10(void *, ACTOR *, int, int);
+BINDING *PchnFindAseg__FP4ASEGP3ALOii(void *, ACTOR *, int, int);
 void func_002046F0(ACTOR *, FOCUS *);
 void func_00204CA8(ACTOR *);
 void func_00189C40(ACTOR *, void *, void *, void *, float, void *);
 void func_00193C98(ACTOR *, void *, void *);
 }
 
-static inline qword GetVelocity(ACTOR *p) { VTE &v = p->vt[33]; return ((qword (*)(void *))v.fn)((char *)p + v.delta); }
+static inline qword GetVelocity(ACTOR *p) { VTE &v = p->vt[33]; return ((qword (*)(void *))v.pfn)((char *)p + v.delta); }
 static inline void ReadBinding(BINDING *b, ANIM *a, U *out)
 {
     COMPONENT *c = b->component;
     VTE &v = c->vt[3];
-    ((void (*)(void *, int, U *, float, float))v.fn)((char *)c + v.delta, 0, out, a->phase, a->rate);
+    ((void (*)(void *, int, U *, float, float))v.pfn)((char *)c + v.delta, 0, out, a->phase, a->rate);
 }
 
 static inline VU_FLOAT VuFloat(float g) { VU_FLOAT v; __asm__("qmtc2.ni %1,%0" : "=j"(v.q) : "r"(g)); return v; }
@@ -164,10 +164,10 @@ extern "C" void func_00191A10(CONTEXT *ctx)
         smp.svSlow = 0.0f;
         smp.dtFast = 0.3f;
         U vel;
-        func_0011F088(pos.q, goal.q, D_002DDED0.dt, &smp, &vel);
+        func_0011F088(pos.q, goal.q, g_clock.dt, &smp, &vel);
         float lateral;
         qword offset;
-        if (func_00132B10(ctx->focus, 38)) {
+        if (FIsBasicDerivedFrom__FP5BASIC3CID(ctx->focus, 38)) {
             offset = QwZero();
             lateral = 0.0f;
         } else {
@@ -188,10 +188,10 @@ extern "C" void func_00191A10(CONTEXT *ctx)
             lateral = GMin(SqrtF(speedMax * speedMax - GFromVf(QwDot(vel.q, vel.q))), lateral);
             float s;
             FOCUS *focus;
-            if (func_00132B10(ctx->focus, 12) && !(focus = ctx->focus)->cyclic) {
+            if (FIsBasicDerivedFrom__FP5BASIC3CID(ctx->focus, 12) && !(focus = ctx->focus)->cyclic) {
                 float lo, hi;
-                func_0011D018(ctx->value, func_001E6620(focus) + 30.0f, D_002DDED0.dt, &smp, &lo);
-                func_0011D018(ctx->value, func_001E6648(focus) - 30.0f, D_002DDED0.dt, &smp, &hi);
+                GSmooth__FfffP3SMPPf(ctx->value, func_001E6620(focus) + 30.0f, g_clock.dt, &smp, &lo);
+                GSmooth__FfffP3SMPPf(ctx->value, func_001E6648(focus) - 30.0f, g_clock.dt, &smp, &hi);
                 s = GClamp(lateral, lo, hi);
             } else {
                 s = lateral;
@@ -220,7 +220,7 @@ extern "C" void func_00191A10(CONTEXT *ctx)
             }
         } else {
             step = 0;
-            if (func_00132B10(ctx->focus, 12)) {
+            if (FIsBasicDerivedFrom__FP5BASIC3CID(ctx->focus, 12)) {
                 FOCUS *focus = ctx->focus;
                 if (lateral < -25.0f && (focus->flags & 1)) {
                     step = ctx->action == 0 && ctx->actor->role == 0 ? 3 : 2;
@@ -232,7 +232,7 @@ extern "C" void func_00191A10(CONTEXT *ctx)
                 func_001940B0(ctx, 3);
         }
         func_00204660(ctx->actor, heading);
-        if (ctx->step == 5 && 0.25f < __builtin_fabsf(func_0011CF60(func_00204740(ctx->actor) - heading)))
+        if (ctx->step == 5 && 0.25f < __builtin_fabsf(RadNormalize__Ff(func_00204740(ctx->actor) - heading)))
             step = 5;
         func_00192BD8(ctx, step);
         break;
@@ -263,7 +263,7 @@ extern "C" void func_00191A10(CONTEXT *ctx)
     case 3: {
         FOCUS *focus = ctx->focus;
         U point, tangent;
-        func_001E6ED8(focus, *ctx->actor->ppos, 0, &point, &tangent, &ctx->parameter, &ctx->value, ctx->parameter);
+        UpdateUbgSgs__FP3UBG(focus, *ctx->actor->ppos, 0, &point, &tangent, &ctx->parameter, &ctx->value, ctx->parameter);
         if (focus->flags && !focus->cyclic &&
             (ctx->parameter < func_001E6610(focus) + 0.01f || func_001E6630(focus) - 0.01f < ctx->parameter)) {
             func_00195A00(ctx->actor->control, 0, 0, 0);
@@ -323,10 +323,10 @@ extern "C" void func_00191A10(CONTEXT *ctx)
             if (focus->cyclic) {
                 limit = smp.svFast;
             } else if (ctx->reversed) {
-                func_0011D018(ctx->value, 50.0f, D_002DDED0.dt, &smp, &limit);
+                GSmooth__FfffP3SMPPf(ctx->value, 50.0f, g_clock.dt, &smp, &limit);
                 limit = -limit;
             } else {
-                func_0011D018(ctx->value, func_001E6648(focus) - 50.0f, D_002DDED0.dt, &smp, &limit);
+                GSmooth__FfffP3SMPPf(ctx->value, func_001E6648(focus) - 50.0f, g_clock.dt, &smp, &limit);
             }
             float ratio = (limit - smp.svSlow) / (smp.svFast - smp.svSlow);
             float amount = pjoy->amount;
@@ -338,7 +338,7 @@ extern "C" void func_00191A10(CONTEXT *ctx)
                 g = amount;
         }
         if (ctx->reversed)
-            heading = func_0011CF60(heading + 3.1415927f);
+            heading = RadNormalize__Ff(heading + 3.1415927f);
         if (0.0f < g) {
             func_00192BD8(ctx, 4);
             func_0020BB58(&ctx->program240, g);
@@ -370,7 +370,7 @@ extern "C" void func_00191A10(CONTEXT *ctx)
                 ACTOR *actor = ctx->actor;
                 float turn = -actor->velocity.f[1] / D_002BF5CC;
                 actor->velocity.q = QwScaleX(D_002A2DA0, QwDot(actor->velocity.q, D_002A2DA0));
-                func_00204660(ctx->actor, ctx->actor->heading + turn * D_002DDED0.dt);
+                func_00204660(ctx->actor, ctx->actor->heading + turn * g_clock.dt);
             } else {
                 func_00192BD8(ctx, 9);
             }
@@ -389,7 +389,7 @@ extern "C" void func_00191A10(CONTEXT *ctx)
         ACTOR *actor = ctx->actor;
         ANIM *anim = actor->anim;
         if (anim) {
-            BINDING *b = func_0012FF10(anim->table, actor, 1, 1);
+            BINDING *b = PchnFindAseg__FP4ASEGP3ALOii(anim->table, actor, 1, 1);
             if (b) {
                 ReadBinding(b, anim, &v);
                 v.q = QwScale(v.q, VuFloat(-1.0f));

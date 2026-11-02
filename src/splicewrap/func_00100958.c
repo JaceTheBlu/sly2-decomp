@@ -1,5 +1,5 @@
 #include "splicewrap.h"
-void func_001A58D0(s32, s32, s32);               /* extern */
+void SetLoParent__FP2LOP2SOi(s32, s32, s32);               /* extern */
 CRef *func_00100958(CRef *ret, void *pbasic, s32 cref, CRef *aref)
 {
     OTYP aotyp[2] = { 8240, 4119 };
@@ -9,7 +9,7 @@ CRef *func_00100958(CRef *ret, void *pbasic, s32 cref, CRef *aref)
     RefSetArgsFromSplice__FiP4CRefP4OTYPe(&ref, 2, aref, aotyp, &arg0_v, &arg1_v);
     Decref__4CRef(&ref);
     InitTag__4CRef(&ref, 0x24);
-    func_001A58D0(pbasic, arg0_v, arg1_v);
+    SetLoParent__FP2LOP2SOi(pbasic, arg0_v, arg1_v);
     __4CRefRC4CRef(ret, &ref);
     Decref__4CRef(&ref);
     return ret;

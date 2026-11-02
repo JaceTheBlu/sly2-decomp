@@ -1,3 +1,4 @@
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct LO { int k; };
 struct Q4 { char pad[0x40]; struct LO *x40; };
@@ -9,15 +10,14 @@ struct PO { char pad[0xEC]; struct X *xEC; char pad2[0x2DC - 0xF0]; int x2DC; ch
 struct T { char pad[0x130]; float x130; };
 struct R { char pad[0x4C]; int x4C; };
 struct P { struct PO *p0; char pad[0xC]; qword pos; float d20; float t24; int f28; };
-struct CLOCK { float t; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002BD2D0;
 extern float D_002BD2D4;
-extern char D_003DD490[];
+extern char g_sw[];
 extern char D_002DEB30[];
 int func_00144068(struct PO *);
 int func_0020F0B0(void *);
-int func_00132B10(struct T *, int);
+int FIsBasicDerivedFrom__FP5BASIC3CID(struct T *, int);
 struct R *func_00205458(void *, int);
 void func_001619A0(void *, int, struct T *);
 void func_001F7BF8(struct T *, float);
@@ -56,10 +56,10 @@ void func_00144640(struct P *p)
     }
     if (!func_00144068(p->p0))
         return;
-    if (D_002DDED0.t < p->t24)
+    if (g_clock.t < p->t24)
         return;
-    p->t24 = D_002DDED0.t + D_002BD2D0;
-    if (func_0020F0B0(D_003DD490)) {
+    p->t24 = g_clock.t + D_002BD2D0;
+    if (func_0020F0B0(g_sw)) {
         int fAny = 0;
         struct LN *pln;
         for (pln = p->p0->xEC->x64; pln; pln = pln->pnext) {
@@ -67,7 +67,7 @@ void func_00144640(struct P *p)
             for (pso = pln->pso; pso; pso = pso->pnext) {
                 int i = IOther(p->p0, pso);
                 struct T *po = pso->ae[1 - i].x8;
-                if (func_00132B10(po, 0x38)) {
+                if (FIsBasicDerivedFrom__FP5BASIC3CID(po, 0x38)) {
                     struct R *pr = func_00205458(po, 0xA9);
                     if (!pr || !pr->x4C) {
                         if (0.0f <= po->x130)

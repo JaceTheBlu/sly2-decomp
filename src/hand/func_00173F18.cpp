@@ -1,17 +1,17 @@
+#include "util.h"
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct M3 { qword row[3]; };
 struct M4 { qword row[4]; };
 struct VEC { qword q; } __attribute__((aligned(16)));
 struct VECTOR4 { float x, y, z, w; } __attribute__((aligned(16)));
 struct VU_FLOAT { qword qw; };
-struct LM { float gMin, gMax; };
 struct LO { char pad0[0x28]; unsigned long flags; char pad30[8]; float sRadius; char pad3C[0x144]; void *pv180; };
 struct SEL { int kind; int unk4; LO *plo; char padC[8]; int fBusy; float tUntil; };
 struct SET {
     char pad0[0x50]; int csel; SEL *asel; char pad58[0x38];
     int cplo; LO **aplo; int cpos; qword *apos;
 };
-struct CLOCK { float t, dt; };
 struct CAMERA { char pad0[0x60]; qword dir; };
 inline void *operator new(unsigned, void *p) { return p; }
 struct FRAME { int unk[4]; };
@@ -20,12 +20,12 @@ extern "C" {
 extern float D_002A53E0;
 extern float D_002BE5E4;
 extern float D_002BE5E8;
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 extern LM D_002BBB60;
-extern CAMERA D_002DDF40;
-extern qword D_002A2DC0;
+extern CAMERA g_cm;
+extern qword g_normalZ;
 FRAME *func_001AE478(FRAME *);
-void func_001AE4A0(FRAME *, int);
+void _$_18CBinaryInputStream(FRAME *, int);
 void func_001B44D8(int *, void ***);
 qword func_001A62E8(LO *);
 M4 *func_001A6318(LO *);
@@ -33,9 +33,9 @@ int func_00173768(SET *, qword, int, void **, float);
 float func_001E6648(LO *);
 int func_001EA3B0(void *, float);
 void func_001E6F10(LO *, qword *, qword *, float);
-float func_0011D448(float, float);
+float GRandInRange__Fff(float, float);
 float func_002458F0(float, float);
-M3 func_0011B500(float, qword);
+M3 LoadRotateMatrixRad__FfUx(float, qword);
 }
 
 static inline VU_FLOAT VuFloatFromMemWord(int n)
@@ -126,7 +126,7 @@ extern "C" SEL *func_00173F18(SET *pset, qword pos, qword *pposOut, M3 *pmatOut,
         LO *plo;
         if (psel->fBusy)
             goto next;
-        if (D_002DDED0.t < psel->tUntil)
+        if (g_clock.t < psel->tUntil)
             goto next;
         plo = psel->plo;
         if (!plo)
@@ -178,7 +178,7 @@ extern "C" SEL *func_00173F18(SET *pset, qword pos, qword *pposOut, M3 *pmatOut,
             for (int k = 0; k < c; )
             {
                 int kNext = k + 1;
-                float u = D_002BE5E8 * ((float)k + func_0011D448(D_002BBB60.gMin, D_002BBB60.gMax));
+                float u = D_002BE5E8 * ((float)k + GRandInRange__Fff(D_002BBB60.gMin, D_002BBB60.gMax));
                 if (func_001EA3B0(plo->pv180, u))
                     goto nextSample;
                 {
@@ -187,13 +187,13 @@ extern "C" SEL *func_00173F18(SET *pset, qword pos, qword *pposOut, M3 *pmatOut,
                     if (sDist < D_002BE5E4 || sBest < sDist)
                         goto nextSample;
                     {
-                        int fFlipT = GXOfQw(QwDot(D_002DDF40.dir, dirCurve.q)) < 0.0f;
+                        int fFlipT = GXOfQw(QwDot(g_cm.dir, dirCurve.q)) < 0.0f;
                         if (!fFlipT)
                         {
                             VU_FLOAT gNeg = VuFloatFromMemWord(0xBF800000);
                             dirCurve.q = QwScaleX(dirCurve.q, gNeg);
                         }
-                        M3 matCurve = func_0011B500(func_002458F0(dirCurve.v.y, dirCurve.v.x), D_002A2DC0);
+                        M3 matCurve = LoadRotateMatrixRad__FfUx(func_002458F0(dirCurve.v.y, dirCurve.v.x), g_normalZ);
                         int j;
                         for (j = 0; j < pset->cpos; j++)
                         {
@@ -221,6 +221,6 @@ extern "C" SEL *func_00173F18(SET *pset, qword pos, qword *pposOut, M3 *pmatOut,
     *pposOut = posBest.q;
     *pmatOut = matBest;
     *pfFlip = fFlip;
-    func_001AE4A0(&frame, 2);
+    _$_18CBinaryInputStream(&frame, 2);
     return pselBest;
 }

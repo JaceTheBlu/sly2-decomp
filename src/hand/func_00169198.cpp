@@ -1,4 +1,4 @@
-// func_00169198 (Claude agent, lanes I1-I9, H21): fresh rewrite in the style of Lilly's matched files.
+// func_00169198: fresh rewrite in the style of Lilly's matched files.
 // H21: the copy loop is a `for` counter loop (loop.c turns it into the target's 12/-4/bgez count) preceded by an
 // empty do-while(0), whose loop notes act as the scheduling barrier the target shows after `pb += 4`.
 // Builds the VIF packet for every submodel of a model: model matrix, optional bone matrices, optional skin matrices,
@@ -115,7 +115,7 @@ struct RPL
 };
 struct G;
 extern DMA D_002DEA28;
-extern G D_003DD490;
+extern G g_sw;
 extern MATRIX4 D_002A2D30;
 extern "C" {
 void *func_002333B4(void *pv, int b, uint cb);
@@ -124,14 +124,14 @@ void func_001A4AD8(G *pg, int c, void **apv, SHD *pshd);
 int func_001EDA20(OBJ *pobj);
 int func_001BEE10(ALO *palo, int n);
 void func_001AE5A0(void *pvDst, const void *pvSrc, uint cb);
-void func_0011C168(MATRIX4 *pmatDst, const MATRIX4 *pmatA, const MATRIX4 *pmatB);
+void __ml__FRC7MATRIX4T0(MATRIX4 *pmatDst, const MATRIX4 *pmatA, const MATRIX4 *pmatB);
 void func_0011C318(MATRIX4 *pmatDst, const MATRIX4 *pmatSrc);
 qword func_001A62E8(ALO *palo);
 RPL *func_001CD998(void);
 }
 static inline MATRIX4 MulMat(const MATRIX4 &matA, const MATRIX4 &matB) return mat
 {
-    func_0011C168(&mat, &matA, &matB);
+    __ml__FRC7MATRIX4T0(&mat, &matA, &matB);
 }
 static inline void CopyMat(MATRIX4 &matDst, const MATRIX4 &matSrc)
 {
@@ -211,7 +211,7 @@ extern "C" void func_00169198(MODEL *pmodel, ALO *palo)
     {
         func_002333B4(&shd, 0, sizeof(SHD));
         pshd = &shd;
-        func_001A4AD8(&D_003DD490, palo->cpshd, palo->apshd, &shd);
+        func_001A4AD8(&g_sw, palo->cpshd, palo->apshd, &shd);
     }
     else
     {

@@ -1,3 +1,5 @@
+#include "vu0.h"
+#include "clock.h"
 typedef int qword __attribute__((mode(TI)));
 struct PL { char pad[0x18]; float g18; float g1C; };
 struct O;
@@ -6,9 +8,8 @@ struct ASEGA {char pad[0x14];struct TABLE*table;struct O*owner;float time;char p
 struct BBOX {float min[4],max[4];char pad20[0x40];struct O*owner;};
 struct G;
 struct Q { char pad[0xEC]; struct BBOX *xEC; };
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
-extern struct G D_003DD490;
+extern struct CLOCK g_clock;
+extern struct G g_sw;
 extern float D_002C08E4;
 extern qword D_002C08F0;
 extern qword D_002A2DE0;
@@ -41,11 +42,10 @@ void func_001A1358(void *p);
 int func_00133D08(struct G *pg,struct BBOX *a,struct BBOX *b);
 void func_00134320(struct G *pg, struct P *p);
 void func_0012D108(void *p, qword v);
-static inline qword Bcast(float g) { qword a; __asm__("qmtc2.ni %1, %0" : "=j"(a) : "r"(g)); return a; }
 static inline void Neg(struct P *p, qword v)
 {
     union { qword q; float f[4]; } u;
-    qword b = Bcast(-1.0f);
+    qword b = QwFromG(-1.0f);
     u.q = b;
     __asm__("vmulx.xyzw %0, %1, %2x" : "=j"(p->v190) : "j"(v), "j"(u.q));
 }
@@ -53,7 +53,7 @@ static inline void Neg2(struct P *p, qword v)
 {
     struct ASEGA *pl = p->p1030;
     volatile qword u; /* scalar stack copy of the -1 broadcast (target stores it to 0(sp) last) */
-    qword b = Bcast(-1.0f); qword r;
+    qword b = QwFromG(-1.0f); qword r;
     __asm__("vmulx.xyzw %0, %1, %2x" : "=j"(r) : "j"(v), "j"(b));
     p->v190 = r;
     u = b;
@@ -96,7 +96,6 @@ typedef char Size_0[sizeof(struct PL)==32?1:-1];
 typedef char Size_1[sizeof(struct ASEGA)==80?1:-1];
 typedef char Size_2[sizeof(struct BBOX)==100?1:-1];
 typedef char Size_3[sizeof(struct Q)==240?1:-1];
-typedef char Size_4[sizeof(struct CLOCK)==8?1:-1];
 typedef char Size_5[sizeof(struct P)==6864?1:-1];
 typedef char Size_6[sizeof(qword)==16?1:-1];
 typedef char Size_7[sizeof(unsigned long)==8?1:-1];
@@ -110,7 +109,7 @@ void func_001B50B0(struct P *p)
         return;
     if (p->x190C && func_00131968(p->x190C))
         func_001306A8(&p->x190C);
-    func_00194A40(&D_003DD490, p, 0xF8FA);
+    func_00194A40(&g_sw, p, 0xF8FA);
     func_001B5038(p);
     func_001B4AA0(p);
     switch (p->x13D0) {
@@ -149,14 +148,14 @@ void func_001B50B0(struct P *p)
     }
     func_001B82A0(p);
     func_001A1358(p->xDF0);
-    if (p->p1430 && p->g1434 + 0.1f < D_002DDED0.t) {
-        if (!p->p1430->xEC || !func_00133D08(&D_003DD490, p->xEC, p->p1430->xEC))
+    if (p->p1430 && p->g1434 + 0.1f < g_clock.t) {
+        if (!p->p1430->xEC || !func_00133D08(&g_sw, p->xEC, p->p1430->xEC))
             p->p1430 = 0;
         if (!p->p1430)
-            func_00134320(&D_003DD490, p);
+            func_00134320(&g_sw, p);
     }
     if (p->x1ACC) {
-        if (D_002DDED0.t - p->g1AC8 < D_002C08E4)
+        if (g_clock.t - p->g1AC8 < D_002C08E4)
             func_0012D108(p->x1ACC, D_002C08F0);
         else
             func_0012D108(p->x1ACC, D_002A2DE0);

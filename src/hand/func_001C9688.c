@@ -1,12 +1,12 @@
-struct RGBA { unsigned char r, g, b, a; };
+#include "util.h"
 struct E { int n; void *p; struct RGBA c; };
 extern struct E D_003D3A00[5];
 extern char D_002C1740[], D_002C19C0[], D_002C1AC8[], D_002C1B50[], D_002C1BD8[];
 extern int D_002DD2E0, D_002DD2E4, D_002DD2E8, D_002DD2EC, D_002DD2F0, D_002DD2F4;
 extern char D_004520A8[], D_004520D0[], D_004520F8[], D_00452120[], D_00452148[], D_00452170[];
 void *func_002333B4(void *p, int c, int cb);
-void func_0011CCA8(void *p, int cb, int c, int align);
-static inline void SetRgba(struct RGBA *pc, int r, int g, int b, int a) { pc->r = r; pc->g = g; pc->b = b; pc->a = a; }
+void __8SLOTHEAPiii(void *p, int cb, int c, int align);
+static inline void SetRgba(struct RGBA *pc, int r, int g, int b, int a) { pc->bRed = r; pc->bGreen = g; pc->bBlue = b; pc->bAlpha = a; }
 static inline void InitE(struct E *pe, int n, void *p, int r, int g, int b, int a)
 {
     func_002333B4(pe, 0, sizeof(struct E));
@@ -42,11 +42,11 @@ void func_001C9688(int init, int prio)
         pe->n = 0x3E;
         pe->p = D_002C1BD8;
         SetRgba(&pe->c, 0x5F, 0x5F, 0x5F, 0x7F);
-        if (++D_002DD2E0 == 1) func_0011CCA8(D_004520A8, 0x14, 0x2000, 0x10);
-        if (++D_002DD2E4 == 1) func_0011CCA8(D_004520D0, 0x18, 0x800, 0x10);
-        if (++D_002DD2E8 == 1) func_0011CCA8(D_004520F8, 0x28, 0x200, 0x10);
-        if (++D_002DD2EC == 1) func_0011CCA8(D_00452120, 0x1C, 0x800, 0x10);
-        if (++D_002DD2F0 == 1) func_0011CCA8(D_00452148, 0xC, 0xC8, 0x10);
-        if (++D_002DD2F4 == 1) func_0011CCA8(D_00452170, 0x14, 0x100, 0x10);
+        if (++D_002DD2E0 == 1) __8SLOTHEAPiii(D_004520A8, 0x14, 0x2000, 0x10);
+        if (++D_002DD2E4 == 1) __8SLOTHEAPiii(D_004520D0, 0x18, 0x800, 0x10);
+        if (++D_002DD2E8 == 1) __8SLOTHEAPiii(D_004520F8, 0x28, 0x200, 0x10);
+        if (++D_002DD2EC == 1) __8SLOTHEAPiii(D_00452120, 0x1C, 0x800, 0x10);
+        if (++D_002DD2F0 == 1) __8SLOTHEAPiii(D_00452148, 0xC, 0xC8, 0x10);
+        if (++D_002DD2F4 == 1) __8SLOTHEAPiii(D_00452170, 0x14, 0x100, 0x10);
     }
 }

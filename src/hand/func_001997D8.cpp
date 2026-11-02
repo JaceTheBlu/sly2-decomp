@@ -2,7 +2,7 @@
 // (11 segments) and tests every segment against the shapes of every layer; returns whether at least 2 hits
 // had a plane normal with Z > 0.7 (any hit before the 3rd segment, or with parameter 0, fails at once).
 //
-// Tricks that mattered (lane 8):
+// Tricks that mattered:
 //  * the segment test is a small inline helper taking POINTERS to the two end points: its pointer parameters become
 //    pseudos copied at the call site, which gives the target's "cursor copy in $s6 + recomputed &apt[i+1]" pair
 //    without any strength-reduced second pointer;
@@ -24,11 +24,11 @@ struct L { int x0; struct L *x4; int x8; struct C *xc; };
 struct EC { char pad[0x64]; struct L *x64; };
 struct O { char pad[0xEC]; struct EC *xec; };
 struct P { struct O *x0; };
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 extern qword D_002A2DB0;
 extern "C" {
 void func_0011E2D8(qword a, qword b, qword c, qword *pm);
-qword *func_00256D18(qword *pq, qword q);
+qword *__as__6VECTORG9VU_VECTOR(qword *pq, qword q);
 void func_001995D8(struct P *p, const M4 *pm, int n, U *apt);
 int func_0014C6A0(struct S0 *s, qword a, qword b, int n, HIT *ph);
 }
@@ -47,9 +47,9 @@ extern "C" int func_001997D8(struct P *p, qword q1, qword q2)
     struct L *l;
     int c = 0;
     m.r[0].q = q2;
-    func_0011E2D8(q2, D_002A2DC0, D_002A2DB0, &m.r[1].q);
+    func_0011E2D8(q2, g_normalZ, D_002A2DB0, &m.r[1].q);
     M4 *pm = &m4;
-    (void)func_00256D18(&m4.pos.q, q1);
+    (void)__as__6VECTORG9VU_VECTOR(&m4.pos.q, q1);
     pm->m = m;
     m4.m.r[0].i[3] = m4.m.r[1].i[3] = m4.m.r[2].i[3] = 0;
     pm->pos.f[3] = 1.0f;

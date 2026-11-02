@@ -1,7 +1,7 @@
+#include "vtable.h"
 extern "C" {
 typedef int qword __attribute__((mode(TI)));
 extern float D_002BE5F0[2];
-struct VTE { short d; short pad; void *pfn; };
 struct O { char pad[0xC]; struct VTE *vt; };
 struct R { char pad[0x2E8]; int n2E8; char pad2[0x1000 - 0x2EC]; int n1000; };
 struct Q { int pad[2]; int n8; };
@@ -39,8 +39,8 @@ extern "C" struct R *func_00174490(struct S *p, struct M *m, qword *pv, int a3, 
         }
         for (i = 0; i < p->n90; i++) {
             struct O *o = p->a94[idx[i]];
-            { struct VTE *e = &o->vt[0x1D]; ((void (*)(void *, qword))e->pfn)((char *)o + e->d, *pv); }
-            { struct VTE *e = &o->vt[0x1E]; ((void (*)(void *, int))e->pfn)((char *)o + e->d, a3); }
+            { struct VTE *e = &o->vt[0x1D]; ((void (*)(void *, qword))e->pfn)((char *)o + e->delta, *pv); }
+            { struct VTE *e = &o->vt[0x1E]; ((void (*)(void *, int))e->pfn)((char *)o + e->delta, a3); }
             r = func_001CB250(o, 0);
             if (r) break;
         }

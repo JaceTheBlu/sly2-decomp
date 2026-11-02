@@ -1,7 +1,8 @@
+#include "vu0.h"
+#include "clock.h"
+#include "util.h"
 
-static __inline__ float sqrtf(float g) { float r; __asm__ __volatile__("sqrt.s %0, %1" : "=&f"(r) : "f"(g)); return r; }
 
-typedef struct LM { float gMin, gMax; } LM;
 
 typedef struct JOY {
     char pad0[0x1000];
@@ -41,20 +42,15 @@ typedef struct JOY {
     float gDpad;     /* 0x10EC */
 } JOY;
 
-typedef struct CLOCK {
-    char pad[0x3C];
-    float tReal;  /* 0x3C */
-    float x40;    /* 0x40 */
-} CLOCK;
 
 typedef struct G { char pad[0x30C]; int x30c; int x310; void *x314; char pad318[0x3A0 - 0x318]; int x3a0; } G;
 typedef struct SND { float t; } SND;
 
-extern CLOCK D_002DDED0;
-extern G D_002DDF40;
+extern CLOCK g_clock;
+extern G g_cm;
 extern SND D_002DEB30;
 extern char D_002DDEC0[];
-extern char D_003DD490[];
+extern char g_sw[];
 
 extern void *func_002333B4(void *pv, int b, int cb);
 extern int func_002432D0(int port, int slot, unsigned char *pb);
@@ -101,7 +97,7 @@ int func_00187998(JOY *p)
 
 
         }
-        if (D_002DDF40.x30c == 0 || D_002DDF40.x314 != &D_002DDF40.x3a0) {
+        if (g_cm.x30c == 0 || g_cm.x314 != &g_cm.x3a0) {
             if (p->grfbtn & 0xF000) {
 
                 p->x = p->y = p->uDeflect = 0.0f;
@@ -116,33 +112,33 @@ int func_00187998(JOY *p)
                     p->y = -p->gDpad;
                 if (p->x * p->y != 0.0f) {
 
-                    p->x = p->x * sqrtf(0.5f);
-                    p->y = p->y * sqrtf(0.5f);
+                    p->x = p->x * GSqrt(0.5f);
+                    p->y = p->y * GSqrt(0.5f);
 
                 }
                 p->uDeflect = 1.0f;
             }
         }
-        p->dx = (p->x - x) / D_002DDED0.x40;
-        p->dy = (p->y - y) / D_002DDED0.x40;
-        p->dx2 = (p->x2 - x2) / D_002DDED0.x40;
-        p->dy2 = (p->y2 - y2) / D_002DDED0.x40;
+        p->dx = (p->x - x) / g_clock.dtFrame;
+        p->dy = (p->y - y) / g_clock.dtFrame;
+        p->dx2 = (p->x2 - x2) / g_clock.dtFrame;
+        p->dy2 = (p->y2 - y2) / g_clock.dtFrame;
         func_0014BF48(D_002DDEC0, p, old & 0xFFFF);
-        p->tRead = D_002DDED0.tReal;
+        p->tRead = g_clock.tFrame;
         if (p->grfbtn != 0 || p->uDeflect != 0.0f || p->uDeflect2 != 0.0f) {
 
-            p->tActive = D_002DDED0.tReal;
+            p->tActive = g_clock.tFrame;
             p->x1020 = 0;
 
-            if (D_002DDED0.tReal - D_002DEB30.t > 15.0f) {
-                func_001619A0(&D_002DEB30, 0xE, func_001C4840(D_003DD490));
-                D_002DEB30.t = D_002DDED0.tReal;
+            if (g_clock.tFrame - D_002DEB30.t > 15.0f) {
+                func_001619A0(&D_002DEB30, 0xE, func_001C4840(g_sw));
+                D_002DEB30.t = g_clock.tFrame;
             }
         } else {
-            p->x1020 = (int)(D_002DDED0.tReal - p->tActive);
+            p->x1020 = (int)(g_clock.tFrame - p->tActive);
         }
     } else {
-        if (D_002DDED0.tReal - p->tRead >= 2.0f)
+        if (g_clock.tFrame - p->tRead >= 2.0f)
             fRet = 0;
     }
     return fRet;

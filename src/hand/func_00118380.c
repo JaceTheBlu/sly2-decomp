@@ -3,7 +3,7 @@ typedef struct ALLOC { VTE *pvt; } ALLOC;
 typedef struct CBinaryInputStream CBinaryInputStream;
 
 int func_00117C20(CBinaryInputStream *pbis);
-void func_00117968(CBinaryInputStream *pbis, int cb, void *pv);
+void Read__18CBinaryInputStreamiPv(CBinaryInputStream *pbis, int cb, void *pv);
 
 void func_00118380(CBinaryInputStream *pbis, char **ppchz, ALLOC *palloc, int nKind)
 {
@@ -14,7 +14,7 @@ void func_00118380(CBinaryInputStream *pbis, char **ppchz, ALLOC *palloc, int nK
         return;
     }
     pchz = (char *)palloc->pvt[1].pfn((char *)palloc + palloc->pvt[1].d, cch + 1, nKind);
-    func_00117968(pbis, cch, pchz);
+    Read__18CBinaryInputStreamiPv(pbis, cch, pchz);
     pchz[cch] = 0;
     *ppchz = pchz;
 }

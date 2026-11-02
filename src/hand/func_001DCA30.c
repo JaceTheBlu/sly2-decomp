@@ -1,5 +1,5 @@
 extern int D_003DA180;
-extern struct G D_003DD490;
+extern struct G g_sw;
 void *func_0013E368(struct G *g, int n);
 void func_0021ED58(char *p, void *q);
 void func_001DCA30(char *pch) {
@@ -10,5 +10,5 @@ void func_001DCA30(char *pch) {
     case 1: id = 0xE0; break;
     default: *pch = 0; return;
     }
-    func_0021ED58(pch, func_0013E368(&D_003DD490, id));
+    func_0021ED58(pch, func_0013E368(&g_sw, id));
 }

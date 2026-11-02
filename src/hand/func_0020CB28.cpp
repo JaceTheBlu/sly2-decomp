@@ -1,3 +1,4 @@
+#include "vu0.h"
 // Select the best animation direction and update its velocity.
 typedef int qword __attribute__((mode(TI)));
 typedef union {qword q;float f[4];} V;
@@ -9,7 +10,7 @@ struct E {struct ASEG *animation;int pad[3];qword velocity;FLOATWORD speed;int p
 struct P {char pad[0x10];qword direction;struct ALO *root;struct ASEGA *active;struct E *entries,*best;int flags,forward,backward;};
 extern const float D_002A8904;
 extern float D_002C3DE4;
-extern "C" struct TAG *func_0012F938(struct ASEG*,int);
+extern "C" struct TAG *PeaFindAsegLabel__FP4ASEG3OID(struct ASEG*,int);
 void ApplyAsegCur(struct ASEG*,struct ALO*,float,float,int,struct ASEGA**);
 extern "C" void func_001333C0(struct ASEGA*,int);
 static inline qword Dot(qword a,qword b){qword r,one;
@@ -21,7 +22,6 @@ static inline void Normalize(V*dst,qword v){qword length=Sqrt(Dot(v,v));register
 __asm__("vdiv $Q,$vf0w,%1x\n\tvwaitq\n\tvmulq.xyzw %0,%2,$Q":"=&j"(result):"j"(length),"j"(v));dst->q=result;}
 static inline qword NormalizeEntry(qword v){qword length=Sqrt(Dot(v,v));
 __asm__("vdiv $Q,$vf0w,%1x\n\tvwaitq\n\tvmulq.xyzw %0,%2,$Q":"=j"(length):"0"(length),"j"(v));return length;}
-static inline float Float(qword v){float f;__asm__("qmfc2.ni %0,%1":"=r"(f):"j"(v));return f;}
 static inline qword Scalar(const FLOATWORD*p){register qword v __asm__("vf1");register int w __asm__("$2")=p->word;__asm__("qmtc2.ni %1,%0":"=j"(v):"r"(w));return v;}
 static inline qword Scale(qword v,qword s){register qword r __asm__("vf2");__asm__("vmulx.xyzw %0,%1,%2x":"=j"(r):"j"(v),"j"(s));return r;}
 extern "C" void func_0020CB28(struct P*p,qword v)
@@ -40,7 +40,7 @@ extern "C" void func_0020CB28(struct P*p,qword v)
    do{
      struct ASEG *animation=entry->animation;
      if(animation){
-       float score=Float(DotReuse(scoringDirection,NormalizeEntry(entry->velocity)));
+       float score=GFromVf(DotReuse(scoringDirection,NormalizeEntry(entry->velocity)));
        if(animation==p->active->owner)score*=bias;
        if(maximum<score){maximum=score;best=entry;}
      }
@@ -54,7 +54,7 @@ extern "C" void func_0020CB28(struct P*p,qword v)
    int id;
    if(p->forward){id=0x17D;animation=best->animation;}
    else {id=0x17F;animation=best->animation;}
-   tag=func_0012F938(animation,id);
+   tag=PeaFindAsegLabel__FP4ASEG3OID(animation,id);
    if(tag)time=tag->value;
    ApplyAsegCur(best->animation,p->root,time,1.0f,p->flags,&p->active);
    func_001333C0(p->active,(int)p);

@@ -1,11 +1,11 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
 typedef union { qword r[4]; float m[4][4]; } M4;
-struct M3 {qword r[3];};
-union FRAME {M4 matrix;M3 basis;};
+union FRAME {M4 matrix;MATRIX3 basis;};
 struct JOB;
 struct O;
 union SOURCE {O *object;float deadline;};
-union MOTIONDATA {qword r[4];M3 rotation;};
+union MOTIONDATA {qword r[4];MATRIX3 rotation;};
 struct O {
  FRAME local;M4 world;float g80,g84;float *pg88,*pg8C;JOB *job;int k94;
  short k98,k9A;unsigned tag;O *parent;int priority;SOURCE source;
@@ -14,11 +14,11 @@ struct O {
 extern qword D_002A2DD0;
 extern "C" void *func_0023320C(void *d, void *s, int n);
 extern "C" void *func_002333B4(void *p, int c, int n);
-extern "C" M4 *func_0022CCD0(M4 *pm, struct O *pa, const M3 *basis, qword v);
-extern "C" M4 *func_0022CB90(M4 *pr, struct O *pa, const M3 *basis, qword c, qword d);
+extern "C" M4 *func_0022CCD0(M4 *pm, struct O *pa, const MATRIX3 *basis, qword v);
+extern "C" M4 *func_0022CB90(M4 *pr, struct O *pa, const MATRIX3 *basis, qword c, qword d);
 extern "C" M4 *func_0022CC00(M4 *pm, struct O *po, qword v);
 extern "C" qword func_0022CA18(struct O *pa, const M4 *matrix);
-extern "C" qword func_0011BFF0(const M3 *rotation);
+extern "C" qword DecomposeRotateMatrixEuler__FP7MATRIX3(const MATRIX3 *rotation);
 extern "C" void func_00117120(float g0, float g1, float g2, qword q0, qword q1, qword q2, qword q3, qword *pa, qword *pb, qword *pc);
 static __inline__ void Eval(struct O *po, qword *pa, qword *pb, qword *pc)
 {
@@ -70,7 +70,7 @@ extern "C" M4 *func_0022CDC0(M4 *pr, struct O *po)
                         initial = po->data.r[0];
                         break;
                     case 5:
-                        initial = func_0011BFF0(&po->data.rotation);
+                        initial = DecomposeRotateMatrixEuler__FP7MATRIX3(&po->data.rotation);
                         break;
                     default:
                         initial = DefaultPoint();

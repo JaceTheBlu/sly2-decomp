@@ -4,7 +4,7 @@ struct T { char pad[0x70]; qword x70; };
 union WORD { int bits; float value; };
 struct S { char pad[0x134]; union WORD x134; };
 struct P { char pad[0x18C4]; struct S *x18c4; char pad2[0x19CC-0x18C8]; struct T *x19cc; };
-extern qword D_002A2DC0;
+extern qword g_normalZ;
 qword func_001A62E8(struct S *p);
 #define FIELD_OFFSET(t,m) ((unsigned int)&(((t*)0x10000)->m)-0x10000)
 typedef char T_x70_Offset[FIELD_OFFSET(struct T,x70)==112?1:-1];
@@ -31,7 +31,7 @@ qword func_00190C58(struct P *p)
     q = func_001A62E8(p->x18c4);
     __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(q), "j"(p->x19cc->x70));
     {
-        register const qword *address __asm__("$2") = &D_002A2DC0;
+        register const qword *address __asm__("$2") = &g_normalZ;
         __asm__("lq %0,%1" : "=r"(fallback) : "m"(*address));
     }
     __asm__("vmul.xyz %0, %2, %2\n\tvaddw.x %1, $vf0, $vf0w\n\tvadday.x $ACC, %0, %0y\n\tvmaddz.x %0, %1, %0z\n\tvsqrt $Q, %0x\n\tvwaitq\n\tvaddq.x %0, $vf0, $Q"

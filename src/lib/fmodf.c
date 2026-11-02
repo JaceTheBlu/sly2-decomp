@@ -1,4 +1,4 @@
-// (Claude agent) 22/79: c.eq.s->bc1f hazard nop (toolchain) + 'lui v1; daddu s1,v1' hi-copy artefact of our PRE (Sony puts lui straight into s1).
+// 22/79: c.eq.s->bc1f hazard nop (toolchain) + 'lui v1; daddu s1,v1' hi-copy artefact of our PRE (Sony puts lui straight into s1).
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db

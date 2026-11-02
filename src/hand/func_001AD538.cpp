@@ -10,7 +10,7 @@ extern "C" {
 extern struct G D_002E65E0;
 extern struct B D_002E6604[];
 extern char D_002E6550[];
-extern struct GD D_003DD490;
+extern struct GD g_sw;
 extern struct H D_003D9ED0;
 extern struct E D_003D9EDC[];
 void func_001ACC38(void *p, int n);
@@ -30,7 +30,7 @@ extern "C" void func_001AD538(void)
     {
         struct B *pb = D_002E6604;
         for (i = 0; i < 3; i++, pb++) {
-            a[i] = F(D_003DD490.x3B1C, pb);
+            a[i] = F(g_sw.x3B1C, pb);
         }
     }
     switch (func_001B0078(&D_003D9ED0)) {

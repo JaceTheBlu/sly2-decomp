@@ -1,4 +1,4 @@
-/* func_001B4728: actor defaults init. The int -1 stores come before the float stores in source; gcc schedules them so x17F4 lands right after x220. (Claude agent) */
+/* func_001B4728: actor defaults init. The int -1 stores come before the float stores in source; gcc schedules them so x17F4 lands right after x220. */
 /* Complete actor defaults and embedded binding initialization. */
 struct SUB{float f0;int i;float f1,f2;};
 struct BIND{void*owner;char pad4[0x8C];int word90;float f94,f98;};

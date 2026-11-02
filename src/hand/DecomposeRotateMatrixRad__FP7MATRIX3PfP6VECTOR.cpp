@@ -1,8 +1,8 @@
+#include "vu0.h"
 struct MATRIX3 { float mat[3][4]; } __attribute__((aligned(16)));
 struct VECTOR { float x, y, z, w; } __attribute__((aligned(16)));
 extern VECTOR D_002A2DA0;
 extern "C" float acosf(float g);
-static inline float SqrtF(float x) { float r; __asm__ __volatile__("sqrt.s %0, %1" : "=&f"(r) : "f"(x)); return r; }
 
 void DecomposeRotateMatrixRad(MATRIX3 *pmat, float *prad, VECTOR *pvec)
 {
@@ -23,10 +23,10 @@ void DecomposeRotateMatrixRad(MATRIX3 *pmat, float *prad, VECTOR *pvec)
             gAbs = gRem;
         else if (gAbs < 0.0f)
             gAbs = 0.0f;
-        (&pvec->x)[i] = SqrtF(gAbs);
+        (&pvec->x)[i] = GSqrt(gAbs);
         gRem -= gAbs;
     }
-    pvec->z = SqrtF(gRem);
+    pvec->z = GSqrt(gRem);
 
     if (c < -0.9999f) {
         *prad = 3.14159265f;

@@ -1,4 +1,4 @@
-extern struct CLOCK { float t; float dt; } D_002DDED0;
+extern struct CLOCK { float t; float dt; } g_clock;
 typedef struct VT1 { struct { short d; short pad; void (*pfn)(void *, int); } a[64]; } VT1;
 typedef struct { char pad[0xC]; VT1 *vt; } W;
 typedef struct VT { struct { short d; short pad; void (*pfn)(void *, int, int, int, int, int); } a[8]; } VT;
@@ -53,7 +53,7 @@ void func_001D4940(OBJ *p, int n)
         break;
     }
     p->state = n;
-    p->t = D_002DDED0.t;
+    p->t = g_clock.t;
     switch (n) {
     case 0: {
         W *pw2 = p->pw;

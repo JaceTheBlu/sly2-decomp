@@ -1,4 +1,4 @@
-// (Claude agent) MATCH. Same shape as _dispRefImageField: 2.9-991111, setField inline with pointer params, shared else-store, long bit temps, descending pC, checkSize inline returning ok.
+// MATCH. Same shape as _dispRefImageField: 2.9-991111, setField inline with pointer params, shared else-store, long bit temps, descending pC, checkSize inline returning ok.
 // SLY2_CC: tools/compilers/extra/ee-gcc2.9-991111
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db

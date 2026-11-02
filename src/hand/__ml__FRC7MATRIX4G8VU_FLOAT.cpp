@@ -1,6 +1,6 @@
+#include "vecmat.h"
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
-struct MATRIX4 { qword r[4]; };
-struct VU_FLOAT { qword q; };
 static inline qword Mulx(qword a, qword f) { qword r; __asm__("vmulx.xyzw %0, %2, %1x" : "=j"(r) : "j"(f), "j"(a)); return r; }
 MATRIX4 operator*(const MATRIX4 &m, VU_FLOAT s) return mat
 {

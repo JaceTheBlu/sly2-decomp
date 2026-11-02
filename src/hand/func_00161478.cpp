@@ -1,3 +1,4 @@
+#include "clock.h"
 extern "C" {void*func_001291A8(void*,const void*);void func_00129EC8(void*);}
 struct CRefData{int tag;union{int n;float g;};};
 struct CRef:CRefData{
@@ -8,14 +9,13 @@ struct CRef:CRefData{
 struct OPT;
 struct H{char pad[0x9C];float start,end,elapsed;};
 struct G{char pad[0x3B0C];H*object;char pad10[0xC];OPT*primary;char pad20[0x38];OPT*options[9];};
-struct CLOCK{float time,dt;};
-extern G D_003DD490;
-extern CLOCK D_002DDED0;
+extern G g_sw;
+extern CLOCK g_clock;
 extern int D_002E0C20;
 extern char D_003D4A60[],D_002DE578[];
 extern "C" CRef func_002581C0(OPT*,void*);
 extern "C" CRef func_00258200(OPT*,const CRefData&,void*);
-extern "C" int func_00210AE0();
+extern "C" int _IppoFindPo__FP2PO();
 extern "C" void func_00154D88(void*,float);
 static inline float GetFloat(OPT*p,void*context){const CRef&r=func_002581C0(p,context);return r.g;}
 static inline void SetPv(OPT*p,const CRef&r,void*context){CRef arg(r);const CRef&ret=func_00258200(p,arg,context);}
@@ -28,18 +28,18 @@ static inline void SetPrimaryFloat(OPT*p,float value,void*context){
  CRef r(value);CRefCopy arg(r);const CRef&ret=func_00258200(p,arg,context);
 }
 extern "C" void func_00161478(){
- if(!D_003DD490.primary)return;
- float x=GetFloat(D_003DD490.primary,D_003D4A60);
- SetPrimaryFloat(D_003DD490.primary,x+D_002DDED0.dt,D_003D4A60);
- unsigned int i=func_00210AE0();
+ if(!g_sw.primary)return;
+ float x=GetFloat(g_sw.primary,D_003D4A60);
+ SetPrimaryFloat(g_sw.primary,x+g_clock.dt,D_003D4A60);
+ unsigned int i=_IppoFindPo__FP2PO();
  if(i<9){
-  OPT*p=D_003DD490.options[i];
-  if(p){float g=GetFloat(p,D_003D4A60);SetFloat(p,g+D_002DDED0.dt,D_003D4A60);}
+  OPT*p=g_sw.options[i];
+  if(p){float g=GetFloat(p,D_003D4A60);SetFloat(p,g+g_clock.dt,D_003D4A60);}
  }
- H*p=D_003DD490.object;
+ H*p=g_sw.object;
  if(p&&(float)D_002E0C20<10.0f){
-  p->elapsed+=D_002DDED0.dt;
-  if(p->start<p->elapsed)func_00154D88(D_002DE578,D_002DDED0.dt/(p->end-p->start));
+  p->elapsed+=g_clock.dt;
+  if(p->start<p->elapsed)func_00154D88(D_002DE578,g_clock.dt/(p->end-p->start));
  }
 }
 
@@ -68,6 +68,3 @@ typedef char G_Object[FIELD_OFFSET(G,object)==0x3B0C?1:-1];
 typedef char G_Primary[FIELD_OFFSET(G,primary)==0x3B1C?1:-1];
 typedef char G_Options[FIELD_OFFSET(G,options)==0x3B58?1:-1];
 typedef char G_OptionCount[sizeof(((G*)0)->options)/sizeof(OPT*)==9?1:-1];
-typedef char Clock_Size[sizeof(CLOCK)==8?1:-1];
-typedef char Clock_Time[FIELD_OFFSET(CLOCK,time)==0?1:-1];
-typedef char Clock_Delta[FIELD_OFFSET(CLOCK,dt)==4?1:-1];

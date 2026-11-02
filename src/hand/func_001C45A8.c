@@ -1,8 +1,8 @@
 struct S { char pad[0x1C]; float f1C; char p1[0x2C - 0x20]; float f2C; int grfCur; char p2[0x78 - 0x34]; int grfPrev; char p3[0x88 - 0x7C]; float a[16]; float aC8[2]; float aD0[2]; };
-extern float D_002DDED0;
+extern float g_clock;
 void func_001C45A8(struct S *p)
 {
-    float t = D_002DDED0;
+    float t = g_clock;
     int grf = p->grfCur & ~p->grfPrev;
     float *pg;
     p->grfPrev = p->grfCur;

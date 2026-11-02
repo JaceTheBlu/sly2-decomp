@@ -1,6 +1,6 @@
 // func_00197500: ported from Lilly's personal Sly 2 decomp (src/P2/jtair_update.c), reduced to the declarations it needs.
 // Every global is named by its address; the function keeps its readable name and gets the team symbol through __asm__.
-// Globals: D_002BF818 (D_002BF818), D_002BF81C (D_002BF81C), D_002BF820 (D_002BF820), D_002BF82C (D_002BF82C), D_002F7900 (g_SheetGangMurray), D_002E1E40 (g_SheetGangSly), D_002BF830 (g_SheetMovementMiscHoverPackDuration), D_002DDED0 (g_clock), D_002A2DD0 (g_qwZero)
+// Globals: D_002BF818 (D_002BF818), D_002BF81C (D_002BF81C), D_002BF820 (D_002BF820), D_002BF82C (D_002BF82C), D_002F7900 (g_SheetGangMurray), D_002E1E40 (g_SheetGangSly), D_002BF830 (g_SheetMovementMiscHoverPackDuration), g_clock (g_clock), D_002A2DD0 (g_qwZero)
 // 0x00197500 UpdateJtAirInput (our name; KB FUN_00197500)
 typedef unsigned char    uint8_t;
 typedef unsigned int     uint32_t;
@@ -276,7 +276,7 @@ struct CLOCK
       int cWrapAround;
       undefined4 unk_0x5c;
 };
-extern CLOCK D_002DDED0;
+extern CLOCK g_clock;
 struct SOPART;
 struct BND;
 struct WRBG;
@@ -1649,7 +1649,7 @@ void UpdateJtAirInput(JTAIR *pjtair)
         switch (pjtair->nState)
         {
             case 0:
-                if (D_002DDED0.t - pjtair->tState > D_002BF818)
+                if (g_clock.t - pjtair->tState > D_002BF818)
                 {
                     if (!(pctl->grfbtn & 0x40) && pjtair->nUnk40 != 3)
                         pjtair->fUnk24 = 1;
@@ -1659,7 +1659,7 @@ void UpdateJtAirInput(JTAIR *pjtair)
                     SteerJtAirClip(pjtair);
                 break;
             case 2:
-                if (D_002DDED0.t - pjtair->tState > D_002BF81C)
+                if (g_clock.t - pjtair->tState > D_002BF81C)
                     SetJtAirState(pjtair, 3, pjtair->plo);
                 else if (!pjtair->fUnk30 && pctl->sLeft > 0.5f)
                     SteerJtAirClip(pjtair);
@@ -1672,7 +1672,7 @@ void UpdateJtAirInput(JTAIR *pjtair)
             case 6:
                 if (((CID88 *)pjtair->plo)->nUnk17c == 3)
                     SetJtAirState(pjtair, 4, 0);
-                else if (*(float *)&pjtair->pstepplayer->pxfUnk58->pxfRef < D_002DDED0.t)
+                else if (*(float *)&pjtair->pstepplayer->pxfUnk58->pxfRef < g_clock.t)
                     StartJtGrabForAirKind(pjtair);
                 break;
             case 9:
@@ -1683,7 +1683,7 @@ void UpdateJtAirInput(JTAIR *pjtair)
             case 0xE:
             case 0xF:
             case 0x10:
-                if (*(float *)&pjtair->pstepplayer->pxfUnk58->pxfRef < D_002DDED0.t)
+                if (*(float *)&pjtair->pstepplayer->pxfUnk58->pxfRef < g_clock.t)
                     StartJtGrabForAirKind(pjtair);
                 break;
             case 0x12:
@@ -1691,21 +1691,21 @@ void UpdateJtAirInput(JTAIR *pjtair)
                 float tLabel = TFindAsegLabel(D_002F7900->moverec.pasegUnk64, (OID)0x1C7);
                 float t = *(float *)&pjtair->pstepplayer->pxfUnk58->pxfRef;
                 t -= tLabel;
-                if (t <= D_002DDED0.t && D_002F7900->moverec.nState != 3)
+                if (t <= g_clock.t && D_002F7900->moverec.nState != 3)
                 {
                     SetJtThrowState((JTTHROW *)&D_002F7900->moverec, 3);
                     break;
                 }
-                if (*(float *)&pjtair->pstepplayer->pxfUnk58->pxfRef < D_002DDED0.t)
+                if (*(float *)&pjtair->pstepplayer->pxfUnk58->pxfRef < g_clock.t)
                     StartJtGrabForAirKind(pjtair);
                 break;
             }
             case 8:
-                if (*(float *)&pjtair->pstepplayer->pxfUnk58->pxfRef < D_002DDED0.t)
+                if (*(float *)&pjtair->pstepplayer->pxfUnk58->pxfRef < g_clock.t)
                     SetJtAirState(pjtair, 4, pjtair->plo);
                 break;
             case 5:
-                if (D_002DDED0.t - pjtair->tState > 0.25f && fFloor)
+                if (g_clock.t - pjtair->tState > 0.25f && fFloor)
                 {
                     pjtair->pstepplayer->VUnk87(0);
                     break;
@@ -1742,7 +1742,7 @@ void UpdateJtAirInput(JTAIR *pjtair)
                     RespawnAtSafeSpot(pjtair->pstepplayer, 0);
                 break;
             case 0x11:
-                if (D_002DDED0.t - pjtair->tState > 0.25f)
+                if (g_clock.t - pjtair->tState > 0.25f)
                 {
                     if (pctl->GrfConsumePressed(0x40, 0.25f))
                     {
@@ -1755,9 +1755,9 @@ void UpdateJtAirInput(JTAIR *pjtair)
                 else
                 {
                     STEPPLAYER *pstepplayer = pjtair->pstepplayer;
-                    pstepplayer->dposUnk1010 = PosSmooth(pstepplayer->dposUnk1010, D_002A2DD0, D_002DDED0.dt, &D_002BF820, 0);
+                    pstepplayer->dposUnk1010 = PosSmooth(pstepplayer->dposUnk1010, D_002A2DD0, g_clock.dt, &D_002BF820, 0);
                     *(qword *)&vec = ConvertXfPos(pjtair->pedge->pxf, 0, pjtair->posEdge);
-                    if (D_002DDED0.t - pjtair->tState > 0.03f)
+                    if (g_clock.t - pjtair->tState > 0.03f)
                     {
                         if (!FCheckJtEdgeGrab(pjtair, (SOPART *)pjtair->pedge, *(qword *)&vec, pjtair->nUnk100, (void *)pjtair->nUnk104, &pjtair->normalEdge))
                         {
@@ -1796,7 +1796,7 @@ void UpdateJtAirInput(JTAIR *pjtair)
                 }
                 break;
             case 0x15:
-                if (pjtair->pact8->tEnd < D_002DDED0.t)
+                if (pjtair->pact8->tEnd < g_clock.t)
                 {
                     JT *pjt = 0;
                     int nUnk10;
@@ -1813,7 +1813,7 @@ void UpdateJtAirInput(JTAIR *pjtair)
                         pjt->janim.nUnk10 = nUnk10;
                     break;
                 }
-                if (pjtair->placeTarget.pspot != 0 && pjtair->pact8->tEnd < D_002DDED0.t + 0.25f)
+                if (pjtair->placeTarget.pspot != 0 && pjtair->pact8->tEnd < g_clock.t + 0.25f)
                 {
                     if (FIsBasicDerivedFrom(pjtair->placeTarget.plo, (CID)0x13) || FIsBasicDerivedFrom(pjtair->placeTarget.plo, (CID)0xB) ||
                         FIsBasicDerivedFrom(pjtair->placeTarget.plo, (CID)0xD) || FIsBasicDerivedFrom(pjtair->placeTarget.plo, (CID)0x27) ||
@@ -1837,18 +1837,18 @@ void UpdateJtAirInput(JTAIR *pjtair)
                 }
                 if (pjtair->placeTarget.pspot != 0 || pjtair->placeTarget.ppart != 0)
                 {
-                    qword posTarget = QwPosOfJtPlace(GMinOf(0.7f, pjtair->pact8->tEnd - D_002DDED0.t), pjtair->pstepplayer, &pjtair->placeTarget);
+                    qword posTarget = QwPosOfJtPlace(GMinOf(0.7f, pjtair->pact8->tEnd - g_clock.t), pjtair->pstepplayer, &pjtair->placeTarget);
                     pjtair->pact8->SetGoal(ConvertXfPos(0, pjtair->pstepplayer->pxfUnk58->pxfParent, posTarget), pjtair->pact8->qwGoalVel);
                 }
                 break;
             case 0x16:
                 if (GetHeroMp(pjtair->pstepplayer) <= 0)
                     SetJtAirState(pjtair, 4, 0);
-                else if (D_002DDED0.t - pjtair->tState > D_002BF82C && fFloor)
+                else if (g_clock.t - pjtair->tState > D_002BF82C && fFloor)
                     pjtair->pstepplayer->VUnk87(0);
-                else if (D_002DDED0.t - pjtair->tState > D_002BF82C && !(pctl->grfbtn & GrfMatchingSlots(pjtair->pstepplayer, 0xC)))
+                else if (g_clock.t - pjtair->tState > D_002BF82C && !(pctl->grfbtn & GrfMatchingSlots(pjtair->pstepplayer, 0xC)))
                     SetJtAirState(pjtair, 4, 0);
-                else if (D_002DDED0.t - pjtair->tState > D_002BF830)
+                else if (g_clock.t - pjtair->tState > D_002BF830)
                     SetJtAirState(pjtair, 4, 0);
                 break;
         }

@@ -1,3 +1,4 @@
+#include "clock.h"
 // Update actor contacts and select the neighboring actor.
 typedef int qword __attribute__((mode(TI)));
 struct O { int x0; struct S *p; };
@@ -6,8 +7,7 @@ struct EDGE { struct SIDE as[2]; qword v80; char pad[0xC]; int k9C; char pad2[0x
 struct LN { struct EDGE *pe; struct LN *pNext; };
 struct Q { char pad[0x60]; int id; struct LN *pln; };
 struct S { char pad[0xEC]; struct Q *pq; char pad1[0x150 - 0xF0]; int x150; float t154; int x158; char pad2[0x190 - 0x15C]; qword v190; struct S *x1A0; };
-struct CLOCK { float t; float dt; };
-extern struct CLOCK D_002DDED0;
+extern struct CLOCK g_clock;
 extern float D_002C42E0;
 extern float D_002C3C60[];
 extern "C" void func_001F4F10(struct S *p);
@@ -26,7 +26,7 @@ extern "C" void func_00224380(struct S *p)
     struct LN *pln;
     int id;
     func_001F4F10(p);
-    if (!p->x150 && D_002DDED0.t - p->t154 < D_002C42E0) return;
+    if (!p->x150 && g_clock.t - p->t154 < D_002C42E0) return;
     pln = p->pq->pln;
     id = p->pq->id;
     for (; pln; pln = pln->pNext) {

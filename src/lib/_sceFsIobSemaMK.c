@@ -2,7 +2,7 @@
 // SLY2_CFLAGS: -O2 -G0
 // SLY2_ASM: gnu-reorder-db
 __asm__(".macro sq r, m\n\tsd \\r, \\m\n\t.endm\n\t.macro lq r, m\n\tld \\r, \\m\n\t.endm");
-// (Claude agent) near miss: 3/28, SemaParam store order (all 6 orders tried, void* option too)
+// near miss: 3/28, SemaParam store order (all 6 orders tried, void* option too)
 struct SemaParam { int currentCount; int maxCount; int initCount; int numWaitThreads; unsigned int attr; unsigned int option; };
 extern int D_002C4A88;
 extern int D_002C4A8C;

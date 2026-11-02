@@ -1,8 +1,10 @@
+#include "vtable.h"
+#include "clock.h"
 // func_00192BD8: set the step of a hero action context (the struct at actor+0x4C0; func_001911A8 calls it).
 // Leaves the old step (cleanup per step / per action), then enters the new one: picks the animation clip, the
 // script, the flags and the blend for the new step and starts them on the actor.
 //
-// Matching notes (wave-5 lane 5, fresh rewrite):
+// Matching notes:
 // - p ends up in s2 only because two block-local call-crossing pointers take s0/s1 while p is live (old action 4:
 //   `ACTOR *actor = p->pactor` before the position call; action 34: `AUX *aux = p->aux` before func_001A62E8).
 // - Normalize: return-style inline plus a split vdiv / vmulq (see Unit) keeps the fallback lq/qmtc2 of the target.
@@ -13,7 +15,6 @@
 typedef int qword __attribute__((mode(TI)));
 typedef unsigned int uint;
 
-struct VTE { short delta, pad; void *fn; };
 struct M3 { qword row[3]; };
 struct CLIP { char pad0[0x74]; float duration; };
 struct JOY { char pad0[0x1C]; float amount; };
@@ -58,18 +59,17 @@ struct CONTEXT {
     CLIP *clip4F0, *clip4F4, *clip4F8; int tag; int fInhibit; char pad504[0x50C - 0x504];
     CLIP *clip50C, *clip510, *clip514;
 };
-struct CLOCK { float t, dt; };
 struct VU_FLOAT { qword q; };
 union U { qword q; float f[4]; int i[4]; };
 
 extern "C" {
-extern CLOCK D_002DDED0;          // g_clock
+extern CLOCK g_clock;          // g_clock
 extern ACTOR *D_002E1E40;         // the player
 extern ACTOR *D_002F7900;
-extern MANAGER D_002DDF40;
-extern qword D_002A2DA0, D_002A2DC0, D_002A2DD0, D_002BF650;
+extern MANAGER g_cm;
+extern qword D_002A2DA0, g_normalZ, D_002A2DD0, D_002BF650;
 extern float D_002BF63C, D_002BF640;
-int func_00132B10(void *, int);
+int FIsBasicDerivedFrom__FP5BASIC3CID(void *, int);
 qword func_001A62E8(void *);
 M3 *func_001A6318(void *);
 void func_001E6F60(SOURCE *, qword, void *, void *, void *, float *, float *);
@@ -104,12 +104,12 @@ void func_0018C120(ACTOR *, int);
 static inline void SourceState(SOURCE *p, int state)
 {
     VTE &v = p->vt[3];
-    ((void (*)(void *, int, void *, void *, void *, void *))v.fn)((char *)p + v.delta, state, 0, 0, 0, 0);
+    ((void (*)(void *, int, void *, void *, void *, void *))v.pfn)((char *)p + v.delta, state, 0, 0, 0, 0);
 }
-static inline void Notify(LO *p, int slot) { VTE &v = p->vt[slot]; ((void (*)(void *))v.fn)((char *)p + v.delta); }
-static inline void Notify(ACTOR *p, int slot) { VTE &v = p->vt[slot]; ((void (*)(void *))v.fn)((char *)p + v.delta); }
-static inline void SetVector(ACTOR *p, int slot, qword q) { VTE &v = p->vt[slot]; ((void (*)(void *, qword))v.fn)((char *)p + v.delta, q); }
-static inline void SetPointer(ACTOR *p, int slot, void *pv) { VTE &v = p->vt[slot]; ((void (*)(void *, void *))v.fn)((char *)p + v.delta, pv); }
+static inline void Notify(LO *p, int slot) { VTE &v = p->vt[slot]; ((void (*)(void *))v.pfn)((char *)p + v.delta); }
+static inline void Notify(ACTOR *p, int slot) { VTE &v = p->vt[slot]; ((void (*)(void *))v.pfn)((char *)p + v.delta); }
+static inline void SetVector(ACTOR *p, int slot, qword q) { VTE &v = p->vt[slot]; ((void (*)(void *, qword))v.pfn)((char *)p + v.delta, q); }
+static inline void SetPointer(ACTOR *p, int slot, void *pv) { VTE &v = p->vt[slot]; ((void (*)(void *, void *))v.pfn)((char *)p + v.delta, pv); }
 // bit 0 set: the word holds the flags itself; otherwise it points to them
 static inline void AddFlags(uint *pflags, uint bits)
 {
@@ -190,7 +190,7 @@ extern "C" void func_00192BD8(CONTEXT *p, int step)
         p->pactor->x1038 = -1;
         break;
     case -1:
-        if (p->focus && func_00132B10(p->focus, 10)) {
+        if (p->focus && FIsBasicDerivedFrom__FP5BASIC3CID(p->focus, 10)) {
             SOURCE *source = p->focus;
             func_001E6F60(source, func_001A62E8(p->pactor), 0, 0, 0, &p->param, &p->value);
         }
@@ -243,7 +243,7 @@ extern "C" void func_00192BD8(CONTEXT *p, int step)
             break;
         }
         p->previous = -1;
-        p->pactor->tStamp = D_002DDED0.t;
+        p->pactor->tStamp = g_clock.t;
         break;
     case 7:
         if (Less(step, 11) && !Less(step, 9)) {
@@ -251,19 +251,19 @@ extern "C" void func_00192BD8(CONTEXT *p, int step)
             if (source->other) {
                 qword pos = func_001A62E8(source->other);
                 SetVector(p->pactor, 29, Sub(pos, p->pactor->posOffset));
-                p->pactor->motion = AddScaled(pos, D_002A2DC0, VuFloat(p->pactor->height));
+                p->pactor->motion = AddScaled(pos, g_normalZ, VuFloat(p->pactor->height));
                 func_002046B0(p->pactor, func_001A6318(source->other)->row[0]);
                 SetPointer(p->pactor, 30, p->pactor->local);
                 SetVector(p->pactor, 35, D_002A2DD0);
                 SetVector(p->pactor, 36, D_002A2DD0);
             }
-            func_0014E328(&D_002DDF40, 10, (CAMERA *)((char *)&D_002DDF40 + 0x4C0), p->pactor, p->pactor->anchor);
+            func_0014E328(&g_cm, 10, (CAMERA *)((char *)&g_cm + 0x4C0), p->pactor, p->pactor->anchor);
         }
         break;
     case 9:
     case 10:
         if (!(Less(step, 11) && !Less(step, 9)))
-            func_0014E4C8(&D_002DDF40, 2, 10, (CAMERA *)((char *)&D_002DDF40 + 0x4C0), 0, 0);
+            func_0014E4C8(&g_cm, 2, 10, (CAMERA *)((char *)&g_cm + 0x4C0), 0, 0);
         break;
     }
 
@@ -406,7 +406,7 @@ extern "C" void func_00192BD8(CONTEXT *p, int step)
         case 0:
             clip = p->clip170;
             if (!p->pactor->focus) {
-                if (func_00132B10(p->focus, 12)) {
+                if (FIsBasicDerivedFrom__FP5BASIC3CID(p->focus, 12)) {
                     SOURCE *source = p->focus;
                     if (source->actor)
                         func_00140C88(p->pactor, source->actor);
@@ -415,7 +415,7 @@ extern "C" void func_00192BD8(CONTEXT *p, int step)
                         p->aux->target = source;
                         func_00140C88(p->pactor, p->aux);
                     }
-                } else if (func_00132B10(p->focus, 34)) {
+                } else if (FIsBasicDerivedFrom__FP5BASIC3CID(p->focus, 34)) {
                     SOURCE *source = p->focus;
                     if (source->owner)
                         func_00140C88(p->pactor, source->owner);
@@ -427,7 +427,7 @@ extern "C" void func_00192BD8(CONTEXT *p, int step)
                         p->aux->value = source->parameter;
                         func_00140C88(p->pactor, p->aux);
                     }
-                } else if (func_00132B10(p->focus, 38)) {
+                } else if (FIsBasicDerivedFrom__FP5BASIC3CID(p->focus, 38)) {
                     SOURCE *source = p->focus;
                     if (source->owner)
                         func_00140C88(p->pactor, source->owner);
@@ -509,14 +509,14 @@ extern "C" void func_00192BD8(CONTEXT *p, int step)
         break;
     }
     p->step = step;
-    p->tStep = D_002DDED0.t;
+    p->tStep = g_clock.t;
     if (step != -1) {
         func_00130658(&p->pactor->animation);
         func_001F15B8(&p->pactor->component);
         func_001305B8(clip, p->pactor, blend, speed, flags, &p->pactor->animation);
         func_001F1448(script, p->pactor, -1, flags, &p->pactor->component);
         Notify(p->pactor, 90);
-        if (func_00132B10(p->pactor, 53))
+        if (FIsBasicDerivedFrom__FP5BASIC3CID(p->pactor, 53))
             func_0018C120(p->pactor, special);
     }
 }

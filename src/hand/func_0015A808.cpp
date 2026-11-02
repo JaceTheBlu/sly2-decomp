@@ -1,20 +1,21 @@
-// func_0015A808: EMITB choose emit position/direction (Claude agent, lanes E3-E11).
+#include "mat.h"
+#include "vu0.h"
+#include "util.h"
+// func_0015A808: EMITB choose emit position/direction.
 // Notes: the unused case-1 VU_VECTOR[3] frees the stack slot that case 3's an[] reuses; VLen = one length-squared asm
 // plus a separate vsqrt asm; Normalize returns its VU_VECTOR by value (gives dir its stack slot).
 typedef int qword __attribute__((mode(TI)));
 struct VU_FLOAT { qword q; VU_FLOAT(float f) { __asm__("qmtc2.ni %1, %0" : "=j"(q) : "r"(f)); } };
 struct VU_VECTOR { qword q; };
 static inline VU_VECTOR V(qword q) { VU_VECTOR v; v.q = q; return v; }
-struct MATRIX3 { qword r[3]; };
 struct CM { char pad[0x60]; MATRIX3 mat; };
-extern CM D_002DDF40;
+extern CM g_cm;
 extern qword D_002A2DA0;
 struct TRI { int aipos[3]; float sArea; };
 struct EMITMESH { int cpos; qword *apos; int ctri; TRI *atri; qword *anormal; float sArea; };
 struct BOXE { float xMin, yMin, zMin, pad; float xMax, yMax, zMax; };
 struct MESHO { char pad[0xE8]; int cs; int padEC; float *as; };
 struct EMITO { void *palo; MESHO *pmesh; };
-struct LM { float gMin, gMax; };
 struct EP {
     int kind;
     int kindDir;
@@ -32,12 +33,10 @@ struct EMITB {
     struct EP ep;
 };
 extern "C" {
-float func_0011D448(float gMin, float gMax);
+float GRandInRange__Fff(float gMin, float gMax);
 void func_001E6F10(MESHO *pmesh, float g, qword *ppos, qword *pnormal);
 MATRIX3 *func_001A6318(void *palo);
 }
-static inline qword Sub(qword a, qword b) { qword d; __asm__("vsub.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
-static inline qword Add(qword a, qword b) { qword d; __asm__("vadd.xyzw %0, %1, %2" : "=j"(d) : "j"(a), "j"(b)); return d; }
 static inline qword Cross(qword a, qword b)
 {
     qword d;
@@ -109,9 +108,9 @@ extern "C" void func_0015A808(EMITB *p, int i, int c, qword *ppos, qword *pv)
         { VU_VECTOR avUnused[3]; } // unused 48-byte local: frees the slot an[] reuses in case 3
         BOXE *pbox = (BOXE *)pep->pv30;
         float *pf = (float *)ppos;
-        pf[0] = func_0011D448(pbox->xMin, pbox->xMax);
-        pf[1] = func_0011D448(pbox->yMin, pbox->yMax);
-        pf[2] = func_0011D448(pbox->zMin, pbox->zMax);
+        pf[0] = GRandInRange__Fff(pbox->xMin, pbox->xMax);
+        pf[1] = GRandInRange__Fff(pbox->yMin, pbox->yMax);
+        pf[2] = GRandInRange__Fff(pbox->zMin, pbox->zMax);
         break;
     }
     case 2: {
@@ -125,7 +124,7 @@ extern "C" void func_0015A808(EMITB *p, int i, int c, qword *ppos, qword *pv)
         }
         float ds = pmesh->as[pmesh->cs - 1] / (float)c;
         float s = (float)i * ds;
-        float g = func_0011D448(s, s + ds);
+        float g = GRandInRange__Fff(s, s + ds);
         switch (pep->kindDir) {
         default:
             func_001E6F10(pmesh, g, ppos, 0);
@@ -143,7 +142,7 @@ extern "C" void func_0015A808(EMITB *p, int i, int c, qword *ppos, qword *pv)
     }
     case 3: {
         EMITMESH *pem = (EMITMESH *)pep->pv30;
-        float s = func_0011D448(0.0f, 1.0f) * pem->sArea;
+        float s = GRandInRange__Fff(0.0f, 1.0f) * pem->sArea;
         TRI *ptri;
         int itri;
         for (itri = 0; itri < pem->ctri; itri++) {
@@ -155,8 +154,8 @@ extern "C" void func_0015A808(EMITB *p, int i, int c, qword *ppos, qword *pv)
         av[0].q = pem->apos[ptri->aipos[0]];
         av[1].q = pem->apos[ptri->aipos[1]];
         av[2].q = pem->apos[ptri->aipos[2]];
-        float u = func_0011D448(0.0f, 1.0f);
-        float v = func_0011D448(0.0f, 1.0f - u);
+        float u = GRandInRange__Fff(0.0f, 1.0f);
+        float v = GRandInRange__Fff(0.0f, 1.0f - u);
         float w = 1.0f - u - v;
         *ppos = Combo3(u, av[0], v, av[1], w, av[2]);
         if (pep->kindDir == 5) {
@@ -176,15 +175,15 @@ extern "C" void func_0015A808(EMITB *p, int i, int c, qword *ppos, qword *pv)
         *pv = pep->v40;
         break;
     case 1:
-        *pv = Sub(*ppos, pep->v40);
+        *pv = QwSub(*ppos, pep->v40);
         break;
     case 4: {
         void *palo = p->pemito->palo;
         if (palo) {
             MATRIX3 *pm = func_001A6318(palo);
-            *pv = MulTMat(*pm, MulCam(&D_002DDF40, pep->v40));
+            *pv = MulTMat(*pm, MulCam(&g_cm, pep->v40));
         } else {
-            *pv = MulCam(&D_002DDF40, pep->v40);
+            *pv = MulCam(&g_cm, pep->v40);
         }
         break;
     }
@@ -200,6 +199,6 @@ normalize:
         VU_VECTOR dir = Normalize(*pv);
         *pv = dir.q;
         qword pos = *ppos;
-        *ppos = Add(pos, Scale(VU_FLOAT(func_0011D448(pep->lm.gMin, plm->gMax)), dir));
+        *ppos = QwAdd(pos, Scale(VU_FLOAT(GRandInRange__Fff(pep->lm.gMin, plm->gMax)), dir));
     }
 }

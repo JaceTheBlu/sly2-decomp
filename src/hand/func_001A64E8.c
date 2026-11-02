@@ -4,12 +4,12 @@ struct LO {int x0,x4,x8;VTE*vt;};
 struct SUB {char pad[0x9C];int x9C;char pad2[0x100-0xA0];};
 struct ALO {char pad[0x50];int c;struct SUB*a;};
 struct E {int grf,id,ib;};
-extern char D_003DD490[];
+extern char g_sw[];
 void*func_001F6030(struct ALO*,int);
 void func_001F2AD0(struct ALO*, void*);
 void*func_001F5FF8(struct ALO*,int);
 void func_001F69F8(struct ALO*,int);
-struct LO*func_0015E938(void*,int,int,struct ALO*);
+struct LO*PloFindSwObject__FP2SWi3OIDP2LO(void*,int,int,struct ALO*);
 void func_001A64E8(struct ALO*palo,
 int c,struct E*ae){
 int i=0;
@@ -35,7 +35,7 @@ done:;
   }else{
    int k;struct LO*p;
    if(grf&2)k=4;else k=(grf&1)?5:1;
-   p=func_0015E938(D_003DD490,(pe->grf&0x400)?k|0x400:k,pe->id,palo);
+   p=PloFindSwObject__FP2SWi3OIDP2LO(g_sw,(pe->grf&0x400)?k|0x400:k,pe->id,palo);
    if(!p){i++;continue;}
    if(pe->grf&0x200)p->vt[9].pfn((struct LO*)((char*)p+p->vt[9].d));
    i++;

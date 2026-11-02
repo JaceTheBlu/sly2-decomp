@@ -1,10 +1,10 @@
+#include "mat.h"
 typedef int qword __attribute__((mode(TI)));
 union U{qword q;float f[4];};
-struct M4{qword r[4];};
-struct CM{char pad[0x40];float sx,sy;char pad48[0x18];M4 mat;};
+struct CM{char pad[0x40];float sx,sy;char pad48[0x18];MATRIX4 mat;};
 struct S{char pad[0x80];float planar;int edge,range,occlusion;};
 struct LSG;
-extern "C" CM D_002DDF40;
+extern "C" CM g_cm;
 extern "C" float D_002BE5B8,D_002BE5BC,D_002BE5C0,D_002BE5C4,D_002BE5C8;
 extern "C" qword func_0014F308(CM*,qword);
 extern "C" int func_00173588(qword,float);
@@ -20,7 +20,7 @@ static inline int TooFar(qword a,float limit){return limit<Len2(a);}
 extern "C" int func_00173768(S*p,qword pos,int count,void**objects,float distance){
  register int cso asm("$19")=count;register void**apso asm("$18")=objects;
  U raised,origin,position,difference;
- register CM*camera asm("$2")=&D_002DDF40;
+ register CM*camera asm("$2")=&g_cm;
  position.q=pos;
  qword cpu,point,vector;ReadInputs(camera,position,cpu,point,vector);qword delta=Sub(point,vector);origin.q=cpu;difference.q=delta;
  distance*=D_002BE5B8;

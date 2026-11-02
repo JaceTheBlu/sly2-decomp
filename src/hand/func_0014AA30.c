@@ -6,8 +6,8 @@ extern struct RANGE D_002BD488;
 extern struct RANGE D_002BD490;
 extern struct RANGE D_002BD498;
 extern struct RANGE D_002BD4A0;
-extern char D_003DD490[];
-extern char D_002DDF40[];
+extern char g_sw[];
+extern char g_cm[];
 struct E { int pad[2]; void *x8; };
 struct Q { char pad[0xF0]; float *xF0; qword *xF4; };
 struct O { char pad[0x50]; int x50; int x54; struct E *x58; struct Q *x5C; };
@@ -31,7 +31,7 @@ int func_0014AA30(struct P *p)
     int iBest = -1;
     int i = 0;
     float ag[1];
-    void *pv = func_001C4840(D_003DD490);
+    void *pv = func_001C4840(g_sw);
     float gBest = -1.0f;
     func_001E6F60(p->p38->x5C, func_001A62E8(pv), 0, 0, 0, 0, ag);
     for (; i < p->p38->x54; i++) {
@@ -49,7 +49,7 @@ int func_0014AA30(struct P *p)
             u1 = 1.0f - GRemap(&D_002BD488, g);
         else
             u1 = 0.0f;
-        v.q = func_0014F308(D_002DDF40, p->p38->x5C->xF4[i]);
+        v.q = func_0014F308(g_cm, p->p38->x5C->xF4[i]);
         if (func_0011D910(&D_002BD490, v.f[2]))
             u2 = GRemap(&D_002BD490, v.f[2]);
         else if (func_0011D910(&D_002BD498, v.f[2]))

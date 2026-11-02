@@ -1,8 +1,8 @@
-struct DL { void *head; void *tail; int ibDle; };
+#include "dl.h"
 struct N { int id; struct N *pnParent; int x8; int xC; int x10; struct N *pnNext; struct DL dl; int pad; };
 struct AL { int cb; int cbAlign; };
-extern char D_003DD490[];
-void *func_001AE2A0(const struct AL *pal);
+extern char g_sw[];
+void *PvAllocSwClearImpl__FP7SWALLOC(const struct AL *pal);
 void func_0011A050(struct DL *pdl, int ib);
 int func_001C9968(int id);
 struct DL *func_0015E3C0(void *p, int id);
@@ -24,14 +24,14 @@ again:
     }
     al.cb = c * sizeof(struct N);
     al.cbAlign = 0x10;
-    pnNew = (struct N *)func_001AE2A0(&al);
+    pnNew = (struct N *)PvAllocSwClearImpl__FP7SWALLOC(&al);
     pnParent = p;
     for (i = 0; i < c; i++) {
         pn = &pnNew[i];
         func_0011A050(&pn->dl, 0x14);
         pn->id = aid[i];
         pn->x8 = func_001C9968(pn->id);
-        func_0011A070(func_0015E3C0(D_003DD490, pn->x8), pn);
+        func_0011A070(func_0015E3C0(g_sw, pn->x8), pn);
         pn->pnParent = pnParent;
         func_0011A070(&pnParent->dl, pn);
         pnParent = pn;

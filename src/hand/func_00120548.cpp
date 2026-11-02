@@ -1,4 +1,4 @@
-// MATCH (Claude agent laneB14, 2026-10-23), from func_00120548.cpp (6). FEq body written out with one commented register pin (pb in a1)
+// MATCH, from func_00120548.cpp (6). FEq body written out with one commented register pin (pb in a1)
 // plus one empty asm whose only job is extra uses of f (f is live from entry on the default path, so its priority was below the return pointer's).
 struct CRef {
     int m_tagk; int m_tag;
