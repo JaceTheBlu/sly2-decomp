@@ -13,7 +13,7 @@ struct P {
     char pad2[0x1088 - 0x58]; int x1088; char pad3[4]; struct O **apo; int cpo;
 };
 extern char D_002BC9F0[];
-void func_00203A38(struct P *);
+void PostStepLoad__FP4STEP(struct P *);
 void func_001A64E8(struct P *, int, void *);
 void func_001959C0(void *);
 void func_001910F8(void *);
@@ -39,7 +39,7 @@ void func_001400B8(struct P *p)
     int c;
     int i;
 
-    func_00203A38(p);
+    PostStepLoad__FP4STEP(p);
     func_001A64E8(p, 0x35, D_002BC9F0);
     func_001959C0((char *)p + 0x2C0);
     func_001910F8((char *)p + 0x4C0);

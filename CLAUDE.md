@@ -54,6 +54,20 @@ commit of this branch so far). Do not regenerate it on a dirty tree you have not
 
 Newest first. Each entry: what changed, how it was verified, the metrics after it.
 
+### 2026-11-02 — Classes identified by hand; vtable extraction fixed
+
+- `name_vslots.py` read the first `lui/addiu $v1` pair of each factory; some factories store the parent's vtable
+  first, construct members, then store their own: it now takes the last pair before `jr $ra`. Those classes had
+  looked like copies of their parent (no own methods).
+- Identified (evidence in `docs/CLASSES.md`): SO 48 (own methods call ClearSoXps/AddSoVelocity/SlotSetRole on SO),
+  PO 50, STEP 51, STEPPLAYER 52, JT 55 (a matcher's RTTI chain in the sources: `__tf2JT`, `__tf10STEPPLAYER`,
+  `__tf4STEP`, `__tf2PO`, `__tf2SO`, `__tf2LO`; STEP calls SetStepRadTarget; JT calls the JTAIR/JTMODE/JTGRAB
+  functions), STEPGUARD 56 (abstract parent of GOMER and the guards), GOMER 57, BTN 22 (a class in Sly 2, parent
+  of VOLBTN), VOLBTN 24, JLOVOL 25, KEYHOLE 70, RIPG 87, COIN 94. So Sly 2's SO derives from LO, not ALO.
+- `name_vslots.py --sly1 DIR`: renames the `CidNN` placeholders of newly identified classes (18) and uses Sly 1's
+  mangled name when it has one (`InitSo__FP2SO`, `UpdateJt__FP2JTf`…); 130 more virtual methods named.
+  objcheck 0.
+
 ### 2026-11-01 — CRef as a shared C++ class
 
 - `include/cref.h` now gives C++ sources the CRef class (anonymous union `m_tag`/`m_p`/`m_g`; inline default and

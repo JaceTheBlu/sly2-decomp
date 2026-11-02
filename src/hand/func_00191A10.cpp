@@ -1,7 +1,7 @@
 #include "vtable.h"
 #include "clock.h"
 // func_00191A10: per-frame update of a hero's movement/action context (the struct at actor+0x4C0; called from the
-// actor's mode handler, see func_0018B7E8 / func_00134DA8). Dispatches on the context's action, then commits the
+// actor's mode handler, see func_0018B7E8 / UpdateJt__FP2JTf). Dispatches on the context's action, then commits the
 // animation / axis weights for the resulting step.
 //
 // Matched from w5lane7's near-miss (3/953). Notes on the forms that matter (each verified against the target):

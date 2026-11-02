@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Name virtual methods from their vtable slot (needs the game executable).
 
-  name_vslots.py [--dry-run]
+  name_vslots.py [--sly1 DIR] [--dry-run]
 
 Reads the class table (0x2BAAE8: 199 records {parent record, cid, end of subtree, size, factory}) and every
 class's vtable (the factory stores it at +0xC; 8-byte entries {short delta, short, pfn}), see docs/CLASSES.md.
@@ -18,8 +18,11 @@ import objcheck as O
 
 ROOT = M.ROOT
 TABLE, NCLASS = 0x2BAAE8, 199
-CLASSES = {2: 'Lo', 3: 'Alo', 9: 'Spire', 29: 'Emitter', 111: 'Sm', 115: 'Wr', 138: 'Saa', 139: 'Loop',
-           140: 'Pingpong', 141: 'Shuffle', 142: 'Eyes', 143: 'Scroller', 144: 'Circler'}
+# Identified classes (evidence in docs/CLASSES.md)
+CLASSES = {2: 'Lo', 3: 'Alo', 9: 'Spire', 22: 'Btn', 24: 'Volbtn', 25: 'Jlovol', 29: 'Emitter', 48: 'So', 50: 'Po',
+           51: 'Step', 52: 'Stepplayer', 55: 'Jt', 56: 'Stepguard', 57: 'Gomer', 70: 'Keyhole', 87: 'Ripg', 94: 'Coin',
+           111: 'Sm', 115: 'Wr', 138: 'Saa', 139: 'Loop', 140: 'Pingpong', 141: 'Shuffle', 142: 'Eyes',
+           143: 'Scroller', 144: 'Circler'}
 LO_SLOTS = {5: 'Handle%sMessage', 7: 'Init%s', 11: 'On%sAdd', 12: 'On%sRemove', 14: 'Load%sFromBrx',
             15: 'Post%sLoad', 16: 'Update%s', 41: 'Clone%s'}
 SAA_SLOTS = {8: 'Update%s', 9: 'UComplete%s'}
@@ -46,11 +49,14 @@ def classes():
 
 def vtable_of(new, starts):
     """vtable address from the factory's lui/addiu $v1 pair, then its entries up to the next empty entry."""
+    # the last lui/addiu $v1 pair before `jr $ra`: some factories first store the parent's vtable, construct
+    # members, then store the class's own
     hi = lo = None
-    for k in range(12):
+    for k in range(64):
         w = W(new + 4 * k)
         if w >> 26 == 0xF and (w >> 16) & 31 == 3: hi = w & 0xFFFF
         if w >> 26 == 0x9 and (w >> 16) & 31 == 3 and (w >> 21) & 31 == 3: lo = (w & 0xFFFF) - ((w & 0x8000) << 1)
+        if w == 0x03E00008: break   # jr $ra
     if hi is None or lo is None: return None
     vt = (hi << 16) + lo; out = []
     for k in range(400):
@@ -61,8 +67,29 @@ def vtable_of(new, starts):
     return out
 
 
+SLY1 = {}   # unmangled -> mangled Sly 1 name, when --sly1 DIR is given
+
+
 def main():
     dry = '--dry-run' in sys.argv
+    if '--sly1' in sys.argv:
+        for l in open(os.path.join(sys.argv[sys.argv.index('--sly1') + 1], 'config', 'symbol_addrs.txt')):
+            m = re.match(r'\s*([A-Za-z_][^\s=]*)\s*=\s*0x[0-9A-Fa-f]+;.*type:func', l)
+            if m: SLY1.setdefault(re.split(r'__(?=[FQ0-9])', m.group(1))[0], m.group(1))
+    # CidNN placeholders of classes identified since: rename them first
+    rows0 = list(csv.DictReader(open(os.path.join(ROOT, 'config', 'functions.csv'))))
+    ren = []
+    for r in rows0:
+        m = re.fullmatch(r'(\w*?)Cid(\d+)(\w*)', r['Name'])
+        if m and int(m.group(2)) in CLASSES:
+            base = m.group(1) + CLASSES[int(m.group(2))] + m.group(3)
+            ren.append((r['Name'], SLY1.get(base, base)))
+    if ren:
+        print(f'{len(ren)} CidNN placeholders renamed after their class')
+        mp = os.path.join(ROOT, 'build', 'vslots_cid.map')
+        open(mp, 'w').write(''.join(f'{o} {n}\n' for o, n in ren))
+        if not dry and subprocess.run([sys.executable, os.path.join(ROOT, 'tools', 'rename.py'), '--map', mp]).returncode:
+            sys.exit(1)
     rows = list(csv.DictReader(open(os.path.join(ROOT, 'config', 'functions.csv'))))
     starts = {int(r['Start'], 16): r['Name'] for r in rows}
     cl = classes()
@@ -110,7 +137,8 @@ def main():
         par = parent_slot(owner, k)
         if par == fn: continue
         cls = CLASSES.get(owner, 'Cid%d' % owner)
-        pairs.append((starts[fn], family(owner)[k] % cls)); seen.add(fn)
+        name = family(owner)[k] % cls
+        pairs.append((starts[fn], SLY1.get(name, name))); seen.add(fn)
     names = collections.Counter(n for o, n in pairs)
     pairs = [(o, n) for o, n in pairs if names[n] == 1]   # two functions for one role of one class: leave both
     print(f'{len(pairs)} virtual methods to name')

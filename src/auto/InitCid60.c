@@ -1,10 +1,10 @@
 #include "m2c_prelude.h"
-M2C_UNK InitCid56();                            /* extern */
+M2C_UNK InitStepguard__FP9STEPGUARD();                            /* extern */
 
 void InitCid60(void *arg0) {
     void *temp_v0;
 
-    InitCid56();
+    InitStepguard__FP9STEPGUARD();
     temp_v0 = arg0 + 0x1070;
     M2C_FIELD(arg0, f32 *, 0x1070) = 1.35f;
     M2C_FIELD(temp_v0, f32 *, 4) = -0.0003f;

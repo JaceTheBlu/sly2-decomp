@@ -4,7 +4,7 @@ struct L { char pad[0x30]; qword q30; };
 struct S { char pad[0x1020]; void *p1020; char pad1[0x1030 - 0x1024]; void *p1030; struct T *p1034;
            char pad2[0x1040 - 0x1038]; qword q1040; char pad3[0x1060 - 0x1050]; int n1060; int pad4[2]; int n106C; };
 extern char D_002C0A50[];
-void PostCid56Load(struct S *p);
+void PostStepguardLoad__FP9STEPGUARD(struct S *p);
 void func_001A64E8(struct S *p, int n, void *pv);
 float *PeaFindAsegLabel__FP4ASEG3OID(void *p, int n);
 void PredictAsegEffect(void *p, struct S *ps, void *p1, int n, struct L *pl, int m, float a, float b);
@@ -14,7 +14,7 @@ void PostCid60Load(struct S *p)
     struct L l;
     qword a, b, d;
     float *pg;
-    PostCid56Load(p);
+    PostStepguardLoad__FP9STEPGUARD(p);
     func_001A64E8(p, 3, D_002C0A50);
     pg = PeaFindAsegLabel__FP4ASEG3OID(p->p1020, 0x5DB);
     PredictAsegEffect(p->p1020, p, p->p1030, p->p1034->nA0, &l, 0, *pg, 1.0f);

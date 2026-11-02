@@ -13,7 +13,7 @@ struct P {
 extern struct G D_002DFC00;
 extern char D_002DE2E0[];
 extern char D_003DA0F0[];
-void func_00203FC0(struct P *p);
+void UpdateStep__FP4STEPf(struct P *p);
 void func_00141A50(struct P *p);
 int func_001C46C0(struct Q *q, float g, int n);
 int func_001C4660(struct Q *q, float g, int n);
@@ -34,7 +34,7 @@ void func_001EED10(int *p);
 void func_001403D0(struct P *p)
 {
     int *pl;
-    func_00203FC0(p);
+    UpdateStep__FP4STEPf(p);
     func_00141A50(p);
     if (func_001C46C0(p->x150, 0.0f, 0x200))
         func_00140338(p);

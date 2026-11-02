@@ -12,7 +12,7 @@ struct P{char pad[0xFE0];P*next;char padFE4[0x2C];VOLUME*first,*second;int state
 struct ROW{int key;P*object;};
 struct GAME;
 extern "C"{
-void UpdateCid56(P*);
+void UpdateStepguard__FP9STEPGUARDf(P*);
 int func_00209A68(P*,int);
 qword func_001A62E8(P*);
 qword func_001A6F00(P*,void*,qword);
@@ -50,7 +50,7 @@ typedef char P_motion_Offset[FIELD_OFFSET(P,motion)==4140?1:-1];
 typedef char P_node_Offset[FIELD_OFFSET(P,node)==4148?1:-1];
 typedef char P_axis_Offset[FIELD_OFFSET(P,axis)==4160?1:-1];
 extern "C" void UpdateCid60(P*p){
- UpdateCid56(p);
+ UpdateStepguard__FP9STEPGUARDf(p);
  switch(p->state){
  case 0:{
   if(!func_00209A68(p,0x25))break;

@@ -38,7 +38,8 @@ Suspect: `OnStepguardAdd__FP9STEPGUARD` sits in SPIRE's slot 15 (`PostSpireLoad`
 The Sly 2 order is Sly 1's (`sly1/include/cid.h`) in places: `SM`, 3 classes, `WR` (cid 111–115) mirrors Sly 1's
 `SM`, `SGG`, `PATHZONE`, `RCHM`, `RWM`, `WR` (151–156) with one class gone. Elsewhere the tree was reorganised.
 
-Differences from Sly 1 seen so far: `SO` is not under `ALO` here (cid 48, parent `LO`, holds the STEP family);
+Differences from Sly 1 seen so far: `SO` is not under `ALO` here (cid 48, parent `LO`; a matcher's RTTI chain in
+the sources says the same: `JT : STEPPLAYER : STEP : PO : SO : LO : BASIC`); BTN is a class (cid 22, parent of VOLBTN);
 the SAA family (cid 138–144) is a direct child of the root, not of `LO`.
 
 | cid | parent | size | vtable | slots | name | evidence |
@@ -65,10 +66,10 @@ the SAA family (cid 138–144) is a direct child of the root, not of `LO`.
 | ····19 | 18 | 0x140 |  | 0 |  |  |
 | ···20 | 3 | 0xF0 | 0x2C9A80 | 51 |  |  |
 | ···21 | 3 | 0x100 | 0x2DB378 | 51 |  |  |
-| ···22 | 3 | 0x130 | 0x2DC3B0 | 51 |  | BTN 2 |
+| ···22 | 3 | 0x130 | 0x2DC3B0 | 51 | **BTN** | its Load slot is `LoadBtn`; VOLBTN and cid 26 call it as their parent Load |
 | ····23 | 22 | 0x140 | 0x2DC210 | 51 |  |  |
-| ····24 | 22 | 0x2D0 | 0x2CC7B0 | 51 |  | VOLBTN 2 |
-| ·····25 | 24 | 0x2D0 | 0x2C9C20 | 51 |  |  |
+| ····24 | 22 | 0x2D0 | 0x2CC7B0 | 51 | **VOLBTN** | own Load method already named `LoadVolbtnFromBrx__FP6VOLBTN…` |
+| ·····25 | 24 | 0x2D0 | 0x2C9C20 | 51 | **JLOVOL** | child of VOLBTN with the same size (Sly 1: `JLOVOL : VOLBTN` adds nothing) |
 | ····26 | 22 | 0x190 | 0x2DC6F0 | 51 |  |  |
 | ····27 | 22 | 0x160 |  | 0 |  |  |
 | ···28 | 3 | 0x460 |  | 0 |  |  |
@@ -91,16 +92,16 @@ the SAA family (cid 138–144) is a direct child of the root, not of `LO`.
 | ···45 | 3 | 0x130 | 0x2D4F80 | 51 |  |  |
 | ···46 | 3 | 0x120 | 0x2D9F70 | 51 |  |  |
 | ···47 | 3 | 0x110 | 0x2CE118 | 51 |  |  |
-| ··48 | 2 | 0x150 | 0x2D9978 | 76 |  |  |
-| ···49 | 48 | 0x150 | 0x2D9978 | 76 |  |  |
-| ···50 | 48 | 0x180 | 0x2D9978 | 76 |  |  |
-| ····51 | 50 | 0x2C0 | 0x2D9978 | 76 |  |  |
-| ·····52 | 51 | 0x1320 |  | 0 |  |  |
+| ··48 | 2 | 0x150 | 0x2D9978 | 76 | **SO** | own methods call `ClearSoXps__FP2SO`, `AddSoVelocity__FP2SO`, `SlotSetRole__FP2SO…`, `PxfFromIxf__FiP2SO` |
+| ···49 | 48 | 0x150 | 0x2D4260 | 76 |  |  |
+| ···50 | 48 | 0x180 | 0x2D5898 | 82 | **PO** | RTTI chain `JT : STEPPLAYER : STEP : PO : SO : LO` (typeinfo functions `__tf2PO`… in the sources); hero camera calls |
+| ····51 | 50 | 0x2C0 | 0x2DA110 | 88 | **STEP** | calls `SetStepRadTarget__FP4STEPf`; RTTI chain |
+| ·····52 | 51 | 0x1320 |  | 0 | **STEPPLAYER** | abstract parent of the three playable characters (53, 54, 55); RTTI chain |
 | ······53 | 52 | 0x2060 |  | 0 |  |  |
 | ······54 | 52 | 0x1B00 |  | 0 |  |  |
-| ······55 | 52 | 0x1880 | 0x2D9978 | 76 |  |  |
-| ·····56 | 51 | 0x1010 |  | 0 |  |  |
-| ······57 | 56 | 0x1010 | 0x2CF520 | 90 |  | GOMER 2 |
+| ······55 | 52 | 0x1880 | 0x2CB230 | 106 | **JT** | calls the JTAIR/JTMODE/JTGRAB functions; RTTI chain |
+| ·····56 | 51 | 0x1010 |  | 0 | **STEPGUARD** | abstract parent of GOMER and the other guards (Sly 1: `GOMER : STEPGUARD`) |
+| ······57 | 56 | 0x1010 | 0x2CF520 | 90 | **GOMER** | `RenderGomerSelf__FP5GOMER…` in its vtable |
 | ······58 | 56 | 0x1010 | 0x2C9DC0 | 90 |  |  |
 | ·······59 | 58 | 0x1020 | 0x2CDE40 | 90 |  |  |
 | ······60 | 56 | 0x10A0 | 0x2D4820 | 90 |  |  |
@@ -111,47 +112,47 @@ the SAA family (cid 138–144) is a direct child of the root, not of `LO`.
 | ······65 | 56 | 0x1010 | 0x2C8EF0 | 90 |  |  |
 | ······66 | 56 | 0x1010 | 0x2C8C18 | 90 |  |  |
 | ······67 | 56 | 0x1010 | 0x2C8940 | 90 |  |  |
-| ·····68 | 51 | 0x410 | 0x2D9978 | 76 |  |  |
-| ····69 | 50 | 0x1E0 | 0x2D9978 | 76 |  |  |
-| ····70 | 50 | 0x240 | 0x2D9978 | 76 |  |  |
-| ····71 | 50 | 0x1C0 | 0x2D9978 | 76 |  |  |
-| ·····72 | 71 | 0x2B0 | 0x2D9978 | 76 |  |  |
-| ·····73 | 71 | 0x390 | 0x2D9978 | 76 |  |  |
-| ·····74 | 71 | 0x1E0 | 0x2D9978 | 76 |  |  |
-| ·····75 | 71 | 0x250 | 0x2D9978 | 76 |  |  |
-| ·····76 | 71 | 0x2A0 | 0x2D9978 | 76 |  |  |
-| ····77 | 50 | 0x5D0 | 0x2D9978 | 76 |  |  |
-| ····78 | 50 | 0x230 | 0x2D9978 | 76 |  |  |
-| ···79 | 48 | 0x210 | 0x2D9978 | 76 |  |  |
-| ····80 | 79 | 0x270 | 0x2D9978 | 76 |  |  |
-| ·····81 | 80 | 0x280 | 0x2D9978 | 76 |  |  |
-| ·····82 | 80 | 0x290 | 0x2D9978 | 76 |  |  |
-| ···83 | 48 | 0x300 | 0x2D9978 | 76 |  |  |
+| ·····68 | 51 | 0x410 | 0x2CD748 | 88 |  |  |
+| ····69 | 50 | 0x1E0 | 0x2DBD80 | 82 |  |  |
+| ····70 | 50 | 0x240 | 0x2D80D0 | 82 | **KEYHOLE** | its Init slot is `InitKeyhole__FP7KEYHOLE` |
+| ····71 | 50 | 0x1C0 | 0x2D1878 | 84 |  |  |
+| ·····72 | 71 | 0x2B0 | 0x2D15D0 | 84 |  |  |
+| ·····73 | 71 | 0x390 | 0x2D1080 | 84 |  |  |
+| ·····74 | 71 | 0x1E0 | 0x2D1328 | 84 |  |  |
+| ·····75 | 71 | 0x250 | 0x2D0DD8 | 84 |  |  |
+| ·····76 | 71 | 0x2A0 | 0x2D0B30 | 84 |  |  |
+| ····77 | 50 | 0x5D0 | 0x2D7CA8 | 82 |  |  |
+| ····78 | 50 | 0x230 | 0x2D5B30 | 82 |  |  |
+| ···79 | 48 | 0x210 | 0x2CB780 | 78 |  |  |
+| ····80 | 79 | 0x270 | 0x2D3FA0 | 79 |  |  |
+| ·····81 | 80 | 0x280 | 0x2D3D20 | 79 |  |  |
+| ·····82 | 80 | 0x290 | 0x2D3AA0 | 79 |  |  |
+| ···83 | 48 | 0x300 | 0x2CC950 | 76 |  |  |
 | ···84 | 48 | 0x190 |  | 0 |  |  |
-| ····85 | 84 | 0x1D0 | 0x2D9978 | 76 |  |  |
-| ···86 | 48 | 0x180 | 0x2D9978 | 76 |  |  |
-| ···87 | 48 | 0x1B0 | 0x2D9978 | 76 |  |  |
+| ····85 | 84 | 0x1D0 | 0x2D8738 | 76 |  |  |
+| ···86 | 48 | 0x180 | 0x2CAF88 | 76 |  |  |
+| ···87 | 48 | 0x1B0 | 0x2D77D8 | 76 | **RIPG** | `OnRipgRemove__FP4RIPG`, `RenderRipgSelf__FP4RIPG…` in its vtable |
 | ···88 | 48 | 0x1A0 | 0x2D9978 | 76 |  |  |
-| ···89 | 48 | 0x190 | 0x2D9978 | 76 |  |  |
+| ···89 | 48 | 0x190 | 0x2DCA30 | 76 |  |  |
 | ···90 | 48 | 0x230 |  | 0 |  |  |
-| ····91 | 90 | 0x240 | 0x2D9978 | 76 |  |  |
-| ····92 | 90 | 0x240 | 0x2D9978 | 76 |  |  |
-| ····93 | 90 | 0x250 | 0x2D9978 | 76 |  |  |
-| ····94 | 90 | 0x250 | 0x2D9978 | 76 |  |  |
-| ····95 | 90 | 0x230 | 0x2D9978 | 76 |  |  |
-| ···96 | 48 | 0x250 | 0x2D9978 | 76 |  |  |
-| ···97 | 48 | 0x160 | 0x2D9978 | 76 |  |  |
-| ···98 | 48 | 0x180 | 0x2D9978 | 76 |  |  |
-| ···99 | 48 | 0x170 | 0x2D9978 | 76 |  |  |
-| ···100 | 48 | 0x1B0 | 0x2D9978 | 76 |  |  |
-| ····101 | 100 | 0x1B0 | 0x2D9978 | 76 |  |  |
-| ····102 | 100 | 0x1D0 | 0x2D9978 | 76 |  |  |
-| ···103 | 48 | 0x190 | 0x2D9978 | 76 |  |  |
-| ···104 | 48 | 0x180 | 0x2D9978 | 76 |  |  |
-| ···105 | 48 | 0x1A0 | 0x2D9978 | 76 |  |  |
-| ···106 | 48 | 0x160 | 0x2D9978 | 76 |  |  |
-| ···107 | 48 | 0x190 | 0x2D9978 | 76 |  |  |
-| ···108 | 48 | 0x170 | 0x2D9978 | 76 |  |  |
+| ····91 | 90 | 0x240 | 0x2D6928 | 77 |  |  |
+| ····92 | 90 | 0x240 | 0x2D6448 | 77 |  |  |
+| ····93 | 90 | 0x250 | 0x2D66B8 | 77 |  |  |
+| ····94 | 90 | 0x250 | 0x2D61D8 | 77 | **COIN** | its Init slot is `InitCoin__FP4COIN` (Sly 1 match) |
+| ····95 | 90 | 0x230 | 0x2D5F68 | 77 |  |  |
+| ···96 | 48 | 0x250 | 0x2D3838 | 76 |  |  |
+| ···97 | 48 | 0x160 | 0x2D9500 | 76 |  |  |
+| ···98 | 48 | 0x180 | 0x2D4B78 | 76 |  |  |
+| ···99 | 48 | 0x170 | 0x2D5450 | 76 |  |  |
+| ···100 | 48 | 0x1B0 | 0x2DBB10 | 77 |  |  |
+| ····101 | 100 | 0x1B0 | 0x2C9810 | 77 |  |  |
+| ····102 | 100 | 0x1D0 | 0x2DB8A0 | 77 |  |  |
+| ···103 | 48 | 0x190 | 0x2CBBA0 | 76 |  |  |
+| ···104 | 48 | 0x180 | 0x2CC548 | 76 |  |  |
+| ···105 | 48 | 0x1A0 | 0x2DB0D0 | 76 |  |  |
+| ···106 | 48 | 0x160 | 0x2D8DD8 | 76 |  |  |
+| ···107 | 48 | 0x190 | 0x2DCC98 | 76 |  |  |
+| ···108 | 48 | 0x170 | 0x2D7A40 | 76 |  |  |
 | ··109 | 2 | 0xC0 | 0x2CAD78 | 49 |  |  |
 | ···110 | 109 | 0xE0 | 0x2CA300 | 49 |  |  |
 | ··111 | 2 | 0x80 | 0x2D97A8 | 49 | **SM** | SM 4 |
